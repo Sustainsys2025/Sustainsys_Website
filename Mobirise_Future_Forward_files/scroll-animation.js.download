@@ -1,0 +1,1 @@
+!function(n,e){"use strict";e.regExtension({name:"scrollAnimation",events:{load:function(){this.addFilter("publishHTML",(function(n){return e.getThemeSettings("isAnimatedOnScroll")?n.replace("</body>",'  <input name="animation" type="hidden">\n  </body>'):n}))}}})}(jQuery,mbrApp);

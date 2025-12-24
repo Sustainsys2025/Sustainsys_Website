@@ -1,0 +1,1 @@
+jQuery,mbrApp.regExtension({name:"change-menu-styles",events:{load:function(){this.Core.addFilter("cleanHTMLplease",(function(n){return n.find(".navbar-dropdown .nav").attr("id","exCollapsingNavbar"),n}))}}});

@@ -1,0 +1,1 @@
+var $,isJQuery="function"==typeof jQuery;isJQuery&&($=jQuery);var isBuilder=document.querySelector("html").classList.contains("is-builder");isBuilder||void 0===window.initPopupBtnPlugin&&(window.initPopupBtnPlugin=!0,document.querySelectorAll("section.popup-btn-cards .card-wrapper").forEach((function(i){i.classList.add("popup-btn")})));

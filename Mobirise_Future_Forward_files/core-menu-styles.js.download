@@ -1,0 +1,1 @@
+!function(e,n){mbrAppCore.regExtension({name:"core-menu-styles",global:{closeSubitems:function(){e(".nav-dropdown li").each((function(){var n=e(this)[0];e(n).removeClass("open")}))}},events:{loadedComponent:function(e,n,o,s){~e._name.toLowerCase().indexOf("menu")&&this.closeSubitems()}}})}(jQuery);
