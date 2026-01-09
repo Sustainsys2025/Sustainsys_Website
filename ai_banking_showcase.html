@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainsys - AI Banking Transformation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: #0a0e27;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 255, 255, 0.2);
+            z-index: 1000;
+            padding: 1rem 5%;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 50%, #f107a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #00f5ff;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f5ff, #7b2ff7);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 100%);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 90vh;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4d 50%, #2d1b69 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        /* Animated AI Network Background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(123, 47, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(241, 7, 163, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* Floating AI particles */
+        .ai-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00f5ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00f5ff;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(100vw, -100vh); opacity: 0; }
+        }
+
+        .ai-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .ai-particle:nth-child(2) { left: 30%; animation-delay: 4s; }
+        .ai-particle:nth-child(3) { left: 50%; animation-delay: 8s; }
+        .ai-particle:nth-child(4) { left: 70%; animation-delay: 12s; }
+        .ai-particle:nth-child(5) { left: 90%; animation-delay: 16s; }
+
+        /* Neural network lines */
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .neural-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00f5ff, transparent);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { width: 0; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0; left: 100%; }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 50%, #f107a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 245, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(123, 47, 247, 0.8)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #b0b8ff;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.8);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 245, 255, 0.1);
+            color: #00f5ff;
+            border: 2px solid #00f5ff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 245, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+        }
+
+        /* AI Brain Animation */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .ai-brain {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .brain-core {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #7b2ff7 0%, transparent 70%);
+            border-radius: 50%;
+            animation: coreGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes coreGlow {
+            0%, 100% { box-shadow: 0 0 40px #7b2ff7, 0 0 80px #7b2ff7; }
+            50% { box-shadow: 0 0 60px #00f5ff, 0 0 120px #00f5ff; }
+        }
+
+        .orbit {
+            position: absolute;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        .orbit:nth-child(2) { width: 250px; height: 250px; top: 75px; left: 75px; }
+        .orbit:nth-child(3) { width: 320px; height: 320px; top: 40px; left: 40px; animation-duration: 15s; }
+        .orbit:nth-child(4) { width: 390px; height: 390px; top: 5px; left: 5px; animation-duration: 20s; }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .data-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #00f5ff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #00f5ff;
+            animation: nodeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #0a0e27;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 50%, #f107a3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #b0b8ff;
+            margin-bottom: 4rem;
+        }
+
+        /* AI Capabilities Grid */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.9) 0%, rgba(26, 31, 77, 0.9) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f5ff, #7b2ff7, #f107a3, #00f5ff);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+            animation: borderRotate 3s linear infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 245, 255, 0.3);
+        }
+
+        .capability-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .capability-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #00f5ff;
+        }
+
+        .capability-card p {
+            color: #b0b8ff;
+            line-height: 1.8;
+        }
+
+        /* Roadmap Timeline */
+        .roadmap {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 31, 77, 0.8) 100%);
+            border-radius: 30px;
+            padding: 4rem;
+            margin-top: 3rem;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(123, 47, 247, 0.05) 0%, transparent 50%);
+            animation: bgShift 10s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 170px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #00f5ff, #7b2ff7, #f107a3);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 162px;
+            top: 30px;
+            width: 18px;
+            height: 18px;
+            background: #00f5ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00f5ff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px #00f5ff; }
+            50% { transform: scale(1.3); box-shadow: 0 0 40px #00f5ff; }
+        }
+
+        .timeline-date {
+            flex-shrink: 0;
+            width: 150px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #00f5ff;
+        }
+
+        .timeline-content {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.05) 0%, rgba(123, 47, 247, 0.05) 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            flex-grow: 1;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            border-color: #00f5ff;
+            box-shadow: 0 5px 30px rgba(0, 245, 255, 0.3);
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: #00f5ff;
+        }
+
+        .timeline-content p {
+            color: #b0b8ff;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .use-case {
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 50%, #f107a3 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .use-case::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, -20px); }
+        }
+
+        .use-case:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 245, 255, 0.5);
+        }
+
+        .use-case h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .use-case ul {
+            list-style: none;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .use-case li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .use-case li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #00f5ff 0%, #7b2ff7 50%, #f107a3 100%);
+            color: white;
+            padding: 5rem;
+            border-radius: 30px;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: #060816;
+            color: #b0b8ff;
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(0, 245, 255, 0.2);
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                height: 300px;
+            }
+
+            .ai-brain {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .capabilities-grid, .use-cases {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item::before {
+                left: -8px;
+            }
+
+            .roadmap {
+                padding: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">⚡ Sustainsys AI</div>
+            <ul class="nav-links">
+                <li><a href="#capabilities">Capabilities</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="ai-particle"></div>
+        <div class="ai-particle"></div>
+        <div class="ai-particle"></div>
+        <div class="ai-particle"></div>
+        <div class="ai-particle"></div>
+        
+        <div class="neural-network">
+            <div class="neural-line" style="top: 20%; animation-delay: 0s;"></div>
+            <div class="neural-line" style="top: 40%; animation-delay: 1s;"></div>
+            <div class="neural-line" style="top: 60%; animation-delay: 2s;"></div>
+            <div class="neural-line" style="top: 80%; animation-delay: 3s;"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>AI-Powered Banking Transformation</h1>
+                <p class="hero-subtitle">Revolutionizing financial services through intelligent automation, predictive analytics, and next-generation digital experiences</p>
+                <div class="hero-buttons">
+                    <a href="#capabilities" class="btn-primary">Explore Solutions</a>
+                    <a href="#roadmap" class="btn-secondary">View Roadmap</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="ai-brain">
+                    <div class="brain-core"></div>
+                    <div class="orbit"></div>
+                    <div class="orbit"></div>
+                    <div class="orbit"></div>
+                    <div class="data-node" style="top: 10%; left: 50%; animation-delay: 0s;"></div>
+                    <div class="data-node" style="top: 50%; left: 90%; animation-delay: 0.5s;"></div>
+                    <div class="data-node" style="top: 90%; left: 50%; animation-delay: 1s;"></div>
+                    <div class="data-node" style="top: 50%; left: 10%; animation-delay: 1.5s;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="capabilities">
+        <h2 class="section-title">AI Capabilities for Banking</h2>
+        <p class="section-subtitle">Cutting-edge artificial intelligence solutions designed specifically for the financial sector</p>
+        
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">🤖</div>
+                <h3>Intelligent Process Automation</h3>
+                <p>Automate complex banking workflows with AI-powered RPA, reducing operational costs by up to 70% while improving accuracy and compliance. Our solutions handle KYC, loan processing, and transaction monitoring seamlessly.</p>
+            </div>
+
+            <div class="capability-card">
+                <div class="capability-icon">🧠</div>
+                <h3>Predictive Analytics Engine</h3>
+                <p>Leverage machine learning models to predict customer behavior, credit risk, fraud patterns, and market trends. Our algorithms process billions of transactions to deliver actionable insights in real-time.</p>
+            </div>
+
+            <div class="capability-card">
+                <div class="capability-icon">💬</div>
+                <h3>Conversational AI Banking</h3>
+                <p>Deploy sophisticated chatbots and virtual assistants powered by natural language processing. Handle customer inquiries 24/7, process transactions, and provide personalized financial advice through voice and text interfaces.</p>
+            </div>
+
+            <div class="capability-card">
+                <div class="capability-icon">🔒</div>
+                <h3>AI Fraud Detection</h3>
+                <p>Real-time fraud prevention using advanced anomaly detection and behavioral analytics. Our systems identify suspicious patterns across millions of transactions, reducing false positives by 85% compared to traditional methods.</p>
+            </div>
+
+            <div class="capability-card">
+                <div class="capability-icon">📊</div>
+                <h3>Smart Document Processing</h3>
+                <p>Extract, classify, and process financial documents with 99% accuracy using computer vision and NLP. From loan applications to compliance reports, automate document-heavy workflows end-to-end.</p>
+            </div>
+
+            <div class="capability-card">
+                <div class="capability-icon">🎯</div>
+                <h3>Hyper-Personalization</h3>
+                <p>Create tailored banking experiences using AI-driven customer segmentation and recommendation engines. Increase cross-sell effectiveness by 40% with personalized product offerings and communications.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap">
+        <h2 class="section-title">Our AI Innovation Roadmap</h2>
+        <p class="section-subtitle">Strategic vision for the next 3 years of AI banking transformation</p>
+        
+        <div class="roadmap">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Q1 2026</div>
+                    <div class="timeline-content">
+                        <h3>Foundation AI Platform Launch</h3>
+                        <p>Deploy our core AI infrastructure enabling real-time data processing, model training, and API integration. Launch conversational AI pilot with 5 major banking partners.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Q2-Q3 2026</div>
+                    <div class="timeline-content">
+                        <h3>Advanced Analytics Suite</h3>
+                        <p>Release predictive models for credit scoring, churn prediction, and fraud detection. Integrate with major core banking systems. Achieve 95% model accuracy benchmarks.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">Q4 2026</div>
+                    <div class="timeline-content">
+                        <h3>Generative AI for Banking</h3>
+                        <p>Introduce large language models for automated report generation, regulatory compliance, and customer communication. Launch AI-powered financial advisor for retail banking.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2027</div>
+                    <div class="timeline-content">
+                        <h3>Autonomous Banking Operations</h3>
+                        <p>Deploy end-to-end autonomous systems for loan origination, wealth management, and treasury operations. Introduce AI-driven risk management platform with real-time market analysis.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">2028</div>
