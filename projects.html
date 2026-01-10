@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainSys - Our Projects</title>
+    <meta name="author" content="Sustainsys.co.uk">
+    <meta name="description" content="Explore SustainSys innovative AI-powered projects transforming software engineering and regulatory compliance">
+    <meta property="og:title" content="SustainSys Projects">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sustainsys.co.uk/projects">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@Sustain_IT_uk">
+    <meta name="theme-color" content="#010101">
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0a0118;
+            --secondary: #1a0f2e;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #9d4edd;
+            --accent-pink: #ff006e;
+            --accent-green: #06ffa5;
+            --accent-orange: #ff9500;
+            --text: #e0e7ff;
+            --text-dim: #8892b0;
+            --glow: rgba(0, 240, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Neural Network Background */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transform-origin: left center;
+            opacity: 0.3;
+            animation: dataFlow 2s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+
+        @keyframes dataFlow {
+            0% { opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; }
+        }
+
+        /* Scroll Progress */
+        .progress-ring {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            z-index: 1000;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.1s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1001;
+            background: rgba(10, 1, 24, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px var(--glow);
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--accent-cyan);
+        }
+
+        .nav-badge-star {
+            display: inline-block;
+            color: var(--accent-pink);
+            margin-left: 5px;
+            font-size: 1em;
+            animation: starPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 10px var(--accent-pink);
+        }
+
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1002;
+            position: relative;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 150px;
+            padding-bottom: 50px;
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+        }
+
+        .glitch-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-green));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+            letter-spacing: -2px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+
+        /* Project Card */
+        .projects-section {
+            padding: 4rem 0 8rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 24px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 30px 80px rgba(0, 240, 255, 0.3);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.4);
+        }
+
+        .project-icon.regulatory {
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+            box-shadow: 0 15px 40px rgba(255, 149, 0, 0.4);
+        }
+
+        .project-title-group {
+            flex: 1;
+        }
+
+        .project-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-title.regulatory {
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .project-subtitle.regulatory {
+            color: var(--accent-orange);
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-overview {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(10, 1, 24, 0.4);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 8px;
+        }
+
+        .project-overview.regulatory {
+            border-left-color: var(--accent-orange);
+        }
+
+        .section-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 3rem 0 1.5rem;
+            color: var(--accent-cyan);
+        }
+
+        .section-heading.regulatory {
+            color: var(--accent-orange);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: rgba(10, 1, 24, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            border-color: var(--accent-cyan);
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+        }
+
+        .feature-item.regulatory:hover {
+            border-color: var(--accent-orange);
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.2);
+        }
+
+        .feature-icon-small {
+            color: var(--accent-cyan);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon-small.regulatory {
+            color: var(--accent-orange);
+        }
+
+        .feature-title {
+            color: var(--text);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .impact-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .impact-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(10, 1, 24, 0.4);
+            border-left: 4px solid var(--accent-purple);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .impact-item:hover {
+            transform: translateX(10px);
+            background: rgba(26, 15, 46, 0.6);
+        }
+
+        .impact-item.regulatory {
+            border-left-color: var(--accent-pink);
+        }
+
+        .impact-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-title.regulatory {
+            color: var(--accent-pink);
+        }
+
+        .impact-description {
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-badge {
+            padding: 0.7rem 1.5rem;
+            background: rgba(26, 15, 46, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tech-badge:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tech-badge.regulatory {
+            border-color: rgba(255, 149, 0, 0.3);
+            color: var(--accent-orange);
+        }
+
+        .tech-badge.regulatory:hover {
+            background: rgba(255, 149, 0, 0.1);
+            border-color: var(--accent-orange);
+            box-shadow: 0 5px 20px rgba(255, 149, 0, 0.3);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin: 6rem 0 4rem;
+            padding: 4rem 3rem;
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 240, 255, 0.2));
+            border: 2px solid rgba(0, 240, 255, 0.4);
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
+            animation: rotate 15s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: var(--accent-cyan);
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #000;
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 240, 255, 0.6);
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .glitch-text {
+                font-size: 3.5rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .project-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .glitch-text {
+                font-size: 2.5rem;
+            }
+
+            .hero-description {
+                font-size: 1.1rem;
+            }
+
+            .project-card {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2.5rem;
+            }
+
+            .project-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Mobile Navigation Drawer */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(10, 1, 24, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 6rem 2rem 2rem;
+            border-left: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .mobile-nav-links a:hover,
+        .mobile-nav-links a.active {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Background -->
+    <div class="neural-bg" id="neuralBg"></div>
+
+    <!-- Progress Ring -->
+    <svg class="progress-ring" width="60" height="60">
+        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">SUSTAINSYS</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html" class="active">PROJECTS<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><a href="Mobirise_Future_Forward.html">Future Forward</a></li>
+                <li><a href="https://sustainsys.co.uk/job-openings">Job Openings</a></li>
+                <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html" class="active">PROJECTS<span class="nav-badge-star">&#9733;</span></a></li>
+            <li><a href="Mobirise_Future_Forward.html">Future Forward</a></li>
+            <li><a href="https://sustainsys.co.uk/job-openings">Job Openings</a></li>
+            <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="subtitle">[ Innovation in Action ]</div>
+                <h1 class="glitch-text">Our Projects</h1>
+                <p class="hero-description">
+                    Pioneering AI-powered solutions that transform software engineering and regulatory compliance. 
+                    Explore how we're pushing the boundaries of what's possible with Generative AI and Agentic AI.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects-section">
+            <!-- Project 1: GenAI Engineering Platform -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">🧠</div>
+                    <div class="project-title-group">
+                        <h2 class="project-title">GenAI-Powered Engineering Platform</h2>
+                        <div class="project-subtitle">AI-Assisted Software Development Lifecycle</div>
+                    </div>
+                </div>
+
+                <div class="project-content">
+                    <div class="project-overview">
+                        Sustainsys delivers a comprehensive GenAI-powered engineering advisory platform that transforms 
+                        the software development lifecycle. Built by experienced engineers, the platform combines deep 
+                        subject-matter expertise, curated engineering best practices, and the power of large language 
+                        models (LLMs) to accelerate development, improve quality, and scale engineering outcomes with 
+                        confidence.
+                    </div>
+
+                    <h3 class="section-heading">Mission</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 2rem;">
+                        To redefine modern software engineering by embedding trusted, explainable, and enterprise-ready 
+                        Generative AI across the entire software delivery lifecycle. We empower organisations to move 
+                        faster from idea to production by combining agentic AI, deep engineering context, and 
+                        best-practice automation, while maintaining security, governance, and accountability at 
+                        enterprise scale.
+                    </p>
+
+                    <h3 class="section-heading">Core Capabilities</h3>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon-small">🎯</div>
+                            <div class="feature-title">AI-Assisted Planning</div>
+                            <div class="feature-description">
+                                Intelligent backlog creation, automated user story generation, and smart sprint planning 
+                                powered by contextual AI understanding.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-small">🔄</div>
+                            <div class="feature-title">Legacy Modernisation</div>
+                            <div class="feature-description">
+                                Deep code comprehension and automated reverse engineering through agentic transformation 
+                                pipelines that preserve business logic.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-small">💻</div>
+                            <div class="feature-title">Context-Aware IDE</div>
+                            <div class="feature-description">
+                                Intelligent code generation, refactoring suggestions, and real-time assistance 
+                                integrated seamlessly into your development environment.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-small">🤖</div>
+                            <div class="feature-title">Virtual AI Teammates</div>
+                            <div class="feature-description">
+                                Background agents handling routine SDLC tasks like documentation, testing, and issue 
+                                resolution autonomously.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-small">🛡️</div>
+                            <div class="feature-title">Secure Framework</div>
+                            <div class="feature-description">
+                                Complete traceability, provenance, and explainability for every AI-generated artifact 
+                                with enterprise-grade security.
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon-small">🎨</div>
+                            <div class="feature-title">Design-System Aware</div>
+                            <div class="feature-description">
+                                AI-powered generation of brand-compliant, consistent UX components aligned with your 
+                                design system.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-heading">Impact Delivered</h3>
+                    <ul class="impact-list">
+                        <li class="impact-item">
+                            <div class="impact-title">⚡ Reduce Delivery Timelines</div>
+                            <div class="impact-description">
+                                Accelerate delivery by 10x through AI assistance across every SDLC stage, reducing 
+                                manual handoffs and enabling predictable, shorter release cycles.
+                            </div>
+                        </li>
+                        <li class="impact-item">
+                            <div class="impact-title">✓ Improve Code Quality</div>
+                            <div class="impact-description">
+                                Achieve 85% improvement through continuous enrichment with enterprise context, design 
+                                standards, and engineering best practices.
+                            </div>
+                        </li>
+                        <li class="impact-item">
+                            <div class="impact-title">🚀 Shift to Innovation</div>
+                            <div class="impact-description">
+                                Free up 60% of engineering time by automating routine tasks, allowing teams to focus 
+                                on high-value innovation initiatives.
+                            </div>
+                        </li>
+                        <li class="impact-item">
+                            <div class="impact-title">🔄 Modernise Legacy Systems</div>
+                            <div class="impact-description">
+                                Transform legacy applications with 95% accuracy while preserving business logic through 
+                                automated transformation pipelines.
+                            </div>
+                        </li>
+                        <li class="impact-item">
+                            <div class="impact-title">🛡️ Responsible AI Adoption</div>
+                            <div class="impact-description">
+                                Scale AI confidently with complete traceability, flexible deployment options, and 
+                                compliance with regulatory requirements.
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="section-heading">Technology Stack</h3>
+                    <div class="tech-badges">
+                        <div class="tech-badge">GPT-4 & Claude</div>
+                        <div class="tech-badge">LangChain</div>
+                        <div class="tech-badge">Vector Databases</div>
+                        <div class="tech-badge">Agentic AI</div>
+                        <div class="tech-badge">RAG Frameworks</div>
+                        <div class="tech-badge">Kubernetes</div>
+                        <div class="tech-badge">GitLab CI/CD</div>
+                        <div class="tech-badge">JIRA Integration</div>
+                        <div class="tech-badge">Azure DevOps</div>
+                        <div class="tech-badge">Microservices</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2: Regulatory Reporting AI -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-icon regulatory">📊</div>
+                    <div class="project-title-group">
+                        <h2 class="project-title regulatory">AI-Powered Regulatory Reporting</h2>
+                        <div class="project-subtitle regulatory">Data Governance & Compliance Automation</div>
+                    </div>
+                </div>
+
+                <div class="project-content">
+                    <div class="project-overview regulatory">
+                        We are developing an advanced AI-powered platform to address the complex data governance and 
+                        regulatory reporting challenges faced by financial institutions. Working with large-scale 
+                        banking databases, our solution tackles the intricate requirements of major regulatory 
+                        frameworks including MiFID II, EMIR, SFTR, and Dodd-Frank (SEC & CFTC), utilizing 
+                        cutting-edge RAG (Retrieval-Augmented Generation) frameworks to automate submission report 
+                        preparation and intelligent trading data labeling.
+                    </div>
+
+                    <h3 class="section-heading regulatory">The Challenge</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 2rem;">
+                        Financial institutions face mounting pressure from increasingly complex regulatory requirements. 
+                        Managing vast trading databases while ensuring accurate, timely submissions to multiple 
+                        regulatory bodies (MiFID II for EU markets, EMIR for derivatives, SFTR for securities financing, 
+                        and Dodd-Frank for US markets) presents significant operational and compliance challenges. 
+                        Traditional manual processes are error-prone, time-consuming, and struggle to scale with the 
+                        volume and complexity of modern trading data.
+                    </p>
+
+                    <h3 class="section-heading regulatory">Our Solution</h3>
+                    <div class="features-grid">
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">🧠</div>
+                            <div class="feature-title">AI-Driven Data Understanding</div>
+                            <div class="feature-description">
+                                Advanced LLMs analyze and comprehend complex trading data structures, automatically 
+                                identifying data relationships, patterns, and regulatory relevance across massive 
+                                datasets.
+                            </div>
+                        </div>
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">🏷️</div>
+                            <div class="feature-title">Intelligent Data Labeling</div>
+                            <div class="feature-description">
+                                RAG-powered classification and labeling of trading data according to multiple regulatory 
+                                frameworks, ensuring accurate categorization and compliance mapping.
+                            </div>
+                        </div>
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">📋</div>
+                            <div class="feature-title">Automated Report Generation</div>
+                            <div class="feature-description">
+                                AI agents autonomously prepare submission-ready reports for MiFID II, EMIR, SFTR, and 
+                                Dodd-Frank, including validation and quality checks.
+                            </div>
+                        </div>
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">🔍</div>
+                            <div class="feature-title">Regulatory Knowledge Base</div>
+                            <div class="feature-description">
+                                Comprehensive RAG framework incorporating up-to-date regulatory requirements, enabling 
+                                context-aware interpretation of complex compliance rules.
+                            </div>
+                        </div>
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">✓</div>
+                            <div class="feature-title">Compliance Validation</div>
+                            <div class="feature-description">
+                                Multi-layer validation ensuring data completeness, accuracy, and adherence to specific 
+                                regulatory submission standards before report finalization.
+                            </div>
+                        </div>
+                        <div class="feature-item regulatory">
+                            <div class="feature-icon-small regulatory">📈</div>
+                            <div class="feature-title">Scalable Architecture</div>
+                            <div class="feature-description">
+                                Enterprise-grade infrastructure handling millions of trading records with distributed 
+                                processing and real-time data governance capabilities.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-heading regulatory">Regulatory Frameworks Supported</h3>
+                    <ul class="impact-list">
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">📊 MiFID II (Markets in Financial Instruments Directive)</div>
+                            <div class="impact-description">
+                                Comprehensive transaction reporting for EU markets, including detailed trade execution 
+                                data, best execution monitoring, and systematic internaliser reporting requirements.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">📉 EMIR (European Market Infrastructure Regulation)</div>
+                            <div class="impact-description">
+                                Derivatives trade reporting to trade repositories, covering OTC derivatives, clearing 
+                                obligations, and risk mitigation techniques for uncleared derivatives.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">📑 SFTR (Securities Financing Transactions Regulation)</div>
+                            <div class="impact-description">
+                                Securities lending and repo transaction reporting, providing transparency in securities 
+                                financing markets and shadow banking activities.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">🇺🇸 Dodd-Frank Act - SEC & CFTC</div>
+                            <div class="impact-description">
+                                US regulatory compliance for securities (SEC) and derivatives (CFTC) including swap 
+                                data reporting, large trader reporting, and consolidated audit trail (CAT) requirements.
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="section-heading regulatory">Key Benefits</h3>
+                    <ul class="impact-list">
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">⚡ Rapid Processing</div>
+                            <div class="impact-description">
+                                Reduce report preparation time from weeks to hours, processing millions of records with 
+                                consistent accuracy and meeting tight regulatory deadlines.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">🎯 Enhanced Accuracy</div>
+                            <div class="impact-description">
+                                Minimize human error through AI-powered validation and cross-reference checking, 
+                                significantly reducing regulatory breach risks and penalties.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">💰 Cost Reduction</div>
+                            <div class="impact-description">
+                                Dramatically reduce manual compliance workload, freeing compliance teams to focus on 
+                                strategic risk management and regulatory advisory.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">🔄 Continuous Adaptation</div>
+                            <div class="impact-description">
+                                RAG framework automatically incorporates regulatory updates, ensuring ongoing compliance 
+                                as rules evolve without manual reconfiguration.
+                            </div>
+                        </li>
+                        <li class="impact-item regulatory">
+                            <div class="impact-title regulatory">📊 Audit Trail & Transparency</div>
+                            <div class="impact-description">
+                                Complete traceability of all data transformations and AI decision-making processes, 
+                                providing clear audit trails for regulatory examinations.
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 class="section-heading regulatory">Technology Foundation</h3>
+                    <div class="tech-badges">
+                        <div class="tech-badge regulatory">RAG Frameworks</div>
+                        <div class="tech-badge regulatory">LLMs (GPT-4 & Claude)</div>
+                        <div class="tech-badge regulatory">Vector Databases</div>
+                        <div class="tech-badge regulatory">Knowledge Graphs</div>
+                        <div class="tech-badge regulatory">Apache Spark</div>
+                        <div class="tech-badge regulatory">Data Governance</div>
+                        <div class="tech-badge regulatory">NLP & Entity Recognition</div>
+                        <div class="tech-badge regulatory">Regulatory Ontologies</div>
+                        <div class="tech-badge regulatory">Distributed Processing</div>
+                        <div class="tech-badge regulatory">Compliance APIs</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Interested in Our Projects?</h2>
+                <p>
+                    Contact us to learn more about how our AI-powered solutions can transform your organization. 
+                    Whether you're looking to accelerate software development or automate regulatory compliance, 
+                    we're here to help.
+                </p>
+                <a href="mailto:accounts@sustainsys.co.uk?subject=Project%20Inquiry" class="cta-button">
+                    Get in Touch
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Neural Network Background Generation
+        function createNeuralNetwork() {
+            const bg = document.getElementById('neuralBg');
+            const nodeCount = 30;
+            const nodes = [];
+
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 3 + 's';
+                bg.appendChild(node);
+                nodes.push({
+                    element: node,
+                    x: parseFloat(node.style.left),
+                    y: parseFloat(node.style.top)
+                });
+            }
+
+            // Create connections
+            for (let i = 0; i < nodeCount; i++) {
+                for (let j = i + 1; j < nodeCount; j++) {
+                    if (Math.random() > 0.85) {
+                        const connection = document.createElement('div');
+                        connection.className = 'neural-connection';
+                        
+                        const dx = nodes[j].x - nodes[i].x;
+                        const dy = nodes[j].y - nodes[i].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const angle = Math.atan2(dy, dx);
+                        
+                        connection.style.width = distance + 'vw';
+                        connection.style.left = nodes[i].x + '%';
+                        connection.style.top = nodes[i].y + '%';
+                        connection.style.transform = `rotate(${angle}rad)`;
+                        connection.style.animationDelay = Math.random() * 2 + 's';
+                        
+                        bg.appendChild(connection);
+                    }
+                }
+            }
+        }
+
+        // Scroll Progress Ring
+        function updateProgressRing() {
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercent = scrollTop / scrollHeight;
+                const offset = circumference - scrollPercent * circumference;
+                circle.style.strokeDashoffset = offset;
+            });
+        }
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createNeuralNetwork();
+            updateProgressRing();
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
