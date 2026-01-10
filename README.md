@@ -207,7 +207,6 @@ Automate financial compliance for:
 
 ## 📞 Contact Information
 
-- **Email:** accounts@sustainsys.co.uk
 - **Website:** https://sustainsys.co.uk
 - **Twitter:** @Sustain_IT_uk
 - **Location:** Saint Neots, England, GB
@@ -226,7 +225,7 @@ Please open an issue or submit a pull request.
 
 Copyright © 2026 SustainSys Consulting Ltd. All rights reserved.
 
-This website and its contents are proprietary. For licensing inquiries, contact accounts@sustainsys.co.uk.
+This website and its contents are proprietary. 
 
 ## 🙏 Acknowledgments
 
