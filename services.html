@@ -232,6 +232,11 @@
             font-size: 2rem;
             cursor: pointer;
             z-index: 1001;
+            position: relative;
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--accent-pink);
         }
 
         /* Container */
@@ -415,6 +420,11 @@
 
             .nav-links {
                 gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .nav-container {
+                padding: 1.2rem 1.5rem;
             }
         }
 
@@ -433,6 +443,24 @@
 
             .services-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2rem;
             }
         }
 
@@ -549,6 +577,7 @@
     <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-close-btn" id="mobileCloseBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: var(--accent-cyan); font-size: 2rem; cursor: pointer; z-index: 1002;">✕</button>
         <ul class="mobile-nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html" class="active">Services</a></li>
@@ -731,15 +760,35 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileNav = document.getElementById('mobileNav');
         const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        });
+        function openMobileMenu() {
+            mobileNav.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-        mobileOverlay.addEventListener('click', () => {
+        function closeMobileMenu() {
             mobileNav.classList.remove('active');
             mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+        }
+
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        if (mobileCloseBtn) {
+            mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
         });
 
         // Initialize
