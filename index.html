@@ -232,6 +232,11 @@
             font-size: 2rem;
             cursor: pointer;
             z-index: 1001;
+            position: relative;
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--accent-pink);
         }
 
         /* Container */
@@ -429,6 +434,11 @@
 
             .nav-links {
                 gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .nav-container {
+                padding: 1.2rem 1.5rem;
             }
         }
 
@@ -451,6 +461,28 @@
 
             .stats {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glitch-text {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
             }
         }
 
@@ -567,6 +599,7 @@
     <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-close-btn" id="mobileCloseBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: var(--accent-cyan); font-size: 2rem; cursor: pointer; z-index: 1002;">✕</button>
         <ul class="mobile-nav-links">
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="services.html">Services</a></li>
@@ -715,7 +748,7 @@
                     <p style="font-size: 1.2rem; color: var(--text-dim); margin-bottom: 2rem;">
                         Contact us to get more information on the project
                     </p>
-                    <a href="mailto:accounts@sustainsys.co.uk" style="display: inline-block; padding: 1.2rem 2.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); color: #000; box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4); transition: all 0.3s ease;">
+                    <a href="/cdn-cgi/l/email-protection#a9c8cacac6dcc7dddae9dadcdaddc8c0c7dad0da87cac687dcc2" style="display: inline-block; padding: 1.2rem 2.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); color: #000; box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4); transition: all 0.3s ease;">
                         Get in Touch
                     </a>
                 </div>
@@ -741,7 +774,7 @@
         </section>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Neural Network Background Generation
         function createNeuralNetwork() {
             const bg = document.getElementById('neuralBg');
@@ -809,15 +842,35 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileNav = document.getElementById('mobileNav');
         const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        });
+        function openMobileMenu() {
+            mobileNav.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-        mobileOverlay.addEventListener('click', () => {
+        function closeMobileMenu() {
             mobileNav.classList.remove('active');
             mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+        }
+
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        if (mobileCloseBtn) {
+            mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
         });
 
         // Initialize
@@ -848,10 +901,4 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+   
