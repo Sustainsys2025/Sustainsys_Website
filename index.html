@@ -282,6 +282,22 @@
             cursor: pointer;
             z-index: 1100;
             position: relative;
+            /* Proper touch target size for mobile accessibility */
+            min-width: 44px;
+            min-height: 44px;
+            padding: 0.5rem;
+            /* Prevent touch interference and text selection */
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            /* Ensure it's always on top */
+            touch-action: manipulation;
+        }
+        
+        /* Visual feedback on tap */
+        .mobile-menu-btn:active {
+            transform: scale(0.95);
         }
 
         /* Container */
@@ -521,6 +537,28 @@
 
             .location-subtitle {
                 font-size: 0.75rem;
+            }
+            
+            /* Enhanced logo visibility on mobile */
+            .logo svg {
+                height: 60px;
+                /* Increase overall brightness and add glow */
+                filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+            }
+            
+            /* Make SVG elements more vibrant on mobile */
+            .logo svg path[stroke],
+            .logo svg line {
+                stroke-opacity: 1 !important;
+                filter: brightness(1.3);
+            }
+            
+            .logo svg circle {
+                filter: brightness(1.3) drop-shadow(0 0 3px rgba(0, 240, 255, 0.8));
+            }
+            
+            .logo svg text {
+                filter: brightness(1.3) drop-shadow(0 0 10px rgba(0, 240, 255, 0.7));
             }
         }
 
