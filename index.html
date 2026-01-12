@@ -51,16 +51,10 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            pointer-events: none;
             opacity: 0.3;
         }
 
-        
-        /* Prevent background layers from intercepting clicks */
-        .neural-bg, .neural-bg * {
-            pointer-events: none;
-        }
-.neural-node {
+        .neural-node {
             position: absolute;
             width: 4px;
             height: 4px;
@@ -288,8 +282,8 @@
             color: var(--accent-cyan);
             font-size: 2rem;
             cursor: pointer;
-            position: relative;
-            /* Elevated z-index to ensure button is always on top */
+            /* Fixed positioning - button is now outside nav */
+            position: fixed;
             z-index: 10001;
             /* Proper touch target size for mobile accessibility */
             min-width: 48px;
@@ -303,7 +297,7 @@
             /* Ensure it's always on top and clickable */
             touch-action: manipulation;
             pointer-events: auto;
-            /* Ensure no transforms interfere with hit detection */
+            /* No transforms to interfere with hit detection */
             transform: none;
         }
         
@@ -529,11 +523,9 @@
 
             .mobile-menu-btn {
                 display: block;
-                position: absolute;
+                /* Fixed position coordinates */
                 right: 1rem;
                 top: 1.5rem;
-                /* Remove transform to prevent hit detection issues */
-                transform: none;
                 z-index: 10001;
             }
 
@@ -736,9 +728,11 @@
                 <li><a href="job-openings.html">Job Openings</a></li>
                 <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI SECTION</a></li>
             </ul>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
         </div>
     </nav>
+
+    <!-- Mobile Menu Button - OUTSIDE nav to avoid stacking context -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
 
     <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
