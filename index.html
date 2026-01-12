@@ -274,47 +274,30 @@
             transition: all 0.5s ease;
         }
 
-        /* Mobile Menu */
+        /* Mobile Menu Button - Simple and Bulletproof */
         .mobile-menu-btn {
             display: none;
+            position: fixed;
+            top: 1.5rem;
+            right: 1rem;
+            width: 50px;
+            height: 50px;
             background: rgba(10, 1, 24, 0.95);
             border: 2px solid var(--accent-cyan);
             border-radius: 8px;
             color: var(--accent-cyan);
             font-size: 1.8rem;
             cursor: pointer;
-            /* Fixed positioning - button is now outside nav with extreme z-index */
-            position: fixed;
             z-index: 999999;
-            /* Proper touch target size for mobile accessibility */
-            min-width: 50px;
-            min-height: 50px;
-            width: 50px;
-            height: 50px;
             padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Prevent touch interference and text selection */
-            -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            /* Ensure it's always on top and clickable */
-            touch-action: manipulation;
-            pointer-events: auto !important;
-            /* No transforms to interfere with hit detection */
-            transform: none;
-            /* Force hardware acceleration and create own stacking context */
-            will-change: transform;
-            isolation: isolate;
-            /* Add glow effect for visibility */
+            line-height: 1;
+            text-align: center;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         
-        /* Visual feedback on tap */
         .mobile-menu-btn:active {
-            transform: scale(0.92);
             background: rgba(0, 240, 255, 0.2);
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
         }
@@ -535,14 +518,7 @@
             }
 
             .mobile-menu-btn {
-                display: flex !important;
-                /* Fixed position coordinates - well away from nav elements */
-                right: 1rem;
-                top: 1.5rem;
-                z-index: 999999 !important;
-                /* Ensure it's visible and not hidden */
-                opacity: 1 !important;
-                visibility: visible !important;
+                display: block !important;
             }
 
             /* Hide progress ring on mobile to prevent any interference */
