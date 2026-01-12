@@ -105,7 +105,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 10000;
+            z-index: 9000;
             background: rgba(10, 1, 24, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 240, 255, 0.2);
@@ -277,33 +277,46 @@
         /* Mobile Menu */
         .mobile-menu-btn {
             display: none;
-            background: transparent;
-            border: none;
+            background: rgba(10, 1, 24, 0.95);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 8px;
             color: var(--accent-cyan);
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            /* Fixed positioning - button is now outside nav */
+            /* Fixed positioning - button is now outside nav with extreme z-index */
             position: fixed;
-            z-index: 10001;
+            z-index: 999999;
             /* Proper touch target size for mobile accessibility */
-            min-width: 48px;
-            min-height: 48px;
-            padding: 0.5rem;
+            min-width: 50px;
+            min-height: 50px;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             /* Prevent touch interference and text selection */
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
             /* Ensure it's always on top and clickable */
             touch-action: manipulation;
-            pointer-events: auto;
+            pointer-events: auto !important;
             /* No transforms to interfere with hit detection */
             transform: none;
+            /* Force hardware acceleration and create own stacking context */
+            will-change: transform;
+            isolation: isolate;
+            /* Add glow effect for visibility */
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
         }
         
         /* Visual feedback on tap */
         .mobile-menu-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
         }
 
         /* Container */
@@ -522,16 +535,21 @@
             }
 
             .mobile-menu-btn {
-                display: block;
-                /* Fixed position coordinates */
+                display: flex !important;
+                /* Fixed position coordinates - well away from nav elements */
                 right: 1rem;
                 top: 1.5rem;
-                z-index: 10001;
+                z-index: 999999 !important;
+                /* Ensure it's visible and not hidden */
+                opacity: 1 !important;
+                visibility: visible !important;
             }
 
-            /* Hide progress ring on mobile to prevent click blocking */
+            /* Hide progress ring on mobile to prevent any interference */
             .progress-ring {
-                display: none;
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
             }
 
             .glitch-text {
@@ -591,7 +609,7 @@
             height: 100vh;
             background: rgba(10, 1, 24, 0.98);
             backdrop-filter: blur(20px);
-            z-index: 9999;
+            z-index: 99999;
             transition: right 0.3s ease;
             overflow-y: auto;
             padding: 6rem 2rem 2rem;
@@ -648,7 +666,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            z-index: 9998;
+            z-index: 99998;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
