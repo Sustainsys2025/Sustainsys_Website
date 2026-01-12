@@ -84,22 +84,6 @@
             100% { opacity: 0; }
         }
 
-        /* Scroll Progress */
-        .progress-ring {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            z-index: 1000;
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.1s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
         /* Navigation */
         nav {
             position: fixed;
@@ -274,7 +258,7 @@
             transition: all 0.5s ease;
         }
 
-        /* Mobile Menu Button - Simple and Bulletproof */
+        /* Mobile Menu Button - Standard top-right position */
         .mobile-menu-btn {
             display: none;
             position: fixed;
@@ -295,6 +279,7 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+            pointer-events: auto;
         }
         
         .mobile-menu-btn:active {
@@ -521,11 +506,20 @@
                 display: block !important;
             }
 
-            /* Hide progress ring on mobile to prevent any interference */
-            .progress-ring {
-                display: none !important;
-                visibility: hidden !important;
+            
+            /* Also disable pointer events on neural background */
+            .neural-bg {
                 pointer-events: none !important;
+            }
+            
+            /* Ensure nav doesn't block clicks */
+            nav {
+                pointer-events: none !important;
+            }
+            
+            /* But re-enable for logo and button */
+            .logo {
+                pointer-events: auto !important;
             }
 
             .glitch-text {
@@ -657,17 +651,6 @@
 <body>
     <!-- Neural Network Background -->
     <div class="neural-bg" id="neuralBg"></div>
-
-    <!-- Progress Ring -->
-    <svg class="progress-ring" width="60" height="60">
-        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
-        <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
-            </linearGradient>
-        </defs>
-    </svg>
 
     <!-- Navigation -->
     <nav>
@@ -1017,24 +1000,6 @@
             }
         }
 
-        // Scroll Progress Ring
-        function updateProgressRing() {
-            const circle = document.querySelector('.progress-ring-circle');
-            const radius = circle.r.baseVal.value;
-            const circumference = radius * 2 * Math.PI;
-            
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circle.style.strokeDashoffset = circumference;
-
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrollPercent = scrollTop / scrollHeight;
-                const offset = circumference - scrollPercent * circumference;
-                circle.style.strokeDashoffset = offset;
-            });
-        }
-
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileNav = document.getElementById('mobileNav');
@@ -1053,7 +1018,6 @@
         // Initialize
         window.addEventListener('load', () => {
             createNeuralNetwork();
-            updateProgressRing();
         });
 
         // Mouse Trail Effect
