@@ -119,6 +119,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1200;
         }
 
         .logo {
@@ -293,6 +295,7 @@
             user-select: none;
             /* Ensure it's always on top */
             touch-action: manipulation;
+            pointer-events: auto;
         }
         
         /* Visual feedback on tap */
@@ -507,12 +510,20 @@
         }
 
         @media (max-width: 768px) {
+            .nav-container {
+                position: relative;
+            }
+            
             .nav-links {
                 display: none;
             }
 
             .mobile-menu-btn {
                 display: block;
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             /* Hide progress ring on mobile to prevent click blocking */
