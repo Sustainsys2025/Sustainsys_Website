@@ -741,6 +741,13 @@
         </ul>
     </div>
 
+    <!-- Mobile Menu Button -->
+    <button 
+        class="mobile-menu-btn" 
+        id="mobileMenuBtn"
+        style="position: fixed !important; bottom: 2rem !important; right: 2rem !important; width: 60px !important; height: 60px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 50% !important; color: #00f0ff !important; font-size: 2rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important; -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3) !important;"
+    >&#9776;</button>
+
     <div class="container">
         <!-- Hero Section -->
         <section class="hero" id="home">
@@ -1017,29 +1024,40 @@
             }
         }
 
-        // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileNav = document.getElementById('mobileNav');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+        // Mobile Menu - Deferred setup with DOMContentLoaded and null guards
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileOverlay = document.getElementById('mobileOverlay');
 
-        console.log('Mobile menu button:', mobileMenuBtn);
-        console.log('Button computed style:', window.getComputedStyle(mobileMenuBtn).display);
+            console.log('Mobile menu button:', mobileMenuBtn);
+            console.log('Mobile nav:', mobileNav);
+            console.log('Mobile overlay:', mobileOverlay);
 
-        function toggleMenu() {
-            console.log('Menu toggle clicked!');
-            mobileNav.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        }
+            // Null guards - ensure all elements exist
+            if (!mobileMenuBtn || !mobileNav || !mobileOverlay) {
+                console.error('Mobile menu elements not found!');
+                return;
+            }
 
-        mobileMenuBtn.addEventListener('click', toggleMenu);
-        mobileMenuBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            toggleMenu();
-        });
+            console.log('Button computed style:', window.getComputedStyle(mobileMenuBtn).display);
 
-        mobileOverlay.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            mobileOverlay.classList.remove('active');
+            function toggleMenu() {
+                console.log('Menu toggle clicked!');
+                mobileNav.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            mobileMenuBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                toggleMenu();
+            }, { passive: false });
+
+            mobileOverlay.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
         });
 
         // Initialize
@@ -1077,13 +1095,5 @@
             });
         });
     </script>
-
-    <!-- Mobile Menu Button - ABSOLUTELY LAST ELEMENT FOR MAXIMUM CLICKABILITY -->
-    <button 
-        class="mobile-menu-btn" 
-        id="mobileMenuBtn"
-        style="position: fixed !important; bottom: 2rem !important; right: 2rem !important; width: 60px !important; height: 60px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 50% !important; color: #00f0ff !important; font-size: 2rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important; -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3) !important;"
-    >&#9776;</button>
-
 </body>
 </html>
