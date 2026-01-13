@@ -41,6 +41,8 @@
             color: var(--text);
             overflow-x: hidden;
             line-height: 1.6;
+            touch-action: pan-y pinch-zoom;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Animated Neural Network Background */
@@ -262,26 +264,43 @@
         .mobile-menu-btn {
             display: none;
             position: fixed;
-            bottom: 2rem;  /* BOTTOM instead of top */
+            bottom: 2rem;
             right: 2rem;
             width: 60px;
             height: 60px;
             background: rgba(10, 1, 24, 0.98);
             border: 3px solid var(--accent-cyan);
-            border-radius: 50%;  /* Round button */
+            border-radius: 50%;
             color: var(--accent-cyan);
             font-size: 2rem;
             cursor: pointer;
-            z-index: 999999;
+            z-index: 99999999;
             padding: 0;
             line-height: 1;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0, 240, 255, 0.6);
+            pointer-events: auto;
+            touch-action: manipulation;
+            isolation: isolate;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        /* Extended clickable area for better mobile usability */
+        .mobile-menu-btn::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border-radius: 50%;
+            cursor: pointer;
         }
         
         .mobile-menu-btn:active {
             background: rgba(0, 240, 255, 0.3);
-            transform: scale(0.95);
+            transform: scale(0.95) translateZ(0);
         }
 
         /* Container */
@@ -502,6 +521,10 @@
             .mobile-menu-btn {
                 display: block !important;
                 pointer-events: auto !important;
+                touch-action: manipulation !important;
+                isolation: isolate !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
             
             /* Disable pointer events on nav to prevent blocking */
@@ -700,11 +723,11 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu Button with INLINE styles -->
+    <!-- Mobile Menu Button with NUCLEAR-level inline styles -->
     <button 
         class="mobile-menu-btn" 
         id="mobileMenuBtn"
-        style="position: fixed !important; bottom: 2rem !important; right: 2rem !important; width: 60px !important; height: 60px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 50% !important; color: #00f0ff !important; font-size: 2rem !important; cursor: pointer !important; z-index: 9999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important;"
+        style="position: fixed !important; bottom: 2rem !important; right: 2rem !important; width: 60px !important; height: 60px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 50% !important; color: #00f0ff !important; font-size: 2rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important;"
     >&#9776;</button>
 
     <!-- Mobile Navigation -->
