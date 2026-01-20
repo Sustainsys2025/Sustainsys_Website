@@ -589,16 +589,16 @@
             .logo svg,
             .logo video {
                 height: 64px;
-                width: auto;
-                max-width: 200px;
                 /* Increase overall brightness and add glow */
                 filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
             }
             
             .logo video {
-                height: 64px;        /* tuned for mobile nav */
-                width: auto;         /* keep proportions */
-                max-width: 225px;    /* was 210px */
+                height: 64px !important;
+                width: 225px !important;
+                max-width: 225px !important;
+                display: block !important;
+                object-fit: contain !important;
             }
             
             /* Make SVG elements more vibrant on mobile */
@@ -707,16 +707,19 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <video 
+                    id="logoVideo"
                     autoplay 
                     loop 
                     muted 
-                    playsinline 
-                    preload="auto"
+                    playsinline
+                    webkit-playsinline
+                    x5-playsinline
+                    preload="metadata"
                     width="280"
                     height="82"
                     disablePictureInPicture
                     controlsList="nodownload nofullscreen noremoteplayback"
-                    style="pointer-events: none; display: block;">
+                    style="pointer-events: none; display: block !important; background: transparent; visibility: visible !important; opacity: 1 !important;">
                     <source src="grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -1108,46 +1111,79 @@
             if (logoVideo) {
                 console.log('Logo video element found');
                 
-                // Ensure video properties are set
+                // Force video properties for mobile compatibility
                 logoVideo.muted = true;
                 logoVideo.playsInline = true;
                 logoVideo.autoplay = true;
                 logoVideo.loop = true;
+                logoVideo.defaultMuted = true;
+                logoVideo.setAttribute('muted', '');
+                logoVideo.setAttribute('playsinline', '');
+                logoVideo.setAttribute('webkit-playsinline', '');
+                logoVideo.setAttribute('x5-playsinline', '');
+                
+                // Force load the video
+                logoVideo.load();
                 
                 // Add error handler
                 logoVideo.addEventListener('error', function(e) {
                     console.error('Video loading error:', e);
                     console.error('Video source:', logoVideo.querySelector('source')?.src);
+                    console.error('Video readyState:', logoVideo.readyState);
+                    console.error('Video networkState:', logoVideo.networkState);
                 });
                 
                 // Add loadeddata event to confirm video loaded
                 logoVideo.addEventListener('loadeddata', function() {
                     console.log('Video loaded successfully');
+                    console.log('Video dimensions:', logoVideo.videoWidth, 'x', logoVideo.videoHeight);
+                });
+                
+                // Add canplay event
+                logoVideo.addEventListener('canplay', function() {
+                    console.log('Video can play');
+                    attemptPlay();
                 });
                 
                 // Attempt to play the video
-                const playPromise = logoVideo.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        // Video playing successfully
-                        console.log('Logo video playing');
-                    }).catch(error => {
-                        // Auto-play was prevented
-                        console.log('Logo video autoplay prevented:', error);
-                        // Try to play on user interaction
-                        document.addEventListener('click', function playOnClick() {
-                            logoVideo.play().then(() => {
-                                console.log('Video started after user interaction');
-                            }).catch(e => console.error('Failed to play after click:', e));
-                        }, { once: true });
-                    });
+                function attemptPlay() {
+                    const playPromise = logoVideo.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('Logo video playing');
+                        }).catch(error => {
+                            console.log('Logo video autoplay prevented:', error);
+                            // Try to play on user interaction
+                            const playOnInteraction = function() {
+                                logoVideo.play().then(() => {
+                                    console.log('Video started after user interaction');
+                                    document.removeEventListener('touchstart', playOnInteraction);
+                                    document.removeEventListener('click', playOnInteraction);
+                                }).catch(e => console.error('Failed to play after interaction:', e));
+                            };
+                            
+                            document.addEventListener('touchstart', playOnInteraction, { once: true });
+                            document.addEventListener('click', playOnInteraction, { once: true });
+                        });
+                    }
                 }
+                
+                // Try to play immediately
+                setTimeout(attemptPlay, 100);
                 
                 // Ensure video restarts if it somehow stops
                 logoVideo.addEventListener('ended', function() {
                     this.currentTime = 0;
                     this.play();
+                });
+                
+                // Additional attempt after page fully loads
+                window.addEventListener('load', function() {
+                    if (logoVideo.paused) {
+                        console.log('Video paused after page load, attempting to play...');
+                        attemptPlay();
+                    }
                 });
             } else {
                 console.error('Logo video element not found');
