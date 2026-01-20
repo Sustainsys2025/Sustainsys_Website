@@ -532,6 +532,13 @@
         }
 
         @media (max-width: 768px) {
+            /* Disable backdrop-filter on mobile - can prevent video rendering */
+            nav {
+                backdrop-filter: none !important;
+                background: rgba(10, 1, 24, 0.95) !important;
+                pointer-events: auto !important;
+            }
+            
             .nav-container {
                 position: relative;
                 gap: 1rem;
@@ -591,11 +598,8 @@
             }
             
             /* Enhanced logo visibility on mobile */
-            .logo svg,
-            .logo video {
-                height: 64px;
-                /* Increase overall brightness and add glow */
-                filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+            .logo {
+                filter: brightness(1.2) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
             }
             
             .logo video {
@@ -604,6 +608,7 @@
                 max-width: 225px !important;
                 display: block !important;
                 object-fit: contain !important;
+                filter: none !important; /* Critical: iOS can't render video with filters */
             }
             
             /* Make SVG elements more vibrant on mobile */
@@ -710,7 +715,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo" role="link" tabindex="0" id="logoLink" style="cursor: pointer;">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
                 <video 
                     id="logoVideo"
                     autoplay 
@@ -719,16 +724,15 @@
                     playsinline
                     webkit-playsinline
                     x5-playsinline
-                    preload="metadata"
+                    preload="auto"
                     width="280"
                     height="82"
                     disablePictureInPicture
-                    controlsList="nodownload nofullscreen noremoteplayback"
-                    style="display: block !important; background: transparent; visibility: visible !important; opacity: 1 !important;">
+                    controlsList="nodownload nofullscreen noremoteplayback">
                     <source src="grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-            </div>
+            </a>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="services.html">Services</a></li>
@@ -1111,7 +1115,6 @@
     <!-- Logo Video Playback Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const logoLink = document.getElementById('logoLink');
             const logoVideo = document.getElementById('logoVideo');
             
             if (!logoVideo) {
@@ -1119,12 +1122,7 @@
                 return;
             }
             
-            if (!logoLink) {
-                console.error('Logo link element not found');
-                return;
-            }
-            
-            console.log('Logo video and link elements found');
+            console.log('Logo video element found');
             
             // Force video properties for mobile compatibility
             logoVideo.muted = true;
@@ -1132,15 +1130,9 @@
             logoVideo.autoplay = true;
             logoVideo.loop = true;
             logoVideo.defaultMuted = true;
-            logoVideo.setAttribute('muted', '');
-            logoVideo.setAttribute('playsinline', '');
-            logoVideo.setAttribute('webkit-playsinline', '');
-            logoVideo.setAttribute('x5-playsinline', '');
             
             // Force load the video
             logoVideo.load();
-            
-            let videoPlaying = false;
             
             // Error handler
             logoVideo.addEventListener('error', function(e) {
@@ -1159,7 +1151,6 @@
             // Track when video is playing
             logoVideo.addEventListener('playing', function() {
                 console.log('Video is now playing');
-                videoPlaying = true;
             });
             
             // Attempt to play the video
@@ -1168,73 +1159,29 @@
                 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
-                        console.log('Logo video autoplay succeeded');
-                        videoPlaying = true;
+                        console.log('Video autoplay succeeded');
                     }).catch(error => {
-                        console.log('Logo video autoplay prevented (expected on mobile):', error.name);
-                        videoPlaying = false;
+                        console.log('Video autoplay prevented (normal on mobile):', error.name);
                     });
                 }
             }
             
-            // Try to play immediately
+            // Try to play after a short delay
             setTimeout(attemptPlay, 100);
             
-            // Handle logo click/tap
-            logoLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                location.href = 'index.html';
-            });
+            // Simple fallback: attempt play on any user interaction
+            const unlockVideo = function() {
+                logoVideo.play().catch(e => console.log('Play attempt failed:', e));
+            };
             
-            // Handle mobile touchstart - unlock video, then navigate
-            if ('ontouchstart' in window) {
-                logoLink.addEventListener('touchstart', async function(e) {
-                    e.preventDefault(); // Prevent immediate navigation
-                    
-                    if (!videoPlaying) {
-                        console.log('Attempting to unlock video on touch...');
-                        try {
-                            await logoVideo.play();
-                            console.log('Video unlocked on touch!');
-                            videoPlaying = true;
-                        } catch (err) {
-                            console.log('Could not unlock video:', err);
-                        }
-                    }
-                    
-                    // Navigate after attempting to unlock video
-                    setTimeout(() => {
-                        location.href = 'index.html';
-                    }, 100);
-                }, { passive: false });
-            }
+            document.addEventListener('touchstart', unlockVideo, { once: true, passive: true });
+            document.addEventListener('click', unlockVideo, { once: true });
             
             // Ensure video loops
             logoVideo.addEventListener('ended', function() {
                 this.currentTime = 0;
                 this.play();
             });
-            
-            // Additional attempt after page fully loads
-            window.addEventListener('load', function() {
-                if (logoVideo.paused && !videoPlaying) {
-                    console.log('Video paused after page load, attempting to play...');
-                    attemptPlay();
-                }
-            });
-            
-            // Fallback: try to unlock on any touch/click in the first few seconds
-            let unlockAttempted = false;
-            const unlockHandler = function() {
-                if (!unlockAttempted && !videoPlaying) {
-                    unlockAttempted = true;
-                    console.log('Attempting to unlock video on user interaction...');
-                    logoVideo.play().catch(e => console.log('Play failed:', e));
-                }
-            };
-            
-            document.addEventListener('touchstart', unlockHandler, { once: true, passive: true });
-            document.addEventListener('click', unlockHandler, { once: true });
         });
     </script>
 </body>
