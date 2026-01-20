@@ -599,7 +599,9 @@
             
             /* Enhanced logo visibility on mobile */
             .logo {
-                filter: brightness(1.2) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+                /* IMPORTANT: iOS Safari can fail to render <video> if any CSS filter is applied
+                   on the video or any ancestor element. */
+                filter: none !important;
             }
             
             .logo video {
@@ -608,7 +610,8 @@
                 max-width: 225px !important;
                 display: block !important;
                 object-fit: contain !important;
-                filter: none !important; /* Critical: iOS can't render video with filters */
+                filter: none !important; /* iOS: avoid filters on video */
+                box-shadow: 0 0 12px var(--glow);
             }
             
             /* Make SVG elements more vibrant on mobile */
@@ -729,6 +732,7 @@
                     height="82"
                     disablePictureInPicture
                     controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="/grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
                     <source src="grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -1112,77 +1116,43 @@
         });
     </script>
     
-    <!-- Logo Video Playback Script -->
+    <!-- Logo Video Playback Script (mobile-safe) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoVideo = document.getElementById('logoVideo');
-            
-            if (!logoVideo) {
-                console.error('Logo video element not found');
-                return;
-            }
-            
-            console.log('Logo video element found');
-            
-            // Force video properties for mobile compatibility
-            logoVideo.muted = true;
-            logoVideo.playsInline = true;
-            logoVideo.autoplay = true;
-            logoVideo.loop = true;
-            logoVideo.defaultMuted = true;
-            
-            // Force load the video
-            logoVideo.load();
-            
-            // Error handler
-            logoVideo.addEventListener('error', function(e) {
-                console.error('Video loading error:', e);
-                console.error('Video source:', logoVideo.querySelector('source')?.src);
-                console.error('Video readyState:', logoVideo.readyState);
-                console.error('Video networkState:', logoVideo.networkState);
+      document.addEventListener('DOMContentLoaded', () => {
+        const v = document.getElementById('logoVideo');
+        if (!v) return;
+
+        // Ensure the attributes are present (some browsers are picky)
+        v.muted = true;
+        v.defaultMuted = true;
+        v.autoplay = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.setAttribute('muted', '');
+        v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
+
+        const tryPlay = () => {
+          const p = v.play();
+          if (p && typeof p.then === 'function') {
+            p.catch(() => {
+              // Autoplay may be blocked until user gesture (normal on mobile).
             });
-            
-            // Track when video loaded
-            logoVideo.addEventListener('loadeddata', function() {
-                console.log('Video loaded successfully');
-                console.log('Video dimensions:', logoVideo.videoWidth, 'x', logoVideo.videoHeight);
-            });
-            
-            // Track when video is playing
-            logoVideo.addEventListener('playing', function() {
-                console.log('Video is now playing');
-            });
-            
-            // Attempt to play the video
-            function attemptPlay() {
-                const playPromise = logoVideo.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        console.log('Video autoplay succeeded');
-                    }).catch(error => {
-                        console.log('Video autoplay prevented (normal on mobile):', error.name);
-                    });
-                }
-            }
-            
-            // Try to play after a short delay
-            setTimeout(attemptPlay, 100);
-            
-            // Simple fallback: attempt play on any user interaction
-            const unlockVideo = function() {
-                logoVideo.play().catch(e => console.log('Play attempt failed:', e));
-            };
-            
-            document.addEventListener('touchstart', unlockVideo, { once: true, passive: true });
-            document.addEventListener('click', unlockVideo, { once: true });
-            
-            // Ensure video loops
-            logoVideo.addEventListener('ended', function() {
-                this.currentTime = 0;
-                this.play();
-            });
-        });
+          }
+        };
+
+        // Don't force v.load(); it can interrupt autoplay on iOS.
+        if (v.readyState >= 2) {
+          tryPlay();
+        } else {
+          v.addEventListener('canplay', tryPlay, { once: true });
+        }
+
+        // Unlock playback on first user interaction (mobile Safari)
+        const unlock = () => tryPlay();
+        document.addEventListener('touchstart', unlock, { once: true, passive: true });
+        document.addEventListener('click', unlock, { once: true });
+      });
     </script>
 </body>
 </html>
