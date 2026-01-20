@@ -13,7 +13,6 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@Sustain_IT_uk">
     <meta name="theme-color" content="#010101">
-    <link rel="canonical" href="https://sustainsys.co.uk/" />
     
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
@@ -42,8 +41,6 @@
             color: var(--text);
             overflow-x: hidden;
             line-height: 1.6;
-            touch-action: pan-y pinch-zoom;
-            -webkit-tap-highlight-color: transparent;
         }
 
         /* Animated Neural Network Background */
@@ -55,7 +52,6 @@
             height: 100%;
             z-index: 0;
             opacity: 0.3;
-            pointer-events: none;
         }
 
         .neural-node {
@@ -66,7 +62,6 @@
             border-radius: 50%;
             box-shadow: 0 0 10px var(--glow);
             animation: pulse 3s ease-in-out infinite;
-            pointer-events: none;
         }
 
         .neural-connection {
@@ -76,7 +71,6 @@
             transform-origin: left center;
             opacity: 0.3;
             animation: dataFlow 2s linear infinite;
-            pointer-events: none;
         }
 
         @keyframes pulse {
@@ -90,12 +84,28 @@
             100% { opacity: 0; }
         }
 
+        /* Scroll Progress */
+        .progress-ring {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            z-index: 1000;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.1s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 9000;
+            z-index: 1100;
             background: rgba(10, 1, 24, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 240, 255, 0.2);
@@ -105,13 +115,12 @@
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.8rem 2rem;
+            padding: 1.5rem 2rem;
             display: flex;
-            justify-content: flex-start;
-            gap: 2.5rem;
+            justify-content: space-between;
             align-items: center;
             position: relative;
-            /* z-index removed - was creating stacking context that trapped child z-indexes */
+            z-index: 1200;
         }
 
         .logo {
@@ -125,29 +134,26 @@
             height: 70px;
             width: auto;
         }
-        
+
         .logo video {
-            height: 88px;
+            height: 70px;
             width: auto;
             max-width: none;
             display: block;
             object-fit: contain;
         }
 
-        .logo-fallback {
+        .logo .logo-fallback {
             display: none;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.35rem;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.35));
-            white-space: nowrap;
         }
 
+        .logo.video-failed .logo-video {
+            display: none;
+        }
+
+        .logo.video-failed .logo-fallback {
+            display: block;
+        }
 
         .nav-links {
             display: flex;
@@ -217,7 +223,6 @@
 
         .nav-links a.ai-highlight:hover {
             box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-            transform: translateY(-2px);
         }
 
         .nav-links a.ai-highlight::before {
@@ -235,11 +240,10 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             position: fixed;
-            top: 150px;
+            top: 120px;
             right: 2rem;
             opacity: 0;
             animation: fadeInUp 1s ease-out 1.2s forwards;
-            z-index: 9100;
         }
 
         .location-badge:hover {
@@ -284,51 +288,26 @@
             border-radius: 50%;
             pointer-events: none;
             opacity: 0.5;
-            z-index: 9900;
-            transition: all 0.5s ease;
+            z-index: 9999;
         }
 
-        /* Mobile Menu Button - TOP RIGHT */
+        /* Mobile Menu Button */
         .mobile-menu-btn {
             display: none;
-            position: fixed;
-            top: 1.5rem;
-            right: 1.25rem;
-            width: 50px;
-            height: 50px;
-            background: rgba(10, 1, 24, 0.98);
-            border: 3px solid var(--accent-cyan);
-            border-radius: 8px;
+            background: transparent;
+            border: 2px solid var(--accent-cyan);
             color: var(--accent-cyan);
-            font-size: 1.8rem;
-            cursor: pointer;
-            z-index: 99999999;
-            padding: 0;
-            line-height: 1;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.6);
-            pointer-events: auto;
-            touch-action: manipulation;
-            isolation: isolate;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        /* Extended clickable area for better mobile usability */
-        .mobile-menu-btn::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
+            width: 40px;
+            height: 40px;
             border-radius: 8px;
+            font-size: 1.5rem;
             cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1201;
         }
-        
-        .mobile-menu-btn:active {
-            background: rgba(0, 240, 255, 0.3);
-            transform: scale(0.95) translateZ(0);
+
+        .mobile-menu-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
         }
 
         /* Container */
@@ -346,7 +325,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 140px;
+            padding-top: 160px;
             padding-bottom: 2rem;
             position: relative;
             text-align: center;
@@ -383,10 +362,8 @@
             margin-bottom: 2rem;
             text-transform: uppercase;
             letter-spacing: 3px;
-            opacity: 1;
+            opacity: 0;
             animation: fadeInUp 1s ease-out 0.5s forwards;
-            z-index: 10;
-            position: relative;
         }
 
         .hero-description {
@@ -533,7 +510,7 @@
             }
 
             .location-badge {
-                top: 130px;
+                top: 100px;
                 padding: 0.8rem 1.2rem;
             }
             
@@ -548,9 +525,7 @@
 
         @media (max-width: 768px) {
             .nav-container {
-                position: relative;
-                gap: 1rem;
-                padding: 1.2rem 1.5rem; /* tighter on mobile so logo + hamburger fit nicely */
+                padding: 1.2rem 1.5rem;
             }
             
             .nav-links {
@@ -558,22 +533,16 @@
             }
 
             .mobile-menu-btn {
-                display: block !important;
-                pointer-events: auto !important;
-                touch-action: manipulation !important;
-                isolation: isolate !important;
-                visibility: visible !important;
-                opacity: 1 !important;
+                display: block;
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
             }
-            
-            /* Disable pointer events on nav to prevent blocking */
-            nav {
-                pointer-events: none !important;
-            }
-            
-            /* Re-enable for logo */
-            .logo {
-                pointer-events: auto !important;
+
+            /* Hide progress ring on mobile to prevent click blocking */
+            .progress-ring {
+                display: none;
             }
 
             .glitch-text {
@@ -600,34 +569,12 @@
                 font-size: 0.75rem;
             }
             
-
-            .logo-fallback {
-                display: none;
-                font-size: 1.05rem;
-                max-width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
             /* Enhanced logo visibility on mobile */
             .logo svg,
             .logo video {
-                height: 64px;
+                height: 60px;
                 /* Increase overall brightness and add glow */
                 filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
-            }
-            
-            /* Mobile: keep logo always visible and prevent it being pushed off-screen */
-            .logo {
-                max-width: calc(100vw - 90px); /* leave room for hamburger button */
-                overflow: hidden;
-            }
-
-            .logo video {
-                height: 64px !important;
-                width: auto !important;
-                max-width: 100% !important;
-                display: block !important;
-                object-fit: contain !important;
             }
             
             /* Make SVG elements more vibrant on mobile */
@@ -656,7 +603,7 @@
             height: 100vh;
             background: rgba(10, 1, 24, 0.98);
             backdrop-filter: blur(20px);
-            z-index: 99999;
+            z-index: 1000;
             transition: right 0.3s ease;
             overflow-y: auto;
             padding: 6rem 2rem 2rem;
@@ -713,17 +660,15 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            z-index: 99998;
+            z-index: 999;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            pointer-events: none;
         }
 
         .mobile-overlay.active {
             opacity: 1;
             visibility: visible;
-            pointer-events: auto;
         }
     </style>
 </head>
@@ -731,29 +676,79 @@
     <!-- Neural Network Background -->
     <div class="neural-bg" id="neuralBg"></div>
 
+    <!-- Progress Ring -->
+    <svg class="progress-ring" width="60" height="60">
+        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <video 
+                <video
+                    class="logo-video"
                     id="logoVideo"
-                    autoplay 
-                    loop 
-                    muted 
+                    autoplay
+                    loop
+                    muted
                     playsinline
                     webkit-playsinline
                     x5-playsinline
                     preload="auto"
-                    poster="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27560%27%20height%3D%27180%27%20viewBox%3D%270%200%20560%20180%27%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%270%27%20stop-color%3D%27%2300f0ff%27/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%271%27%20stop-color%3D%27%239d4edd%27/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%27560%27%20height%3D%27180%27%20fill%3D%27%230a0118%27/%3E%0A%20%20%3Ctext%20x%3D%2730%27%20y%3D%27115%27%20font-family%3D%27Orbitron%2C%20Arial%2C%20sans-serif%27%20font-size%3D%2764%27%20font-weight%3D%27900%27%20fill%3D%27url%28%23g%29%27%3ESustainSys%3C/text%3E%0A%3C/svg%3E"
-                    width="280"
-                    height="82"
+                    width="300"
+                    height="70"
                     disablePictureInPicture
                     controlsList="nodownload nofullscreen noremoteplayback"
-                    style="pointer-events: none; display: block !important; background: transparent; visibility: visible !important; opacity: 1 !important;">
+                >
                     <source src="grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <span class="logo-fallback" aria-hidden="true">SustainSys</span>
+                <svg class="logo-fallback" width="300" height="70" viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9D4EDD;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="navSGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#9D4EDD;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FF006E;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="navTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#9D4EDD;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="navGlow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <g transform="translate(8, 35)">
+                        <path d="M 0,-26 L 18,-30 L 36,-26 L 36,26 L 18,30 L 0,26 Z" fill="rgba(26, 15, 46, 0.6)" stroke="url(#navShieldGrad)" stroke-width="2.2"/>
+                        <line x1="18" y1="0" x2="7" y2="-18" stroke="#00F0FF" stroke-width="1.3" opacity="0.5"/>
+                        <line x1="18" y1="0" x2="29" y2="-18" stroke="#00F0FF" stroke-width="1.3" opacity="0.5"/>
+                        <line x1="18" y1="0" x2="7" y2="18" stroke="#9D4EDD" stroke-width="1.3" opacity="0.5"/>
+                        <line x1="18" y1="0" x2="29" y2="18" stroke="#9D4EDD" stroke-width="1.3" opacity="0.5"/>
+                        <circle cx="7" cy="-18" r="1.5" fill="#00F0FF" opacity="0.8"/>
+                        <circle cx="29" cy="-18" r="1.5" fill="#00F0FF" opacity="0.8"/>
+                        <circle cx="7" cy="18" r="1.5" fill="#9D4EDD" opacity="0.8"/>
+                        <circle cx="29" cy="18" r="1.5" fill="#9D4EDD" opacity="0.8"/>
+                        <path d="M 13,-15 Q 9,-12 9,-6 Q 9,0 18,0 Q 27,0 27,6 Q 27,12 23,15" fill="none" stroke="url(#navSGrad)" stroke-width="4.5" stroke-linecap="round" filter="url(#navGlow)"/>
+                        <circle cx="10" cy="-13" r="1.5" fill="#00F0FF" filter="url(#navGlow)"/>
+                        <circle cx="18" cy="0" r="1.8" fill="#9D4EDD" filter="url(#navGlow)"/>
+                        <circle cx="26" cy="13" r="1.5" fill="#FF006E" filter="url(#navGlow)"/>
+                    </g>
+                    <text x="58" y="43" font-family="Orbitron, Arial, sans-serif" font-size="28" font-weight="900" fill="url(#navTextGrad)" letter-spacing="2">SUSTAINSYS</text>
+                </svg>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
@@ -763,6 +758,7 @@
                 <li><a href="job-openings.html">Job Openings</a></li>
                 <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI SECTION</a></li>
             </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
         </div>
     </nav>
 
@@ -778,13 +774,6 @@
             <li><a href="mobirise.html" class="ai-highlight">AI SECTION</a></li>
         </ul>
     </div>
-
-    <!-- Mobile Menu Button -->
-    <button 
-        class="mobile-menu-btn" 
-        id="mobileMenuBtn"
-        style="position: fixed !important; top: 1.5rem !important; right: 2rem !important; width: 50px !important; height: 50px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 8px !important; color: #00f0ff !important; font-size: 1.8rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important; -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3) !important;"
-    >&#9776;</button>
 
     <div class="container">
         <!-- Hero Section -->
@@ -975,7 +964,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
                 <div style="flex: 1; min-width: 250px;">
                     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="https://www.w3.org/2000/svg">
+                        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <linearGradient id="footerShield" x1="0%" y1="0%" x2="100%" y2="100%">
                                     <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
@@ -994,7 +983,7 @@
                 
                 <div style="flex: 1; min-width: 250px; text-align: right;">
                     <div style="display: inline-flex; align-items: center; gap: 0.8rem; padding: 1rem 1.5rem; background: rgba(26, 15, 46, 0.6); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 12px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="url(#footerShield)"/>
                         </svg>
                         <div style="text-align: left;">
@@ -1062,45 +1051,43 @@
             }
         }
 
-        // Mobile Menu - Deferred setup with DOMContentLoaded and null guards
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileNav = document.getElementById('mobileNav');
-            const mobileOverlay = document.getElementById('mobileOverlay');
+        // Scroll Progress Ring
+        function updateProgressRing() {
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
 
-            console.log('Mobile menu button:', mobileMenuBtn);
-            console.log('Mobile nav:', mobileNav);
-            console.log('Mobile overlay:', mobileOverlay);
-
-            // Null guards - ensure all elements exist
-            if (!mobileMenuBtn || !mobileNav || !mobileOverlay) {
-                console.error('Mobile menu elements not found!');
-                return;
-            }
-
-            console.log('Button computed style:', window.getComputedStyle(mobileMenuBtn).display);
-
-            function toggleMenu() {
-                console.log('Menu toggle clicked!');
-                mobileNav.classList.toggle('active');
-                mobileOverlay.classList.toggle('active');
-            }
-
-            mobileMenuBtn.addEventListener('click', toggleMenu);
-            mobileMenuBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                toggleMenu();
-            }, { passive: false });
-
-            mobileOverlay.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-                mobileOverlay.classList.remove('active');
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercent = scrollTop / scrollHeight;
+                const offset = circumference - scrollPercent * circumference;
+                circle.style.strokeDashoffset = offset;
             });
+        }
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
         });
 
         // Initialize
         window.addEventListener('load', () => {
             createNeuralNetwork();
+            updateProgressRing();
         });
 
         // Mouse Trail Effect
@@ -1133,104 +1120,61 @@
             });
         });
     </script>
-    
-    <!-- Logo Video Playback Script -->
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoVideo = document.querySelector('.logo video');
-            
-            if (logoVideo) {
-                console.log('Logo video element found');
-                
-                // Force video properties for mobile compatibility
-                logoVideo.muted = true;
-                logoVideo.playsInline = true;
-                logoVideo.autoplay = true;
-                logoVideo.loop = true;
-                logoVideo.defaultMuted = true;
-                logoVideo.setAttribute('muted', '');
-                logoVideo.setAttribute('playsinline', '');
-                logoVideo.setAttribute('webkit-playsinline', '');
-                logoVideo.setAttribute('x5-playsinline', '');
-                
-                // Force load the video
-                logoVideo.load();
-                
-                // Add error handler
-                logoVideo.addEventListener('error', function(e) {
-                    console.error('Video loading error:', e);
-                    console.error('Video source:', logoVideo.querySelector('source')?.src);
-                    console.error('Video readyState:', logoVideo.readyState);
-                    console.error('Video networkState:', logoVideo.networkState);
-                    const fb = document.querySelector('.logo-fallback');
-                    if (fb) {
-                        logoVideo.style.display = 'none';
-                        fb.style.display = 'inline-block';
-                    }
-                });
-                
-                // Add loadeddata event to confirm video loaded
-                logoVideo.addEventListener('loadeddata', function() {
-                    console.log('Video loaded successfully');
-                    console.log('Video dimensions:', logoVideo.videoWidth, 'x', logoVideo.videoHeight);
-                    if (!logoVideo.videoWidth || !logoVideo.videoHeight) {
-                        const fb = document.querySelector('.logo-fallback');
-                        if (fb) {
-                            logoVideo.style.display = 'none';
-                            fb.style.display = 'inline-block';
-                        }
-                    }
-                });
-                
-                // Add canplay event
-                logoVideo.addEventListener('canplay', function() {
-                    console.log('Video can play');
-                    attemptPlay();
-                });
-                
-                // Attempt to play the video
-                function attemptPlay() {
-                    const playPromise = logoVideo.play();
-                    
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            console.log('Logo video playing');
-                        }).catch(error => {
-                            console.log('Logo video autoplay prevented:', error);
-                            // Try to play on user interaction
-                            const playOnInteraction = function() {
-                                logoVideo.play().then(() => {
-                                    console.log('Video started after user interaction');
-                                    document.removeEventListener('touchstart', playOnInteraction);
-                                    document.removeEventListener('click', playOnInteraction);
-                                }).catch(e => console.error('Failed to play after interaction:', e));
-                            };
-                            
-                            document.addEventListener('touchstart', playOnInteraction, { once: true });
-                            document.addEventListener('click', playOnInteraction, { once: true });
-                        });
-                    }
-                }
-                
-                // Try to play immediately
-                setTimeout(attemptPlay, 100);
-                
-                // Ensure video restarts if it somehow stops
-                logoVideo.addEventListener('ended', function() {
-                    this.currentTime = 0;
-                    this.play();
-                });
-                
-                // Additional attempt after page fully loads
-                window.addEventListener('load', function() {
-                    if (logoVideo.paused) {
-                        console.log('Video paused after page load, attempting to play...');
-                        attemptPlay();
-                    }
-                });
-            } else {
-                console.error('Logo video element not found');
+        document.addEventListener('DOMContentLoaded', () => {
+            const logo = document.querySelector('.logo');
+            const logoVideo = document.getElementById('logoVideo');
+
+            if (!logo || !logoVideo) {
+                return;
             }
+
+            const markFailed = () => {
+                logo.classList.add('video-failed');
+            };
+
+            const attemptPlay = () => {
+                const playPromise = logoVideo.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {
+                        markFailed();
+                    });
+                }
+            };
+
+            logoVideo.muted = true;
+            logoVideo.defaultMuted = true;
+            logoVideo.setAttribute('muted', '');
+            logoVideo.setAttribute('playsinline', '');
+            logoVideo.setAttribute('webkit-playsinline', '');
+            logoVideo.setAttribute('x5-playsinline', '');
+
+            logoVideo.addEventListener('error', markFailed);
+            logoVideo.addEventListener('stalled', markFailed);
+            logoVideo.addEventListener('abort', markFailed);
+            logoVideo.addEventListener('loadeddata', attemptPlay);
+            logoVideo.addEventListener('canplay', attemptPlay);
+            logoVideo.addEventListener('playing', () => {
+                logo.classList.remove('video-failed');
+            });
+
+            const enablePlayOnInteraction = () => {
+                attemptPlay();
+                document.removeEventListener('touchstart', enablePlayOnInteraction);
+                document.removeEventListener('click', enablePlayOnInteraction);
+            };
+
+            document.addEventListener('touchstart', enablePlayOnInteraction, { passive: true });
+            document.addEventListener('click', enablePlayOnInteraction, { passive: true });
+
+            attemptPlay();
+
+            setTimeout(() => {
+                if (logoVideo.paused) {
+                    markFailed();
+                }
+            }, 1500);
         });
     </script>
 </body>
