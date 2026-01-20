@@ -105,9 +105,10 @@
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
+            padding: 1.8rem 2rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 2.5rem;
             align-items: center;
             position: relative;
             /* z-index removed - was creating stacking context that trapped child z-indexes */
@@ -123,6 +124,14 @@
         .logo svg {
             height: 70px;
             width: auto;
+        }
+        
+        .logo video {
+            height: 88px;
+            width: auto;
+            max-width: none;
+            display: block;
+            object-fit: contain;
         }
 
         .nav-links {
@@ -210,12 +219,12 @@
             border: 1px solid rgba(0, 240, 255, 0.3);
             border-radius: 12px;
             transition: all 0.3s ease;
-            position: absolute;
-            top: 125px;
+            position: fixed;
+            top: 150px;
             right: 2rem;
             opacity: 0;
             animation: fadeInUp 1s ease-out 1.2s forwards;
-            z-index: 10;
+            z-index: 9100;
         }
 
         .location-badge:hover {
@@ -509,13 +518,24 @@
             }
 
             .location-badge {
-                display: none;
+                top: 130px;
+                padding: 0.8rem 1.2rem;
+            }
+            
+            .location-city {
+                font-size: 0.95rem;
+            }
+
+            .location-subtitle {
+                font-size: 0.75rem;
             }
         }
 
         @media (max-width: 768px) {
             .nav-container {
                 position: relative;
+                gap: 1rem;
+                padding: 1.2rem 1.5rem; /* tighter on mobile so logo + hamburger fit nicely */
             }
             
             .nav-links {
@@ -566,10 +586,19 @@
             }
             
             /* Enhanced logo visibility on mobile */
-            .logo svg {
-                height: 60px;
+            .logo svg,
+            .logo video {
+                height: 64px;
+                width: auto;
+                max-width: 200px;
                 /* Increase overall brightness and add glow */
                 filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+            }
+            
+            .logo video {
+                height: 64px;        /* tuned for mobile nav */
+                width: auto;         /* keep proportions */
+                max-width: 225px;    /* was 210px */
             }
             
             /* Make SVG elements more vibrant on mobile */
@@ -677,46 +706,20 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <svg width="300" height="70" viewBox="0 0 300 70" xmlns="https://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#9D4EDD;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="navSGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
-                            <stop offset="50%" style="stop-color:#9D4EDD;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#FF006E;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="navTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#00F0FF;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#9D4EDD;stop-opacity:1" />
-                        </linearGradient>
-                        <filter id="navGlow">
-                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <g transform="translate(8, 35)">
-                        <path d="M 0,-26 L 18,-30 L 36,-26 L 36,26 L 18,30 L 0,26 Z" fill="rgba(26, 15, 46, 0.6)" stroke="url(#navShieldGrad)" stroke-width="2.2"/>
-                        <line x1="18" y1="0" x2="7" y2="-18" stroke="#00F0FF" stroke-width="1.3" opacity="0.5"/>
-                        <line x1="18" y1="0" x2="29" y2="-18" stroke="#00F0FF" stroke-width="1.3" opacity="0.5"/>
-                        <line x1="18" y1="0" x2="7" y2="18" stroke="#9D4EDD" stroke-width="1.3" opacity="0.5"/>
-                        <line x1="18" y1="0" x2="29" y2="18" stroke="#9D4EDD" stroke-width="1.3" opacity="0.5"/>
-                        <circle cx="7" cy="-18" r="1.5" fill="#00F0FF" opacity="0.8"/>
-                        <circle cx="29" cy="-18" r="1.5" fill="#00F0FF" opacity="0.8"/>
-                        <circle cx="7" cy="18" r="1.5" fill="#9D4EDD" opacity="0.8"/>
-                        <circle cx="29" cy="18" r="1.5" fill="#9D4EDD" opacity="0.8"/>
-                        <path d="M 13,-15 Q 9,-12 9,-6 Q 9,0 18,0 Q 27,0 27,6 Q 27,12 23,15" fill="none" stroke="url(#navSGrad)" stroke-width="4.5" stroke-linecap="round" filter="url(#navGlow)"/>
-                        <circle cx="10" cy="-13" r="1.5" fill="#00F0FF" filter="url(#navGlow)"/>
-                        <circle cx="18" cy="0" r="1.8" fill="#9D4EDD" filter="url(#navGlow)"/>
-                        <circle cx="26" cy="13" r="1.5" fill="#FF006E" filter="url(#navGlow)"/>
-                    </g>
-                    <text x="58" y="43" font-family="Orbitron, Arial, sans-serif" font-size="28" font-weight="900" fill="url(#navTextGrad)" letter-spacing="2">SUSTAINSYS</text>
-                </svg>
+                <video 
+                    autoplay 
+                    loop 
+                    muted 
+                    playsinline 
+                    preload="auto"
+                    width="280"
+                    height="82"
+                    disablePictureInPicture
+                    controlsList="nodownload nofullscreen noremoteplayback"
+                    style="pointer-events: none; display: block;">
+                    <source src="grok-video-890d4307-1e67-405d-838d-44860a4e0c56.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </a>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
@@ -1094,6 +1097,61 @@
                     });
                 }
             });
+        });
+    </script>
+    
+    <!-- Logo Video Playback Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoVideo = document.querySelector('.logo video');
+            
+            if (logoVideo) {
+                console.log('Logo video element found');
+                
+                // Ensure video properties are set
+                logoVideo.muted = true;
+                logoVideo.playsInline = true;
+                logoVideo.autoplay = true;
+                logoVideo.loop = true;
+                
+                // Add error handler
+                logoVideo.addEventListener('error', function(e) {
+                    console.error('Video loading error:', e);
+                    console.error('Video source:', logoVideo.querySelector('source')?.src);
+                });
+                
+                // Add loadeddata event to confirm video loaded
+                logoVideo.addEventListener('loadeddata', function() {
+                    console.log('Video loaded successfully');
+                });
+                
+                // Attempt to play the video
+                const playPromise = logoVideo.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Video playing successfully
+                        console.log('Logo video playing');
+                    }).catch(error => {
+                        // Auto-play was prevented
+                        console.log('Logo video autoplay prevented:', error);
+                        // Try to play on user interaction
+                        document.addEventListener('click', function playOnClick() {
+                            logoVideo.play().then(() => {
+                                console.log('Video started after user interaction');
+                            }).catch(e => console.error('Failed to play after click:', e));
+                        }, { once: true });
+                    });
+                }
+                
+                // Ensure video restarts if it somehow stops
+                logoVideo.addEventListener('ended', function() {
+                    this.currentTime = 0;
+                    this.play();
+                });
+            } else {
+                console.error('Logo video element not found');
+            }
         });
     </script>
 </body>
