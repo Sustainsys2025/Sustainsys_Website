@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SustainSys - AI Learn | Corporate AI Training & Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0118;
+            --secondary: #1a0f2e;
+            --accent-cyan: #00f0ff;
+            --accent-purple: #9d4edd;
+            --accent-pink: #ff006e;
+            --accent-green: #06ffa5;
+            --accent-gold: #ffd700;
+            --text: #e0e7ff;
+            --text-dim: #8892b0;
+            --glow: rgba(0, 240, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Neural Network Background */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transform-origin: left center;
+            opacity: 0.3;
+            animation: dataFlow 2s linear infinite;
+        }
+
+        /* Particle System */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { opacity: 0; transform: translateY(0) translateX(0); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+
+        @keyframes dataFlow {
+            0% { opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(10, 1, 24, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px var(--glow);
+            letter-spacing: 2px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            display: inline-block;
+            padding: 0.5rem;
+            margin: -0.5rem;
+            -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
+            touch-action: manipulation;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 40px var(--glow);
+        }
+
+        .logo:active {
+            transform: scale(0.98);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--accent-pink);
+        }
+
+        /* AI Learn Link with Blinking Star */
+        .ai-learn-link {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .blink-star {
+            color: var(--accent-pink);
+            font-size: 0.9rem;
+            animation: blinkStar 1.2s ease-in-out infinite;
+            text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+        }
+
+        @keyframes blinkStar {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+                text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
+            }
+            50% { 
+                opacity: 0.3; 
+                transform: scale(0.8);
+                text-shadow: 0 0 5px var(--accent-pink);
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: auto;
+            display: flex;
+            align-items: center;
+            padding-top: 120px;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-pink);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subtitle .star-icon {
+            animation: blinkStar 1.2s ease-in-out infinite;
+        }
+
+        .glitch-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple), var(--accent-cyan), var(--accent-green));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite, fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Courses Section */
+        .courses-section {
+            padding: 2rem 0 5rem 0;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05), transparent);
+            animation: rotate 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .course-card:hover::before {
+            opacity: 1;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 30px 60px rgba(0, 240, 255, 0.3);
+        }
+
+        .course-card.featured {
+            border-color: var(--accent-pink);
+        }
+
+        .course-card.featured:hover {
+            border-color: var(--accent-pink);
+            box-shadow: 0 30px 60px rgba(255, 0, 110, 0.3);
+        }
+
+        .course-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(0, 240, 255, 0.1);
+            line-height: 1;
+        }
+
+        .course-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: #fff;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-badge.new {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            color: #000;
+        }
+
+        .course-badge.popular {
+            background: linear-gradient(135deg, var(--accent-gold), #ff9500);
+            color: #000;
+        }
+
+        .course-badge.advanced {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+        }
+
+        .course-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-description {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .course-meta-icon {
+            color: var(--accent-cyan);
+        }
+
+        .course-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topic-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+        }
+
+        .course-cta {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Why Choose Us Section */
+        .why-section {
+            padding: 5rem 0;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .why-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(26, 15, 46, 0.4), rgba(10, 1, 24, 0.6));
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .why-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 25px 50px rgba(157, 78, 221, 0.3);
+        }
+
+        .why-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .why-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .why-card p {
+            color: var(--text-dim);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin: 5rem 0;
+            padding: 5rem 4rem;
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.2), rgba(157, 78, 221, 0.2));
+            border: 2px solid rgba(255, 0, 110, 0.4);
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 110, 0.1), transparent);
+            animation: rotate 15s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 0, 110, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .copyright {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .glitch-text {
+                font-size: 3.5rem;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                padding: 0.75rem;
+                margin: -0.75rem;
+                font-size: 1.5rem;
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .glitch-text {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1.1rem;
+            }
+
+            .course-card {
+                padding: 2rem;
+            }
+
+            .cta-section {
+                padding: 3rem 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural Network Background -->
+    <div class="neural-bg" id="neuralBg"></div>
+
+    <!-- Particles -->
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="sustainsys-ai-powered.html" class="logo" title="Back to AI Platform">SUSTAINSYS</a>
+            <ul class="nav-links">
+                <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+                <li><a href="ai-learn.html" class="ai-learn-link active">AI Learn <span class="blink-star">&#9733;</span></a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="subtitle"><span class="star-icon">&#9733;</span> [ AI Education Excellence ]</div>
+                <h1 class="glitch-text">AI Learn Academy</h1>
+                <p class="hero-description">
+                    Master the future of technology with SustainSys's comprehensive AI training programs. 
+                    From MLOps pipelines and CI/CD for machine learning to RAG architectures and vector databases, 
+                    our expert-led courses cover the full spectrum of modern AI engineering. Learn LLM fine-tuning, 
+                    RLHF techniques, prompt engineering, transformer architectures, and agentic AI development. 
+                    Whether you're building embedding models, deploying inference endpoints, implementing 
+                    semantic search, or orchestrating multi-agent systems—our hands-on curriculum empowers 
+                    teams to build, deploy, and scale production-ready AI solutions with confidence.
+                </p>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section class="courses-section">
+            <div class="section-header">
+                <div class="section-label">[ Our Curriculum ]</div>
+                <h2>AI & ML Training Courses</h2>
+                <p class="section-description">
+                    Industry-aligned courses designed for developers, data scientists, and enterprise teams 
+                    looking to harness the power of Generative AI, MLOps, and modern AI architectures.
+                </p>
+            </div>
+
+            <div class="courses-grid">
+                <!-- Course 1 -->
+                <div class="course-card featured">
+                    <div class="course-number">01</div>
+                    <div class="course-badge popular">&#9733; Most Popular</div>
+                    <div class="course-icon">&#129302;</div>
+                    <h3 class="course-title">RAG Fundamentals & Advanced Architectures</h3>
+                    <p class="course-description">
+                        Master Retrieval-Augmented Generation from basics to production. Learn vector databases, 
+                        embedding strategies, chunking techniques, and hybrid search implementations for enterprise AI.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>40 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Intermediate</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Hands-on Labs</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">RAG</span>
+                        <span class="topic-tag">Vector DB</span>
+                        <span class="topic-tag">LangChain</span>
+                        <span class="topic-tag">Embeddings</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 2 -->
+                <div class="course-card">
+                    <div class="course-number">02</div>
+                    <div class="course-badge new">New</div>
+                    <div class="course-icon">&#9881;</div>
+                    <h3 class="course-title">MLOps: Production AI at Scale</h3>
+                    <p class="course-description">
+                        Build robust ML pipelines with CI/CD, model versioning, monitoring, and automated retraining. 
+                        Deploy models to Kubernetes, manage drift detection, and implement A/B testing strategies.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>48 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Advanced</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Real Projects</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">MLOps</span>
+                        <span class="topic-tag">Kubernetes</span>
+                        <span class="topic-tag">MLflow</span>
+                        <span class="topic-tag">CI/CD</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="course-card">
+                    <div class="course-number">03</div>
+                    <div class="course-badge">Corporate</div>
+                    <div class="course-icon">&#129504;</div>
+                    <h3 class="course-title">Large Language Models Mastery</h3>
+                    <p class="course-description">
+                        Deep dive into LLM architectures, fine-tuning techniques, RLHF, prompt engineering, 
+                        and deployment strategies. Work with GPT, Claude, Llama, and open-source models.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>56 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Advanced</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>GPU Labs</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">LLMs</span>
+                        <span class="topic-tag">Fine-tuning</span>
+                        <span class="topic-tag">RLHF</span>
+                        <span class="topic-tag">Transformers</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 4 -->
+                <div class="course-card">
+                    <div class="course-number">04</div>
+                    <div class="course-badge popular">&#9733; Bestseller</div>
+                    <div class="course-icon">&#128295;</div>
+                    <h3 class="course-title">Prompt Engineering Professional</h3>
+                    <p class="course-description">
+                        Master the art of crafting effective prompts for maximum AI output quality. 
+                        Learn chain-of-thought, few-shot learning, system prompts, and advanced techniques.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>24 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Beginner</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Interactive</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">Prompting</span>
+                        <span class="topic-tag">CoT</span>
+                        <span class="topic-tag">Few-shot</span>
+                        <span class="topic-tag">Templates</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 5 -->
+                <div class="course-card featured">
+                    <div class="course-number">05</div>
+                    <div class="course-badge advanced">Advanced</div>
+                    <div class="course-icon">&#129302;</div>
+                    <h3 class="course-title">Agentic AI & Autonomous Systems</h3>
+                    <p class="course-description">
+                        Build intelligent AI agents that reason, plan, and execute complex tasks autonomously. 
+                        Implement multi-agent systems, tool use, and self-improving AI workflows.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>52 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Expert</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Capstone</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">AI Agents</span>
+                        <span class="topic-tag">AutoGPT</span>
+                        <span class="topic-tag">CrewAI</span>
+                        <span class="topic-tag">Tool Use</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 6 -->
+                <div class="course-card">
+                    <div class="course-number">06</div>
+                    <div class="course-badge new">New</div>
+                    <div class="course-icon">&#128202;</div>
+                    <h3 class="course-title">Computer Vision with Deep Learning</h3>
+                    <p class="course-description">
+                        From CNNs to Vision Transformers, master image classification, object detection, 
+                        segmentation, and generative models. Deploy CV solutions at enterprise scale.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>44 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Intermediate</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>GPU Training</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">CNN</span>
+                        <span class="topic-tag">YOLO</span>
+                        <span class="topic-tag">ViT</span>
+                        <span class="topic-tag">Diffusion</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 7 -->
+                <div class="course-card">
+                    <div class="course-number">07</div>
+                    <div class="course-badge">Enterprise</div>
+                    <div class="course-icon">&#128736;</div>
+                    <h3 class="course-title">AI for Software Development Lifecycle</h3>
+                    <p class="course-description">
+                        Integrate AI across your SDLC—from AI-powered code generation and review to 
+                        automated testing, documentation, and intelligent deployment pipelines.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>36 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Intermediate</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>DevOps Focus</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">SDLC</span>
+                        <span class="topic-tag">Copilot</span>
+                        <span class="topic-tag">AI Testing</span>
+                        <span class="topic-tag">DevOps</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 8 -->
+                <div class="course-card">
+                    <div class="course-number">08</div>
+                    <div class="course-badge">Foundation</div>
+                    <div class="course-icon">&#128218;</div>
+                    <h3 class="course-title">Python for AI & Machine Learning</h3>
+                    <p class="course-description">
+                        Build strong foundations in Python for data science and ML. Master NumPy, Pandas, 
+                        Scikit-learn, PyTorch, and TensorFlow with real-world project implementations.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>60 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Beginner</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Projects</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">Python</span>
+                        <span class="topic-tag">PyTorch</span>
+                        <span class="topic-tag">TensorFlow</span>
+                        <span class="topic-tag">Pandas</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 9 -->
+                <div class="course-card">
+                    <div class="course-number">09</div>
+                    <div class="course-badge advanced">Specialized</div>
+                    <div class="course-icon">&#128737;</div>
+                    <h3 class="course-title">AI Ethics, Governance & Compliance</h3>
+                    <p class="course-description">
+                        Navigate AI regulations, implement responsible AI frameworks, and ensure compliance 
+                        with GDPR, EU AI Act, and industry standards. Build ethical AI systems.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>20 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>All Levels</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Case Studies</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">AI Ethics</span>
+                        <span class="topic-tag">GDPR</span>
+                        <span class="topic-tag">EU AI Act</span>
+                        <span class="topic-tag">Governance</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+
+                <!-- Course 10 -->
+                <div class="course-card featured">
+                    <div class="course-number">10</div>
+                    <div class="course-badge popular">&#127942; Premium</div>
+                    <div class="course-icon">&#127959;</div>
+                    <h3 class="course-title">Enterprise AI Transformation Bootcamp</h3>
+                    <p class="course-description">
+                        Comprehensive 12-week program covering end-to-end AI implementation—from strategy 
+                        and use case identification to deployment, monitoring, and organizational change.
+                    </p>
+                    <div class="course-meta">
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128337;</span>
+                            <span>120 Hours</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#127891;</span>
+                            <span>Comprehensive</span>
+                        </div>
+                        <div class="course-meta-item">
+                            <span class="course-meta-icon">&#128187;</span>
+                            <span>Mentorship</span>
+                        </div>
+                    </div>
+                    <div class="course-topics">
+                        <span class="topic-tag">Strategy</span>
+                        <span class="topic-tag">MLOps</span>
+                        <span class="topic-tag">RAG</span>
+                        <span class="topic-tag">Deployment</span>
+                    </div>
+                    <a href="#contact" class="course-cta">Enroll Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="why-section">
+            <div class="section-header">
+                <div class="section-label">[ Why SustainSys AI Learn ]</div>
+                <h2>Excellence in AI Education</h2>
+                <p class="section-description">
+                    Our training programs combine deep technical expertise with hands-on practical experience, 
+                    preparing your teams for real-world AI challenges.
+                </p>
+            </div>
+
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">&#128640;</div>
+                    <h3>Industry Practitioners</h3>
+                    <p>Learn from engineers who build production AI systems daily at leading tech companies and enterprises.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">&#128736;</div>
+                    <h3>Hands-On Projects</h3>
+                    <p>Every course includes real-world projects, giving you portfolio-ready work and practical experience.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">&#127891;</div>
+                    <h3>Corporate Customization</h3>
+                    <p>Tailored training programs aligned with your organization's specific tech stack and business objectives.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">&#128218;</div>
+                    <h3>Lifetime Resources</h3>
+                    <p>Access to continuously updated materials, code repositories, and community forums post-completion.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">&#128176;</div>
+                    <h3>Certification</h3>
+                    <p>Industry-recognized certifications validating your expertise in modern AI technologies and practices.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">&#129309;</div>
+                    <h3>Ongoing Support</h3>
+                    <p>Post-training mentorship and consulting to ensure successful implementation of learned skills.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Team?</h2>
+                <p>
+                    Partner with SustainSys for customized corporate AI training programs. 
+                    From foundational skills to advanced implementations, we'll help your team 
+                    master the technologies driving the future.
+                </p>
+                <div class="cta-buttons">
+                    <a href="/cdn-cgi/l/email-protection#f98d8b98909790979eb98a8c8a8d9890978a808ad79a96d78c92" class="btn btn-primary">Request Corporate Training</a>
+                    <a href="index.html#contact" class="btn btn-secondary">Schedule Consultation</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="sustainsys-ai-powered.html">AI Platform</a>
+                <a href="ai-learn.html">AI Learn</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+            <p class="copyright">&#169; 2025 SustainSys Consulting Ltd. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Create Neural Network Background
+        function createNeuralNetwork() {
+            const neuralBg = document.getElementById('neuralBg');
+            const nodeCount = 30;
+            const nodes = [];
+            
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 3 + 's';
+                neuralBg.appendChild(node);
+                nodes.push({
+                    element: node,
+                    x: parseFloat(node.style.left),
+                    y: parseFloat(node.style.top)
+                });
+            }
+
+            // Create connections
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[j].x - nodes[i].x;
+                    const dy = nodes[j].y - nodes[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 25) {
+                        const connection = document.createElement('div');
+                        connection.className = 'neural-connection';
+                        connection.style.left = nodes[i].x + '%';
+                        connection.style.top = nodes[i].y + '%';
+                        connection.style.width = distance + '%';
+                        connection.style.transform = `rotate(${Math.atan2(dy, dx)}rad)`;
+                        connection.style.animationDelay = Math.random() * 2 + 's';
+                        neuralBg.appendChild(connection);
+                    }
+                }
+            }
+        }
+
+        // Create Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 25;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = 100 + Math.random() * 20 + '%';
+                particle.style.animationDelay = Math.random() * 4 + 's';
+                particle.style.animationDuration = (3 + Math.random() * 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize
