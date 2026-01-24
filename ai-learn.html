@@ -98,7 +98,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 999;
+            z-index: 9000;
             background: rgba(10, 1, 24, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -109,43 +109,31 @@
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
+            padding: 1.8rem 2rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 2.5rem;
             align-items: center;
             position: relative;
-            z-index: 1;
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px var(--glow);
-            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s ease;
             position: relative;
             z-index: 10;
-            display: inline-block;
-            padding: 0.5rem;
-            margin: -0.5rem;
             -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
             touch-action: manipulation;
         }
-
-        .logo:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 40px var(--glow);
-        }
-
-        .logo:active {
-            transform: scale(0.98);
+        
+        .logo video {
+            height: 88px;
+            width: auto;
+            max-width: none;
+            display: block;
+            object-fit: contain;
         }
 
         .nav-links {
@@ -214,6 +202,102 @@
                 transform: scale(0.8);
                 text-shadow: 0 0 5px var(--accent-pink);
             }
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
+            touch-action: manipulation;
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none !important;
+            }
+        }
+
+        .mobile-menu-btn:hover {
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        /* Mobile Navigation Drawer */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(10, 1, 24, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 6rem 2rem 2rem;
+            border-left: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .mobile-nav-links a:hover,
+        .mobile-nav-links a.active {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .mobile-nav-links a.active {
+            color: var(--accent-pink);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Container */
@@ -709,22 +793,47 @@
         }
 
         @media (max-width: 768px) {
+            /* Disable backdrop-filter on mobile - can prevent video rendering */
+            nav {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: rgba(10, 1, 24, 0.95) !important;
+                pointer-events: auto !important;
+            }
+            
+            .nav-container {
+                position: relative;
+                gap: 1rem;
+                padding: 1.2rem 1.5rem;
+            }
+            
             .nav-links {
                 display: none;
             }
 
-            .logo {
-                padding: 0.75rem;
-                margin: -0.75rem;
-                font-size: 1.5rem;
-                min-height: 44px;
-                min-width: 44px;
-                display: flex;
-                align-items: center;
+            .mobile-menu-btn {
+                display: block !important;
+                pointer-events: auto !important;
+                touch-action: manipulation !important;
+                isolation: isolate !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
-
-            .nav-container {
-                padding: 1rem 1.5rem;
+            
+            /* Ensure logo is interactive */
+            .logo {
+                pointer-events: auto !important;
+                filter: none !important;
+            }
+            
+            .logo video {
+                height: 64px !important;
+                width: 225px !important;
+                max-width: 225px !important;
+                display: block !important;
+                object-fit: contain !important;
+                filter: none !important;
+                box-shadow: 0 0 12px var(--glow);
             }
 
             .glitch-text {
@@ -768,7 +877,25 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="sustainsys-ai-powered.html" class="logo" title="Back to AI Platform">SUSTAINSYS</a>
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video 
+                    id="logoVideo"
+                    autoplay 
+                    loop 
+                    muted 
+                    playsinline
+                    webkit-playsinline
+                    x5-playsinline
+                    preload="auto"
+                    width="280"
+                    height="82"
+                    disablePictureInPicture
+                    controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="/Sustainsys_Logo.mp4" type="video/mp4">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </a>
             <ul class="nav-links">
                 <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
                 <li><a href="ai-learn.html" class="ai-learn-link active">AI Learn <span class="blink-star">&#9733;</span></a></li>
@@ -777,6 +904,24 @@
             </ul>
         </div>
     </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+            <li><a href="ai-learn.html" class="active">AI Learn &#9733;</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button 
+        class="mobile-menu-btn" 
+        id="mobileMenuBtn"
+        style="position: fixed !important; top: 1.5rem !important; right: 2rem !important; width: 50px !important; height: 50px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 8px !important; color: #00f0ff !important; font-size: 1.8rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important; -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3) !important;"
+    >&#9776;</button>
 
     <div class="container">
         <!-- Hero Section -->
@@ -1274,3 +1419,70 @@
         }
 
         // Initialize
+        createNeuralNetwork();
+        createParticles();
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        });
+
+        // Close mobile menu when clicking nav links
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        });
+    </script>
+    
+    <!-- Logo Video Playback Script (mobile-safe) -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const v = document.getElementById('logoVideo');
+        if (!v) return;
+
+        // Ensure the attributes are present (some browsers are picky)
+        v.muted = true;
+        v.defaultMuted = true;
+        v.autoplay = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.setAttribute('muted', '');
+        v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
+
+        const tryPlay = () => {
+          const p = v.play();
+          if (p && typeof p.then === 'function') {
+            p.catch(() => {
+              // Autoplay may be blocked until user gesture (normal on mobile).
+            });
+          }
+        };
+
+        // Don't force v.load(); it can interrupt autoplay on iOS.
+        if (v.readyState >= 2) {
+          tryPlay();
+        } else {
+          v.addEventListener('canplay', tryPlay, { once: true });
+        }
+
+        // Unlock playback on first user interaction (mobile Safari)
+        const unlock = () => tryPlay();
+        document.addEventListener('touchstart', unlock, { once: true, passive: true });
+        document.addEventListener('click', unlock, { once: true });
+      });
+    </script>
+</body>
+</html>
