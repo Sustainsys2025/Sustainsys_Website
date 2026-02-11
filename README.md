@@ -1,278 +1,179 @@
 # SustainSys - AI-Powered Engineering Solutions
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Website](https://img.shields.io/badge/website-sustainsys.co.uk-00f0ff)](https://sustainsys.co.uk)
+[![Website](https://img.shields.io/badge/website-sustainsys.co.uk-00d4e6)](https://sustainsys.co.uk)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
-> Next-generation AI-powered engineering advisory platform transforming software development and regulatory compliance.
+> GenAI-powered engineering advisory platform delivering AI-assisted agile software development and digital transformation.
 
-## 🚀 Overview
+## Overview
 
-SustainSys is a GenAI-powered engineering advisory platform that delivers comprehensive tools for AI-assisted agile software development. Built by experienced engineers, the platform leverages modern Generative AI and Agentic AI capabilities to accelerate development, improve quality, and scale engineering outcomes with confidence.
+SustainSys is a consulting firm based in Cambridge, UK, specialising in AI-powered engineering advisory. The platform combines deep subject-matter expertise, curated engineering best practices, and large language models to accelerate software delivery across the full SDLC.
 
-### Key Features
+**Core offerings:**
+- GenAI-powered engineering advisory and delivery platform
+- Cloud transformations (AWS, Azure, GCP, Oracle)
+- Murex consultancy and regulatory compliance (FRTB, IBOR, XVA, ISDA SIMM)
+- Corporate AI training and learning programmes
+- Sustainability and ESG services
 
-- **🧠 AI-Powered Development Lifecycle** - Full SDLC integration from planning to deployment
-- **⚡ 10x Faster Delivery** - Accelerated development through intelligent automation
-- **🔄 Legacy Modernization** - Automated transformation pipelines for legacy systems
-- **💻 Context-Aware IDE** - Intelligent code generation and real-time assistance
-- **🤖 Virtual AI Teammates** - Background agents handling routine SDLC tasks
-- **🛡️ Enterprise Security** - SOC2 compliant with complete traceability
-- **🎨 Design-System Integration** - AI-powered brand-compliant UX generation
+## Tech Stack
 
-## 📂 Project Structure
+- **Frontend:** Pure HTML5, CSS3, vanilla JavaScript (no frameworks)
+- **Fonts:** Google Fonts (Orbitron, Inter, JetBrains Mono)
+- **Hosting:** Static site deployed via GitHub Pages with custom domain (CNAME)
+- **Assets:** MP4 animated logo, PNG static logo, WebP thumbnails
+- **No build step required** - open `index.html` directly or serve with any static server
+
+## Folder Structure
 
 ```
-sustainsys-website/
-├── index.html                      # Main landing page
-├── sustainsys-ai-powered.html      # AI platform details
-├── projects.html                   # Project showcase
-├── job-openings.html               # Career opportunities
-├── services.html                   # Services overview
-├── sustainsys-logo-concepts.md     # Brand identity guidelines
-└── assets/
-    ├── images/
-    ├── styles/
-    └── scripts/
+sustainsys.co.uk/
+├── index.html                          # Landing page (home)
+├── services.html                       # Cloud, Murex, Support, ESG services
+├── projects.html                       # Project portfolio
+├── Future_Forward.html                 # Research initiatives & future work
+├── job-openings.html                   # Career opportunities
+├── ai-learn.html                       # AI Academy - training courses
+├── sustainsys-ai-powered.html         # AI Platform details & events
+├── intelliquest-framework-guide.html  # Intelliquest Agentic Framework docs
+│
+├── styles.css                          # Shared design system & components
+├── main.js                             # Shared JavaScript (nav, effects, etc.)
+│
+├── Sustainsys_Logo.mp4               # Animated video logo
+├── logo_only.png                       # Static PNG logo (footer)
+├── thumbnails/                         # WebP image thumbnails
+│   └── thumbnail-1.webp ... thumbnail-12.webp
+│
+├── CNAME                               # Custom domain config (sustainsys.co.uk)
+├── EVENTS_MANAGEMENT_GUIDE.md         # Guide for managing events config
+├── Intelliquest_Agentic_Framework_Guide.pdf  # Framework reference PDF
+└── README.md                           # This file
 ```
 
-## 🎨 Design System
+## Design System
 
-### Color Palette
+### Colour Palette (Refined)
 
 ```css
---primary: #0a0118;          /* Deep space navy */
---secondary: #1a0f2e;        /* Dark purple */
---accent-cyan: #00f0ff;      /* Electric cyan */
---accent-purple: #9d4edd;    /* Vibrant purple */
---accent-pink: #ff006e;      /* Hot pink */
---accent-green: #06ffa5;     /* Neon green */
---accent-orange: #ff9500;    /* Bright orange */
+--primary: #080114;        /* Deep space */
+--secondary: #16102b;      /* Dark purple */
+--accent-cyan: #00d4e6;    /* Teal cyan (toned down) */
+--accent-purple: #8b5cf6;  /* Soft violet */
+--accent-pink: #ec4899;    /* Warm pink */
+--accent-green: #10b981;   /* Emerald */
+--accent-gold: #f59e0b;    /* Amber (AI Academy) */
+--text: #e2e8f0;           /* Light slate */
+--text-dim: #94a3b8;       /* Muted slate */
 ```
 
 ### Typography
 
-- **Headers:** Orbitron (700-900 weight) - Modern, tech-forward aesthetic
-- **Body:** Inter (300-700 weight) - Clean, highly legible
-- **Code/Technical:** JetBrains Mono (400-700 weight) - Monospace clarity
+| Usage | Font | Weights |
+|-------|------|---------|
+| Headlines | Orbitron | 700, 900 |
+| Body text | Inter | 300, 400, 600, 700 |
+| Code / labels | JetBrains Mono | 400, 700 |
+
+### Component Library (styles.css)
+
+The shared stylesheet provides these reusable components:
+- **Navigation:** Fixed header with video logo, desktop links, mobile drawer
+- **Layout:** `.container`, `.container--wide`, `.grid-2`, `.grid-3`, `.grid-auto`
+- **Cards:** `.card`, `.card-icon`, with hover effects
+- **Buttons:** `.btn`, `.btn-primary`, `.btn-outline`
+- **Sections:** `.hero`, `.page-header`, `.section`, `.cta-section`
+- **Stats:** `.stats`, `.stat-card`, `.stat-number`, `.stat-label`
+- **Footer:** `.footer-inner`, `.footer-top`, `.footer-brand`, `.footer-location`, `.footer-bottom`
+- **Utilities:** `.collapsible-toggle`, `.collapsible-content`, animations
 
 ### Visual Effects
 
-- **Neural Network Background** - Animated nodes and connections
-- **Gradient Animations** - Smooth color transitions
-- **Particle System** - Floating ambient particles
-- **Scroll Progress** - Circular progress indicator
-- **Hover Effects** - Interactive card transformations
+- Animated neural network background (canvas-like, CSS-only)
+- Gradient text animations on headings
+- Scroll progress ring indicator
+- Mouse trail effect (desktop only)
+- Card hover transforms with glow
 
-## 🛠️ Technology Stack
-
-### Frontend
-- Pure HTML5, CSS3, JavaScript (no frameworks)
-- Responsive design with mobile-first approach
-- CSS animations and transitions
-- SVG graphics for scalable icons
-
-### Features
-- Animated neural network background
-- Scroll-based animations with Intersection Observer
-- Mobile navigation drawer
-- Progressive enhancement
-- Cross-browser compatibility
-
-### Fonts
-- Google Fonts integration
-- Orbitron (Display/Headers)
-- Inter (Body text)
-- JetBrains Mono (Code/Technical)
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Web server for local development (optional)
+## Setup Instructions
 
 ### Local Development
 
-1. **Clone the repository**
 ```bash
-git clone https://github.com/sustainsys/website.git
-cd website
+# Clone the repository
+git clone https://github.com/sustainsys/sustainsys.co.uk.git
+cd sustainsys.co.uk
+
+# Serve locally (pick one):
+python -m http.server 8000        # Python
+npx http-server                    # Node.js
+open index.html                    # Direct file access
 ```
 
-2. **Open in browser**
-```bash
-# Option 1: Direct file access
-open index.html
+Then visit `http://localhost:8000`.
 
-# Option 2: Using Python HTTP server
-python -m http.server 8000
+### Prerequisites
 
-# Option 3: Using Node.js http-server
-npx http-server
-```
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- No build tools, npm packages, or compilers needed
 
-3. **View the website**
-Navigate to `http://localhost:8000` or open `index.html` directly
+## Deployment
 
-### Deployment
+The site is deployed as a static website. Compatible with:
 
-The website is designed to be deployed on any static hosting platform:
+| Platform | Method |
+|----------|--------|
+| **GitHub Pages** | Push to `main`, enable Pages in repo settings |
+| **Netlify** | Connect repo or drag-and-drop |
+| **Vercel** | Connect repo, zero-config |
+| **AWS S3 + CloudFront** | Upload static files, configure CDN |
+| **Any web host** | FTP/SFTP upload of all files |
 
-- **Netlify** - Drag and drop deployment
-- **Vercel** - Git integration with automatic deployments
-- **GitHub Pages** - Free hosting for public repositories
-- **AWS S3 + CloudFront** - Enterprise-grade CDN
-- **Traditional web hosting** - Standard FTP upload
+The `CNAME` file maps the custom domain `sustainsys.co.uk`.
 
-## 📄 Pages Overview
+## Pages
 
-### 1. Home (`index.html`)
-Landing page featuring:
-- Hero section with company mission
-- GenAI-powered platform overview
-- Platform capabilities showcase
-- Impact metrics and benefits
-- Contact section
+| Page | File | Description |
+|------|------|-------------|
+| **Home** | `index.html` | Landing page with hero, platform overview, impact cards, CTA |
+| **Services** | `services.html` | Cloud, Murex, Support, and ESG service offerings |
+| **Projects** | `projects.html` | GenAI Engineering Platform and Regulatory Reporting showcase |
+| **Future Forward** | `Future_Forward.html` | Research focus areas and target industries |
+| **Careers** | `job-openings.html` | Job listings with expandable descriptions |
+| **AI Academy** | `ai-learn.html` | 10 AI/ML training courses with featured learning paths |
+| **AI Platform** | `sustainsys-ai-powered.html` | Detailed platform features, stats, events |
+| **Framework Guide** | `intelliquest-framework-guide.html` | Intelliquest Agentic Framework documentation |
 
-### 2. AI Platform (`sustainsys-ai-powered.html`)
-Detailed platform presentation:
-- Full SDLC AI integration
-- Core capabilities breakdown
-- Technology stack showcase
-- Process flow visualization
-- Enterprise features
+## Design Decisions
 
-### 3. Projects (`projects.html`)
-Portfolio of key initiatives:
-- **GenAI Engineering Platform** - Software development lifecycle transformation
-- **AI Regulatory Reporting** - Automated compliance for financial institutions
-- Project impacts and outcomes
-- Technology implementations
+1. **No frameworks** - Pure HTML/CSS/JS for zero dependencies and fast loading
+2. **Shared CSS/JS** - `styles.css` and `main.js` provide consistency across all pages
+3. **Video logo** - Animated MP4 logo used consistently in all page headers
+4. **Dark theme** - Deep space background with cyan/purple accents conveys AI/tech identity
+5. **Refined palette** - Original neon colours toned down for professionalism while retaining energy
+6. **Mobile-first responsive** - Breakpoints at 480px, 768px, 1024px
+7. **Collapsible content** - Used on careers page to reduce scroll length
+8. **Cards-based layout** - Consistent `.card` component across all pages
 
-### 4. Job Openings (`job-openings.html`)
-Career opportunities:
-- Android Developer (5-8 years)
-- Regulatory Business Analyst (Mid-Senior)
-- Office Administrator (Entry-Mid)
-- AI Engineer (Mid-Senior)
-- Detailed job descriptions with expand/collapse
-- Direct application links
+## Future Improvements
 
-## 🌟 Key Projects
-
-### GenAI-Powered Engineering Platform
-Transform software development with:
-- Intelligent backlog creation and planning
-- Legacy system modernization
-- Context-aware IDE integration
-- Virtual AI teammates
-- Design-system aware generation
-
-**Impact:**
-- 10x faster delivery timelines
-- 85% improvement in code quality
-- 60% reduction in technical debt
-- 95% legacy modernization accuracy
-
-### AI-Powered Regulatory Reporting
-Automate financial compliance for:
-- MiFID II transaction reporting
-- EMIR derivatives reporting
-- SFTR securities financing
-- Dodd-Frank (SEC & CFTC) compliance
-
-**Benefits:**
-- Reduce report prep from weeks to hours
-- 85% reduction in manual errors
-- 60% cost savings on compliance
-- Complete audit trail
-
-## 🎯 Target Audience
-
-- **Enterprise Clients** - Large-scale organizations seeking AI transformation
-- **Financial Institutions** - Banks requiring regulatory compliance automation
-- **Healthcare Organizations** - Entities needing secure, compliant AI solutions
-- **Technology Companies** - Businesses modernizing legacy systems
-- **Development Teams** - Engineering groups adopting AI-assisted workflows
-
-## 🔒 Security & Compliance
-
-- SOC2 Type II certified infrastructure
-- End-to-end encryption
-- Role-based access control
-- Complete audit logging
-- GDPR, HIPAA compliance
-- Data residency options
-- Flexible deployment (cloud, hybrid, on-prem)
-
-## 📞 Contact Information
-
-- **Website:** https://sustainsys.co.uk
-- **Twitter:** @Sustain_IT_uk
-- **Location:** Saint Neots, England, GB
-
-## 🤝 Contributing
-
-While this is a commercial website, we welcome:
-- Bug reports and fixes
-- Performance improvements
-- Accessibility enhancements
-- Documentation improvements
-
-Please open an issue or submit a pull request.
-
-## 📝 License
-
-Copyright © 2026 SustainSys Consulting Ltd. All rights reserved.
-
-This website and its contents are proprietary. 
-
-## 🙏 Acknowledgments
-
-- Design inspiration from modern SaaS platforms
-- Color palette optimized for accessibility
-- Animated effects powered by CSS3 and vanilla JavaScript
-- Neural network visualization concept
-- Font choices for technical aesthetics
-
-## 📈 Performance
-
-- **Lighthouse Score:** 95+ (Performance, Accessibility, Best Practices, SEO)
-- **Page Load:** < 2 seconds on 3G
-- **Mobile Optimized:** Fully responsive design
-- **No Dependencies:** Pure vanilla JavaScript
-- **Minimal Bundle:** < 500KB total size
-
-## 🔄 Version History
-
-### v1.0.0 (Current)
-- Initial website launch
-- Full responsive design
-- Animated neural network background
-- Projects showcase
-- Job openings portal
-- Contact integration
-
-## 🗺️ Roadmap
-
-- [ ] Blog/News section
-- [ ] Case studies with detailed metrics
+- [ ] Blog / news section
+- [ ] Case studies with metrics
 - [ ] Interactive platform demo
 - [ ] Client testimonials
-- [ ] Resource library
-- [ ] API documentation portal
-- [ ] Partner ecosystem page
+- [ ] Resource library / downloads
 - [ ] Multi-language support
+- [ ] Contact form with backend integration
+- [ ] Analytics integration
+- [ ] Service worker for offline support
 
-## 📚 Additional Resources
+## Contact
 
-- [Brand Guidelines](sustainsys-logo-concepts.md)
-- [Technology Stack Documentation](#)
-- [API Documentation](#)
-- [Platform User Guide](#)
+- **Website:** [sustainsys.co.uk](https://sustainsys.co.uk)
+- **Email:** accounts@sustainsys.co.uk
+- **Twitter:** [@Sustain_IT_uk](https://twitter.com/Sustain_IT_uk)
+- **Location:** Cambridge, UK
 
 ---
 
-**Built with ❤️ by SustainSys - Transforming Software Engineering with AI**
-
-For inquiries about our platform or services, please visit [sustainsys.co.uk](https://sustainsys.co.uk) or contact us at accounts@sustainsys.co.uk.
+Copyright 2026 SustainSys Consulting Ltd. All rights reserved.

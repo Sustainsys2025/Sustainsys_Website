@@ -1,1152 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SustainSys - AI-Powered Engineering Evolution</title>
+    <meta name="author" content="Sustainsys.co.uk">
+    <meta name="description" content="Enterprise-grade Generative AI and Agentic AI platform that accelerates delivery, enhances quality, and empowers engineering teams.">
+    <meta property="og:title" content="SustainSys - AI-Powered Engineering Evolution">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#f8fafc">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --primary: #0a0118;
-            --secondary: #1a0f2e;
-            --accent-cyan: #00f0ff;
-            --accent-purple: #9d4edd;
-            --accent-pink: #ff006e;
-            --accent-green: #06ffa5;
-            --text: #e0e7ff;
-            --text-dim: #8892b0;
-            --glow: rgba(0, 240, 255, 0.4);
-        }
+        /* === AI Platform Page-Specific Styles === */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Animated Neural Network Background */
-        .neural-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.3;
-        }
-
-        .neural-node {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--glow);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        .neural-connection {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            transform-origin: left center;
-            opacity: 0.3;
-            animation: dataFlow 2s linear infinite;
-        }
-
-        /* Particle System */
-        .particle {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            animation: particleFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes particleFloat {
-            0%, 100% { opacity: 0; transform: translateY(0) translateX(0); }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(20px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        @keyframes dataFlow {
-            0% { opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0; }
-        }
-
-        /* Scroll Progress */
-        .progress-ring {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            z-index: 1000;
-            pointer-events: none;
-        }
-        
-        @media (max-width: 768px) {
-            .progress-ring {
-                top: auto;
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-            }
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.1s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 999;
-            background: rgba(10, 1, 24, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            animation: slideDown 0.8s ease-out;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px var(--glow);
-            letter-spacing: 2px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            /* Mobile touch-friendly enhancements */
-            position: relative;
-            z-index: 10;
-            display: inline-block;
-            padding: 0.5rem;
-            margin: -0.5rem;
-            -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
-            touch-action: manipulation;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 40px var(--glow);
-        }
-        
-        .logo:active {
-            transform: scale(0.98);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
-        }
-
-        /* AI Learn Link with Blinking Star */
-        .ai-learn-link {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .blink-star {
-            color: var(--accent-pink);
-            font-size: 0.9rem;
-            animation: blinkStar 1.2s ease-in-out infinite;
-            text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
-        }
-
-        @keyframes blinkStar {
-            0%, 100% { 
-                opacity: 1; 
-                transform: scale(1);
-                text-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink);
-            }
-            50% { 
-                opacity: 0.3; 
-                transform: scale(0.8);
-                text-shadow: 0 0 5px var(--accent-pink);
-            }
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 100px;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 900px;
-        }
-
-        .glitch-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-green));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 8s ease infinite;
-            letter-spacing: -2px;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .subtitle {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            color: var(--accent-cyan);
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.5s forwards;
-        }
-
-        .hero-description {
-            font-size: 1.3rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.8s forwards;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.1s forwards;
-        }
-
-        .btn {
-            padding: 1.2rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #000;
-            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(0, 240, 255, 0.6);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--accent-cyan);
-            border: 2px solid var(--accent-cyan);
-        }
-
-        .btn-secondary:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.4);
-        }
-
-        /* Stats Section */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 5rem 0;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(26, 15, 46, 0.5);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
-            animation: rotate 10s linear infinite;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .stat-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-        }
-
-        /* Section Styling */
-        section {
-            padding: 8rem 0;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 5rem;
-        }
-
-        .section-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--text), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
-        }
-
-        .section-description {
-            font-size: 1.2rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-        }
-
-        /* AI Process Flow */
-        .process-flow {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
-            margin: 5rem 0;
-        }
-
-        .process-step {
-            position: relative;
-            padding: 3rem;
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 16px;
-            transition: all 0.4s ease;
-        }
-
-        .process-step::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .process-step:hover::before {
-            opacity: 1;
-        }
-
-        .process-step:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 240, 255, 0.3);
-        }
-
-        .step-number {
-            position: absolute;
-            top: -20px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: #000;
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.5);
-        }
-
-        .step-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .process-step h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-cyan);
-        }
-
-        .process-step p {
-            color: var(--text-dim);
-            line-height: 1.7;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-            margin: 5rem 0;
-        }
-
-        .feature-card {
-            padding: 3rem;
-            background: rgba(26, 15, 46, 0.4);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .feature-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .feature-card:hover::after {
-            left: 100%;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent-cyan);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.2);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
-        }
-
-        .feature-card h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .feature-card p {
-            color: var(--text-dim);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-list {
-            list-style: none;
-            margin-top: 1.5rem;
-        }
-
-        .feature-list li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
-            color: var(--text-dim);
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .feature-list li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-        }
-
-        .feature-list li:last-child {
-            border-bottom: none;
-        }
-
-        /* Tech Stack Showcase */
+        /* Tech badges */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 1rem;
             justify-content: center;
-            margin: 5rem 0;
+            margin: 2.5rem 0;
         }
 
         .tech-badge {
-            padding: 1rem 2rem;
-            background: rgba(26, 15, 46, 0.6);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 0.7rem 1.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 50px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             color: var(--accent-cyan);
-            transition: all 0.3s ease;
+            transition: var(--transition);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
         }
 
         .tech-badge:hover {
-            background: rgba(0, 240, 255, 0.1);
+            background: rgba(8, 145, 178, 0.08);
             border-color: var(--accent-cyan);
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.3);
-            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--glow);
+            transform: translateY(-2px);
         }
 
-        /* Timeline */
-        .timeline {
-            position: relative;
-            max-width: 1000px;
-            margin: 5rem auto;
-            padding: 2rem 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, var(--accent-cyan), transparent);
-        }
-
-        .timeline-item {
-            margin-bottom: 4rem;
-            position: relative;
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-left: auto;
-            text-align: right;
-        }
-
-        .timeline-content {
-            width: 45%;
-            padding: 2.5rem;
-            background: rgba(26, 15, 46, 0.6);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 12px;
-            position: relative;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--glow);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .timeline-content h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-cyan);
-        }
-
-        /* Interactive Demo Section */
-        .demo-container {
-            margin: 5rem 0;
-            padding: 4rem;
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.8), rgba(10, 1, 24, 0.9));
-            border: 2px solid rgba(0, 240, 255, 0.3);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(157, 78, 221, 0.1), transparent);
-            animation: rotate 20s linear infinite;
-        }
-
-        .code-block {
-            background: #0a0118;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .code-block::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        .code-block pre {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-cyan);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            margin: 8rem 0;
-            padding: 6rem 4rem;
-            background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 240, 255, 0.2));
-            border: 2px solid rgba(0, 240, 255, 0.4);
-            border-radius: 24px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
-            animation: rotate 15s linear infinite;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-section h2 {
-            margin-bottom: 1.5rem;
-        }
-
-        .cta-section p {
-            font-size: 1.3rem;
-            color: var(--text-dim);
-            max-width: 700px;
-            margin: 0 auto 3rem;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .copyright {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        /* Animations */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Events Section Styles */
-        .events-section {
-            margin-top: 4rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.3s forwards;
-        }
+        /* Event card styles */
+        .events-area { margin-top: 3rem; }
 
         .events-header {
             display: flex;
             align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .events-icon {
-            width: 55px;
-            height: 55px;
+            width: 48px; height: 48px;
             background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-            border-radius: 14px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 12px 35px rgba(255, 0, 110, 0.4);
-            animation: pulse 2.5s ease-in-out infinite;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 24px rgba(236, 72, 153, 0.2);
             flex-shrink: 0;
         }
 
         .events-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 900;
             background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.5px;
         }
 
         .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
         .event-card {
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
-            border: 2px solid rgba(255, 0, 110, 0.3);
-            border-radius: 18px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .event-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 110, 0.1), transparent);
-            animation: rotate 18s linear infinite;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .event-card:hover::before {
-            opacity: 1;
+            background: var(--surface);
+            border: 1px solid rgba(236, 72, 153, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: var(--transition);
         }
 
         .event-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-4px);
             border-color: var(--accent-pink);
-            box-shadow: 0 25px 70px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.12);
         }
 
         .event-type {
             display: inline-block;
-            padding: 0.5rem 1.2rem;
+            padding: 0.35rem 0.9rem;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #000;
-            border-radius: 50px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 1.3rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .event-type.workshop {
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-        }
-
-        .event-type.meetup {
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-        }
-
-        .event-type.webinar {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-        }
-
-        .event-type.session {
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-purple));
-        }
-
-        .event-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 1.2rem;
-            position: relative;
-            z-index: 1;
-            line-height: 1.4;
-        }
-
-        .event-details {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 1.2rem;
-        }
-
-        .event-detail {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            margin-bottom: 0.7rem;
-            color: var(--text-dim);
-            font-size: 0.95rem;
-        }
-
-        .event-detail-icon {
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-            min-width: 22px;
-            text-align: center;
-        }
-
-        .event-link {
-            display: inline-block;
-            margin-top: 0.5rem;
-            padding: 0.7rem 1.8rem;
-            background: transparent;
-            color: var(--accent-cyan);
-            text-decoration: none;
-            border: 2px solid var(--accent-cyan);
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .event-link:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        /* Past Events Section */
-        .past-events-section {
-            margin-top: 6rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 1.5s forwards;
-        }
-
-        .past-events-header {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .past-events-icon {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 12px 35px rgba(6, 255, 165, 0.4);
-            flex-shrink: 0;
-        }
-
-        .past-events-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-        }
-
-        .past-events-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .past-event-card {
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.5), rgba(10, 1, 24, 0.7));
-            border: 2px solid rgba(6, 255, 165, 0.2);
-            border-radius: 16px;
-            padding: 1.8rem 2rem;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .past-event-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(6, 255, 165, 0.08), transparent);
-            animation: rotate 20s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .past-event-card:hover::before {
-            opacity: 1;
-        }
-
-        .past-event-card:hover {
-            border-color: var(--accent-green);
-            box-shadow: 0 15px 45px rgba(6, 255, 165, 0.3);
-            transform: translateX(8px);
-        }
-
-        .past-event-date {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--accent-green);
-            white-space: nowrap;
-            position: relative;
-            z-index: 1;
-            min-width: 110px;
-        }
-
-        .past-event-info {
-            position: relative;
-            z-index: 1;
-        }
-
-        .past-event-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .past-event-type {
-            display: inline-block;
-            padding: 0.3rem 0.9rem;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
             color: #000;
             border-radius: 50px;
             font-family: 'JetBrains Mono', monospace;
@@ -1154,325 +107,209 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin-bottom: 1rem;
         }
 
-        .past-event-type.workshop {
+        .event-type.workshop { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); }
+        .event-type.meetup { background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); }
+        .event-type.webinar { background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)); }
+        .event-type.session { background: linear-gradient(135deg, var(--accent-green), var(--accent-purple)); }
+
+        .event-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .event-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .event-detail-icon { color: var(--accent-cyan); font-size: 1.1rem; min-width: 20px; text-align: center; }
+
+        .event-link {
+            display: inline-block;
+            margin-top: 0.8rem;
+            padding: 0.55rem 1.4rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            border: 2px solid var(--accent-cyan);
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .event-link:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 6px 20px rgba(8, 145, 178, 0.2);
+        }
+
+        /* Past events */
+        .past-events-area { margin-top: 3rem; }
+
+        .past-events-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .past-events-icon {
+            width: 48px; height: 48px;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+            flex-shrink: 0;
         }
 
-        .past-event-type.webinar {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+        .past-events-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .past-event-type.meetup {
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+        .past-events-list { display: flex; flex-direction: column; gap: 1rem; }
+
+        .past-event-card {
+            background: var(--surface);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            border-radius: var(--radius-md);
+            padding: 1.2rem 1.5rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 1.5rem;
+            transition: var(--transition);
         }
 
-        .past-event-type.session {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+        .past-event-card:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+            transform: translateX(4px);
         }
+
+        .past-event-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            white-space: nowrap;
+            min-width: 100px;
+        }
+
+        .past-event-type {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            color: #000;
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 0.4rem;
+        }
+
+        .past-event-type.workshop { background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); }
+        .past-event-type.webinar { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); }
+        .past-event-type.meetup { background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); }
+        .past-event-type.session { background: linear-gradient(135deg, var(--accent-purple), var(--accent-green)); }
 
         .past-event-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.6rem;
+            color: var(--text-bright);
+            margin-bottom: 0.4rem;
         }
 
         .past-event-meta {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
         }
 
         .past-event-meta-item {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            font-size: 0.9rem;
+            gap: 0.4rem;
+            font-size: 0.82rem;
             color: var(--text-dim);
         }
 
-        .past-event-meta-icon {
-            color: var(--accent-cyan);
-            font-size: 1.1rem;
-        }
+        .past-event-meta-icon { color: var(--accent-cyan); font-size: 1rem; }
 
         .past-event-link {
             display: inline-block;
-            padding: 0.7rem 1.8rem;
-            background: transparent;
+            padding: 0.5rem 1.2rem;
             color: var(--accent-green);
             text-decoration: none;
             border: 2px solid var(--accent-green);
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
+            letter-spacing: 0.8px;
+            transition: var(--transition);
             white-space: nowrap;
         }
 
         .past-event-link:hover {
             background: var(--accent-green);
             color: #000;
-            box-shadow: 0 8px 25px rgba(6, 255, 165, 0.5);
-            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2);
         }
 
         .no-events {
             text-align: center;
-            padding: 3rem;
-            background: rgba(26, 15, 46, 0.4);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 16px;
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
             color: var(--text-dim);
-            font-size: 1.1rem;
         }
 
-        /* Burger Button & Mobile Menu - Hidden on Desktop */
-        .burger-btn {
-            display: none;
-        }
-        
-        .mobile-menu {
-            display: none;
-        }
+        /* Impact cards colored borders */
+        .impact-card { border-left: 3px solid var(--accent-cyan); }
+        .impact-card:nth-child(2) { border-left-color: var(--accent-purple); }
+        .impact-card:nth-child(3) { border-left-color: var(--accent-pink); }
+        .impact-card:nth-child(4) { border-left-color: var(--accent-green); }
+        .impact-card:nth-child(5) { border-left-color: var(--accent-gold); }
 
-        /* Responsive Design */
+        /* Responsive overrides */
         @media (max-width: 1024px) {
-            .glitch-text {
-                font-size: 3.5rem;
-            }
-
-            h2 {
-                font-size: 2.5rem;
-            }
-
-            .timeline::before {
-                left: 0;
-            }
-
-            .timeline-content {
-                width: 100%;
-                margin-left: 3rem !important;
-                text-align: left !important;
-            }
-
-            .timeline-dot {
-                left: 0;
-            }
-
-            .events-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-
-            .past-event-card {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .past-event-date {
-                min-width: auto;
-            }
+            .past-event-card { grid-template-columns: 1fr; gap: 1rem; }
+            .past-event-date { min-width: auto; }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            /* Burger Button - Visible on Mobile */
-            .burger-btn {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 5px;
-                width: 44px;
-                height: 44px;
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                z-index: 1001;
-                padding: 8px;
-                -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3);
-                touch-action: manipulation;
-            }
-            
-            .burger-line {
-                width: 24px;
-                height: 2px;
-                background: var(--accent-cyan);
-                border-radius: 2px;
-                transition: all 0.3s ease;
-                box-shadow: 0 0 8px var(--glow);
-            }
-            
-            /* Burger Animation - Open State */
-            .burger-btn.active .burger-line:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
-            
-            .burger-btn.active .burger-line:nth-child(2) {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            
-            .burger-btn.active .burger-line:nth-child(3) {
-                transform: rotate(-45deg) translate(5px, -5px);
-            }
-            
-            /* Mobile Menu Overlay */
-            .mobile-menu {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                background: rgba(10, 1, 24, 0.98);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.4s ease;
-                z-index: 998;
-            }
-            
-            .mobile-menu.active {
-                opacity: 1;
-                visibility: visible;
-            }
-            
-            .mobile-nav-links {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                gap: 2rem;
-            }
-            
-            .mobile-nav-links li {
-                opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.4s ease;
-            }
-            
-            .mobile-menu.active .mobile-nav-links li {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            
-            /* Staggered animation for menu items */
-            .mobile-menu.active .mobile-nav-links li:nth-child(1) { transition-delay: 0.1s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(2) { transition-delay: 0.15s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(3) { transition-delay: 0.2s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(4) { transition-delay: 0.25s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(5) { transition-delay: 0.3s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(6) { transition-delay: 0.35s; }
-            .mobile-menu.active .mobile-nav-links li:nth-child(7) { transition-delay: 0.4s; }
-            
-            .mobile-nav-links a {
-                color: var(--text);
-                text-decoration: none;
-                font-family: 'Orbitron', sans-serif;
-                font-size: 1.5rem;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                transition: all 0.3s ease;
-                display: inline-block;
-                padding: 0.5rem 1rem;
-            }
-            
-            .mobile-nav-links a:hover,
-            .mobile-nav-links a:active {
-                color: var(--accent-cyan);
-                text-shadow: 0 0 15px var(--glow);
-                transform: scale(1.05);
-            }
-            
-            .mobile-nav-links .ai-learn-link {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-            
-            /* Ensure logo is easily tappable on mobile */
-            .logo {
-                padding: 0.75rem;
-                margin: -0.75rem;
-                font-size: 1.5rem;
-                min-height: 44px;
-                min-width: 44px;
-                display: flex;
-                align-items: center;
-            }
-            
-            .nav-container {
-                padding: 1rem 1.5rem;
-            }
-
-            .glitch-text {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .hero-description {
-                font-size: 1.1rem;
-            }
-
-            .features-grid,
-            .process-flow {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .events-header,
-            .past-events-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .past-event-card {
-                padding: 1.5rem;
-            }
-
-            .past-event-meta {
-                flex-direction: column;
-                gap: 0.8rem;
-                align-items: flex-start;
-            }
-
-            .past-event-link {
-                width: 100%;
-                text-align: center;
-            }
+            .events-header, .past-events-header { flex-direction: column; align-items: flex-start; }
+            .events-grid { grid-template-columns: 1fr; }
+            .past-event-card { padding: 1rem; }
+            .past-event-meta { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+            .past-event-link { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -1480,85 +317,59 @@
     <!-- Neural Network Background -->
     <div class="neural-bg" id="neuralBg"></div>
 
-    <!-- Particles -->
-    <div id="particles"></div>
-
-    <!-- Progress Ring -->
-    <svg class="progress-ring" width="60" height="60">
-        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
-        <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
-            </linearGradient>
-        </defs>
+    <!-- Scroll Progress -->
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
     </svg>
 
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="index.html" class="logo" title="Back to Main Site">SUSTAINSYS</a>
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#mission">Mission</a></li>
-                <li><a href="#platform">Platform</a></li>
-                <li><a href="ai-learn.html" class="ai-learn-link">AI Learn <span class="blink-star">★</span></a></li>
-                <li><a href="#impact">Impact</a></li>
-                <li><a href="#technology">Technology</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            
-            <!-- Mobile Burger Menu Button -->
-            <button class="burger-btn" id="burgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
-                <span class="burger-line"></span>
-                <span class="burger-line"></span>
-                <span class="burger-line"></span>
-            </button>
-        </div>
-        
-        <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu" id="mobileMenu">
-            <ul class="mobile-nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#mission">Mission</a></li>
-                <li><a href="#platform">Platform</a></li>
-                <li><a href="ai-learn.html" class="ai-learn-link">AI Learn <span class="blink-star">★</span></a></li>
-                <li><a href="#impact">Impact</a></li>
-                <li><a href="#technology">Technology</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><a href="Future_Forward.html">Future Forward</a></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight active">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
     </nav>
 
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="Future_Forward.html">Future Forward</a></li>
+            <li><a href="job-openings.html">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight active">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
     <div class="container">
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero" id="home">
             <div class="hero-content">
                 <div class="subtitle">[ Next-Gen Engineering ]</div>
-                <h1 class="glitch-text">AI-Powered Engineering Evolution</h1>
-                <p class="hero-description">
-                    Transform your software development lifecycle with enterprise-grade Generative AI and Agentic AI. 
-                    SustainSys delivers a comprehensive platform that accelerates delivery, enhances quality, and 
-                    empowers teams to innovate faster than ever before.
-                </p>
-                <div class="cta-buttons">
-                    <a href="#contact" class="btn btn-primary">Start Your Transformation</a>
-                    <a href="#platform" class="btn btn-secondary">Explore Platform</a>
-                </div>
-
-                <!-- Upcoming Events Section -->
-                <div class="events-section" id="eventsSection">
-                    <!-- Events will be dynamically inserted here by JavaScript -->
-                </div>
-
-                <!-- Past Events Section -->
-                <div class="past-events-section" id="pastEventsSection">
-                    <!-- Past events will be dynamically inserted here by JavaScript -->
-                </div>
+                <h1>AI-Powered<br>Engineering Evolution</h1>
+                <p>Transform your software development lifecycle with enterprise-grade Generative AI and Agentic AI. Our platform harnesses multi-model orchestration, retrieval-augmented generation, and autonomous agent architectures to accelerate delivery, enhance code quality, and empower engineering teams to innovate at unprecedented velocity &mdash; from intelligent backlog planning to production-grade deployment and beyond.</p>
             </div>
         </section>
 
-        <!-- Stats Section -->
+        <!-- Stats -->
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number">10X</div>
@@ -1578,246 +389,95 @@
             </div>
         </div>
 
-        <!-- Mission Section -->
-        <section id="mission">
-            <div class="section-header">
-                <div class="section-label">[ Our Mission ]</div>
-                <h2>Redefining Modern Software Engineering</h2>
-                <p class="section-description">
-                    We embed trusted, explainable, and enterprise-ready Generative AI across the entire software 
-                    delivery lifecycle. Our mission is to empower organisations to move faster from idea to production 
-                    by combining agentic AI, deep engineering context, and best-practice automation—while maintaining 
-                    security, governance, and accountability at enterprise scale.
-                </p>
+        <!-- Mission -->
+        <section class="section" id="mission" style="padding-bottom: 1rem;">
+            <div class="section-title">Our Mission</div>
+            <div class="section-subtitle">
+                We embed trusted, explainable, and enterprise-ready Generative AI across the entire software delivery lifecycle &mdash; empowering organisations to move faster from idea to production while maintaining security, governance, and accountability at scale. Our vision is to make intelligent engineering the default, not the exception &mdash; equipping every team with AI-native tools that understand enterprise context, enforce compliance guardrails, and continuously learn from your codebase, design systems, and delivery patterns.
+            </div>
+        </section>
+
+        <!-- Platform Features -->
+        <section class="section" id="platform" style="padding-top: 2rem;">
+            <div class="section-title">Full SDLC AI Integration</div>
+            <div class="section-subtitle">
+                A comprehensive GenAI-powered engineering platform supporting teams across the entire Software Development Lifecycle &mdash; from backlog creation and design through development, testing, deployment, and ongoing modernisation.
             </div>
 
-            <div class="demo-container">
-                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; text-align: center;">
-                    Enterprise-First AI Platform
-                </h3>
-                <div class="code-block">
-                    <pre>
-// AI-Powered Development Pipeline
-const sustainsysPlatform = {
-  intelligence: "Agentic AI + LLM Integration",
-  context: "Enterprise Knowledge Graph",
-  deployment: "Cloud | Hybrid | On-Premise",
-  security: "SOC2 + GDPR Compliant",
-  integration: {
-    tools: ["JIRA", "GitLab", "Jenkins", "Kubernetes"],
-    frameworks: ["React", "Angular", "Vue", "Next.js"],
-    languages: ["Python", "JavaScript", "Java", "Go"],
-  },
-  capabilities: [
-    "Intelligent Code Generation",
-    "Automated Testing & QA",
-    "Legacy Modernization",
-    "Design System Integration",
-    "Real-time Collaboration"
-  ]
-};
-                    </pre>
+            <div class="grid-auto">
+                <div class="card">
+                    <div class="card-icon">&#129504;</div>
+                    <h4>Agentic AI Orchestration</h4>
+                    <p>Intelligent AI agents that reason over enterprise context, execute tasks autonomously, and maintain continuity across teams and systems.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#9889;</div>
+                    <h4>AI-Assisted Planning</h4>
+                    <p>Transform requirements into actionable stories, epics, and tasks with intelligent prioritization and effort estimation.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128260;</div>
+                    <h4>Legacy Modernisation</h4>
+                    <p>Deep code comprehension and agentic transformation pipelines convert legacy apps into modern architectures with business logic preservation.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#128187;</div>
+                    <h4>Context-Aware IDE</h4>
+                    <p>Seamless integration providing intelligent code completion, refactoring suggestions, and real-time assistance aligned to your standards.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#129302;</div>
+                    <h4>Virtual AI Teammates</h4>
+                    <p>Background AI agents handle routine SDLC tasks like documentation, testing, and issue resolution, freeing teams for innovation.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">&#127912;</div>
+                    <h4>Design-System Integration</h4>
+                    <p>AI-powered design-to-code workflows ensure consistent, brand-compliant UX with automatic component generation and accessibility compliance.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Platform Section -->
-        <section id="platform">
-            <div class="section-header">
-                <div class="section-label">[ The Platform ]</div>
-                <h2>Full SDLC AI Integration</h2>
-                <p class="section-description">
-                    A comprehensive GenAI-powered engineering platform supporting teams across the entire Software 
-                    Development Lifecycle—from backlog creation and design, through development, testing, deployment, 
-                    and ongoing modernisation.
-                </p>
+        <!-- Impact -->
+        <section class="section" id="impact" style="padding-top: 2rem;">
+            <div class="section-title">Measurable Impact</div>
+            <div class="section-subtitle">
+                SustainSys delivers tangible results across every metric that matters &mdash; from delivery speed and code quality to team productivity and innovation capacity.
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3>Agentic AI Orchestration</h3>
-                    <p>
-                        Intelligent AI agents that reason over hierarchical enterprise context, execute tasks 
-                        autonomously or collaboratively, and maintain continuity across teams and systems.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Context-aware task automation</li>
-                        <li>Multi-agent coordination</li>
-                        <li>Autonomous problem-solving</li>
-                        <li>Continuous learning</li>
-                    </ul>
+            <div class="grid-auto">
+                <div class="card impact-card">
+                    <h4 style="color: var(--accent-cyan);">Reduce Delivery Timelines</h4>
+                    <p>AI assistance across every SDLC stage eliminates manual handoffs, enabling shorter release cycles without sacrificing quality.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>AI-Assisted Backlog & Planning</h3>
-                    <p>
-                        Transform requirements into actionable user stories, epics, and technical tasks with 
-                        intelligent prioritization and effort estimation.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Automated story generation</li>
-                        <li>Smart prioritization</li>
-                        <li>Dependency mapping</li>
-                        <li>Sprint planning assistance</li>
-                    </ul>
+                <div class="card impact-card">
+                    <h4 style="color: var(--accent-purple);">Improve Code &amp; Design Quality</h4>
+                    <p>Continuous enrichment with enterprise context and best practices reduces defects by 70% and improves maintainability scores.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Legacy Modernization</h3>
-                    <p>
-                        Deep code comprehension, automated reverse engineering, and agentic transformation pipelines 
-                        convert legacy apps into modern architectures.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Automated code analysis</li>
-                        <li>Architecture transformation</li>
-                        <li>Business logic preservation</li>
-                        <li>Zero-downtime migration</li>
-                    </ul>
+                <div class="card impact-card">
+                    <h4 style="color: var(--accent-pink);">Shift Focus to Innovation</h4>
+                    <p>Automate routine tasks so engineering teams redirect efforts to new features, architecture evolution, and strategic initiatives.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💻</div>
-                    <h3>Context-Aware IDE Integration</h3>
-                    <p>
-                        Seamless integration with your development environment providing intelligent code completion, 
-                        refactoring suggestions, and real-time assistance.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Smart code generation</li>
-                        <li>Automated refactoring</li>
-                        <li>Pattern recognition</li>
-                        <li>Best practice enforcement</li>
-                    </ul>
+                <div class="card impact-card">
+                    <h4 style="color: var(--accent-green);">Modernise Legacy Systems</h4>
+                    <p>95% accuracy in transforming legacy applications with built-in validation, traceability, and low-risk auditable modernisation.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3>Virtual AI Teammates</h3>
-                    <p>
-                        Background AI agents handle routine SDLC tasks like documentation, testing, and issue 
-                        resolution, freeing teams for innovation.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Automated documentation</li>
-                        <li>Continuous testing</li>
-                        <li>Bug detection & fixing</li>
-                        <li>Code review assistance</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Design-System Integration</h3>
-                    <p>
-                        AI-powered design-to-code workflows ensure consistent, brand-compliant UX across all 
-                        applications with automatic component generation.
-                    </p>
-                    <ul class="feature-list">
-                        <li>Component auto-generation</li>
-                        <li>Brand consistency checks</li>
-                        <li>Responsive design optimization</li>
-                        <li>Accessibility compliance</li>
-                    </ul>
+                <div class="card impact-card">
+                    <h4 style="color: var(--accent-gold);">Enterprise-Grade Governance</h4>
+                    <p>Complete traceability, explainability, and flexible deployment options (cloud, hybrid, on-prem) for regulatory compliance at scale.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Impact Section -->
-        <section id="impact">
-            <div class="section-header">
-                <div class="section-label">[ Measurable Impact ]</div>
-                <h2>Transform Your Engineering Outcomes</h2>
-                <p class="section-description">
-                    SustainSys delivers tangible results across every metric that matters—from delivery speed and 
-                    code quality to team productivity and innovation capacity.
-                </p>
-            </div>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>⚡ Reduce Delivery Timelines</h3>
-                        <p>
-                            Accelerate delivery by 10x with AI assistance across every SDLC stage. Intelligent backlog 
-                            generation, context-aware workflows, and autonomous agent execution eliminate manual 
-                            handoffs. Teams move from requirements to production with predictable outcomes and shorter 
-                            release cycles without sacrificing quality.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>✓ Improve Code and Design Quality</h3>
-                        <p>
-                            Achieve 85% improvement in code quality through continuous enrichment with enterprise 
-                            context, design standards, and engineering best practices. AI-assisted reviews, 
-                            specification alignment, and design-system-aware generation reduce defects by 70% and 
-                            improve maintainability scores.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>🚀 Shift Focus to Innovation</h3>
-                        <p>
-                            Free up 60% of engineering time by automating routine tasks. Background AI agents handle 
-                            refactoring, documentation, testing, and issue resolution—acting as virtual teammates. 
-                            Engineering and product teams redirect efforts to high-value work: new features, 
-                            architecture evolution, and innovation initiatives.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>🔄 Modernize Legacy Systems</h3>
-                        <p>
-                            Transform legacy applications with 95% accuracy using deep code comprehension and automated 
-                            reverse engineering. Agentic transformation pipelines convert outdated architectures while 
-                            preserving business logic. Built-in validation and traceability ensure low-risk, auditable 
-                            modernization.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <h3>🛡️ Enterprise-Grade Governance</h3>
-                        <p>
-                            Deploy AI responsibly with complete traceability, explainability, and enterprise controls. 
-                            Every AI-generated artifact is auditable and aligned to compliance requirements. Flexible 
-                            deployment options (cloud, hybrid, on-prem) ensure regulatory and data-residency compliance. 
-                            Scale AI adoption with confidence and transparency.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Technology Section -->
-        <section id="technology">
-            <div class="section-header">
-                <div class="section-label">[ Technology Stack ]</div>
-                <h2>Powered by Cutting-Edge AI</h2>
-                <p class="section-description">
-                    Built on state-of-the-art AI technologies and seamlessly integrated with your existing tools 
-                    and workflows for maximum compatibility and minimal disruption.
-                </p>
+        <!-- Technology -->
+        <section class="section" id="technology" style="padding-top: 2rem;">
+            <div class="section-title">Powered by Cutting-Edge AI</div>
+            <div class="section-subtitle">
+                Built on state-of-the-art AI technologies, seamlessly integrated with your existing tools and workflows for maximum compatibility.
             </div>
 
             <div class="tech-stack">
-                <div class="tech-badge">GPT-4 & Claude</div>
+                <div class="tech-badge">GPT-4 &amp; Claude</div>
                 <div class="tech-badge">LangChain</div>
                 <div class="tech-badge">Vector Databases</div>
                 <div class="tech-badge">Kubernetes</div>
@@ -1837,232 +497,84 @@ const sustainsysPlatform = {
                 <div class="tech-badge">MongoDB</div>
             </div>
 
-            <div class="features-grid" style="margin-top: 5rem;">
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Enterprise Security</h3>
-                    <p>
-                        SOC2 Type II certified with end-to-end encryption, role-based access control, audit logging, 
-                        and compliance with GDPR, HIPAA, and industry-specific regulations.
-                    </p>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-icon">&#128274;</div>
+                    <h4>Enterprise Security</h4>
+                    <p>SOC2 Type II certified with end-to-end encryption, RBAC, audit logging, and GDPR/HIPAA compliance.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Seamless Integration</h3>
-                    <p>
-                        Pre-built connectors for 100+ tools including JIRA, GitLab, Jenkins, Slack, Teams, and more. 
-                        REST APIs and webhooks for custom integrations with your unique tech stack.
-                    </p>
+                <div class="card">
+                    <div class="card-icon">&#128279;</div>
+                    <h4>Seamless Integration</h4>
+                    <p>Pre-built connectors for 100+ tools including JIRA, GitLab, Jenkins, Slack, and Teams with REST API support.</p>
                 </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Scalable Architecture</h3>
-                    <p>
-                        Cloud-native design scales from small teams to enterprise deployments. Supports multi-region, 
-                        multi-cloud, and hybrid deployments with automatic load balancing and failover.
-                    </p>
+                <div class="card">
+                    <div class="card-icon">&#128200;</div>
+                    <h4>Scalable Architecture</h4>
+                    <p>Cloud-native design scaling from small teams to enterprise with multi-region, multi-cloud, and hybrid deployments.</p>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section id="contact">
-            <div class="cta-section">
-                <div class="cta-content">
-                    <div class="section-label">[ Get Started ]</div>
-                    <h2>Ready to Transform Your Engineering?</h2>
-                    <p>
-                        Join forward-thinking organizations leveraging AI to build better software faster. 
-                        Schedule a demo to see SustainSys in action and discover how we can accelerate your 
-                        development lifecycle.
-                    </p>
-                    <div class="cta-buttons">
-                        <a href="/cdn-cgi/l/email-protection#c1a0a2a2aeb4afb5b281b2b4b2b5a0a8afb2b8b2efa2aeefb4aafeb2b4a3aba4a2b5fc91ada0b5a7aeb3ace4f3f185a4acaee4f3f193a4b0b4a4b2b5" class="btn btn-primary">
-                            Schedule a Demo
-                        </a>
-                        <a href="/cdn-cgi/l/email-protection#335250505c465d47407340464047525a5d404a401d505c1d46580c404651595650470e74565d5641525f1601037a5d42465a414a" class="btn btn-secondary">
-                            Contact Sales
-                        </a>
-                    </div>
-                </div>
+        <!-- Events -->
+        <section class="section" id="events">
+            <div class="section-title">Events &amp; Sessions</div>
+
+            <!-- Upcoming Events -->
+            <div class="events-area" id="eventsSection">
+                <!-- Dynamically rendered by JavaScript -->
+            </div>
+
+            <!-- Past Events -->
+            <div class="past-events-area" id="pastEventsSection">
+                <!-- Dynamically rendered by JavaScript -->
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="cta-section" id="contact">
+                <h3>Ready to Transform Your Engineering?</h3>
+                <p>Schedule a demo to see SustainSys in action and discover how we can accelerate your development lifecycle.</p>
+                <a href="contact.html" class="btn btn-primary">Get in Touch</a>
             </div>
         </section>
     </div>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#home">Home</a>
-                <a href="#mission">Mission</a>
-                <a href="#platform">Platform</a>
-                <a href="#impact">Impact</a>
-                <a href="#technology">Technology</a>
-                <a href="/cdn-cgi/l/email-protection#e58486868a908b9196a596909691848c8b969c96cb868acb908e">Contact</a>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
             </div>
-            <p class="copyright">
-                &copy; 2026 SustainSys Consulting Ltd. All rights reserved.<br>
-                Enterprise AI-Powered Engineering Solutions<br>
-                <a href="/cdn-cgi/l/email-protection#8cedefefe3f9e2f8ffccfff9fff8ede5e2fff5ffa2efe3a2f9e7" style="color: var(--accent-cyan); text-decoration: none;">
-                    <span class="__cf_email__" data-cfemail="9efffdfdf1ebf0eaeddeedebedeafff7f0ede7edb0fdf1b0ebf5">[email&#160;protected]</span>
-                </a>
-            </p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a></p>
+            </div>
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Neural Network Background Generation
-        function createNeuralNetwork() {
-            const bg = document.getElementById('neuralBg');
-            const nodeCount = 30;
-            const nodes = [];
-
-            // Create nodes
-            for (let i = 0; i < nodeCount; i++) {
-                const node = document.createElement('div');
-                node.className = 'neural-node';
-                node.style.left = Math.random() * 100 + '%';
-                node.style.top = Math.random() * 100 + '%';
-                node.style.animationDelay = Math.random() * 3 + 's';
-                bg.appendChild(node);
-                nodes.push({
-                    element: node,
-                    x: parseFloat(node.style.left),
-                    y: parseFloat(node.style.top)
-                });
-            }
-
-            // Create connections
-            for (let i = 0; i < nodeCount; i++) {
-                for (let j = i + 1; j < nodeCount; j++) {
-                    if (Math.random() > 0.85) {
-                        const connection = document.createElement('div');
-                        connection.className = 'neural-connection';
-                        
-                        const dx = nodes[j].x - nodes[i].x;
-                        const dy = nodes[j].y - nodes[i].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        const angle = Math.atan2(dy, dx);
-                        
-                        connection.style.width = distance + 'vw';
-                        connection.style.left = nodes[i].x + '%';
-                        connection.style.top = nodes[i].y + '%';
-                        connection.style.transform = `rotate(${angle}rad)`;
-                        connection.style.animationDelay = Math.random() * 2 + 's';
-                        
-                        bg.appendChild(connection);
-                    }
-                }
-            }
-        }
-
-        // Particle System
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 50;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 4 + 's';
-                particle.style.animationDuration = (3 + Math.random() * 2) + 's';
-                container.appendChild(particle);
-            }
-        }
-
-        // Scroll Progress Ring
-        function updateProgressRing() {
-            const circle = document.querySelector('.progress-ring-circle');
-            const radius = circle.r.baseVal.value;
-            const circumference = radius * 2 * Math.PI;
-            
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circle.style.strokeDashoffset = circumference;
-
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrollPercent = scrollTop / scrollHeight;
-                const offset = circumference - scrollPercent * circumference;
-                circle.style.strokeDashoffset = offset;
-            });
-        }
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Intersection Observer for Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animated elements
-        document.querySelectorAll('.feature-card, .process-step, .timeline-item, .stat-card').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(50px)';
-            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-            observer.observe(el);
-        });
-
-        // Initialize
-        window.addEventListener('load', () => {
-            createNeuralNetwork();
-            createParticles();
-            updateProgressRing();
-        });
-
-        // Dynamic cursor effect
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.createElement('div');
-            cursor.style.position = 'fixed';
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            cursor.style.width = '5px';
-            cursor.style.height = '5px';
-            cursor.style.background = 'var(--accent-cyan)';
-            cursor.style.borderRadius = '50%';
-            cursor.style.pointerEvents = 'none';
-            cursor.style.opacity = '0.5';
-            cursor.style.zIndex = '9999';
-            document.body.appendChild(cursor);
-            
-            setTimeout(() => {
-                cursor.style.opacity = '0';
-                cursor.style.transform = 'scale(2)';
-                cursor.style.transition = 'all 0.5s ease';
-            }, 10);
-            
-            setTimeout(() => cursor.remove(), 500);
-        });
-
+    <script src="main.js"></script>
+    <script>
         // ============================================
         // EVENTS CONFIGURATION - EDIT THIS SECTION
         // ============================================
         const EVENTS_CONFIG = {
-            enabled: true, // Set to false to hide events section
+            enabled: true,
             title: "Upcoming Events & Sessions",
-            icon: "📅",
+            icon: "\uD83D\uDCC5",
             events: [
                 {
                     type: "webinar",
@@ -2097,7 +609,7 @@ const sustainsysPlatform = {
         const PAST_EVENTS_CONFIG = {
             enabled: true,
             title: "Past Events & Sessions",
-            icon: "✓",
+            icon: "\u2713",
             events: [
                 {
                     type: "webinar",
@@ -2192,16 +704,17 @@ const sustainsysPlatform = {
             ]
         };
 
-        // Function to render upcoming events
+        // Render upcoming events
         function renderEvents() {
-            const eventsSection = document.getElementById('eventsSection');
-            
+            const section = document.getElementById('eventsSection');
+            if (!section) return;
+
             if (!EVENTS_CONFIG.enabled || !EVENTS_CONFIG.events || EVENTS_CONFIG.events.length === 0) {
-                eventsSection.style.display = 'none';
+                section.style.display = 'none';
                 return;
             }
 
-            const eventsHTML = `
+            section.innerHTML = `
                 <div class="events-header">
                     <div class="events-icon">${EVENTS_CONFIG.icon}</div>
                     <h3 class="events-title">${EVENTS_CONFIG.title}</h3>
@@ -2213,41 +726,40 @@ const sustainsysPlatform = {
                             <h4 class="event-title">${event.title}</h4>
                             <div class="event-details">
                                 <div class="event-detail">
-                                    <span class="event-detail-icon">📅</span>
+                                    <span class="event-detail-icon">\uD83D\uDCC5</span>
                                     <span>${event.date}</span>
                                 </div>
                                 <div class="event-detail">
-                                    <span class="event-detail-icon">⏰</span>
+                                    <span class="event-detail-icon">\u23F0</span>
                                     <span>${event.time}</span>
                                 </div>
                                 <div class="event-detail">
-                                    <span class="event-detail-icon">📍</span>
+                                    <span class="event-detail-icon">\uD83D\uDCCD</span>
                                     <span>${event.location}</span>
                                 </div>
                             </div>
                             ${event.link ? `
                                 <a href="${event.link}" class="event-link" target="_blank" rel="noopener noreferrer">
-                                    ${event.linkText || 'LEARN MORE'} →
+                                    ${event.linkText || 'LEARN MORE'} \u2192
                                 </a>
                             ` : ''}
                         </div>
                     `).join('')}
                 </div>
             `;
-
-            eventsSection.innerHTML = eventsHTML;
         }
 
-        // Function to render past events
+        // Render past events
         function renderPastEvents() {
-            const pastEventsSection = document.getElementById('pastEventsSection');
-            
+            const section = document.getElementById('pastEventsSection');
+            if (!section) return;
+
             if (!PAST_EVENTS_CONFIG.enabled || !PAST_EVENTS_CONFIG.events || PAST_EVENTS_CONFIG.events.length === 0) {
-                pastEventsSection.style.display = 'none';
+                section.style.display = 'none';
                 return;
             }
 
-            const pastEventsHTML = `
+            section.innerHTML = `
                 <div class="past-events-header">
                     <div class="past-events-icon">${PAST_EVENTS_CONFIG.icon}</div>
                     <h3 class="past-events-title">${PAST_EVENTS_CONFIG.title}</h3>
@@ -2257,100 +769,35 @@ const sustainsysPlatform = {
                         <div class="past-event-card">
                             <div class="past-event-date">${event.date}</div>
                             <div class="past-event-info">
-                                <div class="past-event-header">
-                                    <span class="past-event-type ${event.type}">${event.type}</span>
-                                </div>
+                                <div><span class="past-event-type ${event.type}">${event.type}</span></div>
                                 <h4 class="past-event-title">${event.title}</h4>
                                 <div class="past-event-meta">
                                     <div class="past-event-meta-item">
-                                        <span class="past-event-meta-icon">👥</span>
+                                        <span class="past-event-meta-icon">\uD83D\uDC65</span>
                                         <span>${event.attendees} attendees</span>
                                     </div>
                                     <div class="past-event-meta-item">
-                                        <span class="past-event-meta-icon">📍</span>
+                                        <span class="past-event-meta-icon">\uD83D\uDCCD</span>
                                         <span>${event.location}</span>
                                     </div>
                                 </div>
                             </div>
                             ${event.link ? `
                                 <a href="${event.link}" class="past-event-link" target="_blank" rel="noopener noreferrer">
-                                    ${event.linkText || 'VIEW'} →
+                                    ${event.linkText || 'VIEW'} \u2192
                                 </a>
                             ` : ''}
                         </div>
                     `).join('')}
                 </div>
             `;
-
-            pastEventsSection.innerHTML = pastEventsHTML;
         }
 
-        // Update the initialization to include event rendering
+        // Initialize events on load
         window.addEventListener('load', () => {
-            createNeuralNetwork();
-            createParticles();
-            updateProgressRing();
             renderEvents();
             renderPastEvents();
-            initMobileMenu();
         });
-        
-        // Mobile Menu Toggle Functionality
-        function initMobileMenu() {
-            const burgerBtn = document.getElementById('burgerBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-            
-            if (!burgerBtn || !mobileMenu) return;
-            
-            // Toggle menu on burger click
-            burgerBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleMobileMenu();
-            });
-            
-            // Close menu when clicking a nav link
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    closeMobileMenu();
-                });
-            });
-            
-            // Close menu when clicking outside
-            mobileMenu.addEventListener('click', (e) => {
-                if (e.target === mobileMenu) {
-                    closeMobileMenu();
-                }
-            });
-            
-            // Close menu on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                    closeMobileMenu();
-                }
-            });
-            
-            // Prevent body scroll when menu is open
-            function toggleMobileMenu() {
-                const isActive = burgerBtn.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-                burgerBtn.setAttribute('aria-expanded', isActive);
-                
-                if (isActive) {
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.body.style.overflow = '';
-                }
-            }
-            
-            function closeMobileMenu() {
-                burgerBtn.classList.remove('active');
-                mobileMenu.classList.remove('active');
-                burgerBtn.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-        }
     </script>
 </body>
 </html>

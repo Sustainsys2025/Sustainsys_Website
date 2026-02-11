@@ -12,298 +12,28 @@
     <meta property="og:url" content="https://sustainsys.co.uk/job-openings">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@Sustain_IT_uk">
-    <meta name="theme-color" content="#010101">
-    
+    <meta name="theme-color" content="#f8fafc">
+
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="styles.css">
+
     <style>
-        :root {
-            --primary: #0a0118;
-            --secondary: #1a0f2e;
-            --accent-cyan: #00f0ff;
-            --accent-purple: #9d4edd;
-            --accent-pink: #ff006e;
-            --accent-green: #06ffa5;
-            --accent-orange: #ff9500;
-            --text: #e0e7ff;
-            --text-dim: #8892b0;
-            --glow: rgba(0, 240, 255, 0.4);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        .neural-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.3;
-        }
-
-        .neural-node {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--glow);
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        .neural-connection {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            transform-origin: left center;
-            opacity: 0.3;
-            animation: dataFlow 2s linear infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        @keyframes dataFlow {
-            0% { opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0; }
-        }
-
-        .progress-ring {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            z-index: 1000;
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.1s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1001;
-            background: rgba(10, 1, 24, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            animation: slideDown 0.8s ease-out;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px var(--glow);
-            letter-spacing: 2px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
-        }
-
-        .nav-links a.active {
-            color: var(--accent-cyan);
-        }
-
-        .nav-badge-star {
-            display: inline-block;
-            color: var(--accent-pink);
-            margin-left: 5px;
-            font-size: 1em;
-            animation: starPulse 2s ease-in-out infinite;
-            text-shadow: 0 0 10px var(--accent-pink);
-        }
-
-        @keyframes starPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.2) rotate(180deg); }
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: none;
-            color: var(--accent-cyan);
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 1002;
-            position: relative;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero {
-            min-height: 50vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: 150px;
-            padding-bottom: 50px;
-            position: relative;
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 900px;
-        }
-
-        .glitch-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink), var(--accent-green));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 8s ease infinite;
-            letter-spacing: -2px;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .subtitle {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.1rem;
-            color: var(--accent-cyan);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.5s forwards;
-        }
-
-        .hero-description {
-            font-size: 1.2rem;
-            color: var(--text-dim);
-            line-height: 1.7;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.8s forwards;
-        }
-
-        .jobs-section {
-            padding: 3rem 0 8rem;
-        }
-
+        /* Job-specific card styles */
         .job-card {
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
-            border: 2px solid rgba(0, 240, 255, 0.3);
-            border-radius: 20px;
-            padding: 2.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--card-pad);
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .job-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
-            animation: rotate 20s linear infinite;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .job-card:hover::before {
-            opacity: 1;
+            transition: var(--transition);
         }
 
         .job-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
         }
 
         .job-header {
@@ -311,8 +41,6 @@
             align-items: flex-start;
             justify-content: space-between;
             margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
             flex-wrap: wrap;
             gap: 1rem;
         }
@@ -323,9 +51,7 @@
         }
 
         .job-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
+            font-size: 1.8rem;
             margin-bottom: 0.5rem;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
             -webkit-background-clip: text;
@@ -364,34 +90,51 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.4);
             white-space: nowrap;
         }
 
+        .job-badge.closed {
+            background: linear-gradient(135deg, var(--text-dim), #64748b);
+        }
+
         .job-summary {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             color: var(--text-dim);
             line-height: 1.7;
             margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
         }
 
-        .job-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            position: relative;
-            z-index: 1;
+        /* Expand/collapse toggle - extends .collapsible-toggle from styles.css */
+        .job-toggle {
+            border: 2px solid var(--accent-cyan);
+            padding: 0.7rem 1.4rem;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .job-details.expanded {
-            max-height: 2000px;
-            transition: max-height 0.8s ease-in;
+        .job-toggle::after {
+            display: none;
         }
+
+        .job-toggle:hover {
+            background: rgba(8, 145, 178, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .job-toggle .toggle-icon {
+            transition: transform 0.3s var(--ease);
+            font-size: 1.2rem;
+        }
+
+        .job-toggle.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Collapsible content uses .collapsible-content from styles.css */
 
         .job-details-content {
-            padding-top: 1rem;
+            padding-top: 1.5rem;
         }
 
         .job-section {
@@ -399,9 +142,7 @@
         }
 
         .job-section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 900;
+            font-size: 1.2rem;
             margin-bottom: 1rem;
             color: var(--accent-cyan);
         }
@@ -412,303 +153,91 @@
         }
 
         .job-list li {
-            padding: 0.6rem 0 0.6rem 2rem;
+            padding: 0.5rem 0 0.5rem 2rem;
             position: relative;
             color: var(--text-dim);
             line-height: 1.6;
         }
 
         .job-list li::before {
-            content: '▹';
+            content: '\25B9';
             position: absolute;
             left: 0;
             color: var(--accent-cyan);
             font-size: 1.2rem;
         }
 
-        .toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: transparent;
-            border: 2px solid var(--accent-cyan);
-            color: var(--accent-cyan);
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .toggle-btn:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .toggle-icon {
-            transition: transform 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .toggle-btn.expanded .toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        .apply-btn {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #000;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
-            position: relative;
-            z-index: 1;
-        }
-
-        .apply-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.6);
-        }
-
-        .cta-section {
-            margin: 4rem 0 3rem;
-            padding: 3.5rem 3rem;
-            background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(0, 240, 255, 0.2));
-            border: 2px solid rgba(0, 240, 255, 0.4);
-            border-radius: 24px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1), transparent);
-            animation: rotate 15s linear infinite;
-        }
-
-        .cta-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-section h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            margin-bottom: 1.2rem;
-            color: var(--accent-cyan);
-        }
-
-        .cta-section p {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            max-width: 650px;
-            margin: 0 auto 1.8rem;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .glitch-text {
-                font-size: 3.5rem;
-            }
-
-            .nav-links {
-                gap: 1.5rem;
-            }
-        }
-
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .glitch-text {
-                font-size: 2.5rem;
-            }
-
-            .hero-description {
-                font-size: 1rem;
-            }
-
-            .job-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .job-title {
-                font-size: 1.5rem;
-            }
-
-            .job-header {
-                flex-direction: column;
-            }
-
-            .job-badge {
-                width: fit-content;
-            }
-        }
-
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background: rgba(10, 1, 24, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            padding: 6rem 2rem 2rem;
-            border-left: 1px solid rgba(0, 240, 255, 0.3);
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-        }
-
-        .mobile-nav-links li {
-            margin-bottom: 1.5rem;
-        }
-
-        .mobile-nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .mobile-nav-links a:hover,
-        .mobile-nav-links a.active {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .mobile-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            .job-card { padding: 1.5rem; }
+            .job-title { font-size: 1.4rem; }
+            .job-header { flex-direction: column; }
+            .job-badge { width: fit-content; }
         }
     </style>
 </head>
 <body>
     <div class="neural-bg" id="neuralBg"></div>
 
-    <svg class="progress-ring" width="60" height="60">
-        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
-        <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
-            </linearGradient>
-        </defs>
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
     </svg>
 
+    <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="index.html" class="logo">SUSTAINSYS</a>
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="projects.html">PROJECTS<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
                 <li><a href="Future_Forward.html">Future Forward</a></li>
-                <li><a href="job-openings.html" class="active">Job Openings</a></li>
-                <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+                <li><a href="job-openings.html" class="active">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
         </div>
     </nav>
 
+    <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
         <ul class="mobile-nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html">Services</a></li>
-            <li><a href="projects.html">PROJECTS<span class="nav-badge-star">&#9733;</span></a></li>
+            <li><a href="projects.html">Projects</a></li>
             <li><a href="Future_Forward.html">Future Forward</a></li>
-            <li><a href="job-openings.html" class="active">Job Openings</a></li>
-            <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
+            <li><a href="job-openings.html" class="active">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
     </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
+    <!-- Page Content -->
     <div class="container">
-        <section class="hero">
+
+        <!-- Hero / Page Header -->
+        <section class="page-header">
             <div class="hero-content">
-                <div class="subtitle">[ Join Our Team ]</div>
-                <h1 class="glitch-text">Career Opportunities</h1>
-                <p class="hero-description">
-                    Be part of a forward-thinking team pushing the boundaries of AI-powered solutions. 
+                <div class="page-subtitle">[ Join Our Team ]</div>
+                <h1 class="page-title">Career Opportunities</h1>
+                <p class="page-description">
+                    Be part of a forward-thinking team pushing the boundaries of AI-powered solutions.
                     We're looking for talented individuals who are passionate about innovation and technology.
                 </p>
             </div>
         </section>
 
-        <section class="jobs-section">
+        <!-- Job Listings -->
+        <section class="section" style="padding-top:0;">
+
             <!-- Job 1: Android Developer -->
             <div class="job-card">
                 <div class="job-header">
@@ -716,34 +245,34 @@
                         <h2 class="job-title">Android Developer</h2>
                         <div class="job-meta">
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">📍</span>
+                                <span class="job-meta-icon">&#128205;</span>
                                 <span>Remote / Hybrid</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">💼</span>
+                                <span class="job-meta-icon">&#128188;</span>
                                 <span>5-8 Years Experience</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">⏰</span>
+                                <span class="job-meta-icon">&#9200;</span>
                                 <span>Full-Time</span>
                             </div>
                         </div>
                     </div>
-                    <div class="job-badge">Closed</div>
+                    <div class="job-badge closed">Closed</div>
                 </div>
 
                 <p class="job-summary">
-                    We're seeking an experienced Android Developer to join our mobile development team. You'll be 
-                    responsible for designing and building advanced applications for the Android platform, working 
+                    We're seeking an experienced Android Developer to join our mobile development team. You'll be
+                    responsible for designing and building advanced applications for the Android platform, working
                     with cutting-edge technologies to deliver exceptional user experiences.
                 </p>
 
-                <button class="toggle-btn" onclick="toggleJobDetails(this)">
+                <button class="collapsible-toggle job-toggle" onclick="toggleJobDetails(this)">
                     <span>Show More</span>
                     <span class="toggle-icon">+</span>
                 </button>
 
-                <div class="job-details">
+                <div class="collapsible-content">
                     <div class="job-details-content">
                         <div class="job-section">
                             <h3 class="job-section-title">Key Responsibilities</h3>
@@ -759,7 +288,7 @@
                         </div>
 
                         <div class="job-section">
-                            <h3 class="job-section-title">Required Skills & Experience</h3>
+                            <h3 class="job-section-title">Required Skills &amp; Experience</h3>
                             <ul class="job-list">
                                 <li>5-8 years of proven software development experience with Android development</li>
                                 <li>Strong knowledge of Android SDK, different versions of Android, and how to deal with different screen sizes</li>
@@ -800,8 +329,8 @@
                             </ul>
                         </div>
 
-                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Android Developer" class="apply-btn">
-                            Apply Now →
+                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Android Developer" class="btn btn-primary">
+                            Apply Now &rarr;
                         </a>
                     </div>
                 </div>
@@ -814,15 +343,15 @@
                         <h2 class="job-title">Regulatory Business Analyst</h2>
                         <div class="job-meta">
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">📍</span>
+                                <span class="job-meta-icon">&#128205;</span>
                                 <span>Remote / Hybrid</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">💼</span>
+                                <span class="job-meta-icon">&#128188;</span>
                                 <span>Mid to Senior Level</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">⏰</span>
+                                <span class="job-meta-icon">&#9200;</span>
                                 <span>Full-Time</span>
                             </div>
                         </div>
@@ -831,17 +360,17 @@
                 </div>
 
                 <p class="job-summary">
-                    Join our regulatory compliance team as a Techno-Functional Business Analyst specializing in 
-                    MiFID II and EMIR reporting. You'll bridge the gap between business requirements and technical 
+                    Join our regulatory compliance team as a Techno-Functional Business Analyst specializing in
+                    MiFID II and EMIR reporting. You'll bridge the gap between business requirements and technical
                     implementation, working on cutting-edge AI-powered regulatory reporting solutions.
                 </p>
 
-                <button class="toggle-btn" onclick="toggleJobDetails(this)">
+                <button class="collapsible-toggle job-toggle" onclick="toggleJobDetails(this)">
                     <span>Show More</span>
                     <span class="toggle-icon">+</span>
                 </button>
 
-                <div class="job-details">
+                <div class="collapsible-content">
                     <div class="job-details-content">
                         <div class="job-section">
                             <h3 class="job-section-title">Key Responsibilities</h3>
@@ -859,7 +388,7 @@
                         </div>
 
                         <div class="job-section">
-                            <h3 class="job-section-title">Required Skills & Experience</h3>
+                            <h3 class="job-section-title">Required Skills &amp; Experience</h3>
                             <ul class="job-list">
                                 <li>Proven experience with MiFID II transaction reporting requirements</li>
                                 <li>Strong understanding of EMIR trade reporting and derivatives regulations</li>
@@ -878,7 +407,7 @@
                             <h3 class="job-section-title">Preferred Qualifications</h3>
                             <ul class="job-list">
                                 <li>Knowledge of SFTR (Securities Financing Transactions Regulation)</li>
-                                <li>Familiarity with Dodd-Frank reporting requirements (SEC & CFTC)</li>
+                                <li>Familiarity with Dodd-Frank reporting requirements (SEC &amp; CFTC)</li>
                                 <li>Experience with ARM (Approved Reporting Mechanism) submissions</li>
                                 <li>Understanding of ISO 20022 messaging standards</li>
                                 <li>Experience with AI/ML-based regulatory reporting solutions</li>
@@ -901,8 +430,8 @@
                             </ul>
                         </div>
 
-                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Regulatory Business Analyst" class="apply-btn">
-                            Apply Now →
+                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Regulatory Business Analyst" class="btn btn-primary">
+                            Apply Now &rarr;
                         </a>
                     </div>
                 </div>
@@ -915,15 +444,15 @@
                         <h2 class="job-title">Office Administrator</h2>
                         <div class="job-meta">
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">📍</span>
+                                <span class="job-meta-icon">&#128205;</span>
                                 <span>On-Site / Hybrid</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">💼</span>
+                                <span class="job-meta-icon">&#128188;</span>
                                 <span>Entry to Mid Level</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">⏰</span>
+                                <span class="job-meta-icon">&#9200;</span>
                                 <span>Full-Time</span>
                             </div>
                         </div>
@@ -932,17 +461,17 @@
                 </div>
 
                 <p class="job-summary">
-                    We're looking for a detail-oriented Office Administrator to manage daily office operations, 
-                    coordinate administrative activities, and ensure smooth running of our workplace. The ideal 
+                    We're looking for a detail-oriented Office Administrator to manage daily office operations,
+                    coordinate administrative activities, and ensure smooth running of our workplace. The ideal
                     candidate will be organized, proactive, and capable of multitasking.
                 </p>
 
-                <button class="toggle-btn" onclick="toggleJobDetails(this)">
+                <button class="collapsible-toggle job-toggle" onclick="toggleJobDetails(this)">
                     <span>Show More</span>
                     <span class="toggle-icon">+</span>
                 </button>
 
-                <div class="job-details">
+                <div class="collapsible-content">
                     <div class="job-details-content">
                         <div class="job-section">
                             <h3 class="job-section-title">Key Responsibilities</h3>
@@ -962,7 +491,7 @@
                         </div>
 
                         <div class="job-section">
-                            <h3 class="job-section-title">Required Skills & Experience</h3>
+                            <h3 class="job-section-title">Required Skills &amp; Experience</h3>
                             <ul class="job-list">
                                 <li>Proven experience as an Office Administrator, Office Manager, or similar role</li>
                                 <li>Excellent organizational and time management skills</li>
@@ -999,8 +528,8 @@
                             </ul>
                         </div>
 
-                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Office Administrator" class="apply-btn">
-                            Apply Now →
+                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: Office Administrator" class="btn btn-primary">
+                            Apply Now &rarr;
                         </a>
                     </div>
                 </div>
@@ -1013,15 +542,15 @@
                         <h2 class="job-title">AI Engineer</h2>
                         <div class="job-meta">
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">📍</span>
+                                <span class="job-meta-icon">&#128205;</span>
                                 <span>Remote / Hybrid</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">💼</span>
+                                <span class="job-meta-icon">&#128188;</span>
                                 <span>Mid to Senior Level</span>
                             </div>
                             <div class="job-meta-item">
-                                <span class="job-meta-icon">⏰</span>
+                                <span class="job-meta-icon">&#9200;</span>
                                 <span>Full-Time</span>
                             </div>
                         </div>
@@ -1030,17 +559,17 @@
                 </div>
 
                 <p class="job-summary">
-                    We're seeking a talented AI Engineer with strong DevOps and technical expertise to develop and 
-                    deploy cutting-edge AI/ML solutions. You'll work on building scalable AI systems, implementing 
+                    We're seeking a talented AI Engineer with strong DevOps and technical expertise to develop and
+                    deploy cutting-edge AI/ML solutions. You'll work on building scalable AI systems, implementing
                     MLOps pipelines, and integrating AI capabilities into production environments.
                 </p>
 
-                <button class="toggle-btn" onclick="toggleJobDetails(this)">
+                <button class="collapsible-toggle job-toggle" onclick="toggleJobDetails(this)">
                     <span>Show More</span>
                     <span class="toggle-icon">+</span>
                 </button>
 
-                <div class="job-details">
+                <div class="collapsible-content">
                     <div class="job-details-content">
                         <div class="job-section">
                             <h3 class="job-section-title">Key Responsibilities</h3>
@@ -1059,7 +588,7 @@
                         </div>
 
                         <div class="job-section">
-                            <h3 class="job-section-title">Required Skills & Experience</h3>
+                            <h3 class="job-section-title">Required Skills &amp; Experience</h3>
                             <ul class="job-list">
                                 <li>Strong programming skills in Python and experience with ML frameworks (TensorFlow, PyTorch, scikit-learn)</li>
                                 <li>Solid understanding of machine learning algorithms and deep learning architectures</li>
@@ -1104,154 +633,82 @@
                             </ul>
                         </div>
 
-                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: AI Engineer" class="apply-btn">
-                            Apply Now →
+                        <a href="mailto:accounts@sustainsys.co.uk?subject=Application: AI Engineer" class="btn btn-primary">
+                            Apply Now &rarr;
                         </a>
                     </div>
                 </div>
             </div>
+
         </section>
 
-        <section class="cta-section">
-            <div class="cta-content">
-                <h2>Don't See Your Role?</h2>
-                <p>
-                    We're always looking for talented individuals to join our team. Send us your CV and let us 
-                    know how you can contribute to SustainSys.
-                </p>
-                <a href="mailto:accounts@sustainsys.co.uk?subject=General Application" class="apply-btn">
-                    Send Your CV
-                </a>
-            </div>
-        </section>
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h3>Don't See Your Role?</h3>
+            <p>
+                We're always looking for talented individuals to join our team. Send us your CV and let us
+                know how you can contribute to SustainSys.
+            </p>
+            <a href="mailto:accounts@sustainsys.co.uk?subject=General Application" class="btn btn-primary">
+                Send Your CV
+            </a>
+        </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
     <script>
-        function createNeuralNetwork() {
-            const bg = document.getElementById('neuralBg');
-            const nodeCount = 30;
-            const nodes = [];
-
-            for (let i = 0; i < nodeCount; i++) {
-                const node = document.createElement('div');
-                node.className = 'neural-node';
-                node.style.left = Math.random() * 100 + '%';
-                node.style.top = Math.random() * 100 + '%';
-                node.style.animationDelay = Math.random() * 3 + 's';
-                bg.appendChild(node);
-                nodes.push({
-                    element: node,
-                    x: parseFloat(node.style.left),
-                    y: parseFloat(node.style.top)
-                });
-            }
-
-            for (let i = 0; i < nodeCount; i++) {
-                for (let j = i + 1; j < nodeCount; j++) {
-                    if (Math.random() > 0.85) {
-                        const connection = document.createElement('div');
-                        connection.className = 'neural-connection';
-                        
-                        const dx = nodes[j].x - nodes[i].x;
-                        const dy = nodes[j].y - nodes[i].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        const angle = Math.atan2(dy, dx);
-                        
-                        connection.style.width = distance + 'vw';
-                        connection.style.left = nodes[i].x + '%';
-                        connection.style.top = nodes[i].y + '%';
-                        connection.style.transform = `rotate(${angle}rad)`;
-                        connection.style.animationDelay = Math.random() * 2 + 's';
-                        
-                        bg.appendChild(connection);
-                    }
-                }
-            }
-        }
-
-        function updateProgressRing() {
-            const circle = document.querySelector('.progress-ring-circle');
-            const radius = circle.r.baseVal.value;
-            const circumference = radius * 2 * Math.PI;
-            
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circle.style.strokeDashoffset = circumference;
-
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrollPercent = scrollTop / scrollHeight;
-                const offset = circumference - scrollPercent * circumference;
-                circle.style.strokeDashoffset = offset;
-            });
-        }
-
+        // Job details expand/collapse toggle
         function toggleJobDetails(button) {
-            const jobCard = button.closest('.job-card');
-            const details = jobCard.querySelector('.job-details');
-            const buttonText = button.querySelector('span:first-child');
-            const icon = button.querySelector('.toggle-icon');
-            
-            if (details.classList.contains('expanded')) {
-                details.classList.remove('expanded');
-                buttonText.textContent = 'Show More';
-                icon.textContent = '+';
-                button.classList.remove('expanded');
-            } else {
-                details.classList.add('expanded');
-                buttonText.textContent = 'Show Less';
-                icon.textContent = '−';
-                button.classList.add('expanded');
-            }
+            var content = button.nextElementSibling;
+            var label = button.querySelector('span:first-child');
+            var icon = button.querySelector('.toggle-icon');
+            var isOpen = content.classList.contains('open');
+
+            content.classList.toggle('open');
+            button.classList.toggle('open');
+            label.textContent = isOpen ? 'Show More' : 'Show Less';
+            icon.textContent = isOpen ? '+' : '\u2212';
         }
 
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileNav = document.getElementById('mobileNav');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        });
-
-        mobileOverlay.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-            mobileOverlay.classList.remove('active');
-        });
-
-        window.addEventListener('load', () => {
-            createNeuralNetwork();
-            updateProgressRing();
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        // Fade-in job cards on scroll
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-        document.querySelectorAll('.job-card').forEach(card => {
+        document.querySelectorAll('.job-card').forEach(function(card) {
             card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-            card.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(card);
         });
     </script>
