@@ -6,599 +6,241 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - SustainSys</title>
     <meta name="author" content="Sustainsys.co.uk">
-    <meta name="description" content="Our comprehensive suite of cloud, Murex, support, and ESG services">
+    <meta name="description" content="AI implementation, safety, cloud transformation, Murex consulting, and managed support services for enterprises.">
     <meta property="og:title" content="Services - Sustainsys.co.uk">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sustainsys.co.uk/services">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@Sustain_IT_uk">
-    <meta name="theme-color" content="#010101">
-    
+    <meta name="theme-color" content="#f8fafc">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="styles.css">
     <style>
+        /* ===== Services Page-Specific Styles ===== */
+
+        /* Services accent palette (extends shared design tokens) */
         :root {
-            --primary: #0a0118;
-            --secondary: #1a0f2e;
-            --accent-cyan: #00f0ff;
-            --accent-purple: #9d4edd;
-            --accent-pink: #ff006e;
-            --accent-green: #06ffa5;
-            --text: #e0e7ff;
-            --text-dim: #8892b0;
-            --glow: rgba(0, 240, 255, 0.4);
+            --svc-indigo: #4f46e5;
+            --svc-cyan: #0891b2;
+            --svc-violet: #7c3aed;
+            --svc-emerald: #059669;
+            --svc-amber: #d97706;
+            --svc-pink: #db2777;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-            touch-action: pan-y pinch-zoom;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Animated Neural Network Background */
-        .neural-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        .neural-node {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--glow);
-            animation: pulse 3s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .neural-connection {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            transform-origin: left center;
-            opacity: 0.3;
-            animation: dataFlow 2s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        @keyframes dataFlow {
-            0% { opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0; }
-        }
-
-        /* Scroll Progress */
-        .progress-ring {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.1s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 999;
-            background: rgba(10, 1, 24, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            animation: slideDown 0.8s ease-out;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px var(--glow);
-            letter-spacing: 2px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
-        }
-
-        .nav-links a.active {
-            color: var(--accent-cyan);
-        }
-
-        .nav-badge-star {
-            display: inline-block;
-            color: var(--accent-pink);
-            margin-left: 5px;
-            font-size: 1em;
-            animation: starPulse 2s ease-in-out infinite;
-            text-shadow: 0 0 10px var(--accent-pink);
-        }
-
-        @keyframes starPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.2) rotate(180deg); }
-        }
-
-        /* Highlight AI Section */
-        .nav-links a.ai-highlight {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-        }
-
-        .nav-links a.ai-highlight:hover {
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .nav-links a.ai-highlight::before {
-            display: none;
-        }
-
-        /* Mouse Trail Cursor */
-        .cursor-trail {
-            position: fixed;
-            width: 5px;
-            height: 5px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.5;
-            z-index: 9999;
-            transition: all 0.5s ease;
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 1.5rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: rgba(10, 1, 24, 0.98);
-            border: 3px solid var(--accent-cyan);
-            border-radius: 8px;
-            color: var(--accent-cyan);
-            font-size: 1.8rem;
-            cursor: pointer;
-            z-index: 99999999;
-            padding: 0;
-            line-height: 1;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.6);
-            pointer-events: auto;
-            touch-action: manipulation;
-            isolation: isolate;
-            transform: translateZ(0);
-            will-change: transform;
-        }
-        
-        /* Extended clickable area for better mobile usability */
-        .mobile-menu-btn::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .mobile-menu-btn:hover {
-            color: var(--accent-pink);
-        }
-        
-        .mobile-menu-btn:active {
-            background: rgba(0, 240, 255, 0.3);
-            transform: scale(0.95) translateZ(0);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Page Header */
-        .page-header {
-            min-height: 50vh;
+        /* Page header */
+        .svc-page-header {
+            min-height: 38vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding-top: 120px;
-            padding-bottom: 4rem;
+            padding-bottom: 2rem;
             text-align: center;
         }
 
-        .page-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            background-size: 300% 300%;
+        .svc-page-header .page-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--svc-indigo);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .svc-page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-bright), var(--svc-indigo));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 8s ease infinite;
-            letter-spacing: -1px;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .page-subtitle {
-            font-family: 'JetBrains Mono', monospace;
+        .svc-page-header .page-description {
             font-size: 1.1rem;
-            color: var(--accent-cyan);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            color: var(--text-dim);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        /* Services Grid */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin: 5rem 0;
-        }
-
-        .service-card {
-            background: linear-gradient(135deg, rgba(26, 15, 46, 0.6), rgba(10, 1, 24, 0.8));
-            border: 1px solid rgba(0, 240, 255, 0.3);
+        /* Service cards */
+        .svc-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 3rem;
+            padding: 2rem;
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
         }
 
-        .service-card::before {
+        .svc-card::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
         }
 
-        .service-card:hover::before {
-            opacity: 1;
+        .svc-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 240, 255, 0.3);
-        }
-
-        .service-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            border-radius: 12px;
+        .svc-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
         }
 
-        .service-card h3 {
+        .svc-card h3 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent-cyan);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 0.8rem;
         }
 
-        .service-card p {
+        .svc-card p {
             color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 0.6rem;
         }
 
-        .service-list {
+        .svc-card p:last-of-type { margin-bottom: 0; }
+        .svc-card p strong { color: var(--text); }
+
+        /* List items */
+        .svc-list {
             list-style: none;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
+            padding: 0;
         }
 
-        .service-list li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
-            color: var(--text-dim);
+        .svc-list li {
+            padding: 0.45rem 0 0.45rem 1.5rem;
             position: relative;
-            padding-left: 2rem;
-        }
-
-        .service-list li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-        }
-
-        .service-list li:last-child {
-            border-bottom: none;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 4rem 0;
-            margin-top: 8rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
-
-        .copyright {
             color: var(--text-dim);
             font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        /* Animations */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .svc-list li:last-child { border-bottom: none; }
+
+        .svc-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
         }
 
-        /* Responsive Design */
+        /* Tags */
+        .svc-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        /* Color variants */
+        .svc-card.ai-impl::before { background: linear-gradient(90deg, var(--svc-indigo), var(--svc-cyan)); }
+        .svc-card.ai-impl .svc-card-icon { background: rgba(79, 70, 229, 0.1); color: var(--svc-indigo); }
+        .svc-card.ai-impl .svc-list li::before { background: var(--svc-indigo); }
+        .svc-card.ai-impl .svc-tag { background: rgba(79, 70, 229, 0.08); color: var(--svc-indigo); border: 1px solid rgba(79, 70, 229, 0.2); }
+
+        .svc-card.ai-safety::before { background: linear-gradient(90deg, var(--svc-emerald), var(--svc-cyan)); }
+        .svc-card.ai-safety .svc-card-icon { background: rgba(5, 150, 105, 0.1); color: var(--svc-emerald); }
+        .svc-card.ai-safety .svc-list li::before { background: var(--svc-emerald); }
+        .svc-card.ai-safety .svc-tag { background: rgba(5, 150, 105, 0.08); color: var(--svc-emerald); border: 1px solid rgba(5, 150, 105, 0.2); }
+
+        .svc-card.support::before { background: linear-gradient(90deg, var(--svc-amber), var(--svc-pink)); }
+        .svc-card.support .svc-card-icon { background: rgba(217, 119, 6, 0.1); color: var(--svc-amber); }
+        .svc-card.support .svc-list li::before { background: var(--svc-amber); }
+        .svc-card.support .svc-tag { background: rgba(217, 119, 6, 0.08); color: var(--svc-amber); border: 1px solid rgba(217, 119, 6, 0.2); }
+
+        .svc-card.cloud::before { background: linear-gradient(90deg, var(--svc-cyan), var(--svc-violet)); }
+        .svc-card.cloud .svc-card-icon { background: rgba(8, 145, 178, 0.1); color: var(--svc-cyan); }
+        .svc-card.cloud .svc-list li::before { background: var(--svc-cyan); }
+        .svc-card.cloud .svc-tag { background: rgba(8, 145, 178, 0.08); color: var(--svc-cyan); border: 1px solid rgba(8, 145, 178, 0.2); }
+
+        .svc-card.murex::before { background: linear-gradient(90deg, var(--svc-violet), var(--svc-pink)); }
+        .svc-card.murex .svc-card-icon { background: rgba(124, 58, 237, 0.1); color: var(--svc-violet); }
+        .svc-card.murex .svc-list li::before { background: var(--svc-violet); }
+        .svc-card.murex .svc-tag { background: rgba(124, 58, 237, 0.08); color: var(--svc-violet); border: 1px solid rgba(124, 58, 237, 0.2); }
+
+        /* Grids */
+        .svc-grid-top {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .svc-grid-bottom {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* CTA */
+        .svc-cta {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), rgba(8, 145, 178, 0.06));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .svc-cta h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--svc-indigo);
+        }
+
+        .svc-cta p {
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Responsive */
         @media (max-width: 1024px) {
-            .page-title {
-                font-size: 3rem;
-            }
-
-            .nav-links {
-                gap: 1.5rem;
-                font-size: 0.85rem;
-            }
-
-            .nav-container {
-                padding: 1.2rem 1.5rem;
-            }
+            .svc-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+            .svc-page-header h1 { font-size: 2.5rem; }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block !important;
-                pointer-events: auto !important;
-                touch-action: manipulation !important;
-                isolation: isolate !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-            
-            /* Disable pointer events on desktop nav-links only (not the entire nav) */
-            .nav-links {
-                pointer-events: none !important;
-            }
-            
-            /* Re-enable for logo */
-            .logo {
-                pointer-events: auto !important;
-            }
-            
-            /* Hide progress ring on mobile to prevent blocking burger button */
-            .progress-ring {
-                display: none !important;
-            }
-
-            .page-title {
-                font-size: 2.5rem;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: 0 1rem;
-            }
-
-            .nav-container {
-                padding: 1rem 1.5rem;
-            }
-
-            .logo {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-title {
-                font-size: 2rem;
-            }
-        }
-
-        /* Mobile Navigation Drawer */
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background: rgba(10, 1, 24, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            padding: 6rem 2rem 2rem;
-            border-left: 1px solid rgba(0, 240, 255, 0.3);
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-        }
-
-        .mobile-nav-links li {
-            margin-bottom: 1.5rem;
-        }
-
-        .mobile-nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            display: block;
-        }
-
-        .mobile-nav-links a:hover,
-        .mobile-nav-links a.active {
-            color: var(--accent-cyan);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        .mobile-nav-links a.ai-highlight {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-            margin-top: 1rem;
-        }
-
-        .mobile-nav-links a.ai-highlight:hover {
-            box-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
-        }
-
-        .mobile-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-
-        .mobile-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
+            .svc-grid-top,
+            .svc-grid-bottom { grid-template-columns: 1fr; }
+            .svc-page-header { min-height: 32vh; padding-top: 100px; }
+            .svc-page-header h1 { font-size: 2rem; }
+            .svc-cta { padding: 2rem 1.5rem; }
+            .svc-cta h3 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -606,301 +248,207 @@
     <!-- Neural Network Background -->
     <div class="neural-bg" id="neuralBg"></div>
 
-    <!-- Progress Ring -->
-    <svg class="progress-ring" width="60" height="60">
-        <circle class="progress-ring-circle" stroke="url(#gradient)" stroke-width="3" fill="transparent" r="27" cx="30" cy="30"/>
-        <defs>
-            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:var(--accent-cyan);stop-opacity:1" />
-                <stop offset="100%" style="stop-color:var(--accent-purple);stop-opacity:1" />
-            </linearGradient>
-        </defs>
+    <!-- Scroll Progress -->
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
     </svg>
 
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="index.html" class="logo">SUSTAINSYS</a>
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="services.html" class="active">Services</a></li>
-                <li><a href="projects.html">PROJECTS<span class="nav-badge-star">★</span></a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
                 <li><a href="Future_Forward.html">Future Forward</a></li>
-                <li><a href="job-openings.html">Job Openings</a></li>
-                <li><a href="mobirise.html" class="ai-highlight">AI SECTION</a></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
-            <button 
-                class="mobile-menu-btn" 
-                id="mobileMenuBtn"
-                style="position: fixed !important; top: 1.5rem !important; right: 2rem !important; width: 50px !important; height: 50px !important; background: rgba(10, 1, 24, 0.98) !important; border: 3px solid #00f0ff !important; border-radius: 8px !important; color: #00f0ff !important; font-size: 1.8rem !important; cursor: pointer !important; z-index: 99999999 !important; padding: 0 !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.8) !important; line-height: 1 !important; text-align: center !important; pointer-events: auto !important; touch-action: manipulation !important; isolation: isolate !important; transform: translateZ(0) !important; will-change: transform !important; -webkit-tap-highlight-color: rgba(0, 240, 255, 0.3) !important;"
-            >☰</button>
         </div>
     </nav>
 
     <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
-        <button class="mobile-close-btn" id="mobileCloseBtn" style="position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: var(--accent-cyan); font-size: 2rem; cursor: pointer; z-index: 1002;">✕</button>
         <ul class="mobile-nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="services.html" class="active">Services</a></li>
-            <li><a href="projects.html">PROJECTS<span class="nav-badge-star">★</span></a></li>
+            <li><a href="projects.html">Projects</a></li>
             <li><a href="Future_Forward.html">Future Forward</a></li>
-            <li><a href="job-openings.html">Job Openings</a></li>
-            <li><a href="mobirise.html" class="ai-highlight">AI SECTION</a></li>
+            <li><a href="job-openings.html">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
     </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
     <div class="container">
         <!-- Page Header -->
-        <section class="page-header">
+        <section class="svc-page-header">
             <div>
                 <div class="page-subtitle">[ What We Offer ]</div>
-                <h1 class="page-title">Our Services</h1>
+                <h1>Our Services</h1>
+                <p class="page-description">We deliver enterprise-grade AI solutions spanning the full lifecycle — from Retrieval-Augmented Generation, multi-model orchestration, and vector database architecture to production-ready agentic systems and intelligent code companions. Our AI Safety &amp; Security practice ensures every deployment meets rigorous compliance, governance, and adversarial resilience standards. Backed by deep-domain MLOps, CI/CD automation, and ITIL-aligned managed services, we operationalise AI at scale while our Cloud Transformation and Murex consulting teams modernise infrastructure and capital-markets platforms. Through our AI Academy, we equip your teams with hands-on training in prompt engineering, LLM fine-tuning, and responsible AI — empowering organisations to build, secure, and sustain intelligent systems with confidence.</p>
             </div>
         </section>
 
-        <!-- Services Grid -->
-        <section class="services-grid">
-            <!-- Cloud Transformations -->
-            <div class="service-card">
-                <div class="service-icon">☁️</div>
-                <h3>Cloud Transformations</h3>
-                <p>
-                    Our cloud services range from the <strong>assessment & discovery</strong> to the <strong>implementation, migration and support</strong>. 
-                    We are equally equipped in AWS, Azure, GCP, Oracle & Alibaba or on-premises private cloud.
-                </p>
-                <p><strong>Our Key Cloud services include:</strong></p>
-                <ul class="service-list">
-                    <li>Cloud management & optimisation</li>
-                    <li>Cloud engineering and automation</li>
-                    <li>Cloud security</li>
-                    <li>Cloud strategy</li>
-                    <li>Cloud migration</li>
-                    <li>Data transformation</li>
-                </ul>
-                <p>
-                    We are key advocates of supporting multi and hybrid cloud strategy and tirelessly work to stay up-to-date with the ever-changing landscape in this space.
-                </p>
+        <!-- Services -->
+        <section class="section">
+
+            <!-- Row 1: Two large cards - AI Implementation & AI Safety -->
+            <div class="svc-grid-top">
+
+                <!-- AI Implementations -->
+                <div class="svc-card ai-impl">
+                    <div class="svc-card-icon">&#129302;</div>
+                    <h3>AI Implementations</h3>
+                    <p>End-to-end Generative AI and Agentic AI solutions &mdash; from proof-of-concept to production-grade deployments. We architect, build, and scale intelligent systems tailored to your enterprise context.</p>
+                    <ul class="svc-list">
+                        <li>Retrieval-Augmented Generation (RAG) pipelines</li>
+                        <li>Multi-model connectivity &amp; orchestration</li>
+                        <li>Vector database design &amp; optimisation</li>
+                        <li>AI code companions &amp; IDE integrations</li>
+                        <li>Agentic workflows &amp; autonomous agents</li>
+                        <li>Fine-tuning &amp; custom model training</li>
+                        <li>Enterprise knowledge base &amp; semantic search</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <span class="svc-tag">RAG</span>
+                        <span class="svc-tag">LangChain</span>
+                        <span class="svc-tag">Vector DB</span>
+                        <span class="svc-tag">LLMs</span>
+                        <span class="svc-tag">Agents</span>
+                    </div>
+                </div>
+
+                <!-- AI Safety & Security -->
+                <div class="svc-card ai-safety">
+                    <div class="svc-card-icon">&#128737;</div>
+                    <h3>AI Safety &amp; Security</h3>
+                    <p>Ensure your AI deployments are <strong>responsible, compliant, and secure</strong>. We implement enterprise-grade guardrails, governance frameworks, and security controls for trustworthy AI at scale.</p>
+                    <ul class="svc-list">
+                        <li>AI compliance &amp; regulatory alignment (EU AI Act, GDPR)</li>
+                        <li>Data privacy &amp; PII protection frameworks</li>
+                        <li>Guardrails, content filtering &amp; output validation</li>
+                        <li>Prompt injection defence &amp; adversarial testing</li>
+                        <li>Model explainability &amp; bias auditing</li>
+                        <li>Cyber safety assessments for AI systems</li>
+                        <li>AI governance policies &amp; risk management</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <span class="svc-tag">Compliance</span>
+                        <span class="svc-tag">Privacy</span>
+                        <span class="svc-tag">Guardrails</span>
+                        <span class="svc-tag">Security</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Murex Expertise -->
-            <div class="service-card">
-                <div class="service-icon">💼</div>
-                <h3>Murex Expertise</h3>
-                <p>
-                    <strong>Consultancy and resourcing</strong> services for Murex 3.1 for cloud & data migrations, upgrades, enhancements and support.
-                </p>
-                <p>
-                    Our focus is to help clients notch up their ROI on Murex. We have helped clients in the areas of Murex upgrades, 
-                    migration from Mx2.11 to Mx3.1, integrating their trading and risk systems in Murex workflows, and delivering 
-                    datamart reporting solutions.
-                </p>
-                <p>
-                    We have contributed immense value to client efforts to optimize costs by overhauling the reporting and risk 
-                    infrastructures of Mx implementations. In recent engagements, we have successfully contributed towards the 
-                    implementations of regulatory projects such as <strong>FRTB, IBOR transitions, XVA and ISDA SIMM</strong>.
-                </p>
-            </div>
+            <!-- Row 2: Three smaller cards -->
+            <div class="svc-grid-bottom">
 
-            <!-- Support Services -->
-            <div class="service-card">
-                <div class="service-icon">🛠️</div>
-                <h3>Support Services</h3>
-                <p>
-                    We provide a plethora of support services—be it infrastructure, network or application support. We have a team of 
-                    highly talented support professionals with a range of experiences in L1/L2 and L3 support lines.
-                </p>
-                <p>
-                    For the smooth transitioning of projects from the development to operational phase, we offer extended services. 
-                    Under the same vertical, we are happy to become partners in your development and testing phases.
-                </p>
-                <p>
-                    Our support services ensure <strong>24/7 availability</strong>, rapid incident response, and proactive monitoring 
-                    to keep your systems running smoothly.
-                </p>
-            </div>
+                <!-- Support Services (MLOps / DevOps / ITIL) -->
+                <div class="svc-card support">
+                    <div class="svc-card-icon">&#9881;</div>
+                    <h3>Support Services</h3>
+                    <p>Production-grade AI operations, infrastructure support, and ITIL-aligned service management to keep your intelligent systems running at peak performance.</p>
+                    <ul class="svc-list">
+                        <li>MLOps &amp; model lifecycle management</li>
+                        <li>CI/CD pipelines for ML deployments</li>
+                        <li>Intelligent monitoring &amp; observability</li>
+                        <li>ITIL service management (L1/L2/L3)</li>
+                        <li>24/7 incident response &amp; SLA management</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <span class="svc-tag">MLOps</span>
+                        <span class="svc-tag">CI/CD</span>
+                        <span class="svc-tag">ITIL</span>
+                    </div>
+                </div>
 
-            <!-- Sustainability and ESG -->
-            <div class="service-card">
-                <div class="service-icon">🌱</div>
-                <h3>Sustainability and ESG</h3>
-                <p>
-                    From minimizing our climate impact, reducing our carbon footprints and optimizing the use of natural resources, 
-                    to driving greater diversity and inclusion in our ways of working, we demonstrate the importance of sustainability 
-                    in our success.
-                </p>
-                <p>
-                    We have integrated <strong>ESG</strong> into our business, constantly challenging ourselves to do more and to do better 
-                    for a sustainable future.
-                </p>
-                <p>
-                    We strive to provide quality research and surveys to augment the climate change awareness campaign. We will soon be 
-                    publishing our series of <strong>ESG articles</strong> focusing on climate change, community development, corporate 
-                    governance and sustainability reporting standards.
-                </p>
+                <!-- Cloud Transformations -->
+                <div class="svc-card cloud">
+                    <div class="svc-card-icon">&#9729;&#65039;</div>
+                    <h3>Cloud Transformations</h3>
+                    <p>From strategy and assessment through to migration and optimisation across <strong>AWS, Azure, GCP, Oracle</strong> and hybrid environments.</p>
+                    <ul class="svc-list">
+                        <li>Cloud strategy &amp; architecture design</li>
+                        <li>Migration &amp; modernisation</li>
+                        <li>Cloud security &amp; cost optimisation</li>
+                        <li>Infrastructure automation (Terraform, IaC)</li>
+                        <li>Data platform transformations</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <span class="svc-tag">AWS</span>
+                        <span class="svc-tag">Azure</span>
+                        <span class="svc-tag">GCP</span>
+                    </div>
+                </div>
+
+                <!-- Murex Expertise -->
+                <div class="svc-card murex">
+                    <div class="svc-card-icon">&#128188;</div>
+                    <h3>Murex Expertise</h3>
+                    <p><strong>Consultancy and resourcing</strong> for Murex 3.1 &mdash; cloud migrations, upgrades, regulatory projects, and reporting solutions for capital markets.</p>
+                    <ul class="svc-list">
+                        <li>Murex upgrades &amp; Mx2.11 to Mx3.1 migration</li>
+                        <li>FRTB, IBOR, XVA &amp; ISDA SIMM delivery</li>
+                        <li>Trading &amp; risk system integration</li>
+                        <li>Datamart reporting solutions</li>
+                        <li>Cost optimisation &amp; infrastructure overhaul</li>
+                    </ul>
+                    <div style="margin-top: 1rem;">
+                        <span class="svc-tag">FRTB</span>
+                        <span class="svc-tag">IBOR</span>
+                        <span class="svc-tag">ISDA SIMM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="svc-cta">
+                <h3>Ready to Transform?</h3>
+                <p>Get in touch to learn how our AI-powered services can accelerate your business outcomes.</p>
+                <a href="contact.html" class="btn btn-primary">Get in Touch</a>
             </div>
         </section>
     </div>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <p class="copyright">
-                &copy; 2025 SustainSys Consulting Ltd. All rights reserved.<br>
-                <a href="/cdn-cgi/l/email-protection#debfbdbdb1abb0aaad9eadabadaabfb7b0ada7adf0bdb1f0abb5" style="color: var(--accent-cyan); text-decoration: none;">
-                    <span class="__cf_email__" data-cfemail="fd9c9e9e928893898ebd8e888e899c94938e848ed39e92d38896">[email&#160;protected]</span>
-                </a>
-            </p>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a></p>
+            </div>
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Neural Network Background Generation
-        function createNeuralNetwork() {
-            const bg = document.getElementById('neuralBg');
-            const nodeCount = 30;
-            const nodes = [];
-
-            // Create nodes
-            for (let i = 0; i < nodeCount; i++) {
-                const node = document.createElement('div');
-                node.className = 'neural-node';
-                node.style.left = Math.random() * 100 + '%';
-                node.style.top = Math.random() * 100 + '%';
-                node.style.animationDelay = Math.random() * 3 + 's';
-                bg.appendChild(node);
-                nodes.push({
-                    element: node,
-                    x: parseFloat(node.style.left),
-                    y: parseFloat(node.style.top)
-                });
-            }
-
-            // Create connections
-            for (let i = 0; i < nodeCount; i++) {
-                for (let j = i + 1; j < nodeCount; j++) {
-                    if (Math.random() > 0.85) {
-                        const connection = document.createElement('div');
-                        connection.className = 'neural-connection';
-                        
-                        const dx = nodes[j].x - nodes[i].x;
-                        const dy = nodes[j].y - nodes[i].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        const angle = Math.atan2(dy, dx);
-                        
-                        connection.style.width = distance + 'vw';
-                        connection.style.left = nodes[i].x + '%';
-                        connection.style.top = nodes[i].y + '%';
-                        connection.style.transform = `rotate(${angle}rad)`;
-                        connection.style.animationDelay = Math.random() * 2 + 's';
-                        
-                        bg.appendChild(connection);
-                    }
-                }
-            }
-        }
-
-        // Scroll Progress Ring
-        function updateProgressRing() {
-            const circle = document.querySelector('.progress-ring-circle');
-            const radius = circle.r.baseVal.value;
-            const circumference = radius * 2 * Math.PI;
-            
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circle.style.strokeDashoffset = circumference;
-
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrollPercent = scrollTop / scrollHeight;
-                const offset = circumference - scrollPercent * circumference;
-                circle.style.strokeDashoffset = offset;
-            });
-        }
-
-        // Mobile Menu - Deferred setup with DOMContentLoaded and null guards
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileNav = document.getElementById('mobileNav');
-            const mobileOverlay = document.getElementById('mobileOverlay');
-            const mobileCloseBtn = document.getElementById('mobileCloseBtn');
-
-            console.log('Mobile menu button:', mobileMenuBtn);
-            console.log('Mobile nav:', mobileNav);
-            console.log('Mobile overlay:', mobileOverlay);
-
-            function openMobileMenu() {
-                if (mobileNav && mobileOverlay) {
-                    mobileNav.classList.add('active');
-                    mobileOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-
-            function closeMobileMenu() {
-                if (mobileNav && mobileOverlay) {
-                    mobileNav.classList.remove('active');
-                    mobileOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            }
-
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', openMobileMenu);
-                mobileMenuBtn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    openMobileMenu();
-                }, { passive: false });
-            }
-
-            if (mobileOverlay) {
-                mobileOverlay.addEventListener('click', closeMobileMenu);
-            }
-
-            if (mobileCloseBtn) {
-                mobileCloseBtn.addEventListener('click', closeMobileMenu);
-            }
-
-            // Close mobile menu when clicking on a link
-            document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-                link.addEventListener('click', closeMobileMenu);
-            });
-        });
-
-        // Initialize
-        window.addEventListener('load', () => {
-            createNeuralNetwork();
-            updateProgressRing();
-        });
-
-        // Mouse Trail Effect
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.createElement('div');
-            cursor.className = 'cursor-trail';
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            document.body.appendChild(cursor);
-            
-            setTimeout(() => {
-                cursor.style.opacity = '0';
-                cursor.style.transform = 'scale(2)';
-            }, 10);
-            
-            setTimeout(() => cursor.remove(), 500);
-        });
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').slice(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
