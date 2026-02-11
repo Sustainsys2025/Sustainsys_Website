@@ -171,7 +171,7 @@ The `CNAME` file maps the custom domain `sustainsys.co.uk`.
 
 - **Website:** [sustainsys.co.uk](https://sustainsys.co.uk)
 - **Email:** accounts@sustainsys.co.uk
-- **Twitter:** [@Sustain_IT_uk](https://twitter.com/Sustain_IT_uk)
+- **Twitter:** [@Sustainsys_AI](https://twitter.com/Sustainsys_AI)
 - **Location:** Cambridge, UK
 
 ---
