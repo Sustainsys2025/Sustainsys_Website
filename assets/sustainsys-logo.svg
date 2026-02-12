@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="50%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="sGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="30%" stop-color="#6366f1"/>
+      <stop offset="60%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="hexClip">
+      <polygon points="100,8 178,48 178,192 100,232 22,192 22,48"/>
+    </clipPath>
+  </defs>
+
+  <!-- Hexagonal frame -->
+  <polygon points="100,4 182,46 182,194 100,236 18,194 18,46" fill="none" stroke="url(#frameGrad)" stroke-width="8" stroke-linejoin="round"/>
+
+  <!-- Dark inner background -->
+  <polygon points="100,14 174,52 174,188 100,226 26,188 26,52" fill="#0a0118"/>
+
+  <!-- Subtle inner glow -->
+  <polygon points="100,14 174,52 174,188 100,226 26,188 26,52" fill="url(#sGrad)" opacity="0.05"/>
+
+  <!-- Neural connection lines -->
+  <g stroke="#6366f1" stroke-width="1.5" opacity="0.4" clip-path="url(#hexClip)">
+    <line x1="65" y1="70" x2="135" y2="170"/>
+    <line x1="135" y1="70" x2="65" y2="170"/>
+    <line x1="65" y1="70" x2="100" y2="120"/>
+    <line x1="135" y1="70" x2="100" y2="120"/>
+    <line x1="100" y1="120" x2="65" y2="170"/>
+    <line x1="100" y1="120" x2="135" y2="170"/>
+  </g>
+
+  <!-- S-curve path -->
+  <g clip-path="url(#hexClip)">
+    <path d="M 125,65 C 125,65 140,80 130,100 C 120,120 80,120 70,140 C 60,160 75,175 75,175"
+          fill="none" stroke="url(#sGrad)" stroke-width="14" stroke-linecap="round" filter="url(#glow)" opacity="0.9"/>
+    <path d="M 125,65 C 125,65 140,80 130,100 C 120,120 80,120 70,140 C 60,160 75,175 75,175"
+          fill="none" stroke="url(#sGrad)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- Neural nodes -->
+  <g clip-path="url(#hexClip)">
+    <!-- Top nodes -->
+    <circle cx="65" cy="70" r="7" fill="url(#nodeGrad1)" filter="url(#glow)"/>
+    <circle cx="135" cy="70" r="7" fill="url(#nodeGrad1)" filter="url(#glow)"/>
+    <!-- Middle node -->
+    <circle cx="100" cy="120" r="6" fill="url(#nodeGrad2)" filter="url(#glow)"/>
+    <!-- Bottom nodes -->
+    <circle cx="65" cy="170" r="7" fill="url(#nodeGrad3)" filter="url(#glow)"/>
+    <circle cx="135" cy="170" r="7" fill="url(#nodeGrad3)" filter="url(#glow)"/>
+    <!-- S-curve endpoint nodes -->
+    <circle cx="125" cy="65" r="5" fill="#22d3ee" filter="url(#glow)"/>
+    <circle cx="75" cy="175" r="5" fill="#ec4899" filter="url(#glow)"/>
+  </g>
+</svg>
