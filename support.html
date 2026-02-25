@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - SustainSys</title>
+    <meta name="author" content="Sustainsys.co.uk">
+    <meta name="description" content="Get help with the SustainsysAI mobile app. FAQs, troubleshooting, and contact support.">
+    <meta property="og:title" content="Support - Sustainsys.co.uk">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sustainsys.co.uk/support">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@Sustain_IT_uk">
+    <meta name="theme-color" content="#f8fafc">
+    <link rel="canonical" href="https://sustainsys.co.uk/support">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .support-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 0 4rem;
+        }
+        .support-contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .support-contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-green));
+        }
+        .support-contact-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .contact-item {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .contact-item .icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .contact-item h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .contact-item p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+        }
+        .contact-item a {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+        }
+        .faq-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .faq-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-cyan);
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-item h3::after {
+            content: '+';
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            font-weight: 400;
+            transition: var(--transition);
+        }
+        .faq-item.open h3::after {
+            content: '−';
+        }
+        .faq-item p {
+            color: var(--text-dim);
+            font-size: 0.94rem;
+            line-height: 1.75;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .faq-item.open p {
+            display: block;
+        }
+        .troubleshoot-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .troubleshoot-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-purple);
+        }
+        .troubleshoot-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .troubleshoot-item:last-child {
+            border-bottom: none;
+        }
+        .troubleshoot-item .icon {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .troubleshoot-item div h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .troubleshoot-item div p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .feedback-card {
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.08), rgba(124, 58, 237, 0.08));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .feedback-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 0.8rem;
+        }
+        .feedback-card p {
+            color: var(--text-dim);
+            font-size: 0.94rem;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+        .feedback-card .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #fff;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .feedback-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(8, 145, 178, 0.3);
+        }
+        @media (max-width: 768px) {
+            .support-contact-card, .faq-section, .troubleshoot-section, .feedback-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="job-openings.html">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <div class="container">
+        <!-- Page Header -->
+        <header class="page-header" style="min-height: 30vh; padding-bottom: 1rem; flex-direction: column; gap: 1rem;">
+            <h1 class="page-title">Support</h1>
+            <p class="page-subtitle">We're here to help you on your AI learning journey</p>
+        </header>
+
+        <div class="support-content">
+            <!-- Contact Card -->
+            <div class="support-contact-card">
+                <h2>Get in Touch</h2>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <div class="icon">&#9993;</div>
+                        <h3>Email Support</h3>
+                        <p><a href="mailto:sustainsys.co.uk@gmail.com">sustainsys.co.uk@gmail.com</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">&#127760;</div>
+                        <h3>Website</h3>
+                        <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon">&#9200;</div>
+                        <h3>Response Time</h3>
+                        <p>Within 24-48 hours</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+
+                <div class="faq-item open">
+                    <h3>How do I create an account?</h3>
+                    <p>Open the app and tap "Register" on the home screen. Fill in your name, email, organisation, and create a password. You'll receive a verification email to confirm your account.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Is there a free trial?</h3>
+                    <p>Yes! You can explore the public course catalogue and preview course content without signing up. Create a free account to access the AI Co-Pilot and start tracking your learning progress.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How does the AI Co-Pilot work?</h3>
+                    <p>The AI Co-Pilot is your personal learning assistant. It can explain concepts, answer questions about course material, and provide personalised study recommendations based on your progress.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I use the app offline?</h3>
+                    <p>Some features require an internet connection, including the AI Co-Pilot and course synchronisation. Offline support for downloaded content is planned for a future update.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do I reset my password?</h3>
+                    <p>On the login screen, tap "Forgot password?" and enter your registered email address. You'll receive a password reset link within minutes.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Are certificates verifiable?</h3>
+                    <p>Yes. Each certificate comes with a unique verification ID that can be used to confirm its authenticity. You can share certificates directly from the app.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do I delete my account?</h3>
+                    <p>To request account deletion, email us at <a href="mailto:sustainsys.co.uk@gmail.com" style="color: var(--accent-cyan);">sustainsys.co.uk@gmail.com</a> with the subject "Account Deletion Request". We will process your request within 30 days in accordance with GDPR requirements.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>What domains does SustainsysAI cover?</h3>
+                    <p>We offer courses across Financial AI, Deep Tech AI, and Life Sciences AI. Our curriculum covers machine learning, deep learning, natural language processing, computer vision, reinforcement learning, and Python for data science.</p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="troubleshoot-section">
+                <h2>Troubleshooting</h2>
+
+                <div class="troubleshoot-item">
+                    <div class="icon">1</div>
+                    <div>
+                        <h3>App not loading</h3>
+                        <p>Ensure you have a stable internet connection and the latest version of the app installed from the App Store.</p>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="icon">2</div>
+                    <div>
+                        <h3>Login issues</h3>
+                        <p>Double-check your email and password. Use "Forgot password?" to reset if needed. Make sure there are no extra spaces in your email.</p>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="icon">3</div>
+                    <div>
+                        <h3>Notifications not working</h3>
+                        <p>Check your device Settings to ensure notifications are enabled for SustainsysAI. Also check that Do Not Disturb mode is off.</p>
+                    </div>
+                </div>
+
+                <div class="troubleshoot-item">
+                    <div class="icon">4</div>
+                    <div>
+                        <h3>Course progress not saving</h3>
+                        <p>Ensure you're connected to the internet. Progress syncs automatically when online. Try closing and reopening the app if the issue persists.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Card -->
+            <div class="feedback-card">
+                <h2>Share Your Feedback</h2>
+                <p>We value your feedback! If you have suggestions for new courses, features, or improvements, we'd love to hear from you. Your input helps us build a better learning experience for everyone.</p>
+                <a href="mailto:sustainsys.co.uk@gmail.com?subject=SustainsysAI%20Feedback" class="btn">Send Feedback</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // FAQ toggle
+        document.querySelectorAll('.faq-item h3').forEach(function(h3) {
+            h3.addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
