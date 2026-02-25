@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team | Sustainsys</title>
+    <meta name="author" content="Sustainsys.co.uk">
+    <meta name="description" content="Meet the Sustainsys leadership and advisors.">
+    <meta property="og:title" content="Team - Sustainsys.co.uk">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sustainsys.co.uk/team">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@Sustain_IT_uk">
+    <meta name="theme-color" content="#f8fafc">
+    <link rel="canonical" href="https://sustainsys.co.uk/team">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===== Team Page-Specific Styles ===== */
+
+        /* Page header */
+        .team-page-header {
+            min-height: 38vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 120px;
+            padding-bottom: 2rem;
+            text-align: center;
+        }
+
+        .team-page-header .page-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #4f46e5;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .team-page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-bright), #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .team-page-header .page-description {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section heading */
+        .team-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text-bright);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Team zigzag stack */
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Team card — horizontal layout */
+        .team-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #4f46e5, var(--accent-cyan));
+            border-radius: 16px 0 0 16px;
+        }
+
+        /* Zigzag: even cards flip direction */
+        .team-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .team-card:nth-child(even)::before {
+            left: auto;
+            right: 0;
+            border-radius: 0 16px 16px 0;
+        }
+
+        .team-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Photo placeholder (circle for placeholders) */
+        .team-photo {
+            width: 150px;
+            height: 150px;
+            min-width: 150px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* When photo has an actual image, use a taller rounded rectangle */
+        .team-photo.has-image {
+            width: 160px;
+            height: 210px;
+            min-width: 160px;
+            border-radius: var(--radius-lg);
+        }
+
+        .team-photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            border-radius: var(--radius-lg);
+        }
+
+        .team-photo-img.team-photo-img--circle {
+            border-radius: 50%;
+        }
+
+        .team-photo-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Text block */
+        .team-info {
+            flex: 1;
+        }
+
+        /* Name */
+        .team-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        /* Role */
+        .team-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Bio */
+        .team-bio {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            line-height: 1.8;
+        }
+
+        /* Even cards align text right */
+        .team-card:nth-child(even) .team-info {
+            text-align: right;
+        }
+
+        /* Mobile: stack vertically, center everything */
+        @media (max-width: 768px) {
+            .team-card,
+            .team-card:nth-child(even) {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+                gap: 1.5rem;
+            }
+            .team-card:nth-child(even) .team-info {
+                text-align: center;
+            }
+            .team-card::before,
+            .team-card:nth-child(even)::before {
+                top: 0; left: 0; right: 0; bottom: auto;
+                width: auto; height: 3px;
+                border-radius: 16px 16px 0 0;
+            }
+            .team-photo {
+                width: 120px;
+                height: 120px;
+                min-width: 120px;
+            }
+            .team-photo.has-image {
+                width: 140px;
+                height: 180px;
+                min-width: 140px;
+            }
+            .team-page-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* CTA */
+        .team-cta {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--secondary);
+            border-radius: var(--radius-xl);
+            margin-top: 3rem;
+        }
+
+        .team-cta h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-bright);
+            margin-bottom: 0.8rem;
+        }
+
+        .team-cta p {
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Ring -->
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
+    </svg>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
+            <li><a href="job-openings.html">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <section class="team-page-header">
+            <div>
+                <div class="page-subtitle">[ Our People ]</div>
+                <h1>Our Team</h1>
+                <p class="page-description">Builders and advisors focused on AI-led delivery with real-world impact.</p>
+            </div>
+        </section>
+
+        <!-- Leadership & Advisors -->
+        <section class="section">
+            <h2 class="team-section-title">Leadership &amp; Advisors</h2>
+
+            <div class="team-grid">
+
+                <!-- Satyawan Singh — photo LEFT, text RIGHT -->
+                <div class="team-card">
+                    <div class="team-photo has-image" role="img" aria-label="Photo of Satyawan Singh">
+                        <img src="team-photos/satyawan-singh.png" alt="Photo of Satyawan Singh" class="team-photo-img">
+                    </div>
+                    <div class="team-info">
+                        <h3>Satyawan Singh</h3>
+                        <div class="team-role">Founder &amp; CEO</div>
+                        <p class="team-bio">With over 13 years of experience architecting mission-critical systems across global banking &mdash; including HSBC, UOB, Soci&eacute;t&eacute; G&eacute;n&eacute;rale, and Standard Chartered &mdash; Satyawan founded Sustainsys as a digital transformation consultancy for the financial sector, later diversifying operations into applied research and enterprise AI implementations. He now spearheads the company&rsquo;s vision for production-grade GenAI adoption, overseeing model training strategy, agentic system design, and end-to-end AI delivery that turns cutting-edge research into measurable business outcomes.</p>
+                    </div>
+                </div>
+
+                <!-- Imran Jafri — photo RIGHT, text LEFT (zigzag) -->
+                <div class="team-card">
+                    <div class="team-photo" role="img" aria-label="Photo placeholder for Imran Jafri">
+                        <span class="team-photo-label">Add Photo</span>
+                    </div>
+                    <div class="team-info">
+                        <h3>Imran Jafri</h3>
+                        <div class="team-role">Lead Developer</div>
+                        <p class="team-bio">A versatile engineering leader with over a decade of hands-on development across Android, iOS, and modern web platforms. At Sustainsys, Imran drives the technical execution behind the company&rsquo;s most ambitious AI products &mdash; from intelligent OCR pipelines and retrieval-augmented generation systems to cross-platform mobile applications &mdash; ensuring every release meets production-grade quality at speed.</p>
+                    </div>
+                </div>
+
+                <!-- Vikas Singh — photo LEFT, text RIGHT -->
+                <div class="team-card">
+                    <div class="team-photo" role="img" aria-label="Photo of Vikas Singh">
+                        <img src="team-photos/vikas-singh.png" alt="Photo of Vikas Singh" class="team-photo-img team-photo-img--circle">
+                    </div>
+                    <div class="team-info">
+                        <h3>Vikas Singh</h3>
+                        <div class="team-role">Advisor</div>
+                        <p class="team-bio">A distinguished researcher in cellular pathogenesis, tumour biology, and CRISPR-based gene editing, Dr. Singh brings world-class scientific rigour to Sustainsys&rsquo;s health-domain AI initiatives. His pioneering work in cancer biology and therapeutic genomics shapes the company&rsquo;s research direction, ensuring every health-tech platform is anchored in deep biological science with real clinical relevance.</p>
+                    </div>
+                </div>
+
+                <!-- Nishat Akhter — photo RIGHT, text LEFT (zigzag) -->
+                <div class="team-card">
+                    <div class="team-photo" role="img" aria-label="Photo placeholder for Nishat Akhter">
+                        <span class="team-photo-label">Add Photo</span>
+                    </div>
+                    <div class="team-info">
+                        <h3>Nishat Akhter</h3>
+                        <div class="team-role">Advisor</div>
+                        <p class="team-bio">With 15+ years spanning telecom infrastructure and hardware/software engineering, Nishat advises Sustainsys on the high-performance computing backbone behind its AI capabilities. From GPU optimisation and large-scale model training strategy to pioneering research into telecom-specific AI use cases, she ensures the company&rsquo;s platforms are built to handle enterprise-scale workloads with precision.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="section">
+            <div class="team-cta">
+                <h3>Join Our Team</h3>
+                <p>We're always looking for talented engineers and researchers to help shape the future of enterprise AI.</p>
+                <a href="job-openings.html" class="btn btn-primary">View Open Roles</a>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
