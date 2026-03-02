@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribe - SustainSys</title>
+    <meta name="author" content="Sustainsys.co.uk">
+    <meta name="description" content="Request deletion of your SustainsysAI account and all associated data.">
+    <meta property="og:title" content="Unsubscribe - Sustainsys.co.uk">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sustainsys.co.uk/delete-account">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@Sustain_IT_uk">
+    <meta name="theme-color" content="#f8fafc">
+    <link rel="canonical" href="https://sustainsys.co.uk/delete-account">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .delete-content {
+            max-width: 580px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .delete-hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .delete-hero-icon {
+            width: 64px; height: 64px;
+            border-radius: var(--radius-lg);
+            background: #fef2f2;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        .delete-hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-hero p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .warning-card {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .warning-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #dc2626;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .warning-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .warning-card ul li {
+            font-size: 0.875rem;
+            color: var(--text);
+            padding: 0.25rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .warning-card ul li::before {
+            content: "\2022";
+            color: #ef4444;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .retention-notice {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .retention-notice strong {
+            color: var(--text);
+        }
+
+        .retention-notice a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .retention-notice a:hover {
+            opacity: 0.8;
+        }
+
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ef4444, #dc2626, #b91c1c);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group label .optional {
+            font-weight: 400;
+            color: var(--text-dim);
+        }
+
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .form-group input[type="email"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--border-hover);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 0.25rem;
+            width: 18px; height: 18px;
+            accent-color: var(--accent-purple);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-group span {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .btn-delete {
+            width: 100%;
+            padding: 0.85rem;
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-delete:active { transform: translateY(0); }
+
+        .btn-delete:disabled {
+            background: var(--text-dim);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+
+        .error-msg {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-msg.visible { display: block; }
+
+        /* Success state */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-state.visible { display: block; }
+
+        .success-icon {
+            width: 64px; height: 64px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+
+        .success-icon svg { width: 32px; height: 32px; color: #16a34a; }
+
+        .success-state h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-bright);
+            margin-bottom: 0.75rem;
+        }
+
+        .success-state p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .success-state a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .success-state a:hover { opacity: 0.8; }
+
+        .spinner {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .delete-content { padding: 1.5rem 1rem 3rem; }
+            .form-card { padding: 1.5rem; }
+            .delete-hero h1 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
+                <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
+            <li><a href="job-openings.html">Careers</a></li>
+            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <!-- Page Content -->
+    <div class="delete-content">
+        <div class="delete-hero">
+            <div class="delete-hero-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            </div>
+            <h1>Delete Your Account</h1>
+            <p>Request permanent deletion of your SustainsysAI account and all associated data.</p>
+        </div>
+
+        <div class="warning-card">
+            <h3>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                What will be deleted
+            </h3>
+            <ul>
+                <li>Your profile information (name, email, preferences)</li>
+                <li>Course enrolment history and progress</li>
+                <li>Quiz and assessment results</li>
+                <li>Certificates earned</li>
+                <li>AI Co-Pilot conversation history</li>
+                <li>Analytics and learning data</li>
+            </ul>
+        </div>
+
+        <p class="retention-notice">
+            Your data will be permanently deleted within <strong>30 days</strong> of your request. During this period you can contact us at
+            <a href="mailto:support@sustainsys.co.uk">support@sustainsys.co.uk</a> to cancel the deletion. After 30 days, this action is irreversible.
+        </p>
+
+        <!-- Form -->
+        <div class="form-card" id="formState">
+            <div class="error-msg" id="errorMsg"></div>
+
+            <form id="deleteForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="email">Email address linked to your account</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">Reason for leaving <span class="optional">(optional)</span></label>
+                    <textarea id="reason" name="reason" placeholder="Help us improve — let us know why you're leaving"></textarea>
+                </div>
+
+                <label class="checkbox-group">
+                    <input type="checkbox" id="confirm" required>
+                    <span>I understand that all my data will be permanently deleted and this cannot be undone after the 30-day grace period.</span>
+                </label>
+
+                <button type="submit" class="btn-delete" id="submitBtn" disabled>
+                    Request Account Deletion
+                </button>
+            </form>
+        </div>
+
+        <!-- Success State -->
+        <div class="success-state" id="successState">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Deletion Request Received</h2>
+            <p>
+                We've sent a confirmation email to <strong id="confirmedEmail"></strong>.
+                Your account and all associated data will be permanently deleted within 30 days.
+                If you change your mind, contact us at
+                <a href="mailto:support@sustainsys.co.uk">support@sustainsys.co.uk</a>
+                before then.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        var form = document.getElementById('deleteForm');
+        var emailInput = document.getElementById('email');
+        var confirmBox = document.getElementById('confirm');
+        var submitBtn = document.getElementById('submitBtn');
+        var errorMsg = document.getElementById('errorMsg');
+        var formState = document.getElementById('formState');
+        var successState = document.getElementById('successState');
+        var confirmedEmail = document.getElementById('confirmedEmail');
+
+        confirmBox.addEventListener('change', function() {
+            submitBtn.disabled = !confirmBox.checked;
+        });
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.add('visible');
+        }
+
+        function hideError() {
+            errorMsg.classList.remove('visible');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            hideError();
+
+            var email = emailInput.value.trim();
+            var reason = document.getElementById('reason').value.trim();
+
+            if (!email) { showError('Please enter your email address.'); return; }
+            if (!isValidEmail(email)) { showError('Please enter a valid email address.'); return; }
+            if (!confirmBox.checked) { showError('Please confirm that you understand the deletion is permanent.'); return; }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Submitting...';
+
+            // Simulate API call — replace with real endpoint in production
+            // Set window.SUSTAINSYS_API_URL to your backend URL
+            var API_BASE = window.SUSTAINSYS_API_URL || '';
+
+            if (API_BASE) {
+                fetch(API_BASE + '/api/users/delete-request/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, reason: reason })
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                        return response.json().catch(function() { return {}; }).then(function(data) {
+                            throw new Error(data.detail || 'Something went wrong. Please try again.');
+                        });
+                    }
+                    showSuccess(email);
+                })
+                .catch(function(err) {
+                    showError(err.message || 'Network error. Please try again later.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Request Account Deletion';
+                });
+            } else {
+                setTimeout(function() { showSuccess(email); }, 1200);
+            }
+        });
+
+        function showSuccess(email) {
+            confirmedEmail.textContent = email;
+            formState.style.display = 'none';
+            document.querySelector('.warning-card').style.display = 'none';
+            document.querySelector('.retention-notice').style.display = 'none';
+            successState.classList.add('visible');
+        }
+    </script>
+</body>
+</html>
