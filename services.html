@@ -28,18 +28,43 @@
             --svc-pink: #db2777;
         }
 
-        /* Page header */
-        .svc-page-header {
-            min-height: 38vh;
+        /* ---- Hero: image left + text right ---- */
+        .svc-hero {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: 120px;
-            padding-bottom: 2rem;
-            text-align: center;
+            align-items: stretch;
+            min-height: 75vh;
+            padding-top: 80px; /* clear fixed nav */
+            width: 100%;
         }
 
-        .svc-page-header .page-subtitle {
+        .svc-hero-img {
+            flex: 1 1 50%;
+            min-height: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .svc-hero-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .svc-hero-text {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 2.5rem 3rem 2.5rem 3.5rem;
+            padding-top: 0;
+            text-align: left;
+            align-self: stretch; /* match image height exactly */
+            overflow-y: auto;
+        }
+
+        .svc-hero-text .page-subtitle {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
             color: var(--svc-indigo);
@@ -48,21 +73,29 @@
             margin-bottom: 1rem;
         }
 
-        .svc-page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .svc-hero-text h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.2rem;
             background: linear-gradient(135deg, var(--text-bright), var(--svc-indigo));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .svc-page-header .page-description {
-            font-size: 1.1rem;
+        .svc-hero-text .page-description {
+            font-size: 0.92rem;
             color: var(--text-dim);
-            line-height: 1.8;
-            max-width: 700px;
-            margin: 0 auto;
+            line-height: 1.75;
+            margin-bottom: 0.8rem;
+        }
+
+        .svc-hero-text .page-description:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .svc-hero-text .page-description strong {
+            color: var(--text-bright, #1e293b);
+            font-weight: 700;
         }
 
         /* Service cards */
@@ -228,6 +261,17 @@
             margin-right: auto;
         }
 
+        /* Full-width sections with comfortable padding */
+        .svc-section {
+            padding: 2rem 4rem;
+            max-width: 100%;
+        }
+
+        .svc-cta {
+            margin-left: 4rem;
+            margin-right: 4rem;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .svc-grid-bottom { grid-template-columns: repeat(2, 1fr); }
@@ -237,10 +281,15 @@
         @media (max-width: 768px) {
             .svc-grid-top,
             .svc-grid-bottom { grid-template-columns: 1fr; }
-            .svc-page-header { min-height: 32vh; padding-top: 100px; }
+            .svc-hero { flex-direction: column; min-height: auto; padding-top: 60px; }
+            .svc-hero-img { max-height: 300px; }
+            .svc-hero-text { padding: 2rem 1rem; text-align: center; }
+            .svc-hero-text h1 { font-size: 2rem; }
             .svc-page-header h1 { font-size: 2rem; }
             .svc-cta { padding: 2rem 1.5rem; }
             .svc-cta h3 { font-size: 1.6rem; }
+            .svc-section { padding: 1.5rem 1rem; }
+            .svc-cta { margin-left: 1rem; margin-right: 1rem; }
         }
     </style>
 </head>
@@ -291,18 +340,24 @@
     </div>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
-    <div class="container">
-        <!-- Page Header -->
-        <section class="svc-page-header">
-            <div>
-                <div class="page-subtitle">[ What We Offer ]</div>
-                <h1>Our Services</h1>
-                <p class="page-description">We deliver enterprise-grade AI solutions spanning the full lifecycle — from Retrieval-Augmented Generation, multi-model orchestration, and vector database architecture to production-ready agentic systems and intelligent code companions. Our AI Safety &amp; Security practice ensures every deployment meets rigorous compliance, governance, and adversarial resilience standards. Backed by deep-domain MLOps, CI/CD automation, and ITIL-aligned managed services, we operationalise AI at scale while our Cloud Transformation and Murex consulting teams modernise infrastructure and capital-markets platforms. Through our AI Academy, we equip your teams with hands-on training in prompt engineering, LLM fine-tuning, and responsible AI — empowering organisations to build, secure, and sustain intelligent systems with confidence.</p>
-            </div>
-        </section>
+    <!-- Hero: image left, text right -->
+    <section class="svc-hero">
+        <div class="svc-hero-img">
+            <img src="Sustainsys_hero2.png" alt="SustainSys Services Hero" />
+        </div>
+        <div class="svc-hero-text">
+            <div class="page-subtitle">[ What We Offer ]</div>
+            <h1>Our Services</h1>
+            <p class="page-description">We architect and deliver <strong>enterprise-grade AI solutions</strong> spanning the full lifecycle &mdash; from <strong>Retrieval-Augmented Generation (RAG)</strong> pipelines, multi-model orchestration frameworks, and high-throughput vector database architectures to production-hardened <strong>agentic systems</strong>, autonomous reasoning engines, and intelligent code companions purpose-built for mission-critical workloads.</p>
+            <p class="page-description">Our dedicated <strong>AI Safety &amp; Security</strong> practice embeds compliance-by-design into every deployment, enforcing rigorous governance protocols, adversarial resilience testing, prompt-injection defence layers, and alignment with evolving regulatory mandates including the <strong>EU AI Act</strong> and <strong>GDPR</strong>.</p>
+            <p class="page-description">Backed by deep-domain <strong>MLOps &amp; DevOps</strong> expertise, end-to-end <strong>CI/CD automation</strong>, and ITIL-aligned <strong>managed support services</strong>, we operationalise AI at scale &mdash; ensuring observability, model drift monitoring, and continuous delivery across heterogeneous infrastructure.</p>
+            <p class="page-description">Our <strong>Cloud Transformation</strong> consultants accelerate migration and modernisation across AWS, Azure, GCP, and hybrid environments, while our specialist <strong>Murex consulting</strong> team delivers end-to-end capital-markets platform upgrades, FRTB, IBOR transition, and XVA analytics.</p>
+            <p class="page-description">Through our <strong>AI Academy</strong>, we upskill your teams with immersive, hands-on training in prompt engineering, LLM fine-tuning, responsible AI governance, and agentic workflow design &mdash; empowering organisations to build, secure, and sustain intelligent systems with confidence.</p>
+        </div>
+    </section>
 
         <!-- Services -->
-        <section class="section">
+        <section class="svc-section">
 
             <!-- Row 1: Two large cards - AI Implementation & AI Safety -->
             <div class="svc-grid-top">
@@ -416,14 +471,13 @@
         </section>
 
         <!-- CTA -->
-        <section class="section">
+        <section class="svc-section">
             <div class="svc-cta">
                 <h3>Ready to Transform?</h3>
                 <p>Get in touch to learn how our AI-powered services can accelerate your business outcomes.</p>
                 <a href="contact.html" class="btn btn-primary">Get in Touch</a>
             </div>
         </section>
-    </div>
 
     <!-- Footer -->
     <footer>
