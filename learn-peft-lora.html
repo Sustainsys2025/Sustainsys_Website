@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEFT & LoRA - SustainSys AI Academy</title>
+<meta name="description" content="Master parameter-efficient fine-tuning techniques for large language models.">
+    <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style><style>:root{--accent-cyan:#0891b2;--accent-purple:#7c3aed;--accent-pink:#db2777;--accent-green:#059669;--accent-gold:#d97706;--text:#1e293b;--text-dim:#64748b;--surface:#ffffff;--secondary:#f1f5f9;--border:#e2e8f0;}</style>
+</head><body>
+<nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+<main>
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">PEFT & LoRA</h1>
+                <p class="page-description">Master PEFT & LoRA with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+<div class="ml-page-container"><aside class="ml-sidebar"><h3>Contents</h3><ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#why-matters">Why It Matters</a></li>
+<li><a href="#fundamentals">PEFT Fundamentals</a></li>
+<li><a href="#lora-basics">LoRA Basics</a></li>
+<li><a href="#qlora">QLoRA & Quantization</a></li>
+<li><a href="#other-peft">Other PEFT Methods</a></li>
+<li><a href="#math-concepts">Mathematical Foundation</a></li>
+<li><a href="#architecture">Architecture & Design</a></li>
+<li><a href="#implementation">Implementation Guide</a></li>
+<li><a href="#code-examples">Code Examples</a></li>
+<li><a href="#comparison">Method Comparison</a></li>
+<li><a href="#memory-analysis">Memory & Parameters</a></li>
+<li><a href="#practical-guide">Practical Deployment</a></li>
+<li><a href="#multi-adapter">Multi-Adapter Serving</a></li>
+<li><a href="#fine-tuning">Fine-Tuning from Scratch</a></li>
+<li><a href="#rank-selection">Rank Selection</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#use-cases">Real-World Use Cases</a></li>
+<li><a href="#interview">Interview Questions</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ul></aside><article class="ml-content">
+
+<section id="intro" class="ml-section">
+<h2><a href="https://huggingface.co/docs/peft/" target="_blank" rel="noopener">PEFT</a> & LoRA: Parameter-Efficient Fine-Tuning for LLMs</h2>
+<div class="ml-intro-text"><p><strong>Parameter-Efficient Fine-Tuning (PEFT)</strong> fundamentally changed LLM customization by enabling effective fine-tuning with minimal computational resources. <strong>LoRA (Low-Rank Adaptation)</strong> is the dominant technique: train only 0.01-0.1% of model parameters while maintaining or exceeding full fine-tuning quality. This enables practical LLM customization on consumer-grade hardware.</p></div>
+<p>This comprehensive guide covers:</p>
+<ul style="margin-left: 1.5rem; line-height: 2;">
+<li>Complete mathematical foundations of low-rank decomposition and why it works theoretically</li>
+<li>Detailed comparison of LoRA, QLoRA, Adapters, Prefix Tuning, and IA3 — when to use each</li>
+<li>Production-ready code examples for training with PEFT library</li>
+<li>Advanced techniques: rank selection, multi-adapter serving, adapter composition, and merging strategies</li>
+<li>Memory analysis, GPU requirements, and hardware optimization strategies</li>
+<li>Deployment patterns for single and multi-adapter inference systems</li>
+<li>Real-world case studies: customer support, code generation, domain QA, personal AI</li>
+<li>Interview preparation: 8 questions covering core concepts and practical scenarios</li>
+<li>Comprehensive FAQ addressing 10 common questions and edge cases</li>
+</ul>
+<div class="highlight-box"><p>Key Insight: The intrinsic dimensionality of task-specific weight updates is much lower than the full parameter space. LoRA exploits this by learning ΔW = BA where B ∈ ℝ^(m×r) and A ∈ ℝ^(r×n) with r ≪ min(m,n).</p></div>
+<div class="card-grid" style="margin-top: 2rem;">
+<div class="card green-accent"><h4>Memory Efficiency</h4><p>Reduce trainable parameters from 7B to 1.3M (0.02%). Training on GPUs with 16GB vs 80GB required.</p></div>
+<div class="card cyan-accent"><h4>Speed</h4><p>Single GPU fine-tuning in hours instead of weeks. 5-10× faster than full fine-tuning.</p></div>
+<div class="card purple-accent"><h4>Modularity</h4><p>Train separate task-specific adapters. Swap at inference. Serve multiple tasks from one model.</p></div>
+<div class="card gold-accent"><h4>Cost</h4><p>Reduce infrastructure spending by 50-100×. Democratizes LLM customization.</p></div>
+</div>
+</section>
+
+<section id="why-matters" class="ml-section">
+<h2>Why Parameter-Efficient Fine-Tuning Matters</h2>
+<p>Understanding the problem PEFT solves requires examining the full fine-tuning landscape. Large language models have grown exponentially: GPT-2 (1.5B), GPT-3 (175B), GPT-3.5 (unknown), and modern open models (LLaMA 7B-70B, Mistral, Gemma). While pre-trained models are freely available, customizing them for specific domains or tasks remained prohibitively expensive.</p>
+<h3>The Full Fine-Tuning Memory Crisis</h3>
+<div class="info-box"><h4>Memory Breakdown for 7B Model Training</h4><p>Model parameters (float32): 28 GB | Model parameters (float16): 14 GB | Gradients (float32): 28 GB | Optimizer momentum (float32): 28 GB | Optimizer variance (float32): 28 GB | Activation checkpoints: 3-5 GB | Total for full FT: 100+ GB. A single V100 (16GB) or even A100 (40GB) cannot handle this. You need 8× A100s, costing $12k+/month.</p></div>
+<p>This barrier eliminated fine-tuning for most organizations. Startups, academic labs, and individual researchers had two choices:</p>
+<ol style="margin-left: 1.5rem; line-height: 2;">
+<li>Use pre-trained models without customization (suboptimal quality)</li>
+<li>Build from scratch (years of development, massive datasets required)</li>
+</ol>
+<p>LoRA solved this constraint. Microsoft researchers (Hu et al. 2021) hypothesized that fine-tuning weight updates are intrinsically low-rank. They empirically verified this across multiple models and datasets, showing that rank-8 LoRA adapters achieved comparable performance to full fine-tuning on NLU tasks, NLG tasks, and instruction-following.</p>
+
+<h3>Quantified Impact</h3>
+<table class="comparison-table" style="margin: 2rem 0;">
+<tr><th>Dimension</th><th>Full FT</th><th>LoRA</th><th>Improvement</th></tr>
+<tr><td>GPU Memory</td><td>80-100 GB</td><td>14-32 GB</td><td>60-85% reduction</td></tr>
+<tr><td>Trainable Params</td><td>7,000M (100%)</td><td>1.3M (0.02%)</td><td>5400× reduction</td></tr>
+<tr><td>Training Time (1 epoch)</td><td>8-12 hours</td><td>1-2 hours</td><td>5-10× speedup</td></tr>
+<tr><td>Adapter Size</td><td>14,000 MB</td><td>50-100 MB</td><td>140-280× smaller</td></tr>
+<tr><td>Hardware Cost</td><td>8× A100 (~$12k/mo)</td><td>1× A100 (~$1.5k/mo)</td><td>8× cost reduction</td></tr>
+<tr><td>Turnaround Time</td><td>1-2 weeks</td><td>1-2 days</td><td>7-10× faster</td></tr>
+<tr><td>Model Quality</td><td>100%</td><td>99%</td><td>Negligible loss</td></tr>
+</table>
+
+<div class="highlight-box"><p>The LoRA Breakthrough: On GLUE benchmark, a rank-8 LoRA adapter on RoBERTa achieved 99.1% of full fine-tuning quality while using 0.02% of trainable parameters. This result was surprising and opened a new research direction.</p></div>
+
+<h3>Downstream Impact on AI Development</h3>
+<div class="card-grid">
+<div class="card cyan-accent"><h4>Democratization</h4><p>Thousands of practitioners now fine-tune models who couldn't afford $10k+ infrastructure before.</p></div>
+<div class="card green-accent"><h4>Acceleration</h4><p><a href="https://huggingface.co/docs/peft/" target="_blank" rel="noopener">PEFT</a> research exploded post-2021. New methods (adapters, IA3, prefix tuning) emerged because fine-tuning was now viable.</p></div>
+<div class="card purple-accent"><h4>Market Competition</h4><p>Open LLM ecosystem thrives. Without PEFT, only mega-corporations could customize models. PEFT enabled open models to compete.</p></div>
+<div class="card gold-accent"><h4>Production ML</h4><p>Companies deploy task-specific adapters instead of model zoos. Smaller serving infrastructure, versioning, and model management.</p></div>
+</div>
+</section>
+
+<section id="fundamentals" class="ml-section">
+<h2>PEFT Fundamentals: The Complete Landscape</h2>
+<p>PEFT is an umbrella term for techniques that keep most of a pre-trained model frozen while training a small adapter layer. This simple principle has profound implications for efficiency and quality.</p>
+
+<div class="formula-box"><div class="label">PEFT Mathematical Principle</div>y = f_base(x) + f_adapter(x)<br><br>Where:<br>f_base(x) is the frozen pre-trained model<br>f_adapter(x) is a small learnable component<br><br>The adapter is typically 0.01-2% of the base model size.<br>During training: ∂L/∂base = 0 (frozen)<br>During training: ∂L/∂adapter ≠ 0 (optimized)</div>
+
+<h3>Why This Works</h3>
+<ol style="margin-left: 1.5rem; line-height: 2;">
+<li><strong>Feature Reuse:</strong> Pre-training already learned excellent general representations. Adaptation just needs to steer these representations toward the specific task.</li>
+<li><strong>Intrinsic Dimensionality:</strong> Task adaptation lies in a low-dimensional subspace of the parameter space. You don't need billions of degrees of freedom — hundreds of thousands suffice.</li>
+<li><strong>Catastrophic Forgetting Mitigation:</strong> By freezing the base model, PEFT preserves knowledge from pre-training while adapting to new domains. Full fine-tuning risks forgetting general knowledge.</li>
+<li><strong>Computational Efficiency:</strong> Smaller adapters reduce memory (both weights and gradients/optimizer states), enable batching on consumer hardware, and reduce training time.</li>
+</ol>
+
+<h3>PEFT Method Comparison Matrix</h3>
+<table class="comparison-table">
+<tr><th>Method</th><th>Mechanism</th><th>Params %</th><th>Pros</th><th>Cons</th></tr>
+<tr><td><strong>LoRA</strong></td><td>Low-rank weight decomposition</td><td>0.01-0.1%</td><td>Excellent quality, simple, widely supported</td><td>Assumes low-rank, cannot change architecture</td></tr>
+<tr><td><strong>QLoRA</strong></td><td>LoRA + 4-bit base quantization</td><td>0.01-0.1%</td><td>Extreme memory savings, same quality</td><td>Slower training (quantization overhead)</td></tr>
+<tr><td><strong>Adapters</strong></td><td>Bottleneck layers in transformer blocks</td><td>0.5-2%</td><td>Composable, task routing possible</td><td>Slower inference, larger than LoRA</td></tr>
+<tr><td><strong>Prefix Tuning</strong></td><td>Learnable soft prompt tokens</td><td>0.1-1%</td><td>Interpretable, few-shot friendly</td><td>Reduces sequence length, lower quality</td></tr>
+<tr><td><strong>IA3</strong></td><td>Element-wise activation scaling</td><td>0.001%</td><td>Ultra-efficient, minimal computation</td><td>Lower final quality, less research support</td></tr>
+<tr><td><strong>BitFit</strong></td><td>Only train bias vectors</td><td>0.0009%</td><td>Simplest, barely any parameters</td><td>Quality trails other methods</td></tr>
+</table>
+
+<div class="info-box"><h4>Feature Visualization Insight</h4><p>Research using neural network visualization shows that LoRA adapters learn task-specific rotations and scalings of pre-trained feature representations. The base model's learned features (attention to language structure, semantic relationships) are preserved. The adapter amplifies task-relevant features and suppresses task-irrelevant ones.</p></div>
+</section>
+
+<section id="lora-basics" class="ml-section">
+<h2>LoRA: Low-Rank Adaptation — Deep Dive</h2>
+
+<p>LoRA (Hu et al., 2021) is the most successful PEFT method. The core idea is elegant: instead of fine-tuning weight matrix W, decompose the update as a product of two small matrices.</p>
+
+<div class="formula-box"><div class="label">LoRA Mathematical Definition</div>Standard forward pass: y = Wx<br><br>With LoRA adaptation: y = Wx + \Delta Wx = Wx + BAx<br><br>Where:<br>W ∈ ℝ^(m×n) is the pre-trained weight matrix (frozen)<br>B ∈ ℝ^(m×r) is the down-projection matrix (trainable)<br>A ∈ ℝ^(r×n) is the up-projection matrix (trainable)<br>r ≪ min(m, n) is the rank (typically 4-64)<br><br>Parameter reduction:<br>Full: m·n parameters<br>LoRA: r·(m + n) parameters<br><br>For a 1000×1000 weight matrix with r=8:<br>Full: 1,000,000 parameters<br>LoRA: 8×2000 = 16,000 parameters<br>Reduction: 62.5× fewer parameters</div>
+
+<h3>Initialization Strategy</h3>
+
+<div class="code-block"><div class="code-header">Python — Correct LoRA Initialization</div><div class="code-content"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> torch
+
+<span class="comment"># CORRECT initialization (as in Hu et al. 2021)</span>
+lora_a = nn.<span class="function">Linear</span>(in_features, rank, bias=<span class="keyword">False</span>)
+lora_b = nn.<span class="function">Linear</span>(rank, out_features, bias=<span class="keyword">False</span>)
+
+<span class="comment"># Initialize A with Gaussian noise (important for gradient flow!)</span>
+nn.init.<span class="function">normal_</span>(lora_a.weight, mean=<span class="number">0</span>, std=<span class="number">1</span>/rank)
+
+<span class="comment"># Initialize B to zero (so ΔW = BA starts at zero, no initial disruption)</span>
+nn.init.<span class="function">zeros_</span>(lora_b.weight)
+
+<span class="comment"># INCORRECT (common beginner mistake)</span>
+<span class="comment"># Both randomly initialized → large initial update, training instability</span>
+<span class="comment"># nn.init.normal_(lora_b.weight)  # DON'T DO THIS!</span></div></div>
+
+<div class="highlight-box"><p>Why Zero Initialization for B?: At the start of training, LoRA should contribute zero to the forward pass (ΔW = 0). This ensures the model doesn't suddenly change behavior. Gradients through B start from random, and A is initialized to provide gradient signal. This is critical for stable training.</p></div>
+
+<h3>Scaling Factor: α/r</h3>
+
+<p>LoRA includes a scaling factor α/r applied to the update. This is crucial for hyperparameter transfer.</p>
+
+<div class="formula-box"><div class="label">LoRA Scaling Analysis</div>Update magnitude: y = Wx + (α/r) × BAx<br><br>If α = r (typical choice):<br>  Scaling factor = r/r = 1 (constant!)<br><br>Without scaling (α = 1):<br>  For r=4: scaling = 1/4 = 0.25<br>  For r=8: scaling = 1/8 = 0.125<br>  For r=16: scaling = 1/16 = 0.0625<br>  ← Different learning rates for different ranks!<br><br>With α = r:<br>  For any r, scaling ≈ 1<br>  ← Same learning dynamics regardless of rank<br><br>Consequence: You can change rank without retuning hyperparameters!</div>
+
+<h3>Where to Apply LoRA?</h3>
+
+<p>Not all weight matrices benefit equally from LoRA. Research shows:</p>
+
+<table class="comparison-table">
+<tr><th>Layer Type</th><th>Impact</th><th>Typical Strategy</th><th>Why</th></tr>
+<tr><td><strong>Query, Key, Value</strong></td><td>Very High</td><td>Always apply LoRA</td><td>These projections determine what information each token attends to. Task-specific, high flexibility.</td></tr>
+<tr><td><strong>Output Projection</strong></td><td>High</td><td>Almost always apply</td><td>Combines attention heads. Task-specific routing of information.</td></tr>
+<tr><td><strong>FFN Up (expansion)</strong></td><td>Moderate-High</td><td>Apply in ~60% of cases</td><td>Maps to intermediate dimension. Some task-specificity.</td></tr>
+<tr><td><strong>FFN Down (projection)</strong></td><td>Moderate</td><td>Apply in ~40% of cases</td><td>Projects back to model dimension. Less essential than up.</td></tr>
+<tr><td><strong>Token Embeddings</strong></td><td>Very Low</td><td>Skip unless vocab changes</td><td>Pre-trained embeddings are general-purpose. Rarely need task-specific adjustment.</td></tr>
+<tr><td><strong>Layer Norms</strong></td><td>Negligible</td><td>Always frozen</td><td>Normalization is task-agnostic. Training breaks stability.</td></tr>
+<tr><td><strong>Biases</strong></td><td>Low</td><td>Usually frozen</td><td>Biases are low-capacity. Include only with large datasets.</td></tr>
+</table>
+
+<div class="info-box"><h4>Empirical Finding: Focus on Attention</h4><p>In practice, most high-quality results come from applying LoRA only to attention projections (Q, K, V, O). FFN layers help but with diminishing returns. Embeddings rarely need LoRA.</p></div>
+
+<h3>LoRA Extensions and Variants</h3>
+
+<p><strong>LoRA+:</strong> Uses different learning rates for B and A. Empirically, A benefits from higher learning rate than B. This provides modest quality improvements.</p>
+
+<p><strong>DoRA (Decomposed LoRA):</strong> Separates weight matrices into magnitude and direction components. Fine-tunes magnitude separately from direction via LoRA. Better quality on some benchmarks but more complex.</p>
+
+<p><strong>Sparse LoRA:</strong> Applies structured sparsity to B and A matrices. Many values are exactly zero, further reducing computation and memory. Trade-off: slightly lower quality.</p>
+
+<p><strong>Mixture of LoRAs (MoLoRA):</strong> Multiple LoRA adapters with attention-based gating. Enables soft composition of multiple adapters. Useful for multi-task learning within a single forward pass.</p>
+</section>
+
+<section id="qlora" class="ml-section">
+<h2>QLoRA: Quantized LoRA — Extreme Efficiency</h2>
+
+<p>QLoRA (Dettmers et al., 2023) combines LoRA with aggressive 4-bit base model quantization. This enables fine-tuning of 70B-parameter models on 40GB GPUs — previously impossible.</p>
+
+<h3>The Quantization Strategy</h3>
+
+<div class="formula-box"><div class="label">4-bit Quantization Process</div>Original weights W ∈ ℝ^(m×n) (float32 or float16)<br><br>1. Compute statistics: min_val, max_val, range<br>2. Map to integers: int_val = round((W - min_val) / (range / 15)) ∈ [0, 15]<br>3. Store 4 bits per value (0.5 bytes vs 2-4 bytes in float32)<br>4. Dequantize during forward: W_dequant = int_val × (range/15) + min_val<br><br>Memory savings: 8-16× reduction for base model weights<br><br>NF4 (Normal Float 4) variant:<br>- Quantization levels are information-theoretically optimal for Gaussian dist<br>- Uses 16 specific floating-point values (not uniform integer mapping)<br>- Preserves more information for neural network weights</div>
+
+<h3>QLoRA Training Dynamics</h3>
+
+<p>Unlike simply quantizing and fine-tuning, QLoRA carefully manages precision:</p>
+
+<ol style="margin-left: 1.5rem; line-height: 2;">
+<li><strong>Base Model:</strong> Quantized to 4-bit NF4 for storage and forward pass</li>
+<li><strong>Adapter (LoRA):</strong> Kept in full precision (float32) throughout training</li>
+<li><strong>Forward Pass:</strong> Base weights dequantized to float32, used to compute hidden states</li>
+<li><strong>Adapter Pass:</strong> LoRA adapter computes in full precision</li>
+<li><strong>Backward Pass:</strong> Gradients flow only through adapter, not through quantized base (avoids quantization-induced gradient issues)</li>
+</ol>
+
+<div class="code-block"><div class="code-header">Python — QLoRA Implementation with <a href="https://github.com/TimDettmers/bitsandbytes" target="_blank" rel="noopener">bitsandbytes</a></div><div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> BitsAndBytesConfig, AutoModelForCausalLM
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+<span class="keyword">import</span> torch
+
+<span class="comment"># Step 1: Configure 4-bit quantization</span>
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_use_double_quant=<span class="keyword">True</span>,      <span class="comment"># Double quantization (quantize scales too)</span>
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,            <span class="comment"># NF4 (normal float 4) quantization</span>
+    bnb_4bit_compute_dtype=torch.bfloat16 <span class="comment"># Compute in bfloat16</span>
+)
+
+<span class="comment"># Step 2: Load model in 4-bit</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># Step 3: Apply LoRA on quantized base</span>
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">8</span>,
+    lora_alpha=<span class="number">16</span>,
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>
+)
+
+model = <span class="function">get_peft_model</span>(model, lora_config)
+
+<span class="comment"># Prepare for training</span>
+<span class="keyword">from</span> peft <span class="keyword">import</span> prepare_model_for_kbit_training
+model = <span class="function">prepare_model_for_kbit_training</span>(model)
+
+<span class="function">print</span>(model)
+<span class="comment"># Now memory usage is ~3.5-4 GB even for 7B models!</span></div></div>
+
+<h3>QLoRA Quality-Efficiency Tradeoff</h3>
+
+<table class="comparison-table">
+<tr><th>Metric</th><th>Standard LoRA</th><th>QLoRA</th></tr>
+<tr><td>Base Model</td><td>float16 (14GB for 7B)</td><td>4-bit NF4 (3.5GB for 7B)</td></tr>
+<tr><td>Training Speed</td><td>1.0× baseline</td><td>0.7-0.8× (quantization/dequantization overhead)</td></tr>
+<tr><td>Training Memory</td><td>~14-16 GB</td><td>~3.5-4 GB</td></tr>
+<tr><td>Inference Speed</td><td>1.0× (if merged)</td><td>0.95-1.0× (minimal dequantization cost per token)</td></tr>
+<tr><td>Final Quality</td><td>99-100%</td><td>97-99% (small but measurable degradation)</td></tr>
+<tr><td>Recommended Use</td><td>16GB+ VRAM</td><td>8-16GB VRAM (memory-constrained)</td></tr>
+</table>
+
+<div class="highlight-box"><p>The QLoRA Breakthrough: A single 48GB GPU could fine-tune 65B LLaMA models. This was revolutionary — suddenly, affordable hardware (~$8-10k) could handle models that previously required enterprise infrastructure ($100k+). This enabled a new wave of open-source fine-tuning research.</p></div>
+
+<h3>Gradient Precision in QLoRA</h3>
+
+<p>A subtle but important detail: even though base weights are 4-bit, gradients are computed in full precision. Here's why:</p>
+
+<div class="code-block"><div class="code-header">Python — QLoRA Precision Management</div><div class="code-content"><span class="comment"># Base model weights: 4-bit quantized</span>
+W_quantized = 4_bit_tensor  <span class="comment"># 0.5 bytes per element</span>
+
+<span class="comment"># During forward pass, dequantize to float32</span>
+W_float32 = <span class="function">dequantize</span>(W_quantized)  <span class="comment"># Temporary, only during forward</span>
+
+<span class="comment"># Compute activations</span>
+activations = W_float32 @ <span class="function">input</span>
+
+<span class="comment"># Gradients through LoRA adapter (full precision)</span>
+grad_lora_down = activations.T @ grad_output
+grad_lora_up = grad_output @ hidden_states.T
+
+<span class="comment"># Note: No gradients for W_float32 (base model frozen)</span>
+<span class="comment"># Quantization error does NOT accumulate through gradients!</span>
+
+<span class="comment"># This is key: quantization noise is isolated in forward pass</span>
+<span class="comment"># It does not degrade gradient signal for the adapter</span></div></div>
+</section>
+
+<section id="other-peft" class="ml-section">
+<h2>Other Parameter-Efficient Methods</h2>
+
+<h3>Adapters (Bottleneck Adapters)</h3>
+
+<div class="formula-box"><div class="label">Adapter Architecture</div>For each transformer layer:<br><br>Adapter(x) = W_up(σ(W_down(x + residual)))<br><br>Dimensions:<br>  Input x: d_model (e.g., 4096)<br>  W_down: d_model → r (e.g., 4096 → 256, ratio 1/16)<br>  σ: Activation (ReLU or GELU)<br>  W_up: r → d_model (e.g., 256 → 4096)<br><br>Per-adapter params:<br>  W_down: 4096 × 256 = 1,048,576<br>  W_up: 256 × 4096 = 1,048,576<br>  Total: ~2M per adapter<br><br>For 32-layer model: 64M parameters total (0.9% for 7B model)</div>
+
+<p><strong>Key Difference from LoRA:</strong> Adapters are inserted as separate layers, not fused into weight matrices. This enables easy removal, stacking, and composition.</p>
+
+<p><strong>Advantages:</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Task Composition: Stack multiple adapters sequentially</li>
+<li>Adapter Merging: Combine multiple task adapters into one</li>
+<li>Routing: Dynamically select which adapter based on input</li>
+<li>Layer-specific tuning: Different reduction ratios for different layers</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Slower inference (each adapter adds computation)</li>
+<li>Larger than LoRA (0.5-2% vs 0.01-0.1%)</li>
+<li>Less widely supported in production libraries</li>
+<li>Requires architectural integration during model loading</li>
+</ul>
+
+<h3>Prefix Tuning</h3>
+
+<div class="formula-box"><div class="label">Prefix Tuning Mechanism</div>Prepend learnable prefix tokens to every layer's KV cache:<br><br>For each transformer layer:<br>  prefix_k = P_k ∈ ℝ^(prefix_len × d_k)  // learnable<br>  prefix_v = P_v ∈ ℝ^(prefix_len × d_v)  // learnable<br>  <br>  actual_k = [prefix_k; cached_k]  // concatenate<br>  actual_v = [prefix_v; cached_v]<br>  <br>  attention = softmax(Q · actual_k^T) · actual_v<br><br>Total parameters:<br>  num_layers × prefix_len × (d_k + d_v)<br>  For 32 layers, prefix_len=100, d_k=d_v=64:<br>  32 × 100 × 128 = 409,600 params (~0.006% for 7B model)</div>
+
+<p><strong>Interpretation:</strong> The prefix acts like a soft, continuous prompt that influences the model's behavior throughout the network. Unlike hard prompts (discrete tokens), prefix vectors are learned end-to-end.</p>
+
+<p><strong>Strengths:</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Interpretable: Prefix vectors capture task intent</li>
+<li>Very small parameter count (0.001-0.1%)</li>
+<li>Effective for few-shot and prompt-based tasks</li>
+<li>Can mix multiple prefixes (ensemble)</li>
+</ul>
+
+<p><strong>Weaknesses:</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Consumes input sequence length (reduces tokens for actual content)</li>
+<li>Performance often trails LoRA and Adapters</li>
+<li>Learning can be unstable (manifold of equivalent prefixes)</li>
+<li>Limited to prompt-based adaptation (doesn't work for ranking/classification well)</li>
+</ul>
+
+<h3>IA3: Information-preserving and parameter-efficient adaptation</h3>
+
+<div class="formula-box"><div class="label">IA3 Mechanism (Element-wise Scaling)</div>For each activation in FFN and attention:<br><br>For attention: v_out = Attention(Q, K, V) ⊙ s_attn<br>For FFN up: hidden = W_up(x) ⊙ s_ffn_up<br>For FFN down: out = W_down(hidden) ⊙ s_ffn_down<br><br>Where ⊙ is element-wise multiplication, and s_* are learnable scalars.<br><br>Total parameters:<br>  ~ 2 × d_model + 2 × d_ff per layer<br>  For 32 layers: 32 × (2×4096 + 2×11008) = ~961,536 params<br>  That is 0.01% for 7B model!</div>
+
+<div class="highlight-box"><p>IA3 is Extremely Efficient: Only element-wise scalar multiplication. Minimal computational overhead. Surprisingly effective — maintains 92-95% of full FT quality with 0.01% parameters.</p></div>
+</section>
+
+<section id="math-concepts" class="ml-section">
+<h2>Mathematical Foundation & Theory</h2>
+
+<h3>Singular Value Decomposition (SVD) Theory</h3>
+
+<div class="formula-box"><div class="label">Complete SVD Theorem</div>Any matrix W ∈ ℝ^(m×n) can be decomposed as:<br><br>W = U Σ V^T<br><br>Where:<br>  U ∈ ℝ^(m×m): orthonormal matrix (left singular vectors)<br>  Σ ∈ ℝ^(m×n): diagonal matrix with singular values σ₁ ≥ σ₂ ≥ ... ≥ σₙ ≥ 0<br>  V ∈ ℝ^(n×n): orthonormal matrix (right singular vectors)<br><br>The Frobenius norm of a rank-r approximation error:<br>  ||W - W_r||_F = √(Σᵢ₌ᵣ₊₁ σᵢ²)<br><br>Eckart-Young Theorem: The truncated SVD using the top-r singular values<br>minimizes ||W - W_r||_F among all rank-r matrices.</div>
+
+<h3>Why Weight Updates Are Low-Rank</h3>
+
+<p>During pre-training, large models learn to map diverse inputs to rich representations. These representations capture linguistic structure, semantic meaning, world knowledge, and reasoning patterns. Fine-tuning does not need to relearn all of this.</p>
+
+<p><strong>Empirical Evidence (Hu et al. 2021):</strong> When computing the SVD of ΔW = W_fine_tuned - W_pretrained across various models and tasks, the singular values decay rapidly:</p>
+
+<div class="code-block"><div class="code-header">Python — SVD Analysis of Weight Updates</div><div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> scipy.linalg <span class="keyword">import</span> svd
+
+<span class="comment"># Example: Hypothetical weight update ΔW</span>
+delta_W = np.random.<span class="function">randn</span>(<span class="number">4096</span>, <span class="number">4096</span>) * <span class="number">0.001</span>
+
+<span class="comment"># Compute SVD</span>
+U, singular_values, Vt = <span class="function">svd</span>(delta_W, full_matrices=<span class="keyword">False</span>)
+
+<span class="comment"># Analyze decay</span>
+cumsum = np.<span class="function">cumsum</span>(singular_values ** <span class="number">2</span>)
+cumsum = cumsum / cumsum[-<span class="number">1</span>]  <span class="comment"># Normalize</span>
+
+<span class="comment"># How many singular values needed for 90% variance?</span>
+rank_90 = np.<span class="function">argmax</span>(cumsum >= <span class="number">0.9</span>) + <span class="number">1</span>
+rank_95 = np.<span class="function">argmax</span>(cumsum >= <span class="number">0.95</span>) + <span class="number">1</span>
+rank_99 = np.<span class="function">argmax</span>(cumsum >= <span class="number">0.99</span>) + <span class="number">1</span>
+
+<span class="function">print</span>(<span class="string">f"Rank for 90% variance: {rank_90}"</span>)  <span class="comment"># Often ~4-8</span>
+<span class="function">print</span>(<span class="string">f"Rank for 95% variance: {rank_95}"</span>)  <span class="comment"># Often ~8-16</span>
+<span class="function">print</span>(<span class="string">f"Rank for 99% variance: {rank_99}"</span>)  <span class="comment"># Often ~16-32</span>
+
+<span class="comment"># Visualization</span>
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+plt.<span class="function">plot</span>(cumsum)
+plt.<span class="function">axhline</span>(y=<span class="number">0.95</span>, color=<span class="string">'r'</span>, linestyle=<span class="string">'--'</span>, label=<span class="string">'95% threshold'</span>)
+plt.<span class="function">xlabel</span>(<span class="string">'Rank'</span>)
+plt.<span class="function">ylabel</span>(<span class="string">'Cumulative Variance Explained'</span>)
+plt.<span class="function">title</span>(<span class="string">'Singular Value Spectrum of Weight Updates'</span>)
+plt.<span class="function">legend</span>()
+plt.<span class="function">show</span>()</div></div>
+
+<h3>Gradient Flow Analysis</h3>
+
+<div class="formula-box"><div class="label">Gradient Computation Through LoRA</div>Forward pass: y = Wx + BAx<br><br>Loss: L = loss_fn(y, target)<br><br>Backward pass:<br>  ∂L/∂(BAx) = ∂L/∂y (chain rule)<br>  ∂L/∂(BAx) = ∂L/∂y · ∂y/∂(BAx)<br>  <br>  ∂L/∂A: (∂L/∂(BAx)) · ∂(BAx)/∂A = (∂L/∂(BAx)) · B^T x^T<br>  ∂L/∂B: (∂L/∂(BAx)) · ∂(BAx)/∂B = (∂L/∂(BAx)) · x A<br>  <br>  ∂L/∂W = ∂L/∂y  (but W is frozen, so no update)<br><br>Key insight: Gradient ∂L/∂(BAx) is shared between B and A.<br>This creates a bottleneck: B and A must cooperatively represent the gradient.</div>
+
+<p><strong>Benefit:</strong> The low-rank bottleneck can improve gradient conditioning. Instead of optimizing in a billion-dimensional space, you optimize in a rank-limited space. This often leads to better generalization and faster convergence.</p>
+</section>
+
+<section id="architecture" class="ml-section">
+<h2>Architecture & Design Considerations</h2>
+
+<h3>Rank Selection Strategy</h3>
+
+<div class="formula-box"><div class="label">Rank Selection Heuristics</div>Empirical Guidelines (from literature):<br><br>1. Task-agnostic default: r=8<br>   Works well for most use cases (90%+)<br><br>2. Model size scaling:<br>   1-7B models: r=4-8<br>   7-30B models: r=8-16  <br>   30B+ models: r=16-32<br><br>3. Dataset size scaling:<br>   Small (≤1k): r=4<br>   Medium (1k-10k): r=8<br>   Large (10k-100k): r=16<br>   Extra-large (100k+): r=32-64<br><br>4. Complexity of task:<br>   Simple classification: r=4<br>   General instruction-tuning: r=8<br>   Complex reasoning: r=16-32<br><br>5. Quality requirements:<br>   High-quality (95%+ of FT): r=16-32<br>   Good quality (90%+ of FT): r=8<br>   Fast prototyping: r=4</div>
+
+<div class="highlight-box"><p>The 80/20 Rule: 80% of adaptation capacity comes from the top 4-8 singular directions. Diminishing returns for r > 16 in most tasks.</p></div>
+
+<h3>Learning Rate Dynamics</h3>
+
+<table class="comparison-table">
+<tr><th>Aspect</th><th>Full FT</th><th>LoRA</th><th>QLoRA</th></tr>
+<tr><td>Learning Rate</td><td>1e-5 to 5e-5</td><td>1e-4 to 5e-4</td><td>1e-4 to 5e-4</td></tr>
+<tr><td>Warmup Steps</td><td>500-1000 (helpful)</td><td>0-100 (optional)</td><td>0-100 (optional)</td></tr>
+<tr><td>Learning Rate Schedule</td><td>Cosine decay (common)</td><td>Cosine or constant</td><td>Constant or cosine</td></tr>
+<tr><td>Gradient Clipping</td><td>1.0 (often helpful)</td><td>Usually not needed</td><td>Usually not needed</td></tr>
+<tr><td>Weight Decay</td><td>0.01</td><td>0.01</td><td>0.01</td></tr>
+</table>
+
+<div class="info-box"><h4>Why Higher LR for LoRA?</h4><p>LoRA operates in a smaller, lower-dimensional parameter space. The Hessian (curvature) is typically better-conditioned. Higher learning rates are stable without divergence. This enables faster convergence and shorter training.</p></div>
+
+<h3>Target Module Configuration</h3>
+
+<div class="code-block"><div class="code-header">Python — PEFT Target Module Selection Patterns</div><div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig
+
+<span class="comment"># Pattern 1: Minimal (Q and V only)</span>
+config_minimal = <span class="function">LoraConfig</span>(
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],
+    r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>
+)
+<span class="comment"># Useful for: Quick experiments, memory-constrained, CPU inference</span>
+<span class="comment"># Quality: 95-98% of full FT</span>
+
+<span class="comment"># Pattern 2: Standard (Q, K, V, O in attention)</span>
+config_standard = <span class="function">LoraConfig</span>(
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"k_proj"</span>, <span class="string">"v_proj"</span>, <span class="string">"o_proj"</span>],
+    r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>
+)
+<span class="comment"># Useful for: Most use cases, balanced quality/efficiency</span>
+<span class="comment"># Quality: 98-99% of full FT</span>
+
+<span class="comment"># Pattern 3: Comprehensive (attention + FFN)</span>
+config_comprehensive = <span class="function">LoraConfig</span>(
+    target_modules=[
+        <span class="string">"q_proj"</span>, <span class="string">"k_proj"</span>, <span class="string">"v_proj"</span>, <span class="string">"o_proj"</span>,      <span class="comment"># Attention</span>
+        <span class="string">"gate_proj"</span>, <span class="string">"up_proj"</span>, <span class="string">"down_proj"</span>          <span class="comment"># FFN (LLaMA style)</span>
+    ],
+    r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>
+)
+<span class="comment"># Useful for: High-quality needed, memory available, time not critical</span>
+<span class="comment"># Quality: 99-100% of full FT</span>
+
+<span class="comment"># For different models, module names vary:</span>
+<span class="comment"># LLaMA/Mistral: q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj</span>
+<span class="comment"># GPT-2/3: c_attn (all QKV), c_proj, c_fc, c_proj</span>
+<span class="comment"># BERT: query, key, value, dense</span>
+<span class="comment"># Use model.named_modules() to inspect actual layer names!</span></div></div>
+</section>
+
+<section id="implementation" class="ml-section">
+<h2>Implementation Guide: Step-by-Step</h2>
+
+<div class="code-block"><div class="code-header">Python — Complete LoRA Fine-Tuning Pipeline</div><div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
+<span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> os
+
+<span class="comment"># ===== CONFIGURATION =====</span>
+MODEL_NAME = <span class="string">"meta-llama/Llama-2-7b-hf"</span>
+OUTPUT_DIR = <span class="string">"./llama-7b-custom-lora"</span>
+DATASET_NAME = <span class="string">"tatsu-lab/alpaca"</span>  <span class="comment"># Or your custom dataset</span>
+
+<span class="comment"># ===== STEP 1: LOAD BASE MODEL =====</span>
+<span class="function">print</span>(<span class="string">"Loading base model..."</span>)
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    MODEL_NAME,
+    torch_dtype=torch.float16,
+    device_map=<span class="string">"auto"</span>
+)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(MODEL_NAME)
+
+<span class="comment"># Ensure padding token is set</span>
+<span class="keyword">if</span> tokenizer.pad_token <span class="keyword">is</span> <span class="keyword">None</span>:
+    tokenizer.pad_token = tokenizer.eos_token
+
+<span class="comment"># ===== STEP 2: APPLY LORA =====</span>
+<span class="function">print</span>(<span class="string">"Applying LoRA..."</span>)
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">8</span>,
+    lora_alpha=<span class="number">16</span>,
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>, <span class="string">"k_proj"</span>, <span class="string">"o_proj"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>
+)
+model = <span class="function">get_peft_model</span>(model, lora_config)
+model.<span class="function">print_trainable_parameters</span>()
+
+<span class="comment"># ===== STEP 3: LOAD AND PREPARE DATA =====</span>
+<span class="function">print</span>(<span class="string">"Loading dataset..."</span>)
+dataset = <span class="function">load_dataset</span>(DATASET_NAME)
+
+<span class="keyword">def</span> <span class="function">preprocess_function</span>(examples):
+    <span class="comment"># Format: Instruction - Input - Output (alpaca format)</span>
+    texts = []
+    <span class="keyword">for</span> instruction, inp, output <span class="keyword">in</span> <span class="function">zip</span>(
+        examples.<span class="function">get</span>(<span class="string">"instruction"</span>, []),
+        examples.<span class="function">get</span>(<span class="string">"input"</span>, []),
+        examples.<span class="function">get</span>(<span class="string">"output"</span>, [])
+    ):
+        text = <span class="string">f"Instruction: {instruction}\nInput: {inp}\nOutput: {output}"</span>
+        texts.<span class="function">append</span>(text)
+    
+    tokenized = <span class="function">tokenizer</span>(
+        texts,
+        truncation=<span class="keyword">True</span>,
+        max_length=<span class="number">512</span>,
+        padding=<span class="string">"max_length"</span>,
+        return_tensors=<span class="keyword">None</span>
+    )
+    
+    <span class="comment"># For causal LM, labels = input_ids</span>
+    tokenized[<span class="string">"labels"</span>] = tokenized[<span class="string">"input_ids"</span>].<span class="function">copy</span>()
+    <span class="keyword">return</span> tokenized
+
+<span class="comment"># Process dataset</span>
+train_dataset = dataset[<span class="string">"train"</span>].<span class="function">map</span>(
+    preprocess_function,
+    batched=<span class="keyword">True</span>,
+    remove_columns=[<span class="string">"instruction"</span>, <span class="string">"input"</span>, <span class="string">"output"</span>, <span class="string">"text"</span>]
+)
+
+<span class="comment"># ===== STEP 4: TRAINING ARGUMENTS =====</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=OUTPUT_DIR,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">8</span>,
+    per_device_eval_batch_size=<span class="number">8</span>,
+    warmup_steps=<span class="number">100</span>,
+    weight_decay=<span class="number">0.01</span>,
+    logging_steps=<span class="number">10</span>,
+    learning_rate=<span class="number">5e-4</span>,
+    lr_scheduler_type=<span class="string">"cosine"</span>,
+    save_strategy=<span class="string">"epoch"</span>,
+    save_total_limit=<span class="number">2</span>,
+    gradient_accumulation_steps=<span class="number">1</span>,
+    gradient_checkpointing=<span class="keyword">False</span>,
+    fp16=<span class="keyword">True</span>,
+    seed=<span class="number">42</span>,
+)
+
+<span class="comment"># ===== STEP 5: CREATE TRAINER =====</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+)
+
+<span class="comment"># ===== STEP 6: TRAIN =====</span>
+<span class="function">print</span>(<span class="string">"Starting training..."</span>)
+trainer.<span class="function">train</span>()
+
+<span class="comment"># ===== STEP 7: SAVE ADAPTER =====</span>
+<span class="function">print</span>(<span class="string">f"Saving adapter to {OUTPUT_DIR}..."</span>)
+model.<span class="function">save_pretrained</span>(OUTPUT_DIR)
+tokenizer.<span class="function">save_pretrained</span>(OUTPUT_DIR)
+
+<span class="function">print</span>(<span class="string">"✓ Training complete!"</span>)</div></div>
+
+<h3>Memory-Optimized Training for Constrained GPUs</h3>
+
+<div class="code-block"><div class="code-header">Python — Memory Optimization Techniques</div><div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model, prepare_model_for_kbit_training
+<span class="keyword">from</span> transformers <span class="keyword">import</span> BitsAndBytesConfig
+<span class="keyword">import</span> torch
+
+<span class="comment"># For 8GB GPU (aggressive optimization)</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    quantization_config=<span class="function">BitsAndBytesConfig</span>(
+        load_in_4bit=<span class="keyword">True</span>,
+        bnb_4bit_quant_type=<span class="string">"nf4"</span>,
+        bnb_4bit_use_double_quant=<span class="keyword">True</span>,
+        bnb_4bit_compute_dtype=torch.bfloat16
+    ),
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># Apply LoRA</span>
+lora_config = <span class="function">LoraConfig</span>(r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>, ...)
+model = <span class="function">get_peft_model</span>(model, lora_config)
+model = <span class="function">prepare_model_for_kbit_training</span>(model)
+
+<span class="comment"># Training args for memory efficiency</span>
+training_args = <span class="function">TrainingArguments</span>(
+    per_device_train_batch_size=<span class="number">1</span>,      <span class="comment"># Minimal batch size</span>
+    per_device_eval_batch_size=<span class="number">1</span>,
+    gradient_accumulation_steps=<span class="number">4</span>,      <span class="comment"># Simulate batch_size=4</span>
+    gradient_checkpointing=<span class="keyword">True</span>,        <span class="comment"># Trade compute for memory</span>
+    max_grad_norm=<span class="number">0.3</span>,                  <span class="comment"># Gradient clipping</span>
+    warmup_ratio=<span class="number">0.03</span>,
+    lr_scheduler_type=<span class="string">"linear"</span>,
+    optim=<span class="string">"paged_adamw_8bit"</span>,           <span class="comment"># Memory-efficient optimizer</span>
+    num_train_epochs=<span class="number">1</span>,
+)
+
+<span class="comment"># Result: 4GB training possible for 7B model!</span></div></div>
+</section>
+
+<section id="code-examples" class="ml-section">
+<h2>Advanced Code Examples</h2>
+
+<h3>QLoRA with Gradient Checkpointing</h3>
+
+<div class="code-block"><div class="code-header">Python — QLoRA with Extreme Optimization</div><div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> BitsAndBytesConfig, AutoModelForCausalLM
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model, prepare_model_for_kbit_training
+
+<span class="comment"># Ultra-efficient configuration for 70B model on 40GB A100</span>
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_use_double_quant=<span class="keyword">True</span>,
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-70b-hf"</span>,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>,
+    load_in_8bit_fp32_cpu_offload=<span class="keyword">True</span>  <span class="comment"># Offload some ops to CPU</span>
+)
+
+lora_config = <span class="function">LoraConfig</span>(r=<span class="number">8</span>, lora_alpha=<span class="number">16</span>, target_modules=[...])
+model = <span class="function">get_peft_model</span>(model, lora_config)
+model = <span class="function">prepare_model_for_kbit_training</span>(model)
+
+<span class="comment"># Set up training with aggressive memory saving</span>
+model.config.use_cache = <span class="keyword">False</span>  <span class="comment"># Disable KV cache during training</span>
+model.<span class="function">gradient_checkpointing_enable</span>()  <span class="comment"># Store only some activations</span>
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=<span class="function">TrainingArguments</span>(
+        per_device_train_batch_size=<span class="number">1</span>,
+        gradient_accumulation_steps=<span class="number">4</span>,
+        gradient_checkpointing=<span class="keyword">True</span>,
+        max_steps=<span class="number">1000</span>,
+        learning_rate=<span class="number">1e-4</span>,
+        optim=<span class="string">"paged_adamw_8bit"</span>
+    ),
+    train_dataset=train_dataset
+)
+
+trainer.<span class="function">train</span>()</div></div>
+
+<h3>Merging and Unloading Adapters</h3>
+
+<div class="code-block"><div class="code-header">Python — Adapter Merging for Production</div><div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> PeftModel, AutoPeftModelForCausalLM
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+<span class="comment"># Load base model</span>
+base_model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    torch_dtype=torch.float16,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># Load adapter</span>
+peft_model = PeftModel.<span class="function">from_pretrained</span>(
+    base_model,
+    <span class="string">"llama-7b-custom-lora"</span>
+)
+
+<span class="comment"># Merge LoRA weights into base model</span>
+<span class="comment"># This bakes the low-rank update into the weight matrices</span>
+merged_model = peft_model.<span class="function">merge_and_unload</span>()
+
+<span class="comment"># Save merged model (now a standard HuggingFace model)</span>
+merged_model.<span class="function">save_pretrained</span>(<span class="string">"llama-7b-merged"</span>)
+tokenizer.<span class="function">save_pretrained</span>(<span class="string">"llama-7b-merged"</span>)
+
+<span class="comment"># Use merged model anywhere without <a href="https://huggingface.co/docs/peft/" target="_blank" rel="noopener">PEFT</a> library!</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+pipe = <span class="function">pipeline</span>(<span class="string">"text-generation"</span>, model=<span class="string">"llama-7b-merged"</span>, tokenizer=<span class="string">"llama-7b-merged"</span>)
+output = <span class="function">pipe</span>(<span class="string">"Explain transformers:"</span>, max_length=<span class="number">100</span>)</div></div>
+
+<h3>Multi-Adapter Serving at Scale</h3>
+
+<div class="code-block"><div class="code-header">Python — Serving Multiple Adapters from One Model</div><div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> PeftModel
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForCausalLM
+<span class="keyword">import</span> torch
+
+<span class="comment"># Load base model once</span>
+base_model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    torch_dtype=torch.float16,
+    device_map=<span class="string">"auto"</span>
+)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"meta-llama/Llama-2-7b-hf"</span>)
+
+<span class="comment"># Load multiple task-specific adapters</span>
+adapters = {
+    <span class="string">"customer_support"</span>: <span class="string">"adapter-support-lora"</span>,
+    <span class="string">"technical_qa"</span>: <span class="string">"adapter-technical-lora"</span>,
+    <span class="string">"code_generation"</span>: <span class="string">"adapter-code-lora"</span>,
+    <span class="string">"creative_writing"</span>: <span class="string">"adapter-creative-lora"</span>
+}
+
+<span class="comment"># Load all adapters into memory</span>
+model = base_model
+<span class="keyword">for</span> task_name, adapter_path <span class="keyword">in</span> adapters.<span class="function">items</span>():
+    model = PeftModel.<span class="function">from_pretrained</span>(
+        model,
+        adapter_path,
+        adapter_name=task_name  <span class="comment"># Name for this adapter</span>
+    )
+
+<span class="comment"># Inference function with task routing</span>
+<span class="keyword">def</span> <span class="function">generate_with_task</span>(prompt, task_name, max_tokens=<span class="number">100</span>):
+    <span class="string">"""Generate with task-specific adapter"""</span>
+    
+    <span class="comment"># Switch to appropriate adapter</span>
+    model.<span class="function">set_adapter</span>(task_name)
+    
+    <span class="comment"># Tokenize input</span>
+    inputs = <span class="function">tokenizer</span>(prompt, return_tensors=<span class="string">"pt"</span>).<span class="function">to</span>(<span class="string">"cuda"</span>)
+    
+    <span class="comment"># Generate</span>
+    <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+        outputs = model.<span class="function">generate</span>(
+            **inputs,
+            max_length=max_tokens,
+            temperature=<span class="number">0.7</span>,
+            top_p=<span class="number">0.9</span>,
+            do_sample=<span class="keyword">True</span>
+        )
+    
+    <span class="comment"># Decode output</span>
+    response = tokenizer.<span class="function">decode</span>(outputs[<span class="number">0</span>], skip_special_tokens=<span class="keyword">True</span>)
+    <span class="keyword">return</span> response
+
+<span class="comment"># Example usage</span>
+support_response = <span class="function">generate_with_task</span>(
+    <span class="string">"How do I reset my password?"</span>,
+    <span class="string">"customer_support"</span>
+)
+code_response = <span class="function">generate_with_task</span>(
+    <span class="string">"Write Python to sort a list"</span>,
+    <span class="string">"code_generation"</span>
+)
+story = <span class="function">generate_with_task</span>(
+    <span class="string">"Once upon a time..."</span>,
+    <span class="string">"creative_writing"</span>
+)
+
+<span class="function">print</span>(<span class="string">"Support:"</span>, support_response)
+<span class="function">print</span>(<span class="string">"Code:"</span>, code_response)
+<span class="function">print</span>(<span class="string">"Story:"</span>, story)</div></div>
+
+<h3>Custom LoRA Training from Scratch</h3>
+
+<div class="code-block"><div class="code-header">Python — Implementing LoRA without PEFT (Educational)</div><div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+
+<span class="keyword">class</span> <span class="function">LoRALayer</span>(nn.Module):
+    <span class="string">"""Simple LoRA adapter for a linear layer"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, in_features, out_features, rank=<span class="number">8</span>, alpha=<span class="number">16</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.in_features = in_features
+        <span class="function">self</span>.out_features = out_features
+        <span class="function">self</span>.rank = rank
+        <span class="function">self</span>.alpha = alpha
+        <span class="function">self</span>.scaling = alpha / rank
+        
+        <span class="comment"># Trainable LoRA matrices</span>
+        <span class="function">self</span>.lora_down = nn.<span class="function">Linear</span>(in_features, rank, bias=<span class="keyword">False</span>)
+        <span class="function">self</span>.lora_up = nn.<span class="function">Linear</span>(rank, out_features, bias=<span class="keyword">False</span>)
+        
+        <span class="comment"># Initialization (critical!)</span>
+        nn.init.<span class="function">kaiming_uniform_</span>(<span class="function">self</span>.lora_down.weight, a=<span class="number">5</span>**<span class="number">0.5</span>)
+        nn.init.<span class="function">zeros_</span>(<span class="function">self</span>.lora_up.weight)
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x):
+        <span class="comment"># LoRA computation: (α/r) × (W_up × W_down × x)</span>
+        lora_out = <span class="function">self</span>.<span class="function">lora_down</span>(x)
+        lora_out = <span class="function">self</span>.<span class="function">lora_up</span>(lora_out)
+        <span class="keyword">return</span> lora_out * <span class="function">self</span>.scaling
+
+<span class="keyword">class</span> <span class="function">LinearWithLoRA</span>(nn.Module):
+    <span class="string">"""Linear layer with LoRA adapter"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, base_linear, rank=<span class="number">8</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.base_linear = base_linear
+        <span class="function">self</span>.lora = <span class="function">LoRALayer</span>(
+            base_linear.in_features,
+            base_linear.out_features,
+            rank=rank
+        )
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x):
+        <span class="comment"># y = W·x + LoRA(x)</span>
+        base_out = <span class="function">self</span>.<span class="function">base_linear</span>(x)
+        lora_out = <span class="function">self</span>.<span class="function">lora</span>(x)
+        <span class="keyword">return</span> base_out + lora_out
+
+<span class="comment"># Integration example</span>
+<span class="keyword">class</span> <span class="function">TransformerBlockWithLoRA</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, base_block, apply_lora_to_qkv=<span class="keyword">True</span>, apply_lora_to_ffn=<span class="keyword">False</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.base_block = base_block
+        
+        <span class="keyword">if</span> apply_lora_to_qkv:
+            <span class="comment"># Wrap attention projections</span>
+            <span class="function">self</span>.q_proj_lora = <span class="function">LinearWithLoRA</span>(base_block.self_attn.q_proj, rank=<span class="number">8</span>)
+            <span class="function">self</span>.v_proj_lora = <span class="function">LinearWithLoRA</span>(base_block.self_attn.v_proj, rank=<span class="number">8</span>)
+            <span class="function">self</span>.k_proj_lora = <span class="function">LinearWithLoRA</span>(base_block.self_attn.k_proj, rank=<span class="number">8</span>)
+            <span class="function">self</span>.o_proj_lora = <span class="function">LinearWithLoRA</span>(base_block.self_attn.o_proj, rank=<span class="number">8</span>)
+            
+            <span class="comment"># Freeze base</span>
+            <span class="keyword">for</span> param <span class="keyword">in</span> base_block.self_attn.<span class="function">parameters</span>():
+                param.requires_grad = <span class="keyword">False</span>
+            <span class="comment"># Only LoRA params are trainable</span>
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, hidden_states, attention_mask=<span class="keyword">None</span>):
+        <span class="comment"># Forward through base block, but use LoRA-enhanced projections</span>
+        <span class="comment"># (simplified for illustration)</span>
+        <span class="keyword">return</span> <span class="function">self</span>.<span class="function">base_block</span>(hidden_states, attention_mask)</div></div>
+
+<h3>Rank Analysis and Selection</h3>
+
+<div class="code-block"><div class="code-header">Python — Finding Optimal Rank for Your Task</div><div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+<span class="keyword">from</span> transformers <span class="keyword">import</span> Trainer, TrainingArguments
+
+<span class="comment"># Grid search over ranks</span>
+ranks_to_test = [<span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">64</span>]
+results = {rank: {<span class="string">"train_loss"</span>: [], <span class="string">"eval_loss"</span>: <span class="keyword">None</span>, <span class="string">"params"</span>: <span class="number">0</span>} <span class="keyword">for</span> rank <span class="keyword">in</span> ranks_to_test}
+
+<span class="keyword">for</span> rank <span class="keyword">in</span> ranks_to_test:
+    <span class="function">print</span>(<span class="string">f"\nTraining with rank={rank}..."</span>)
+    
+    <span class="comment"># Load fresh model for each rank</span>
+    model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(<span class="string">"meta-llama/Llama-2-7b-hf"</span>, ...)
+    
+    <span class="comment"># Configure LoRA with this rank</span>
+    config = <span class="function">LoraConfig</span>(
+        r=rank,
+        lora_alpha=<span class="number">16</span>,
+        target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],
+        lora_dropout=<span class="number">0.05</span>,
+        bias=<span class="string">"none"</span>,
+        task_type=<span class="string">"CAUSAL_LM"</span>
+    )
+    
+    model = <span class="function">get_peft_model</span>(model, config)
+    
+    <span class="comment"># Count trainable params</span>
+    trainable = <span class="function">sum</span>(p.<span class="function">numel</span>() <span class="keyword">for</span> p <span class="keyword">in</span> model.<span class="function">parameters</span>() <span class="keyword">if</span> p.requires_grad)
+    results[rank][<span class="string">"params"</span>] = trainable
+    
+    <span class="comment"># Train (abbreviated)</span>
+    trainer = <span class="function">Trainer</span>(...)
+    trainer.<span class="function">train</span>()
+    
+    <span class="comment"># Evaluate</span>
+    eval_results = trainer.<span class="function">evaluate</span>()
+    results[rank][<span class="string">"eval_loss"</span>] = eval_results[<span class="string">"eval_loss"</span>]
+    results[rank][<span class="string">"train_loss"</span>] = eval_results.<span class="function">get</span>(<span class="string">"train_loss"</span>, <span class="number">0</span>)
+
+<span class="comment"># Analysis</span>
+<span class="function">print</span>(<span class="string">"\n"</span> + <span class="string">"="</span>*<span class="number">60</span>)
+<span class="function">print</span>(<span class="string">"RANK ANALYSIS RESULTS"</span>)
+<span class="function">print</span>(<span class="string">"="</span>*<span class="number">60</span>)
+<span class="keyword">for</span> rank <span class="keyword">in</span> ranks_to_test:
+    loss = results[rank][<span class="string">"eval_loss"</span>]
+    params_m = results[rank][<span class="string">"params"</span>] / <span class="number">1e6</span>
+    <span class="function">print</span>(<span class="string">f"Rank {rank:2d}: Loss={loss:.4f}  Params={params_m:6.1f}M"</span>)
+
+<span class="comment"># Plot</span>
+fig, (ax1, ax2) = plt.<span class="function">subplots</span>(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">12</span>, <span class="number">4</span>))
+
+losses = [results[r][<span class="string">"eval_loss"</span>] <span class="keyword">for</span> r <span class="keyword">in</span> ranks_to_test]
+params = [results[r][<span class="string">"params"</span>]/<span class="number">1e6</span> <span class="keyword">for</span> r <span class="keyword">in</span> ranks_to_test]
+
+<span class="comment"># Plot 1: Loss vs Rank</span>
+ax1.<span class="function">plot</span>(ranks_to_test, losses, <span class="string">'o-'</span>, linewidth=<span class="number">2</span>, markersize=<span class="number">8</span>)
+ax1.<span class="function">set_xlabel</span>(<span class="string">"LoRA Rank"</span>, fontsize=<span class="number">12</span>)
+ax1.<span class="function">set_ylabel</span>(<span class="string">"Validation Loss"</span>, fontsize=<span class="number">12</span>)
+ax1.<span class="function">set_title</span>(<span class="string">"Loss vs Rank"</span>, fontsize=<span class="number">14</span>)
+ax1.<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)
+
+<span class="comment"># Plot 2: Loss vs Parameters (Pareto frontier)</span>
+colors = [<span class="string">'green'</span> <span class="keyword">if</span> l < <span class="function">min</span>(losses)*<span class="number">1.01</span> <span class="keyword">else</span> <span class="string">'blue'</span> <span class="keyword">for</span> l <span class="keyword">in</span> losses]
+ax2.<span class="function">scatter</span>(params, losses, s=<span class="number">200</span>, c=colors, alpha=<span class="number">0.6</span>)
+<span class="keyword">for</span> i, rank <span class="keyword">in</span> <span class="function">enumerate</span>(ranks_to_test):
+    ax2.<span class="function">annotate</span>(<span class="string">f"r={rank}"</span>, (params[i], losses[i]), fontsize=<span class="number">10</span>, ha=<span class="string">"center"</span>)
+ax2.<span class="function">set_xlabel</span>(<span class="string">"Trainable Parameters (Millions)"</span>, fontsize=<span class="number">12</span>)
+ax2.<span class="function">set_ylabel</span>(<span class="string">"Validation Loss"</span>, fontsize=<span class="number">12</span>)
+ax2.<span class="function">set_title</span>(<span class="string">"Quality vs Efficiency Tradeoff"</span>, fontsize=<span class="number">14</span>)
+ax2.<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)
+
+plt.<span class="function">tight_layout</span>()
+plt.<span class="function">savefig</span>(<span class="string">"rank_analysis.png"</span>, dpi=<span class="number">150</span>)
+<span class="function">print</span>(<span class="string">"\n✓ Saved rank analysis plot to rank_analysis.png"</span>)</div></div>
+</section>
+
+<section id="comparison" class="ml-section">
+<h2>Comprehensive Method Comparison</h2>
+
+<table class="comparison-table" style="font-size: 0.9rem;">
+<tr>
+<th>Metric</th><th>Full FT</th><th>LoRA</th><th>QLoRA</th><th>Adapters</th><th>Prefix</th><th>IA3</th>
+</tr>
+<tr>
+<td><strong>Trainable %</strong></td><td>100%</td><td>0.1%</td><td>0.1%</td><td>1%</td><td>0.5%</td><td>0.01%</td>
+</tr>
+<tr>
+<td><strong>Memory (7B)</strong></td><td>~80GB</td><td>~14GB</td><td>~4GB</td><td>~16GB</td><td>~15GB</td><td>~14GB</td>
+</tr>
+<tr>
+<td><strong>Train Speed</strong></td><td>1.0×</td><td>0.95×</td><td>0.7×</td><td>0.85×</td><td>0.9×</td><td>0.98×</td>
+</tr>
+<tr>
+<td><strong>Quality (%)</strong></td><td>100%</td><td>99%</td><td>97%</td><td>98%</td><td>95%</td><td>92%</td>
+</tr>
+<tr>
+<td><strong>Inference</strong></td><td>1.0×</td><td>1.0×† (merged)</td><td>1.0×</td><td>0.95×</td><td>0.98×</td><td>1.0×</td>
+</tr>
+<tr>
+<td><strong>Min GPU</strong></td><td>80GB</td><td>24GB</td><td>8GB</td><td>32GB</td><td>24GB</td><td>24GB</td>
+</tr>
+<tr>
+<td><strong>Adapter Size</strong></td><td>N/A</td><td>50-100MB</td><td>50-100MB</td><td>500MB-2GB</td><td>100-500MB</td><td>100-500MB</td>
+</tr>
+<tr>
+<td><strong>Composability</strong></td><td>N/A</td><td>Fair</td><td>Fair</td><td>Excellent</td><td>Good</td><td>Limited</td>
+</tr>
+<tr>
+<td><strong>Best For</strong></td><td>Unlimited compute</td><td>Default choice</td><td>Tight memory</td><td>Multi-task</td><td>Few-shot</td><td>Extreme efficiency</td>
+</tr>
+</table>
+
+<p style="font-size: 0.9rem; margin-top: 0.5rem;">† Inference speed identical to base if adapter is merged into weights. Slight overhead (1-2%) if loaded separately.</p>
+
+<h3>Visual Comparison: Memory and Parameters</h3>
+
+<div class="diagram-box">
+<h4>Memory Usage Comparison (7B Model Training)</h4>
+<div class="model-bars">
+<div class="model-bar">
+<div class="model-bar-label">Full FT</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:100%; background:linear-gradient(90deg, #ef4444, #dc2626);">104 GB</div>
+</div>
+</div>
+<div class="model-bar">
+<div class="model-bar-label">LoRA</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:14%; background:linear-gradient(90deg, #10b981, #059669);">14 GB</div>
+</div>
+</div>
+<div class="model-bar">
+<div class="model-bar-label">QLoRA</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:4%; background:linear-gradient(90deg, #3b82f6, #2563eb);">4 GB</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="diagram-box">
+<h4>Trainable Parameters Comparison</h4>
+<div class="model-bars">
+<div class="model-bar">
+<div class="model-bar-label">Full FT (7B)</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:100%; background:linear-gradient(90deg, #7c3aed, #6d28d9);">7000M</div>
+</div>
+</div>
+<div class="model-bar">
+<div class="model-bar-label">LoRA (r=8)</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:0.15%; background:linear-gradient(90deg, #0891b2, #06b6d4);">10M</div>
+</div>
+</div>
+<div class="model-bar">
+<div class="model-bar-label">Adapters</div>
+<div class="model-bar-track">
+<div class="model-bar-fill" style="width:1%; background:linear-gradient(90deg, #f59e0b, #d97706);">70M</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="memory-analysis" class="ml-section">
+<h2>Memory & Parameter Detailed Analysis</h2>
+
+<h3>Complete Memory Accounting</h3>
+
+<div class="formula-box"><div class="label">Total Memory Formula</div>M_total = M_model + M_gradients + M_optimizer + M_activations<br><br>For 7B model (float16) with Adam optimizer:<br><br>M_model = 7B × 2 bytes = 14 GB<br>M_gradients = 7B × 2 bytes = 14 GB (only trainable params)<br>M_optimizer = 7B × (4 + 4) bytes = 56 GB (momentum + variance)<br>M_activations = batch×seq×hidden×layers × 2 ≈ 3-5 GB<br><br>Full FT Total ≈ 14 + 14 + 56 + 5 = 89 GB<br><br>With LoRA (1.3M trainable):<br>M_gradients = 1.3M × 2 bytes = 2.6 MB<br>M_optimizer = 1.3M × 8 bytes = 10.4 MB<br><br>LoRA Total ≈ 14 + 0.01 + 0.01 + 5 = 19 GB (or 31 GB with safety margin)</div>
+
+<h3>Memory Reduction Strategies</h3>
+
+<table class="comparison-table">
+<tr><th>Strategy</th><th>Memory Reduction</th><th>Speed Impact</th><th>Quality Impact</th><th>Difficulty</th></tr>
+<tr><td>Mixed Precision (fp16)</td><td>50%</td><td>Faster!</td><td>None</td><td>Trivial</td></tr>
+<tr><td>Gradient Checkpointing</td><td>30-50%</td><td>-20% speed</td><td>None</td><td>Easy</td></tr>
+<tr><td>LoRA</td><td>85%</td><td>-5% speed</td><td>-1% quality</td><td>Easy</td></tr>
+<tr><td>4-bit Quantization</td><td>75% (model)</td><td>-30% speed</td><td>-3% quality</td><td>Moderate</td></tr>
+<tr><td>Batch Size ≤ 2</td><td>Variable</td><td>Slower convergence</td><td>+2-5% loss</td><td>Trivial</td></tr>
+</table>
+
+<div class="highlight-box"><p>Recommended Stack: Always do mixed precision (free). Then LoRA (massive savings). If still tight, add gradient checkpointing. Only then consider quantization.</p></div>
+
+<div class="code-block"><div class="code-header">Python — Memory Estimation Tool</div><div class="code-content"><span class="keyword">def</span> <span class="function">estimate_training_memory</span>(
+    model_params_b: <span class="function">float</span>,
+    sequence_length: <span class="function">int</span> = <span class="number">512</span>,
+    batch_size: <span class="function">int</span> = <span class="number">8</span>,
+    use_lora: <span class="function">bool</span> = <span class="keyword">False</span>,
+    use_quantization: <span class="function">bool</span> = <span class="keyword">False</span>,
+    gradient_checkpointing: <span class="function">bool</span> = <span class="keyword">False</span>,
+    precision: <span class="function">str</span> = <span class="string">"fp16"</span>  <span class="comment"># fp16, fp32, or 4bit</span>
+):
+    <span class="string">"""Estimate GPU memory needed for training"""</span>
+    
+    <span class="comment"># Model weights</span>
+    <span class="keyword">if</span> use_quantization:
+        model_mem = (model_params_b * <span class="number">1e9</span> * <span class="number">0.5</span>) / <span class="number">1e9</span>  <span class="comment"># 4-bit: 0.5 bytes/param</span>
+    <span class="keyword">elif</span> precision == <span class="string">"fp16"</span>:
+        model_mem = (model_params_b * <span class="number">1e9</span> * <span class="number">2</span>) / <span class="number">1e9</span>
+    <span class="keyword">else</span>:  <span class="comment"># fp32</span>
+        model_mem = (model_params_b * <span class="number">1e9</span> * <span class="number">4</span>) / <span class="number">1e9</span>
+    
+    <span class="comment"># Trainable parameters</span>
+    <span class="keyword">if</span> use_lora:
+        <span class="comment"># Estimate: ~0.3% of parameters for LoRA</span>
+        trainable_params = model_params_b * <span class="number">1e9</span> * <span class="number">0.003</span>
+    <span class="keyword">else</span>:
+        trainable_params = model_params_b * <span class="number">1e9</span>
+    
+    <span class="comment"># Gradient memory</span>
+    grad_mem = (trainable_params * <span class="number">4</span>) / <span class="number">1e9</span>  <span class="comment"># Gradients usually float32</span>
+    
+    <span class="comment"># Optimizer states (Adam: momentum + variance)</span>
+    optimizer_mem = (trainable_params * <span class="number">8</span>) / <span class="number">1e9</span>
+    
+    <span class="comment"># Activation memory</span>
+    <span class="keyword">if</span> gradient_checkpointing:
+        <span class="comment"># Only store O(sqrt(layers)) activations</span>
+        activation_mem = <span class="number">1.0</span>  <span class="comment"># Rough estimate</span>
+    <span class="keyword">else</span>:
+        <span class="comment"># Store all activations</span>
+        hidden_size = <span class="function">int</span>((model_params_b * <span class="number">1e9</span> / <span class="number">12</span> / sequence_length) ** <span class="number">0.5</span>)  <span class="comment"># Rough</span>
+        activation_mem = (batch_size * sequence_length * hidden_size * <span class="number">4</span>) / <span class="number">1e9</span>  <span class="comment"># Bytes</span>
+    
+    total = model_mem + grad_mem + optimizer_mem + activation_mem
+    
+    <span class="keyword">return</span> {
+        <span class="string">"model"</span>: model_mem,
+        <span class="string">"gradients"</span>: grad_mem,
+        <span class="string">"optimizer"</span>: optimizer_mem,
+        <span class="string">"activations"</span>: activation_mem,
+        <span class="string">"total"</span>: total
+    }
+
+<span class="comment"># Examples</span>
+<span class="function">print</span>(<span class="string">"Memory Requirements for Training:"</span>)
+<span class="function">print</span>(<span class="string">"="</span>*<span class="number">70</span>)
+
+configs = [
+    (<span class="string">"Full FT 7B (fp16)"</span>, <span class="function">dict</span>(model_params_b=<span class="number">7</span>, use_lora=<span class="keyword">False</span>, precision=<span class="string">"fp16"</span>)),
+    (<span class="string">"Full FT 7B (fp32)"</span>, <span class="function">dict</span>(model_params_b=<span class="number">7</span>, use_lora=<span class="keyword">False</span>, precision=<span class="string">"fp32"</span>)),
+    (<span class="string">"LoRA 7B"</span>, <span class="function">dict</span>(model_params_b=<span class="number">7</span>, use_lora=<span class="keyword">True</span>, precision=<span class="string">"fp16"</span>)),
+    (<span class="string">"LoRA 7B + GradCP"</span>, <span class="function">dict</span>(model_params_b=<span class="number">7</span>, use_lora=<span class="keyword">True</span>, gradient_checkpointing=<span class="keyword">True</span>)),
+    (<span class="string">"QLoRA 7B"</span>, <span class="function">dict</span>(model_params_b=<span class="number">7</span>, use_lora=<span class="keyword">True</span>, use_quantization=<span class="keyword">True</span>)),
+]
+
+<span class="keyword">for</span> name, cfg <span class="keyword">in</span> configs:
+    est = <span class="function">estimate_training_memory</span>(**cfg)
+    <span class="function">print</span>(<span class="string">f"{name:25s}: {est['total']:6.1f} GB"</span>)</div></div>
+</section>
+
+<section id="practical-guide" class="ml-section">
+<h2>Practical Deployment & Serving</h2>
+
+<h3>Merging vs Runtime Loading</h3>
+
+<p><strong>Strategy 1: Merge and Deploy</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Pros: No framework dependencies, standard HF model, no latency overhead</li>
+<li>Cons: Lose adapter modularity, larger model size, single task</li>
+<li>Best for: Production deployment, speed critical, single well-defined task</li>
+</ul>
+
+<p><strong>Strategy 2: Runtime Loading</strong></p>
+<ul style="margin-left: 1.5rem;">
+<li>Pros: Multiple adapters from one base, easy A/B testing, modular</li>
+<li>Cons: Framework dependency (PEFT), slight latency (adapter loading), complex serving</li>
+<li>Best for: Multi-task systems, frequent adapter updates, research/experimentation</li>
+</ul>
+
+<h3>Production Deployment Checklist</h3>
+
+<div style="background: #f0f9ff; border: 1px solid #0891b2; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+<h4 style="margin-top: 0; color: #0891b2;">Before Deploying Adapters</h4>
+<ul style="margin-left: 1.5rem; line-height: 1.8;">
+<li><input type="checkbox"> Test adapter on held-out test set (not seen during training)</li>
+<li><input type="checkbox"> Benchmark inference latency (with/without adapter)</li>
+<li><input type="checkbox"> Measure VRAM footprint on target hardware</li>
+<li><input type="checkbox"> Test 10× actual peak load (verify stability)</li>
+<li><input type="checkbox"> Version control: store adapter + base model + training config</li>
+<li><input type="checkbox"> A/B test: compare merged vs runtime-loaded performance</li>
+<li><input type="checkbox"> Monitor: track inference latency, error rates, adapter-specific metrics</li>
+<li><input type="checkbox"> Fallback: plan behavior if adapter loading fails</li>
+<li><input type="checkbox"> Documentation: record training data, hyperparameters, expected quality</li>
+</ul>
+</div>
+</section>
+
+<section id="multi-adapter" class="ml-section">
+<h2>Multi-Adapter Serving Architecture</h2>
+
+<p>One of PEFT's greatest advantages: serve multiple task-specific adapters from a single frozen base model. This unlocks new architecture patterns.</p>
+
+<div class="highlight-box"><p>Architecture Pattern: Single base model + multiple adapters enables task routing, adapter composition, and dynamic model updates without retraining or redeploying the base model.</p></div>
+
+<div class="code-block"><div class="code-header">Python — Multi-Adapter Serving with Request Routing</div><div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> PeftModel
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForCausalLM
+<span class="keyword">import</span> torch
+
+<span class="keyword">class</span> MultiAdapterServer:
+    <span class="string">"""Serves multiple task-specific adapters"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, base_model_name, adapter_configs):
+        <span class="string">"""
+        base_model_name: HF model ID (e.g., 'meta-llama/Llama-2-7b-hf')
+        adapter_configs: dict {task_name: adapter_path}
+        """</span>
+        <span class="function">self</span>.device = <span class="string">"cuda"</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> <span class="string">"cpu"</span>
+        
+        <span class="comment"># Load base model once</span>
+        <span class="function">self</span>.model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+            base_model_name,
+            torch_dtype=torch.float16,
+            device_map=<span class="string">"auto"</span>
+        )
+        <span class="function">self</span>.tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(base_model_name)
+        
+        <span class="comment"># Load all adapters</span>
+        <span class="keyword">for</span> task_name, adapter_path <span class="keyword">in</span> adapter_configs.<span class="function">items</span>():
+            <span class="function">self</span>.model = PeftModel.<span class="function">from_pretrained</span>(
+                <span class="function">self</span>.model,
+                adapter_path,
+                adapter_name=task_name
+            )
+        
+        <span class="function">self</span>.active_adapter = <span class="keyword">None</span>
+    
+    <span class="keyword">def</span> <span class="function">detect_task</span>(<span class="function">self</span>, prompt):
+        <span class="string">"""Simple task detection (can be ML model in practice)"""</span>
+        keywords = {
+            <span class="string">"support"</span>: [<span class="string">"help"</span>, <span class="string">"issue"</span>, <span class="string">"problem"</span>, <span class="string">"fix"</span>, <span class="string">"reset"</span>],
+            <span class="string">"coding"</span>: [<span class="string">"code"</span>, <span class="string">"python"</span>, <span class="string">"function"</span>, <span class="string">"write"</span>],
+            <span class="string">"analysis"</span>: [<span class="string">"analyze"</span>, <span class="string">"data"</span>, <span class="string">"statistics"</span>, <span class="string">"predict"</span>],
+        }
+        
+        prompt_lower = prompt.<span class="function">lower</span>()
+        <span class="keyword">for</span> task, keywords_list <span class="keyword">in</span> keywords.<span class="function">items</span>():
+            <span class="keyword">if</span> <span class="function">any</span>(kw <span class="keyword">in</span> prompt_lower <span class="keyword">for</span> kw <span class="keyword">in</span> keywords_list):
+                <span class="keyword">return</span> task
+        <span class="keyword">return</span> <span class="string">"support"</span>  <span class="comment"># Default</span>
+    
+    <span class="keyword">def</span> <span class="function">generate</span>(<span class="function">self</span>, prompt, max_length=<span class="number">100</span>, task=<span class="keyword">None</span>):
+        <span class="string">"""Generate response with appropriate adapter"""</span>
+        
+        <span class="comment"># Auto-detect task if not specified</span>
+        <span class="keyword">if</span> task <span class="keyword">is</span> <span class="keyword">None</span>:
+            task = <span class="function">self</span>.<span class="function">detect_task</span>(prompt)
+        
+        <span class="comment"># Switch adapter</span>
+        <span class="keyword">if</span> task != <span class="function">self</span>.active_adapter:
+            <span class="function">self</span>.model.<span class="function">set_adapter</span>(task)
+            <span class="function">self</span>.active_adapter = task
+        
+        <span class="comment"># Generate</span>
+        inputs = <span class="function">self</span>.<span class="function">tokenizer</span>(prompt, return_tensors=<span class="string">"pt"</span>).<span class="function">to</span>(<span class="function">self</span>.device)
+        <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+            outputs = <span class="function">self</span>.model.<span class="function">generate</span>(
+                **inputs,
+                max_length=max_length,
+                temperature=<span class="number">0.7</span>,
+                top_p=<span class="number">0.9</span>
+            )
+        
+        response = <span class="function">self</span>.tokenizer.<span class="function">decode</span>(outputs[<span class="number">0</span>], skip_special_tokens=<span class="keyword">True</span>)
+        <span class="keyword">return</span> response
+
+<span class="comment"># Usage</span>
+server = <span class="function">MultiAdapterServer</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    {
+        <span class="string">"support"</span>: <span class="string">"adapters/support-lora"</span>,
+        <span class="string">"coding"</span>: <span class="string">"adapters/code-lora"</span>,
+        <span class="string">"analysis"</span>: <span class="string">"adapters/data-lora"</span>,
+    }
+)
+
+<span class="comment"># Requests automatically routed to correct adapter</span>
+response1 = server.<span class="function">generate</span>(<span class="string">"How do I reset my password?"</span>)  <span class="comment"># → support adapter</span>
+response2 = server.<span class="function">generate</span>(<span class="string">"Write a Python merge sort"</span>)     <span class="comment"># → coding adapter</span>
+response3 = server.<span class="function">generate</span>(<span class="string">"Analyze this sales data"</span>)       <span class="comment"># → analysis adapter</span></div></div>
+</section>
+
+<section id="fine-tuning" class="ml-section">
+<h2>Fine-Tuning from Scratch: Complete Example</h2>
+
+<p>End-to-end example from data loading to deployment.</p>
+
+<div class="code-block"><div class="code-header">Python — Complete Fine-Tuning Workflow</div><div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="string">"""
+End-to-end LoRA fine-tuning on custom dataset
+"""</span>
+
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset, load_dataset
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> json
+
+<span class="comment"># ===== CONFIG =====</span>
+MODEL_NAME = <span class="string">"meta-llama/Llama-2-7b-hf"</span>
+OUTPUT_DIR = <span class="string">"./llama-custom-lora"</span>
+TRAINING_EPOCHS = <span class="number">3</span>
+BATCH_SIZE = <span class="number">8</span>
+LEARNING_RATE = <span class="number">5e-4</span>
+LORA_RANK = <span class="number">8</span>
+
+<span class="comment"># ===== LOAD DATA (from JSON) =====</span>
+<span class="keyword">def</span> <span class="function">load_custom_data</span>(json_path):
+    <span class="string">"""Load training data from JSON"""</span>
+    <span class="keyword">with</span> <span class="function">open</span>(json_path) <span class="keyword">as</span> f:
+        data = json.<span class="function">load</span>(f)
+    <span class="keyword">return</span> data
+
+<span class="comment"># Example JSON format:</span>
+<span class="comment"># [</span>
+<span class="comment">#   {"instruction": "...", "input": "...", "output": "..."},</span>
+<span class="comment">#   ...</span>
+<span class="comment"># ]</span>
+
+<span class="comment"># ===== SETUP MODEL &amp; TOKENIZER =====</span>
+<span class="function">print</span>(<span class="string">"Loading model..."</span>)
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    MODEL_NAME,
+    torch_dtype=torch.float16,
+    device_map=<span class="string">"auto"</span>
+)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(MODEL_NAME)
+
+<span class="keyword">if</span> tokenizer.pad_token <span class="keyword">is</span> <span class="keyword">None</span>:
+    tokenizer.pad_token = tokenizer.eos_token
+
+<span class="comment"># ===== APPLY LORA =====</span>
+<span class="function">print</span>(<span class="string">"Applying LoRA..."</span>)
+lora_config = <span class="function">LoraConfig</span>(
+    r=LORA_RANK,
+    lora_alpha=<span class="number">16</span>,
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>, <span class="string">"k_proj"</span>, <span class="string">"o_proj"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>
+)
+
+model = <span class="function">get_peft_model</span>(model, lora_config)
+model.<span class="function">print_trainable_parameters</span>()
+
+<span class="comment"># ===== PREPARE DATA =====</span>
+<span class="function">print</span>(<span class="string">"Preparing data..."</span>)
+data = <span class="function">load_custom_data</span>(<span class="string">"data.json"</span>)
+
+<span class="keyword">def</span> <span class="function">format_prompt</span>(example):
+    instruction = example.<span class="function">get</span>(<span class="string">"instruction"</span>, <span class="string">""</span>)
+    input_text = example.<span class="function">get</span>(<span class="string">"input"</span>, <span class="string">""</span>)
+    output = example.<span class="function">get</span>(<span class="string">"output"</span>, <span class="string">""</span>)
+    <span class="keyword">return</span> <span class="string">f"Instruction: {instruction}\nInput: {input_text}\nOutput: {output}"</span>
+
+texts = [<span class="function">format_prompt</span>(ex) <span class="keyword">for</span> ex <span class="keyword">in</span> data]
+
+<span class="keyword">def</span> <span class="function">tokenize_function</span>(examples):
+    outputs = <span class="function">tokenizer</span>(
+        examples[<span class="string">"text"</span>],
+        truncation=<span class="keyword">True</span>,
+        max_length=<span class="number">512</span>,
+        padding=<span class="string">"max_length"</span>,
+        return_tensors=<span class="keyword">None</span>
+    )
+    outputs[<span class="string">"labels"</span>] = outputs[<span class="string">"input_ids"</span>].<span class="function">copy</span>()
+    <span class="keyword">return</span> outputs
+
+dataset = Dataset.<span class="function">from_dict</span>({<span class="string">"text"</span>: texts})
+dataset = dataset.<span class="function">map</span>(tokenize_function, batched=<span class="keyword">True</span>)
+
+<span class="comment"># Split: 90% train, 10% eval</span>
+split_dataset = dataset.<span class="function">train_test_split</span>(test_size=<span class="number">0.1</span>)
+
+<span class="comment"># ===== TRAINING =====</span>
+<span class="function">print</span>(<span class="string">"Starting training..."</span>)
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=OUTPUT_DIR,
+    num_train_epochs=TRAINING_EPOCHS,
+    per_device_train_batch_size=BATCH_SIZE,
+    per_device_eval_batch_size=BATCH_SIZE,
+    warmup_steps=<span class="number">100</span>,
+    weight_decay=<span class="number">0.01</span>,
+    logging_steps=<span class="number">10</span>,
+    learning_rate=LEARNING_RATE,
+    lr_scheduler_type=<span class="string">"cosine"</span>,
+    save_strategy=<span class="string">"epoch"</span>,
+    evaluation_strategy=<span class="string">"epoch"</span>,
+    seed=<span class="number">42</span>,
+)
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=split_dataset[<span class="string">"train"</span>],
+    eval_dataset=split_dataset[<span class="string">"test"</span>],
+)
+
+trainer.<span class="function">train</span>()
+
+<span class="comment"># ===== SAVE &amp; DEPLOY =====</span>
+<span class="function">print</span>(<span class="string">"Saving adapter..."</span>)
+model.<span class="function">save_pretrained</span>(OUTPUT_DIR)
+tokenizer.<span class="function">save_pretrained</span>(OUTPUT_DIR)
+
+<span class="function">print</span>(<span class="string">"Merging for production..."</span>)
+merged_model = model.<span class="function">merge_and_unload</span>()
+merged_model.<span class="function">save_pretrained</span>(<span class="string">f"{OUTPUT_DIR}-merged"</span>)
+
+<span class="function">print</span>("✓ Complete! Deploy <span class="keyword">from</span>: {OUTPUT_DIR}-merged</div></div>
+</section>
+
+<section id="rank-selection" class="ml-section">
+<h2>Rank Selection: Deep Analysis</h2>
+
+<p>Choosing the right rank is crucial for balancing quality and efficiency.</p>
+
+<div class="formula-box"><div class="label">Empirical Rank Selection Rules</div>Baseline Rule: r=8 for any model (works 90% of time)<br><br>Task Complexity Scaling:<br>  Simple (binary classification): r=4<br>  Moderate (NLU tasks): r=8<br>  Complex (reasoning, generation): r=16<br>  Very complex (code, creative): r=32<br><br>Data-driven Selection:<br>  Compute SVD of a few weight updates after 1 epoch<br>  Measure variance explained at different ranks<br>  Choose rank where 95% variance is captured<br><br>Grid Search Template:<br>  For dataset_size ≤ 5k: test [4, 8, 16]<br>  For dataset_size 5k-50k: test [8, 16, 32]<br>  For dataset_size > 50k: test [16, 32, 64]</div>
+
+<div class="highlight-box"><p>Key Insight: Rank selection has diminishing returns. Going from r=4 to r=8 might improve quality 3%. Going from r=32 to r=64 might improve 0.5%. Bigger gains come from dataset size, learning rate, and training duration.</p></div>
+</section>
+
+<section id="best-practices" class="ml-section">
+<h2>Best Practices & Troubleshooting</h2>
+
+<h3>Training Best Practices</h3>
+
+<div class="card-grid">
+<div class="card cyan-accent"><h4>Start Conservative</h4><p>Begin with r=8, lr=5e-4, batch=8. Increase only if needed.</p></div>
+<div class="card green-accent"><h4>Monitor Continuously</h4><p>Log loss every 10-20 steps. Use W&B or TensorBoard.</p></div>
+<div class="card purple-accent"><h4>Save Checkpoints</h4><p>Save adapter every epoch. Recover from crashes easily.</p></div>
+<div class="card gold-accent"><h4>Validate Early</h4><p>Check validation loss by epoch 1. Detect bad configs early.</p></div>
+</div>
+
+<h3>Common Issues & Solutions</h3>
+
+<div class="info-box"><h4>Loss not decreasing</h4><p>LR too low (try 2-5×) OR rank too low (try r=16) OR bad data (verify labels). Check logs for NaN/Inf values.</p></div>
+
+<div class="info-box"><h4>Loss spikes/diverges</h4><p>LR too high (reduce 50%). Try gradient clipping (max_norm=1.0). Reduce batch size.</p></div>
+
+<div class="info-box"><h4>Memory OOM errors</h4><p>Reduce batch_size to 4 or 2. Enable gradient_checkpointing=True. Use QLoRA if available.</p></div>
+
+<div class="info-box"><h4>Poor final quality</h4><p>Rank too low (increase to 16+). Dataset too small (collect more). Apply LoRA to more layers (Q,K,V,O,FFN).</p></div>
+
+<div class="info-box"><h4>Training loops forever</h4><p>Set max_steps explicitly. Use early_stopping_patience. Monitor validation loss plateau.</p></div>
+</section>
+
+<section id="use-cases" class="ml-section">
+<h2>Real-World Use Cases</h2>
+
+<h3>Customer Support Chatbot</h3>
+<p>Fine-tune on company's historical support conversations. Deploy separate adapters for each product line (API, SaaS, Hardware). Route requests to task-specific adapters.</p>
+
+<h3>Code Generation for Proprietary Framework</h3>
+<p>Adapt CodeLLaMA on internal codebase and documentation. LoRA adapter learns coding style, libraries, and conventions specific to your stack.</p>
+
+<h3>Domain-Specific QA System</h3>
+<p>Medical QA: fine-tune on clinical literature. Legal QA: fine-tune on case law. Financial QA: fine-tune on regulatory documents. Single base model, multiple domain adapters.</p>
+
+<h3>Personalized AI Assistant</h3>
+<p>Users fine-tune on their own emails, documents, preferences. Deploy adapter locally on user's device. Privacy-preserving personalization.</p>
+
+<h3>A/B Testing Model Improvements</h3>
+<p>Cheap to train variants. Compare adapter A vs B vs C in production. Winner becomes deployed version. Faster iteration cycle.</p>
+</section>
+
+<section id="interview" class="ml-section">
+<h2>Interview Questions & Answers</h2>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>1. Explain the core mathematical insight behind LoRA.</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>LoRA exploits the observation that fine-tuning weight updates ΔW are intrinsically low-rank. Instead of updating the full m×n weight matrix W, we decompose the update as ΔW = BA where B ∈ ℝ^(m×r) and A ∈ ℝ^(r×n) with r ≪ min(m,n). This works because pre-training already learned powerful features; fine-tuning just recombines them for the specific task, which is a low-rank operation. Empirically, singular values of weight updates decay rapidly — rank 4-8 captures 95%+ variance.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>2. Why does LoRA reduce training time compared to full fine-tuning?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>Three reasons: (1) Fewer parameters to optimize (0.01-0.1% vs 100%) means smaller gradients and faster backprop. (2) Smaller optimizer states (Adam stores momentum + variance only for LoRA params). (3) Better numerical conditioning in lower-dimensional parameter space enables higher learning rates without divergence, reducing epochs needed. Combined: 5-10× speedup on single GPU.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>3. Compare LoRA vs QLoRA. When would you use each?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>LoRA: Base model in float16 (14GB for 7B), adapter in float32. Best quality, standard approach. Use when you have ≥24GB VRAM. QLoRA: Base model in 4-bit NF4 (3.5GB for 7B), adapter in float32. Trains 70B on 40GB A100s. Trade-off: 2-3% quality loss, 30% slower training. Use when GPU memory is tight (8-16GB). QLoRA not recommended if quality is critical and you have the hardware.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>4. Explain the α/r scaling factor in LoRA. Why is it important?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>LoRA update is scaled by α/r. Typically α=r. Without scaling, different ranks would have different update magnitudes, requiring different learning rates. With α=r, the effective learning rate is constant regardless of rank: the update (α/r)·BA·x ≈ same magnitude for any r. This enables hyperparameter transfer — you can change rank without retuning learning rate. Critical for reproducibility.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>5. What are the limitations of LoRA?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>(1) Low-rank assumption: For very different domains/tasks, higher rank might be needed, reducing efficiency gains. (2) Cannot modify architecture: Can't change vocab size, max position, or add/remove layers. (3) No inference speedup: LoRA reduces training/memory but not inference speed (unless merged). (4) Quality gap: 1-2% quality loss compared to full FT on some benchmarks. (5) Limited composition: Stacking multiple LoRAs can be unstable; adapters are better for composition.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>6. How does inference speed change with LoRA?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>If merged: identical to base model (LoRA weights are baked in). If loaded separately: ~1-2% overhead per token because you add BA·x computation in each forward pass. For 7B model, this is negligible (a few milliseconds). In practice, no noticeable latency difference for most applications. If inference latency is critical, merge before deployment.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>7. How do you select the optimal rank for your task?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>Start with r=8 (works for most cases). If validation loss plateaus early, increase to r=16. If still plateauing, try r=32. For rigorous selection: (1) Grid search [4, 8, 16, 32] on your validation set. (2) Plot loss vs rank — find the elbow where gains diminish. (3) Compute SVD of weight updates — choose rank where 95% variance is captured. In practice, r=8-16 is optimal for most tasks; rarely need higher.</p></div></div>
+</div>
+
+<div class="collapsible-section">
+<div class="collapsible-header"><span>8. How would you implement multi-task learning with PEFT adapters?</span><span class="toggle-icon">▼</span></div>
+<div class="collapsible-content"><div class="collapsible-body"><p>Train separate LoRA adapters for each task using the same base model. Load base model once, then load multiple adapters with different names. At inference, set_adapter(task_name) switches between tasks. For composition (e.g., "translate then summarize"), use Adapter layers instead of LoRA, as they support stacking and routing. This architecture enables efficient multi-task serving, easy A/B testing, and independent task updates.</p></div></div>
+</div>
+</section>
+
+<section id="faq" class="ml-section">
+<h2>Frequently Asked Questions (FAQ)</h2>
+
+<div class="faq-item">
+<div class="faq-question"><span>What is the difference between parameter-efficient fine-tuning and regular fine-tuning?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Regular fine-tuning updates all model parameters (billions). PEFT keeps most parameters frozen and trains only a small adapter (millions or less). PEFT: 60-90% less memory, 5-10× faster training, similar quality.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>Can I use LoRA with any transformer model?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Yes, LoRA is architecture-agnostic. Works with any transformer: LLaMA, Mistral, Gemma, GPT, BERT, T5, etc. Just specify the weight matrix names you want to adapt. For GPT: target c_attn. For LLaMA: target q_proj, v_proj, etc. Use model.named_modules() to find layer names.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>How long does LoRA training typically take?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>1-3 hours on single modern GPU (A100/RTX4090) for 10k-100k examples. Scales roughly linearly with data size. Full FT takes 8-24 hours for same data. LoRA is 5-10× faster.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>Do I need to use quantization with LoRA?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>No, LoRA alone is usually sufficient. Use quantization (QLoRA) only if VRAM < 16GB. Trade-off: another 4× memory savings but 2-3% quality loss and 30% slower training. Decision tree: VRAM ≥ 24GB → LoRA. VRAM 16-24GB → LoRA maybe+checkpointing. VRAM < 16GB → QLoRA.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>Can I merge a LoRA adapter and use it as a standalone model?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Yes! Use model.merge_and_unload() to bake adapter into base weights. Result is a standard HF model with no framework dependencies. Pro: universal compatibility. Con: lose modularity (can't swap adapters).</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>What is the typical size of a LoRA adapter?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>For 7B model with rank=8: 50-100MB. Base model is 14GB. That is 140-280× smaller! For 70B with rank=8: 500-800MB. Makes distribution, versioning, and multi-adapter serving practical.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>Does LoRA work well with instruction-following models like ChatGPT or Alpaca?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Absolutely! LoRA works great with any model. Just format your data in the same instruction-response style the model was trained on. Fine-tune with LoRA to specialize for your domain.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>How do I handle vocabulary expansion with LoRA?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>LoRA doesn't modify embedding matrices by default. Options: (1) Keep pre-trained tokenizer (simplest). (2) Add external expansion layer + LoRA adapters (complex). (3) Use full FT if vocabulary changes are essential.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>Can I combine LoRA with other optimization techniques?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Yes, very effectively! LoRA + mixed precision (fp16) + gradient checkpointing work together. They target different bottlenecks: LoRA reduces parameters, fp16 reduces memory, checkpointing trades compute for memory. Combine all three for extreme efficiency.</p></div></div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question"><span>What is the best way to version and track LoRA adapters in production?</span><span class="faq-icon">▼</span></div>
+<div class="faq-answer"><div class="faq-answer-content"><p>Store adapters in Git (they're small!) or HF Hub. Include metadata files: base_model_version.txt, training_date, hyperparameters.json, performance_metrics.json. Use semantic versioning (v1.0, v1.1, v2.0). Track training runs with Weights & Biases. For A/B testing, save both adapter_a and adapter_b, deploy via feature flag.</p></div></div>
+</div>
+</section>
+
+</article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Sidebar active state
+            const sections = document.querySelectorAll(".ml-section");
+            const links = document.querySelectorAll(".ml-sidebar a");
+
+            window.addEventListener("scroll", function() {
+                let current = "";
+                for (let s of sections) {
+                    if (s.getBoundingClientRect().top < 200) current = s.id;
+                }
+                links.forEach(l => {
+                    l.classList.toggle("active", l.href.includes(current));
+                });
+            });
+
+            // Collapsibles
+            document.querySelectorAll(".collapsible-header").forEach(h => {
+                h.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    this.nextElementSibling.classList.toggle("active");
+                });
+            });
+
+            // FAQ
+            document.querySelectorAll(".faq-question").forEach(q => {
+                q.addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    this.nextElementSibling.classList.toggle("active");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

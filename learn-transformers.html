@@ -1,0 +1,2658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformers - SustainSys AI Academy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+</ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <!-- Progress Ring -->
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
+    </svg>
+
+    <!-- Page Header -->
+    <div class="container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Transformers</h1>
+                <p class="page-description">Master the architecture that powers GPT, Claude, and modern AI — from self-attention fundamentals to production deployment.</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <div class="ml-page-container">
+            <aside class="ml-sidebar">
+                <h3>Learning Path</h3>
+                <ul>
+                    <li><a href="#intro" class="sidebar-link active">Introduction</a></li>
+                    <li><a href="#why-matters" class="sidebar-link">Why It Matters</a></li>
+                    <li><a href="#history" class="sidebar-link">Historical Evolution</a></li>
+                    <li><a href="#core-concepts" class="sidebar-link">Core Concepts</a></li>
+                    <li><a href="#architecture" class="sidebar-link">Architecture Deep Dive</a></li>
+                    <li><a href="#components" class="sidebar-link">Key Components</a></li>
+                    <li><a href="#implementation" class="sidebar-link">Implementation Guide</a></li>
+                    <li><a href="#advanced" class="sidebar-link">Advanced Techniques</a></li>
+                    <li><a href="#comparison" class="sidebar-link">Comparison</a></li>
+                    <li><a href="#use-cases" class="sidebar-link">Real-World Use Cases</a></li>
+                    <li><a href="#enterprise" class="sidebar-link">Enterprise Applications</a></li>
+                    <li><a href="#mistakes" class="sidebar-link">Common Mistakes</a></li>
+                    <li><a href="#best-practices" class="sidebar-link">Best Practices</a></li>
+                    <li><a href="#advanced-insights" class="sidebar-link">Advanced Insights</a></li>
+                    <li><a href="#code-examples" class="sidebar-link">Code Examples</a></li>
+                    <li><a href="#exercises" class="sidebar-link">Exercises</a></li>
+                    <li><a href="#interview" class="sidebar-link">Interview Questions</a></li>
+                    <li><a href="#faq" class="sidebar-link">FAQ</a></li>
+                    <li><a href="#summary" class="sidebar-link">Summary</a></li>
+                    <li><a href="#resources" class="sidebar-link">Resources</a></li>
+                </ul>
+            </aside>
+            <div class="ml-content">
+
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to Transformers</h2>
+
+    <div class="ml-intro-text">
+        <p>The Transformer architecture, introduced in the 2017 paper "<a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need</a>" by Vaswani et al., has fundamentally reshaped artificial intelligence. It replaced recurrent neural networks (RNNs) and LSTMs as the dominant architecture for sequence processing and now powers virtually every major AI system — from GPT-4 and Claude to Stable Diffusion and AlphaFold.</p>
+    </div>
+
+    <p>Unlike RNNs that process sequences step-by-step (creating bottlenecks with long sequences), transformers process entire sequences in parallel using a mechanism called <strong>self-attention</strong>. This allows each token in the input to directly attend to every other token, capturing long-range dependencies without the vanishing gradient problem that plagued earlier architectures.</p>
+
+    <p>The key innovation is elegant: instead of sequential processing, transformers compute attention scores between all pairs of positions simultaneously, enabling massive parallelization on GPUs and making it feasible to train on enormous datasets. This architectural choice, combined with scale, is what enabled the current AI revolution.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Self-Attention Mechanism</h4>
+    <p>Understand how queries, keys, and values enable tokens to attend to each other — the mathematical core of transformers.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Full Architecture</h4>
+    <p>Learn the complete encoder-decoder structure including multi-head attention, feed-forward networks, layer normalization, and positional encoding.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Modern Innovations</h4>
+    <p>Explore cutting-edge improvements: Flash Attention, Rotary Position Embeddings (RoPE), Grouped Query Attention (GQA), and Mixture of Experts.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Hands-On Code</h4>
+    <p>Build transformers from scratch in <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a> and use HuggingFace for practical NLP tasks with real, working Python code.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Basic understanding of Python, neural networks (layers, activation functions, backpropagation), and linear algebra (matrix multiplication, dot products). Familiarity with PyTorch is helpful but not required.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Transformers Matter</h2>
+
+    <p>Transformers aren't just another neural network architecture — they are <strong>the architecture</strong> that enabled the modern AI revolution. Before 2017, state-of-the-art NLP relied on LSTMs and attention mechanisms bolted onto recurrent models. After transformers, the field underwent a paradigm shift that continues to accelerate.</p>
+
+    <h3>The Impact in Numbers</h3>
+    <p>The performance improvement transformers brought to NLP tasks was dramatic. Here's how transformer-based models compare to previous approaches across standard benchmarks:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Transformer (BERT)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #0891b2, #7c3aed);">94.9%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">LSTM + Attention</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #059669, #10b981);">82.1%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Vanilla LSTM</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #d97706, #f59e0b);">72.3%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">CNN-based (TextCNN)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 67%; background: linear-gradient(90deg, #db2777, #f472b6);">67.5%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Bag of Words</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 52%; background: linear-gradient(90deg, #64748b, #94a3b8);">52.0%</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>GLUE Benchmark composite scores — higher is better</em></p>
+
+    <h3>Why Transformers Won</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Parallelization</h4>
+    <p>Unlike RNNs that process tokens sequentially, transformers process all tokens simultaneously. Training a sequence of 512 tokens takes the same time as processing 1 token — a massive speedup on GPUs.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Long-Range Dependencies</h4>
+    <p>Self-attention connects every token to every other token directly. A word at position 1 can attend to position 500 without information passing through 499 intermediate steps, solving the vanishing gradient problem.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Scalability</h4>
+    <p>Transformers scale remarkably well with data and compute. Scaling laws show predictable performance gains as models grow larger, enabling organizations to invest confidently in larger models.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Transfer Learning</h4>
+    <p>Pre-trained transformer models (BERT, GPT) capture rich language understanding that transfers to downstream tasks. Fine-tuning a pre-trained model often outperforms training from scratch with 100x the data.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> The transformer's success isn't just about self-attention — it's about the <em>combination</em> of self-attention, positional encoding, layer normalization, and residual connections. Each component is essential, and removing any one significantly degrades performance.</p>
+</div>
+</section>
+
+<!-- SECTION: Historical Evolution -->
+<section id="history" class="ml-section">
+    <h2>Historical Evolution</h2>
+
+    <p>The transformer didn't appear in a vacuum — it was the culmination of decades of research in sequence modeling. Understanding this history helps you appreciate why each design decision was made and what problems it solves.</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
+            <strong>1986</strong><br>Simple RNN<br><small>Sequential processing, vanishing gradients</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>1997</strong><br>LSTM<br><small>Gates control information flow, mitigates vanishing gradient</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+            <strong>2014</strong><br>GRU<br><small>Simplified LSTM with fewer parameters</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>2014</strong><br>Seq2Seq + Attention<br><small>Bahdanau attention enables selective focus</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>2017</strong><br>Transformer<br><small>"Attention Is All You Need" — no recurrence!</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>2018-19</strong><br>BERT &amp; GPT<br><small>Pre-training + fine-tuning revolution</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #db2777, #f472b6);">
+            <strong>2020+</strong><br>GPT-3, Claude, LLMs<br><small>Scale enables emergent abilities</small>
+        </div>
+    </div>
+
+    <h3>The Key Breakthroughs</h3>
+
+    <div class="info-box">
+    <h4>Bahdanau Attention (2014)</h4>
+    <p>The idea of &ldquo;attention&rdquo; — letting the decoder look at different parts of the encoder output — was the crucial precursor to transformers. But Bahdanau attention was still bolted onto RNNs, maintaining sequential computation. The transformer's innovation was making attention the <em>only</em> mechanism.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Self-Attention vs Cross-Attention</h4>
+    <p>Before transformers, attention was used between encoder and decoder (cross-attention). The transformer introduced <strong>self-attention</strong>, where a sequence attends to itself. This is what allows a sentence to understand relationships between its own words — e.g., resolving what 'it' refers to in 'The animal didn't cross the street because it was too tired.'</p>
+</div>
+
+    <p>The transformer paper achieved state-of-the-art results on machine translation (English-German and English-French) while training significantly faster than the best RNN-based models. But the real impact came when researchers realized transformers could be pre-trained on massive text corpora and then fine-tuned for specific tasks — leading to <a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener">BERT (2018)</a> and GPT (2018-2019).</p>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts and Theory</h2>
+
+    <p>The transformer architecture rests on a few powerful ideas. Let's build understanding from the ground up.</p>
+
+    <h3>1. Self-Attention: The Key Innovation</h3>
+    <p>Self-attention lets every position in a sequence compute a weighted sum of all positions. For each token, it asks: "How much should I pay attention to every other token in this sequence?"</p>
+
+    <p>This is computed using three learned projections of each input token:</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Query (Q)</h4>
+    <p>What am I looking for? The query vector represents what this token wants to know about other tokens. Think of it as a search query.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Key (K)</h4>
+    <p>What do I contain? The key vector represents what information this token has to offer. Think of it as a search index entry.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Value (V)</h4>
+    <p>What information do I pass along? Once attention scores are computed, the value vector provides the actual content that flows forward.</p>
+</div>
+    </div>
+
+    <div class="formula-box">
+    <div class="label">Scaled Dot-Product Attention</div>
+    Attention(Q, K, V) = softmax(Q · K<sup>T</sup> / √d<sub>k</sub>) · V
+
+Where:
+  Q = Query matrix (n × d_k)
+  K = Key matrix   (n × d_k)
+  V = Value matrix  (n × d_v)
+  d_k = dimension of keys (scaling factor prevents softmax saturation)
+</div>
+
+    <p>The scaling factor <code>√d_k</code> is crucial. Without it, when the dimension d_k is large, the dot products between Q and K become very large, pushing the softmax function into regions with extremely small gradients, effectively killing the training signal.</p>
+
+    <div class="highlight-box">
+    <p><strong>Intuition:</strong> Imagine you're at a conference and need information. The Query is your question. Each person's Key is their name badge showing their expertise. The attention score tells you who to listen to most. The Value is what they actually tell you. You combine all responses weighted by how relevant each person is.</p>
+</div>
+
+    <h3>2. Multi-Head Attention</h3>
+    <p>Instead of computing attention once, the transformer runs attention multiple times in parallel (called "heads"), each with different learned projections. This allows the model to attend to different types of relationships simultaneously.</p>
+
+    <div class="formula-box">
+    <div class="label">Multi-Head Attention</div>
+    MultiHead(Q, K, V) = Concat(head_1, ..., head_h) · W_O
+
+Where each head_i = Attention(Q · W_Q_i, K · W_K_i, V · W_V_i)
+
+With h = number of heads (typically 8, 12, or 16)
+     d_k = d_model / h  (each head operates on a smaller dimension)
+</div>
+
+    <div class="info-box">
+    <h4>Why Multiple Heads?</h4>
+    <p>Different heads learn to capture different types of relationships. In language, one head might capture syntactic dependencies (subject-verb agreement), another might capture coreference (what 'it' refers to), and another might capture semantic similarity. Having multiple heads gives the model richer representational capacity.</p>
+</div>
+
+    <h3>3. Positional Encoding</h3>
+    <p>Since self-attention treats the input as a set (not a sequence), the model has no inherent notion of token order. Positional encoding injects position information into the input embeddings.</p>
+
+    <div class="formula-box">
+    <div class="label">Sinusoidal Positional Encoding (Original)</div>
+    PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+
+Where:
+  pos = position in the sequence (0, 1, 2, ...)
+  i   = dimension index
+  d_model = model embedding dimension
+</div>
+
+    <p>The sinusoidal encoding has an elegant property: for any fixed offset k, PE(pos+k) can be represented as a linear function of PE(pos), enabling the model to learn to attend to relative positions.</p>
+
+    <div class="info-box">
+    <h4>Modern Alternatives</h4>
+    <p>Modern transformers often use <strong>Rotary Position Embeddings (RoPE)</strong> instead of sinusoidal encoding. RoPE encodes position by rotating the query and key vectors in 2D subspaces, directly encoding relative position information in the attention computation. This enables better length generalization — models can handle longer sequences than they were trained on.</p>
+</div>
+
+    <h3>4. Layer Normalization and Residual Connections</h3>
+    <p>Every sub-layer (attention or feed-forward) in a transformer is wrapped with a residual connection and layer normalization:</p>
+
+    <div class="formula-box">
+    <div class="label">Residual + Layer Norm</div>
+    output = LayerNorm(x + SubLayer(x))
+
+Pre-Norm variant (used in GPT/LLaMA):
+output = x + SubLayer(LayerNorm(x))
+
+RMSNorm variant (simpler, used in modern LLMs):
+RMSNorm(x) = x / RMS(x) * γ
+where RMS(x) = √(mean(x²))
+</div>
+
+    <p>Residual connections allow gradients to flow directly through the network (solving the degradation problem in very deep models), while layer normalization stabilizes the activations, enabling faster and more stable training.</p>
+</section>
+
+<!-- SECTION: Architecture Deep Dive -->
+<section id="architecture" class="ml-section">
+    <h2>Architecture Deep Dive</h2>
+
+    <p>The original transformer uses an encoder-decoder architecture. Modern variants use encoder-only (BERT), decoder-only (GPT, Claude, LLaMA), or encoder-decoder (T5, BART). Let's examine the full architecture.</p>
+
+    <div class="nn-animated">
+        <h4 style="color: var(--accent-cyan); font-family: 'Orbitron', sans-serif;">Transformer Architecture Visualization</h4>
+        <div style="display: flex; justify-content: space-around; align-items: flex-start; gap: 2rem; flex-wrap: wrap; padding: 1rem;">
+            <!-- Encoder Side -->
+            <div style="text-align: center;">
+                <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 1rem; font-family: 'Orbitron', sans-serif; font-size: 0.9rem;">ENCODER</div>
+                <div class="nn-layer" style="gap: 8px;">
+                    <div class="nn-node" style="background: linear-gradient(135deg, #0891b2, #22d3ee); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Input Embedding + PE</div>
+                    <div style="color: var(--accent-cyan); font-size: 1.2rem;">↓</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Self-Attention</div>
+                    <div style="color: var(--accent-cyan); font-size: 0.65rem;">+ Add & Norm</div>
+                    <div style="color: var(--accent-cyan); font-size: 1.2rem;">↓</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #059669, #10b981); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
+                    <div style="color: var(--accent-cyan); font-size: 0.65rem;">+ Add & Norm</div>
+                    <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.5rem;">× N layers</div>
+                </div>
+            </div>
+            <!-- Arrow -->
+            <div style="display: flex; align-items: center; color: var(--accent-gold); font-size: 2rem; padding-top: 5rem;">→</div>
+            <!-- Decoder Side -->
+            <div style="text-align: center;">
+                <div style="color: var(--accent-purple); font-weight: 700; margin-bottom: 1rem; font-family: 'Orbitron', sans-serif; font-size: 0.9rem;">DECODER</div>
+                <div class="nn-layer" style="gap: 8px;">
+                    <div class="nn-node" style="background: linear-gradient(135deg, #0891b2, #22d3ee); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Output Embedding + PE</div>
+                    <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #db2777, #f472b6); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Masked Multi-Head Self-Attention</div>
+                    <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
+                    <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Cross-Attention</div>
+                    <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
+                    <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #059669, #10b981); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
+                    <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
+                    <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.5rem;">× N layers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Encoder Block</h3>
+    <p>Each encoder block has two sub-layers: (1) multi-head self-attention and (2) a position-wise feed-forward network. Each sub-layer has a residual connection and layer normalization around it.</p>
+
+    <div class="info-box">
+    <h4>Self-Attention in the Encoder</h4>
+    <p>In the encoder, self-attention is <strong>bidirectional</strong> — each token can attend to all other tokens in the sequence. This is why BERT (encoder-only) can use context from both left and right of each token, making it powerful for understanding tasks like classification and named entity recognition.</p>
+</div>
+
+    <h3>Decoder Block</h3>
+    <p>The decoder has three sub-layers: (1) <strong>masked</strong> multi-head self-attention (prevents attending to future tokens), (2) multi-head cross-attention (attends to encoder output), and (3) feed-forward network.</p>
+
+    <div class="info-box">
+    <h4>Why Masking Matters</h4>
+    <p>During training, the decoder sees the entire target sequence at once. Without masking, it could &ldquo;cheat&rdquo; by looking at future tokens. The causal mask ensures position i can only attend to positions ≤ i, preserving the autoregressive property needed for generation. This is implemented by setting future positions to -infinity before softmax.</p>
+</div>
+
+    <h3>Modern Architectural Variants</h3>
+    <table class="comparison-table">
+        <tr>
+            <th>Variant</th>
+            <th>Architecture</th>
+            <th>Examples</th>
+            <th>Best For</th>
+        </tr>
+        <tr>
+            <td><strong>Encoder-Only</strong></td>
+            <td>Bidirectional self-attention, no decoder</td>
+            <td>BERT, RoBERTa, DeBERTa</td>
+            <td>Classification, NER, sentence embeddings</td>
+        </tr>
+        <tr>
+            <td><strong>Decoder-Only</strong></td>
+            <td>Causal (masked) self-attention only</td>
+            <td>GPT-4, Claude, LLaMA, Gemini</td>
+            <td>Text generation, chat, reasoning</td>
+        </tr>
+        <tr>
+            <td><strong>Encoder-Decoder</strong></td>
+            <td>Full architecture as in original paper</td>
+            <td>T5, BART, mBART</td>
+            <td>Translation, summarization, seq2seq</td>
+        </tr>
+    </table>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components Deep Dive</h2>
+
+    <h3>1. Token Embeddings</h3>
+    <p>Input tokens are converted to dense vectors via a learned embedding matrix. For a vocabulary of size V and embedding dimension d_model, this is a V × d_model matrix. Each token ID looks up its corresponding row.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Token Embedding Layer</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+
+<span class="keyword">class</span> <span class="function">TokenEmbedding</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, vocab_size, d_model):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.embedding = nn.<span class="function">Embedding</span>(vocab_size, d_model)
+        <span class="function">self</span>.d_model = d_model
+
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x):
+        <span class="comment"># Scale embeddings by sqrt(d_model) as in the original paper</span>
+        <span class="keyword">return</span> <span class="function">self</span>.<span class="function">embedding</span>(x) * (<span class="function">self</span>.d_model ** <span class="number">0.5</span>)
+
+<span class="comment"># Example: vocab of 32000 tokens, embedding dim 512</span>
+embed = <span class="function">TokenEmbedding</span>(vocab_size=<span class="number">32000</span>, d_model=<span class="number">512</span>)
+tokens = torch.<span class="function">tensor</span>([[<span class="number">1</span>, <span class="number">42</span>, <span class="number">1337</span>, <span class="number">5</span>, <span class="number">0</span>]])  <span class="comment"># batch of 1 sentence</span>
+embedded = <span class="function">embed</span>(tokens)  <span class="comment"># Shape: [1, 5, 512]</span>
+<span class="function">print</span>(<span class="string">f"Input shape: {tokens.shape}"</span>)
+<span class="function">print</span>(<span class="string">f"Embedded shape: {embedded.shape}"</span>)</div>
+</div>
+
+    <h3>2. Positional Encoding Implementation</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Sinusoidal Positional Encoding</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> math
+
+<span class="keyword">class</span> <span class="function">PositionalEncoding</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, max_len=<span class="number">5000</span>, dropout=<span class="number">0.1</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.dropout = nn.<span class="function">Dropout</span>(p=dropout)
+
+        <span class="comment"># Create positional encoding matrix</span>
+        pe = torch.<span class="function">zeros</span>(max_len, d_model)
+        position = torch.<span class="function">arange</span>(<span class="number">0</span>, max_len, dtype=torch.<span class="function">float</span>).<span class="function">unsqueeze</span>(<span class="number">1</span>)
+        div_term = torch.<span class="function">exp</span>(
+            torch.<span class="function">arange</span>(<span class="number">0</span>, d_model, <span class="number">2</span>).<span class="function">float</span>() * (-math.<span class="function">log</span>(<span class="number">10000.0</span>) / d_model)
+        )
+
+        pe[:, <span class="number">0</span>::<span class="number">2</span>] = torch.<span class="function">sin</span>(position * div_term)  <span class="comment"># Even dimensions</span>
+        pe[:, <span class="number">1</span>::<span class="number">2</span>] = torch.<span class="function">cos</span>(position * div_term)  <span class="comment"># Odd dimensions</span>
+        pe = pe.<span class="function">unsqueeze</span>(<span class="number">0</span>)  <span class="comment"># Add batch dimension: [1, max_len, d_model]</span>
+
+        <span class="function">self</span>.<span class="function">register_buffer</span>(<span class="string">'pe'</span>, pe)  <span class="comment"># Not a parameter, but saved in state_dict</span>
+
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x):
+        <span class="comment"># x shape: [batch_size, seq_len, d_model]</span>
+        x = x + <span class="function">self</span>.pe[:, :x.<span class="function">size</span>(<span class="number">1</span>), :]
+        <span class="keyword">return</span> <span class="function">self</span>.<span class="function">dropout</span>(x)
+
+<span class="comment"># Example usage</span>
+pos_enc = <span class="function">PositionalEncoding</span>(d_model=<span class="number">512</span>, max_len=<span class="number">1000</span>)
+x = torch.<span class="function">randn</span>(<span class="number">2</span>, <span class="number">100</span>, <span class="number">512</span>)  <span class="comment"># batch=2, seq_len=100, d_model=512</span>
+output = <span class="function">pos_enc</span>(x)
+<span class="function">print</span>(<span class="string">f"Output shape: {output.shape}"</span>)  <span class="comment"># [2, 100, 512]</span></div>
+</div>
+
+    <h3>3. Feed-Forward Network (FFN)</h3>
+    <p>Each transformer layer includes a position-wise feed-forward network applied identically to each position. It typically expands the dimension by 4x, applies a non-linearity, then projects back down.</p>
+
+    <div class="formula-box">
+    <div class="label">Feed-Forward Network</div>
+    FFN(x) = max(0, x · W₁ + b₁) · W₂ + b₂
+
+Dimensions:
+  W₁: d_model × d_ff     (expand: 512 → 2048)
+  W₂: d_ff × d_model     (contract: 2048 → 512)
+  d_ff is typically 4 × d_model
+
+Modern variant (SwiGLU, used in LLaMA):
+  FFN(x) = (Swish(x · W₁) ⊙ (x · W₃)) · W₂
+</div>
+
+    <h3>4. Layer Normalization</h3>
+    <div class="info-box">
+    <h4>Pre-Norm vs Post-Norm</h4>
+    <p>The original paper uses <strong>Post-Norm</strong>: LayerNorm(x + SubLayer(x)). Modern LLMs like GPT and LLaMA use <strong>Pre-Norm</strong>: x + SubLayer(LayerNorm(x)). Pre-Norm is more stable during training and doesn't require learning rate warmup, but may produce slightly lower quality. Most practitioners now use Pre-Norm for its training stability.</p>
+</div>
+
+    <h3>5. The Output Layer</h3>
+    <p>The final layer projects the decoder output (dimension d_model) back to vocabulary size using a linear layer followed by softmax to produce probability distributions over the next token. In many models, this output projection matrix shares weights with the input embedding matrix (weight tying), reducing parameters.</p>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation Guide</h2>
+
+    <p>Let's build a transformer from scratch in PyTorch. We'll implement each component step by step, then assemble them into a complete model.</p>
+
+    <h3>Step 1: Scaled Dot-Product Attention</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Scaled Dot-Product Attention from Scratch</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+<span class="keyword">import</span> math
+
+<span class="keyword">def</span> <span class="function">scaled_dot_product_attention</span>(query, key, value, mask=<span class="keyword">None</span>):
+    <span class="string">"""
+    Compute scaled dot-product attention.
+
+    Args:
+        query: [batch, heads, seq_len, d_k]
+        key:   [batch, heads, seq_len, d_k]
+        value: [batch, heads, seq_len, d_v]
+        mask:  [batch, 1, 1, seq_len] or [batch, 1, seq_len, seq_len]
+
+    Returns:
+        output: [batch, heads, seq_len, d_v]
+        attention_weights: [batch, heads, seq_len, seq_len]
+    """</span>
+    d_k = query.<span class="function">size</span>(-<span class="number">1</span>)
+
+    <span class="comment"># Step 1: Compute attention scores</span>
+    <span class="comment"># Q @ K^T =&gt; [batch, heads, seq_len, seq_len]</span>
+    scores = torch.<span class="function">matmul</span>(query, key.<span class="function">transpose</span>(-<span class="number">2</span>, -<span class="number">1</span>)) / math.<span class="function">sqrt</span>(d_k)
+
+    <span class="comment"># Step 2: Apply mask (if provided)</span>
+    <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+        scores = scores.<span class="function">masked_fill</span>(mask == <span class="number">0</span>, <span class="function">float</span>(<span class="string">'-inf'</span>))
+
+    <span class="comment"># Step 3: Softmax to get attention weights</span>
+    attention_weights = F.<span class="function">softmax</span>(scores, dim=-<span class="number">1</span>)
+
+    <span class="comment"># Step 4: Multiply by values</span>
+    output = torch.<span class="function">matmul</span>(attention_weights, value)
+
+    <span class="keyword">return</span> output, attention_weights
+
+<span class="comment"># Test it</span>
+batch, heads, seq_len, d_k = <span class="number">2</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">64</span>
+Q = torch.<span class="function">randn</span>(batch, heads, seq_len, d_k)
+K = torch.<span class="function">randn</span>(batch, heads, seq_len, d_k)
+V = torch.<span class="function">randn</span>(batch, heads, seq_len, d_k)
+
+output, weights = <span class="function">scaled_dot_product_attention</span>(Q, K, V)
+<span class="function">print</span>(<span class="string">f"Output shape: {output.shape}"</span>)     <span class="comment"># [2, 8, 10, 64]</span>
+<span class="function">print</span>(<span class="string">f"Weights shape: {weights.shape}"</span>)   <span class="comment"># [2, 8, 10, 10]</span>
+<span class="function">print</span>(<span class="string">f"Weights sum per query: {weights.sum(dim=-1)[0, 0]}"</span>)  <span class="comment"># Should be all 1s</span></div>
+</div>
+
+    <h3>Step 2: Multi-Head Attention Module</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Multi-Head Attention from Scratch</div>
+    <div class="code-content"><span class="keyword">class</span> <span class="function">MultiHeadAttention</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, num_heads, dropout=<span class="number">0.1</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="keyword">assert</span> d_model % num_heads == <span class="number">0</span>, <span class="string">"d_model must be divisible by num_heads"</span>
+
+        <span class="function">self</span>.d_model = d_model
+        <span class="function">self</span>.num_heads = num_heads
+        <span class="function">self</span>.d_k = d_model // num_heads
+
+        <span class="comment"># Linear projections for Q, K, V and output</span>
+        <span class="function">self</span>.W_q = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_k = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_v = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_o = nn.<span class="function">Linear</span>(d_model, d_model)
+
+        <span class="function">self</span>.dropout = nn.<span class="function">Dropout</span>(dropout)
+
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, query, key, value, mask=<span class="keyword">None</span>):
+        batch_size = query.<span class="function">size</span>(<span class="number">0</span>)
+
+        <span class="comment"># 1. Linear projections</span>
+        Q = <span class="function">self</span>.<span class="function">W_q</span>(query)  <span class="comment"># [batch, seq_len, d_model]</span>
+        K = <span class="function">self</span>.<span class="function">W_k</span>(key)
+        V = <span class="function">self</span>.<span class="function">W_v</span>(value)
+
+        <span class="comment"># 2. Reshape to [batch, num_heads, seq_len, d_k]</span>
+        Q = Q.<span class="function">view</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.d_k).<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)
+        K = K.<span class="function">view</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.d_k).<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)
+        V = V.<span class="function">view</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.d_k).<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)
+
+        <span class="comment"># 3. Compute attention</span>
+        attn_output, attn_weights = <span class="function">scaled_dot_product_attention</span>(
+            Q, K, V, mask
+        )
+
+        <span class="comment"># 4. Reshape back: [batch, seq_len, d_model]</span>
+        attn_output = attn_output.<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>).<span class="function">contiguous</span>()
+        attn_output = attn_output.<span class="function">view</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.d_model)
+
+        <span class="comment"># 5. Final linear projection</span>
+        output = <span class="function">self</span>.<span class="function">W_o</span>(attn_output)
+        <span class="keyword">return</span> output, attn_weights
+
+<span class="comment"># Test</span>
+mha = <span class="function">MultiHeadAttention</span>(d_model=<span class="number">512</span>, num_heads=<span class="number">8</span>)
+x = torch.<span class="function">randn</span>(<span class="number">2</span>, <span class="number">20</span>, <span class="number">512</span>)  <span class="comment"># batch=2, seq=20, dim=512</span>
+output, weights = <span class="function">mha</span>(x, x, x)  <span class="comment"># Self-attention: Q=K=V=x</span>
+<span class="function">print</span>(<span class="string">f"MHA output shape: {output.shape}"</span>)      <span class="comment"># [2, 20, 512]</span>
+<span class="function">print</span>(<span class="string">f"Attention weights: {weights.shape}"</span>)     <span class="comment"># [2, 8, 20, 20]</span></div>
+</div>
+
+    <h3>Step 3: Complete Transformer Block</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Full Transformer Encoder Block</div>
+    <div class="code-content"><span class="keyword">class</span> <span class="function">TransformerBlock</span>(nn.Module):
+    <span class="string">"""Single transformer encoder block with pre-norm."""</span>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, num_heads, d_ff, dropout=<span class="number">0.1</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+
+        <span class="comment"># Multi-head attention</span>
+        <span class="function">self</span>.attention = <span class="function">MultiHeadAttention</span>(d_model, num_heads, dropout)
+
+        <span class="comment"># Feed-forward network</span>
+        <span class="function">self</span>.feed_forward = nn.<span class="function">Sequential</span>(
+            nn.<span class="function">Linear</span>(d_model, d_ff),
+            nn.<span class="function">GELU</span>(),           <span class="comment"># Modern transformers use GELU instead of ReLU</span>
+            nn.<span class="function">Dropout</span>(dropout),
+            nn.<span class="function">Linear</span>(d_ff, d_model),
+            nn.<span class="function">Dropout</span>(dropout),
+        )
+
+        <span class="comment"># Layer normalization (pre-norm style)</span>
+        <span class="function">self</span>.norm1 = nn.<span class="function">LayerNorm</span>(d_model)
+        <span class="function">self</span>.norm2 = nn.<span class="function">LayerNorm</span>(d_model)
+        <span class="function">self</span>.dropout = nn.<span class="function">Dropout</span>(dropout)
+
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x, mask=<span class="keyword">None</span>):
+        <span class="comment"># Pre-norm self-attention with residual</span>
+        normed = <span class="function">self</span>.<span class="function">norm1</span>(x)
+        attn_output, _ = <span class="function">self</span>.<span class="function">attention</span>(normed, normed, normed, mask)
+        x = x + <span class="function">self</span>.<span class="function">dropout</span>(attn_output)
+
+        <span class="comment"># Pre-norm feed-forward with residual</span>
+        normed = <span class="function">self</span>.<span class="function">norm2</span>(x)
+        ff_output = <span class="function">self</span>.<span class="function">feed_forward</span>(normed)
+        x = x + ff_output
+
+        <span class="keyword">return</span> x
+
+<span class="comment"># Build a 6-layer transformer encoder</span>
+<span class="keyword">class</span> <span class="function">TransformerEncoder</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, vocab_size, d_model=<span class="number">512</span>, num_heads=<span class="number">8</span>,
+                 d_ff=<span class="number">2048</span>, num_layers=<span class="number">6</span>, max_len=<span class="number">512</span>, dropout=<span class="number">0.1</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.embedding = <span class="function">TokenEmbedding</span>(vocab_size, d_model)
+        <span class="function">self</span>.pos_encoding = <span class="function">PositionalEncoding</span>(d_model, max_len, dropout)
+        <span class="function">self</span>.layers = nn.<span class="function">ModuleList</span>([
+            <span class="function">TransformerBlock</span>(d_model, num_heads, d_ff, dropout)
+            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(num_layers)
+        ])
+        <span class="function">self</span>.norm = nn.<span class="function">LayerNorm</span>(d_model)
+
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x, mask=<span class="keyword">None</span>):
+        x = <span class="function">self</span>.<span class="function">embedding</span>(x)
+        x = <span class="function">self</span>.<span class="function">pos_encoding</span>(x)
+        <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="function">self</span>.layers:
+            x = <span class="function">layer</span>(x, mask)
+        <span class="keyword">return</span> <span class="function">self</span>.<span class="function">norm</span>(x)
+
+<span class="comment"># Create model and test</span>
+model = <span class="function">TransformerEncoder</span>(vocab_size=<span class="number">32000</span>, d_model=<span class="number">512</span>, num_layers=<span class="number">6</span>)
+tokens = torch.<span class="function">randint</span>(<span class="number">0</span>, <span class="number">32000</span>, (<span class="number">2</span>, <span class="number">128</span>))  <span class="comment"># batch=2, seq_len=128</span>
+output = <span class="function">model</span>(tokens)
+<span class="function">print</span>(<span class="string">f"Model output: {output.shape}"</span>)  <span class="comment"># [2, 128, 512]</span>
+
+<span class="comment"># Count parameters</span>
+params = <span class="function">sum</span>(p.<span class="function">numel</span>() <span class="keyword">for</span> p <span class="keyword">in</span> model.<span class="function">parameters</span>())
+<span class="function">print</span>(<span class="string">f"Total parameters: {params:,}"</span>)  <span class="comment"># ~44M parameters</span></div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Notice the pattern:</strong> Every transformer implementation follows the same recipe — (1) embed tokens, (2) add position info, (3) run through N identical blocks of attention + FFN with residuals and normalization. Understanding this pattern lets you read any transformer codebase.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Techniques</h2>
+
+    <p>Modern transformers have evolved significantly from the original 2017 design. Here are the key innovations that power today's state-of-the-art models.</p>
+
+    <table class="comparison-table">
+        <tr>
+            <th>Technique</th>
+            <th>Problem Solved</th>
+            <th>Used In</th>
+            <th>Key Benefit</th>
+        </tr>
+        <tr>
+            <td><strong>Flash Attention</strong></td>
+            <td>Memory bottleneck in attention</td>
+            <td>Almost all modern LLMs</td>
+            <td>2-4x speedup, O(N) memory instead of O(N²)</td>
+        </tr>
+        <tr>
+            <td><strong>RoPE</strong></td>
+            <td>Length generalization</td>
+            <td>LLaMA, Mistral, Qwen</td>
+            <td>Better relative position encoding, extrapolation</td>
+        </tr>
+        <tr>
+            <td><strong>Grouped Query Attention (GQA)</strong></td>
+            <td>KV cache memory usage</td>
+            <td>LLaMA 2/3, Mistral</td>
+            <td>70%+ KV cache reduction vs multi-head</td>
+        </tr>
+        <tr>
+            <td><strong>SwiGLU Activation</strong></td>
+            <td>Better FFN non-linearity</td>
+            <td>LLaMA, PaLM</td>
+            <td>Improved training efficiency and quality</td>
+        </tr>
+        <tr>
+            <td><strong>RMSNorm</strong></td>
+            <td>Simpler normalization</td>
+            <td>LLaMA, Gemma</td>
+            <td>Faster than LayerNorm, equivalent quality</td>
+        </tr>
+        <tr>
+            <td><strong>Mixture of Experts (MoE)</strong></td>
+            <td>Scaling without proportional compute</td>
+            <td>Mixtral, GPT-4 (rumored)</td>
+            <td>Much larger models with same inference cost</td>
+        </tr>
+    </table>
+
+    <h3>Flash Attention Explained</h3>
+    <p>Standard attention computes the full N×N attention matrix, requiring O(N²) memory. Flash Attention uses tiling and kernel fusion to compute attention in blocks, reducing memory to O(N) while being 2-4x faster by avoiding slow GPU memory reads/writes.</p>
+
+    <div class="info-box">
+    <h4>Flash Attention Key Idea</h4>
+    <p>Instead of materializing the full N×N attention matrix in GPU HBM (slow memory), Flash Attention computes attention in tiles that fit in SRAM (fast on-chip memory). It uses the online softmax trick to compute exact attention without ever storing the full matrix. This is a hardware-aware algorithm — same math, dramatically better performance.</p>
+</div>
+
+    <h3>Grouped Query Attention (GQA)</h3>
+    <p>In standard multi-head attention (MHA), each head has its own Q, K, and V projections. GQA shares K and V across groups of heads while keeping separate Q projections. This reduces the KV cache size during inference without significant quality loss.</p>
+
+    <div class="diagram-box">
+        <h4 style="text-align: center;">Attention Variants Comparison</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: center; margin-top: 1rem;">
+            <div>
+                <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Multi-Head (MHA)</div>
+                <div style="font-size: 0.85rem;">8 Q heads + 8 K heads + 8 V heads</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 8 × d_k per layer</div>
+                <div style="background: linear-gradient(135deg, #0891b2, #22d3ee); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">100% KV memory</div>
+            </div>
+            <div>
+                <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.5rem;">Grouped Query (GQA)</div>
+                <div style="font-size: 0.85rem;">8 Q heads + 2 K heads + 2 V heads</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 2 × d_k per layer</div>
+                <div style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">25% KV memory</div>
+            </div>
+            <div>
+                <div style="font-weight: 700; color: var(--accent-pink); margin-bottom: 0.5rem;">Multi-Query (MQA)</div>
+                <div style="font-size: 0.85rem;">8 Q heads + 1 K head + 1 V head</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 1 × d_k per layer</div>
+                <div style="background: linear-gradient(135deg, #db2777, #f472b6); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">12.5% KV memory</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Comparison with Alternatives</h2>
+
+    <p>How do transformers compare to the architectures they replaced, and to newer alternatives?</p>
+
+    <table class="comparison-table">
+        <tr>
+            <th>Feature</th>
+            <th>RNN / LSTM</th>
+            <th>Transformer</th>
+            <th>State Space (Mamba)</th>
+        </tr>
+        <tr>
+            <td><strong>Sequence Processing</strong></td>
+            <td>Sequential (O(N) steps)</td>
+            <td>Parallel (O(1) depth)</td>
+            <td>Parallel (O(N log N))</td>
+        </tr>
+        <tr>
+            <td><strong>Attention Complexity</strong></td>
+            <td>N/A (implicit via hidden state)</td>
+            <td>O(N²) per layer</td>
+            <td>O(N) linear</td>
+        </tr>
+        <tr>
+            <td><strong>Long-Range Dependencies</strong></td>
+            <td>Poor (vanishing gradients)</td>
+            <td>Excellent (direct connections)</td>
+            <td>Good (selective state space)</td>
+        </tr>
+        <tr>
+            <td><strong>Training Speed</strong></td>
+            <td>Slow (sequential)</td>
+            <td>Fast (highly parallel)</td>
+            <td>Fast (hardware-efficient)</td>
+        </tr>
+        <tr>
+            <td><strong>Inference Speed</strong></td>
+            <td>O(1) per token</td>
+            <td>O(N) per token (KV cache)</td>
+            <td>O(1) per token</td>
+        </tr>
+        <tr>
+            <td><strong>Memory (Inference)</strong></td>
+            <td>O(1) — fixed hidden state</td>
+            <td>O(N) — growing KV cache</td>
+            <td>O(1) — fixed state</td>
+        </tr>
+    </table>
+
+    <div class="highlight-box">
+    <p><strong>The Transformer Trade-off:</strong> Transformers trade O(N²) attention cost for vastly superior parallel training and better quality. For sequences up to ~128K tokens, this trade-off is overwhelmingly worth it. For extremely long sequences (1M+ tokens), hybrid approaches combining transformers with linear attention or state space models may be needed.</p>
+</div>
+
+    <h3>Performance Comparison</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">GPT-4 (Transformer)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a855f7);">96%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Claude 3.5 (Transformer)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #0891b2, #22d3ee);">94%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Mamba-2 (State Space)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #059669, #10b981);">78%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">RWKV-6 (Linear RNN)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #d97706, #f59e0b);">72%</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Average score across common reasoning benchmarks (approximate)</em></p>
+</section>
+
+<!-- SECTION: Real-World Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Use Cases</h2>
+
+    <p>Transformers have expanded far beyond their original NLP origins. Here are the major domains where they dominate.</p>
+
+    <div class="grid-cards grid-6">
+        <div class="card cyan-accent">
+    <h4>Natural Language Processing</h4>
+    <p>The original domain: machine translation, text summarization, question answering, sentiment analysis, named entity recognition. Models like BERT, GPT, and T5 set the standard.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Conversational AI</h4>
+    <p>ChatGPT, Claude, Gemini — all built on transformers. Long-context understanding, instruction following, reasoning, and multi-turn dialogue are transformer strengths.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Computer Vision</h4>
+    <p>Vision Transformers (ViT) treat image patches as tokens. DINO, DINOv2, and SAM use transformers for self-supervised image understanding, object detection, and segmentation.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Code Generation</h4>
+    <p>GitHub Copilot, CodeLlama, StarCoder — transformers trained on code can write, debug, explain, and refactor code across dozens of programming languages.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Scientific AI</h4>
+    <p>AlphaFold uses transformers to predict protein 3D structure from amino acid sequences. ESMFold, RoseTTAFold extend this to drug discovery and molecular design.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>Multimodal AI</h4>
+    <p>Models like GPT-4V, Gemini, and LLaVA combine vision and language transformers to understand images, charts, documents, and answer questions about visual content.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Enterprise Applications -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise Applications</h2>
+
+    <p>Deploying transformers in production requires careful consideration of latency, cost, scaling, and reliability. Here's a typical enterprise transformer inference pipeline:</p>
+
+    <div class="data-flow-anim">
+        <h4 style="color: var(--accent-cyan); font-family: 'Orbitron', sans-serif;">Production Transformer Pipeline</h4>
+        <div class="pipeline-track">
+            <span class="data-particle"></span>
+            <span class="data-particle"></span>
+            <span class="data-particle"></span>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #0891b2, #0e7490);">
+                <span class="stage-icon">📥</span>
+                Request<br>Router
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                <span class="stage-icon">🔤</span>
+                Tokenizer
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #059669, #047857);">
+                <span class="stage-icon">💾</span>
+                KV Cache<br>Lookup
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #db2777, #be185d);">
+                <span class="stage-icon">🧠</span>
+                GPU<br>Inference
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #d97706, #b45309);">
+                <span class="stage-icon">📊</span>
+                Post-<br>Process
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                <span class="stage-icon">📤</span>
+                Response<br>Stream
+            </div>
+        </div>
+    </div>
+
+    <h3>Key Enterprise Considerations</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Quantization</h4>
+    <p>Reduce model precision from FP32/FP16 to INT8 or INT4 for 2-4x inference speedup with minimal quality loss. Tools: bitsandbytes, GPTQ, AWQ.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>KV Cache Optimization</h4>
+    <p>During autoregressive generation, cache key-value pairs from previous tokens. Use PagedAttention (vLLM) for efficient memory management across batches.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Speculative Decoding</h4>
+    <p>Use a small 'draft' model to generate candidate tokens, then verify them in parallel with the large model. 2-3x speedup for generation.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Continuous Batching</h4>
+    <p>Instead of waiting for entire batches to complete, dynamically add/remove requests from the batch. Dramatically improves throughput and latency.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes</h2>
+
+    <p>Building and fine-tuning transformers involves many subtle pitfalls. Here are the most common mistakes practitioners make.</p>
+
+    <div class="highlight-box">
+    <p><strong>⚠️ Mistake #1: Forgetting to Scale Attention.</strong> Computing Q·K<sup>T</sup> without dividing by √d_k causes the softmax to saturate, producing near-one-hot attention weights. This kills gradient flow and makes learning impossible. Always use scaled dot-product attention.</p>
+</div>
+    <div class="highlight-box">
+    <p><strong>⚠️ Mistake #2: Wrong Masking.</strong> Forgetting causal masks in decoder models (or applying them incorrectly) lets the model cheat by looking at future tokens during training. The model will train well but generate garbage at inference time.</p>
+</div>
+    <div class="highlight-box">
+    <p><strong>⚠️ Mistake #3: Ignoring Learning Rate Warmup.</strong> Transformers are sensitive to the initial learning rate. Without warmup (gradually increasing lr for the first few thousand steps), training often diverges. Use a warmup schedule of 1-5% of total training steps.</p>
+</div>
+    <div class="highlight-box">
+    <p><strong>⚠️ Mistake #4: Applying Softmax Twice.</strong> Some loss functions (like nn.CrossEntropyLoss) include the softmax internally. Applying softmax to your model output AND using CrossEntropyLoss means you're applying softmax twice, destroying your loss landscape.</p>
+</div>
+
+    <h3>Performance Pitfalls</h3>
+    <div class="info-box">
+    <h4>Sequence Length vs Memory</h4>
+    <p>Attention is O(N²) in memory. A model that handles 512 tokens fine may OOM at 2048 tokens (using 16x more attention memory). Always profile memory usage at your target sequence length, not a shorter test length.</p>
+</div>
+    <div class="info-box">
+    <h4>Tokenizer Mismatch</h4>
+    <p>Using a tokenizer that wasn't trained with your model produces garbage. GPT-2's tokenizer and BERT's tokenizer produce completely different token IDs for the same text. Always use the tokenizer that came with your model.</p>
+</div>
+    <div class="info-box">
+    <h4>Not Using Mixed Precision</h4>
+    <p>Training transformers in FP32 is 2-3x slower and uses 2x more memory than FP16/BF16 mixed precision. Always use torch.cuda.amp.autocast() or accelerate's mixed precision for training.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices</h2>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Use Pre-Norm Architecture</h4>
+    <p>Place LayerNorm before (not after) the attention and FFN sub-layers. This makes training more stable and eliminates the need for careful learning rate warmup.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Learning Rate: Cosine Schedule</h4>
+    <p>Use a cosine learning rate schedule with warmup. Peak LR of 1e-4 to 3e-4 for most models. Warmup for 1-5% of total steps, then cosine decay to 1/10th of peak.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Gradient Clipping</h4>
+    <p>Clip gradients to a max norm of 1.0. Transformer training can produce gradient spikes (especially early in training) that cause divergence without clipping.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Weight Initialization</h4>
+    <p>Use Xavier/Glorot initialization for most weights. Scale residual path weights by 1/√N where N is the number of layers. This prevents the residual stream from growing too large.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Flash Attention</h4>
+    <p>Always use Flash Attention when available (flash_attn, xformers, or PyTorch's scaled_dot_product_attention). It's strictly better — same results, less memory, faster.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>Gradient Accumulation</h4>
+    <p>If your batch can't fit in memory, use gradient accumulation over multiple micro-batches. Effective batch size = micro_batch × gradient_accumulation_steps × num_gpus.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>The Golden Rule of Transformer Training</h4>
+    <p>Start with a known-good configuration from an existing model's paper (learning rate, batch size, warmup steps, etc.) and modify one thing at a time. Transformer training is sensitive to hyperparameters, and debugging divergent training runs is difficult. Replicate before you innovate.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights</h2>
+
+    <h3>Scaling Laws</h3>
+    <p>One of the most important discoveries in modern AI is that transformer performance follows predictable scaling laws. The "Chinchilla" scaling laws (Hoffmann et al., 2022) showed that optimal performance comes from scaling both model size and training data together.</p>
+
+    <div class="diagram-box">
+        <h4 style="text-align: center;">Scaling Laws: Loss vs Compute</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem;">
+            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #e0f2fe, #f0e7ff); border-radius: 8px;">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--accent-cyan);">N</div>
+                <div style="font-weight: 600;">Model Parameters</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">Loss ∝ N<sup>-0.076</sup></div>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f0e7ff, #fce7f3); border-radius: 8px;">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--accent-purple);">D</div>
+                <div style="font-weight: 600;">Training Tokens</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">Loss ∝ D<sup>-0.095</sup></div>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #fce7f3, #fef3c7); border-radius: 8px;">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--accent-pink);">C</div>
+                <div style="font-weight: 600;">Total Compute</div>
+                <div style="font-size: 0.85rem; color: var(--text-dim);">Optimal: N ∝ C<sup>0.5</sup>, D ∝ C<sup>0.5</sup></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-box">
+    <div class="label">Chinchilla Optimal Scaling</div>
+    For compute budget C FLOPs:
+  Optimal parameters N ≈ 0.0554 × C^0.5
+  Optimal tokens    D ≈ 0.0554 × C^0.5
+
+Rule of thumb: train on ~20 tokens per parameter
+  7B model  → ~140B tokens
+  70B model → ~1.4T tokens
+</div>
+
+    <h3>Emergent Abilities</h3>
+    <div class="info-box">
+    <h4>What Are Emergent Abilities?</h4>
+    <p>As transformers scale beyond certain thresholds, they exhibit capabilities that are absent in smaller models — seemingly appearing suddenly rather than gradually. Examples include in-context learning (few-shot prompting), chain-of-thought reasoning, and the ability to follow complex multi-step instructions. Whether these are truly 'emergent' or just hard to detect at small scale is an active research debate.</p>
+</div>
+
+    <h3>Attention Pattern Analysis</h3>
+    <p>Researchers have found that transformer attention heads specialize into distinct roles. Common patterns include:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Positional Heads</h4>
+    <p>Attend to specific relative positions (e.g., always attend to the previous token). These implement a form of n-gram model within the transformer.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Syntactic Heads</h4>
+    <p>Capture grammatical relationships like subject-verb agreement, even across long distances. These heads implement parsing-like behavior.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Induction Heads</h4>
+    <p>Implement in-context learning by recognizing and continuing patterns seen earlier in the context. Two attention heads work together: one finds a previous occurrence, the other copies what followed.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Python Code Examples</h2>
+
+    <p>Here are practical, ready-to-run code examples for working with transformers in production.</p>
+
+    <h3>1. Using HuggingFace Transformers Pipeline</h3>
+    <div class="code-block">
+    <div class="code-header">Python — HuggingFace Quick Start</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+
+<span class="comment"># Sentiment Analysis</span>
+classifier = <span class="function">pipeline</span>(<span class="string">"sentiment-analysis"</span>)
+result = <span class="function">classifier</span>(<span class="string">"Transformers have revolutionized NLP!"</span>)
+<span class="function">print</span>(result)
+<span class="comment"># [{'label': 'POSITIVE', 'score': 0.9998}]</span>
+
+<span class="comment"># Text Generation</span>
+generator = <span class="function">pipeline</span>(<span class="string">"text-generation"</span>, model=<span class="string">"gpt2"</span>)
+output = <span class="function">generator</span>(
+    <span class="string">"The transformer architecture"</span>,
+    max_length=<span class="number">50</span>,
+    num_return_sequences=<span class="number">1</span>,
+    temperature=<span class="number">0.7</span>,
+)
+<span class="function">print</span>(output[<span class="number">0</span>][<span class="string">"generated_text"</span>])
+
+<span class="comment"># Question Answering</span>
+qa = <span class="function">pipeline</span>(<span class="string">"question-answering"</span>)
+result = <span class="function">qa</span>(
+    question=<span class="string">"What is self-attention?"</span>,
+    context=<span class="string">"Self-attention allows each token to attend to all other tokens "</span>
+            <span class="string">"in the sequence, computing weighted sums based on relevance."</span>
+)
+<span class="function">print</span>(<span class="string">f"Answer: {result['answer']} (score: {result['score']:.4f})"</span>)</div>
+</div>
+
+    <h3>2. Loading and Using Pre-trained Models</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Working with AutoModel and AutoTokenizer</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModel
+<span class="keyword">import</span> torch
+
+<span class="comment"># Load model and tokenizer</span>
+model_name = <span class="string">"bert-base-uncased"</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+model = AutoModel.<span class="function">from_pretrained</span>(model_name)
+
+<span class="comment"># Tokenize input</span>
+text = <span class="string">"Transformers process all tokens in parallel using self-attention."</span>
+inputs = <span class="function">tokenizer</span>(
+    text,
+    return_tensors=<span class="string">"pt"</span>,     <span class="comment"># Return PyTorch tensors</span>
+    padding=<span class="keyword">True</span>,
+    truncation=<span class="keyword">True</span>,
+    max_length=<span class="number">128</span>,
+)
+
+<span class="function">print</span>(<span class="string">f"Input IDs: {inputs['input_ids'].shape}"</span>)
+<span class="function">print</span>(<span class="string">f"Tokens: {tokenizer.convert_ids_to_tokens(inputs['input_ids'][0])}"</span>)
+
+<span class="comment"># Get model output</span>
+<span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+    outputs = <span class="function">model</span>(**inputs)
+
+<span class="comment"># outputs.last_hidden_state: [batch, seq_len, hidden_dim]</span>
+<span class="function">print</span>(<span class="string">f"Output shape: {outputs.last_hidden_state.shape}"</span>)
+
+<span class="comment"># Get [CLS] token embedding (useful for classification)</span>
+cls_embedding = outputs.last_hidden_state[:, <span class="number">0</span>, :]
+<span class="function">print</span>(<span class="string">f"CLS embedding: {cls_embedding.shape}"</span>)  <span class="comment"># [1, 768]</span></div>
+</div>
+
+    <h3>3. Fine-Tuning with HuggingFace Trainer</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Fine-Tuning BERT for Classification</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> (
+    AutoTokenizer,
+    AutoModelForSequenceClassification,
+    TrainingArguments,
+    Trainer
+)
+<span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Load dataset</span>
+dataset = <span class="function">load_dataset</span>(<span class="string">"imdb"</span>)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+<span class="comment"># Tokenize</span>
+<span class="keyword">def</span> <span class="function">tokenize_function</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(
+        examples[<span class="string">"text"</span>],
+        padding=<span class="string">"max_length"</span>,
+        truncation=<span class="keyword">True</span>,
+        max_length=<span class="number">256</span>,
+    )
+
+tokenized = dataset.<span class="function">map</span>(tokenize_function, batched=<span class="keyword">True</span>)
+
+<span class="comment"># Load model for classification (2 classes: pos/neg)</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"bert-base-uncased"</span>, num_labels=<span class="number">2</span>
+)
+
+<span class="comment"># Training arguments</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./results"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">16</span>,
+    per_device_eval_batch_size=<span class="number">64</span>,
+    warmup_steps=<span class="number">500</span>,
+    weight_decay=<span class="number">0.01</span>,
+    learning_rate=<span class="number">2e-5</span>,
+    eval_strategy=<span class="string">"epoch"</span>,
+    save_strategy=<span class="string">"epoch"</span>,
+    load_best_model_at_end=<span class="keyword">True</span>,
+    fp16=<span class="keyword">True</span>,  <span class="comment"># Mixed precision training</span>
+)
+
+<span class="comment"># Metrics</span>
+<span class="keyword">def</span> <span class="function">compute_metrics</span>(eval_pred):
+    logits, labels = eval_pred
+    predictions = np.<span class="function">argmax</span>(logits, axis=-<span class="number">1</span>)
+    accuracy = (predictions == labels).<span class="function">mean</span>()
+    <span class="keyword">return</span> {<span class="string">"accuracy"</span>: accuracy}
+
+<span class="comment"># Train</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized[<span class="string">"train"</span>].<span class="function">select</span>(<span class="function">range</span>(<span class="number">5000</span>)),
+    eval_dataset=tokenized[<span class="string">"test"</span>].<span class="function">select</span>(<span class="function">range</span>(<span class="number">1000</span>)),
+    compute_metrics=compute_metrics,
+)
+
+trainer.<span class="function">train</span>()
+<span class="function">print</span>(trainer.<span class="function">evaluate</span>())</div>
+</div>
+
+    <h3>4. Attention Visualization</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Visualizing Attention Patterns</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModel
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+
+<span class="comment"># Load model with attention output</span>
+model_name = <span class="string">"bert-base-uncased"</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+model = AutoModel.<span class="function">from_pretrained</span>(model_name, output_attentions=<span class="keyword">True</span>)
+
+<span class="comment"># Process text</span>
+text = <span class="string">"The cat sat on the mat because it was tired"</span>
+inputs = <span class="function">tokenizer</span>(text, return_tensors=<span class="string">"pt"</span>)
+tokens = tokenizer.<span class="function">convert_ids_to_tokens</span>(inputs[<span class="string">"input_ids"</span>][<span class="number">0</span>])
+
+<span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+    outputs = <span class="function">model</span>(**inputs)
+
+<span class="comment"># outputs.attentions: tuple of (batch, heads, seq_len, seq_len)</span>
+<span class="comment"># One tensor per layer</span>
+attentions = outputs.attentions
+
+<span class="comment"># Visualize attention in layer 6, head 0</span>
+layer, head = <span class="number">5</span>, <span class="number">0</span>
+attn_matrix = attentions[layer][<span class="number">0</span>, head].<span class="function">numpy</span>()
+
+plt.<span class="function">figure</span>(figsize=(<span class="number">10</span>, <span class="number">8</span>))
+sns.<span class="function">heatmap</span>(
+    attn_matrix,
+    xticklabels=tokens,
+    yticklabels=tokens,
+    cmap=<span class="string">"Blues"</span>,
+    annot=<span class="keyword">False</span>,
+)
+plt.<span class="function">title</span>(<span class="string">f"Attention Pattern - Layer {layer+1}, Head {head+1}"</span>)
+plt.<span class="function">xlabel</span>(<span class="string">"Key (attended to)"</span>)
+plt.<span class="function">ylabel</span>(<span class="string">"Query (attending from)"</span>)
+plt.<span class="function">tight_layout</span>()
+plt.<span class="function">savefig</span>(<span class="string">"attention_heatmap.png"</span>, dpi=<span class="number">150</span>)
+plt.<span class="function">show</span>()
+
+<span class="comment"># Check what "it" attends to (shows coreference resolution)</span>
+it_idx = tokens.<span class="function">index</span>(<span class="string">"it"</span>)
+top_attended = torch.<span class="function">topk</span>(attentions[layer][<span class="number">0</span>, head, it_idx], k=<span class="number">3</span>)
+<span class="function">print</span>(<span class="string">f"'it' most attends to: {[tokens[i] for i in top_attended.indices]}"</span>)</div>
+</div>
+
+    <h3>5. Efficient Inference with <a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a></h3>
+    <div class="code-block">
+    <div class="code-header">Python — Production Inference with vLLM</div>
+    <div class="code-content"><span class="comment"># vLLM provides high-throughput LLM serving</span>
+<span class="comment"># Install: pip install vllm</span>
+
+<span class="keyword">from</span> vllm <span class="keyword">import</span> LLM, SamplingParams
+
+<span class="comment"># Load model with automatic tensor parallelism</span>
+llm = <span class="function">LLM</span>(
+    model=<span class="string">"meta-llama/Llama-2-7b-chat-hf"</span>,
+    tensor_parallel_size=<span class="number">1</span>,     <span class="comment"># Number of GPUs</span>
+    dtype=<span class="string">"float16"</span>,
+    max_model_len=<span class="number">4096</span>,
+    gpu_memory_utilization=<span class="number">0.9</span>,
+)
+
+<span class="comment"># Define sampling parameters</span>
+sampling_params = <span class="function">SamplingParams</span>(
+    temperature=<span class="number">0.7</span>,
+    top_p=<span class="number">0.9</span>,
+    max_tokens=<span class="number">256</span>,
+    stop=[<span class="string">"\n\n"</span>],
+)
+
+<span class="comment"># Batch inference (much faster than sequential)</span>
+prompts = [
+    <span class="string">"Explain self-attention in one paragraph:"</span>,
+    <span class="string">"What is the difference between BERT and GPT?"</span>,
+    <span class="string">"How does positional encoding work?"</span>,
+]
+
+outputs = llm.<span class="function">generate</span>(prompts, sampling_params)
+
+<span class="keyword">for</span> output <span class="keyword">in</span> outputs:
+    prompt = output.prompt
+    generated = output.outputs[<span class="number">0</span>].text
+    <span class="function">print</span>(<span class="string">f"Prompt: {prompt[:50]}..."</span>)
+    <span class="function">print</span>(<span class="string">f"Response: {generated[:200]}..."</span>)
+    <span class="function">print</span>(<span class="string">"---"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Try It Yourself</h2>
+
+    <p>Put your transformer knowledge into practice with these hands-on exercises. Each builds on the concepts covered above.</p>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Build Scaled Dot-Product Attention</h4>
+    <p>Implement the scaled dot-product attention function from scratch. Verify it produces attention weights that sum to 1 for each query, and test with a causal mask.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+<span class="keyword">import</span> math
+
+<span class="keyword">def</span> <span class="function">my_attention</span>(query, key, value, mask=<span class="keyword">None</span>):
+    <span class="string">"""
+    TODO: Implement scaled dot-product attention.
+
+    Steps:
+    1. Compute scores = Q @ K^T / sqrt(d_k)
+    2. Apply mask (set masked positions to -inf)
+    3. Apply softmax
+    4. Multiply by V
+    """</span>
+    d_k = query.<span class="function">size</span>(-<span class="number">1</span>)
+    <span class="comment"># YOUR CODE HERE</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># Test your implementation</span>
+Q = torch.<span class="function">randn</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>)  <span class="comment"># batch=1, head=1, seq=4, d_k=8</span>
+K = torch.<span class="function">randn</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>)
+V = torch.<span class="function">randn</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>)
+
+<span class="comment"># Create causal mask</span>
+mask = torch.<span class="function">tril</span>(torch.<span class="function">ones</span>(<span class="number">4</span>, <span class="number">4</span>)).<span class="function">unsqueeze</span>(<span class="number">0</span>).<span class="function">unsqueeze</span>(<span class="number">0</span>)
+
+output, weights = <span class="function">my_attention</span>(Q, K, V, mask)
+<span class="keyword">assert</span> weights.<span class="function">sum</span>(dim=-<span class="number">1</span>).<span class="function">allclose</span>(torch.<span class="function">ones</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>)), <span class="string">"Weights should sum to 1!"</span>
+<span class="function">print</span>(<span class="string">"Attention weights (should be lower-triangular):"</span>)
+<span class="function">print</span>(weights[<span class="number">0</span>, <span class="number">0</span>])</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Visualize Positional Encodings</h4>
+    <p>Generate positional encodings for 100 positions with d_model=64. Plot the encodings as a heatmap to see the sinusoidal patterns. What patterns do you notice for different dimensions?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> math
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="keyword">def</span> <span class="function">create_positional_encoding</span>(max_len, d_model):
+    <span class="string">"""TODO: Create sinusoidal positional encodings."""</span>
+    pe = torch.<span class="function">zeros</span>(max_len, d_model)
+    <span class="comment"># YOUR CODE HERE: Fill pe using sin/cos formulas</span>
+    <span class="keyword">return</span> pe
+
+<span class="comment"># Generate and visualize</span>
+pe = <span class="function">create_positional_encoding</span>(<span class="number">100</span>, <span class="number">64</span>)
+plt.<span class="function">figure</span>(figsize=(<span class="number">12</span>, <span class="number">6</span>))
+plt.<span class="function">imshow</span>(pe.<span class="function">numpy</span>(), cmap=<span class="string">'RdBu'</span>, aspect=<span class="string">'auto'</span>)
+plt.<span class="function">xlabel</span>(<span class="string">'Embedding Dimension'</span>)
+plt.<span class="function">ylabel</span>(<span class="string">'Position'</span>)
+plt.<span class="function">title</span>(<span class="string">'Positional Encoding Patterns'</span>)
+plt.<span class="function">colorbar</span>()
+plt.<span class="function">show</span>()</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Compare Tokenizers</h4>
+    <p>Load the tokenizers for GPT-2, BERT, and LLaMA. Tokenize the same sentence with each and compare: How many tokens does each produce? How do they handle unknown words? What are the vocabulary sizes?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+sentence = <span class="string">"The transformer architecture revolutionized NLP in 2017."</span>
+
+tokenizers = {
+    <span class="string">"GPT-2"</span>: <span class="string">"gpt2"</span>,
+    <span class="string">"BERT"</span>: <span class="string">"bert-base-uncased"</span>,
+    <span class="string">"LLaMA"</span>: <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+}
+
+<span class="keyword">for</span> name, model_id <span class="keyword">in</span> tokenizers.<span class="function">items</span>():
+    <span class="keyword">try</span>:
+        tok = AutoTokenizer.<span class="function">from_pretrained</span>(model_id)
+        tokens = tok.<span class="function">tokenize</span>(sentence)
+        ids = tok.<span class="function">encode</span>(sentence)
+        <span class="function">print</span>(<span class="string">f"\n{name}:"</span>)
+        <span class="function">print</span>(<span class="string">f"  Vocab size: {tok.vocab_size:,}"</span>)
+        <span class="function">print</span>(<span class="string">f"  Tokens ({len(tokens)}): {tokens}"</span>)
+        <span class="function">print</span>(<span class="string">f"  IDs: {ids}"</span>)
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        <span class="function">print</span>(<span class="string">f"  {name}: Requires authentication - {e}"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Fine-tune a Sentiment Classifier</h4>
+    <p>Fine-tune a DistilBERT model on the IMDB dataset for sentiment classification. Train for 1 epoch, then evaluate accuracy on the test set. Target: >88% accuracy.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> (
+    AutoTokenizer,
+    AutoModelForSequenceClassification,
+    TrainingArguments,
+    Trainer,
+)
+<span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># TODO: Complete this fine-tuning pipeline</span>
+<span class="comment"># 1. Load the "imdb" dataset</span>
+<span class="comment"># 2. Tokenize with distilbert-base-uncased</span>
+<span class="comment"># 3. Create model with num_labels=2</span>
+<span class="comment"># 4. Set training args (1 epoch, batch_size=32, lr=2e-5)</span>
+<span class="comment"># 5. Train and evaluate</span>
+
+<span class="comment"># YOUR CODE HERE</span></div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+
+    <p>These questions are commonly asked in ML engineering and AI research interviews. Click each question to reveal a detailed answer.</p>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q1: Explain the self-attention mechanism. Why is it called 'self' attention? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>Self-attention computes attention scores between all pairs of positions within the <strong>same</strong> sequence (hence 'self'). Each position generates a Query (what it's looking for), Key (what it contains), and Value (what it passes along). Attention scores are computed as the scaled dot product between queries and keys, normalized with softmax, then used to compute weighted sums of values.</p><p>It's called 'self' because the queries, keys, and values all come from the same sequence, unlike cross-attention where queries come from one sequence and keys/values from another (e.g., decoder attending to encoder output).</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q2: Why does the transformer scale the dot product by √d_k? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>When the dimension d_k is large, the dot products Q·K<sup>T</sup> grow in magnitude (variance proportional to d_k), pushing the softmax into regions with extremely small gradients. Dividing by √d_k normalizes the variance of the dot products to approximately 1, keeping softmax in a region with useful gradients. Without scaling, the model would produce near-one-hot attention distributions early in training, making optimization very difficult.</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q3: What is the computational complexity of self-attention, and why is it a problem? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>Self-attention has O(N² · d) time and O(N²) space complexity, where N is the sequence length and d is the dimension. For a sequence of 128K tokens, the attention matrix has 128K × 128K = 16.4 billion entries per head per layer. This quadratic scaling limits the maximum context length and makes long-sequence processing expensive. Solutions include Flash Attention (same math, better memory access patterns), sparse attention (attend to a subset of positions), and linear attention variants.</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q4: Compare encoder-only, decoder-only, and encoder-decoder architectures. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Encoder-only (BERT):</strong> Bidirectional attention, sees full context. Best for understanding tasks (classification, NER, similarity). Cannot generate text autoregressively.</p><p><strong>Decoder-only (GPT, Claude):</strong> Causal attention (each token sees only previous tokens). Best for generation tasks. Can also do understanding tasks via prompting. Dominant architecture for LLMs.</p><p><strong>Encoder-decoder (T5):</strong> Encoder processes input bidirectionally, decoder generates output autoregressively with cross-attention to encoder. Best for sequence-to-sequence tasks (translation, summarization). More parameters for same capability.</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q5: What is the KV cache, and why does it matter for inference? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>During autoregressive generation, each new token needs to attend to all previous tokens. Without caching, the model would recompute the Key and Value projections for all previous tokens at every step — O(N²) total computation for N tokens. The KV cache stores previously computed K and V tensors, so only the new token's K and V need to be computed at each step, reducing generation to O(N) total computation. The trade-off is memory: the KV cache grows linearly with sequence length and is often the memory bottleneck during inference.</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q6: Explain Flash Attention. How does it achieve speedup without approximation? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>Flash Attention is an IO-aware exact attention algorithm. Standard attention materializes the full N×N attention matrix in GPU HBM (high bandwidth memory), which is slow to read/write. Flash Attention tiles the computation into blocks that fit in SRAM (on-chip memory), which is 10-100x faster. It uses the online softmax algorithm to compute exact softmax without materializing the full attention matrix. The result is mathematically identical to standard attention but 2-4x faster and uses O(N) memory instead of O(N²).</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q7: What are Rotary Position Embeddings (RoPE)? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>RoPE encodes position information by rotating query and key vectors in 2D subspaces. For each pair of dimensions, it applies a rotation by an angle proportional to the position. The key property: the dot product between a rotated query at position m and a rotated key at position n depends only on (m-n), automatically encoding relative position. Benefits: (1) naturally encodes relative position in the attention computation, (2) better length generalization than absolute position embeddings, (3) decays attention with distance, similar to a learnable bias. Used by LLaMA, Mistral, and most modern LLMs.</p></div>
+    </div>
+</div>
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q8: How do Mixture of Experts (MoE) transformers work? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>MoE replaces the dense FFN layer with multiple 'expert' FFN layers and a learned routing network. For each token, the router selects the top-k experts (typically k=2), and only those experts process the token. This allows the model to have many more total parameters (larger capacity) while keeping per-token computation constant. Mixtral 8x7B has 47B total parameters but only activates ~13B per token, achieving quality close to models 3x its active size. Challenges include load balancing across experts, training stability, and communication overhead in distributed settings.</p></div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between attention and self-attention? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Attention</strong> is the general mechanism where one sequence attends to another. <strong>Self-attention</strong> is the specific case where a sequence attends to itself. In the original transformer, the encoder uses self-attention, while the decoder uses both self-attention (attending to previous decoder outputs) and cross-attention (attending to encoder outputs).</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How many parameters does a transformer have? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>For a transformer with L layers, d_model dimension, h heads, and vocabulary V: approximately <code>12 × L × d_model²</code> parameters (for attention + FFN), plus <code>V × d_model</code> for embeddings. BERT-base (12 layers, 768 dim) has ~110M parameters. GPT-3 (96 layers, 12288 dim) has 175B parameters. LLaMA-3 70B has 70B parameters.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">Can transformers handle sequences of any length? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>In theory, the self-attention mechanism can handle any length. In practice, memory is O(N²) and computation is O(N² × d), limiting context length. Modern solutions include: Flash Attention (reduces memory to O(N)), position encoding that generalizes (RoPE with NTK-aware scaling), and architectural innovations (ring attention for distributed long-context). Current state-of-the-art models support 128K-1M token contexts.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">Why are transformers so much better than RNNs? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>Three main reasons: (1) <strong>Parallelization</strong> — transformers process all positions simultaneously during training, making them dramatically faster on GPUs. (2) <strong>Long-range dependencies</strong> — every token directly attends to every other token, while RNNs must pass information through a bottleneck hidden state. (3) <strong>Scalability</strong> — transformers scale predictably with compute and data, following power law scaling curves that enable reliable investment in larger models.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What is the 'attention is all you need' claim really saying? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>The original paper's title argues that you don't need recurrence (RNNs) or convolution for sequence modeling — attention alone is sufficient. The model eliminates recurrent connections entirely, using only self-attention layers plus simple feed-forward networks. This was a bold claim at the time, as RNNs were considered essential for sequence processing. The paper proved this claim on machine translation tasks, and subsequent work has confirmed it across virtually all sequence modeling domains.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do transformers handle different languages? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>Through subword tokenization and multilingual training. Tokenizers like BPE and SentencePiece split text into common subword units, naturally handling any script. Models like mBERT and XLM-RoBERTa are trained on text from 100+ languages simultaneously, learning shared representations. Remarkably, they exhibit cross-lingual transfer — fine-tuning on English data often improves performance on other languages too, especially for related languages.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">Are transformers being replaced by newer architectures? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>As of 2025, transformers remain dominant for most AI tasks. State Space Models (SSMs) like Mamba offer O(N) complexity and show promise for very long sequences, but haven't matched transformer quality on reasoning-heavy tasks. Hybrid architectures (combining transformers with SSMs) are an active research area. The most likely near-term evolution is efficient transformer variants (Flash Attention, GQA, MoE) rather than complete replacement.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What hardware do I need to train a transformer? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>It depends on scale. Fine-tuning BERT or small models: a single GPU (16GB+ VRAM). Fine-tuning 7B parameter models with LoRA: 1 GPU with 24GB (e.g., RTX 4090). Pre-training 7B models: 8-64 GPUs for days/weeks. Pre-training 70B+ models: hundreds to thousands of high-end GPUs (H100, A100) for months. Cloud providers (AWS, GCP, Lambda Labs) make GPU access affordable for smaller-scale work.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between GPT and BERT? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>GPT</strong> is decoder-only with causal (left-to-right) attention — designed for generation. <strong>BERT</strong> is encoder-only with bidirectional attention — designed for understanding. GPT is pre-trained to predict the next token. BERT is pre-trained with masked language modeling (predicting masked tokens). In practice, GPT-style models have won because they can do both generation AND understanding via prompting, while BERT can only do understanding.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do I choose which transformer model to use for my task? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>For <strong>text classification/NER</strong>: start with a BERT-family model (DeBERTa-v3 for best quality). For <strong>text generation/chatbots</strong>: use a decoder model (LLaMA 3, Mistral, or API-based GPT-4/Claude). For <strong>embeddings/similarity</strong>: use a sentence transformer (all-MiniLM-L6-v2 for speed, gte-large for quality). For <strong>translation</strong>: use an encoder-decoder (NLLB, mBART). Always start with the smallest model that meets your quality requirements — it's cheaper and faster to iterate.</p></div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary and Key Takeaways</h2>
+
+    <div class="card-grid grid-5">
+        <div class="card cyan-accent">
+    <h4>Self-Attention Is the Core</h4>
+    <p>Transformers use self-attention to let every token attend to every other token in parallel. The Q, K, V mechanism with scaled dot products is the mathematical foundation that enables this.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Architecture Matters</h4>
+    <p>The combination of multi-head attention, feed-forward networks, residual connections, and layer normalization — not just attention alone — is what makes transformers work. Each component is essential.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Scale Is Key</h4>
+    <p>Transformer performance scales predictably with model size and training data. The Chinchilla scaling laws guide efficient allocation of compute budget between parameters and training tokens.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Modern Innovations</h4>
+    <p>Flash Attention, RoPE, GQA, and MoE have dramatically improved transformer efficiency. These innovations enable longer contexts, faster inference, and larger models without proportional compute increases.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Practical Skills</h4>
+    <p>Using HuggingFace for fine-tuning, understanding tokenization, implementing attention from scratch, and choosing the right model for your task are the essential practical skills.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources and Further Reading</h2>
+
+    <h3>Essential Papers</h3>
+    <div class="grid-cards grid-6">
+        <div class="card cyan-accent">
+    <h4>Attention Is All You Need (2017)</h4>
+    <p>Vaswani et al. — The foundational transformer paper. Start here to understand the original architecture.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>BERT (2018)</h4>
+    <p>Devlin et al. — Bidirectional encoder representations. Introduced pre-training + fine-tuning paradigm.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>GPT-3 (2020)</h4>
+    <p>Brown et al. — Demonstrated few-shot learning and emergent abilities at scale.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Flash Attention (2022)</h4>
+    <p>Dao et al. — IO-aware exact attention algorithm. Essential reading for efficiency.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Chinchilla (2022)</h4>
+    <p>Hoffmann et al. — Optimal scaling laws for compute-efficient training.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>LLaMA (2023)</h4>
+    <p>Touvron et al. — Open-weight transformer with modern architecture choices. Good reference implementation.</p>
+</div>
+    </div>
+
+    <h3>Learning Resources</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">The Illustrated Transformer</a></h4>
+    <p><a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">Jay Alammar</a>'s visual guide is the best introduction to transformer internals. Bookmark it.</p>
+</div>
+        <div class="card purple-accent">
+    <h4><a href="https://www.youtube.com/@andrejkarpathy" target="_blank" rel="noopener">Andrej Karpathy's YouTube</a></h4>
+    <p>His 'Let's build GPT from scratch' video is the gold standard for hands-on transformer education.</p>
+</div>
+        <div class="card green-accent">
+    <h4><a href="https://huggingface.co/learn/nlp-course/" target="_blank" rel="noopener">HuggingFace NLP Course</a></h4>
+    <p>Free, comprehensive course on using transformers for NLP with the HuggingFace ecosystem.</p>
+</div>
+        <div class="card gold-accent">
+    <h4><a href="https://web.stanford.edu/class/cs224n/" target="_blank" rel="noopener">Stanford CS224N</a></h4>
+    <p>Stanford's NLP with Deep Learning course. Covers transformers in depth with theory and practice.</p>
+</div>
+    </div>
+</section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Sidebar Navigation Active State
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const isActive = this.classList.contains('active');
+                document.querySelectorAll('.faq-question').forEach(fq => { fq.classList.remove('active'); fq.nextElementSibling.classList.remove('active'); });
+                if (!isActive) { this.classList.add('active'); answer.classList.add('active'); }
+            });
+        });
+
+        // Collapsible Interview Sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll spy for sidebar
+        const sections = document.querySelectorAll('.ml-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

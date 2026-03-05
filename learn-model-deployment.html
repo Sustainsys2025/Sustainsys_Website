@@ -1,0 +1,3207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Deployment - SustainSys AI Academy</title>
+    <meta name="description" content="Ship ML models to production — REST APIs, containerization, GPU serving, scaling, and monitoring.">
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f8fa;
+            --surface: #ffffff;
+            --text: #1a202c;
+            --text-dim: #64748b;
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-pink: #db2777;
+            --accent-green: #059669;
+            --accent-gold: #ca8a04;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+        
+        /* Additional deployment-specific styles */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        
+        .code-header {
+            color: #0891b2;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .code-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(168, 85, 247, 0.1));
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--accent-cyan);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(219, 39, 119, 0.1), rgba(244, 114, 182, 0.1));
+            border: 1px solid #fbcfe8;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .formula-box {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .formula-box .label {
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+        
+        .try-it-box {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid #86efac;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .try-it-box h4 {
+            margin-top: 0;
+            color: var(--accent-green);
+        }
+        
+        .faq-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:hover {
+            opacity: 0.9;
+        }
+        
+        .faq-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            max-height: 1000px;
+        }
+        
+        .faq-answer-content {
+            padding: 1.5rem;
+            background: var(--surface);
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .collapsible-section {
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .collapsible-header {
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .collapsible-header:hover {
+            opacity: 0.9;
+        }
+        
+        .collapsible-header.active {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+        }
+        
+        .toggle-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+        
+        .collapsible-body {
+            padding: 1.5rem;
+            background: var(--surface);
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-top: 3px solid;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+        
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+        
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+        
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+        
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+        
+        .card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .model-bars {
+            margin: 2rem 0;
+        }
+        
+        .model-bar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .model-bar-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        
+        .model-bar-track {
+            background: #e2e8f0;
+            height: 30px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .model-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .flow-step {
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .flow-step small {
+            display: block;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .ml-content {
+            flex: 1;
+        }
+        
+        .ml-section {
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .ml-section h2 {
+            color: var(--accent-cyan);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+        
+        .ml-section h3 {
+            color: var(--text);
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ml-intro-text {
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(34, 211, 238, 0.1));
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-link {
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link.active {
+            color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+            border-left: 2px solid var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <!-- Progress indicator -->
+    <svg class="progress-ring" style="position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; z-index: 9999;">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
+    </svg>
+
+    <!-- Page Header -->
+    <div class="container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Model Deployment</h1>
+                <p class="page-description">Ship ML models to production — REST APIs, containerization, GPU serving, scaling, and monitoring.</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <div class="ml-page-container">
+            
+<aside class="ml-sidebar">
+    <h3>Contents</h3>
+    <ul>
+        <li><a href="#intro" class="sidebar-link">Introduction</a></li>
+        <li><a href="#why-matters" class="sidebar-link">Why It Matters</a></li>
+        <li><a href="#history" class="sidebar-link">Historical Evolution</a></li>
+        <li><a href="#core-concepts" class="sidebar-link">Core Concepts</a></li>
+        <li><a href="#architecture" class="sidebar-link">Architecture</a></li>
+        <li><a href="#components" class="sidebar-link">Key Components</a></li>
+        <li><a href="#implementation" class="sidebar-link">Implementation</a></li>
+        <li><a href="#advanced" class="sidebar-link">Advanced Techniques</a></li>
+        <li><a href="#comparison" class="sidebar-link">Framework Comparison</a></li>
+        <li><a href="#use-cases" class="sidebar-link">Real-World Use Cases</a></li>
+        <li><a href="#enterprise" class="sidebar-link">Enterprise Deployment</a></li>
+        <li><a href="#mistakes" class="sidebar-link">Common Mistakes</a></li>
+        <li><a href="#best-practices" class="sidebar-link">Best Practices</a></li>
+        <li><a href="#advanced-insights" class="sidebar-link">Advanced Insights</a></li>
+        <li><a href="#code-examples" class="sidebar-link">Code Examples</a></li>
+        <li><a href="#exercises" class="sidebar-link">Exercises</a></li>
+        <li><a href="#interview" class="sidebar-link">Interview Questions</a></li>
+        <li><a href="#faq" class="sidebar-link">FAQ</a></li>
+        <li><a href="#summary" class="sidebar-link">Summary</a></li>
+        <li><a href="#resources" class="sidebar-link">Resources</a></li>
+    </ul>
+</aside>
+
+            <div class="ml-content">
+
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to Model Deployment</h2>
+
+    <div class="ml-intro-text">
+        <p>Building a state-of-the-art machine learning model is only half the challenge. The other half — and often the harder half — is <strong>deploying</strong> that model to production where it serves real users, handles real traffic, and generates real value. Model deployment is the bridge between research and reality.</p>
+    </div>
+
+    <p>A deployed model must satisfy requirements that rarely matter in a notebook: <strong>low latency</strong> (inference in milliseconds), <strong>high throughput</strong> (serving thousands of requests per second), <strong>reliability</strong> (99.99% uptime), <strong>cost efficiency</strong> (minimizing GPU costs), and <strong>monitoring</strong> (catching performance degradation). A model that achieves 95% accuracy is worthless if it takes 10 seconds to respond or crashes under load.</p>
+
+    <p>This course covers everything needed to ship ML models to production. You'll learn about REST APIs with <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a>, containerization with <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>, model optimization with <a href="https://onnx.ai/" target="_blank" rel="noopener">ONNX</a> and quantization, scaling with <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>, and advanced serving frameworks like <a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a> and Triton. By the end, you'll understand not just how to serve a single model, but how to build enterprise-grade ML infrastructure that scales reliably.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>REST API Development</h4>
+    <p>Build production-grade APIs with FastAPI that serve models efficiently, handle concurrent requests, and validate inputs. Learn request/response serialization and error handling.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Containerization & Docker</h4>
+    <p>Package models, dependencies, and configurations into Docker containers that run identically everywhere — laptop, CI/CD pipeline, Kubernetes cluster.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Model Optimization</h4>
+    <p>Compress and accelerate models using quantization (INT8, FP16), ONNX conversion, and distillation to reduce inference latency and cost.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Scale & Production</h4>
+    <p>Deploy models at scale using Kubernetes, handle auto-scaling, implement monitoring and logging, and achieve sub-100ms latency under high load.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Understanding of Python, basic knowledge of machine learning (training, inference, models), familiarity with command-line tools, and basic understanding of HTTP/REST APIs. Deep learning framework experience (<a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a> or TensorFlow) is helpful.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Model Deployment Matters</h2>
+
+    <p>In industry, the cost of deploying a model often exceeds the cost of training it. A large language model might cost $10 million to train once, but if deployed inefficiently, could cost millions annually in inference GPU costs. Similarly, a 100ms latency increase can cost millions in lost user engagement. Model deployment isn't a footnote — it's central to an ML engineer's job.</p>
+
+    <h3>Real-World Impact</h3>
+    <p>Consider a recommendation system serving Spotify's 500M users:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Inference Latency Impact</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #0891b2, #22d3ee);">50ms latency = 95% engagement</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">100ms Latency Cost</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #d97706, #f59e0b);">Lost 10% user engagement</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Throughput Requirement</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #059669, #10b981);">Serve 50,000 req/sec peak</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Unoptimized Cost</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 90%; background: linear-gradient(90deg, #db2777, #f472b6);">$2M/month in GPU costs</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Optimized Cost (Quantization)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #7c3aed, #a855f7);">$600K/month (70% savings)</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Why deployment efficiency is business-critical</em></p>
+
+    <h3>Key Challenges in Production</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Latency</h4>
+    <p>Models trained for accuracy must be optimized for speed. 50ms latency is acceptable; 500ms is not. Even 10ms improvements matter at scale.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Reliability</h4>
+    <p>99.9% uptime means 9 hours of downtime per year are allowed. 99.99% (AWS/Google standard) means 44 minutes per year. Every crash is expensive.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Cost</h4>
+    <p>GPU compute is expensive ($1-4 per hour per GPU). Optimize inference cost and throughput becomes a core business concern, not an afterthought.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Monitoring</h4>
+    <p>Models degrade in production as data drifts. You need continuous monitoring to catch accuracy degradation, latency increases, and anomalous patterns.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> A model that works perfectly in a Jupyter notebook but takes 2 seconds to respond in production is worthless. Deployment is not something you do <em>after</em> building a model — it's something you design for <em>while</em> building it.</p>
+</div>
+</section>
+
+<!-- SECTION: Historical Evolution -->
+<section id="history" class="ml-section">
+    <h2>Historical Evolution of Model Serving</h2>
+
+    <p>Model deployment evolved alongside machine learning itself. Understanding this history helps you appreciate why different frameworks exist and which problems they solve.</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
+            <strong>2010s</strong><br>Single Models<br><small>REST APIs + pickle files, manual scaling</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>2015</strong><br>TensorFlow Serving<br><small>Google open-sources model serving, introduces batching</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+            <strong>2017</strong><br>Containerization<br><small>Docker adoption for reproducible deployments</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>2018</strong><br>Kubernetes Era<br><small>Orchestrating containers at scale, auto-scaling</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>2020</strong><br>LLM Serving<br><small>vLLM, Triton address unique challenges of large models</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>2023+</strong><br>Multimodal Era<br><small>Serving LLMs, vision models, multimodal systems</small>
+        </div>
+    </div>
+
+    <h3>The Evolution of Problems & Solutions</h3>
+
+    <div class="info-box">
+    <h4>The Pickle Problem (2010s)</h4>
+    <p>Early deployments pickled models and loaded them directly in Flask. This worked for small models on single servers but couldn't handle concurrent requests, batch processing, or multiple model versions. Every framework reinvented the wheel.</p>
+</div>
+
+    <div class="info-box">
+    <h4>TensorFlow Serving (2015)</h4>
+    <p>Google released TensorFlow Serving, the first production serving framework. It introduced crucial concepts: model versioning, batching requests for better GPU utilization, and separate model and serving code. This became the blueprint for modern serving systems.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Container Revolution (2017)</h4>
+    <p>Docker made dependencies explicit and deployments reproducible. A model + Python version + CUDA version + dependencies could be packaged once and run identically everywhere. Combined with Kubernetes, this enabled truly scalable ML.</p>
+</div>
+
+    <div class="info-box">
+    <h4>LLM Explosion (2023+)</h4>
+    <p>GPT-3's 175B parameters broke existing serving frameworks. vLLM and Triton emerged to handle token generation efficiently using techniques like continuous batching and paged attention. The challenges of serving LLMs are fundamentally different from traditional models.</p>
+</div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts and Fundamentals</h2>
+
+    <p>Model deployment introduces several new concepts that rarely appear in training. Understanding these fundamentals is crucial for building production systems.</p>
+
+    <h3>Key Terms & Concepts</h3>
+
+    <div class="info-box">
+    <h4>Inference vs Training</h4>
+    <p>Training optimizes for accuracy using backpropagation and gradient updates. Inference runs a fixed model on new data to make predictions. Inference is what happens in production. A model might spend 10% of its cost during training and 90% during inference.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Latency</h4>
+    <p>Time from receiving a request to returning a response. For real-time systems, sub-100ms is standard. Even 10ms improvements matter. Latency = model execution time + I/O + network overhead.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Throughput</h4>
+    <p>Requests served per second. A model with 10ms latency can serve 100 requests per second per GPU (assuming optimal batching). Throughput is limited by memory bandwidth, not necessarily compute.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Batching</h4>
+    <p>Instead of processing one request at a time, accumulate multiple requests and process them together. A model might do 10 inferences/sec on single samples but 1000 inferences/sec when processing batches of 100. The tradeoff is latency.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Model Quantization</h4>
+    <p>Reduce model precision (FP32 → INT8 or FP16). Cuts model size by 4x, speeds up inference 2-4x, but slightly reduces accuracy. Often accuracy loss is < 0.5% but cost savings are 70%+.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Cold Start & Warm Start</h4>
+    <p>Cold start: first request pays penalty of loading model into GPU memory (100ms-1s). Warm start: subsequent requests reuse loaded model. Most production systems keep models loaded to avoid cold starts.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Model Versioning</h4>
+    <p>Ability to run multiple versions of a model simultaneously (A/B testing), canary deployments (0.1% traffic on v2, 99.9% on v1), and safe rollbacks. Crucial for updates without downtime.</p>
+</div>
+</section>
+
+<!-- SECTION: Architecture -->
+<section id="architecture" class="ml-section">
+    <h2>Deployment Architecture</h2>
+
+    <p>Production ML systems follow a consistent architecture pattern, evolved through lessons from companies like Google, Meta, and Amazon.</p>
+
+    <h3>The Standard Deployment Pipeline</h3>
+
+    <div style="background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(34, 211, 238, 0.1)); border-left: 4px solid var(--accent-cyan); padding: 2rem; border-radius: 8px; margin: 2rem 0; font-size: 0.95rem; line-height: 1.8;">
+        <strong>1. Model Training & Validation</strong><br>
+        Train model, validate performance, export to standardized format (ONNX, SavedModel, PyTorch checkpoint).
+        <br><br>
+        <strong>2. Optimization & Quantization</strong><br>
+        Apply quantization, pruning, distillation to reduce latency and cost. Create optimized model variants for different hardware.
+        <br><br>
+        <strong>3. Containerization</strong><br>
+        Package model + serving code + dependencies into Docker image. Build for multiple architectures (x86, ARM, etc).
+        <br><br>
+        <strong>4. Local Testing</strong><br>
+        Run container locally, validate serving logic, benchmark latency. Test model loading, error handling, input validation.
+        <br><br>
+        <strong>5. Registry & Registry Management</strong><br>
+        Push image to container registry (Docker Hub, ECR, GCR). Tag with version, model name, hardware requirements.
+        <br><br>
+        <strong>6. Orchestration & Scaling</strong><br>
+        Deploy to Kubernetes. Configure auto-scaling: increase replicas if latency > 100ms or CPU > 80%.
+        <br><br>
+        <strong>7. Monitoring & Observability</strong><br>
+        Monitor latency (p50, p99), throughput, GPU utilization, accuracy drift. Alert on anomalies.
+        <br><br>
+        <strong>8. Continuous Deployment</strong><br>
+        New model versions roll out gradually: canary (1%), then 10%, then 50%, then 100%. Automatic rollback on errors.
+    </div>
+
+    <h3>Architecture Diagram</h3>
+    <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1)); border: 1px solid #d8b4fe; border-radius: 8px; padding: 2rem; text-align: center; margin: 2rem 0;">
+        <p style="font-family: monospace; font-size: 0.9rem; color: var(--text-dim); line-height: 1.6;">
+            [Client] --HTTP--> [Load Balancer] ---> [Kubernetes Cluster]<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+--> [Pod 1: Model + FastAPI]<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+--> [Pod 2: Model + FastAPI]<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+--> [Pod 3: Model + FastAPI]<br>
+            <br>
+            [Monitoring: Prometheus] [Logging: ELK Stack] [Model Registry: MLflow]
+        </p>
+    </div>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components of Production ML Systems</h2>
+
+    <p>A production ML deployment isn't just the model — it's an ecosystem of components working together.</p>
+
+    <h3>Essential Components</h3>
+
+    <div class="info-box">
+    <h4>Model Serving Framework</h4>
+    <p>Software that loads a model and handles HTTP requests. Examples: FastAPI (Python REST APIs), TensorFlow Serving (TF models), vLLM (LLMs), Triton (multi-framework). Each optimizes for different use cases.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Container Runtime</h4>
+    <p>Docker or Podman packages the model, serving code, and dependencies. Enables reproducible deployments and portability across systems.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Orchestration Platform</h4>
+    <p>Kubernetes manages containers at scale: scheduling, auto-scaling, rolling updates, secret management, persistent storage. Most enterprises use Kubernetes.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Model Registry</h4>
+    <p>Central repository for trained models (e.g., MLflow, Hugging Face Hub, Model Zoo). Stores model artifacts, metadata, versioning, and lineage.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Monitoring & Observability</h4>
+    <p>Prometheus scrapes metrics (latency, throughput, GPU util). Grafana visualizes them. ELK Stack or DataDog logs requests/errors. Alerts on anomalies.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Load Balancer</h4>
+    <p>Routes requests across multiple serving instances. Kubernetes automatically provides this (Service resource). External load balancer (AWS ALB) distributes traffic to Kubernetes cluster.</p>
+</div>
+
+    <div class="info-box">
+    <h4>CI/CD Pipeline</h4>
+    <p>GitHub Actions, GitLab CI, or Jenkins automatically build Docker image, run tests, push to registry, deploy to staging, and promote to production.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Feature Store</h4>
+    <p>System for managing input features (standardized, versioned, cached). Reduces training-serving skew by ensuring training and inference use identical features. Examples: Tecton, Feast.</p>
+</div>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation: Building a Production-Ready API</h2>
+
+    <p>Let's build a real, production-grade model serving API using FastAPI. This is how real production systems work.</p>
+
+    <h3>Step 1: FastAPI Endpoint</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — FastAPI Model Serving</div>
+    <div class="code-content">
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+<span class="keyword">import</span> torch
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+<span class="keyword">import</span> time
+<span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager
+
+<span class="comment"># Global model cache</span>
+_model_cache = {}
+
+<span class="decorator">@asynccontextmanager</span>
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">lifespan</span>(app: FastAPI):
+    <span class="comment"># Startup: load model once</span>
+    <span class="function">print</span>(<span class="string">"Loading model..."</span>)
+    _model_cache[<span class="string">'classifier'</span>] = <span class="function">pipeline</span>(
+        <span class="string">"sentiment-analysis"</span>,
+        model=<span class="string">"distilbert-base-uncased-finetuned-sst-2-english"</span>,
+        device=<span class="number">0</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> -<span class="number">1</span>
+    )
+    <span class="function">print</span>(<span class="string">"Model loaded"</span>)
+    <span class="keyword">yield</span>
+    <span class="comment"># Shutdown: cleanup</span>
+    _model_cache.<span class="function">clear</span>()
+
+app = <span class="function">FastAPI</span>(lifespan=lifespan)
+
+<span class="keyword">class</span> <span class="function">PredictionRequest</span>(BaseModel):
+    text: <span class="function">str</span>
+    
+    <span class="keyword">class</span> Config:
+        examples = {<span class="string">"text"</span>: <span class="string">"This product is amazing!"</span>}
+
+<span class="keyword">class</span> <span class="function">PredictionResponse</span>(BaseModel):
+    label: <span class="function">str</span>
+    score: <span class="function">float</span>
+    latency_ms: <span class="function">float</span>
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>, response_model=PredictionResponse)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(request: PredictionRequest):
+    start = time.<span class="function">time</span>()
+    
+    <span class="keyword">try</span>:
+        result = _model_cache[<span class="string">'classifier'</span>](request.text)
+        latency_ms = (time.<span class="function">time</span>() - start) * <span class="number">1000</span>
+        
+        <span class="keyword">return</span> <span class="function">PredictionResponse</span>(
+            label=result[<span class="number">0</span>][<span class="string">'label'</span>],
+            score=<span class="function">round</span>(result[<span class="number">0</span>][<span class="string">'score'</span>], <span class="number">4</span>),
+            latency_ms=<span class="function">round</span>(latency_ms, <span class="number">2</span>)
+        )
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        <span class="keyword">raise</span> <span class="function">HTTPException</span>(status_code=<span class="number">500</span>, detail=<span class="function">str</span>(e))
+
+<span class="decorator">@app.get</span>(<span class="string">"/health"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">health_check</span>():
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"healthy"</span>}
+</div>
+</div>
+
+    <p><strong>Key production details:</strong> Model loads once at startup (expensive), then reused. Each request timed to monitor latency. Input validation via Pydantic. Error handling returns proper HTTP codes. Health check endpoint for load balancers.</p>
+
+    <h3>Step 2: Docker Containerization</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Dockerfile for Model Serving</div>
+    <div class="code-content">
+FROM nvidia/cuda:<span class="number">11.8</span>.<span class="number">0</span>-runtime-ubuntu22.<span class="number">04</span>
+
+WORKDIR /app
+
+<span class="comment"># Install Python and dependencies</span>
+RUN apt-get update && apt-get install -y python3.<span class="number">10</span> python3-pip
+
+<span class="comment"># Copy requirements</span>
+COPY requirements.txt .
+RUN pip install --no-cache-<span class="function">dir</span> -r requirements.txt
+
+<span class="comment"># Copy app code</span>
+COPY app.py .
+
+<span class="comment"># Model will be downloaded at startup or mounted</span>
+ENV TRANSFORMERS_CACHE=/models
+
+<span class="comment"># Expose port</span>
+EXPOSE <span class="number">8000</span>
+
+<span class="comment"># Health check</span>
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=<span class="number">3</span> \
+    CMD python -c <span class="string">"import requests; requests.get('http://localhost:8000/health')"</span>
+
+<span class="comment"># Run</span>
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"app:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>, <span class="string">"--port"</span>, <span class="string">"8000"</span>]
+</div>
+</div>
+
+    <p><strong>Production features:</strong> Uses NVIDIA CUDA base image for GPU support. Caches model directory outside container. Health check for Kubernetes to detect crashed containers.</p>
+
+    <h3>Step 3: Building and Running</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Build and Test</div>
+    <div class="code-content">
+<span class="comment"># Build image</span>
+docker build -t model-server:v1.<span class="number">0</span> .
+
+<span class="comment"># Run locally (test)</span>
+docker run --gpus <span class="function">all</span> -p <span class="number">8000</span>:<span class="number">8000</span> \
+  -e TRANSFORMERS_CACHE=/models \
+  model-server:v1.<span class="number">0</span>
+
+<span class="comment"># Test endpoint</span>
+curl -X POST http://localhost:<span class="number">8000</span>/predict \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"text": "This is amazing!"}'</span>
+
+<span class="comment"># Push to registry</span>
+docker tag model-server:v1.<span class="number">0</span> myregistry.azurecr.io/model-server:v1.<span class="number">0</span>
+docker push myregistry.azurecr.io/model-server:v1.<span class="number">0</span>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Optimization Techniques</h2>
+
+    <p>Once basic serving works, production systems optimize for latency, cost, and reliability. These techniques can yield 10-100x improvements.</p>
+
+    <h3>Model Quantization: INT8 Optimization</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — INT8 Quantization with ONNX</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSequenceClassification, AutoTokenizer
+<span class="keyword">import</span> onnxruntime <span class="keyword">as</span> ort
+
+<span class="comment"># Load original model</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+<span class="comment"># Export to ONNX</span>
+dummy_input = <span class="function">tokenizer</span>(<span class="string">"test"</span>, return_tensors=<span class="string">"pt"</span>)
+torch.onnx.<span class="function">export</span>(
+    model,
+    <span class="function">tuple</span>(dummy_input.<span class="function">values</span>()),
+    <span class="string">"model.onnx"</span>,
+    input_names=[<span class="string">"input_ids"</span>, <span class="string">"attention_mask"</span>],
+    output_names=[<span class="string">"output"</span>],
+    opset_version=<span class="number">14</span>
+)
+
+<span class="comment"># Quantize to INT8 (4x smaller, 2-4x faster)</span>
+<span class="keyword">from</span> onnxruntime.quantization <span class="keyword">import</span> quantize_dynamic, QuantType
+<span class="function">quantize_dynamic</span>(
+    <span class="string">"model.onnx"</span>,
+    <span class="string">"model_quantized.onnx"</span>,
+    weight_type=QuantType.QInt8,
+)
+
+<span class="comment"># Inference with ONNX</span>
+sess = ort.<span class="function">InferenceSession</span>(<span class="string">"model_quantized.onnx"</span>)
+output = sess.<span class="function">run</span>(<span class="keyword">None</span>, {<span class="string">"input_ids"</span>: dummy_input[<span class="string">'input_ids'</span>].<span class="function">numpy</span>()})
+<span class="function">print</span>(<span class="string">f"Output shape: {output[0].shape}"</span>)
+<span class="function">print</span>(<span class="string">f"Accuracy loss: ~0.5% (typical for BERT quantization)"</span>)
+</div>
+</div>
+
+    <h3>vLLM: LLM-Specific Optimization</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — vLLM for High-Throughput LLM Serving</div>
+    <div class="code-content">
+<span class="keyword">from</span> vllm <span class="keyword">import</span> LLM, SamplingParams
+<span class="keyword">import</span> time
+
+<span class="comment"># Load LLM with vLLM (handles batching, paging, etc)</span>
+llm = <span class="function">LLM</span>(
+    model=<span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    tensor_parallel_size=<span class="number">2</span>,  <span class="comment"># Shard across 2 GPUs</span>
+    gpu_memory_utilization=<span class="number">0.9</span>,  <span class="comment"># Use 90% GPU memory</span>
+)
+
+<span class="comment"># vLLM implements continuous batching:</span>
+<span class="comment"># Instead of waiting for all requests in a batch,</span>
+<span class="comment"># processes requests as they arrive, yielding tokens incrementally</span>
+
+sampling_params = <span class="function">SamplingParams</span>(temperature=<span class="number">0.7</span>, top_p=<span class="number">0.95</span>, max_tokens=<span class="number">256</span>)
+
+prompts = [
+    <span class="string">"What is machine learning?"</span>,
+    <span class="string">"Explain quantum computing"</span>,
+    <span class="string">"Write a Python function for..."</span>
+]
+
+<span class="comment"># vLLM batches across GPU memory pages</span>
+<span class="comment"># Typical throughput: 500+ tokens/sec on 1 GPU (vs 10 on naive approach)</span>
+outputs = llm.<span class="function">generate</span>(prompts, sampling_params)
+
+<span class="keyword">for</span> output <span class="keyword">in</span> outputs:
+    <span class="function">print</span>(<span class="string">f"Prompt: {output.prompt}"</span>)
+    <span class="function">print</span>(<span class="string">f"Generated: {output.outputs[0].text}"</span>)
+    <span class="function">print</span>(<span class="string">"---"</span>)
+</div>
+</div>
+
+    <h3>Triton Inference Server: Multi-Model Serving</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Triton Configuration for Multiple Models</div>
+    <div class="code-content">
+<span class="comment"># model_repository/</span>
+<span class="comment"># ├── bert-model/</span>
+<span class="comment"># │   ├── config.pbtxt</span>
+<span class="comment"># │   └── 1/</span>
+<span class="comment"># │       └── model.onnx</span>
+<span class="comment"># ├── gpt2-model/</span>
+<span class="comment"># │   ├── config.pbtxt</span>
+<span class="comment"># │   └── 1/</span>
+<span class="comment"># │       └── model.onnx</span>
+<span class="comment"># └── ensemble-model/</span>
+<span class="comment">#     ├── config.pbtxt</span>
+<span class="comment">#     └── 1/</span>
+<span class="comment">#         └── model.plan</span>
+
+<span class="comment"># bert-model/config.pbtxt:</span>
+name: <span class="string">"bert-model"</span>
+platform: <span class="string">"onnxruntime_onnx"</span>
+max_batch_size: <span class="number">128</span>
+<span class="function">input</span> [
+  {
+    name: <span class="string">"input_ids"</span>
+    data_type: TYPE_INT64
+    shape: [ <span class="number">512</span> ]
+  }
+]
+output [
+  {
+    name: <span class="string">"logits"</span>
+    data_type: TYPE_FP32
+    shape: [ <span class="number">2</span> ]
+  }
+]
+
+<span class="comment"># Run Triton server</span>
+<span class="comment"># docker run --gpus all -p 8000:8000 -p 8001:8001 \</span>
+<span class="comment">#   -v /path/to/model_repository:/models \</span>
+<span class="comment">#   nvcr.io/nvidia/tritonserver:23.04-py3</span>
+
+<span class="comment"># Triton handles:</span>
+<span class="comment"># - Model batching (group requests for better GPU util)</span>
+<span class="comment"># - Model versioning (A/B test, canary deployment)</span>
+<span class="comment"># - Ensemble models (bert + gpt2 in sequence)</span>
+<span class="comment"># - Multiple backends (ONNX, TensorRT, TensorFlow, PyTorch)</span>
+<span class="comment"># - Dynamic batching (wait up to 5ms for more requests)</span>
+</div>
+</div>
+
+    <h3>Performance Improvements Breakdown</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">FP32 Baseline</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: #94a3b8;">100ms latency</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">FP16 (Mixed Precision)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 65%; background: linear-gradient(90deg, #6366f1, #818cf8);">65ms (1.5x faster)</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">INT8 Quantization</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #059669, #10b981);">40ms (2.5x faster)</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">INT8 + vLLM Batching</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 15%; background: linear-gradient(90deg, #0891b2, #22d3ee);">15ms (6.7x faster)</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">TensorRT (NVIDIA)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 8%; background: linear-gradient(90deg, #7c3aed, #a855f7);">8ms (12x faster)</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Latency improvements from various optimization techniques (cumulative)</em></p>
+</section>
+
+<!-- SECTION: Framework Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Comparison of Serving Frameworks</h2>
+
+    <p>Different frameworks optimize for different use cases. Choosing the right one matters for performance and cost.</p>
+
+    <div style="overflow-x: auto; margin: 2rem 0;">
+        <table style="width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+            <thead>
+                <tr style="background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); color: white;">
+                    <th style="padding: 1rem; text-align: left; font-weight: 600;">Framework</th>
+                    <th style="padding: 1rem; text-align: left; font-weight: 600;">Best For</th>
+                    <th style="padding: 1rem; text-align: left; font-weight: 600;">Latency</th>
+                    <th style="padding: 1rem; text-align: left; font-weight: 600;">Throughput</th>
+                    <th style="padding: 1rem; text-align: left; font-weight: 600;">Learning Curve</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>FastAPI</strong></td>
+                    <td style="padding: 1rem;">Quick prototypes, custom logic</td>
+                    <td style="padding: 1rem;">Good (50-200ms)</td>
+                    <td style="padding: 1rem;">Moderate (100-500 req/s)</td>
+                    <td style="padding: 1rem;">Easy</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>TensorFlow Serving</strong></td>
+                    <td style="padding: 1rem;">TensorFlow models, batching</td>
+                    <td style="padding: 1rem;">Excellent (5-50ms)</td>
+                    <td style="padding: 1rem;">High (1000+ req/s)</td>
+                    <td style="padding: 1rem;">Medium</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>vLLM</strong></td>
+                    <td style="padding: 1rem;">LLMs, token generation</td>
+                    <td style="padding: 1rem;">Good (50-500ms/token)</td>
+                    <td style="padding: 1rem;">Excellent (500+ tokens/s)</td>
+                    <td style="padding: 1rem;">Easy</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>Triton</strong></td>
+                    <td style="padding: 1rem;">Multi-model, complex pipelines</td>
+                    <td style="padding: 1rem;">Excellent (5-100ms)</td>
+                    <td style="padding: 1rem;">Excellent (1000+ req/s)</td>
+                    <td style="padding: 1rem;">Hard</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>KServe</strong></td>
+                    <td style="padding: 1rem;">Kubernetes-native, multi-framework</td>
+                    <td style="padding: 1rem;">Good (50-200ms)</td>
+                    <td style="padding: 1rem;">Moderate (100-500 req/s)</td>
+                    <td style="padding: 1rem;">Hard</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 1rem;"><strong>Ray Serve</strong></td>
+                    <td style="padding: 1rem;">Distributed serving, scalability</td>
+                    <td style="padding: 1rem;">Good (50-300ms)</td>
+                    <td style="padding: 1rem;">High (500+ req/s)</td>
+                    <td style="padding: 1rem;">Medium</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Decision Tree</h3>
+    <div style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(168, 85, 247, 0.1)); border: 1px solid #a5f3fc; border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+        <p><strong>Simple REST API, small model?</strong> → FastAPI</p>
+        <p><strong>TensorFlow model, need high throughput?</strong> → TensorFlow Serving</p>
+        <p><strong>LLM with token generation?</strong> → vLLM</p>
+        <p><strong>Multiple models, complex pipelines?</strong> → Triton</p>
+        <p><strong>Kubernetes cluster with scale requirements?</strong> → KServe or Ray Serve</p>
+    </div>
+</section>
+
+<!-- SECTION: Real-World Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Use Cases</h2>
+
+    <p>Model deployment looks different across industries. Here's how leading companies serve ML in production.</p>
+
+    <div class="info-box">
+    <h4>Recommendation Systems (Netflix, Spotify)</h4>
+    <p>Serve embeddings and ranking models to billions of users. Latency budget: 50ms. Solutions: Embedding cache (Redis), approximate nearest neighbors (Faiss), lightweight rankers. Netflix serves personalized recommendations in <30ms using GPU-accelerated approximate search.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Real-Time Translation (Google Translate)</h4>
+    <p>Serve seq2seq models for 100+ language pairs with <500ms latency. Solutions: Model caching, quantization to FP16, batching requests. Google processes 100B+ translations per day using TensorFlow Serving with multiple model instances per GPU.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Autonomous Driving (Tesla, Waymo)</h4>
+    <p>Serve vision models at 30+ fps on embedded hardware (not cloud). Latency budget: 33ms per frame. Solutions: Quantization to INT8, TensorRT optimization, multi-model inference. Waymo runs 20+ models per vehicle with <20ms total latency.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Conversational AI (ChatGPT, Claude)</h4>
+    <p>Serve large language models with token generation. Latency budget: 20-50ms per token. Solutions: vLLM with paged attention, continuous batching, speculative decoding. OpenAI serves ChatGPT at 100+ tokens/sec per GPU using specialized inference optimization.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Fraud Detection (PayPal, Square)</h4>
+    <p>Classify transactions in <100ms with high accuracy. Serve thousands of models (one per merchant). Solutions: Ensemble methods, lightweight models (linear/tree-based), feature caching. PayPal evaluates 1M+ transactions/sec using gradient boosted models.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Image Recognition (AWS, Google Cloud)</h4>
+    <p>Serve vision models via REST API to millions of applications. Latency budget: 100-500ms. Solutions: Batching, model quantization, GPU pooling. AWS SageMaker serves 10B+ predictions monthly using TensorFlow/PyTorch inference containers.</p>
+</div>
+</section>
+
+<!-- SECTION: Enterprise Deployment -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise Deployment at Scale</h2>
+
+    <p>Enterprise deployments differ from startups. They emphasize reliability, compliance, governance, and cost control.</p>
+
+    <h3>Kubernetes Deployment with Auto-Scaling</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Kubernetes YAML for Auto-Scaling Deployment</div>
+    <div class="code-content">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-server
+spec:
+  replicas: <span class="number">3</span>
+  selector:
+    matchLabels:
+      app: model-server
+  template:
+    metadata:
+      labels:
+        app: model-server
+    spec:
+      containers:
+      - name: model-server
+        image: myregistry.azurecr.io/model-server:v1.<span class="number">0</span>
+        ports:
+        - containerPort: <span class="number">8000</span>
+        resources:
+          requests:
+            memory: <span class="string">"4Gi"</span>
+            nvidia.com/gpu: <span class="string">"1"</span>
+          limits:
+            memory: <span class="string">"6Gi"</span>
+            nvidia.com/gpu: <span class="string">"1"</span>
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: <span class="number">8000</span>
+          initialDelaySeconds: <span class="number">30</span>
+          periodSeconds: <span class="number">10</span>
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: <span class="number">8000</span>
+          initialDelaySeconds: <span class="number">20</span>
+          periodSeconds: <span class="number">5</span>
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-server-service
+spec:
+  selector:
+    app: model-server
+  ports:
+  - protocol: TCP
+    port: <span class="number">80</span>
+    targetPort: <span class="number">8000</span>
+  <span class="function">type</span>: LoadBalancer
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: model-server-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: model-server
+  minReplicas: <span class="number">3</span>
+  maxReplicas: <span class="number">10</span>
+  metrics:
+  - <span class="function">type</span>: Resource
+    resource:
+      name: cpu
+      target:
+        <span class="function">type</span>: Utilization
+        averageUtilization: <span class="number">70</span>
+  - <span class="function">type</span>: Resource
+    resource:
+      name: memory
+      target:
+        <span class="function">type</span>: Utilization
+        averageUtilization: <span class="number">80</span>
+</div>
+</div>
+
+    <p><strong>How it works:</strong> Kubernetes monitors CPU and memory. If CPU > 70%, adds a new pod. If requests exceed 3 pods' capacity (e.g., 50,000 → 60,000 req/s), scales to 4 pods. If traffic drops, scales down. Liveness probe restarts crashed pods. Readiness probe removes unhealthy pods from load balancer.</p>
+
+    <h3>Multi-Region Deployment for Global Availability</h3>
+
+    <div style="background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(34, 211, 238, 0.1)); border-left: 4px solid var(--accent-cyan); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <strong>Architecture:</strong><br>
+        <br>
+        • <strong>Global Load Balancer</strong> (AWS Route53, Google Cloud CDN) routes requests to nearest region<br>
+        • <strong>US East</strong>: Kubernetes cluster with 10 GPU nodes<br>
+        • <strong>EU West</strong>: Kubernetes cluster with 5 GPU nodes<br>
+        • <strong>APAC</strong>: Kubernetes cluster with 3 GPU nodes<br>
+        • <strong>Model Registry</strong> (central): Syncs model versions across regions<br>
+        • <strong>Monitoring</strong> (central): Collects metrics from all regions<br>
+        <br>
+        <strong>Latency impact:</strong> Client in Singapore queries EU instead of US? 200ms latency improvement. Cost savings: Serve closer to users, reduce expensive inter-region traffic.
+    </div>
+
+    <h3>Cost Optimization in Production</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Spot GPUs</h4>
+    <p>Use cheaper spot instances for non-critical workloads. On AWS, spot V100 = 30% of on-demand cost. Tradeoff: 2-5 hour interruption risk.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Batching</h4>
+    <p>Accumulate requests, process in batches. Throughput 10x higher (similar latency). Tradeoff: Increased latency for last request in batch.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Model Quantization</h4>
+    <p>INT8/FP16 uses 4-8x less VRAM, enables smaller GPUs (T4 vs V100). Potential 1% accuracy loss, 70% cost reduction.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Multi-tenancy</h4>
+    <p>Run multiple models on single GPU via shared memory. Requires isolation (memory limits), careful scheduling, but reduces idle GPU cost.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes in Model Deployment</h2>
+
+    <p>Learning from others' mistakes can save months of debugging. Here are the most common deployment pitfalls.</p>
+
+    <div class="info-box">
+    <h4>Mistake 1: Not Benchmarking Latency in Advance</h4>
+    <p>Building a model is exciting. Deploying it is urgent. But if latency requirements aren't clear before development, you might finish training a 2-second model that needs to serve in 100ms. Result: 6 months of optimization work. Solution: Define latency/throughput requirements before building the model.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 2: Training-Serving Skew</h4>
+    <p>Model trained on preprocessed data, but serving code uses different preprocessing (different scaling, missing features, etc). Model makes poor predictions in production despite training accuracy of 95%. Solution: Use a feature store that both training and serving pipeline consume from.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 3: Not Testing Error Handling</h4>
+    <p>Assuming models never crash. But what if input is malformed? Model out of memory? GPU fails? Production crashes silently or returns garbage. Solution: Input validation (Pydantic), exception handling, circuit breakers, fallback logic.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 4: Forgetting About Model Versioning</h4>
+    <p>Deploy v2 of a model, traffic drops 30% (due to degradation), but can't rollback because no one documented v1. Solution: Always version models, keep previous versions, test v2 on 1% traffic before full rollout.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 5: Not Monitoring Data Drift</h4>
+    <p>Model trained on 2023 data. In 2024, distribution shifts, accuracy drops to 60%. No one notices for 3 months. Solution: Monitor input distribution (via KL divergence), model predictions, actual labels (if available). Alert on drift.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 6: Deploying Bloated Models</h4>
+    <p>Serving a 13B parameter model that could achieve 95% of the accuracy with 2B parameters (and be 6x faster). Solution: Early in development, test model size vs accuracy tradeoff. Distill if necessary.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 7: Ignoring Cold Start Time</h4>
+    <p>Model takes 3 seconds to load into GPU memory. Every restart (deployments, crashes) has 3 second latency spike. With multiple pods restarting, cascades to 30 second downtime. Solution: Keep models warm, use persistent GPU memory, test startup time.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Mistake 8: Single Point of Failure</h4>
+    <p>Only one instance of the model running. If it crashes, service is down until manual restart. Solution: Always run >= 3 replicas. Use auto-scaling. Have health checks.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Production Best Practices</h2>
+
+    <p>Best practices are lessons learned by companies that got it wrong. Apply them from day one.</p>
+
+    <h3>Development Phase</h3>
+    <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1)); border-left: 4px solid var(--accent-purple); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <p><strong>1. Define deployment requirements early:</strong> Latency (p50, p99), throughput (req/sec), accuracy, uptime SLA. Design model accordingly.</p>
+        <p><strong>2. Build models for inference from start:</strong> Consider model size, quantizability, inference hardware. Avoid architectures that are hard to optimize.</p>
+        <p><strong>3. Test with production-like inputs:</strong> Don't train on clean data, test on messy data. Simulate production traffic patterns.</p>
+        <p><strong>4. Benchmark on target hardware:</strong> If deploying on T4 GPU, benchmark on T4 (not local GPU). Consider batch sizes, precision.</p>
+    </div>
+
+    <h3>Deployment Phase</h3>
+    <div style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(0, 184, 212, 0.1)); border-left: 4px solid var(--accent-cyan); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <p><strong>5. Use containers (<a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>) for all deployments:</strong> Ensures reproducibility, simplifies dependency management, enables <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>.</p>
+        <p><strong>6. Version everything:</strong> Model artifacts, code, Docker images, configurations. Track lineage.</p>
+        <p><strong>7. Implement health checks:</strong> Liveness (is the process alive?), readiness (can it handle traffic?), startup (how long to load model?)</p>
+        <p><strong>8. Gradual rollout (canary deployment):</strong> Don't deploy v2 to 100% traffic at once. Deploy to 1%, then 5%, then 50%, with metrics comparison.</p>
+    </div>
+
+    <h3>Production Phase</h3>
+    <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.1)); border-left: 4px solid var(--accent-green); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <p><strong>9. Monitor everything:</strong> Latency (p50, p99, p999), throughput, error rate, accuracy, resource utilization. Set up alerts.</p>
+        <p><strong>10. Log for debugging:</strong> Log slow requests, errors, unusual inputs. Aggregrate with ELK or similar. But don't log raw predictions (privacy).</p>
+        <p><strong>11. Implement circuit breakers:</strong> If model inference starts timing out, fail fast rather than cascading timeout.</p>
+        <p><strong>12. Have a playbook for incidents:</strong> Model latency spikes, out of memory errors, accuracy degradation. Who to page? What to roll back?</p>
+    </div>
+
+    <h3>Data & Governance</h3>
+    <div style="background: linear-gradient(135deg, rgba(212, 39, 119, 0.1), rgba(244, 114, 182, 0.1)); border-left: 4px solid var(--accent-pink); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <p><strong>13. Monitor data drift:</strong> Track distribution of input features. Accuracy degradation often signals data shift.</p>
+        <p><strong>14. Maintain audit trail:</strong> Log predictions for audit (legal requirement in some domains). Enable root cause analysis later.</p>
+        <p><strong>15. Plan for retraining:</strong> Models degrade. Establish retraining cadence (weekly/monthly/quarterly) and automate it.</p>
+        <p><strong>16. Document models:</strong> What data was it trained on? What performance guarantees? Known failure modes? Deprecation timeline?</p>
+    </div>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights & State-of-the-Art</h2>
+
+    <p>Beyond basics: cutting-edge techniques that leading companies use for competitive advantage.</p>
+
+    <h3>Speculative Decoding for LLMs</h3>
+
+    <p>Generating text token-by-token is slow. Speculative decoding uses a small fast model to generate draft tokens, then a large model verifies them in parallel. Result: Up to 2-3x faster text generation with no accuracy loss.</p>
+
+    <div class="highlight-box">
+    <p><strong>How it works:</strong> Small model generates 5 candidate tokens fast. Large model checks them all in parallel (much cheaper than generating them sequentially). If match, accept them all at once. If mismatch, use large model's choice. Net: 5 tokens generated in time of 1-2 large model calls.</p>
+</div>
+
+    <h3>Prefix Caching for Conversation</h3>
+
+    <p>When chatting, you recompute attention for the same conversation history every turn. Prefix caching stores intermediate activations (KV cache) from previous turns. New query only computes attention on new tokens.</p>
+
+    <div class="highlight-box">
+    <p><strong>Performance gain:</strong> First turn of 1000-token conversation: 5 seconds. Second turn (new 50 tokens): 100ms (50x faster) instead of 5 seconds.</p>
+</div>
+
+    <h3>Model Merging & Ensemble</h3>
+
+    <p>Train multiple models on different data or with different objectives, then merge them. A single merged model can match accuracy of ensemble while being faster.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Simple Model Merging</div>
+    <div class="code-content">
+<span class="comment"># Train specialist models</span>
+model_domain1 = <span class="function">train_model</span>(data_domain1)  <span class="comment"># Finance domain</span>
+model_domain2 = <span class="function">train_model</span>(data_domain2)  <span class="comment"># Medical domain</span>
+
+<span class="comment"># Merge their weights (simple averaging or learned interpolation)</span>
+merged_weights = <span class="number">0.6</span> * model_domain1.weights + <span class="number">0.4</span> * model_domain2.weights
+merged_model = <span class="function">create_model</span>(merged_weights)
+
+<span class="comment"># Result: One model that's good at both domains</span>
+<span class="comment"># No ensemble overhead (no need to run 2 models, just 1)</span>
+<span class="comment"># Faster inference, smaller deployment footprint</span>
+</div>
+</div>
+
+    <h3>Continuous Batching vs Micro-Batching</h3>
+
+    <p><strong>Continuous Batching</strong> (vLLM): Instead of waiting for a full batch before processing, start processing as soon as requests arrive. Each request generates tokens independently. When one finishes, replace with waiting request. GPU rarely sits idle.</p>
+
+    <p><strong>Micro-batching:</strong> Process requests in tiny batches (size 1-4) rapidly. Slightly higher latency than continuous batching but simpler to implement.</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Unbatched (batch_size=1)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: #94a3b8;">Throughput: 100 tokens/sec</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Small Batching (batch_size=8)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #6366f1, #818cf8);">Throughput: 600 tokens/sec</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Continuous Batching</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #0891b2, #22d3ee);">Throughput: 850 tokens/sec</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete Code Examples</h2>
+
+    <p>Real, runnable code for common deployment scenarios.</p>
+
+    <h3>Example 1: End-to-End FastAPI + Docker</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — app.py</div>
+    <div class="code-content">
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException
+<span class="keyword">from</span> fastapi.middleware.cors <span class="keyword">import</span> CORSMiddleware
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+<span class="keyword">import</span> torch
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForSequenceClassification
+<span class="keyword">import</span> logging
+<span class="keyword">import</span> time
+
+logging.<span class="function">basicConfig</span>(level=logging.INFO)
+logger = logging.<span class="function">getLogger</span>(<span class="function">__name__</span>)
+
+app = <span class="function">FastAPI</span>(title=<span class="string">"Sentiment API"</span>, version=<span class="string">"1.0"</span>)
+
+<span class="comment"># CORS for web clients</span>
+app.<span class="function">add_middleware</span>(
+    CORSMiddleware,
+    allow_origins=[<span class="string">"*"</span>],
+    allow_methods=[<span class="string">"*"</span>],
+    allow_headers=[<span class="string">"*"</span>],
+)
+
+model_cache = {}
+
+<span class="decorator">@app.on_event</span>(<span class="string">"startup"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">startup</span>():
+    logger.<span class="function">info</span>(<span class="string">"Loading model..."</span>)
+    tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"distilbert-base-uncased-finetuned-sst-2-english"</span>)
+    model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(<span class="string">"distilbert-base-uncased-finetuned-sst-2-english"</span>)
+    
+    <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>():
+        model.<span class="function">cuda</span>()
+    
+    model.<span class="function">eval</span>()
+    model_cache[<span class="string">'tokenizer'</span>] = tokenizer
+    model_cache[<span class="string">'model'</span>] = model
+    logger.<span class="function">info</span>(<span class="string">"Model loaded successfully"</span>)
+
+<span class="keyword">class</span> <span class="function">TextRequest</span>(BaseModel):
+    text: <span class="function">str</span>
+
+<span class="keyword">class</span> <span class="function">SentimentResponse</span>(BaseModel):
+    text: <span class="function">str</span>
+    sentiment: <span class="function">str</span>
+    confidence: <span class="function">float</span>
+    latency_ms: <span class="function">float</span>
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>, response_model=SentimentResponse)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(request: TextRequest):
+    <span class="keyword">if</span> <span class="keyword">not</span> request.text <span class="keyword">or</span> <span class="function">len</span>(request.text.<span class="function">strip</span>()) == <span class="number">0</span>:
+        <span class="keyword">raise</span> <span class="function">HTTPException</span>(status_code=<span class="number">400</span>, detail=<span class="string">"Text cannot be empty"</span>)
+    
+    start = time.<span class="function">time</span>()
+    tokenizer = model_cache[<span class="string">'tokenizer'</span>]
+    model = model_cache[<span class="string">'model'</span>]
+    
+    <span class="keyword">try</span>:
+        inputs = <span class="function">tokenizer</span>(request.text, return_tensors=<span class="string">"pt"</span>, truncation=<span class="keyword">True</span>, max_length=<span class="number">512</span>)
+        <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>():
+            inputs = {k: v.<span class="function">cuda</span>() <span class="keyword">for</span> k, v <span class="keyword">in</span> inputs.<span class="function">items</span>()}
+        
+        <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+            outputs = <span class="function">model</span>(**inputs)
+        
+        logits = outputs.logits
+        probs = torch.<span class="function">softmax</span>(logits, dim=-<span class="number">1</span>)
+        pred_class = torch.<span class="function">argmax</span>(probs, dim=-<span class="number">1</span>).<span class="function">item</span>()
+        confidence = probs[<span class="number">0</span>][pred_class].<span class="function">item</span>()
+        
+        sentiment = <span class="string">"POSITIVE"</span> <span class="keyword">if</span> pred_class == <span class="number">1</span> <span class="keyword">else</span> <span class="string">"NEGATIVE"</span>
+        latency_ms = (time.<span class="function">time</span>() - start) * <span class="number">1000</span>
+        
+        <span class="keyword">return</span> <span class="function">SentimentResponse</span>(
+            text=request.text[:<span class="number">100</span>],
+            sentiment=sentiment,
+            confidence=<span class="function">round</span>(confidence, <span class="number">4</span>),
+            latency_ms=<span class="function">round</span>(latency_ms, <span class="number">2</span>)
+        )
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        logger.<span class="function">error</span>(<span class="string">f"Prediction error: {str(e)}"</span>)
+        <span class="keyword">raise</span> <span class="function">HTTPException</span>(status_code=<span class="number">500</span>, detail=<span class="function">str</span>(e))
+
+<span class="decorator">@app.get</span>(<span class="string">"/health"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">health</span>():
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"healthy"</span>, <span class="string">"model"</span>: <span class="string">"loaded"</span>}
+
+<span class="decorator">@app.get</span>(<span class="string">"/metrics"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">metrics</span>():
+    <span class="keyword">return</span> {<span class="string">"gpu_available"</span>: torch.cuda.<span class="function">is_available</span>()}
+</div>
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — Dockerfile</div>
+    <div class="code-content">
+FROM nvidia/cuda:<span class="number">11.8</span>.<span class="number">0</span>-runtime-ubuntu22.<span class="number">04</span>
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y python3.<span class="number">10</span> python3-pip && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-<span class="function">dir</span> -r requirements.txt
+
+COPY app.py .
+
+ENV TRANSFORMERS_CACHE=/models
+ENV PYTHONUNBUFFERED=<span class="number">1</span>
+
+EXPOSE <span class="number">8000</span>
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=<span class="number">3</span> \
+    CMD python3 -c <span class="string">"import requests; requests.get('http://localhost:8000/health').raise_for_status()"</span>
+
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"app:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>, <span class="string">"--port"</span>, <span class="string">"8000"</span>]
+</div>
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — requirements.txt</div>
+    <div class="code-content">
+fastapi==<span class="number">0.104</span>.<span class="number">1</span>
+uvicorn[standard]==<span class="number">0.24</span>.<span class="number">0</span>
+torch==<span class="number">2.0</span>.<span class="number">1</span>
+transformers==<span class="number">4.34</span>.<span class="number">0</span>
+pydantic==<span class="number">2.4</span>.<span class="number">2</span>
+python-multipart==<span class="number">0.0</span>.<span class="number">6</span>
+</div>
+</div>
+
+    <h3>Example 2: ONNX Inference Optimization</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — onnx_inference.py</div>
+    <div class="code-content">
+<span class="keyword">import</span> onnxruntime <span class="keyword">as</span> ort
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+<span class="comment"># Load ONNX model (pre-quantized to INT8)</span>
+sess_options = ort.<span class="function">SessionOptions</span>()
+sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+sess_options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
+
+session = ort.<span class="function">InferenceSession</span>(
+    <span class="string">"model_quantized.onnx"</span>,
+    sess_options=sess_options,
+    providers=[<span class="string">'CUDAExecutionProvider'</span>, <span class="string">'CPUExecutionProvider'</span>]
+)
+
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"distilbert-base-uncased"</span>)
+
+<span class="keyword">def</span> <span class="function">predict_onnx</span>(texts, batch_size=<span class="number">32</span>):
+    all_logits = []
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        
+        <span class="comment"># Tokenize</span>
+        inputs = <span class="function">tokenizer</span>(
+            batch,
+            padding=<span class="string">'max_length'</span>,
+            truncation=<span class="keyword">True</span>,
+            max_length=<span class="number">128</span>,
+            return_tensors=<span class="string">'np'</span>
+        )
+        
+        <span class="comment"># ONNX inference</span>
+        input_ids = inputs[<span class="string">'input_ids'</span>].<span class="function">astype</span>(np.int64)
+        attention_mask = inputs[<span class="string">'attention_mask'</span>].<span class="function">astype</span>(np.int64)
+        token_type_ids = inputs[<span class="string">'token_type_ids'</span>].<span class="function">astype</span>(np.int64)
+        
+        output_names = session.<span class="function">get_outputs</span>()
+        output_names = [o.name <span class="keyword">for</span> o <span class="keyword">in</span> output_names]
+        
+        logits = session.<span class="function">run</span>(
+            output_names,
+            {
+                <span class="string">'input_ids'</span>: input_ids,
+                <span class="string">'attention_mask'</span>: attention_mask,
+                <span class="string">'token_type_ids'</span>: token_type_ids,
+            }
+        )
+        
+        all_logits.<span class="function">append</span>(logits[<span class="number">0</span>])
+    
+    <span class="keyword">return</span> np.<span class="function">vstack</span>(all_logits)
+
+<span class="comment"># Test</span>
+texts = [<span class="string">"This is great!"</span>, <span class="string">"This is terrible."</span>] * <span class="number">100</span>
+predictions = <span class="function">predict_onnx</span>(texts, batch_size=<span class="number">64</span>)
+<span class="function">print</span>(<span class="string">f"Predictions shape: {predictions.shape}"</span>)
+<span class="function">print</span>(<span class="string">f"ONNX INT8 model: 4x smaller, 2-3x faster, &lt;1% accuracy loss"</span>)
+</div>
+</div>
+
+    <h3>Example 3: vLLM Serving</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — llm_serve.py</div>
+    <div class="code-content">
+<span class="keyword">from</span> vllm <span class="keyword">import</span> LLM, SamplingParams
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+
+app = <span class="function">FastAPI</span>()
+
+<span class="comment"># Load LLM with vLLM's continuous batching</span>
+llm = <span class="function">LLM</span>(
+    model=<span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    tensor_parallel_size=<span class="number">1</span>,
+    gpu_memory_utilization=<span class="number">0.9</span>,
+    max_model_len=<span class="number">2048</span>,
+)
+
+<span class="keyword">class</span> <span class="function">GenerateRequest</span>(BaseModel):
+    prompt: <span class="function">str</span>
+    max_tokens: <span class="function">int</span> = <span class="number">256</span>
+
+<span class="keyword">class</span> <span class="function">GenerateResponse</span>(BaseModel):
+    prompt: <span class="function">str</span>
+    generated_text: <span class="function">str</span>
+
+<span class="decorator">@app.post</span>(<span class="string">"/generate"</span>, response_model=GenerateResponse)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">generate</span>(request: GenerateRequest):
+    sampling_params = <span class="function">SamplingParams</span>(
+        temperature=<span class="number">0.7</span>,
+        top_p=<span class="number">0.95</span>,
+        max_tokens=request.max_tokens
+    )
+    
+    <span class="comment"># vLLM handles continuous batching internally</span>
+    <span class="comment"># Multiple concurrent requests are batched efficiently</span>
+    outputs = llm.<span class="function">generate</span>([request.prompt], sampling_params)
+    
+    <span class="keyword">return</span> <span class="function">GenerateResponse</span>(
+        prompt=request.prompt,
+        generated_text=outputs[<span class="number">0</span>].outputs[<span class="number">0</span>].text
+    )
+
+<span class="comment"># Run: uvicorn llm_serve:app --reload</span>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <p>Apply what you've learned with practical exercises.</p>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Build Your First FastAPI Endpoint</h4>
+    <p>Create a simple FastAPI app that loads a pretrained HuggingFace model and serves predictions via /predict endpoint. Test with curl.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+
+app = <span class="function">FastAPI</span>()
+
+<span class="keyword">class</span> <span class="function">TextInput</span>(BaseModel):
+    text: <span class="function">str</span>
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(<span class="function">input</span>: TextInput):
+    <span class="comment"># Load model and return predictions</span>
+    <span class="keyword">return</span> {<span class="string">"prediction"</span>: <span class="string">"TODO"</span>}
+</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Containerize the API</h4>
+    <p>Write a Dockerfile for your FastAPI app. Build the image, test it with `docker run`, and push to a registry.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+FROM python:<span class="number">3.10</span>
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY app.py .
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"app:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>]
+</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Quantize and Benchmark</h4>
+    <p>Load a model in FP32, quantize to INT8 using ONNX, benchmark latency of both. Calculate speedup and accuracy change.</p>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Deploy to Kubernetes</h4>
+    <p>Write a Kubernetes deployment manifest for your containerized model server. Apply it to a cluster and test with `kubectl port-forward`.</p>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+
+    <p>Common questions asked in ML engineering interviews about deployment.</p>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">1. How would you reduce latency of a model serving API from 500ms to 50ms? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Multi-step optimization:
+    <br><br>
+    1. <strong>Profiling:</strong> Determine bottleneck. Is it model inference, I/O, preprocessing?
+    <br>
+    2. <strong>Model optimization:</strong> Quantization (FP32→INT8, 4x speedup). Distillation to smaller model. Pruning. Knowledge distillation.
+    <br>
+    3. <strong>Batching:</strong> Process requests in batches. 10x throughput (slight latency increase for last request).
+    <br>
+    4. <strong>Caching:</strong> Cache embeddings, feature preprocessing, model outputs if applicable.
+    <br>
+    5. <strong>Framework choice:</strong> vLLM for LLMs, Triton for complex pipelines. TensorFlow Serving for TF models.
+    <br>
+    6. <strong>Hardware:</strong> Use GPU. Faster GPU (V100 vs T4, 5x speedup). Multiple GPUs for ensemble.
+    <br>
+    7. <strong>Serving optimizations:</strong> Remove unnecessary preprocessing, minimize data copying, parallel model forward pass.
+    <br><br>
+    <strong>Typical result:</strong> 50-100x improvements combining several techniques.
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2. How do you handle model versioning in production? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Multi-strategy approach:
+    <br><br>
+    <strong>Version Storage:</strong>
+    <br>
+    • Store model artifacts in model registry (MLflow, Hugging Face Hub) with version tags
+    <br>
+    • Include metadata: training date, accuracy, model hyperparameters, dependencies
+    <br><br>
+    <strong>Deployment Strategy:</strong>
+    <br>
+    • Never overwrite old model versions; always create new versions
+    <br>
+    • Test new version on staging environment first
+    <br>
+    • Canary deployment: Route 1% traffic to v2, monitor metrics, scale to 5%, 10%, 50%, 100%
+    <br>
+    • Keep previous versions readily available for rollback
+    <br><br>
+    <strong>Serving Strategy:</strong>
+    <br>
+    • Use model serving framework that supports multiple versions (Triton, TensorFlow Serving)
+    <br>
+    • Implement A/B testing: Split traffic between v1 and v2, compare accuracy/latency
+    <br>
+    • Automatic rollback if error rate increases >1% or latency >10%
+    <br><br>
+    <strong>Example:</strong> Deploy v1.5 to 1% traffic for 24 hours. If metrics are better, scale to 100%. If worse, automatic rollback to v1.4.
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">3. What's the difference between throughput and latency optimization? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Different objectives, different approaches:
+    <br><br>
+    <strong>Latency Optimization (p99 < 100ms):</strong>
+    <br>
+    • Minimize time per single request
+    <br>
+    • Reduce model computation (quantization, pruning, smaller model)
+    <br>
+    • Reduce I/O (pre-load model, local inference)
+    <br>
+    • Trade throughput for latency (don't batch, or batch=1)
+    <br>
+    • Use fastest GPU, CPU processor
+    <br><br>
+    <strong>Throughput Optimization (max req/sec):</strong>
+    <br>
+    • Maximize requests per second
+    <br>
+    • Batch requests aggressively (batch_size=128), slight latency increase
+    <br>
+    • Parallel processing (multi-GPU, multi-model)
+    <br>
+    • Can tolerate higher latency per request if total throughput increases
+    <br><br>
+    <strong>Example:</strong> Recommendation system needs latency. Spam detection can batch (can tolerate 100ms latency for throughput).
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">4. How would you set up monitoring for a production model? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Multi-layer monitoring strategy:
+    <br><br>
+    <strong>Serving Metrics (Real-time):</strong>
+    <br>
+    • Latency: p50, p99, p999 (not just mean)
+    <br>
+    • Throughput: requests per second
+    <br>
+    • Error rate: % of requests failing
+    <br>
+    • Resource utilization: GPU memory, CPU, bandwidth
+    <br><br>
+    <strong>Model Metrics (Batch):</strong>
+    <br>
+    • Accuracy: True positive rate, false positive rate on holdout test set
+    <br>
+    • Data drift: Distribution of input features vs training distribution (KL divergence)
+    <br>
+    • Prediction distribution: Are outputs changing unexpectedly?
+    <br><br>
+    <strong>Infrastructure Metrics:</strong>
+    <br>
+    • Pod health: % replicas up, deployment success rate
+    <br>
+    • Kubernetes health: Node availability, persistent storage
+    <br><br>
+    <strong>Tools:</strong>
+    <br>
+    • Prometheus for metrics collection
+    <br>
+    • Grafana for dashboards
+    <br>
+    • ELK Stack for logs
+    <br>
+    • Weights & Biases or similar for model-specific monitoring
+    <br><br>
+    <strong>Alerting:</strong>
+    <br>
+    • Alert if p99 latency > 200ms
+    <br>
+    • Alert if error rate > 1%
+    <br>
+    • Alert if data drift detected
+    <br>
+    • Alert if accuracy drops > 2%
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">5. How do you handle the cold start problem? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Multi-strategy approach:
+    <br><br>
+    <strong>Problem:</strong> First request to a container incurs 1-5 second latency penalty for loading model into GPU memory. In auto-scaled systems with frequent deployment, cold starts are common and visible to users.
+    <br><br>
+    <strong>Solutions:</strong>
+    <br><br>
+    1. <strong>Warm Up on Startup:</strong>
+    <br>
+    &nbsp;&nbsp; • Send dummy requests in container startup script
+    <br>
+    &nbsp;&nbsp; • Load model and run inference before marking as ready
+    <br>
+    &nbsp;&nbsp; • Kubernetes readiness probe won't pass until warm
+    <br><br>
+    2. <strong>Model Preloading:</strong>
+    <br>
+    &nbsp;&nbsp; • Use Init Container in Kubernetes to load model from shared storage
+    <br>
+    &nbsp;&nbsp; • Pin model weights in GPU memory (don't evict)
+    <br><br>
+    3. <strong>Prevent Scale Down:</strong>
+    <br>
+    &nbsp;&nbsp; • Minimum replicas > 0 (keep at least 1 warm instance always running)
+    <br>
+    &nbsp;&nbsp; • Don't scale to zero, even during low traffic
+    <br><br>
+    4. <strong>Fast Startup:</strong>
+    <br>
+    &nbsp;&nbsp; • Use smaller models for initialization (distilled version)
+    <br>
+    &nbsp;&nbsp; • Cache compiled CUDA kernels
+    <br><br>
+    <strong>Tradeoff:</strong> Idle cost vs cold start latency. Usually worth keeping warm replica running.
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">6. What's the difference between batch inference and online serving? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Different paradigms for different use cases:
+    <br><br>
+    <strong>Batch Inference:</strong>
+    <br>
+    • Process large dataset (1M+ samples) at once
+    <br>
+    • Latency not critical (can wait hours)
+    <br>
+    • Throughput critical (maximize GPU utilization)
+    <br>
+    • Example: Daily recommendation computation, overnight fraud scoring
+    <br>
+    • Implementation: Spark, Kubernetes batch jobs, SageMaker Batch Transform
+    <br><br>
+    <strong>Online Serving:</strong>
+    <br>
+    • Process single request in response to API call
+    <br>
+    • Latency critical (must respond in 100ms)
+    <br>
+    • Throughput secondary (though important at scale)
+    <br>
+    • Example: Real-time search ranking, recommendation ranking
+    <br>
+    • Implementation: FastAPI, Triton, vLLM
+    <br><br>
+    <strong>Mixed Approach (Lambdas Architecture):</strong>
+    <br>
+    • Use batch inference for complex, heavy models overnight
+    <br>
+    • Cache results (e.g., Redis)
+    <br>
+    • Online serving looks up cached results
+    <br>
+    • Combine batch + online for best of both worlds
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">7. How do you ensure feature consistency between training and serving? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Feature stores and standardized pipelines:
+    <br><br>
+    <strong>The Problem (Training-Serving Skew):</strong>
+    <br>
+    • Training pipeline: Complex feature engineering in Spark
+    <br>
+    • Serving pipeline: Different code (maybe different language), slightly different logic
+    <br>
+    • Result: Model sees different features at train time vs serve time
+    <br>
+    • Impact: Accuracy drops from 95% → 80% in production
+    <br><br>
+    <strong>Solution 1: Feature Store</strong>
+    <br>
+    • Centralized system for feature definitions and computation
+    <br>
+    • Both training and serving pipelines consume from feature store
+    <br>
+    • Ensures identical features
+    <br>
+    • Examples: Tecton, Feast, Vertex AI Feature Store
+    <br><br>
+    <strong>Solution 2: Unified Code</strong>
+    <br>
+    • Write feature engineering in language-agnostic format (e.g., SQL)
+    <br>
+    • Compile to both training and serving
+    <br>
+    • Use same preprocessing for training and serving
+    <br><br>
+    <strong>Solution 3: Versioned Features</strong>
+    <br>
+    • Version feature engineering code
+    <br>
+    • When training model, record feature version used
+    <br>
+    • At serving time, use same feature version
+    <br><br>
+    <strong>Solution 4: Testing</strong>
+    <br>
+    • Compare features computed in training vs serving on same data
+    <br>
+    • Alert if differences > threshold
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">8. Design a deployment system for serving 100 different models with varying latency requirements <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <strong>Answer:</strong> Complex multi-model orchestration:
+    <br><br>
+    <strong>Requirements Analysis:</strong>
+    <br>
+    • 100 models, different sizes (1MB - 50GB)
+    <br>
+    • Different latency needs (some need <50ms, some tolerate 1s)
+    <br>
+    • Shared GPU resources
+    <br>
+    • Cost optimization needed
+    <br><br>
+    <strong>Architecture:</strong>
+    <br><br>
+    1. <strong>Model Registry:</strong>
+    <br>
+    &nbsp;&nbsp; • MLflow: Store all 100 models with metadata (size, latency profile, accuracy)
+    <br>
+    &nbsp;&nbsp; • Tag each model with SLA requirements
+    <br><br>
+    2. <strong>Categorization by Latency:</strong>
+    <br>
+    &nbsp;&nbsp; • <50ms: Fast models (25 models, 2GB each) → Triton on expensive GPUs (V100)
+    <br>
+    &nbsp;&nbsp; • 50-200ms: Medium models (50 models) → vLLM or TF Serving on T4/A100
+    <br>
+    &nbsp;&nbsp; • >200ms: Slow models (25 models) → Batch inference, Kubernetes jobs
+    <br><br>
+    3. <strong>Serving Strategy:</strong>
+    <br>
+    &nbsp;&nbsp; • API Gateway: Routes requests to appropriate serving infrastructure
+    <br>
+    &nbsp;&nbsp; • Model Router: Determines which serving engine for each model
+    <br>
+    &nbsp;&nbsp; • Load Balancer: Distributes to instances
+    <br><br>
+    4. <strong>GPU Sharing:</strong>
+    <br>
+    &nbsp;&nbsp; • Triton Ensemble: Run multiple small models on 1 GPU
+    <br>
+    &nbsp;&nbsp; • Memory isolation: Limit GPU memory per model
+    <br>
+    &nbsp;&nbsp; • Context switching: Switch between models based on traffic
+    <br><br>
+    5. <strong>Cost Optimization:</strong>
+    <br>
+    &nbsp;&nbsp; • Spot instances for batch inference (25% cost)
+    <br>
+    &nbsp;&nbsp; • Quantization for all models (reduce GPU requirements)
+    <br>
+    &nbsp;&nbsp; • Idle model unloading (free up GPU after N minutes)
+    <br><br>
+    6. <strong>Monitoring:</strong>
+    <br>
+    &nbsp;&nbsp; • Per-model metrics dashboard
+    <br>
+    &nbsp;&nbsp; • Alert if any model violates SLA
+    <br>
+    &nbsp;&nbsp; • Track GPU utilization per model
+    </div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Q1: Should I always use quantization? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Quantization (FP32→INT8) typically reduces latency 2-4x with <1% accuracy loss. Always try it. The only exception: If your model is already quantized or if the accuracy loss exceeds your tolerance. For most production systems, quantization is free performance.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q2: How do I choose between FastAPI, TensorFlow Serving, and Triton? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">FastAPI: Simple REST APIs, single models, quick prototyping. TensorFlow Serving: TensorFlow models needing batching and versioning. Triton: Multiple models, complex pipelines, need all the features. Choose the simplest tool that solves your problem.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q3: Can I run multiple models on one GPU? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, but with caveats. Triton Ensemble can run multiple small models on one GPU using careful memory management. Tradeoff: Scheduling overhead, potential latency interference if models run simultaneously. Works best for small models or time-shared scheduling.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q4: How often should I retrain models? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Depends on data drift. Monitor input distribution: if drift detected, retrain. Typical cadence: daily for rapidly changing domains (news), weekly for stable domains (fraud detection), monthly for slowly-changing (recommendation). Automate retraining pipeline.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q5: What's the cost difference between batch inference and online serving? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Batch inference: $0.1/1000 predictions (efficient GPU usage). Online serving: $1-10/1000 predictions (GPU idle time, redundancy for availability). Use batch for non-time-critical tasks. Online for real-time requirements.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q6: How do I handle model inference timeouts? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Set a request timeout (e.g., 5 seconds). If inference takes longer, return an error or fallback result. Implement circuit breaker: if >10% requests timeout, stop sending traffic and alert on-call. Consider increasing timeout or optimizing model.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q7: Should I version my code or just my models? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Version both! Model without code context is useless (what preprocessing was used?). Use git for code, model registry for models. Each production model references specific code version.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q8: Can I deploy on CPUs instead of GPUs? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, but 5-50x slower. For small models, CPUs sufficient. For real-time requirements, GPUs essential. Hybrid approach: Use CPUs for batch, GPUs for online serving.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q9: How do I debug model serving issues in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Check logs (ELK), monitor metrics (Prometheus/Grafana), profile model latency (time each component), test with sample data, compare to staging environment. Never modify code in production for debugging; create test deployment.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q10: How do I handle privacy compliance (GDPR, etc) in deployments? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Don't log raw predictions (models might leak PII). Log only: request ID, feature version, inference time, error. Store audit trail separately. Implement data retention: delete logs after N days. Test with legal team.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary & Key Takeaways</h2>
+
+    <p>Model deployment is both art and science. Here are the essential principles:</p>
+
+    <h3>Core Principles</h3>
+
+    <div style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(168, 85, 247, 0.1)); border: 1px solid #a5f3fc; border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+        <p><strong>1. Latency Matters:</strong> 100ms might not matter for batch inference, but it's critical for real-time systems. Measure it, optimize it, monitor it.</p>
+        <p><strong>2. Reliability > Accuracy:</strong> A model that crashes is worthless. Invest in monitoring, alerts, and failover mechanisms before optimizing model accuracy.</p>
+        <p><strong>3. Cost Discipline:</strong> GPU costs scale with traffic. Quantization, batching, and optimization save millions. Build cost optimization into model development.</p>
+        <p><strong>4. Automation:</strong> Manual deployments are error-prone and slow. Invest in CI/CD pipelines. Models should deploy with same rigor as code.</p>
+        <p><strong>5. Observability:</strong> You can't optimize what you don't measure. Instrument everything: latency, accuracy, resource usage, errors.</p>
+    </div>
+
+    <h3>The Deployment Checklist</h3>
+
+    <div style="background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.1)); border-left: 4px solid var(--accent-green); padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+        <p>Before deploying to production, verify:</p>
+        <p>☑ Latency/throughput requirements defined and met</p>
+        <p>☑ Model quantized (INT8 or FP16) for production</p>
+        <p>☑ Containerized (<a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>) with health checks</p>
+        <p>☑ Tested locally and in staging</p>
+        <p>☑ Input validation and error handling implemented</p>
+        <p>☑ Monitoring and alerting configured</p>
+        <p>☑ Model versioning strategy in place</p>
+        <p>☑ Rollback procedure documented</p>
+        <p>☑ Canary deployment plan created</p>
+        <p>☑ On-call runbook written</p>
+    </div>
+
+    <h3>Next Steps</h3>
+
+    <p>You now understand model deployment. To master it:</p>
+    <ol>
+        <li><strong>Build:</strong> Deploy a simple model using <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a> + Docker. Get comfortable with basics.</li>
+        <li><strong>Optimize:</strong> Quantize it, benchmark latency improvements, measure cost savings.</li>
+        <li><strong>Scale:</strong> Deploy to <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>, implement auto-scaling, monitor in production.</li>
+        <li><strong>Advanced:</strong> Explore <a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a>, Triton, multi-model serving, feature stores.</li>
+        <li><strong>Production:</strong> Lead a real model deployment at your company. Learn from mistakes.</li>
+    </ol>
+
+    <div class="highlight-box">
+    <p><strong>Remember:</strong> The best model is the one serving users in production. Deployment isn't the final step — it's the beginning of the ML system's life. Invest accordingly.</p>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Learning</h2>
+
+    <h3>Official Frameworks & Documentation</h3>
+    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong><a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a>:</strong> <code>https://fastapi.tiangolo.com</code> — Modern Python web framework</li>
+        <li><strong><a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a>:</strong> <code>https://docs.vllm.ai</code> — LLM serving with continuous batching</li>
+        <li><strong><a href="https://www.tensorflow.org/tfx/guide/serving" target="_blank" rel="noopener">TensorFlow Serving</a>:</strong> <code>https://www.tensorflow.org/tfx/guide/serving</code> — Production TF model serving</li>
+        <li><strong><a href="https://developer.nvidia.com/triton-inference-server" target="_blank" rel="noopener">Triton Inference Server</a>:</strong> <code>https://docs.nvidia.com/triton</code> — Multi-model multi-framework serving</li>
+        <li><strong><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>:</strong> <code>https://kubernetes.io/docs</code> — Container orchestration</li>
+        <li><strong><a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>:</strong> <code>https://docs.docker.com</code> — Containerization platform</li>
+        <li><strong><a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>:</strong> <code>https://mlflow.org</code> — Model registry and experiment tracking</li>
+    </ul>
+
+    <h3>Recommended Books & Papers</h3>
+    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong>"<a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" target="_blank" rel="noopener">Designing Machine Learning Systems</a>"</strong> by <a href="https://huyenchip.com/" target="_blank" rel="noopener">Chip Huyen</a> — Comprehensive guide to ML systems including deployment</li>
+        <li><strong>"<a href="https://www.oreilly.com/library/view/production-ready-microservices/9781491965962/" target="_blank" rel="noopener">Production-Ready Microservices</a>"</strong> by Susan Fowler — How to build reliable production systems</li>
+        <li><strong>"Efficient Inference for Large Language Models"</strong> — Recent papers on serving LLMs efficiently</li>
+        <li><strong><a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a> Paper:</strong> "<a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener">vLLM: Easy, Fast, and Cheap LLM Serving</a>" — Explains continuous batching</li>
+    </ul>
+
+    <h3>Courses & Tutorials</h3>
+    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong><a href="https://fullstackdeeplearning.com/llm-bootcamp/" target="_blank" rel="noopener">Full Stack LLM Bootcamp</a></strong> (UC Berkeley) — Covers deployment of LLMs</li>
+        <li><strong><a href="https://stanford-cs329s.github.io/" target="_blank" rel="noopener">Stanford CS329S</a></strong> — ML systems design course</li>
+        <li><strong><a href="https://huggingface.co/learn/nlp-course/" target="_blank" rel="noopener">Hugging Face Course</a>:</strong> <code>huggingface.co/course</code> — NLP and model deployment</li>
+        <li><strong><a href="https://www.deeplearning.ai/" target="_blank" rel="noopener">DeepLearning.AI</a>:</strong> Short courses on MLOps, LLMOps</li>
+    </ul>
+
+    <h3>Tools & Platforms</h3>
+    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong>Model Registries:</strong> <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>, <a href="https://huggingface.co/models" target="_blank" rel="noopener">Hugging Face Hub</a>, NVIDIA NGC</li>
+        <li><strong>Serving Frameworks:</strong> <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a>, <a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a>, Triton, <a href="https://www.tensorflow.org/tfx/guide/serving" target="_blank" rel="noopener">TensorFlow Serving</a>, <a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a></li>
+        <li><strong>Orchestration:</strong> <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>, <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> Swarm, <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> Compose</li>
+        <li><strong>Monitoring:</strong> <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a>, <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a>, <a href="https://www.datadoghq.com/" target="_blank" rel="noopener">DataDog</a>, <a href="https://newrelic.com/" target="_blank" rel="noopener">New Relic</a></li>
+        <li><strong>Feature Stores:</strong> <a href="https://www.tecton.ai/" target="_blank" rel="noopener">Tecton</a>, <a href="https://feast.dev/" target="_blank" rel="noopener">Feast</a>, <a href="https://www.databricks.com/" target="_blank" rel="noopener">Databricks</a> Feature Store</li>
+        <li><strong>Optimization:</strong> <a href="https://onnx.ai/" target="_blank" rel="noopener">ONNX</a>, <a href="https://developer.nvidia.com/tensorrt" target="_blank" rel="noopener">TensorRT</a>, <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a>'s torch.compile</li>
+    </ul>
+
+    <h3>Community & Blogs</h3>
+    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong><a href="https://huyenchip.com/" target="_blank" rel="noopener">Chip Huyen</a>'s Blog:</strong> <code>huyenchip.com</code> — ML systems and deployment insights</li>
+        <li><strong>vLLM Team Blogs:</strong> Latest LLM serving techniques</li>
+        <li><strong>NVIDIA Developer Blog:</strong> GPU optimization and TensorRT</li>
+        <li><strong>Kubernetes Community:</strong> <code>kubernetes.io/community</code></li>
+        <li><strong><a href="https://www.fast.ai/" target="_blank" rel="noopener">Fast.ai</a> Forums:</strong> Active community discussion on deployment</li>
+    </ul>
+</section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Sidebar Navigation Active State
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const isActive = this.classList.contains('active');
+                document.querySelectorAll('.faq-question').forEach(fq => { fq.classList.remove('active'); fq.nextElementSibling.classList.remove('active'); });
+                if (!isActive) { this.classList.add('active'); answer.classList.add('active'); }
+            });
+        });
+
+        // Collapsible Interview Sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll spy for sidebar
+        const sections = document.querySelectorAll('.ml-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

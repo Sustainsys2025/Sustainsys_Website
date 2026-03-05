@@ -1,0 +1,2906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrieval-Augmented Generation (RAG) - SustainSys AI Academy</title>
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+            --accent-gold: #f59e0b;
+            --accent-orange: #f97316;
+            
+            --text: #1f2937;
+            --text-dim: #6b7280;
+            --surface: #ffffff;
+            --secondary: #f3f4f6;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background: #f9fafb;
+            color: var(--text);
+        }
+
+        body {
+            line-height: 1.6;
+        }
+
+        <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <main class="ml-page-container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Retrieval-Augmented Generation (RAG)</h1>
+                <p class="page-description">Master Retrieval-Augmented Generation (RAG) with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <aside class="ml-sidebar">
+            <h3>Sections</h3>
+            <ul><li><a href="#intro">Introduction</a></li>
+<li><a href="#why-matters">Why It Matters</a></li>
+<li><a href="#history">Historical Evolution</a></li>
+<li><a href="#core-concepts">Core Concepts</a></li>
+<li><a href="#architecture">Architecture & Pipeline</a></li>
+<li><a href="#components">Key Components</a></li>
+<li><a href="#implementation">Implementation Guide</a></li>
+<li><a href="#advanced">Advanced Techniques</a></li>
+<li><a href="#comparison">RAG Comparison</a></li>
+<li><a href="#use-cases">Real-World Use Cases</a></li>
+<li><a href="#enterprise">Enterprise Applications</a></li>
+<li><a href="#mistakes">Common Mistakes</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#advanced-insights">Advanced Insights</a></li>
+<li><a href="#code-examples">Code Examples</a></li>
+<li><a href="#exercises">Exercises</a></li>
+<li><a href="#interview">Interview Questions</a></li>
+<li><a href="#faq">FAQ</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#resources">Resources</a></li>
+</ul>
+        </aside>
+
+        <div class="ml-content">
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Retrieval-Augmented Generation (RAG)</h2>
+
+    <div class="ml-intro-text">
+        <p>Retrieval-Augmented Generation (RAG) is a technique that enhances Large Language Models (LLMs) by combining retrieval and generation. Instead of relying solely on a model's training data, RAG systems retrieve relevant documents or knowledge from external sources and use them to augment the generation process, producing more accurate, grounded, and up-to-date responses.</p>
+    </div>
+
+    <p>The RAG approach solves critical limitations of standalone LLMs: hallucinations (generating false information), lack of access to real-time or domain-specific knowledge, and inability to trace where information comes from. By integrating a retrieval component, RAG systems can provide citations, handle private documents, and adapt to knowledge updates without retraining.</p>
+
+    <p>RAG has become essential in production systems for question-answering, customer support, research assistance, and knowledge work. Companies like OpenAI, Anthropic, and every major AI company have adopted RAG-style approaches in their products. Understanding RAG is critical for anyone building practical AI applications.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>RAG Architecture</h4>
+    <p>Understand the complete RAG pipeline: document ingestion, chunking, embedding, storage, retrieval, and generation.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Retrieval Systems</h4>
+    <p>Learn vector databases (<a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener">FAISS</a>, <a href="https://www.trychroma.com/" target="_blank" rel="noopener">Chroma</a>, <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>), embedding models, and retrieval metrics that power modern RAG.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Advanced Techniques</h4>
+    <p>Explore re-ranking, query expansion, multi-hop reasoning, and hybrid search to build production-grade RAG systems.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Real Code & Evaluation</h4>
+    <p>Build RAG systems with <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a>, implement <a href="https://docs.ragas.io/" target="_blank" rel="noopener">RAGAS</a> evaluation, and learn how to measure RAG quality.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Familiarity with Python, LLMs (GPT, BERT embeddings), basic machine learning concepts, and ideally some experience with vector databases or information retrieval.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why RAG Matters</h2>
+
+    <p>LLMs are powerful but flawed. They hallucinate, have fixed knowledge cutoffs, can't access proprietary documents, and can't update their knowledge without retraining. RAG solves these problems elegantly by separating <strong>knowledge retrieval</strong> from <strong>knowledge generation</strong>.</p>
+
+    <h3>The Problem with LLMs Alone</h3>
+    <div class="card-grid">
+        <div class="card pink-accent">
+    <h4>Hallucinations</h4>
+    <p>LLMs generate plausible-sounding but false information. A 7B parameter model hallucinates ~28% of the time on factual questions.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Stale Knowledge</h4>
+    <p>Models trained in 2023 don't know about 2024 events. Retraining is expensive and impractical for frequent updates.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>No Private Data</h4>
+    <p>LLMs can't access your company's documents, databases, or internal knowledge bases without fine-tuning.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>No Attribution</h4>
+    <p>Users can't verify where information came from. In regulated industries, this is unacceptable.</p>
+</div>
+    </div>
+
+    <h3>How RAG Solves It</h3>
+    <p>RAG elegantly addresses all four problems:</p>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">RAG with Citations</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #0891b2, #7c3aed);">96% Verifiable</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">RAG Factuality</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #059669, #10b981);">91% Accurate</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">LLM Only</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #d97706, #f59e0b);">72% Factual</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Real-time Knowledge</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #059669, #10b981);">100% Current</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>RAG significantly improves accuracy, attribution, and knowledge currency</em></p>
+
+    <h3>RAG in Production</h3>
+    <div class="highlight-box">
+    <p><strong>Why companies use RAG:</strong> OpenAI uses RAG in ChatGPT's browsing mode. Anthropic uses it for retrieval. Google uses it in Search Generative Experience. Every enterprise AI system uses RAG to ground models in proprietary data and reduce hallucinations.</p>
+</div>
+</section>
+
+<!-- SECTION: Historical Evolution -->
+<section id="history" class="ml-section">
+    <h2>Historical Evolution of RAG</h2>
+
+    <p>RAG didn't emerge fully formed in 2020. It represents the convergence of information retrieval research (decades old) with modern deep learning and LLMs.</p>
+
+    <h3>The Evolution Timeline</h3>
+    
+    <div class="collapsible-section">
+        <div class="collapsible-header">1990s-2000s: Information Retrieval Era <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>BM25 and TF-IDF:</strong> Traditional keyword matching dominated. These algorithms ranked documents by term frequency and inverse document frequency. Fast, interpretable, but limited to exact keyword matches.</p>
+                <p><strong>Vector Space Models:</strong> Documents represented as vectors; similarity computed via cosine distance. This foundational idea still underlies modern RAG.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">2010-2017: Neural IR and Word Embeddings <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>Word2Vec (2013):</strong> Dense word embeddings showed that semantic relationships could be captured in vector space. This was revolutionary.</p>
+                <p><strong>Neural Ranking:</strong> Researchers began using neural networks to learn ranking functions instead of hand-crafted BM25 weights.</p>
+                <p><strong>BERT (2018):</strong> Contextual embeddings that understand meaning in context, not just individual words.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">2018-2020: Attention and QA Systems <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>BiDAF and Reading Comprehension:</strong> Models that could read documents and answer questions about them. This was the precursor to RAG.</p>
+                <p><strong>Dense Passage Retrieval (DPR, 2020):</strong> Facebook AI Research showed that learning dense embeddings specifically for retrieval was more effective than BM25. This was crucial — it showed retrieval itself could be learned end-to-end.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">2020-2021: RAG Emerges <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>RAG Paper (Lewis et al., Facebook, 2020):</strong> "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" formally defined RAG. The key insight: condition generation on retrieved documents.</p>
+                <p><strong>Vector Databases Become Practical:</strong> Pinecone (2021), Weaviate, and others made vector databases accessible. No longer required specialized expertise.</p>
+                <p><strong>LLMs Arrive:</strong> GPT-3 (2020) showed that large models could do amazing things. But they still hallucinated.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">2022-Present: Modern RAG Era <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>LangChain (2022):</strong> Made RAG accessible to everyone with simple APIs for retrieval, generation, and tool use.</p>
+                <p><strong>Production RAG at Scale:</strong> Companies deployed RAG for customer support, internal search, research, and knowledge work.</p>
+                <p><strong>Advanced RAG:</strong> Re-ranking, query expansion, hypothetical document embeddings, multi-hop reasoning, and more.</p>
+                <p><strong>RAG Evaluation (RAGAS, 2023):</strong> Frameworks for measuring RAG quality. No longer just eyeballing results.</p>
+                <p><strong>Agentic RAG (2024):</strong> Systems that decide when to retrieve, what to retrieve, and iterate on results. RAG becomes a tool in a broader reasoning system.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts</h2>
+
+    <p>To understand RAG, you need to understand a few foundational concepts that come from information retrieval and machine learning.</p>
+
+    <h3>Embeddings and Semantic Search</h3>
+    <p>An <strong>embedding</strong> is a numerical representation of text in a high-dimensional space (typically 384-1536 dimensions). Semantically similar texts have embeddings close in vector space.</p>
+
+    <div class="formula-box">
+    <div class="label">Cosine Similarity</div>
+    <div style="font-family: monospace;">similarity(A, B) = (A · B) / (||A|| × ||B||)</div><p style="font-size: 0.85rem; margin-top: 0.5rem;">Measures angle between vectors. Range: -1 to 1. Higher is more similar.</p>
+</div>
+
+    <p><strong>Embedding Models</strong> convert text to vectors:</p>
+    <ul>
+        <li><strong>BERT / RoBERTa:</strong> Bi-directional context. Slow but accurate. Use for important tasks.</li>
+        <li><strong>Sentence-Transformers:</strong> Optimized for semantic search. Fast and effective. Industry standard.</li>
+        <li><strong>OpenAI text-embedding-3-small/large:</strong> Proprietary, powerful, but costs add up at scale.</li>
+        <li><strong>Specialized Models:</strong> BGE, E5, ColBERT for domain-specific or multi-lingual retrieval.</li>
+    </ul>
+
+    <h3>Vector Databases</h3>
+    <p>Storing and searching embeddings efficiently requires specialized databases optimized for similarity search:</p>
+    <ul>
+        <li><strong>FAISS (Facebook):</strong> In-memory, blazing fast, used when you fit data in RAM.</li>
+        <li><strong>Chroma:</strong> Simple, developer-friendly, good for prototypes and small-to-medium applications.</li>
+        <li><strong>Pinecone:</strong> Fully managed, scalable, built for production with metadata filtering.</li>
+        <li><strong>Milvus / Weaviate:</strong> Open-source, scalable, support complex queries.</li>
+        <li><strong>Elasticsearch with vector capabilities:</strong> For teams that already use Elasticsearch.</li>
+    </ul>
+
+    <h3>The RAG Pipeline: Core Steps</h3>
+    <p>RAG systems follow a standard flow:</p>
+    
+    <div class="data-flow-anim">
+        <h4>RAG Pipeline Flow</h4>
+        <div class="pipeline-track" style="background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%); padding: 1.5rem; border-radius: 8px;">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                <div class="stage-icon">📄</div>
+                <div>Documents</div>
+            </div>
+            <div style="color: #0891b2; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                <div class="stage-icon">✂️</div>
+                <div>Chunk</div>
+            </div>
+            <div style="color: #3b82f6; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                <div class="stage-icon">🧮</div>
+                <div>Embed</div>
+            </div>
+            <div style="color: #8b5cf6; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                <div class="stage-icon">💾</div>
+                <div>Store</div>
+            </div>
+            <div style="color: #ec4899; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <div class="stage-icon">🔍</div>
+                <div>Query</div>
+            </div>
+            <div style="color: #f59e0b; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <div class="stage-icon">📥</div>
+                <div>Retrieve</div>
+            </div>
+            <div style="color: #10b981; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                <div class="stage-icon">✍️</div>
+                <div>Generate</div>
+            </div>
+            <div class="data-particle"></div>
+            <div class="data-particle"></div>
+            <div class="data-particle"></div>
+        </div>
+    </div>
+
+    <h3>Key Terms</h3>
+    <ul>
+        <li><strong>Chunking:</strong> Breaking documents into overlapping pieces (typically 256-1024 tokens) to manage context length and improve retrieval granularity.</li>
+        <li><strong>Relevance:</strong> Whether retrieved documents actually answer the query. Measured by similarity score and human judgment.</li>
+        <li><strong>Ranking:</strong> Ordering retrieved results by relevance. Naive RAG ranks by embedding similarity; advanced RAG uses cross-encoders to rerank.</li>
+        <li><strong>Context Window:</strong> The maximum tokens the LLM can see. Modern LLMs have 4K-200K tokens; RAG must fit retrieved docs + query + instructions in this budget.</li>
+        <li><strong>Hallucination:</strong> LLM generating false information not grounded in retrieved documents. RAG reduces but doesn't eliminate hallucination.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Architecture -->
+<section id="architecture" class="ml-section">
+    <h2>RAG Architecture & Pipeline</h2>
+
+    <p>A complete RAG system consists of multiple stages. Understanding each stage and how they interact is critical to building effective systems.</p>
+
+    <h3>The Full RAG Architecture</h3>
+
+    <div class="diagram-box">
+        <h4>RAG System Architecture</h4>
+        <svg viewBox="0 0 1000 600" style="width: 100%; height: auto; max-height: 500px;">
+            <!-- Ingestion Stage -->
+            <rect x="20" y="20" width="180" height="100" fill="#e0f2fe" stroke="#0891b2" stroke-width="2" rx="8"/>
+            <text x="110" y="55" text-anchor="middle" font-weight="bold" font-size="14">Document Ingestion</text>
+            <text x="110" y="75" text-anchor="middle" font-size="12">PDFs, Web, APIs</text>
+            <text x="110" y="95" text-anchor="middle" font-size="12">Databases, Files</text>
+            
+            <!-- Chunking Stage -->
+            <rect x="220" y="20" width="180" height="100" fill="#e3e8ef" stroke="#3b82f6" stroke-width="2" rx="8"/>
+            <text x="310" y="55" text-anchor="middle" font-weight="bold" font-size="14">Preprocessing</text>
+            <text x="310" y="75" text-anchor="middle" font-size="12">Chunk & Clean</text>
+            <text x="310" y="95" text-anchor="middle" font-size="12">Normalize</text>
+
+            <!-- Embedding Stage -->
+            <rect x="420" y="20" width="180" height="100" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+            <text x="510" y="55" text-anchor="middle" font-weight="bold" font-size="14">Embedding</text>
+            <text x="510" y="75" text-anchor="middle" font-size="12">Dense Vectors</text>
+            <text x="510" y="95" text-anchor="middle" font-size="12">384-1536 dims</text>
+
+            <!-- Storage Stage -->
+            <rect x="620" y="20" width="180" height="100" fill="#fce7f3" stroke="#ec4899" stroke-width="2" rx="8"/>
+            <text x="710" y="55" text-anchor="middle" font-weight="bold" font-size="14">Vector Store</text>
+            <text x="710" y="75" text-anchor="middle" font-size="12">FAISS, Pinecone</text>
+            <text x="710" y="95" text-anchor="middle" font-size="12">Weaviate, Chroma</text>
+
+            <!-- Arrows between ingestion stages -->
+            <path d="M 200 70 L 220 70" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <path d="M 400 70 L 420 70" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <path d="M 600 70 L 620 70" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Query Processing (bottom row) -->
+            <rect x="420" y="250" width="180" height="100" fill="#dbeafe" stroke="#0891b2" stroke-width="2" rx="8"/>
+            <text x="510" y="285" text-anchor="middle" font-weight="bold" font-size="14">Query Processing</text>
+            <text x="510" y="305" text-anchor="middle" font-size="12">Embed Query</text>
+            <text x="510" y="325" text-anchor="middle" font-size="12">Same space as docs</text>
+
+            <!-- Retrieval Stage -->
+            <rect x="220" y="250" width="180" height="100" fill="#dcfce7" stroke="#10b981" stroke-width="2" rx="8"/>
+            <text x="310" y="285" text-anchor="middle" font-weight="bold" font-size="14">Retrieval</text>
+            <text x="310" y="305" text-anchor="middle" font-size="12">Similarity Search</text>
+            <text x="310" y="325" text-anchor="middle" font-size="12">Top-K matching</text>
+
+            <!-- Re-ranking Stage (optional) -->
+            <rect x="20" y="250" width="180" height="100" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" rx="8"/>
+            <text x="110" y="285" text-anchor="middle" font-weight="bold" font-size="14">Re-ranking</text>
+            <text x="110" y="305" text-anchor="middle" font-size="12" style="opacity: 0.7;">(Optional)</text>
+            <text x="110" y="325" text-anchor="middle" font-size="12">Cross-encoder</text>
+
+            <!-- Arrows from storage and query to retrieval -->
+            <path d="M 710 120 L 710 180 L 400 180 L 400 250" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <path d="M 510 350 L 400 350" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <path d="M 400 300 L 200 300" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            <path d="M 200 300 L 110 300" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Generation Stage -->
+            <rect x="620" y="250" width="180" height="100" fill="#fecaca" stroke="#f87171" stroke-width="2" rx="8"/>
+            <text x="710" y="285" text-anchor="middle" font-weight="bold" font-size="14">Generation</text>
+            <text x="710" y="305" text-anchor="middle" font-size="12">Context + Query</text>
+            <text x="710" y="325" text-anchor="middle" font-size="12">LLM generates answer</text>
+
+            <!-- Final arrow -->
+            <path d="M 110 350 L 110 420 L 710 420 L 710 350" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+            <!-- Output -->
+            <rect x="620" y="430" width="180" height="100" fill="#e0f2fe" stroke="#0891b2" stroke-width="2" rx="8"/>
+            <text x="710" y="465" text-anchor="middle" font-weight="bold" font-size="14">Answer with</text>
+            <text x="710" y="485" text-anchor="middle" font-size="12">Citations & Sources</text>
+            <text x="710" y="505" text-anchor="middle" font-size="12">Confidence scores</text>
+
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                    <polygon points="0 0, 10 3, 0 6" fill="#666"/>
+                </marker>
+            </defs>
+        </svg>
+    </div>
+
+    <h3>Stage 1: Document Ingestion</h3>
+    <p>Raw documents come from many sources: PDFs, websites, databases, APIs, internal wikis, research papers, product docs. The ingestion system must handle various formats and scale to process millions of documents.</p>
+    <div class="info-box">
+    <h4>Document Sources</h4>
+    <p>Common sources include customer support docs, research papers, internal knowledge bases, product documentation, website content, and real-time data feeds.</p>
+</div>
+
+    <h3>Stage 2: Preprocessing & Chunking</h3>
+    <p>Documents must be broken into manageable pieces (chunks). Too small chunks lose context; too large chunks exceed context windows. Typical chunk size: 256-1024 tokens with 20-50% overlap.</p>
+    <div class="formula-box">
+    <div class="label">Chunk Overlap Strategy</div>
+    <div style="font-family: monospace;">overlap_pct = 30%<br/>chunk_size = 512<br/>overlap_size = chunk_size × overlap_pct<br/>= 154 tokens overlap between chunks</div>
+</div>
+
+    <h3>Stage 3: Embedding</h3>
+    <p>Convert text chunks to dense vectors using embedding models. This happens offline once; at query time, queries are embedded in the same space.</p>
+
+    <h3>Stage 4: Storage & Indexing</h3>
+    <p>Vectors are stored in vector databases with metadata (source document, chunk ID, date, etc.). These databases use specialized indexes (HNSW, IVF, PQ) for fast similarity search.</p>
+
+    <h3>Stage 5: Query Processing</h3>
+    <p>User query is embedded using the same embedding model. This is critical — using different embedding models for documents and queries breaks the system.</p>
+
+    <h3>Stage 6: Retrieval</h3>
+    <p>Find top-K similar documents (typically K=3-10) using approximate nearest neighbor search. Trade-off between speed and accuracy.</p>
+
+    <h3>Stage 7 (Optional): Re-ranking</h3>
+    <p>Use a more powerful model (cross-encoder) to re-rank retrieved results. Slower but more accurate. Optional but recommended for high-quality systems.</p>
+
+    <h3>Stage 8: Generation</h3>
+    <p>Combine query + retrieved context + system prompt, and feed to LLM. LLM generates answer grounded in retrieved documents.</p>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components of RAG Systems</h2>
+
+    <p>RAG systems have several critical components. Understanding and optimizing each is key to building production systems.</p>
+
+    <h3>1. Embedding Models</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4><a href="https://www.sbert.net/" target="_blank" rel="noopener">Sentence-Transformers</a></h4>
+    <p>Fast, open-source models like all-MiniLM-L6-v2 (384 dims). Great for general-purpose semantic search.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>OpenAI Embeddings</h4>
+    <p>Proprietary text-embedding-3 (1536 dims). Powerful but costs increase with scale.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Domain-Specific</h4>
+    <p>BGE for multilingual, ColBERT for specialized domains. Trade speed for accuracy.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Sparse vs Dense</h4>
+    <p>Dense embeddings capture semantics; sparse (BM25) capture exact keywords. Hybrid often works best.</p>
+</div>
+    </div>
+
+    <h3>2. Chunking Strategies</h3>
+    <div class="info-box">
+    <h4>Fixed-Size Chunking</h4>
+    <p>Split documents into fixed-size pieces (e.g., 512 tokens). Simple but loses structure. Risk of splitting sentences mid-way.</p>
+</div>
+    <div class="info-box">
+    <h4>Semantic Chunking</h4>
+    <p>Use sentence or paragraph boundaries. Preserves meaning but variable size can complicate batch processing.</p>
+</div>
+    <div class="info-box">
+    <h4>Recursive Chunking</h4>
+    <p>Split by hierarchy: sentences → paragraphs → sections. Preserves semantic structure. Recommended approach.</p>
+</div>
+
+    <h3>3. Vector Databases</h3>
+    <p>Choose based on your scale and infrastructure:</p>
+    <div class="comparison-table">
+        <tr>
+            <th>Database</th>
+            <th>Scale</th>
+            <th>Speed</th>
+            <th>Cost</th>
+            <th>Best For</th>
+        </tr>
+        <tr>
+            <td><strong><a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener">FAISS</a></strong></td>
+            <td>~1M in-memory</td>
+            <td>Ultra-fast</td>
+            <td>Free (compute)</td>
+            <td>Prototypes, single machine</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://www.trychroma.com/" target="_blank" rel="noopener">Chroma</a></strong></td>
+            <td>~100K-1M</td>
+            <td>Fast</td>
+            <td>Free/cheap</td>
+            <td>Development, small apps</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a></strong></td>
+            <td>100M+</td>
+            <td>Fast (managed)</td>
+            <td>$7-40+/month</td>
+            <td>Production, large scale</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a></strong></td>
+            <td>100M+</td>
+            <td>Fast</td>
+            <td>Free (self-hosted)</td>
+            <td>Enterprise, open-source</td>
+        </tr>
+        <tr>
+            <td><strong>Milvus</strong></td>
+            <td>1B+</td>
+            <td>Very fast</td>
+            <td>Free (self-hosted)</td>
+            <td>Massive scale, cloud</td>
+        </tr>
+    </table>
+
+    <h3>4. Retrieval Methods</h3>
+    <ul>
+        <li><strong>Semantic Search:</strong> Query and documents in same embedding space. Foundation of RAG.</li>
+        <li><strong>Hybrid Search:</strong> Combine dense vectors + sparse BM25. Excellent results, more computation.</li>
+        <li><strong>Metadata Filtering:</strong> Retrieve by category, date, or other metadata before similarity search. Reduces hallucination.</li>
+        <li><strong>Multi-hop Retrieval:</strong> Iterative retrieval: retrieve → answer intermediate question → retrieve again. For complex queries.</li>
+        <li><strong>Query Expansion:</strong> Generate multiple versions of query (synonyms, rephrasings) and retrieve for all. Increases recall.</li>
+    </ul>
+
+    <h3>5. Re-ranking (Critical for Quality)</h3>
+    <p>Embedding-based retrieval is fast but can miss nuance. Cross-encoder re-rankers improve relevance:</p>
+    <div class="formula-box">
+    <div class="label">Re-ranking Pipeline</div>
+    <div style="font-family: monospace;">retrieved_docs = retrieve_top_k(query, k=100)<br/>scored = cross_encoder.predict(<br/>  [(query, doc) for doc in retrieved_docs]<br/>)<br/>reranked = sorted_by_score(scored)[:10]</div>
+</div>
+    
+    <div class="info-box">
+    <h4>Popular Re-rankers</h4>
+    <p>ms-marco-MiniLM for speed, ms-marco-TinyBERT for extreme speed, mmarco-mMiniLMv2 for multilingual. Each trades accuracy vs latency.</p>
+</div>
+
+    <h3>6. Context Management</h3>
+    <p>LLMs have context limits. You must fit: [system prompt] + [retrieved docs] + [query] + [generation space] within limit.</p>
+    <ul>
+        <li><strong>Context Pruning:</strong> Summarize retrieved docs or keep only most relevant parts.</li>
+        <li><strong>Sliding Window:</strong> If too much context, keep top-K most relevant chunks and summarize the rest.</li>
+        <li><strong>Long-Context Models:</strong> GPT-4 Turbo (128K), Claude 3 (200K). Higher costs but more flexibility.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation Guide: Building a Basic RAG System</h2>
+
+    <p>Let's build a working RAG system from scratch. We'll use popular libraries: LangChain for orchestration, Sentence-Transformers for embeddings, and Chroma for vector storage.</p>
+
+    <h3>Step 1: Install Dependencies</h3>
+<div class="code-block">
+    <div class="code-header">Python — Installation</div>
+    <div class="code-content">pip install langchain langchain-community \
+  sentence-transformers chromadb \
+  pypdf python-dotenv</div>
+</div>
+
+    <h3>Step 2: Load Documents</h3>
+<div class="code-block">
+    <div class="code-header">Python — Document Loading</div>
+    <div class="code-content"><span class="keyword">from</span> langchain_community.document_loaders <span class="keyword">import</span> PyPDFLoader
+
+loader = <span class="function">PyPDFLoader</span>(<span class="string">"document.pdf"</span>)
+documents = loader.<span class="function">load</span>()
+<span class="function">print</span>(<span class="string">f"Loaded {len(documents)} pages"</span>)
+
+<span class="comment"># Documents are split by PyPDFLoader, but we want</span>
+<span class="comment"># more granular chunking</span>
+<span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
+
+splitter = <span class="function">RecursiveCharacterTextSplitter</span>(
+    chunk_size=<span class="number">512</span>,      <span class="comment"># tokens per chunk</span>
+    chunk_overlap=<span class="number">102</span>,   <span class="comment"># 20% overlap</span>
+    separators=[<span class="string">"\n\n"</span>, <span class="string">"\n"</span>, <span class="string">" "</span>, <span class="string">""</span>]
+)
+
+chunks = splitter.<span class="function">split_documents</span>(documents)
+<span class="function">print</span>(<span class="string">f"Created {len(chunks)} chunks"</span>)</div>
+</div>
+
+    <h3>Step 3: Create Embeddings and Store in Vector DB</h3>
+<div class="code-block">
+    <div class="code-header">Python — Embedding and Storage</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">from</span> langchain_community.vectorstores <span class="keyword">import</span> <a href="https://www.trychroma.com/" target="_blank" rel="noopener">Chroma</a>
+
+<span class="comment"># Initialize embedding model</span>
+embedding_model = <span class="function">SentenceTransformer</span>(
+    <span class="string">"all-MiniLM-L6-v2"</span>
+)
+
+<span class="comment"># Create vector store</span>
+vectorstore = Chroma.<span class="function">from_documents</span>(
+    documents=chunks,
+    embedding=embedding_model,
+    collection_name=<span class="string">"documents"</span>,
+    persist_directory=<span class="string">"./chroma_db"</span>
+)
+
+<span class="function">print</span>(<span class="string">f"Stored {len(chunks)} chunks in vector database"</span>)
+vectorstore.<span class="function">persist</span>()  <span class="comment"># Save to disk</span></div>
+</div>
+
+    <h3>Step 4: Create a Retriever</h3>
+<div class="code-block">
+    <div class="code-header">Python — Retriever Setup</div>
+    <div class="code-content"><span class="comment"># Create retriever with MMR (Maximal Marginal Relevance)</span>
+<span class="comment"># This balances relevance with diversity</span>
+retriever = vectorstore.<span class="function">as_retriever</span>(
+    search_type=<span class="string">"mmr"</span>,
+    search_kwargs={
+        <span class="string">"k"</span>: <span class="number">5</span>,          <span class="comment"># Return top 5 results</span>
+        <span class="string">"fetch_k"</span>: <span class="number">20</span>,   <span class="comment"># Fetch 20 then select 5</span>
+    }
+)
+
+<span class="comment"># Test retrieval</span>
+query = <span class="string">"What is machine learning?"</span>
+retrieved = retriever.<span class="function">get_relevant_documents</span>(query)
+<span class="function">print</span>(<span class="string">f"Retrieved {len(retrieved)} documents"</span>)
+<span class="keyword">for</span> doc <span class="keyword">in</span> retrieved:
+    <span class="function">print</span>(<span class="string">f"- {doc.page_content[:100]}..."</span>)</div>
+</div>
+
+    <h3>Step 5: Set Up LLM and Build RAG Chain</h3>
+<div class="code-block">
+    <div class="code-header">Python — RAG Chain</div>
+    <div class="code-content"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate
+<span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnablePassthrough
+<span class="keyword">from</span> langchain.schema.output_parser <span class="keyword">import</span> StrOutputParser
+
+<span class="comment"># Initialize LLM</span>
+llm = <span class="function">ChatOpenAI</span>(
+    model=<span class="string">"gpt-3.5-turbo"</span>,
+    temperature=<span class="number">0.2</span>,
+    api_key=<span class="string">"your-api-key"</span>
+)
+
+<span class="comment"># Create prompt template</span>
+prompt_template = <span class="string">"""Use the following documents to answer 
+the question. If you can't find the answer in the documents, 
+say "I don't know."
+
+Documents:
+{context}
+
+Question: {question}
+
+Answer:"""</span>
+
+prompt = <span class="function">PromptTemplate</span>(
+    template=prompt_template,
+    input_variables=[<span class="string">"context"</span>, <span class="string">"question"</span>]
+)
+
+<span class="comment"># Create RAG chain</span>
+<span class="keyword">def</span> <span class="function">format_docs</span>(docs):
+    <span class="keyword">return</span> <span class="string">"\n\n"</span>.<span class="function">join</span>([d.page_content <span class="keyword">for</span> d <span class="keyword">in</span> docs])
+
+chain = (
+    {<span class="string">"context"</span>: retriever | format_docs, <span class="string">"question"</span>: <span class="function">RunnablePassthrough</span>()}
+    | prompt
+    | llm
+    | <span class="function">StrOutputParser</span>()
+)
+
+<span class="comment"># Query!</span>
+result = chain.<span class="function">invoke</span>(<span class="string">"What is machine learning?"</span>)
+<span class="function">print</span>(result)</div>
+</div>
+
+    <h3>Step 6: Add Source Attribution</h3>
+<div class="code-block">
+    <div class="code-header">Python — Source Attribution</div>
+    <div class="code-content"><span class="comment"># Modify chain to return docs and answer</span>
+<span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnableMap
+
+<span class="keyword">def</span> <span class="function">create_rag_with_sources</span>(retriever, llm, prompt):
+    <span class="keyword">return</span> <span class="function">RunnableMap</span>({
+        <span class="string">"docs"</span>: retriever,
+        <span class="string">"question"</span>: <span class="function">RunnablePassthrough</span>()
+    }) | {
+        <span class="string">"answer"</span>: (
+            {<span class="string">"context"</span>: <span class="keyword">lambda</span> x: <span class="function">format_docs</span>(x[<span class="string">"docs"</span>]),
+             <span class="string">"question"</span>: <span class="keyword">lambda</span> x: x[<span class="string">"question"</span>]}
+            | prompt
+            | llm
+            | <span class="function">StrOutputParser</span>()
+        ),
+        <span class="string">"sources"</span>: <span class="keyword">lambda</span> x: x[<span class="string">"docs"</span>]
+    }
+
+<span class="comment"># Use it</span>
+rag_with_sources = <span class="function">create_rag_with_sources</span>(retriever, llm, prompt)
+result = rag_with_sources.<span class="function">invoke</span>(<span class="string">"What is machine learning?"</span>)
+
+<span class="function">print</span>(<span class="string">"Answer:"</span>, result[<span class="string">"answer"</span>])
+<span class="function">print</span>(<span class="string">"\nSources:"</span>)
+<span class="keyword">for</span> doc <span class="keyword">in</span> result[<span class="string">"sources"</span>]:
+    <span class="function">print</span>(<span class="string">f"- {doc.metadata.get('source', 'Unknown')}"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced RAG Techniques</h2>
+
+    <p>Basic RAG is powerful, but production systems need advanced techniques to achieve high quality. Here are the most important optimizations.</p>
+
+    <h3>1. Re-ranking with Cross-Encoders</h3>
+    <p>Initial retrieval via embeddings is fast but imprecise. Cross-encoders compute interaction scores between query and document, providing more accurate relevance scores.</p>
+<div class="code-block">
+    <div class="code-header">Python — Cross-Encoder Re-ranking</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> CrossEncoder
+
+<span class="comment"># Load cross-encoder</span>
+cross_encoder = <span class="function">CrossEncoder</span>(
+    <span class="string">"ms-marco-MiniLM-L-6-v2"</span>
+)
+
+<span class="comment"># Retrieve many documents</span>
+retrieved = retriever.<span class="function">get_relevant_documents</span>(query)
+
+<span class="comment"># Score with cross-encoder</span>
+pairs = [(query, doc.page_content) <span class="keyword">for</span> doc <span class="keyword">in</span> retrieved]
+scores = cross_encoder.<span class="function">predict</span>(pairs)
+
+<span class="comment"># Sort by cross-encoder scores</span>
+ranked_docs = <span class="function">sorted</span>(
+    <span class="function">zip</span>(retrieved, scores),
+    key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>],
+    reverse=<span class="keyword">True</span>
+)[:<span class="number">5</span>]  <span class="comment"># Keep top 5</span>
+
+<span class="function">print</span>(<span class="string">"Re-ranked results:"</span>)
+<span class="keyword">for</span> doc, score <span class="keyword">in</span> ranked_docs:
+    <span class="function">print</span>(<span class="string">f"Score: {score:.3f} - {doc.page_content[:80]}..."</span>)</div>
+</div>
+
+    <h3>2. Query Expansion</h3>
+    <p>Generate multiple versions of the query to improve recall. Especially useful for complex or ambiguous questions.</p>
+<div class="code-block">
+    <div class="code-header">Python — Query Expansion</div>
+    <div class="code-content"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate
+<span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI
+
+<span class="comment"># Create query expander</span>
+expansion_template = <span class="string">"""Generate 3 alternative phrasings 
+of the following question that would help find relevant documents. 
+Return only the phrasings, one per line.
+
+Original question: {question}
+
+Alternatives:"""</span>
+
+expander_prompt = <span class="function">PromptTemplate</span>(
+    template=expansion_template,
+    input_variables=[<span class="string">"question"</span>]
+)
+
+<span class="comment"># Expand query</span>
+llm = <span class="function">OpenAI</span>(temperature=<span class="number">0.7</span>)
+expanded = (expander_prompt | llm).<span class="function">invoke</span>(question=original_query)
+
+<span class="comment"># Split into individual queries</span>
+queries = [original_query] + [
+    q.<span class="function">strip</span>() <span class="keyword">for</span> q <span class="keyword">in</span> expanded.<span class="function">split</span>(<span class="string">"\n"</span>) <span class="keyword">if</span> q.<span class="function">strip</span>()
+]
+
+<span class="comment"># Retrieve for all queries and combine</span>
+all_docs = []
+<span class="keyword">for</span> q <span class="keyword">in</span> queries:
+    docs = retriever.<span class="function">get_relevant_documents</span>(q)
+    all_docs.<span class="function">extend</span>(docs)
+
+<span class="comment"># Remove duplicates while preserving order</span>
+seen = <span class="function">set</span>()
+unique_docs = []
+<span class="keyword">for</span> doc <span class="keyword">in</span> all_docs:
+    doc_id = doc.metadata.<span class="function">get</span>(<span class="string">"source"</span>) + doc.page_content[:<span class="number">50</span>]
+    <span class="keyword">if</span> doc_id <span class="keyword">not</span> <span class="keyword">in</span> seen:
+        seen.<span class="function">add</span>(doc_id)
+        unique_docs.<span class="function">append</span>(doc)
+
+<span class="function">print</span>(<span class="string">f"Retrieved {len(unique_docs)} unique documents from {len(queries)} queries"</span>)</div>
+</div>
+
+    <h3>3. Hypothetical Document Embeddings (HyDE)</h3>
+    <p>Instead of embedding the query directly, generate a hypothetical answer, embed that, then use it to retrieve. This works surprisingly well!</p>
+<div class="code-block">
+    <div class="code-header">Python — HyDE Implementation</div>
+    <div class="code-content"><span class="comment"># Generate hypothetical document</span>
+hyde_prompt = <span class="string">"""Write a short document that would answer 
+the following question:
+
+Question: {question}
+
+Document:"""</span>
+
+hyde_template = <span class="function">PromptTemplate</span>(
+    template=hyde_prompt,
+    input_variables=[<span class="string">"question"</span>]
+)
+
+<span class="comment"># Generate hypothetical doc</span>
+llm = <span class="function">OpenAI</span>(temperature=<span class="number">0.7</span>)
+hypothetical_doc = (hyde_template | llm).<span class="function">invoke</span>(question=query)
+
+<span class="comment"># Embed the hypothetical document</span>
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+embedder = <span class="function">SentenceTransformer</span>(<span class="string">"all-MiniLM-L6-v2"</span>)
+query_embedding = embedder.<span class="function">encode</span>(hypothetical_doc)
+
+<span class="comment"># Retrieve using this embedding</span>
+retrieved = vectorstore.<span class="function">similarity_search_by_vector</span>(
+    query_embedding,
+    k=<span class="number">5</span>
+)
+
+<span class="function">print</span>(<span class="string">"HyDE-based retrieval:"</span>)
+<span class="keyword">for</span> doc <span class="keyword">in</span> retrieved:
+    <span class="function">print</span>(<span class="string">f"- {doc.page_content[:100]}..."</span>)</div>
+</div>
+
+    <h3>4. Multi-hop Retrieval (Iterative RAG)</h3>
+    <p>For complex questions requiring multiple steps, retrieve → answer intermediate question → retrieve again.</p>
+<div class="code-block">
+    <div class="code-header">Python — Multi-hop Retrieval</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">multi_hop_retrieval</span>(question, retriever, llm, max_hops=<span class="number">3</span>):
+    <span class="string">"""Iteratively retrieve and reason about intermediate questions."""</span>
+    
+    context = []
+    current_question = question
+    
+    <span class="keyword">for</span> hop <span class="keyword">in</span> <span class="function">range</span>(max_hops):
+        <span class="comment"># Retrieve documents for current question</span>
+        docs = retriever.<span class="function">get_relevant_documents</span>(current_question)
+        context.<span class="function">extend</span>(docs)
+        
+        <span class="comment"># Check if we have enough info</span>
+        doc_text = <span class="string">"\n\n"</span>.<span class="function">join</span>([d.page_content <span class="keyword">for</span> d <span class="keyword">in</span> docs])
+        
+        check_prompt = <span class="string">f"""Based on these documents:
+        
+{doc_text}
+
+Can you fully answer: {question}?
+
+Respond with:
+1. YES if fully answered
+2. NO if more info needed
+3. If NO, what should we search for next?"""</span>
+        
+        response = <span class="function">llm</span>(check_prompt)
+        
+        <span class="keyword">if</span> <span class="string">"YES"</span> <span class="keyword">in</span> response.<span class="function">upper</span>():
+            <span class="keyword">break</span>
+        <span class="keyword">elif</span> <span class="string">"NO"</span> <span class="keyword">in</span> response.<span class="function">upper</span>():
+            <span class="comment"># Extract next search query</span>
+            next_query_prompt = <span class="string">f"""Extract one search query 
+            to find missing information. Be specific.
+            
+{response}
+
+Search query:"""</span>
+            current_question = <span class="function">llm</span>(next_query_prompt)
+        <span class="keyword">else</span>:
+            <span class="keyword">break</span>
+    
+    <span class="keyword">return</span> context
+
+<span class="comment"># Use it</span>
+context = <span class="function">multi_hop_retrieval</span>(
+    <span class="string">"How does climate change affect agriculture in Africa?"</span>,
+    retriever, llm
+)
+
+<span class="function">print</span>(<span class="string">f"Retrieved {len(context)} documents across multiple hops"</span>)</div>
+</div>
+
+    <h3>5. Hybrid Search (Dense + Sparse)</h3>
+    <p>Combine semantic search (dense vectors) with keyword search (BM25). Hybrid often outperforms either alone.</p>
+<div class="code-block">
+    <div class="code-header">Python — Hybrid Search</div>
+    <div class="code-content"><span class="keyword">from</span> langchain_community.retrievers <span class="keyword">import</span> BM25Retriever
+<span class="keyword">from</span> langchain.retrievers <span class="keyword">import</span> EnsembleRetriever
+
+<span class="comment"># Create dense retriever (semantic)</span>
+dense_retriever = vectorstore.<span class="function">as_retriever</span>(
+    search_kwargs={<span class="string">"k"</span>: <span class="number">10</span>}
+)
+
+<span class="comment"># Create sparse retriever (BM25 keyword search)</span>
+bm25_retriever = BM25Retriever.<span class="function">from_documents</span>(chunks)
+bm25_retriever.k = <span class="number">10</span>
+
+<span class="comment"># Combine them</span>
+hybrid_retriever = <span class="function">EnsembleRetriever</span>(
+    retrievers=[dense_retriever, bm25_retriever],
+    weights=[<span class="number">0.5</span>, <span class="number">0.5</span>]  <span class="comment"># Adjust weights based on your data</span>
+)
+
+<span class="comment"># Use hybrid retriever</span>
+docs = hybrid_retriever.<span class="function">get_relevant_documents</span>(query)
+<span class="function">print</span>(<span class="string">f"Retrieved {len(docs)} documents (hybrid search)"</span>)</div>
+</div>
+
+    <h3>6. Metadata Filtering</h3>
+    <p>Filter retrieval by metadata (source, date, category) before similarity search. Reduces hallucinations.</p>
+<div class="code-block">
+    <div class="code-header">Python — Metadata Filtering</div>
+    <div class="code-content"><span class="comment"># Retrieve with metadata filters</span>
+docs = vectorstore.<span class="function">similarity_search</span>(
+    <span class="string">"machine learning"</span>,
+    k=<span class="number">5</span>,
+    <span class="function">filter</span>={<span class="string">"source"</span>: <span class="string">"research_papers"</span>}  <span class="comment"># Only from research papers</span>
+)
+
+<span class="comment"># More complex filters</span>
+docs = vectorstore.<span class="function">similarity_search</span>(
+    <span class="string">"recent advances"</span>,
+    k=<span class="number">5</span>,
+    <span class="function">filter</span>={
+        <span class="string">"$and"</span>: [
+            {<span class="string">"year"</span>: {<span class="string">"$gte"</span>: <span class="number">2023</span>}},
+            {<span class="string">"category"</span>: {<span class="string">"$in"</span>: [<span class="string">"AI"</span>, <span class="string">"ML"</span>]}}
+        ]
+    }
+)
+
+<span class="function">print</span>(<span class="string">f"Retrieved {len(docs)} documents with metadata filters"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Comparing RAG Approaches</h2>
+
+    <p>There are multiple ways to implement RAG. Each has tradeoffs in complexity, quality, latency, and cost.</p>
+
+    <h3>Naive RAG vs Advanced RAG vs Agentic RAG</h3>
+
+    <div class="comparison-table">
+        <tr>
+            <th>Aspect</th>
+            <th>Naive RAG</th>
+            <th>Advanced RAG</th>
+            <th>Agentic RAG</th>
+        </tr>
+        <tr>
+            <td><strong>Retrieval</strong></td>
+            <td>Single query embedding</td>
+            <td>Query expansion + re-ranking</td>
+            <td>Iterative decisions on what/when to retrieve</td>
+        </tr>
+        <tr>
+            <td><strong>Architecture</strong></td>
+            <td>Query → Retrieve → Generate</td>
+            <td>Query → Expand → Retrieve → Rerank → Generate</td>
+            <td>Reasoning loop with retrieval as a tool</td>
+        </tr>
+        <tr>
+            <td><strong>Latency</strong></td>
+            <td>100-200ms (fastest)</td>
+            <td>500-2000ms</td>
+            <td>2-10s (depends on reasoning steps)</td>
+        </tr>
+        <tr>
+            <td><strong>Quality</strong></td>
+            <td>~70-75% factuality</td>
+            <td>~85-92% factuality</td>
+            <td>~90-95% (best)</td>
+        </tr>
+        <tr>
+            <td><strong>Cost</strong></td>
+            <td>$0.001-0.01 per query</td>
+            <td>$0.01-0.05 per query</td>
+            <td>$0.05-0.50 per query (multiple LLM calls)</td>
+        </tr>
+        <tr>
+            <td><strong>Complexity</strong></td>
+            <td>Low (few components)</td>
+            <td>Medium (orchestration needed)</td>
+            <td>High (reasoning, tool use)</td>
+        </tr>
+        <tr>
+            <td><strong>Use Cases</strong></td>
+            <td>Quick prototypes, simple QA</td>
+            <td>Production systems, enterprise search</td>
+            <td>Complex reasoning, multi-step tasks</td>
+        </tr>
+    </table>
+
+    <h3>When to Use Each</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Naive RAG</h4>
+    <p>Use for MVP/prototypes, real-time applications where latency is critical, or simple fact retrieval. Good for: chatbots answering FAQs, simple document search.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Advanced RAG</h4>
+    <p>Use for production systems where quality matters, enterprise knowledge bases, research assistants. Good for: customer support, internal search, documentation QA.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Agentic RAG</h4>
+    <p>Use for complex reasoning, multi-step problem solving, when decisions about what/when to retrieve are important. Good for: research assistance, complex analysis, reasoning-heavy tasks.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World RAG Use Cases</h2>
+
+    <p>RAG is transforming how organizations interact with information. Here are the most impactful applications.</p>
+
+    <h3>Customer Support & Q&A</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Support Ticket Automation</h4>
+    <p>RAG searches support docs, FAQs, and past tickets to suggest or auto-generate responses. Reduces response time by 50-80%, reduces support costs significantly.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Interactive FAQ</h4>
+    <p>Users ask questions in natural language; RAG retrieves relevant FAQ entries and generates comprehensive answers with citations.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Chatbot Personalization</h4>
+    <p>RAG retrieves customer history, account details, and relevant docs to provide personalized support. Higher satisfaction scores.</p>
+</div>
+    </div>
+
+    <h3>Enterprise Knowledge Management</h3>
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Internal Search</h4>
+    <p>Employees search across documentation, wikis, and policies. RAG understands intent and returns relevant information with context.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Research Assistant</h4>
+    <p>Scientists and analysts use RAG to search papers, data, and findings. Helps synthesize information across thousands of documents.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Policy Compliance</h4>
+    <p>RAG helps identify relevant policies and regulations for queries. Important for legal, finance, and regulated industries.</p>
+</div>
+    </div>
+
+    <h3>Content & Creative</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Content Generation</h4>
+    <p>RAG retrieves source material (research, interviews, data) to ground content generation. Reduces fabrication, improves accuracy.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Code Search</h4>
+    <p>Developers search codebases using natural language. RAG finds relevant code snippets and documentation. GitHub Copilot uses this.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Product Recommendations</h4>
+    <p>RAG retrieves product info, reviews, and specs. Generates personalized recommendations with explanations.</p>
+</div>
+    </div>
+
+    <h3>Healthcare & Regulatory</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Clinical Decision Support</h4>
+    <p>RAG retrieves medical literature, treatment guidelines, and patient history. Assists doctors in decision making. Requires high accuracy.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Drug Discovery</h4>
+    <p>Researchers use RAG to search papers on compounds, mechanisms, and trials. Accelerates identification of research directions.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Regulatory Compliance</h4>
+    <p>Retrieve relevant regulations, requirements, and precedents. Critical for healthcare, finance, and pharma.</p>
+</div>
+    </div>
+
+    <h3>E-commerce & Marketplace</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Smart Product Search</h4>
+    <p>RAG understands shopper intent and retrieves relevant products from detailed catalogs. Improves conversion by 15-30%.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Seller Support</h4>
+    <p>Marketplace sellers use RAG to search policies, shipping rules, and best practices. Reduces policy violations.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Enterprise Applications -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise RAG Applications</h2>
+
+    <p>Enterprise RAG systems must handle scale, security, compliance, and integration with existing systems. This section covers enterprise-grade patterns.</p>
+
+    <h3>Scalability Patterns</h3>
+    <div class="info-box">
+    <h4>Multi-Collection Architecture</h4>
+    <p>Store different data sources in separate vector collections. Allows different embedding models, refresh rates, and metadata schemas. Query relevant collections based on intent.</p>
+</div>
+    <div class="info-box">
+    <h4>Sharding</h4>
+    <p>For massive document collections (100M+), shard across multiple vector databases. Route queries to relevant shards. Requires careful metadata strategy.</p>
+</div>
+    <div class="info-box">
+    <h4>Hybrid Deployment</h4>
+    <p>Mix cloud-based vector DBs (Pinecone) with on-premises or private deployments for sensitive data. Use federated search.</p>
+</div>
+
+    <h3>Security & Privacy</h3>
+    <ul>
+        <li><strong>Data Isolation:</strong> Separate collections per tenant/organization. Ensure queries only retrieve authorized documents.</li>
+        <li><strong>Encryption:</strong> Encrypt documents at rest and in transit. Vector DBs support encrypted storage.</li>
+        <li><strong>Access Control:</strong> Implement row-level security. Tag documents with access levels and filter during retrieval.</li>
+        <li><strong>Audit Logging:</strong> Log all queries and retrievals for compliance and debugging.</li>
+        <li><strong>PII Handling:</strong> Anonymize or mask sensitive data in retrieved documents before sending to LLM.</li>
+    </ul>
+
+    <h3>Quality Assurance</h3>
+    <div class="info-box">
+    <h4>Evaluation Metrics</h4>
+    <p>Track retrieval accuracy (recall, precision), generation quality (factuality, relevance), and end-to-end user satisfaction.</p>
+</div>
+    <div class="info-box">
+    <h4>Feedback Loops</h4>
+    <p>Collect user feedback on answer quality. Use feedback to identify failing queries and improve chunking/retrieval strategies.</p>
+</div>
+    <div class="info-box">
+    <h4>A/B Testing</h4>
+    <p>Test different embeddings, chunk sizes, retrieval strategies, and LLMs. Measure impact on quality and latency.</p>
+</div>
+
+    <h3>Integration with Enterprise Systems</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Data Connectors</h4>
+    <p>Integrate with Salesforce, Jira, Confluence, SharePoint, databases. Keep vector store in sync with source data.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>API Gateway</h4>
+    <p>Expose RAG system via API. Implement rate limiting, authentication, and request logging.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Workflow Integration</h4>
+    <p>Embed RAG into existing workflows. Trigger retrieval from document management systems, CRM, or chat platforms.</p>
+</div>
+    </div>
+
+    <h3>Cost Management</h3>
+    <ul>
+        <li><strong>Cache Retrieved Documents:</strong> Store frequently retrieved docs in cache. Reduces redundant embedding computations.</li>
+        <li><strong>Batch Embedding:</strong> Embed documents in batches during off-peak hours, not in real-time.</li>
+        <li><strong>Model Selection:</strong> Use smaller, faster embedding models (384-dim) instead of large ones when possible. Fine-tune on domain data for better quality without scaling to larger models.</li>
+        <li><strong>Selective Re-ranking:</strong> Only re-rank top-20 results, not all results.</li>
+        <li><strong>Query Optimization:</strong> Cache embeddings of common queries. Deduplicate similar queries before retrieving.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common RAG Mistakes (And How to Avoid Them)</h2>
+
+    <p>Building RAG systems is deceptively simple but deploying high-quality production systems is hard. Here are the most common pitfalls.</p>
+
+    <h3>1. Using Different Embedding Models for Indexing vs Querying</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Index with OpenAI embeddings but query with Sentence-Transformers. <strong>Why Bad:</strong> Vectors are in different spaces. Similarity scores are meaningless. <strong>Fix:</strong> Use the same model for indexing and querying, always.</p>
+</div>
+
+    <h3>2. Ignoring Chunk Overlap and Context</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Split documents into 256-token chunks with 0% overlap. <strong>Why Bad:</strong> Important concepts get split across chunks, retrieved documents lack context. <strong>Fix:</strong> Use 20-50% overlap. Test different chunk sizes.</p>
+</div>
+
+    <h3>3. Not Evaluating Retrieval Quality</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Only evaluate end-to-end answer quality. <strong>Why Bad:</strong> Can't diagnose if problems are in retrieval or generation. <strong>Fix:</strong> Evaluate retrieval metrics (recall, precision, NDCG) separately from generation quality (factuality, relevance).</p>
+</div>
+
+    <h3>4. Over-Optimizing for Latency</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Use small embeddings, no re-ranking, minimal retrieval to reduce latency. <strong>Why Bad:</strong> Answer quality suffers. <strong>Fix:</strong> Measure quality-latency tradeoff. Users prefer accurate over fast.</p>
+</div>
+
+    <h3>5. Forgetting About LLM Hallucinations Even With RAG</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Assume retrieved documents prevent hallucinations. <strong>Why Bad:</strong> LLMs still hallucinate even when given correct context. Happen ~10-20% of the time even with good retrieval. <strong>Fix:</strong> Implement fact-checking, confidence scoring, and require citations.</p>
+</div>
+
+    <h3>6. Not Handling Updates to Documents</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Embed documents once and never update. <strong>Why Bad:</strong> System becomes stale. Critical for real-time or frequently updated data. <strong>Fix:</strong> Implement incremental updates. For some data, re-embed daily or hourly.</p>
+</div>
+
+    <h3>7. Using Raw Documents Without Metadata</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Store chunks with no metadata (source, date, category, access level). <strong>Why Bad:</strong> Can't filter, can't trace results, violates compliance. <strong>Fix:</strong> Rich metadata on every chunk. Use for filtering and attribution.</p>
+</div>
+
+    <h3>8. Ignoring the Cost of Embeddings at Scale</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Use expensive embedding APIs without considering cost. <strong>Why Bad:</strong> At 1M documents, cost becomes prohibitive. <strong>Fix:</strong> Use open-source models (Sentence-Transformers). Only use proprietary APIs when necessary.</p>
+</div>
+
+    <h3>9. Not Testing on Your Actual Data</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Test RAG on toy datasets, deploy on real data. <strong>Why Bad:</strong> Real data has different characteristics. Quality may be much lower. <strong>Fix:</strong> Evaluate on representative samples of your actual data early and often.</p>
+</div>
+
+    <h3>10. Underestimating the Importance of Query Understanding</h3>
+    <div class="highlight-box">
+    <p><strong>Mistake:</strong> Embed query as-is without preprocessing. <strong>Why Bad:</strong> Typos, abbreviations, and poor phrasing hurt retrieval. <strong>Fix:</strong> Implement query expansion, spelling correction, and intent classification before retrieval.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>RAG Best Practices</h2>
+
+    <p>Based on what works in production, here are proven best practices for building high-quality RAG systems.</p>
+
+    <h3>Document Preparation</h3>
+    <ul>
+        <li><strong>Clean Data:</strong> Remove headers, footers, boilerplate. Preserve semantic structure. Quality in → quality out.</li>
+        <li><strong>Rich Metadata:</strong> Attach source, date, category, confidence, access level, version. Use for filtering and attribution.</li>
+        <li><strong>Optimal Chunking:</strong> 256-1024 tokens is typical. Test different sizes. Recursive chunking > fixed-size chunking.</li>
+        <li><strong>Overlap:</strong> 20-50% overlap between chunks. Helps maintain context at chunk boundaries.</li>
+    </ul>
+
+    <h3>Embedding Selection</h3>
+    <ul>
+        <li><strong>Start with <a href="https://www.sbert.net/" target="_blank" rel="noopener">Sentence-Transformers</a>:</strong> all-MiniLM-L6-v2 (384-dim) is a strong baseline. Free, fast, effective.</li>
+        <li><strong>Fine-tune if needed:</strong> If domain-specific vocabulary is important, fine-tune an embedding model on your data.</li>
+        <li><strong>Multilingual:</strong> If serving multiple languages, use multilingual models (multilingual-e5-small).</li>
+        <li><strong>Consistency:</strong> Same model for indexing and querying. Document which model was used.</li>
+    </ul>
+
+    <h3>Retrieval Strategy</h3>
+    <ul>
+        <li><strong>Start Simple:</strong> Semantic search (dense retrieval) works well. Add complexity only if needed.</li>
+        <li><strong>Hybrid Search for Recall:</strong> Combine dense + sparse (BM25). Higher recall with minimal latency increase.</li>
+        <li><strong>Always Re-rank:</strong> If quality is critical, re-rank top-20 with cross-encoder. ~500ms extra latency, 10-20% quality improvement.</li>
+        <li><strong>Metadata Filters:</strong> Filter by date, source, category before similarity search. Reduces noise and hallucination.</li>
+    </ul>
+
+    <h3>Generation</h3>
+    <ul>
+        <li><strong>Context Window Management:</strong> Fit [prompt + retrieved docs + generation] in context. Prioritize retrieved docs, summarize if needed.</li>
+        <li><strong>System Prompt:</strong> Clear instructions to use retrieved docs, cite sources, say "I don't know" if not in docs.</li>
+        <li><strong>Temperature:</strong> Low temperature (0.2-0.3) for factual tasks. Higher (0.7+) for creative tasks.</li>
+        <li><strong>Stopping Tokens:</strong> Use stop tokens if generating citations in specific format.</li>
+    </ul>
+
+    <h3>Evaluation & Monitoring</h3>
+    <ul>
+        <li><strong>Retrieval Metrics:</strong> Recall@K, Precision@K, NDCG. Essential for diagnosing issues.</li>
+        <li><strong>Generation Metrics:</strong> Use <a href="https://docs.ragas.io/" target="_blank" rel="noopener">RAGAS</a> (Retrieval-Augmented Generation Assessment) framework. Measures answer relevance, groundedness, and citation accuracy.</li>
+        <li><strong>User Feedback:</strong> Thumbs up/down on answers. Use to identify and fix failing queries.</li>
+        <li><strong>Continuous Testing:</strong> Build evaluation pipeline. Test weekly on new data.</li>
+    </ul>
+
+    <h3>Deployment</h3>
+    <ul>
+        <li><strong>Start Small:</strong> Begin with small dataset, expand after validating quality.</li>
+        <li><strong>Version Control:</strong> Version embeddings and chunking strategy. A/B test new versions.</li>
+        <li><strong>Monitoring:</strong> Track latency, error rates, cost. Alert on quality degradation.</li>
+        <li><strong>User Experience:</strong> Show confidence scores, source documents, alternative answers.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights & Future Directions</h2>
+
+    <p>RAG is rapidly evolving. Here are emerging techniques and future directions shaping the field.</p>
+
+    <h3>Sparse-Dense Hybrids</h3>
+    <p>Recent research shows that hybrid retrieval (combining sparse BM25 with dense vectors) often beats either alone. More nuanced: different retrieval methods excel at different aspects (density captures semantics, sparsity captures keywords). Future systems will intelligently choose methods based on query type.</p>
+
+    <h3>Self-Improving RAG</h3>
+    <p>Systems that learn from retrieval failures. When answer is wrong, identify whether fault was in retrieval or generation. Adapt: better query expansion for retrieval failures, better prompts for generation failures.</p>
+
+    <h3>Multimodal RAG</h3>
+    <p>Extending RAG beyond text: retrieve images, tables, code snippets, videos. Require multimodal embeddings (CLIP, LLaVA) and multimodal generation models. Frontier is still being mapped.</p>
+
+    <h3>Graph-based RAG</h3>
+    <p>Instead of flat document retrieval, build knowledge graphs from documents. Retrieve subgraphs relevant to query. Allows reasoning across multiple documents and relationships. More complex but higher quality for knowledge-intensive tasks.</p>
+
+    <h3>Long-Context Models Changing the Game</h3>
+    <p>GPT-4 Turbo and Claude 3 have 100K-200K context windows. Some researchers are experimenting with putting entire corpora in context (in-context RAG). Extreme approach: index everything in the prompt. Reduces retrieval quality concerns but increases cost and latency.</p>
+
+    <h3>Agentic RAG</h3>
+    <p>RAG as a tool in reasoning systems. LLM decides what to retrieve, when, and how many times. Learns to reason about information gaps. Early results show promise but current LLMs struggle with this level of metacognition.</p>
+
+    <h3>Fine-Tuning on Retrieval Tasks</h3>
+    <p>Instruction-tuned models specifically for retrieval-augmented generation tasks. E.g., training models to generate better queries, to recognize when they need to retrieve, or to synthesize information from multiple docs.</p>
+
+    <h3>Latency Optimization</h3>
+    <p>Current bottleneck: embedding the query and retrieving from vector DB (100-200ms). Future: cached embeddings, streaming retrieval, early stopping. Goal: sub-50ms retrieval for real-time applications.</p>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete Code Examples</h2>
+
+    <p>Working, production-ready code for building RAG systems. Copy-paste and run.</p>
+
+    <h3>Example 1: Basic RAG with LangChain</h3>
+<div class="code-block">
+    <div class="code-header">Python — Basic RAG Pipeline</div>
+    <div class="code-content"><span class="keyword">import</span> os
+<span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> PyPDFLoader
+<span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
+<span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> HuggingFaceEmbeddings
+<span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma
+<span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate
+<span class="keyword">from</span> langchain.schema.runnable <span class="keyword">import</span> RunnablePassthrough
+<span class="keyword">from</span> langchain.schema.output_parser <span class="keyword">import</span> StrOutputParser
+
+<span class="comment"># Set API key</span>
+os.environ[<span class="string">"OPENAI_API_KEY"</span>] = <span class="string">"your-key-here"</span>
+
+<span class="comment"># 1. Load documents</span>
+loader = <span class="function">PyPDFLoader</span>(<span class="string">"example.pdf"</span>)
+documents = loader.<span class="function">load</span>()
+
+<span class="comment"># 2. Chunk documents</span>
+splitter = <span class="function">RecursiveCharacterTextSplitter</span>(
+    chunk_size=<span class="number">512</span>,
+    chunk_overlap=<span class="number">102</span>
+)
+chunks = splitter.<span class="function">split_documents</span>(documents)
+
+<span class="comment"># 3. Create embeddings and vector store</span>
+embeddings = <span class="function">HuggingFaceEmbeddings</span>(
+    model_name=<span class="string">"all-MiniLM-L6-v2"</span>
+)
+vectorstore = Chroma.<span class="function">from_documents</span>(
+    chunks,
+    embeddings,
+    collection_name=<span class="string">"rag-docs"</span>,
+    persist_directory=<span class="string">"./chroma_data"</span>
+)
+
+<span class="comment"># 4. Create retriever</span>
+retriever = vectorstore.<span class="function">as_retriever</span>(
+    search_type=<span class="string">"mmr"</span>,
+    search_kwargs={<span class="string">"k"</span>: <span class="number">5</span>, <span class="string">"fetch_k"</span>: <span class="number">20</span>}
+)
+
+<span class="comment"># 5. Setup LLM and RAG chain</span>
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-3.5-turbo"</span>, temperature=<span class="number">0.2</span>)
+
+prompt_template = <span class="string">"""Use the documents to answer the question. 
+If you can't answer from the documents, say "I don't know."
+
+Documents:
+{context}
+
+Question: {question}
+
+Answer:"""</span>
+
+prompt = <span class="function">PromptTemplate</span>(
+    template=prompt_template,
+    input_variables=[<span class="string">"context"</span>, <span class="string">"question"</span>]
+)
+
+<span class="keyword">def</span> <span class="function">format_docs</span>(docs):
+    <span class="keyword">return</span> <span class="string">"\n\n"</span>.<span class="function">join</span>([d.page_content <span class="keyword">for</span> d <span class="keyword">in</span> docs])
+
+chain = (
+    {<span class="string">"context"</span>: retriever | format_docs, <span class="string">"question"</span>: <span class="function">RunnablePassthrough</span>()}
+    | prompt
+    | llm
+    | <span class="function">StrOutputParser</span>()
+)
+
+<span class="comment"># 6. Query</span>
+result = chain.<span class="function">invoke</span>(<span class="string">"What is the main topic of the document?"</span>)
+<span class="function">print</span>(result)</div>
+</div>
+
+    <h3>Example 2: RAG with Re-ranking</h3>
+<div class="code-block">
+    <div class="code-header">Python — RAG with Cross-Encoder Re-ranking</div>
+    <div class="code-content"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> CrossEncoder
+<span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI
+
+<span class="comment"># Setup retriever and re-ranker</span>
+vectorstore = <span class="function">Chroma</span>(
+    collection_name=<span class="string">"rag-docs"</span>,
+    embedding_function=embeddings,
+    persist_directory=<span class="string">"./chroma_data"</span>
+)
+retriever = vectorstore.<span class="function">as_retriever</span>(search_kwargs={<span class="string">"k"</span>: <span class="number">20</span>})
+
+cross_encoder = <span class="function">CrossEncoder</span>(<span class="string">"ms-marco-MiniLM-L-6-v2"</span>)
+
+<span class="comment"># Setup LLM</span>
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-3.5-turbo"</span>)
+
+<span class="keyword">def</span> <span class="function">retrieve_and_rerank</span>(query):
+    <span class="comment"># Initial retrieval</span>
+    docs = retriever.<span class="function">get_relevant_documents</span>(query)
+    
+    <span class="comment"># Re-rank with cross-encoder</span>
+    pairs = [(query, doc.page_content) <span class="keyword">for</span> doc <span class="keyword">in</span> docs]
+    scores = cross_encoder.<span class="function">predict</span>(pairs)
+    
+    <span class="comment"># Sort and keep top-5</span>
+    scored_docs = <span class="function">sorted</span>(
+        <span class="function">zip</span>(docs, scores),
+        key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>],
+        reverse=<span class="keyword">True</span>
+    )[:<span class="number">5</span>]
+    
+    <span class="keyword">return</span> [doc <span class="keyword">for</span> doc, score <span class="keyword">in</span> scored_docs]
+
+<span class="comment"># Use in chain</span>
+docs = <span class="function">retrieve_and_rerank</span>(<span class="string">"your query here"</span>)
+context = <span class="string">"\n\n"</span>.<span class="function">join</span>([d.page_content <span class="keyword">for</span> d <span class="keyword">in</span> docs])
+<span class="function">print</span>(<span class="string">f"Retrieved {len(docs)} documents after re-ranking"</span>)</div>
+</div>
+
+    <h3>Example 3: Advanced RAG with Query Expansion and Filtering</h3>
+<div class="code-block">
+    <div class="code-header">Python — Advanced RAG with Query Expansion</div>
+    <div class="code-content"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> PromptTemplate
+<span class="keyword">from</span> langchain.output_parsers <span class="keyword">import</span> CommaSeparatedListOutputParser
+
+<span class="comment"># Query expansion</span>
+expansion_template = <span class="string">"""Generate 3 alternative phrasings of this query:
+{original_query}
+
+Alternatives:"""</span>
+
+expansion_prompt = <span class="function">PromptTemplate</span>(
+    template=expansion_template,
+    input_variables=[<span class="string">"original_query"</span>]
+)
+
+llm = <span class="function">ChatOpenAI</span>(temperature=<span class="number">0.7</span>)
+parser = <span class="function">CommaSeparatedListOutputParser</span>()
+
+<span class="comment"># Expand query</span>
+original_query = <span class="string">"How does RAG improve LLMs?"</span>
+expanded = (expansion_prompt | llm | parser).<span class="function">invoke</span>(
+    original_query=original_query
+)
+
+<span class="comment"># Retrieve with all queries</span>
+all_queries = [original_query] + expanded
+retrieved_docs = []
+seen = <span class="function">set</span>()
+
+<span class="keyword">for</span> q <span class="keyword">in</span> all_queries:
+    docs = retriever.<span class="function">get_relevant_documents</span>(q)
+    <span class="keyword">for</span> doc <span class="keyword">in</span> docs:
+        doc_id = <span class="function">hash</span>(doc.page_content)
+        <span class="keyword">if</span> doc_id <span class="keyword">not</span> <span class="keyword">in</span> seen:
+            seen.<span class="function">add</span>(doc_id)
+            retrieved_docs.<span class="function">append</span>(doc)
+
+<span class="function">print</span>(<span class="string">f"Query expansion: {len(all_queries)} queries → {len(retrieved_docs)} unique docs"</span>)</div>
+</div>
+
+    <h3>Example 4: RAG Evaluation with RAGAS</h3>
+<div class="code-block">
+    <div class="code-header">Python — RAGAS Evaluation Framework</div>
+    <div class="code-content">pip install ragas
+
+<span class="keyword">from</span> ragas <span class="keyword">import</span> evaluate
+<span class="keyword">from</span> ragas.metrics <span class="keyword">import</span> (
+    faithfulness,
+    answer_relevancy,
+    context_relevancy,
+    context_precision
+)
+
+<span class="comment"># Prepare evaluation data</span>
+eval_data = {
+    <span class="string">"question"</span>: [
+        <span class="string">"What is RAG?"</span>,
+        <span class="string">"How does retrieval improve LLMs?"</span>
+    ],
+    <span class="string">"answer"</span>: [
+        <span class="string">"RAG combines retrieval and generation..."</span>,
+        <span class="string">"Retrieval provides grounding..."</span>
+    ],
+    <span class="string">"contexts"</span>: [
+        [<span class="string">"RAG is a technique..."</span>, <span class="string">"It uses vector..."</span>],
+        [<span class="string">"Retrieval augments..."</span>, <span class="string">"Reduces hallucination..."</span>]
+    ],
+    <span class="string">"ground_truth"</span>: [
+        <span class="string">"RAG is Retrieval-Augmented Generation"</span>,
+        <span class="string">"It prevents hallucinations"</span>
+    ]
+}
+
+<span class="comment"># Evaluate</span>
+results = <span class="function">evaluate</span>(
+    eval_data,
+    metrics=[
+        faithfulness,
+        answer_relevancy,
+        context_relevancy,
+        context_precision
+    ]
+)
+
+<span class="function">print</span>(<span class="string">f"Faithfulness: {results['faithfulness']:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Answer Relevancy: {results['answer_relevancy']:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Context Relevancy: {results['context_relevancy']:.3f}"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <p>Learning RAG is best done by building. Here are practical exercises to deepen your understanding.</p>
+
+    <h3>Exercise 1: Build Your First RAG System</h3>
+    <div class="try-it-box">
+    <h4>Create a Basic RAG Pipeline</h4>
+    <p>
+        Load a PDF document (download any research paper from arXiv), chunk it, embed it, and build a RAG system that answers questions about it.
+        
+        <strong>Steps:</strong>
+        1. Find a research paper PDF (aim for 5-15 pages)
+        2. Use PyPDFLoader to load it
+        3. Chunk with RecursiveCharacterTextSplitter (512 tokens, 20% overlap)
+        4. Create embeddings with Sentence-Transformers
+        5. Store in Chroma
+        6. Build QA chain with LangChain
+        7. Test with 5-10 questions about the paper
+        
+        <strong>Success Criteria:</strong> System answers at least 80% of questions correctly with proper citations.
+        </p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="comment"># Template</span>
+loader = <span class="function">PyPDFLoader</span>(<span class="string">"paper.pdf"</span>)
+docs = loader.<span class="function">load</span>()
+
+splitter = <span class="function">RecursiveCharacterTextSplitter</span>(...)
+chunks = splitter.<span class="function">split_documents</span>(docs)
+
+<span class="comment"># Continue from here...</span></div>
+</div>
+</div>
+
+    <h3>Exercise 2: Compare Embedding Models</h3>
+    <div class="try-it-box">
+    <h4>Evaluate Different Embeddings</h4>
+    <p>
+        Take the same documents and create vector stores with 3 different embedding models. Compare retrieval quality on the same test queries.
+        
+        <strong>Models to compare:</strong>
+        - all-MiniLM-L6-v2 (fast, small)
+        - all-mpnet-base-v2 (balanced)
+        - all-distilroberta-v1 (small, decent)
+        
+        <strong>Metrics:</strong>
+        - Retrieval latency
+        - Relevance (manual scoring 1-5)
+        - Memory usage
+        
+        <strong>What you'll learn:</strong> How to choose embeddings for different requirements.
+        </p>
+</div>
+
+    <h3>Exercise 3: Advanced Retrieval with Re-ranking</h3>
+    <div class="try-it-box">
+    <h4>Implement Cross-Encoder Re-ranking</h4>
+    <p>
+        Add a re-ranking layer to your RAG system. Compare quality before/after re-ranking.
+        
+        <strong>Setup:</strong>
+        1. Use your basic RAG from Exercise 1
+        2. Retrieve top-20 documents (instead of top-5)
+        3. Re-rank with ms-marco-MiniLM cross-encoder
+        4. Keep top-5 re-ranked results
+        
+        <strong>Evaluation:</strong>
+        - Does re-ranking improve answer quality?
+        - How much latency cost?
+        - Is it worth it for your use case?
+        </p>
+</div>
+
+    <h3>Exercise 4: Implement Query Expansion</h3>
+    <div class="try-it-box">
+    <h4>Build Query Expansion</h4>
+    <p>
+        Implement query expansion: given a query, generate 3 alternative phrasings and retrieve from all. Compare to single-query retrieval.
+        
+        <strong>Process:</strong>
+        1. Use an LLM to expand queries
+        2. Retrieve for original + expanded
+        3. Deduplicate results
+        
+        <strong>Measure:</strong>
+        - Recall improvement
+        - Latency increase
+        </p>
+</div>
+
+    <h3>Exercise 5: Evaluate with RAGAS</h3>
+    <div class="try-it-box">
+    <h4>Setup RAG Evaluation</h4>
+    <p>
+        Install RAGAS and evaluate your RAG system on 20 test questions.
+        
+        <strong>Metrics to track:</strong>
+        - Faithfulness (does answer follow context?)
+        - Answer relevancy (does it answer the question?)
+        - Context precision (are retrieved docs relevant?)
+        
+        <strong>Goal:</strong> Achieve >0.85 on all metrics.
+        </p>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>RAG Interview Questions</h2>
+
+    <p>Preparing for interviews? Here are the questions you're likely to face on RAG systems.</p>
+
+    <h3>Foundational Questions</h3>
+
+    <div class="faq-item">
+    <div class="faq-question">1. What is RAG and why is it important? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">RAG (Retrieval-Augmented Generation) combines document retrieval with LLM generation. It's important because it addresses LLM hallucinations, adds domain-specific knowledge, and provides attribution. Without RAG, LLMs are limited to training data and tend to hallucinate.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">2. How does RAG differ from fine-tuning? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Fine-tuning updates model weights on task-specific data (expensive, slow, permanent). RAG retrieves at inference time (flexible, fast to update, cheaper). RAG is better for frequently-updated knowledge; fine-tuning for task adaptation.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">3. What are embeddings and why are they central to RAG? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Embeddings are dense vector representations of text in high-dimensional space (typically 384-1536 dimensions). Semantically similar texts have similar embeddings. RAG relies on embeddings to find relevant documents via similarity search.</div>
+    </div>
+</div>
+
+    <h3>Architecture & Design Questions</h3>
+
+    <div class="faq-item">
+    <div class="faq-question">4. Walk me through a complete RAG pipeline. What happens at each stage? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>Ingestion:</strong> Load documents. <strong>Chunking:</strong> Split into 256-1024 token pieces with overlap. <strong>Embedding:</strong> Convert to vectors. <strong>Storage:</strong> Store in vector DB. <strong>Query:</strong> Embed user query. <strong>Retrieval:</strong> Find top-K similar docs. <strong>Generation:</strong> Feed docs + query to LLM.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">5. Why can't we just put all documents in the LLM context? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">LLMs have finite context windows (4K-200K tokens). Putting all documents is infeasible for large corpora, increases latency and cost, and actually degrades quality (longer context → more noise). Retrieval solves this by selecting only relevant docs.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">6. What's the difference between embedding a document vs embedding a query? Can you use the same model? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">You must use the same model for both. If you use different models, documents and queries are in different vector spaces, making similarity scores meaningless. This is a common mistake.</div>
+    </div>
+</div>
+
+    <h3>Technical Implementation</h3>
+
+    <div class="faq-item">
+    <div class="faq-question">7. How would you chunk documents? What trade-offs are there? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Chunk size 256-1024 tokens typical. Small chunks: preserve relevance, fit more in context, but may lose context. Large chunks: preserve context, retrieve fewer docs, but may exceed context window. Use recursive chunking (by hierarchy) rather than fixed-size. 20-50% overlap helps with boundary cases.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">8. How do you choose an embedding model? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Start with all-MiniLM-L6-v2 (fast, 384-dim, effective). Consider: latency, quality, cost, multilingual needs, domain. Fine-tune on domain data if needed. Use proprietary APIs only when necessary due to cost.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">9. What vector database would you choose? Why? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Depends on scale: FAISS for <1M in-memory, Chroma for <1M on disk, Pinecone for 100M+. Milvus/Weaviate for open-source at scale. For most startups: Chroma initially, Pinecone when scaling.</div>
+    </div>
+</div>
+
+    <h3>Quality & Advanced Topics</h3>
+
+    <div class="faq-item">
+    <div class="faq-question">10. How do you improve RAG quality? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Retrieval: re-ranking, query expansion, hybrid search. Generation: better prompts, few-shot examples, instructions to cite. Evaluation: track retrieval and generation metrics separately. A/B test changes.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">11. What's the difference between naive RAG and advanced RAG? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Naive RAG: single query embedding → retrieve. Advanced RAG: query expansion → hybrid search → re-ranking → generate. Higher quality but more latency and complexity.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">12. How do you handle hallucinations in RAG? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">RAG reduces but doesn't eliminate hallucinations. Strategies: clear system prompts telling model to use retrieved docs only, confidence scoring, fact-checking, requiring citations, user feedback loops. Monitor hallucination rate.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">13. How would you make RAG work with proprietary/sensitive documents? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use on-premises vector DB or secure cloud storage. Encrypt at rest and in transit. Implement row-level security — filter retrieved docs by user permissions. Use private LLMs if data is very sensitive. Audit logging.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">14. What metrics would you track for a production RAG system? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Retrieval: recall@K, precision@K. Generation: faithfulness, relevancy, hallucination rate. End-to-end: user satisfaction, cost per query, latency. Setup dashboards and alerts.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">How much data do I need to build a RAG system? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">None! RAG works with any amount of data, from a few documents to millions. Start small (10-100 docs) to test ideas. Quality of documents matters more than quantity.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Will RAG make my LLM never hallucinate? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No. RAG reduces hallucinations from ~30% to ~5-10%. But LLMs can still hallucinate even with retrieved context. Implement checks: fact verification, confidence scoring, requiring citations.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How long does it take to build a production RAG system? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">MVP (basic RAG): 1-2 weeks. Production-grade (re-ranking, evaluation, monitoring): 2-3 months. Enterprise (security, compliance, integration): 3-6 months.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I use RAG with open-source LLMs? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes! RAG is architecture-agnostic. Works with GPT, Claude, Llama, Mistral, etc. Open-source LLMs: Llama 2, Mistral, are good choices for cost-sensitive deployments.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I handle documents longer than the context window? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Chunk into smaller pieces. Retrieve only relevant chunks. Summarize if needed. Or use newer long-context models (Claude 3 with 200K tokens).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What if my data changes frequently? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Update vector DB incrementally. Add new docs, update changed docs, delete removed docs. Some systems re-embed weekly. For real-time data, consider streaming pipelines.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I handle multiple languages? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use multilingual embedding models (multilingual-e5-base, mmarco-mMiniLMv2). They embed documents and queries in shared space across languages. LLM must support target languages.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can RAG handle images, tables, code? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Text: yes. Multimodal (images, tables): emerging. Use OCR for images/tables → text, then standard RAG. For specialized needs: multimodal embeddings (CLIP), multimodal LLMs (GPT-4V).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How much does RAG cost at scale? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Vector DB: $100-10k/month depending on volume. Embeddings: $10-100/month (open-source free). LLM API: $1-100k+/month depending on queries. Total: often cheaper than fine-tuning or large models.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the latency of RAG systems? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Typical: 500-2000ms. Breakdown: retrieval (100-300ms), re-ranking (300-500ms), LLM generation (200-1000ms). Can optimize to <500ms for simple systems.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary</h2>
+
+    <p>RAG is the practical solution for building AI systems that are accurate, grounded, and up-to-date. Here's what you've learned:</p>
+
+    <h3>Key Takeaways</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>RAG Fundamentals</h4>
+    <p>RAG combines retrieval (finding relevant docs) and generation (LLM creating answers). Solves hallucination, stale knowledge, and attribution problems.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Complete Pipeline</h4>
+    <p>Document ingestion → chunking → embedding → storage → query processing → retrieval → generation. Each stage matters.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Production Patterns</h4>
+    <p>Naive RAG is simple but limited. Advanced RAG (re-ranking, expansion) gives 15-20% quality boost. Choose based on requirements.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Evaluation</h4>
+    <p>Measure retrieval quality (recall, precision) separately from generation (faithfulness, relevancy). Use RAGAS framework.</p>
+</div>
+    </div>
+
+    <h3>Next Steps</h3>
+    <ol>
+        <li><strong>Build a basic RAG system</strong> using the code examples in this guide.</li>
+        <li><strong>Evaluate on your data</strong> using RAGAS or similar frameworks.</li>
+        <li><strong>Optimize retrieval</strong> with re-ranking and query expansion.</li>
+        <li><strong>Deploy to production</strong> with monitoring and user feedback loops.</li>
+        <li><strong>Stay updated</strong> — RAG is evolving rapidly with new techniques emerging monthly.</li>
+    </ol>
+
+    <h3>Common Pitfalls to Avoid</h3>
+    <ul>
+        <li>Different embedding models for indexing vs querying</li>
+        <li>Not evaluating retrieval quality separately</li>
+        <li>Expecting RAG to completely eliminate hallucinations</li>
+        <li>Ignoring updates to source documents</li>
+        <li>Not tracking costs at scale</li>
+    </ul>
+
+    <h3>Resources for Continued Learning</h3>
+    <ul>
+        <li><strong>Papers:</strong> "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (Lewis et al.) — the seminal RAG paper</li>
+        <li><strong>Libraries:</strong> LangChain, LlamaIndex for RAG orchestration</li>
+        <li><strong>Evaluation:</strong> RAGAS framework for systematic evaluation</li>
+        <li><strong>Communities:</strong> LangChain Discord, RAG research papers on arXiv</li>
+    </ul>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Learning</h2>
+
+    <h3>Essential Papers</h3>
+    <ul>
+        <li><strong>"<a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a>"</strong> (Lewis et al., 2020) — The original RAG paper. Must read.</li>
+        <li><strong>"<a href="https://arxiv.org/abs/2004.04906" target="_blank" rel="noopener">Dense Passage Retrieval for Open-Domain Question Answering</a>"</strong> (Karpukhin et al., 2020) — Foundational work on learned dense retrieval.</li>
+        <li><strong>"<a href="https://arxiv.org/abs/2002.08909" target="_blank" rel="noopener">Realm: Retrieval-Augmented Language Model Pre-Training</a>"</strong> (Guu et al., 2020) — Pre-training with retrieval.</li>
+        <li><strong>"<a href="https://arxiv.org/abs/2302.00083" target="_blank" rel="noopener">In-Context Retrieval-Augmented Language Models</a>"</strong> (Ram et al., 2023) — Modern RAG patterns with in-context learning.</li>
+        <li><strong>"<a href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener">RAGAS: A Unified Metric for Evaluating Retrieval-Augmented Generation</a>"</strong> (Es et al., 2023) — How to properly evaluate RAG.</li>
+    </ul>
+
+    <h3>Tools & Libraries</h3>
+    <ul>
+        <li><strong><a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a></strong> (langchain.com) — Python library for RAG orchestration. Most popular.</li>
+        <li><strong><a href="https://www.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a></strong> (llamaindex.ai) — Alternative RAG framework, strong for document indexing.</li>
+        <li><strong><a href="https://www.sbert.net/" target="_blank" rel="noopener">Sentence-Transformers</a></strong> (sbert.net) — Open-source embedding models.</li>
+        <li><strong><a href="https://www.trychroma.com/" target="_blank" rel="noopener">Chroma</a></strong> (trychroma.com) — Vector database for development.</li>
+        <li><strong><a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a></strong> (pinecone.io) — Managed vector database for production.</li>
+        <li><strong><a href="https://docs.ragas.io/" target="_blank" rel="noopener">RAGAS</a></strong> (github.com/explodinggradients/ragas) — Evaluation framework for RAG systems.</li>
+        <li><strong><a href="https://github.com/stanfordnlp/dspy" target="_blank" rel="noopener">DSPy</a></strong> — Formal framework for composing RAG programs.</li>
+    </ul>
+
+    <h3>Learning Resources</h3>
+    <ul>
+        <li><strong><a href="https://python.langchain.com/docs/" target="_blank" rel="noopener">LangChain Documentation</a></strong> — Best practices and tutorials</li>
+        <li><strong><a href="https://huggingface.co/models" target="_blank" rel="noopener">Hugging Face Hub</a></strong> — Thousands of pre-trained embedding models</li>
+        <li><strong>arXiv.org</strong> — Latest research papers on retrieval and generation</li>
+        <li><strong>GitHub</strong> — See real implementations in production projects</li>
+    </ul>
+
+    <h3>Community</h3>
+    <ul>
+        <li><strong><a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a> Discord</strong> — Active community discussing RAG and LLMs</li>
+        <li><strong>SustainSys AI Academy</strong> — Our other courses on transformers and ML fundamentals</li>
+        <li><strong>Research Groups</strong> — Facebook AI, Google Research, DeepMind publish RAG research</li>
+    </ul>
+
+    <h3>Recommended Learning Path</h3>
+    <ol>
+        <li>Complete this course ✓</li>
+        <li>Read the original RAG paper</li>
+        <li>Build a basic RAG system with your own documents</li>
+        <li>Study advanced techniques (re-ranking, evaluation)</li>
+        <li>Deploy a production system</li>
+        <li>Follow research on new RAG techniques</li>
+    </ol>
+</section>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar active link tracking
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.ml-section');
+            const navLinks = document.querySelectorAll('.ml-sidebar a');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const answer = this.nextElementSibling;
+                answer.classList.toggle('active');
+            });
+        });
+
+        // Animate bars on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.model-bar-fill').forEach(bar => {
+                bar.style.animation = 'barGrow 1.5s ease-out forwards';
+            });
+        });
+    </script>
+</body>
+</html>

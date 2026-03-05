@@ -1,0 +1,3442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Databases - SustainSys AI Academy</title>
+    <meta name="description" content="Master vector storage and similarity search — HNSW, IVF, Pinecone, Weaviate, Qdrant, Chroma, and pgvector.">
+    
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+<style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+    
+    <style>
+        .comparison-table {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(90deg, #0891b2, #7c3aed);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(8, 145, 178, 0.05);
+        }
+        
+        .model-bar {
+            margin: 1rem 0;
+        }
+        
+        .model-bar-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+        
+        .model-bar-track {
+            width: 100%;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .model-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+<nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <main class="ml-page-container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Vector Databases</h1>
+                <p class="page-description">Master Vector Databases with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <div class="ml-sidebar"><h3>Sections</h3><ul><li><a href="#intro" data-section="intro">Introduction</a></li><li><a href="#why-matters" data-section="why-matters">Why Vector Databases Matter</a></li><li><a href="#fundamentals" data-section="fundamentals">Vector Fundamentals</a></li><li><a href="#similarity" data-section="similarity">Similarity Search</a></li><li><a href="#distance-metrics" data-section="distance-metrics">Distance Metrics</a></li><li><a href="#hnsw" data-section="hnsw">HNSW Index</a></li><li><a href="#ivf" data-section="ivf">IVF Index</a></li><li><a href="#chroma" data-section="chroma">ChromaDB</a></li><li><a href="#pinecone" data-section="pinecone">Pinecone</a></li><li><a href="#qdrant" data-section="qdrant">Qdrant</a></li><li><a href="#weaviate" data-section="weaviate">Weaviate</a></li><li><a href="#pgvector" data-section="pgvector">pgvector</a></li><li><a href="#comparison" data-section="comparison">Platform Comparison</a></li><li><a href="#scaling" data-section="scaling">Scaling Strategies</a></li><li><a href="#optimization" data-section="optimization">Optimization Techniques</a></li><li><a href="#code-examples" data-section="code-examples">Code Examples</a></li><li><a href="#exercises" data-section="exercises">Exercises</a></li><li><a href="#interview" data-section="interview">Interview Questions</a></li><li><a href="#faq" data-section="faq">FAQ</a></li><li><a href="#resources" data-section="resources">Resources</a></li></ul></div>
+        
+        <div class="ml-content">
+            <h1>Vector Databases: Comprehensive Guide</h1>
+            <p style="color: var(--text-dim); font-size: 1.1rem; margin-bottom: 2rem;">Master vector storage, similarity search, HNSW, IVF, and production platforms.</p>
+            
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Vector Databases: Mastering Similarity Search</h2>
+
+    <div class="ml-intro-text">
+        <p>Vector databases have become essential infrastructure for modern AI applications. They enable efficient similarity search across billions of vectors, powering semantic search, recommendation systems, RAG (Retrieval-Augmented Generation), and AI-powered personalization at scale. While traditional databases excel at exact matching (SQL: WHERE id = 42), vector databases excel at finding similar items (Vector: FIND closest vectors to [0.1, 0.5, 0.3, ...]).</p>
+    </div>
+
+    <p>A <strong>vector database</strong> stores high-dimensional numerical representations (embeddings) and retrieves the most similar vectors using specialized indexing structures. Instead of comparing strings character-by-character or numbers with exact equality, vector databases compute similarity using distance metrics like cosine similarity or Euclidean distance.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Vector Fundamentals</h4>
+    <p>Understand embeddings, dimensionality, and why vectors enable semantic understanding. Learn how language models create meaningful numerical representations of concepts.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Similarity Metrics</h4>
+    <p>Master distance metrics: cosine similarity, Euclidean distance, Manhattan distance. Learn when to use each and how they impact performance.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Index Structures</h4>
+    <p>Explore HNSW (Hierarchical Navigable Small World), IVF (Inverted File Index), LSH, and more. Understand time-space tradeoffs.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Production Systems</h4>
+    <p>Deep dive into <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>, <a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a>, <a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a>, <a href="https://www.trychroma.com/" target="_blank" rel="noopener">ChromaDB</a>, Milvus, and <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a>. Learn when to use which platform.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Basic Python, understanding of machine learning concepts, familiarity with embeddings/vectors. No advanced mathematics required — we'll explain concepts from first principles.</p>
+</div>
+</section>
+
+<!-- SECTION: Why Vector Databases Matter -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Vector Databases Matter</h2>
+
+    <p>The explosion of large language models (LLMs) and AI applications created new demands on data infrastructure. Traditional databases couldn't answer questions like "find the 10 most similar documents" efficiently. Vector databases solve this fundamental problem.</p>
+
+    <h3>The Scale of the Opportunity</h3>
+
+    <div class="model-bar">
+        <div class="model-bar-label">LLM Inference Latency (ms)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 90%; background: linear-gradient(90deg, #0891b2, #22d3ee);">45ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Vector DB Query (100M vectors)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #059669, #10b981);">125ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">SQL DB Full Scan (10M rows)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #d97706, #f59e0b);">5234ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Brute Force Cosine (1M vectors)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 15%; background: linear-gradient(90deg, #db2777, #f472b6);">8932ms</div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Query latency for finding top-10 similar items — lower is better</em></p>
+
+    <h3>Key Use Cases</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Semantic Search</h4>
+    <p>Users search by meaning, not keywords. 'battery-powered transportation' returns bicycles AND electric scooters. Vector search understands intent.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>RAG Systems</h4>
+    <p>Retrieve relevant documents, then feed them to an LLM for generation. Powers ChatGPT plugins and enterprise AI assistants.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Recommendations</h4>
+    <p>Find similar products/content/users at scale. Netflix recommends movies; TikTok recommends videos — both using vector similarity.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Anomaly Detection</h4>
+    <p>Outliers are vectors far from the normal cluster. Use vector distance to identify fraud, system failures, and unusual patterns.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>The Vector Database Moment:</strong> Before 2023, vector search was a niche technique. After ChatGPT exploded and LLMs became mainstream, every developer suddenly needed semantic search. Vector databases went from 'nice to have' to 'table stakes' for modern applications.</p>
+</div>
+</section>
+
+<!-- SECTION: Vector Fundamentals -->
+<section id="fundamentals" class="ml-section">
+    <h2>Vector Fundamentals</h2>
+
+    <p>Before diving into databases, let's understand vectors themselves. A vector is just an ordered list of numbers, but the key insight is that vectors can represent meaning.</p>
+
+    <h3>From Text to Numbers</h3>
+    <p>Language models (BERT, GPT, etc.) convert text into vectors called <strong>embeddings</strong>. Each dimension captures some aspect of meaning:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Creating Embeddings</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+<span class="comment"># Text → embedding (384-dim vector)</span>
+text1 = <span class="string">"A fast car"</span>
+vector1 = model.<span class="function">encode</span>(text1)  <span class="comment"># [0.123, -0.456, 0.789, ...]</span>
+
+text2 = <span class="string">"A quick automobile"</span>
+vector2 = model.<span class="function">encode</span>(text2)  <span class="comment"># Similar vector to vector1</span>
+
+<span class="comment"># High-level concept: similar meanings → similar vectors</span>
+<span class="function">print</span>(<span class="string">f"Vector dimension: {len(vector1)}"</span>)  <span class="comment"># Output: 384</span>
+<span class="function">print</span>(<span class="string">f"Vector values: {vector1[:5]}"</span>)      <span class="comment"># [-0.12, 0.45, ...]</span></div>
+</div>
+
+    <p>The beauty is that similar text produces similar vectors. Distance between vectors represents semantic difference.</p>
+
+    <h3>Vector Space Properties</h3>
+
+    <div class="formula-box">
+    <div class="label">Vector Magnitude (L2 Norm)</div>
+    ||v|| = √(v₁² + v₂² + ... + vₙ²)
+
+Measures the 'length' or 'magnitude' of a vector in n-dimensional space.
+Used in normalization: v_normalized = v / ||v||
+</div>
+
+    <div class="formula-box">
+    <div class="label">Vector Dimensionality</div>
+    Most embeddings are 300-3,000 dimensions:
+  • BERT: 768 dimensions
+  • GPT-3: 12,288 dimensions
+  • OpenAI text-embedding-3-small: 512 dimensions
+  • MiniLM: 384 dimensions
+
+Higher dimensions = more expressive but slower similarity search
+</div>
+
+    <div class="info-box">
+    <h4>Dimensionality Paradox</h4>
+    <p>More dimensions provide richer representation, but also create the 'curse of dimensionality' — distances become less meaningful, and search becomes slower. Often you must trade off representation quality vs. query speed.</p>
+</div>
+
+    <h3>Vector Normalization</h3>
+    <p>Many systems normalize vectors (scale them to unit length). This matters because it affects distance calculations:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Vector Normalization</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+v = np.<span class="function">array</span>([<span class="number">3</span>, <span class="number">4</span>])
+magnitude = np.linalg.<span class="function">norm</span>(v)          <span class="comment"># √(9 + 16) = 5.0</span>
+v_normalized = v / magnitude           <span class="comment"># [0.6, 0.8]</span>
+
+<span class="comment"># Check normalization</span>
+<span class="function">print</span>(np.linalg.<span class="function">norm</span>(v_normalized))    <span class="comment"># Output: 1.0</span>
+
+<span class="comment"># Why normalize? For cosine similarity, normalized vectors</span>
+<span class="comment"># make the computation more efficient:</span>
+<span class="comment"># cos_sim(u, v) = u · v  (only need dot product if normalized)</span></div>
+</div>
+
+    <div class="info-box">
+    <h4>Vector Sparsity</h4>
+    <p>Text embeddings are typically dense (all dimensions have non-zero values). Some systems use sparse vectors (only a few non-zero dimensions), which are faster but less expressive. SPLADE uses sparse vectors for fast, interpretable retrieval.</p>
+</div>
+</section>
+
+<!-- SECTION: Similarity Search -->
+<section id="similarity" class="ml-section">
+    <h2>Similarity Search Fundamentals</h2>
+
+    <p>Given a query vector, find the K most similar vectors from a database. This is a fundamental operation in all vector systems.</p>
+
+    <h3>Exact vs. Approximate Search</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Exact Search (Brute Force)</h4>
+    <p>Compare query to every vector, compute exact distances, return top-K. Guaranteed correct answers. Time complexity: O(n·d) where n = vectors, d = dimensions. For millions of vectors, this is too slow.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Approximate Search (Indexed)</h4>
+    <p>Use index structure (HNSW, IVF, LSH) to skip comparisons. Trade small accuracy loss for massive speed gain. Usually find 99%+ of true neighbors in 1/100th the time.</p>
+</div>
+    </div>
+
+    <h3>Search Quality Metrics</h3>
+
+    <div class="formula-box">
+    <div class="label">Recall@K</div>
+    Of the K results we returned, what percentage were actual top-K neighbors?
+
+Recall@10 = (# of true top-10 neighbors we found) / 10
+
+Example: If we return 10 results and 9 are in the true top-10,
+Recall@10 = 9/10 = 90%
+
+Target: 99%+ recall with sub-10ms latency
+</div>
+
+    <div class="formula-box">
+    <div class="label">Mean Average Precision (MAP)</div>
+    Average precision across multiple queries:
+
+MAP = (1/Q) Σ AP(q) for each query q
+
+AP = (1/K) Σ (precision@i × is_relevant(i))
+
+Penalizes mistakes in top positions more than bottom
+</div>
+
+    <p>The key insight: most applications accept 99% recall to get 100x speedup. A product recommendation that returns 99 of the 100 best matches is still excellent.</p>
+
+    <div class="info-box">
+    <h4>Recall vs Latency Tradeoff</h4>
+    <p>Vector indices let you control this tradeoff. Index tuning parameters (ef_construction, M in HNSW, or n_probe in IVF) control accuracy/speed. More parameters = slower indexing but better recall, or faster queries but lower recall.</p>
+</div>
+
+    <h3>Similarity Search Example</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Brute Force Search</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Database: 1000 vectors, 384 dimensions</span>
+db_vectors = np.random.<span class="function">randn</span>(<span class="number">1000</span>, <span class="number">384</span>).<span class="function">astype</span>(<span class="string">'float32'</span>)
+
+<span class="comment"># Normalize for cosine similarity</span>
+db_vectors = db_vectors / np.linalg.<span class="function">norm</span>(db_vectors, axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)
+
+<span class="comment"># Query vector</span>
+query = np.random.<span class="function">randn</span>(<span class="number">384</span>).<span class="function">astype</span>(<span class="string">'float32'</span>)
+query = query / np.linalg.<span class="function">norm</span>(query)
+
+<span class="comment"># Brute force: compute distance to all vectors</span>
+<span class="comment"># Cosine similarity = dot product (after normalization)</span>
+distances = db_vectors @ query  <span class="comment"># O(n*d)</span>
+
+<span class="comment"># Get top 10 most similar</span>
+top_k = <span class="number">10</span>
+top_indices = np.<span class="function">argsort</span>(-distances)[:top_k]
+top_scores = distances[top_indices]
+
+<span class="function">print</span>(<span class="string">f"Top {top_k} most similar:"</span>)
+<span class="keyword">for</span> idx, score <span class="keyword">in</span> <span class="function">zip</span>(top_indices, top_scores):
+    <span class="function">print</span>(<span class="string">f"  Vector {idx}: similarity {score:.4f}"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Distance Metrics -->
+<section id="distance-metrics" class="ml-section">
+    <h2>Distance Metrics for Vectors</h2>
+
+    <p>Different metrics measure "distance" differently. Choosing the right metric is crucial for both correctness and performance.</p>
+
+    <h3>Cosine Similarity</h3>
+
+    <div class="formula-box">
+    <div class="label">Cosine Similarity</div>
+    cos_sim(u, v) = (u · v) / (||u|| × ||v||)
+
+Range: [-1, 1] where:
+  1  = identical vectors
+  0  = orthogonal (unrelated)
+  -1 = opposite vectors
+
+Advantages: Fast, normalized, works in high dimensions
+Disadvantages: Ignores magnitude, sensitive to sparse vectors
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — Cosine Similarity</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+u = np.<span class="function">array</span>([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]])
+v = np.<span class="function">array</span>([[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]])
+
+similarity = <span class="function">cosine_similarity</span>(u, v)[<span class="number">0</span>][<span class="number">0</span>]
+<span class="function">print</span>(<span class="string">f"Cosine similarity: {similarity:.4f}"</span>)  <span class="comment"># 0.9746</span>
+
+<span class="comment"># For normalized vectors, cosine sim = dot product</span>
+u_norm = u / np.linalg.<span class="function">norm</span>(u)
+v_norm = v / np.linalg.<span class="function">norm</span>(v)
+dot_product = (u_norm @ v_norm.T)[<span class="number">0</span>][<span class="number">0</span>]
+<span class="function">print</span>(<span class="string">f"Dot product (normalized): {dot_product:.4f}"</span>)  <span class="comment"># 0.9746</span></div>
+</div>
+
+    <h3>Euclidean Distance</h3>
+
+    <div class="formula-box">
+    <div class="label">Euclidean Distance (L2)</div>
+    d(u, v) = √((u₁-v₁)² + (u₂-v₂)² + ... + (uₙ-vₙ)²)
+
+Range: [0, ∞) where:
+  0   = identical vectors
+  larger = more different
+
+Advantages: Intuitive, captures magnitude differences
+Disadvantages: Slower in high dimensions, magnitude-dependent
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — Euclidean Distance</div>
+    <div class="code-content"><span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> euclidean
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+u = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
+v = np.<span class="function">array</span>([<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>])
+
+distance = <span class="function">euclidean</span>(u, v)
+<span class="function">print</span>(<span class="string">f"Euclidean distance: {distance:.4f}"</span>)  <span class="comment"># 5.1962</span>
+
+<span class="comment"># Also: L2 = sqrt(3), L2^2 = 3</span>
+l2_squared = np.<span class="function">sum</span>((u - v) ** <span class="number">2</span>)
+<span class="function">print</span>(<span class="string">f"L2 squared: {l2_squared}"</span>)  <span class="comment"># 27</span></div>
+</div>
+
+    <h3>Manhattan Distance</h3>
+
+    <div class="formula-box">
+    <div class="label">Manhattan Distance (L1)</div>
+    d(u, v) = |u₁-v₁| + |u₂-v₂| + ... + |uₙ-vₙ|
+
+Range: [0, ∞)
+
+Advantages: Fast (sum of absolute values), sparse-friendly
+Disadvantages: Less intuitive, doesn't account for direction
+</div>
+
+    <h3>Hamming Distance</h3>
+
+    <div class="formula-box">
+    <div class="label">Hamming Distance</div>
+    d(u, v) = count(uᵢ ≠ vᵢ) for i = 1 to n
+
+Used for binary/discrete vectors (often quantized for speed)
+
+Example: 
+  u = [1, 0, 1, 1]
+  v = [1, 1, 0, 1]
+  Hamming distance = 2 (differ at positions 1 and 2)
+</div>
+
+    <h3>Which Metric to Use?</h3>
+
+    <div class="comparison-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Best For</th>
+                <th>Speed</th>
+                <th>Space</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cosine Similarity</strong></td>
+                <td>Text/embeddings (ignore magnitude)</td>
+                <td>Very Fast</td>
+                <td>Requires normalization</td>
+            </tr>
+            <tr>
+                <td><strong>Euclidean (L2)</strong></td>
+                <td>Geometric data, images</td>
+                <td>Fast</td>
+                <td>Accounts for all differences</td>
+            </tr>
+            <tr>
+                <td><strong>Manhattan (L1)</strong></td>
+                <td>Sparse data, robustness</td>
+                <td>Very Fast</td>
+                <td>Lightweight</td>
+            </tr>
+            <tr>
+                <td><strong>Hamming</strong></td>
+                <td>Binary/quantized vectors</td>
+                <td>Fastest</td>
+                <td>1 bit per dimension</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="info-box">
+    <h4>Metric Selection Rule of Thumb</h4>
+    <p>Use cosine similarity for text/NLP embeddings (it's what language models are trained with). Use Euclidean for general purpose similarity or when magnitude matters. Use Manhattan for robustness to outliers. Use Hamming only with quantized/binary vectors.</p>
+</div>
+</section>
+
+<!-- SECTION: HNSW Index -->
+<section id="hnsw" class="ml-section">
+    <h2>HNSW: Hierarchical Navigable Small World</h2>
+
+    <p>HNSW is the most popular index structure for vector databases. It powers Pinecone, Weaviate, Qdrant, and Milvus. Understanding it is essential for production systems.</p>
+
+    <h3>Core Idea: Small World Networks</h3>
+
+    <p>HNSW is inspired by the "small world" phenomenon — in a small world network, you can reach any node via a few hops by following local connections. Think of social networks: you can reach someone across the world through 6 degrees of separation.</p>
+
+    <div class="highlight-box">
+        <p><strong>Small World Property:</strong> Even in huge networks, the average path length is logarithmic. HNSW exploits this: instead of comparing a query to all N vectors, you navigate a graph following distances, reaching the nearest neighbor in O(log N) comparisons on average.</p>
+    </div>
+
+    <h3>The Algorithm</h3>
+
+    <div class="formula-box">
+    <div class="label">HNSW Parameters</div>
+    M = max number of connections per node (default 5-16)
+ef_construction = size of dynamic candidate list during insert (default 200)
+ef = size of dynamic candidate list during search (default 10-100)
+
+Rules:
+  • Higher M → better recall but slower/more memory
+  • Higher ef_construction → better index quality but slower build
+  • Higher ef → better recall but slower queries
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — HNSW Insertion Algorithm</div>
+    <div class="code-content"><span class="comment"># Simplified HNSW insertion pseudocode</span>
+<span class="keyword">def</span> <span class="function">insert</span>(new_vector, M=<span class="number">5</span>, ef_construction=<span class="number">200</span>):
+    <span class="comment"># 1. Determine layer assignment (random, exponential)</span>
+    L = <span class="function">random_level</span>()
+    
+    <span class="comment"># 2. Find nearest neighbors at each layer from top to bottom</span>
+    <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="function">range</span>(L, <span class="number">0</span>, -<span class="number">1</span>):
+        <span class="comment"># Greedy search: find closest node in this layer</span>
+        nearest = <span class="function">greedy_search</span>(new_vector, layer)
+    
+    <span class="comment"># 3. At layer 0, insert with M nearest neighbors</span>
+    neighbors_layer_0 = <span class="function">search_neighbors</span>(new_vector, M, ef_construction)
+    <span class="function">add_bidirectional_links</span>(new_vector, neighbors_layer_0)
+    
+    <span class="comment"># 4. Prune neighbor connections if needed</span>
+    <span class="keyword">for</span> node <span class="keyword">in</span> neighbors_layer_0:
+        <span class="keyword">if</span> node.connections > M:
+            <span class="function">prune_worst_connections</span>(node, M)</div>
+</div>
+
+    <h3>Layered Architecture</h3>
+
+    <p>HNSW creates multiple layers. Higher layers (sparser) enable fast long-distance navigation. Lower layers (denser) enable fine-grained local search:</p>
+
+    <div class="info-box">
+    <h4>Layer 0 (Detailed)</h4>
+    <p>Dense graph with most connections. Comparisons happen here. Thousands of links enable precise nearest neighbor finding.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Layers 1+ (Navigation)</h4>
+    <p>Increasingly sparse. Few long-distance connections jump quickly toward the target region. Reduces the number of comparisons in lower layers.</p>
+</div>
+
+    <h3>Search Algorithm</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — HNSW Search</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">search</span>(query_vector, K=<span class="number">10</span>, ef=<span class="number">10</span>):
+    nearest = [entry_point]  <span class="comment"># Start from top layer entry</span>
+    
+    <span class="comment"># Traverse layers top-to-bottom</span>
+    <span class="keyword">for</span> layer <span class="keyword">in</span> <span class="function">range</span>(top_layer, <span class="number">0</span>, -<span class="number">1</span>):
+        <span class="comment"># Greedy: move toward closest neighbor in this layer</span>
+        nearest = <span class="function">greedy_search</span>(query_vector, nearest, layer)
+    
+    <span class="comment"># At layer 0: beam search with ef candidates</span>
+    candidates = nearest
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(ef):
+        <span class="comment"># Explore neighbors of current candidates</span>
+        <span class="keyword">for</span> neighbor <span class="keyword">in</span> candidates.<span class="function">neighbors</span>(layer=<span class="number">0</span>):
+            distance = <span class="function">compute_distance</span>(query_vector, neighbor)
+            candidates.<span class="function">add</span>(neighbor, distance)
+    
+    <span class="comment"># Return K nearest from final candidates</span>
+    <span class="keyword">return</span> candidates.<span class="function">top_k</span>(K)</div>
+</div>
+
+    <h3>HNSW Strengths and Weaknesses</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Strengths: HNSW</h4>
+    <p>Logarithmic query complexity, excellent recall with small ef values, in-memory friendly, handles insertions/deletions well, no reindexing needed.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Weaknesses: HNSW</h4>
+    <p>Difficult to tune (M, ef_construction, ef), limited batch processing, random layer assignment adds variance, not ideal for disk-based systems.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>HNSW in Practice</h4>
+    <p>Start with M=16, ef_construction=200, ef=10. Measure recall@10 on test set. If recall < 95%, increase ef_construction or M. If latency > target, decrease ef or M. Typical P99 latency: 5-50ms for billions of vectors.</p>
+</div>
+</section>
+
+<!-- SECTION: IVF Index -->
+<section id="ivf" class="ml-section">
+    <h2>IVF: Inverted File Index</h2>
+
+    <p>IVF (used in Faiss, Milvus, Vespa) partitions the vector space into clusters, then searches only the closest clusters. It trades recall for speed with larger indices.</p>
+
+    <h3>Core Concept: Partitioning</h3>
+
+    <p>IVF divides vectors into N clusters (typically 256-16,384). Each cluster has a centroid. To search:</p>
+    <ol style="margin-left: 2rem;">
+        <li>Find the n_probe closest clusters to the query</li>
+        <li>Search only vectors in those clusters</li>
+        <li>Return the top-K overall</li>
+    </ol>
+
+    <div class="formula-box">
+    <div class="label">IVF Time Complexity</div>
+    Without index: O(n × d)
+With IVF: O(k + (n/c) × n_probe × d)
+
+Where:
+  n = total vectors
+  d = dimensions
+  c = number of clusters
+  k = top-K results
+  n_probe = clusters to search (1-c)
+
+Typical speedup: 10-100x with small accuracy loss
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — IVF Search Example</div>
+    <div class="code-content"><span class="comment"># Simplified IVF search pseudocode</span>
+<span class="keyword">def</span> <span class="function">ivf_search</span>(query_vector, K=<span class="number">10</span>, n_probe=<span class="number">10</span>):
+    <span class="comment"># 1. Find distance to all cluster centroids O(c*d)</span>
+    distances_to_centroids = [
+        <span class="function">compute_distance</span>(query_vector, centroid) 
+        <span class="keyword">for</span> centroid <span class="keyword">in</span> centroids
+    ]
+    
+    <span class="comment"># 2. Find n_probe closest clusters</span>
+    closest_clusters = np.<span class="function">argsort</span>(distances_to_centroids)[:n_probe]
+    
+    <span class="comment"># 3. Search only vectors in those clusters</span>
+    candidates = []
+    <span class="keyword">for</span> cluster_id <span class="keyword">in</span> closest_clusters:
+        cluster_vectors = <span class="function">get_cluster_vectors</span>(cluster_id)
+        <span class="keyword">for</span> vector <span class="keyword">in</span> cluster_vectors:
+            distance = <span class="function">compute_distance</span>(query_vector, vector)
+            candidates.<span class="function">append</span>((distance, vector))
+    
+    <span class="comment"># 4. Return top-K</span>
+    candidates.<span class="function">sort</span>()
+    <span class="keyword">return</span> candidates[:K]</div>
+</div>
+
+    <h3>Building the Index</h3>
+
+    <div class="info-box">
+    <h4>K-Means Clustering</h4>
+    <p>IVF uses K-means to partition vectors. Run K-means on sample (10-100M vectors) to find centroids. Assign all vectors to nearest centroid. Build inverted list: for each centroid, store all vectors in that cluster.</p>
+</div>
+
+    <h3>Tuning IVF: The Recall/Speed Tradeoff</h3>
+
+    <div class="model-bar">
+        <div class="model-bar-label">n_probe=1</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #db2777, #f472b6);">5ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">n_probe=10</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #0891b2, #22d3ee);">35ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">n_probe=50</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #059669, #10b981);">145ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">n_probe=256 (all)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #6366f1, #818cf8);">1850ms</div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>IVF latency vs recall tradeoff. Search 10M vectors, K=10</em></p>
+
+    <h3>IVF vs HNSW</h3>
+
+    <div class="comparison-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>HNSW</th>
+                <th>IVF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Index Size</strong></td>
+                <td>Smaller (fewer links)</td>
+                <td>Larger (stores cluster assignments)</td>
+            </tr>
+            <tr>
+                <td><strong>Building Time</strong></td>
+                <td>O(n log n), slower</td>
+                <td>O(n log k), faster</td>
+            </tr>
+            <tr>
+                <td><strong>Query Latency</strong></td>
+                <td>5-20ms typical</td>
+                <td>5-50ms (variable)</td>
+            </tr>
+            <tr>
+                <td><strong>Tuning Complexity</strong></td>
+                <td>Moderate (M, ef, ef_construction)</td>
+                <td>High (n_clusters, n_probe, retraining)</td>
+            </tr>
+            <tr>
+                <td><strong>Insertions/Updates</strong></td>
+                <td>Fast, no reindex</td>
+                <td>Slow, may need reindex</td>
+            </tr>
+            <tr>
+                <td><strong>Best For</strong></td>
+                <td>Streaming, dynamic data</td>
+                <td>Batch operations, static data</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</section>
+
+<!-- SECTION: ChromaDB -->
+<section id="chroma" class="ml-section">
+    <h2>ChromaDB: Simple Vector Database</h2>
+
+    <p>ChromaDB is the easiest vector database to get started with. It's open-source, requires zero infrastructure, and works great for prototyping and small-to-medium scale applications.</p>
+
+    <h3>Key Features</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Easy Setup</h4>
+    <p>pip install chromadb, import, use. No Docker, no databases, no credentials. Perfect for rapid prototyping.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Built-in Embeddings</h4>
+    <p>Chromadb can generate embeddings automatically using sentence-transformers or OpenAI. Just add text, it handles the rest.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Multiple Backends</h4>
+    <p>Run in-memory, on-disk, or connect to a Chroma server. Scale from local laptop to distributed setup.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Metadata Filtering</h4>
+    <p>Filter results by metadata before/after similarity search. E.g., only documents from 2024.</p>
+</div>
+    </div>
+
+    <h3>Installation and Basic Usage</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — ChromaDB Basic Operations</div>
+    <div class="code-content"><span class="comment"># Installation</span>
+<span class="comment"># pip install chromadb</span>
+
+<span class="keyword">import</span> chromadb
+
+<span class="comment"># Create a local persistent database</span>
+client = chromadb.<span class="function">PersistentClient</span>(path=<span class="string">"/tmp/chroma"</span>)
+
+<span class="comment"># Create a collection (like a table)</span>
+collection = client.<span class="function">get_or_create_collection</span>(name=<span class="string">"documents"</span>)
+
+<span class="comment"># Add documents (Chroma auto-generates embeddings)</span>
+collection.<span class="function">add</span>(
+    ids=[<span class="string">"doc1"</span>, <span class="string">"doc2"</span>, <span class="string">"doc3"</span>],
+    documents=[
+        <span class="string">"The quick brown fox jumps over the lazy dog"</span>,
+        <span class="string">"A fast red fox leaps over a sleepy dog"</span>,
+        <span class="string">"Python is a popular programming language"</span>
+    ],
+    metadatas=[
+        {<span class="string">"source"</span>: <span class="string">"story.txt"</span>, <span class="string">"year"</span>: <span class="number">2024</span>},
+        {<span class="string">"source"</span>: <span class="string">"story.txt"</span>, <span class="string">"year"</span>: <span class="number">2024</span>},
+        {<span class="string">"source"</span>: <span class="string">"programming.txt"</span>, <span class="string">"year"</span>: <span class="number">2023</span>}
+    ]
+)
+
+<span class="comment"># Query: find 2 most similar documents</span>
+results = collection.<span class="function">query</span>(
+    query_texts=[<span class="string">"A quick fox"</span>],
+    n_results=<span class="number">2</span>
+)
+
+<span class="function">print</span>(results[<span class="string">"documents"</span>])     <span class="comment"># [["The quick brown...", "A fast red..."]]</span>
+<span class="function">print</span>(results[<span class="string">"distances"</span>])     <span class="comment"># [[0.15, 0.32]]  # Lower = more similar</span>
+<span class="function">print</span>(results[<span class="string">"metadatas"</span>])     <span class="comment"># Metadata for results</span></div>
+</div>
+
+    <h3>Advanced: Filtering and Custom Embeddings</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — ChromaDB with Filtering</div>
+    <div class="code-content"><span class="keyword">import</span> chromadb
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+
+client = chromadb.<span class="function">PersistentClient</span>(path=<span class="string">"/tmp/chroma"</span>)
+collection = client.<span class="function">get_or_create_collection</span>(name=<span class="string">"articles"</span>)
+
+<span class="comment"># Add documents with rich metadata</span>
+collection.<span class="function">add</span>(
+    ids=[<span class="string">"a1"</span>, <span class="string">"a2"</span>, <span class="string">"a3"</span>, <span class="string">"a4"</span>],
+    documents=[
+        <span class="string">"Machine learning is transforming AI"</span>,
+        <span class="string">"Deep learning requires lots of data"</span>,
+        <span class="string">"Python is easy to learn"</span>,
+        <span class="string">"Rust is fast and safe"</span>
+    ],
+    metadatas=[
+        {<span class="string">"category"</span>: <span class="string">"AI"</span>, <span class="string">"year"</span>: <span class="number">2024</span>},
+        {<span class="string">"category"</span>: <span class="string">"AI"</span>, <span class="string">"year"</span>: <span class="number">2023</span>},
+        {<span class="string">"category"</span>: <span class="string">"Programming"</span>, <span class="string">"year"</span>: <span class="number">2024</span>},
+        {<span class="string">"category"</span>: <span class="string">"Programming"</span>, <span class="string">"year"</span>: <span class="number">2024</span>}
+    ]
+)
+
+<span class="comment"># Query with metadata filter: only AI articles from 2024</span>
+results = collection.<span class="function">query</span>(
+    query_texts=[<span class="string">"neural networks"</span>],
+    n_results=<span class="number">2</span>,
+    where={<span class="string">"$and"</span>: [
+        {<span class="string">"category"</span>: <span class="string">"AI"</span>},
+        {<span class="string">"year"</span>: <span class="number">2024</span>}
+    ]}
+)
+
+<span class="comment"># Custom embeddings with sentence-transformers</span>
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-mpnet-base-v2'</span>)
+embeddings = [model.<span class="function">encode</span>(doc).<span class="function">tolist</span>() <span class="keyword">for</span> doc <span class="keyword">in</span> my_documents]
+
+collection2 = client.<span class="function">get_or_create_collection</span>(name=<span class="string">"custom"</span>)
+collection2.<span class="function">add</span>(
+    ids=<span class="function">list</span>(<span class="function">range</span>(<span class="function">len</span>(my_documents))),
+    documents=my_documents,
+    embeddings=embeddings
+)</div>
+</div>
+
+    <h3>When to Use ChromaDB</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Perfect For:</h4>
+    <p>Prototyping RAG systems, small document stores (< 100K), learning vector databases, demo applications, hobby projects.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Not For:</h4>
+    <p>Production systems with >1M documents, heavy concurrent access, sub-5ms latency requirements, complex filtering, multi-tenant.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>ChromaDB Performance</h4>
+    <p>In-memory: 1-5ms per query (up to 100K vectors). Persistent: 5-20ms. Server mode: 20-100ms (includes network). Suitable for applications where 50-100ms latency is acceptable.</p>
+</div>
+</section>
+
+<!-- SECTION: Pinecone -->
+<section id="pinecone" class="ml-section">
+    <h2>Pinecone: Managed Vector Database</h2>
+
+    <p>Pinecone is the most mature managed vector database service. It handles infrastructure, scaling, and availability so you just push vectors and query. Perfect for production AI applications.</p>
+
+    <h3>Key Features</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Fully Managed</h4>
+    <p>No ops, no infrastructure. Just use API. Automatic scaling, replication, disaster recovery built-in.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Production Ready</h4>
+    <p>99.9% SLA, low-latency endpoints, edge caching, real-time indexing. Handles millions of vectors easily.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pod Storage</h4>
+    <p>Persistent storage for metadata. Store arbitrary JSON with each vector for rich filtering and retrieval.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Serverless</h4>
+    <p>Pay-per-request pricing. No minimum costs. Scales from zero to billions of vectors.</p>
+</div>
+    </div>
+
+    <h3>Setup and Basic Operations</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Pinecone Setup and Search</div>
+    <div class="code-content"><span class="comment"># pip install pinecone-client</span>
+
+<span class="keyword">from</span> pinecone <span class="keyword">import</span> Pinecone
+<span class="keyword">import</span> openai
+
+<span class="comment"># Initialize</span>
+pc = <span class="function">Pinecone</span>(api_key=<span class="string">"YOUR_API_KEY"</span>)
+index = pc.<span class="function">Index</span>(<span class="string">"my-index"</span>)
+
+<span class="comment"># Upload vectors</span>
+vectors_to_upsert = [
+    (<span class="string">"vec1"</span>, [<span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, ...], {<span class="string">"text"</span>: <span class="string">"First document"</span>, <span class="string">"date"</span>: <span class="string">"2024-01-01"</span>}),
+    (<span class="string">"vec2"</span>, [<span class="number">0.2</span>, <span class="number">0.3</span>, <span class="number">0.4</span>, ...], {<span class="string">"text"</span>: <span class="string">"Second document"</span>, <span class="string">"date"</span>: <span class="string">"2024-01-02"</span>}),
+]
+
+index.<span class="function">upsert</span>(vectors=vectors_to_upsert)
+
+<span class="comment"># Query</span>
+query_embedding = openai.Embedding.<span class="function">create</span>(
+    <span class="function">input</span>=<span class="string">"machine learning tutorial"</span>,
+    model=<span class="string">"text-embedding-3-small"</span>
+)[<span class="string">"data"</span>][<span class="number">0</span>][<span class="string">"embedding"</span>]
+
+results = index.<span class="function">query</span>(
+    vector=query_embedding,
+    top_k=<span class="number">10</span>,
+    include_metadata=<span class="keyword">True</span>
+)
+
+<span class="keyword">for</span> match <span class="keyword">in</span> results.matches:
+    <span class="function">print</span>(<span class="string">f"{match.metadata['text']}: {match.score}"</span>)</div>
+</div>
+
+    <h3>Advanced: Hybrid Search with Metadata</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Pinecone with Filtering</div>
+    <div class="code-content"><span class="keyword">from</span> pinecone <span class="keyword">import</span> Pinecone
+
+pc = <span class="function">Pinecone</span>(api_key=<span class="string">"YOUR_API_KEY"</span>)
+index = pc.<span class="function">Index</span>(<span class="string">"articles"</span>)
+
+<span class="comment"># Upsert with metadata</span>
+index.<span class="function">upsert</span>(vectors=[
+    (<span class="string">"id1"</span>, vector1, {
+        <span class="string">"title"</span>: <span class="string">"AI Trends 2024"</span>,
+        <span class="string">"category"</span>: <span class="string">"AI"</span>,
+        <span class="string">"views"</span>: <span class="number">5000</span>,
+        <span class="string">"year"</span>: <span class="number">2024</span>
+    }),
+    (<span class="string">"id2"</span>, vector2, {
+        <span class="string">"title"</span>: <span class="string">"Python Async"</span>,
+        <span class="string">"category"</span>: <span class="string">"Programming"</span>,
+        <span class="string">"views"</span>: <span class="number">2000</span>,
+        <span class="string">"year"</span>: <span class="number">2024</span>
+    }),
+])
+
+<span class="comment"># Query with metadata filter (namespace support)</span>
+results = index.<span class="function">query</span>(
+    vector=query_vec,
+    top_k=<span class="number">5</span>,
+    <span class="function">filter</span>={
+        <span class="string">"$and"</span>: [
+            {<span class="string">"category"</span>: {<span class="string">"$eq"</span>: <span class="string">"AI"</span>}},
+            {<span class="string">"year"</span>: {<span class="string">"$gte"</span>: <span class="number">2024</span>}}
+        ]
+    },
+    include_metadata=<span class="keyword">True</span>
+)
+
+<span class="comment"># Hybrid search: combine vector similarity + filters</span>
+<span class="comment"># Returns vectors similar to query that also match filters</span></div>
+</div>
+
+    <h3>Performance Characteristics</h3>
+
+    <div class="model-bar">
+        <div class="model-bar-label">P50 Latency</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #0891b2, #22d3ee);">8ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">P95 Latency</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #059669, #10b981);">25ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">P99 Latency</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #6366f1, #818cf8);">60ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Throughput (QPS)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #059669, #10b981);">10000+</div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Typical performance on standard index (billions of vectors)</em></p>
+
+    <h3>Pricing Model</h3>
+
+    <div class="info-box">
+    <h4>Pinecone Costs</h4>
+    <p>Serverless: $0.04 per 1M requests. Standard indexes: $0.25/pod-hour (s1 pod) to $2.50/pod-hour (p2 pod). Each pod = ~2M vectors (s1) to ~40M vectors (p2). For 10M vectors with 100 QPS: ~$200-500/month.</p>
+</div>
+
+    <h3>When to Use Pinecone</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Best For:</h4>
+    <p>Production AI apps, RAG systems at scale, SaaS products, teams without ops expertise, applications needing 99.9% uptime.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Trade-offs:</h4>
+    <p>Vendor lock-in, pricing can add up, limited customization of index internals, requires API key management.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Qdrant -->
+<section id="qdrant" class="ml-section">
+    <h2>Qdrant: Open Source, Powerful Filtering</h2>
+
+    <p>Qdrant is an open-source vector database excelling at rich metadata filtering. It combines the best of HNSW indexing with SQL-like filtering capabilities, making it ideal for complex retrieval scenarios.</p>
+
+    <h3>Key Features</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Open Source</h4>
+    <p>Full control, no vendor lock-in, can self-host or use managed cloud, MIT licensed.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Advanced Filtering</h4>
+    <p>Filter on metadata using complex queries (AND, OR, nested conditions). Unlike simpler systems, Qdrant filters efficiently.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Payload Storage</h4>
+    <p>Store rich JSON metadata with vectors. Query using complex conditions: {age > 18 AND category IN ['ai', 'ml']}</p>
+</div>
+        <div class="card green-accent">
+    <h4>Python/Rust</h4>
+    <p>High-performance Rust backend. Python-first API. Cloud version available with SLA.</p>
+</div>
+    </div>
+
+    <h3>Installation and Basic Operations</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Qdrant Setup</div>
+    <div class="code-content"><span class="comment"># pip install qdrant-client</span>
+
+<span class="keyword">from</span> qdrant_client <span class="keyword">import</span> QdrantClient
+<span class="keyword">from</span> qdrant_client.models <span class="keyword">import</span> Distance, VectorParams, PointStruct
+
+<span class="comment"># Connect to Qdrant (local or remote)</span>
+client = <span class="function">QdrantClient</span>(<span class="string">":memory:"</span>)  <span class="comment"># In-memory for testing</span>
+<span class="comment"># Or: QdrantClient("localhost", port=6333)  # Docker instance</span>
+<span class="comment"># Or: QdrantClient(url="https://...", api_key="...")  # Cloud</span>
+
+<span class="comment"># Create collection with vector config</span>
+client.<span class="function">create_collection</span>(
+    collection_name=<span class="string">"documents"</span>,
+    vectors_config=<span class="function">VectorParams</span>(size=<span class="number">384</span>, distance=Distance.COSINE)
+)
+
+<span class="comment"># Upsert points (vectors with metadata)</span>
+points = [
+    <span class="function">PointStruct</span>(
+        <span class="function">id</span>=<span class="number">1</span>,
+        vector=[<span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, ...],  <span class="comment"># 384-dimensional vector</span>
+        payload={
+            <span class="string">"text"</span>: <span class="string">"Machine learning fundamentals"</span>,
+            <span class="string">"category"</span>: <span class="string">"AI"</span>,
+            <span class="string">"date"</span>: <span class="string">"2024-01-15"</span>,
+            <span class="string">"rating"</span>: <span class="number">4.5</span>
+        }
+    ),
+    <span class="function">PointStruct</span>(
+        <span class="function">id</span>=<span class="number">2</span>,
+        vector=[<span class="number">0.15</span>, <span class="number">0.25</span>, <span class="number">0.35</span>, ...],
+        payload={
+            <span class="string">"text"</span>: <span class="string">"Python for data science"</span>,
+            <span class="string">"category"</span>: <span class="string">"Programming"</span>,
+            <span class="string">"date"</span>: <span class="string">"2024-02-01"</span>,
+            <span class="string">"rating"</span>: <span class="number">4.8</span>
+        }
+    ),
+]
+
+client.<span class="function">upsert</span>(
+    collection_name=<span class="string">"documents"</span>,
+    points=points
+)
+
+<span class="comment"># Simple search</span>
+results = client.<span class="function">search</span>(
+    collection_name=<span class="string">"documents"</span>,
+    query_vector=[<span class="number">0.12</span>, <span class="number">0.22</span>, <span class="number">0.32</span>, ...],  <span class="comment"># Query vector</span>
+    limit=<span class="number">5</span>
+)
+
+<span class="keyword">for</span> result <span class="keyword">in</span> results:
+    <span class="function">print</span>(<span class="string">f"ID: {result.id}, Score: {result.score}, Text: {result.payload['text']}"</span>)</div>
+</div>
+
+    <h3>Advanced: Complex Metadata Filtering</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Qdrant with Metadata Filtering</div>
+    <div class="code-content"><span class="keyword">from</span> qdrant_client.models <span class="keyword">import</span> PointStruct, Filter, FieldCondition, MatchValue, Range
+
+<span class="comment"># Search with complex filter</span>
+results = client.<span class="function">search</span>(
+    collection_name=<span class="string">"documents"</span>,
+    query_vector=query_vec,
+    query_filter=<span class="function">Filter</span>(
+        must=[
+            <span class="function">FieldCondition</span>(
+                key=<span class="string">"category"</span>,
+                match=<span class="function">MatchValue</span>(value=<span class="string">"AI"</span>)
+            ),
+            <span class="function">FieldCondition</span>(
+                key=<span class="string">"rating"</span>,
+                <span class="function">range</span>=<span class="function">Range</span>(gte=<span class="number">4.0</span>)
+            )
+        ],
+        must_not=[
+            <span class="function">FieldCondition</span>(
+                key=<span class="string">"date"</span>,
+                <span class="function">range</span>=<span class="function">Range</span>(lte=<span class="number">1672531200</span>)  <span class="comment"># Before 2023</span>
+            )
+        ]
+    ),
+    limit=<span class="number">10</span>
+)
+
+<span class="comment"># Complex query examples:</span>
+<span class="comment"># 1. (category='AI' OR category='ML') AND rating &gt;= 4.5 AND date &gt; 2024-01-01</span>
+<span class="comment"># 2. has_images=true AND location within_radius(10km)</span>
+<span class="comment"># 3. price &lt; 100 AND stock &gt; 0 AND (brand='Apple' OR brand='Samsung')</span></div>
+</div>
+
+    <h3>Qdrant Performance on Filtering</h3>
+
+    <div class="model-bar">
+        <div class="model-bar-label">Simple search (no filter)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 25%; background: linear-gradient(90deg, #0891b2, #22d3ee);">2ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Search + filter (10% selectivity)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #059669, #10b981);">3ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Search + complex filter (5% selectivity)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #6366f1, #818cf8);">8ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Search + filter (0.1% selectivity)</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #d97706, #f59e0b);">45ms</div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Latency with increasing filter selectivity (10M vectors)</em></p>
+
+    <h3>Docker Setup</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Run Qdrant with Docker</div>
+    <div class="code-content"><span class="comment"># Start Qdrant server</span>
+docker run -p <span class="number">6333</span>:<span class="number">6333</span> qdrant/qdrant
+
+<span class="comment"># Connect from Python</span>
+<span class="keyword">from</span> qdrant_client <span class="keyword">import</span> QdrantClient
+client = <span class="function">QdrantClient</span>(<span class="string">"localhost"</span>, port=<span class="number">6333</span>)
+
+<span class="comment"># Now use as normal</span></div>
+</div>
+
+    <h3>When to Use Qdrant</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Best For:</h4>
+    <p>Applications needing complex filtering, self-hosted deployments, open-source preference, hybrid retrieval (vector + structured search).</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Trade-offs:</h4>
+    <p>More complex to set up than Pinecone, less mature ecosystem, requires self-hosting or managing cloud deployment.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Weaviate -->
+<section id="weaviate" class="ml-section">
+    <h2>Weaviate: GraphQL-Based Vector Database</h2>
+
+    <p>Weaviate combines vector search with graph capabilities and structured data. It's designed for complex knowledge graphs and enterprises needing both semantic and structured search.</p>
+
+    <h3>Key Features</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>GraphQL API</h4>
+    <p>Query using GraphQL instead of REST. Single query combines vector search, filtering, and relationships.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Hybrid Search</h4>
+    <p>Combine vector similarity with keyword (BM25) search. Best of both worlds for comprehensive retrieval.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Multi-Tenancy</h4>
+    <p>Built-in multi-tenant support. Perfect for SaaS platforms with isolated customer data.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Built-in Transformers</h4>
+    <p>Vectorize text automatically using Hugging Face models. No external embedding service needed.</p>
+</div>
+    </div>
+
+    <h3>Setup and Basic Usage</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Weaviate Setup with Python</div>
+    <div class="code-content"><span class="comment"># pip install weaviate-client</span>
+
+<span class="keyword">import</span> weaviate
+<span class="keyword">from</span> weaviate.classes.generic <span class="keyword">import</span> DataObject
+
+<span class="comment"># Connect to Weaviate</span>
+client = weaviate.<span class="function">connect_to_local</span>()  <span class="comment"># Docker required</span>
+
+<span class="comment"># Define schema (class structure)</span>
+articles_schema = {
+    <span class="string">"classes"</span>: [
+        {
+            <span class="string">"class"</span>: <span class="string">"Article"</span>,
+            <span class="string">"description"</span>: <span class="string">"A news article"</span>,
+            <span class="string">"properties"</span>: [
+                {
+                    <span class="string">"name"</span>: <span class="string">"title"</span>,
+                    <span class="string">"dataType"</span>: [<span class="string">"text"</span>],
+                    <span class="string">"description"</span>: <span class="string">"Article title"</span>,
+                },
+                {
+                    <span class="string">"name"</span>: <span class="string">"content"</span>,
+                    <span class="string">"dataType"</span>: [<span class="string">"text"</span>],
+                    <span class="string">"description"</span>: <span class="string">"Article content"</span>,
+                },
+                {
+                    <span class="string">"name"</span>: <span class="string">"category"</span>,
+                    <span class="string">"dataType"</span>: [<span class="string">"text"</span>],
+                    <span class="string">"description"</span>: <span class="string">"Category (AI, Tech, etc)"</span>,
+                },
+                {
+                    <span class="string">"name"</span>: <span class="string">"publication_date"</span>,
+                    <span class="string">"dataType"</span>: [<span class="string">"date"</span>],
+                    <span class="string">"description"</span>: <span class="string">"When published"</span>,
+                },
+            ],
+            <span class="string">"vectorizer"</span>: <span class="string">"text2vec-openai"</span>,  <span class="comment"># Auto-vectorize with OpenAI</span>
+            <span class="string">"moduleConfig"</span>: {
+                <span class="string">"text2vec-openai"</span>: {
+                    <span class="string">"model"</span>: <span class="string">"text-embedding-3-small"</span>
+                }
+            }
+        }
+    ]
+}
+
+client.schema.<span class="function">create</span>(articles_schema)
+
+<span class="comment"># Add data (auto-vectorized)</span>
+client.data.<span class="function">create</span>(
+    collection_name=<span class="string">"Article"</span>,
+    properties={
+        <span class="string">"title"</span>: <span class="string">"Deep Learning Revolution"</span>,
+        <span class="string">"content"</span>: <span class="string">"Recent advances in deep learning..."</span>,
+        <span class="string">"category"</span>: <span class="string">"AI"</span>,
+        <span class="string">"publication_date"</span>: <span class="string">"2024-02-27"</span>
+    }
+)
+
+<span class="comment"># Query using GraphQL</span>
+response = client.graphql.<span class="function">raw</span>(<span class="string">"""
+{
+    Get {
+        Article(
+            nearText: {concepts: ["machine learning trends"]}
+            where: {
+                operator: AND
+                operands: [
+                    {path: ["category"], operator: Equal, valueString: "AI"}
+                    {path: ["publication_date"], operator: GreaterOrEqual, valueDate: "2024-01-01"}
+                ]
+            }
+            limit: 10
+        ) {
+            title
+            content
+            category
+            publication_date
+            _additional {
+                distance
+            }
+        }
+    }
+}
+"""</span>)
+
+<span class="function">print</span>(response)</div>
+</div>
+
+    <h3>Hybrid Search (Vector + Keyword)</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Weaviate Hybrid Search</div>
+    <div class="code-content"><span class="comment"># Hybrid search combines vector + BM25 keyword search</span>
+response = client.graphql.<span class="function">raw</span>(<span class="string">"""
+{
+    Get {
+        Article(
+            hybrid: {
+                query: "transformer attention mechanism",
+                alpha: 0.75  # 75% vector, 25% keyword
+            }
+            limit: 5
+        ) {
+            title
+            _additional {
+                score
+                explainScore
+            }
+        }
+    }
+}
+"""</span>)
+
+<span class="comment"># alpha = 0.0: Pure keyword (BM25)</span>
+<span class="comment"># alpha = 0.5: Balanced vector + keyword</span>
+<span class="comment"># alpha = 1.0: Pure vector similarity</span>
+<span class="comment"># Typical: alpha = 0.75 (mostly semantic, some keyword)</span></div>
+</div>
+
+    <h3>Docker Setup</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Run Weaviate</div>
+    <div class="code-content"><span class="comment"># Start with docker-compose</span>
+version: <span class="string">'3.4'</span>
+services:
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    ports:
+      - <span class="string">"8080:8080"</span>
+    environment:
+      QUERY_DEFAULTS_LIMIT: <span class="number">25</span>
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: <span class="string">"true"</span>
+      PERSISTENCE_DATA_PATH: <span class="string">"/var/lib/weaviate"</span>
+
+<span class="comment"># Start: docker-compose up -d</span></div>
+</div>
+
+    <h3>When to Use Weaviate</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Best For:</h4>
+    <p>Knowledge graphs, enterprises, hybrid search needs, multi-tenant SaaS, semantic web applications.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Trade-offs:</h4>
+    <p>Steeper learning curve (GraphQL), heavier resource usage, slower to set up than simpler alternatives.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: pgvector -->
+<section id="pgvector" class="ml-section">
+    <h2>pgvector: PostgreSQL Vector Extension</h2>
+
+    <p>pgvector adds vector search to PostgreSQL. Perfect if you already use Postgres and want to avoid a separate database. Great for integrating vector search into existing applications.</p>
+
+    <h3>Key Features</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>PostgreSQL Native</h4>
+    <p>Vector type directly in Postgres. Use SQL familiar to millions of developers. No new infrastructure.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Multiple Indexes</h4>
+    <p>IVFFLAT (IVF) and HNSW indexes. Choose based on your workload.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>SQL Integration</h4>
+    <p>Combine vector search with any SQL query. Join vectors with relational data seamlessly.</p>
+</div>
+        <div class="card green-accent">
+    <h4>ACID Compliance</h4>
+    <p>Transactions, consistency guarantees. Vectors are first-class citizens in Postgres.</p>
+</div>
+    </div>
+
+    <h3>Installation and Setup</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — pgvector Installation</div>
+    <div class="code-content"><span class="comment"># On the server (assuming Ubuntu)</span>
+sudo apt-get install postgresql-contrib
+sudo apt-get install build-essential postgresql-server-dev-<span class="number">14</span>
+
+git clone --branch v0.<span class="number">5.1</span> https://github.com/pgvector/pgvector.git
+cd pgvector
+make
+sudo make install
+
+<span class="comment"># In PostgreSQL:</span>
+CREATE EXTENSION vector;
+
+<span class="comment"># Verify</span>
+SELECT * FROM pg_extension WHERE extname = <span class="string">'vector'</span>;</div>
+</div>
+
+    <h3>Basic Vector Operations</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — pgvector with Python</div>
+    <div class="code-content"><span class="keyword">import</span> psycopg2
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> pgvector.psycopg2 <span class="keyword">import</span> register_vector
+
+<span class="comment"># Connect and register vector type</span>
+conn = psycopg2.<span class="function">connect</span>(<span class="string">"dbname=mydb user=postgres"</span>)
+<span class="function">register_vector</span>(conn)
+
+cur = conn.<span class="function">cursor</span>()
+
+<span class="comment"># Create table with vector column</span>
+cur.<span class="function">execute</span>(<span class="string">"""
+CREATE TABLE IF NOT EXISTS documents (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    embedding vector(384),  -- 384-dim vector
+    category TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""</span>)
+
+<span class="comment"># Create index (HNSW recommended)</span>
+cur.<span class="function">execute</span>(<span class="string">"""
+CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops)
+WITH (m=16, ef_construction=64);
+"""</span>)
+
+<span class="comment"># Insert documents with embeddings</span>
+embedding = np.random.<span class="function">randn</span>(<span class="number">384</span>).<span class="function">astype</span>(<span class="string">'float32'</span>)
+cur.<span class="function">execute</span>(
+    <span class="string">"INSERT INTO documents (title, content, embedding, category) VALUES (%s, %s, %s, %s)"</span>,
+    (<span class="string">"ML Tutorial"</span>, <span class="string">"Learn machine learning..."</span>, embedding.<span class="function">tolist</span>(), <span class="string">"AI"</span>)
+)
+
+conn.<span class="function">commit</span>()
+
+<span class="comment"># Vector similarity search (cosine)</span>
+cur.<span class="function">execute</span>(<span class="string">"""
+SELECT id, title, 1 - (embedding &lt;=&gt; %s) as similarity
+FROM documents
+WHERE category = 'AI'
+ORDER BY embedding &lt;=&gt; %s
+LIMIT 10;
+"""</span>, (query_embedding, query_embedding))
+
+results = cur.<span class="function">fetchall</span>()
+<span class="keyword">for</span> <span class="function">id</span>, title, similarity <span class="keyword">in</span> results:
+    <span class="function">print</span>(<span class="string">f"{id}: {title} (similarity: {similarity:.4f})"</span>)
+
+cur.<span class="function">close</span>()
+conn.<span class="function">close</span>()</div>
+</div>
+
+    <h3>Vector Operators</h3>
+
+    <div class="comparison-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Operator</th>
+                <th>Meaning</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>&lt;-&gt;</code></td>
+                <td>Euclidean distance</td>
+                <td>embedding &lt;-&gt; query_vec</td>
+            </tr>
+            <tr>
+                <td><code>&lt;#&gt;</code></td>
+                <td>Negative dot product</td>
+                <td>embedding &lt;#&gt; query_vec</td>
+            </tr>
+            <tr>
+                <td><code>&lt;=&gt;</code></td>
+                <td>Cosine distance</td>
+                <td>embedding &lt;=&gt; query_vec</td>
+            </tr>
+            <tr>
+                <td><code>&lt;|&gt;</code></td>
+                <td>Dot product</td>
+                <td>embedding &lt;|&gt; query_vec</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Index Types: IVFFLAT vs HNSW</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a> Index Options</div>
+    <div class="code-content">-- <span class="function">IVFFLAT</span> (Inverted File Flat) - simpler, less memory
+CREATE INDEX ON documents USING <span class="function">ivfflat</span> (embedding vector_cosine_ops)
+<span class="function">WITH</span> (lists=<span class="number">100</span>);  -- Number of clusters
+
+-- <span class="function">HNSW</span> (Hierarchical Navigable Small World) - faster, more memory
+CREATE INDEX ON documents USING <span class="function">hnsw</span> (embedding vector_cosine_ops)
+<span class="function">WITH</span> (m=<span class="number">16</span>, ef_construction=<span class="number">64</span>);
+
+-- m = number of connections per <span class="function">node</span> (<span class="number">16</span> <span class="keyword">is</span> typical)
+-- ef_construction = size of search space during <span class="function">build</span> (<span class="number">64</span>-<span class="number">200</span>)
+-- ef = size of search space during <span class="function">query</span> (can <span class="function">set</span> at query time)
+
+-- Query <span class="keyword">with</span> specific ef <span class="function">parameter</span> (HNSW only)
+SET hnsw.ef_search = <span class="number">100</span>;
+SELECT * FROM documents 
+ORDER BY embedding <=> query_vec 
+LIMIT <span class="number">10</span>;</div>
+</div>
+
+    <h3>Hybrid SQL + Vector Queries</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Complex pgvector Queries</div>
+    <div class="code-content">-- Find top <span class="number">10</span> most similar documents
+-- published <span class="keyword">in</span> last <span class="number">30</span> days, <span class="keyword">in</span> AI category
+SELECT 
+    <span class="function">id</span>, 
+    title, 
+    <span class="number">1</span> - (embedding <=> %s) <span class="keyword">as</span> similarity,
+    created_at
+FROM documents
+WHERE 
+    category = <span class="string">'AI'</span>
+    AND created_at > <span class="function">NOW</span>() - INTERVAL <span class="string">'30 days'</span>
+ORDER BY embedding <=> %s
+LIMIT <span class="number">10</span>;
+
+-- Similarity search <span class="keyword">with</span> aggregation
+SELECT 
+    category,
+    <span class="function">AVG</span>(<span class="number">1</span> - (embedding <=> %s)) <span class="keyword">as</span> avg_similarity,
+    <span class="function">COUNT</span>(*) <span class="keyword">as</span> count
+FROM documents
+GROUP BY category
+ORDER BY avg_similarity DESC;
+
+-- Find documents within distance threshold
+SELECT <span class="function">id</span>, title
+FROM documents
+<span class="function">WHERE</span> (embedding <=> %s) < <span class="number">0.5</span>;  -- Distance < <span class="number">0.5</span></div>
+</div>
+
+    <h3>Performance Tuning</h3>
+
+    <div class="info-box">
+    <h4>pgvector Indexing Tips</h4>
+    <p>Use HNSW for production (better latency). For HNSW, m=16 is usually optimal. ef_construction should be 200-400 for high-quality index. At query time, ef_search defaults to ef_construction but can be tuned (higher = more accurate but slower). For 1M vectors with HNSW: ~1-10ms queries.</p>
+</div>
+
+    <h3>When to Use pgvector</h3>
+
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Best For:</h4>
+    <p>Existing Postgres users, hybrid relational+vector queries, applications already using SQL, cost-conscious deployments.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Trade-offs:</h4>
+    <p>Not specialized like <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a> (slower), requires Postgres administration, limited built-in tools for embeddings.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Platform Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Platform Comparison: Pinecone vs Qdrant vs Weaviate vs Milvus vs Chroma</h2>
+
+    <p>Each platform has strengths and trade-offs. This comparison helps you choose the right one for your use case.</p>
+
+    <h3>Feature Comparison Matrix</h3>
+
+    <div class="comparison-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Pinecone</th>
+                <th>Qdrant</th>
+                <th>Weaviate</th>
+                <th>Milvus</th>
+                <th>ChromaDB</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hosting</strong></td>
+                <td>Managed only</td>
+                <td>Self-host or cloud</td>
+                <td>Self-host or cloud</td>
+                <td>Self-host only</td>
+                <td>Local or server</td>
+            </tr>
+            <tr>
+                <td><strong>Index Type</strong></td>
+                <td>HNSW</td>
+                <td>HNSW</td>
+                <td>HNSW/IVF</td>
+                <td>HNSW/IVF</td>
+                <td>HNSW</td>
+            </tr>
+            <tr>
+                <td><strong>Metadata Filtering</strong></td>
+                <td>Basic</td>
+                <td>Advanced</td>
+                <td>Advanced</td>
+                <td>Advanced</td>
+                <td>Basic</td>
+            </tr>
+            <tr>
+                <td><strong>API Type</strong></td>
+                <td>REST/gRPC</td>
+                <td>REST/gRPC</td>
+                <td>GraphQL/REST</td>
+                <td>REST/Python/Go</td>
+                <td>Python library</td>
+            </tr>
+            <tr>
+                <td><strong>Max Vectors</strong></td>
+                <td>Billions</td>
+                <td>Billions</td>
+                <td>Billions</td>
+                <td>Billions</td>
+                <td>Millions</td>
+            </tr>
+            <tr>
+                <td><strong>P99 Latency</strong></td>
+                <td>&lt;100ms</td>
+                <td>&lt;100ms</td>
+                <td>&lt;200ms</td>
+                <td>&lt;500ms</td>
+                <td>&lt;50ms*</td>
+            </tr>
+            <tr>
+                <td><strong>Learning Curve</strong></td>
+                <td>Easy</td>
+                <td>Moderate</td>
+                <td>Hard</td>
+                <td>Moderate</td>
+                <td>Very Easy</td>
+            </tr>
+            <tr>
+                <td><strong>Setup Time</strong></td>
+                <td>&lt;5 min</td>
+                <td>30 min</td>
+                <td>1 hour</td>
+                <td>1-2 hours</td>
+                <td>&lt;1 min</td>
+            </tr>
+            <tr>
+                <td><strong>Cost</strong></td>
+                <td>High (managed)</td>
+                <td>Low (self) / Medium (cloud)</td>
+                <td>Medium</td>
+                <td>Low</td>
+                <td>Free</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim);"><em>* ChromaDB: in-memory is fast but limited to millions. *Latencies depend on index size and configuration</em></p>
+
+    <h3>Decision Matrix: Which to Choose?</h3>
+
+    <div class="highlight-box">
+    <p><strong>Prototyping & Learning:</strong> ChromaDB. Zero setup, instant results, no costs. Perfect for learning vector databases.</p>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Production SaaS/API:</strong> Pinecone or Weaviate. Managed infrastructure, high availability, focus on your code not ops.</p>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Complex Filtering:</strong> Qdrant or Weaviate. Rich metadata queries, SQL-like filters, flexible data models.</p>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Existing Postgres Users:</strong> pgvector. Minimal new infrastructure, leverage existing expertise and connections.</p>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Cost-Conscious, Self-Hosting:</strong> Milvus or Qdrant. Open-source, control your costs, full customization.</p>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Enterprise/Hybrid:</strong> Weaviate. Multi-tenancy, hybrid search (vector + keyword), knowledge graph capabilities.</p>
+</div>
+</section>
+
+<!-- SECTION: Scaling Strategies -->
+<section id="scaling" class="ml-section">
+    <h2>Scaling Vector Databases</h2>
+
+    <p>How do you scale from thousands to billions of vectors? Different platforms have different scaling models.</p>
+
+    <h3>Scaling Dimensions</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Data Size</h4>
+    <p>From millions to billions of vectors. Sharding across nodes is necessary beyond single-machine capacity.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Throughput</h4>
+    <p>From hundreds to millions of QPS (queries per second). Replication and caching needed for high QPS.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Latency</h4>
+    <p>P50, P95, P99 tail latencies must remain low even under high load. Requires careful indexing and caching.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Updates</h4>
+    <p>How frequently you add/delete/update vectors. Some systems excel at real-time updates, others prefer batch operations.</p>
+</div>
+    </div>
+
+    <h3>Sharding Strategy</h3>
+
+    <div class="formula-box">
+    <div class="label">Shard Assignment</div>
+    Shard ID = hash(vector_id) % num_shards
+
+Each shard stores a subset of vectors.
+Queries are broadcast to all shards in parallel.
+Results are aggregated and top-K selected.
+
+Example: 1B vectors × 100 shards = 10M vectors per shard
+</div>
+
+    <p>Most managed systems (Pinecone, Weaviate Cloud) handle sharding automatically. Self-hosted systems (Qdrant, Milvus) require explicit configuration.</p>
+
+    <h3>Replication for High Availability</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Replication Example</div>
+    <div class="code-content"><span class="comment"># Typical setup: 3 replicas for fault tolerance</span>
+<span class="comment"># If one node fails, others handle traffic</span>
+
+cluster_config = {
+    <span class="string">"shard_count"</span>: <span class="number">100</span>,        <span class="comment"># 100 shards total</span>
+    <span class="string">"replication_factor"</span>: <span class="number">3</span>,   <span class="comment"># 3 copies of each shard</span>
+    <span class="string">"total_nodes"</span>: <span class="number">10</span>          <span class="comment"># At least replication_factor nodes</span>
+}
+
+<span class="comment"># Distribution:</span>
+<span class="comment"># Total shards with replicas: 100 × 3 = 300</span>
+<span class="comment"># Shards per node: 300 / 10 = 30 shards per node</span>
+
+<span class="comment"># Throughput scaling:</span>
+<span class="comment"># 1 shard @ 1000 QPS = 1000 QPS</span>
+<span class="comment"># 10 shards @ 1000 QPS each = 10,000 QPS</span>
+<span class="comment"># 100 shards = 100,000 QPS with replication</span></div>
+</div>
+
+    <h3>Caching Strategies</h3>
+
+    <div class="info-box">
+    <h4>Multi-Level Caching</h4>
+    <p>L1: In-memory node-local cache (hot vectors). L2: Distributed cache across replicas. L3: Disk-based persistent storage. Typically: 1% of data in L1, 10% in L2, rest on disk. This enables sub-10ms latency even for billion-scale systems.</p>
+</div>
+
+    <div class="model-bar">
+        <div class="model-bar-label">L1 Cache Hit</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 10%; background: linear-gradient(90deg, #0891b2, #22d3ee);">&lt;1ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">L2 Cache Hit</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #059669, #10b981);">5-15ms</div>
+        </div>
+    </div>
+    <div class="model-bar">
+        <div class="model-bar-label">Disk Read</div>
+        <div class="model-bar-track">
+            <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #6366f1, #818cf8);">50-200ms</div>
+        </div>
+    </div>
+
+    <h3>Partitioning Strategies</h3>
+
+    <div class="comparison-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Strategy</th>
+                <th>Approach</th>
+                <th>Pros</th>
+                <th>Cons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Hash-Based</strong></td>
+                <td>Shard = hash(ID) % N</td>
+                <td>Simple, even distribution</td>
+                <td>Rebalancing on growth is hard</td>
+            </tr>
+            <tr>
+                <td><strong>Range-Based</strong></td>
+                <td>Shard = ID range</td>
+                <td>Range queries efficient</td>
+                <td>Can have hotspots</td>
+            </tr>
+            <tr>
+                <td><strong>Space-Filling Curve</strong></td>
+                <td>Z-order (Morton) curve</td>
+                <td>Locality-preserving, good cache behavior</td>
+                <td>Complex to implement</td>
+            </tr>
+            <tr>
+                <td><strong>Consistent Hashing</strong></td>
+                <td>Ring of hash values</td>
+                <td>Minimal rebalancing on scale</td>
+                <td>More overhead than hash</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</section>
+
+<!-- SECTION: Optimization Techniques -->
+<section id="optimization" class="ml-section">
+    <h2>Optimization Techniques</h2>
+
+    <p>Getting the best performance from vector databases requires careful tuning and optimization.</p>
+
+    <h3>Quantization: Trading Accuracy for Speed</h3>
+
+    <p>Quantization reduces vector dimensionality or bit-depth, trading small accuracy loss for large speed/memory gains.</p>
+
+    <div class="formula-box">
+    <div class="label">Vector Quantization</div>
+    Original: 384-dim float32 = 1536 bytes per vector
+
+1. Product Quantization (PQ):
+   Split into m segments, quantize each to k bits
+   384 dimensions → 8 segments × 4 bits = 4 bytes per vector
+   96x compression! Only ~0.1% recall loss
+
+2. Binary Quantization:
+   Each dimension → 1 bit (above/below median)
+   384-dim → 48 bytes → 32x smaller
+   Find nearest in Hamming distance (very fast)
+
+3. Scalar Quantization:
+   float32 → int8: 4x smaller
+   Often: use int8 for filtering, float32 for reranking
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — Quantization Example</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Original vectors (float32)</span>
+vectors = np.random.<span class="function">randn</span>(<span class="number">1000</span>, <span class="number">384</span>).<span class="function">astype</span>(<span class="string">'float32'</span>)
+<span class="function">print</span>(<span class="string">f"Original size: {vectors.nbytes / 1e6:.1f} MB"</span>)  <span class="comment"># 1.5 MB</span>
+
+<span class="comment"># Binary Quantization</span>
+<span class="keyword">def</span> <span class="function">binary_quantize</span>(v):
+    <span class="string">"""Convert float32 to binary (1 bit per dimension)"""</span>
+    median = np.<span class="function">median</span>(v)
+    <span class="keyword">return</span> (v > median).<span class="function">astype</span>(<span class="string">'uint8'</span>)
+
+binary_vecs = np.<span class="function">array</span>([<span class="function">binary_quantize</span>(v) <span class="keyword">for</span> v <span class="keyword">in</span> vectors])
+<span class="function">print</span>(<span class="string">f"Binary quantized: {binary_vecs.nbytes / 1e6:.3f} MB"</span>)  <span class="comment"># 0.048 MB</span>
+<span class="function">print</span>(<span class="string">f"Compression: {1.5 / 0.048:.0f}x smaller"</span>)
+
+<span class="comment"># Product Quantization (simplified)</span>
+<span class="keyword">def</span> <span class="function">pq_quantize</span>(v, num_subvectors=<span class="number">8</span>):
+    <span class="string">"""Quantize to 8-bit per subvector"""</span>
+    subvector_size = <span class="function">len</span>(v) // num_subvectors
+    quantized = []
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(num_subvectors):
+        subvec = v[i*subvector_size:(i+<span class="number">1</span>)*subvector_size]
+        <span class="comment"># Quantize subvector to 256 levels (8 bits)</span>
+        min_val, max_val = subvec.<span class="function">min</span>(), subvec.<span class="function">max</span>()
+        normalized = (subvec - min_val) / (max_val - min_val + <span class="number">1e-6</span>)
+        quantized.<span class="function">append</span>(<span class="function">int</span>(normalized.<span class="function">mean</span>() * <span class="number">255</span>))
+    <span class="keyword">return</span> np.<span class="function">array</span>(quantized, dtype=<span class="string">'uint8'</span>)
+
+pq_vecs = np.<span class="function">array</span>([<span class="function">pq_quantize</span>(v) <span class="keyword">for</span> v <span class="keyword">in</span> vectors])
+<span class="function">print</span>(<span class="string">f"PQ quantized: {pq_vecs.nbytes / 1e6:.2f} MB"</span>)  <span class="comment"># 0.008 MB</span>
+<span class="function">print</span>(<span class="string">f"Compression: {1.5 / 0.008:.0f}x smaller"</span>)</div>
+</div>
+
+    <h3>Caching and Prefetching</h3>
+
+    <div class="info-box">
+    <h4>Smart Caching</h4>
+    <p>Cache frequently accessed vector embeddings in memory. Use LRU (Least Recently Used) eviction. For datasets with skewed access (some documents are searched 100x more), in-memory caching can eliminate 70%+ of disk I/O.</p>
+</div>
+
+    <h3>Batch Search Optimization</h3>
+
+    <p>When searching multiple queries simultaneously, batch them to amortize overhead and improve cache locality:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Batch vs Single Search</div>
+    <div class="code-content"><span class="comment"># Single query: 10ms overhead + 2ms compute</span>
+results = []
+<span class="keyword">for</span> query <span class="keyword">in</span> queries:
+    results.<span class="function">append</span>(index.<span class="function">search</span>(query, k=<span class="number">10</span>))
+<span class="comment"># Total: 100 queries × 12ms = 1200ms</span>
+
+<span class="comment"># Batch search: 10ms overhead once + 2ms per query (vectorized)</span>
+batch_results = index.<span class="function">batch_search</span>(queries, k=<span class="number">10</span>)
+<span class="comment"># Total: 10ms + 100×2ms = 210ms</span>
+<span class="comment"># ~6x faster!</span>
+
+<span class="comment"># How it works:</span>
+<span class="comment"># - Vectorized operations on GPU</span>
+<span class="comment"># - Better CPU cache behavior</span>
+<span class="comment"># - Amortized I/O operations</span>
+<span class="comment"># - Network round-trip batching (if remote)</span></div>
+</div>
+
+    <h3>Index Tuning Parameters</h3>
+
+    <div class="formula-box">
+    <div class="label">HNSW Tuning Guide</div>
+    For Recall@10 >= 95% with minimum latency:
+
+1. Index Building (one-time):
+   ef_construction = 200-400
+   M = 12-16
+
+2. Query Time:
+   Start with ef = ef_construction/2
+   Measure recall, tune up if needed
+
+3. Memory Tradeoff:
+   Memory ≈ n_vectors × (d × 4 + M × 4 × 8)
+   For 100M vectors, d=384, M=16:
+   ≈ 100M × (1536 + 512) = 205 GB
+   Consider quantization if memory-constrained
+</div>
+
+    <h3>Benchmark Template</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Benchmarking Vector Database</div>
+    <div class="code-content"><span class="keyword">import</span> time
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> statistics <span class="keyword">import</span> mean, stdev
+
+<span class="keyword">def</span> <span class="function">benchmark_search</span>(db, queries, k=<span class="number">10</span>, num_runs=<span class="number">3</span>):
+    <span class="string">"""Benchmark search latency and recall"""</span>
+    
+    latencies = []
+    recalls = []
+    
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(num_runs):
+        <span class="comment"># Warm up</span>
+        db.<span class="function">search</span>(queries[<span class="number">0</span>], k=k)
+        
+        <span class="comment"># Measure</span>
+        start = time.<span class="function">perf_counter</span>()
+        results = db.<span class="function">search</span>(queries, k=k)
+        latencies.<span class="function">append</span>((time.<span class="function">perf_counter</span>() - start) / <span class="function">len</span>(queries))
+    
+    avg_latency = <span class="function">mean</span>(latencies) * <span class="number">1000</span>  <span class="comment"># Convert to ms</span>
+    std_latency = <span class="function">stdev</span>(latencies) * <span class="number">1000</span>
+    
+    <span class="function">print</span>(<span class="string">f"Latency: {avg_latency:.2f}ms ± {std_latency:.2f}ms"</span>)
+    <span class="function">print</span>(<span class="string">f"Throughput: {1000/avg_latency:.0f} QPS"</span>)
+    
+    <span class="keyword">return</span> avg_latency
+
+<span class="comment"># Compare configurations</span>
+<span class="keyword">for</span> M <span class="keyword">in</span> [<span class="number">8</span>, <span class="number">12</span>, <span class="number">16</span>, <span class="number">24</span>]:
+    <span class="keyword">for</span> ef_construction <span class="keyword">in</span> [<span class="number">200</span>, <span class="number">400</span>, <span class="number">600</span>]:
+        <span class="function">print</span>(<span class="string">f"\nM={M}, ef_construction={ef_construction}"</span>)
+        <span class="function">benchmark_search</span>(db, test_queries)</div>
+</div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete Code Examples</h2>
+
+    <h3>Building a Simple RAG System with Chroma</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — RAG with ChromaDB</div>
+    <div class="code-content"><span class="keyword">import</span> chromadb
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">import</span> openai
+
+<span class="comment"># 1. Setup</span>
+client = chromadb.<span class="function">PersistentClient</span>(path=<span class="string">"./chroma_data"</span>)
+collection = client.<span class="function">get_or_create_collection</span>(<span class="string">"documents"</span>)
+embed_model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+<span class="comment"># 2. Index documents</span>
+documents = [
+    <span class="string">"Machine learning is a subset of AI focusing on learning from data."</span>,
+    <span class="string">"Deep learning uses neural networks with multiple layers."</span>,
+    <span class="string">"NLP processes and understands human language."</span>,
+    <span class="string">"Computer vision analyzes images and video."</span>
+]
+
+collection.<span class="function">add</span>(
+    ids=[<span class="function">str</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(documents))],
+    documents=documents,
+    metadatas=[{<span class="string">"source"</span>: <span class="string">f"doc_{i}"</span>} <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(documents))]
+)
+
+<span class="comment"># 3. RAG: Retrieve + Generate</span>
+<span class="keyword">def</span> <span class="function">rag_query</span>(question):
+    <span class="comment"># Step 1: Retrieve relevant documents</span>
+    results = collection.<span class="function">query</span>(query_texts=[question], n_results=<span class="number">2</span>)
+    context = <span class="string">"\n"</span>.<span class="function">join</span>(results[<span class="string">"documents"</span>][<span class="number">0</span>])
+    
+    <span class="comment"># Step 2: Generate answer using LLM</span>
+    response = openai.ChatCompletion.<span class="function">create</span>(
+        model=<span class="string">"gpt-4"</span>,
+        messages=[
+            {
+                <span class="string">"role"</span>: <span class="string">"system"</span>,
+                <span class="string">"content"</span>: <span class="string">"Answer based on the provided context."</span>
+            },
+            {
+                <span class="string">"role"</span>: <span class="string">"user"</span>,
+                <span class="string">"content"</span>: <span class="string">f"Context:\n{context}\n\nQuestion: {question}"</span>
+            }
+        ]
+    )
+    
+    <span class="keyword">return</span> response[<span class="string">"choices"</span>][<span class="number">0</span>][<span class="string">"message"</span>][<span class="string">"content"</span>]
+
+<span class="comment"># Test</span>
+answer = <span class="function">rag_query</span>(<span class="string">"What is deep learning?"</span>)
+<span class="function">print</span>(answer)</div>
+</div>
+
+    <h3>Similarity Search with Pinecone</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Pinecone Production Setup</div>
+    <div class="code-content"><span class="keyword">from</span> pinecone <span class="keyword">import</span> Pinecone
+<span class="keyword">import</span> openai
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Initialize</span>
+pc = <span class="function">Pinecone</span>(api_key=<span class="string">"your-api-key"</span>)
+index = pc.<span class="function">Index</span>(<span class="string">"documents"</span>)
+
+<span class="comment"># Upsert millions of vectors efficiently</span>
+<span class="keyword">def</span> <span class="function">batch_upsert</span>(documents, batch_size=<span class="number">100</span>):
+    <span class="string">"""Efficiently upload large batches"""</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(documents), batch_size):
+        batch = documents[i:i+batch_size]
+        vectors = [
+            (doc[<span class="string">'id'</span>], 
+             openai.Embedding.<span class="function">create</span>(
+                <span class="function">input</span>=doc[<span class="string">'text'</span>],
+                model=<span class="string">"text-embedding-3-small"</span>
+            )[<span class="string">"data"</span>][<span class="number">0</span>][<span class="string">"embedding"</span>],
+             {<span class="string">"text"</span>: doc[<span class="string">'text'</span>], <span class="string">"date"</span>: doc[<span class="string">'date'</span>]})
+            <span class="keyword">for</span> doc <span class="keyword">in</span> batch
+        ]
+        index.<span class="function">upsert</span>(vectors=vectors)
+        <span class="function">print</span>(<span class="string">f"Upserted {i+len(batch)}/{len(documents)}"</span>)
+
+<span class="comment"># Semantic search function</span>
+<span class="keyword">def</span> <span class="function">semantic_search</span>(query_text, top_k=<span class="number">10</span>, filters=<span class="keyword">None</span>):
+    <span class="comment"># Embed query</span>
+    query_embedding = openai.Embedding.<span class="function">create</span>(
+        <span class="function">input</span>=query_text,
+        model=<span class="string">"text-embedding-3-small"</span>
+    )[<span class="string">"data"</span>][<span class="number">0</span>][<span class="string">"embedding"</span>]
+    
+    <span class="comment"># Search with optional filtering</span>
+    results = index.<span class="function">query</span>(
+        vector=query_embedding,
+        top_k=top_k,
+        <span class="function">filter</span>=filters,
+        include_metadata=<span class="keyword">True</span>
+    )
+    
+    <span class="keyword">return</span> results
+
+<span class="comment"># Example usage</span>
+results = <span class="function">semantic_search</span>(
+    <span class="string">"latest AI breakthroughs"</span>,
+    top_k=<span class="number">5</span>,
+    filters={<span class="string">"date"</span>: {<span class="string">"$gte"</span>: <span class="string">"2024-01-01"</span>}}
+)
+
+<span class="keyword">for</span> match <span class="keyword">in</span> results.matches:
+    <span class="function">print</span>(<span class="string">f"{match.metadata['text']}: {match.score:.4f}"</span>)</div>
+</div>
+
+    <h3>Advanced Filtering with Qdrant</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Qdrant Complex Filtering</div>
+    <div class="code-content"><span class="keyword">from</span> qdrant_client <span class="keyword">import</span> QdrantClient
+<span class="keyword">from</span> qdrant_client.models <span class="keyword">import</span> Filter, FieldCondition, HasIdCondition, Range
+
+client = <span class="function">QdrantClient</span>(<span class="string">"localhost"</span>, port=<span class="number">6333</span>)
+
+<span class="comment"># Multi-level filtering example</span>
+advanced_filter = <span class="function">Filter</span>(
+    must=[
+        <span class="comment"># All of these must be true</span>
+        <span class="function">FieldCondition</span>(key=<span class="string">"product_category"</span>, match={<span class="string">"value"</span>: <span class="string">"electronics"</span>}),
+        <span class="function">FieldCondition</span>(key=<span class="string">"price"</span>, <span class="function">range</span>=<span class="function">Range</span>(gte=<span class="number">100</span>, lte=<span class="number">1000</span>)),
+    ],
+    should=[
+        <span class="comment"># At least one of these should be true</span>
+        <span class="function">FieldCondition</span>(key=<span class="string">"brand"</span>, match={<span class="string">"value"</span>: <span class="string">"Apple"</span>}),
+        <span class="function">FieldCondition</span>(key=<span class="string">"brand"</span>, match={<span class="string">"value"</span>: <span class="string">"Samsung"</span>}),
+    ],
+    must_not=[
+        <span class="comment"># None of these should be true</span>
+        <span class="function">FieldCondition</span>(key=<span class="string">"out_of_stock"</span>, match={<span class="string">"value"</span>: <span class="keyword">True</span>}),
+    ]
+)
+
+results = client.<span class="function">search</span>(
+    collection_name=<span class="string">"products"</span>,
+    query_vector=product_embedding,
+    query_filter=advanced_filter,
+    limit=<span class="number">20</span>
+)
+
+<span class="keyword">for</span> result <span class="keyword">in</span> results:
+    <span class="function">print</span>(<span class="string">f"{result.payload['name']}: {result.score:.3f}"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Practical Exercises</h2>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Build Your First Vector Database</h4>
+    <p>Create a ChromaDB collection with 100 sample documents, then search for 5 queries. Measure latency.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">import</span> chromadb
+
+client = chromadb.<span class="function">EphemeralClient</span>()
+collection = client.<span class="function">create_collection</span>(<span class="string">"docs"</span>)
+
+<span class="comment"># TODO: Add 100 documents</span>
+<span class="comment"># TODO: Query 5 times</span>
+<span class="comment"># TODO: Measure and print latency</span></div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Compare Distance Metrics</h4>
+    <p>Generate 1000 random vectors. Measure query latency and recall for cosine vs Euclidean distance.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity, euclidean_distances
+
+vectors = np.random.<span class="function">randn</span>(<span class="number">1000</span>, <span class="number">384</span>)
+query = np.random.<span class="function">randn</span>(<span class="number">384</span>)
+
+<span class="comment"># TODO: Measure cosine vs euclidean</span>
+<span class="comment"># TODO: Which is faster?</span>
+<span class="comment"># TODO: Do results differ?</span></div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Tune HNSW Parameters</h4>
+    <p>Build an HNSW index with different M and ef_construction values. Plot recall vs latency tradeoff.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="comment"># Using Qdrant or similar</span>
+<span class="keyword">import</span> time
+
+configs = [
+    {<span class="string">"m"</span>: <span class="number">8</span>, <span class="string">"ef_construction"</span>: <span class="number">200</span>},
+    {<span class="string">"m"</span>: <span class="number">16</span>, <span class="string">"ef_construction"</span>: <span class="number">400</span>},
+    {<span class="string">"m"</span>: <span class="number">32</span>, <span class="string">"ef_construction"</span>: <span class="number">800</span>},
+]
+
+results = []
+<span class="keyword">for</span> config <span class="keyword">in</span> configs:
+    <span class="comment"># Build index with config</span>
+    <span class="comment"># Measure: latency, recall</span>
+    <span class="comment"># Store in results</span>
+
+<span class="comment"># TODO: Plot recall vs latency</span>
+<span class="comment"># TODO: Which configuration is best?</span></div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Build a RAG System</h4>
+    <p>Create a system that retrieves documents based on semantic similarity, then answers questions using an LLM.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="comment"># Using ChromaDB + OpenAI</span>
+
+documents = [...]  <span class="comment"># Your documents</span>
+queries = [...]    <span class="comment"># Your questions</span>
+
+<span class="comment"># TODO: Index documents in ChromaDB</span>
+<span class="comment"># TODO: For each query:</span>
+<span class="comment">#   - Retrieve top 3 most similar documents</span>
+<span class="comment">#   - Use GPT-4 to generate answer from context</span>
+<span class="comment">#   - Print answer</span>
+
+<span class="comment"># TODO: Evaluate: Is the answer correct?</span></div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions & Answers</h2>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q1: What's the difference between exact and approximate nearest neighbor search? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> Exact search compares the query to every vector and returns the true K nearest. Approximate search uses an index (like HNSW) to skip comparisons, trading small accuracy loss (typically 1-5% recall loss) for massive speed gains (10-100x faster). In practice, most applications accept 99% recall for 100x speedup.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q2: When would you use cosine similarity vs Euclidean distance? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> Use <strong>cosine similarity</strong> for text/NLP embeddings (magnitude-independent, what transformers optimize for). Use <strong>Euclidean distance</strong> for geometric data where magnitude matters (images, coordinates). Cosine treats [1,0,0] and [10,0,0] as identical (same direction). Euclidean treats them differently (different magnitude).</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q3: How does HNSW indexing work at a high level? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> HNSW creates a multi-layered graph inspired by small-world networks. Vectors are organized in layers (L=0 is dense, L=high is sparse). To search: start at top layer, greedily navigate toward the query, then move down layers. Upper layers skip long distances quickly; lower layers find precise neighbors. Key parameters: M (connections per node) and ef_construction (search width during build).</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q4: What are the trade-offs of vector quantization? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> <strong>Benefits:</strong> 10-100x smaller vectors (less memory/storage/bandwidth), faster distance computation, enables massive scale on limited hardware. <strong>Costs:</strong> Slight accuracy loss (typically 1-5% recall loss with good quantization). Product quantization achieves 50-100x compression with <1% recall loss. Binary quantization gets 100x compression but larger accuracy loss.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q5: How would you design a vector database to scale to 100 billion vectors? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> 
+1. Sharding: Split data across 1000+ nodes (100M vectors per node)
+2. Replication: 3 replicas per shard for fault tolerance
+3. Caching: L1 (node-local) + L2 (distributed) cache for hot vectors
+4. Quantization: Use PQ or binary quantization to fit more in memory
+5. Batch queries: Process 100-1000 queries in parallel
+6. Monitoring: Track latency, recall, throughput, cache hit rates
+7. Search optimization: Set ef parameters for 95-99% recall target (not 100%)</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q6: Explain the difference between IVF and HNSW indexing. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong> <strong>IVF (Inverted File):</strong> Partitions space into clusters, searches only nearby clusters. Faster building but requires careful tuning (n_probe). <strong>HNSW:</strong> Creates layered graph structure. Slower building but better query performance and easier parameter tuning. HNSW is typically faster for queries; IVF better for very large datasets or batch operations.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q7: What factors impact query latency in a vector database? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong>
+1. Index type and parameters (HNSW ef, IVF n_probe)
+2. Vector dimensionality (higher = slower comparisons)
+3. Number of vectors (larger index = more I/O)
+4. Cache hit rate (cached vectors are 100x faster)
+5. Network latency (for remote databases)
+6. Concurrent queries (affects resource contention)
+7. Filtering complexity (complex filters add latency)
+Typical latency: 1-10ms (memory), 10-100ms (disk), 50-500ms (network)</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q8: How do you choose between Pinecone, Qdrant, Weaviate, and ChromaDB? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><strong>Answer:</strong>
+<strong>ChromaDB:</strong> Learning, prototyping, small projects (<1M vectors)
+<strong>Pinecone:</strong> Production SaaS, complex filtering needs, don't want to manage infrastructure
+<strong>Qdrant:</strong> Complex metadata filtering, cost-conscious, prefer self-hosting
+<strong>Weaviate:</strong> Knowledge graphs, hybrid search, enterprise/multi-tenant needs
+Decision factors: scale, filtering complexity, budget, ops preference, learning curve tolerance</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">What is a vector database and why do I need it? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">A vector database stores high-dimensional numbers (embeddings) and finds similar ones efficiently. You need it for semantic search, RAG systems, recommendations, and any application where 'similarity' is important rather than exact matching.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I just use a regular SQL database for vectors? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">SQL databases are terrible at vector search. Scanning all rows is O(n), taking seconds or minutes for millions of records. Vector databases use specialized indexes (HNSW, IVF) making it O(log n) — milliseconds instead.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between embeddings and vectors? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">They're the same thing. 'Embedding' usually refers to the representation, 'vector' refers to the numerical form. An embedding is a vector. A text embedding is a vector representation of text created by a language model.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How much memory do vectors need? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Each vector = dimensionality × bytes per dimension. 384-dim float32 = 1536 bytes. 1 million vectors = 1.5 GB. 1 billion vectors = 1.5 TB. With HNSW indexing overhead (pointers, graph): ~2-3x more. Use quantization if memory-constrained.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can vector databases handle real-time updates? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, but with caveats. HNSW-based systems (Pinecone, Qdrant) handle insertions/deletions well without full reindexing. IVF-based systems (Milvus, Faiss) require periodic reindexing. For true real-time: expect latency impact during updates.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I measure if my vector database is working correctly? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use Recall@K: of the top-K results, how many are actual nearest neighbors? Target 95-99% recall. Measure latency at P50, P95, P99. Monitor cache hit rates. Compare results against brute-force baseline for small test sets.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the typical latency I should expect? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Depends on setup: In-memory (1-10ms), SSD (10-100ms), Network (50-500ms), Brute-force (1-100 seconds). For production, target P99 latency < 100ms including everything (network, filtering, etc).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I combine vector search with keyword search? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes! Weaviate calls this 'hybrid search'. Qdrant and others let you combine vector similarity with metadata filtering. For pure keyword + vector: use BM25 keyword search, then rerank using vectors.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I prevent hallucination in RAG systems using vector databases? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">1. Increase retrieval accuracy (higher Recall@K). 2. Retrieve more documents (top-20 instead of top-3). 3. Use diverse, high-quality source documents. 4. Implement answer verification (check if answer is in retrieved documents). 5. Use smaller, more focused vector indices.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the cost of running a vector database at scale? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>Pinecone:</strong> $200-1000/month (depending on vector count). <strong>Self-hosted (Qdrant/Milvus):</strong> $100-500/month (infrastructure only). <strong>pgvector:</strong> $50-200/month (Postgres). <strong>ChromaDB:</strong> Free (local) to $100/month (self-hosted). Calculate based on your query volume and data size.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Learning</h2>
+
+    <h3>Official Documentation</h3>
+    <ul style="margin-left: 2rem;">
+        <li><a href="https://www.pinecone.io/learn/" target="_blank">Pinecone Learning Hub</a> — Comprehensive guides and tutorials</li>
+        <li><a href="https://qdrant.tech/documentation/" target="_blank">Qdrant Documentation</a> — Detailed API and deployment guides</li>
+        <li><a href="https://weaviate.io/developers/weaviate/" target="_blank">Weaviate Documentation</a> — GraphQL API reference</li>
+        <li><a href="https://docs.trychroma.com/" target="_blank">ChromaDB Documentation</a> — Easy-to-follow guides</li>
+        <li><a href="https://pgvector.org/" target="_blank">pgvector Documentation</a> — PostgreSQL vector extension</li>
+        <li><a href="https://github.com/facebookresearch/faiss" target="_blank">Faiss (Facebook)</a> — Open-source vector search library</li>
+    </ul>
+
+    <h3>Research Papers</h3>
+    <ul style="margin-left: 2rem;">
+        <li>Malkov & Yashunin (2018): "<a href="https://arxiv.org/abs/1603.09320" target="_blank" rel="noopener">Efficient and Robust Approximate Nearest Neighbor Search with Hierarchical Navigable Small World Graphs</a>" — HNSW algorithm</li>
+        <li>Johnson, Douze & Jégou (2017): "<a href="https://arxiv.org/abs/1702.08734" target="_blank" rel="noopener">Billion-scale similarity search with GPUs</a>" — IVF and scaling</li>
+        <li>Jégou, Douze & Schmid (2010): "<a href="https://ieeexplore.ieee.org/document/5432202" target="_blank" rel="noopener">Product Quantization for Nearest Neighbor Search</a>" — Quantization</li>
+        <li>Guo, Sun, Wang et al. (2020): "<a href="https://arxiv.org/abs/1908.10396" target="_blank" rel="noopener">Accelerating Large-Scale Inference with Anisotropic Vector Quantization</a>"</li>
+    </ul>
+
+    <h3>Tools & Libraries</h3>
+    <ul style="margin-left: 2rem;">
+        <li><strong><a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener">Faiss</a></strong> — Facebook's open-source library for similarity search</li>
+        <li><strong><a href="https://github.com/spotify/annoy" target="_blank" rel="noopener">Annoy</a></strong> — Approximate Nearest Neighbors in high-dimensional spaces</li>
+        <li><strong><a href="https://umap-learn.readthedocs.io/" target="_blank" rel="noopener">UMAP</a></strong> — Dimensionality reduction for visualization</li>
+        <li><strong>Numpy/<a href="https://scipy.org/" target="_blank" rel="noopener">SciPy</a></strong> — Distance computations and linear algebra</li>
+        <li><strong><a href="https://www.sbert.net/" target="_blank" rel="noopener">sentence-transformers</a></strong> — Creating embeddings easily</li>
+    </ul>
+
+    <h3>Related Topics</h3>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Embeddings & Representation Learning</strong> — How text becomes vectors</li>
+        <li><strong>Retrieval-Augmented Generation (RAG)</strong> — Using vector search with LLMs</li>
+        <li><strong>Information Retrieval</strong> — Classical IR techniques (BM25, TF-IDF)</li>
+        <li><strong>Approximate Nearest Neighbor Search</strong> — The theoretical foundation</li>
+        <li><strong>Dimensionality Reduction</strong> — PCA, t-SNE, <a href="https://umap-learn.readthedocs.io/" target="_blank" rel="noopener">UMAP</a> for visualization</li>
+    </ul>
+
+    <h3>Real-World Projects to Build</h3>
+    <ul style="margin-left: 2rem;">
+        <li>PDF/document search engine using embeddings</li>
+        <li>Semantic recommendation system for products</li>
+        <li>Question-answering system using RAG</li>
+        <li>Duplicate detection system for text/images</li>
+        <li>Search engine for your personal notes/knowledge base</li>
+        <li>Anomaly detection system using vector distance</li>
+    </ul>
+</section>
+
+        </div>
+    </main>
+
+<footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Sidebar navigation highlighting
+        document.querySelectorAll('.ml-sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                const element = document.getElementById(section);
+                
+                // Update active state
+                document.querySelectorAll('.ml-sidebar a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Scroll to section
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const section = this.nextElementSibling;
+                section.style.display = section.style.display === 'none' ? 'block' : 'none';
+                this.querySelector('.toggle-icon').style.transform = 
+                    section.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+            // Hide by default
+            header.nextElementSibling.style.display = 'none';
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+                this.querySelector('.faq-icon').style.transform = 
+                    answer.style.display === 'none' ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+            // Hide by default
+            question.nextElementSibling.style.display = 'none';
+        });
+        
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('.ml-section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.ml-sidebar a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-section') === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

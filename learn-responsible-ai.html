@@ -1,0 +1,2559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build fair, transparent, and accountable AI — bias detection, explainability, governance, and ethical frameworks.">
+    <title>Responsible AI - SustainSys AI Academy</title>
+
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    <style>
+        /* RAI Specific Animations */
+        @keyframes pillar-glow {
+            0% { box-shadow: 0 0 10px rgba(8, 145, 178, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(8, 145, 178, 0.5); }
+        }
+
+        .pillar-card {
+            animation: pillar-glow 3s ease-in-out infinite;
+        }
+
+        .timeline-item {
+            opacity: 0;
+            animation: slideInLeft 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .model-bars {
+            margin: 2rem 0;
+        }
+
+        .model-bar {
+            margin-bottom: 1.5rem;
+        }
+
+        .model-bar-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .model-bar-track {
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            padding-right: 8px;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding-right: 0.75rem;
+        }
+
+        .interview-qa {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .exercise-item {
+            border-left: 4px solid #a855f7;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <main class="main-content">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Responsible AI</h1>
+                <p class="page-description">Master Responsible AI with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <div class="ml-page-container">
+            <!-- Sidebar Navigation -->
+            <aside class="ml-sidebar">
+                <h3>Sections</h3>
+                <ul>
+                    <li><a href="#intro">Introduction</a></li>
+                    <li><a href="#why-matters">Why It Matters</a></li>
+                    <li><a href="#history">Historical Context</a></li>
+                    <li><a href="#core-concepts">Core Concepts</a></li>
+                    <li><a href="#architecture">Architecture & Pillars</a></li>
+                    <li><a href="#components">Key Components</a></li>
+                    <li><a href="#implementation">Implementation Guide</a></li>
+                    <li><a href="#advanced">Advanced Frameworks</a></li>
+                    <li><a href="#comparison">Framework Comparison</a></li>
+                    <li><a href="#use-cases">Real-World Use Cases</a></li>
+                    <li><a href="#enterprise">Enterprise Governance</a></li>
+                    <li><a href="#mistakes">Common Mistakes</a></li>
+                    <li><a href="#best-practices">Best Practices</a></li>
+                    <li><a href="#advanced-insights">Advanced Insights</a></li>
+                    <li><a href="#code-examples">Code Examples</a></li>
+                    <li><a href="#exercises">Hands-On Exercises</a></li>
+                    <li><a href="#interview">Interview Questions</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#summary">Summary</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="ml-content">
+                
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Responsible AI: Building Fair, Transparent, and Accountable Systems</h2>
+
+    <div class="ml-intro-text">
+        <p>Responsible Artificial Intelligence (RAI) is the practice of designing, developing, and deploying AI systems that are fair, transparent, explainable, accountable, and aligned with human values. As AI systems increasingly influence critical decisions in hiring, lending, criminal justice, healthcare, and education, ensuring these systems operate responsibly is no longer optional — it's imperative.</p>
+    </div>
+
+    <p>The consequences of irresponsible AI are well-documented: <strong>Amazon's recruiting AI</strong> showed systematic bias against women. <strong>ProPublica's investigation of COMPAS</strong> revealed racial bias in recidivism predictions used in criminal sentencing. <strong>Facial recognition systems</strong> show dramatically higher error rates on people with darker skin tones. These aren't edge cases; they're symptoms of AI systems deployed without adequate fairness and explainability safeguards.</p>
+
+    <p>Responsible AI encompasses four pillars: <strong>Fairness</strong> (ensuring equitable treatment across groups), <strong>Explainability</strong> (making AI decisions interpretable to humans), <strong>Accountability</strong> (tracing decisions to responsible parties), and <strong>Governance</strong> (implementing frameworks and processes to maintain these standards).</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Fairness & Bias Detection</h4>
+    <p>Identify sources of bias in data and models. Use statistical tests and fairness metrics (demographic parity, equalized odds, calibration) to quantify and mitigate discrimination.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Explainability Methods</h4>
+    <p>Learn <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a> values, <a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a>, feature importance, and attention visualization to make black-box models interpretable. Understand when and how to explain AI decisions to stakeholders.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Governance Frameworks</h4>
+    <p>Implement model cards, data cards, audit logs, and governance processes. Explore frameworks from Google, Microsoft, and the <a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a>.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Real-World Implementation</h4>
+    <p>Build fairness dashboards, create model documentation, implement audit trails, and design bias detection pipelines for production systems.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Why This Matters</h4>
+    <p>A 2023 Deloitte survey found 72% of organizations had experienced AI-related incidents. Building responsible AI isn't about compliance; it's about creating systems people can trust, that operate fairly across all populations, and that stand up to scrutiny.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Responsible AI Matters</h2>
+
+    <p>AI systems now make or influence decisions affecting millions of lives: whether you get a loan, a job, parole, medical treatment, or college admission. Unlike human decision-makers who can explain their reasoning, explain biases that influenced decisions, many AI systems are opaque. This opacity creates three critical problems:</p>
+
+    <h3>1. Fairness & Discrimination</h3>
+    <p>AI systems can amplify historical biases present in training data. If hiring data reflects past discrimination, an AI trained on this data will perpetuate and even amplify that discrimination at scale. Studies have shown:</p>
+    <ul>
+        <li><strong>Gender bias:</strong> Word embeddings (word2vec) associate "programmer" more with male names and "nurse" with female names</li>
+        <li><strong>Racial bias:</strong> Facial recognition has 0.4% error rate on lighter-skinned males but 34% error on darker-skinned females</li>
+        <li><strong>Socioeconomic bias:</strong> Credit scoring models disproportionately deny loans to minorities due to historical data bias</li>
+    </ul>
+
+    <h3>2. Lack of Explainability</h3>
+    <p>Deep neural networks are often "black boxes" — even creators can't fully explain why a model made a specific decision. In regulated domains (banking, healthcare, criminal justice), this is legally and ethically problematic. The <a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a> requires "explainability" for high-risk systems.</p>
+
+    <h3>3. Accountability Gaps</h3>
+    <p>When an AI system causes harm, who is responsible? The data provider? The model builder? The deployment team? Without clear accountability frameworks, victims have no recourse and organizations have insufficient incentive to maintain responsible AI practices.</p>
+
+    <h3>Business Impact</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Organizations with RAI practices</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #10b981, #34d399);">78%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Reported improved stakeholder trust</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #0891b2, #7c3aed);">85%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Reduced regulatory/legal risk</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #8b5cf6, #d946ef);">72%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Improved model robustness</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 81%; background: linear-gradient(90deg, #f59e0b, #fbbf24);">81%</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>2023 Industry Survey Data</em></p>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> Responsible AI isn't a cost center; it's a competitive advantage. Organizations that build fairness and explainability into their AI systems enjoy higher stakeholder trust, better regulatory positioning, and more robust models that generalize better across populations.</p>
+</div>
+</section>
+
+<!-- SECTION: Historical Context -->
+<section id="history" class="ml-section">
+    <h2>Historical Context & Evolution</h2>
+
+    <p>Concerns about bias in automated decision-making predate modern AI. But the field of Responsible AI as we know it emerged around 2016-2018 as AI systems began making consequential real-world decisions.</p>
+
+    <h3>Key Milestones</h3>
+
+    <div class="timeline-item" style="border-left: 4px solid #0891b2; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #0891b2;">2016: ProPublica COMPAS Investigation</h4>
+        <p>ProPublica analyzes COMPAS, a widely-used recidivism prediction system. Finding: Black defendants labeled "High Risk" at nearly twice the rate of white defendants, despite similar recidivism rates. This investigation galvanizes discussion about bias in criminal justice AI.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #7c3aed; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #7c3aed;">2017: Word Embeddings Bias Studies</h4>
+        <p>Researchers demonstrate that word embeddings trained on internet text absorb gender and racial biases: "programmer" associates with male pronouns, "nurse" with female. This sparks broader investigation of bias in NLP systems.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #d946ef; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #d946ef;">2018: Amazon Recruiting AI Bias</h4>
+        <p>Reuters reports that Amazon's automated recruiting tool showed systematic bias against women. The system was trained on historical hiring data that reflected male-dominated tech industry; it learned to penalize resumes with "women's" in them. Amazon scrapped the tool.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #f59e0b; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #f59e0b;">2019: LIME & SHAP Papers Published</h4>
+        <p>"Why Should I Trust You?" (LIME) and "A Unified Approach to Interpreting Model Predictions" (SHAP) become influential. These methods provide practical tools for explaining black-box model predictions — a major step forward for AI explainability.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #10b981; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #10b981;">2019-2021: Major Tech RAI Initiatives</h4>
+        <p>Microsoft launches AI Ethics and Effects Lab. Google publishes Model Cards for Model Reporting. Facebook publishes Fairness Flow. These efforts shift RAI from academic research to industry practice.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #0ea5e9; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #0ea5e9;">2021: EU AI Act Proposed</h4>
+        <p>The EU proposes the AI Act, which categorizes AI by risk and requires explainability, documentation, and human oversight for high-risk systems. This is the first major regulatory framework for AI.</p>
+    </div>
+
+    <div class="timeline-item" style="border-left: 4px solid #ec4899; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #ec4899;">2023-Present: Enterprise Governance</h4>
+        <p>Responsible AI shifts from academic exercise to enterprise necessity. Tools like Fairlearn, What-If Tool, AI Fairness 360 gain traction. Organizations implement governance boards, audit frameworks, and RAI processes as standard practice.</p>
+    </div>
+
+    <div class="info-box">
+    <h4>Regulatory Landscape</h4>
+    <p>Today, RAI is mandated or strongly encouraged by: EU AI Act (2024), UK AI Bill, US Executive Order on AI, China's algorithm governance rules, and industry-specific regulations (healthcare: HIPAA, finance: UDAAP).</p>
+</div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts in Responsible AI</h2>
+
+    <p>Responsible AI revolves around four interconnected pillars. Understanding each is essential to implementing RAI in practice.</p>
+
+    <h3>1. Fairness</h3>
+    <p><strong>Definition:</strong> Ensuring AI systems treat individuals and groups equitably, without discrimination based on protected attributes (race, gender, age, etc.) or proxies for these attributes.</p>
+    <p><strong>Why it's hard:</strong> "Fairness" isn't monolithic. Multiple mathematical definitions exist, and they often conflict:</p>
+    <ul>
+        <li><strong>Demographic Parity:</strong> Model predicts positive outcome at equal rates across groups (e.g., hiring algorithm accepts 50% of men and 50% of women)</li>
+        <li><strong>Equalized Odds:</strong> Model has equal TPR and FPR across groups (e.g., false positive rate for loan defaults is same for all races)</li>
+        <li><strong>Calibration:</strong> Predicted probabilities are accurate within each group (if model says 70% chance, 70% actually default, for all groups)</li>
+    </ul>
+    <p>Often you can satisfy one definition but not others. Building fair AI requires understanding these tradeoffs and choosing the right definition for your context.</p>
+
+    <h3>2. Explainability & Interpretability</h3>
+    <p><strong>Definition:</strong> The ability to understand and explain why an AI system made a specific decision.</p>
+    <p><strong>Two types:</strong></p>
+    <ul>
+        <li><strong>Interpretability:</strong> The model itself is transparent (e.g., decision trees, linear models). You can read the rules and understand the decision directly.</li>
+        <li><strong>Explainability:</strong> The model is opaque, but you can explain its output (e.g., neural networks + <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a> values). The explanation is post-hoc but still valuable.</li>
+    </ul>
+    <p>Explainability techniques answer questions like: "Which features influenced this prediction?" "What would change the model's prediction?" "Is the model reasoning as intended?"</p>
+
+    <h3>3. Accountability</h3>
+    <p><strong>Definition:</strong> Clear responsibility for AI system outcomes, with mechanisms to investigate and remediate failures.</p>
+    <p><strong>Components:</strong></p>
+    <ul>
+        <li><strong>Traceability:</strong> Audit logs showing who trained the model, what data was used, what versions were deployed, when, and why</li>
+        <li><strong>Responsibility Assignment:</strong> Clear organizational structure defining who approves AI deployment, who monitors performance, who investigates failures</li>
+        <li><strong>Remediation Processes:</strong> Procedures for addressing bias complaints, retraining models, issuing updates, compensating harmed parties</li>
+    </ul>
+
+    <h3>4. Governance</h3>
+    <p><strong>Definition:</strong> Organizational processes and frameworks ensuring AI systems are developed and deployed responsibly throughout their lifecycle.</p>
+    <p><strong>Components:</strong></p>
+    <ul>
+        <li><strong>Documentation:</strong> Model cards, data cards, system cards describing datasets, models, and systems</li>
+        <li><strong>Testing:</strong> Rigorous evaluation for fairness, robustness, and performance across demographic groups</li>
+        <li><strong>Monitoring:</strong> Continuous tracking of model fairness and performance in production</li>
+        <li><strong>Stakeholder Engagement:</strong> Including affected communities in AI design and deployment decisions</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Integration:</strong> These four pillars are deeply interconnected. Explainability helps identify bias (fairness). Governance ensures fairness is measured and monitored. Accountability mechanisms incentivize proper governance. Together, they create responsible AI systems.</p>
+</div>
+</section>
+
+<!-- SECTION: Architecture & Pillars -->
+<section id="architecture" class="ml-section">
+    <h2>RAI Architecture & Pillars Framework</h2>
+
+    <p>Think of Responsible AI as a four-pillar architecture supporting an AI system throughout its lifecycle.</p>
+
+    <h3>The RAI Pillars Framework</h3>
+
+    <div style="background: linear-gradient(135deg, #0891b2 0%, #7c3aed 25%, #d946ef 50%, #f59e0b 75%, #10b981 100%); padding: 0.5px; border-radius: 8px; margin: 2rem 0;">
+        <div style="background: white; padding: 2rem; border-radius: 8px;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; color: #0891b2; margin-bottom: 0.5rem;">⚖️</div>
+                    <h4 style="color: #0891b2; margin: 0.5rem 0;">FAIRNESS</h4>
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Equitable treatment across groups. Detect and mitigate bias. Measure fairness metrics.</p>
+                </div>
+
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; color: #7c3aed; margin-bottom: 0.5rem;">💡</div>
+                    <h4 style="color: #7c3aed; margin: 0.5rem 0;">EXPLAINABILITY</h4>
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Interpretable models. Feature importance. Decision explanations.</p>
+                </div>
+
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; color: #d946ef; margin-bottom: 0.5rem;">📋</div>
+                    <h4 style="color: #d946ef; margin: 0.5rem 0;">ACCOUNTABILITY</h4>
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Audit trails. Responsibility assignment. Remediation processes.</p>
+                </div>
+
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 0.5rem;">🏛️</div>
+                    <h4 style="color: #f59e0b; margin: 0.5rem 0;">GOVERNANCE</h4>
+                    <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Frameworks, processes, documentation, monitoring.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <h3>Full RAI Lifecycle</h3>
+
+    <div style="margin: 2rem 0;">
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;">
+            <div style="background: #e0f2fe; border-left: 4px solid #0284c7; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #0284c7;">1. Planning</h4>
+                <p style="margin: 0; font-size: 0.9rem;">Define fairness requirements, governance policies, documentation standards</p>
+            </div>
+            <div style="background: #fce7f3; border-left: 4px solid #be185d; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #be185d;">2. Data</h4>
+                <p style="margin: 0; font-size: 0.9rem;">Audit data for bias. Create data cards. Document limitations.</p>
+            </div>
+            <div style="background: #f3e8ff; border-left: 4px solid #7c3aed; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #7c3aed;">3. Development</h4>
+                <p style="margin: 0; font-size: 0.9rem;">Build models with fairness constraints. Test for bias. Document decisions.</p>
+            </div>
+            <div style="background: #fef3c7; border-left: 4px solid #d97706; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #d97706;">4. Evaluation</h4>
+                <p style="margin: 0; font-size: 0.9rem;">Measure fairness metrics. Assess explainability. Conduct ethical review.</p>
+            </div>
+            <div style="background: #d1fae5; border-left: 4px solid #059669; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #059669;">5. Deployment</h4>
+                <p style="margin: 0; font-size: 0.9rem;">Monitor performance. Track fairness. Handle appeals and redress.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+    <h4>No Single Solution</h4>
+    <p>RAI isn't a checkbox. It's an ongoing process of measurement, monitoring, and improvement. As data changes, user demographics shift, and societal values evolve, your fairness and governance practices must evolve too.</p>
+</div>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components of RAI Systems</h2>
+
+    <p>Implementing Responsible AI requires several technical and organizational components working together.</p>
+
+    <h3>1. Fairness Metrics & Measurement</h3>
+    <p><strong>Purpose:</strong> Quantify bias in your AI system.</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Demographic Parity</h4>
+    <p>P(Y=1|A=a) = P(Y=1|A=b) for all groups a,b. Model should predict positive outcome at equal rates across groups.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Equalized Odds</h4>
+    <p>P(Y'=1|Y=1,A=a) = P(Y'=1|Y=1,A=b) and P(Y'=1|Y=0,A=a) = P(Y'=1|Y=0,A=b). True positive rate and false positive rate equal across groups.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Calibration</h4>
+    <p>For any group A and predicted probability p, actual positive rate ≈ p. Predicted probabilities are accurate within each group.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Counterfactual Fairness</h4>
+    <p>Model's decision on one individual shouldn't change if we alter their sensitive attributes. Tests causal fairness.</p>
+</div>
+    </div>
+
+    <h3>2. Explainability Tools</h3>
+    <p><strong>Purpose:</strong> Make model predictions interpretable and transparent.</p>
+    <ul>
+        <li><strong>SHAP (SHapley Additive exPlanations):</strong> Game-theoretic approach computing each feature's contribution to prediction. Theoretically sound and model-agnostic.</li>
+        <li><strong>LIME (Local Interpretable Model-agnostic Explanations):</strong> Approximates black-box model with interpretable linear model in local region around prediction. Fast but less theoretically robust than SHAP.</li>
+        <li><strong>Feature Importance:</strong> Permutation importance, tree-based importance scores. Simple but can be misleading.</li>
+        <li><strong>Attention Visualization:</strong> For neural networks, visualize which input features the model attends to. Useful for NLP and vision models.</li>
+        <li><strong>Counterfactual Explanations:</strong> "To change this prediction, you would need to..." Shows minimal changes to input that flip model's decision.</li>
+    </ul>
+
+    <h3>3. Model Documentation</h3>
+    <p><strong>Purpose:</strong> Comprehensive record of model's purpose, data, performance, limitations, and fairness.</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Model Cards</h4>
+    <p>Document model architecture, training data, performance metrics by demographic group, use cases, and ethical considerations.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Data Cards</h4>
+    <p>Document dataset composition, collection process, labeling process, known limitations, and biases.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>System Cards</h4>
+    <p>Document how model integrates into broader system, who makes final decisions, how to appeal, monitoring plan.</p>
+</div>
+    </div>
+
+    <h3>4. Governance Processes</h3>
+    <p><strong>Purpose:</strong> Ensure RAI practices are systematized and enforced.</p>
+    <ul>
+        <li><strong>Model Review Board:</strong> Cross-functional team approving high-risk AI systems before deployment</li>
+        <li><strong>Data Audit Process:</strong> Systematic review of training data for bias and representativeness</li>
+        <li><strong>Continuous Monitoring:</strong> Production dashboards tracking fairness metrics, model performance, user appeals</li>
+        <li><strong>Incident Response:</strong> Procedures for responding to bias complaints, investigating root causes, remediation</li>
+        <li><strong>Training & Culture:</strong> Education for data scientists, engineers, product managers on RAI best practices</li>
+    </ul>
+
+    <h3>5. Audit & Compliance Framework</h3>
+    <p><strong>Purpose:</strong> Enable independent verification of RAI practices and compliance with regulations.</p>
+    <ul>
+        <li>Audit trails of all model versions, data changes, performance changes</li>
+        <li>Impact assessments for high-risk systems (algorithmic impact assessments per EU AI Act)</li>
+        <li>Third-party audits for critical systems</li>
+        <li>Regulatory documentation and evidence of compliance</li>
+    </ul>
+
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Integration is Key: These components aren't separate; they're interdependent. Documentation (model cards) feeds into governance (review board decides based on documented fairness metrics). Monitoring results flow into incident response (if fairness degrades, trigger investigation). Build them together as a system.</p>
+</div>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementing Responsible AI: Step-by-Step</h2>
+
+    <p>Here's a practical roadmap for implementing RAI in your organization.</p>
+
+    <h3>Phase 1: Assess & Plan (Weeks 1-4)</h3>
+    <div style="background: #f0f9ff; border-left: 4px solid #0284c7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+        <ol>
+            <li><strong>Audit current AI systems:</strong> Catalog all models in use. Assess risk level (high-risk: hiring, lending, criminal justice; low-risk: recommendations)</li>
+            <li><strong>Identify fairness requirements:</strong> For high-risk systems, define what fairness means. Who are protected groups? What fairness metrics matter?</li>
+            <li><strong>Establish governance structure:</strong> Create RAI review board. Assign ownership for fairness, explainability, monitoring</li>
+            <li><strong>Set baseline metrics:</strong> For current models, compute demographic distributions, fairness metrics, identify bias</li>
+        </ol>
+    </div>
+
+    <h3>Phase 2: Tools & Infrastructure (Weeks 5-8)</h3>
+    <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+        <ol>
+            <li><strong>Select fairness tools:</strong> <a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn</a>, <a href="https://aif360.res.ibm.com/" target="_blank" rel="noopener">AI Fairness 360</a>, scikit-fairness. Start with your framework (TensorFlow, <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a>, <a href="https://scikit-learn.org/" target="_blank" rel="noopener">scikit-learn</a>)</li>
+            <li><strong>Implement explainability:</strong> Set up <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a> and/or <a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a> for your models. Create explanation pipelines</li>
+            <li><strong>Build monitoring dashboard:</strong> Real-time tracking of fairness metrics, prediction distributions across demographic groups, prediction changes over time</li>
+            <li><strong>Create model card templates:</strong> Standardized documentation for all new models going forward</li>
+        </ol>
+    </div>
+
+    <h3>Phase 3: Pilot & Test (Weeks 9-16)</h3>
+    <div style="background: #d1fae5; border-left: 4px solid #059669; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+        <ol>
+            <li><strong>Select pilot models:</strong> Choose 1-2 high-risk models for deep RAI work. Compute fairness metrics. Identify bias sources</li>
+            <li><strong>Implement mitigation:</strong> Retrain with fairness constraints. Upsample underrepresented groups. Adjust decision thresholds for fairness</li>
+            <li><strong>Document & explain:</strong> Create detailed model cards. Generate SHAP/LIME explanations. Document decision logic</li>
+            <li><strong>Stakeholder review:</strong> Share with affected communities, legal team, and ethics board. Gather feedback</li>
+        </ol>
+    </div>
+
+    <h3>Phase 4: Scale & Monitor (Ongoing)</h3>
+    <div style="background: #f3e8ff; border-left: 4px solid #7c3aed; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+        <ol>
+            <li><strong>Apply to all new models:</strong> RAI review becomes part of model development workflow. All models require fairness assessment before deployment</li>
+            <li><strong>Continuous monitoring:</strong> Daily tracking of fairness metrics. Monthly reports to RAI board. Automatic alerts if metrics degrade</li>
+            <li><strong>Incident response:</strong> When bias is detected, trigger investigation. Retrain if needed. Communicate with affected parties</li>
+            <li><strong>Improvement cycle:</strong> Quarterly review of RAI practices. Update based on new techniques, regulatory changes, learned lessons</li>
+        </ol>
+    </div>
+
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Common Pitfall: Many organizations implement fairness metrics without governance. They compute demographic parity scores but don't act on them. Measurement without governance is just expensive reporting. Pair measurement with decision authority and action mechanisms.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Frameworks -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Responsible AI Frameworks</h2>
+
+    <p>As RAI matures, organizations are adopting comprehensive frameworks developed by major tech companies and regulatory bodies.</p>
+
+    <h3>Microsoft's AI Ethics & Effects Framework</h3>
+    <p><strong>Focus:</strong> Sociotechnical approach integrating technical fairness with human and societal considerations.</p>
+    <p><strong>Six pillars:</strong> Fairness (prevent unfair bias), Transparency (understandable decisions), Accountability (clear responsibility), Privacy & Security, Safety & Security, Inclusivity (broad stakeholder engagement).</p>
+    <p><strong>Best for:</strong> Organizations wanting holistic view beyond just technical metrics. Emphasizes human-in-the-loop.</p>
+
+    <h3>Google's AI Principles & <a href="https://modelcards.withgoogle.com/about" target="_blank" rel="noopener">Model Cards</a></h3>
+    <p><strong>Focus:</strong> Practical documentation and governance.</p>
+    <p><strong>Seven AI Principles:</strong> Beneficial, accountable, socially responsible, fair, transparent, respects privacy, scientifically rigorous.</p>
+    <p><strong>Model Cards artifact:</strong> Concise documentation of model's performance across demographic groups. Widely adopted as best practice.</p>
+    <p><strong>Best for:</strong> Technical teams needing concrete documentation standards. Model cards are becoming industry standard.</p>
+
+    <h3><a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a> Framework (Regulatory)</h3>
+    <p><strong>Focus:</strong> Risk-based regulation of AI systems.</p>
+    <p><strong>Risk categories:</strong></p>
+    <ul>
+        <li><strong>Prohibited Risk:</strong> Social credit systems, emotion recognition, subliminal manipulation. Banned outright.</li>
+        <li><strong>High Risk:</strong> Hiring, lending, criminal justice, immigration, education. Require: documentation, testing, monitoring, human oversight, transparency</li>
+        <li><strong>Limited Risk:</strong> Chatbots, deepfakes. Require: disclosure of AI involvement</li>
+        <li><strong>Minimal Risk:</strong> Video games, spam filters. No requirements</li>
+    </ul>
+    <p><strong>Best for:</strong> Organizations operating in EU or needing compliance-grade RAI. Defines legal standards for what RAI means.</p>
+
+    <h3><a href="https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence" target="_blank" rel="noopener">NIST AI Risk Management Framework</a> (US)</h3>
+    <p><strong>Focus:</strong> Practical risk management approach for AI systems.</p>
+    <p><strong>Four functions:</strong> Govern (policies, oversight), Map (understand risks), Measure (quantify risks), Manage (mitigate risks).</p>
+    <p><strong>Best for:</strong> Organizations seeking comprehensive but flexible framework. Emphasizes integration with enterprise risk management.</p>
+
+    <div class="highlight-box">
+    <p>Framework Convergence: While frameworks differ in details, they converge on key themes: measurement (fairness metrics), documentation (model cards), governance (review processes), and monitoring (continuous oversight). Pick the framework that fits your regulatory context, but implement these core themes regardless.</p>
+</div>
+</section>
+
+<!-- SECTION: Framework Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Governance Framework Comparison</h2>
+
+    <p>Here's how major RAI frameworks compare across key dimensions:</p>
+
+    <div style="overflow-x: auto; margin: 2rem 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--accent-cyan); color: white;">
+                    <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">Framework</th>
+                    <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">Approach</th>
+                    <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">Primary Focus</th>
+                    <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">Binding</th>
+                    <th style="padding: 1rem; text-align: left; border: 1px solid #e2e8f0;">Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #f8fafc;">
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Microsoft Ethics</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Sociotechnical</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Broad principles + human impact</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Voluntary</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Holistic orgs</td>
+                </tr>
+                <tr style="background: white;">
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Google Model Cards</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Technical Documentation</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Fairness metrics + model transparency</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Voluntary</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Technical teams</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>EU AI Act</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Risk-based Regulation</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">High-risk system controls + transparency</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>Mandatory</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">EU orgs / compliance</td>
+                </tr>
+                <tr style="background: white;">
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>NIST AI RMF</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Risk Management</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Four functions: Govern, Map, Measure, Manage</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Recommended</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Enterprise integration</td>
+                </tr>
+                <tr style="background: #f8fafc;">
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;"><strong>AI Fairness 360</strong></td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Technical Toolkit</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Fairness metrics + mitigation algorithms</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Voluntary</td>
+                    <td style="padding: 1rem; border: 1px solid #e2e8f0;">Data scientists</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-box">
+    <h4>Multi-Framework Approach</h4>
+    <p>Most mature organizations don't pick one framework. They use Google's Model Cards for documentation, NIST RMF for governance structure, EU AI Act for risk assessment (if applicable), and AI Fairness 360 for technical fairness metrics.</p>
+</div>
+</section>
+
+<!-- SECTION: Real-World Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World RAI Use Cases</h2>
+
+    <h3>1. Hiring & Recruitment</h3>
+    <p><strong>Challenge:</strong> Resume screening and interview scheduling systems can discriminate based on name, school, or protected attributes.</p>
+    <p><strong>RAI Solution:</strong></p>
+    <ul>
+        <li>Audit hiring data: identify historical hiring disparities by gender, race, age</li>
+        <li>Fairness testing: ensure model rejects/accepts candidates at equal rates across demographics (demographic parity) or has equal false positive rates (equalized odds)</li>
+        <li>Explainability: for rejected candidates, provide explanation of which factors led to rejection (qualifications, experience level) vs. protected attributes</li>
+        <li>Monitoring: weekly dashboard tracking hiring rates by demographics, flag candidates if prediction changes due to model update</li>
+    </ul>
+    <p><strong>Business outcome:</strong> LinkedIn, Google, and major tech firms now use fairness-aware hiring to attract diverse talent pools while reducing legal risk.</p>
+
+    <h3>2. Lending & Credit Decisions</h3>
+    <p><strong>Challenge:</strong> Credit scoring models can proxy discrimination through ZIP code, employment history, or other correlated features.</p>
+    <p><strong>RAI Solution:</strong></p>
+    <ul>
+        <li>Fairness metrics: measure equal approval rates across racial groups (demographic parity) or equal false positive rates (equalized odds)</li>
+        <li>Protected feature removal: explicitly remove race, but identify and remove proxies</li>
+        <li>Explainability: for loan denials, explain which factors (credit score, debt-to-income, payment history) drove decision</li>
+        <li>Redress: allow borrowers to appeal decisions and request model explanation</li>
+    </ul>
+    <p><strong>Business outcome:</strong> Banks using RAI reduce regulatory penalties under UDAAP, improve market access, and retain customer trust.</p>
+
+    <h3>3. Criminal Justice & Recidivism</h3>
+    <p><strong>Challenge:</strong> COMPAS and similar recidivism tools show racial bias: Black defendants labeled "High Risk" at 2x the rate of white defendants.</p>
+    <p><strong>RAI Solution:</strong></p>
+    <ul>
+        <li>Bias audit: measure false positive rates by race. Ensure system has equal FPR across races (equalized odds)</li>
+        <li>Fairness constraints: retrain model to optimize for equalized odds despite tradeoff with overall accuracy</li>
+        <li>Explainability: for parole decisions, show which factors (prior convictions, employment, family ties) influenced prediction</li>
+        <li>Human oversight: ensure model informs but doesn't replace human parole board judgment</li>
+    </ul>
+    <p><strong>Business outcome:</strong> Jurisdictions using fair recidivism tools have reduced incarceration disparities and face less litigation.</p>
+
+    <h3>4. Healthcare Diagnosis & Treatment</h3>
+    <p><strong>Challenge:</strong> AI diagnosis systems trained on patient data that's skewed toward male patients show poor performance on female patients.</p>
+    <p><strong>RAI Solution:</strong></p>
+    <ul>
+        <li>Stratified evaluation: measure diagnostic accuracy separately by gender, age, race, comorbidities</li>
+        <li>Data balance: ensure training data represents populations fairly</li>
+        <li>Explainability: highlight which symptoms/test results influenced diagnosis recommendation</li>
+        <li>Clinical oversight: AI assists but doesn't replace doctor judgment</li>
+    </ul>
+    <p><strong>Business outcome:</strong> Hospitals using fair AI diagnosis have better health outcomes for underrepresented populations and reduce health disparities.</p>
+
+    <h3>5. Education & Admissions</h3>
+    <p><strong>Challenge:</strong> College admissions models can perpetuate historical disadvantage against minority students.</p>
+    <p><strong>RAI Solution:</strong></p>
+    <ul>
+        <li>Fairness evaluation: measure acceptance rates across demographic groups</li>
+        <li>Explainability: show which factors (GPA, SAT, essays, extracurriculars) influenced admission decision</li>
+        <li>Transparency: communicate AI's role in admissions, allow appeals</li>
+        <li>Fairness constraints: explicitly optimize for access and diversity</li>
+    </ul>
+    <p><strong>Business outcome:</strong> Universities using fair admissions build more diverse cohorts and improve educational outcomes for all students.</p>
+
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Theme: In every case, RAI combines technical measurement (fairness metrics), transparency (explainability), human oversight, and remediation processes. No technical tool alone solves RAI; you need the full ecosystem.</p>
+</div>
+</section>
+
+<!-- SECTION: Enterprise Governance -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise RAI Governance</h2>
+
+    <p>Scaling RAI across an organization requires governance structures, processes, and cultural changes.</p>
+
+    <h3>Organizational Structure for RAI</h3>
+
+    <div style="background: white; border: 2px solid var(--accent-cyan); border-radius: 8px; padding: 2rem; margin: 2rem 0;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 1.2rem; font-weight: 600; color: var(--accent-cyan);">C-Suite Sponsorship</div>
+            <div style="font-size: 0.9rem; color: var(--text-dim);">Chief Data Officer / Chief AI Officer</div>
+        </div>
+        <div style="border-top: 2px solid #e2e8f0; padding-top: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div style="background: #e0f2fe; padding: 1rem; border-radius: 4px;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #0284c7;">AI Ethics Board</h4>
+                    <p style="margin: 0; font-size: 0.85rem;">Cross-functional review of high-risk systems. Quarterly governance reports.</p>
+                </div>
+                <div style="background: #f3e8ff; padding: 1rem; border-radius: 4px;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #7c3aed;">Data & Fairness Team</h4>
+                    <p style="margin: 0; font-size: 0.85rem;">Develops fairness tools, audits data, measures bias, builds frameworks.</p>
+                </div>
+                <div style="background: #d1fae5; padding: 1rem; border-radius: 4px;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #059669;">Audit & Compliance</h4>
+                    <p style="margin: 0; font-size: 0.85rem;">Monitors production systems, investigates incidents, handles regulatory requirements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>RAI Governance Process</h3>
+
+    <div style="margin: 2rem 0;">
+        <div style="border: 2px solid var(--accent-cyan); border-radius: 8px; padding: 1.5rem; background: #f0f9ff;">
+            <h4 style="margin-top: 0; color: var(--accent-cyan);">Step 1: Risk Assessment</h4>
+            <p>Classify model by risk level (high/medium/low). High-risk models require full RAI review before deployment.</p>
+        </div>
+        <div style="border: 2px solid var(--accent-purple); border-radius: 8px; padding: 1.5rem; background: #f3e8ff; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: var(--accent-purple);">Step 2: Data Audit</h4>
+            <p>Review training data: What are the demographics? Are underrepresented groups included? Known limitations?</p>
+        </div>
+        <div style="border: 2px solid #d946ef; border-radius: 8px; padding: 1.5rem; background: #fce7f3; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #d946ef;">Step 3: Fairness Testing</h4>
+            <p>Measure fairness metrics. Compute performance by demographic group. Identify bias sources. Design mitigation if needed.</p>
+        </div>
+        <div style="border: 2px solid #f59e0b; border-radius: 8px; padding: 1.5rem; background: #fef3c7; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #f59e0b;">Step 4: Documentation</h4>
+            <p>Create model card, data card, system card. Document fairness metrics, limitations, use cases, and restrictions.</p>
+        </div>
+        <div style="border: 2px solid #10b981; border-radius: 8px; padding: 1.5rem; background: #d1fae5; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #10b981;">Step 5: Ethics Board Review</h4>
+            <p>Board reviews high-risk systems. Approves or requests mitigation. Documents decision and rationale.</p>
+        </div>
+        <div style="border: 2px solid #0284c7; border-radius: 8px; padding: 1.5rem; background: #e0f2fe; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #0284c7;">Step 6: Deployment & Monitoring</h4>
+            <p>Deploy with monitoring dashboards. Track fairness metrics daily. Escalate if metrics degrade. Regular audits.</p>
+        </div>
+    </div>
+
+    <h3>RAI Metrics Dashboard</h3>
+    <p><strong>Real-time metrics tracked for every production model:</strong></p>
+    <ul>
+        <li>Fairness metrics: demographic parity, equalized odds, calibration by group</li>
+        <li>Performance metrics: accuracy, AUC, precision, recall by demographic group</li>
+        <li>Data metrics: prediction volume, demographic distribution of predictions</li>
+        <li>Monitoring: model version, training data date, when fairness metrics were last computed</li>
+        <li>Incidents: bias complaints, appeals, appeals resolution</li>
+    </ul>
+
+    <h3>RAI Training & Culture</h3>
+    <p><strong>Building RAI culture requires:</strong></p>
+    <ul>
+        <li><strong>Mandatory training:</strong> All engineers and data scientists complete RAI fundamentals course</li>
+        <li><strong>Best practices documentation:</strong> Internal guides on fairness metrics, explainability, documentation</li>
+        <li><strong>Case studies:</strong> Share lessons from fairness failures (Amazon, COMPAS, etc.) and successes</li>
+        <li><strong>Incentives:</strong> Include fairness in model evaluation criteria, bonus structures, promotion criteria</li>
+        <li><strong>Partnerships:</strong> External experts (ML ethics conferences, academic researchers) guide governance</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p>Governance Requires Authority: RAI governance only works if the ethics board has real authority to block high-risk deployments, delay launches for mitigation, and mandate retraining. Without enforcement power, governance becomes theater.</p>
+</div>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes in Implementing RAI</h2>
+
+    <h3>Mistake 1: Measurement Without Action</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Organizations compute fairness metrics but don't act on findings. High demographic disparity? Shrug and deploy anyway. This creates false sense of responsibility without actual improvement.</p>
+</div>
+    <p><strong>Fix:</strong> Tie measurement to decision gates. High bias → mandatory mitigation or executive approval to override. Create accountability: "Who is responsible for fairness of this model?"</p>
+
+    <h3>Mistake 2: Fairness Without Context</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Optimize for demographic parity without understanding the system. Maybe equalized odds is more appropriate. Maybe fairness isn't about group statistics but individual fairness. One metric doesn't fit all.</p>
+</div>
+    <p><strong>Fix:</strong> Engage stakeholders (affected communities, domain experts) early. Decide which fairness definition fits your context. Document the choice and rationale.</p>
+
+    <h3>Mistake 3: Removing Protected Attributes Isn't Enough</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Remove race/gender from model thinking this guarantees fairness. But other features (ZIP code, school, name) proxy for protected attributes. Model learns them anyway and perpetuates discrimination.</p>
+</div>
+    <p><strong>Fix:</strong> Actively measure bias against protected attributes. If demographic disparity exists, investigate feature proxies. Measure disparate impact, not just disparate treatment.</p>
+
+    <h3>Mistake 4: Explainability Theater</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Generate <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a>/<a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a> explanations for show. Explanations are mathematically correct but don't actually help users understand model decisions or identify bias.</p>
+</div>
+    <p><strong>Fix:</strong> Test explanations with actual users. Are they meaningful? Do they help understand why decision was made? Combine with human oversight so explanations actually influence decisions.</p>
+
+    <h3>Mistake 5: RAI as a Phase, Not a Process</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: RAI is a one-time checklist before launch. After deployment, no monitoring, no fairness tracking, no updates. Data drifts, model degrades, bias emerges but nobody notices.</p>
+</div>
+    <p><strong>Fix:</strong> RAI is continuous. Build monitoring into production. Weekly fairness dashboards. Regular audits. Incident response procedures. Improvement cycles.</p>
+
+    <h3>Mistake 6: No Stakeholder Engagement</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Build RAI in lab with data scientists and ethicists. Deploy without consulting affected communities, domain experts, or users who will interact with the system.</p>
+</div>
+    <p><strong>Fix:</strong> Early and ongoing stakeholder engagement. User research with people who will be affected by system. Community feedback loops. Transparency about how system works and how to appeal.</p>
+
+    <h3>Mistake 7: Governance Without Technical Integration</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: Create ethics board that reviews models post-hoc. No technical infrastructure to enforce governance decisions. Board says 'fix bias' but engineers have no tools to measure/fix bias.</p>
+</div>
+    <p><strong>Fix:</strong> Integrate governance with technical pipelines. MLOps tools that compute fairness metrics automatically. Code review processes that enforce documentation. Deployment gates that check fairness before launch.</p>
+
+    <h3>Mistake 8: Treating RAI as Optional</h3>
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Problem: RAI is extra feature for risk-conscious teams. Ambitious teams skip it to move fast. Result: inconsistent implementation, varying quality, and gaps in high-risk areas.</p>
+</div>
+    <p><strong>Fix:</strong> Make RAI part of standard process for all models. Include in initial requirements, design review, development, testing, deployment, and monitoring. No exceptions for "fast-moving" teams.</p>
+
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">Theme: RAI failures aren't usually technical. They're organizational — lack of accountability, weak governance, no stakeholder engagement, measurement without action. Build RAI as a system, not just as technical metrics.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>RAI Best Practices</h2>
+
+    <h3>1. Start with Problem Definition</h3>
+    <p><strong>Before building any model:</strong></p>
+    <ul>
+        <li>Who will be affected by this system? Identify protected groups and vulnerable populations</li>
+        <li>What does fairness mean in this context? Which fairness metric aligns with values and constraints?</li>
+        <li>What are the consequences of errors? False positive (denying credit) vs. false negative (approving risky loan) — which is worse?</li>
+        <li>Who will make final decisions? Is this fully automated or human-in-the-loop?</li>
+    </ul>
+
+    <h3>2. Audit Data Thoroughly</h3>
+    <p><strong>Before training any model:</strong></p>
+    <ul>
+        <li>Demographic composition: who is represented? who is missing?</li>
+        <li>Label quality: are labels reliable? any systematic errors by subgroup?</li>
+        <li>Temporal issues: is data from single time period? how will it change?</li>
+        <li>Historical bias: does data reflect past discrimination?</li>
+        <li>Document everything: create data card specifying these findings</li>
+    </ul>
+
+    <h3>3. Measure Fairness Proactively</h3>
+    <p><strong>During development:</strong></p>
+    <ul>
+        <li>Compute multiple fairness metrics: demographic parity, equalized odds, calibration. Understand tradeoffs</li>
+        <li>Stratified evaluation: report performance metrics separately for each demographic group</li>
+        <li>Fairness-accuracy tradeoff: if perfect fairness requires accuracy loss, quantify and document it</li>
+        <li>Sensitivity analysis: how do fairness metrics change with different hyperparameters?</li>
+    </ul>
+
+    <h3>4. Implement Explainability Early</h3>
+    <p><strong>Design for interpretability:</strong></p>
+    <ul>
+        <li>Prefer simpler models (linear, tree-based) when possible. They're naturally interpretable</li>
+        <li>For complex models, add explanation layer: SHAP, LIME, or attention</li>
+        <li>Evaluate explanation quality: do explanations match domain expertise? do they help users?</li>
+        <li>Build explanation interfaces: how will users see explanations? what format?</li>
+    </ul>
+
+    <h3>5. Document Comprehensively</h3>
+    <p><strong>Create model cards covering:</strong></p>
+    <ul>
+        <li>Model details: architecture, training procedure, hyperparameters</li>
+        <li>Intended use: what is this model for? who should use it?</li>
+        <li>Performance metrics: accuracy, precision, recall, and breakdown by demographic group</li>
+        <li>Fairness assessment: which fairness metrics? any known disparities?</li>
+        <li>Limitations: where does model perform poorly? any known biases?</li>
+        <li>Recommendations: when to use, when not to use, how to interpret</li>
+    </ul>
+
+    <h3>6. Plan for Continuous Monitoring</h3>
+    <p><strong>Before deployment, establish:</strong></p>
+    <ul>
+        <li>Fairness dashboard: daily tracking of key metrics by demographic group</li>
+        <li>Alert thresholds: fairness metrics degrade by X%, trigger investigation</li>
+        <li>Comparison baseline: compare current to previous month/quarter, flag changes</li>
+        <li>Audit schedule: monthly deep-dive, quarterly ethics board review, annual third-party audit</li>
+    </ul>
+
+    <h3>7. Design Human Oversight</h3>
+    <p><strong>For high-risk systems:</strong></p>
+    <ul>
+        <li>Humans make final decisions, model provides recommendations and explanations</li>
+        <li>Regular spot checks: randomly audit decisions to ensure humans are paying attention</li>
+        <li>Appeal mechanisms: affected parties can contest decisions, get explanations, request human review</li>
+        <li>Feedback loops: use appeals and human overrides to improve model</li>
+    </ul>
+
+    <h3>8. Engage Stakeholders Throughout</h3>
+    <p><strong>At every stage:</strong></p>
+    <ul>
+        <li>Early design: consult affected communities, domain experts, ethicists</li>
+        <li>Development: share fairness findings, solicit feedback on tradeoffs</li>
+        <li>Pre-launch: external review, ethical approval</li>
+        <li>Post-launch: monitor appeals, gather feedback, maintain communication channels</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Integration:</strong> These aren't independent best practices. They work together: problem definition → data audit → fairness measurement → explainability → documentation → monitoring → stakeholder engagement → iterative improvement.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced RAI Insights</h2>
+
+    <h3>Fairness-Accuracy Tradeoffs</h3>
+    <p>In many real-world scenarios, achieving perfect fairness requires sacrificing some accuracy. This is a fundamental tradeoff worth understanding.</p>
+    
+    <div style="background: white; border: 2px solid var(--accent-cyan); border-radius: 8px; padding: 1.5rem; margin: 1rem 0;">
+        <p><strong>Example:</strong> A loan approval model achieves 92% overall accuracy but with equalized odds constraint (equal TPR/FPR across races), accuracy drops to 88%. Should you make this tradeoff?</p>
+        <p style="margin-bottom: 0;"><strong>Answer:</strong> It depends on your values and constraints. If fairness is a legal requirement (UDAAP), yes. If accuracy is critical for business, you need to design the fairness constraint differently. This requires stakeholder engagement — a 4% accuracy loss isn't purely technical question.</p>
+    </div>
+
+    <h3>The Causality Challenge</h3>
+    <p><strong>Correlation vs. Causation:</strong> Most fairness metrics measure correlation between model predictions and sensitive attributes. But truly causal fairness is much harder. Did the model discriminate because of causal pathways (e.g., ZIP code → lower credit history → loan denial) or just statistical association?</p>
+    <p>Counterfactual fairness asks: if we change an individual's sensitive attribute, would their outcome change? This requires causal modeling, which is complex but more theoretically satisfying than correlation-based metrics.</p>
+
+    <h3>Fairness in Different Contexts</h3>
+    <p>Fairness definitions that work for one domain don't work for others:</p>
+    <ul>
+        <li><strong>Allocative fairness:</strong> Who gets resources? (hiring, loans, college admissions) → need demographic parity or equalized odds</li>
+        <li><strong>Predictive fairness:</strong> How accurate are predictions? (recidivism, disease diagnosis) → need calibration and equal accuracy across groups</li>
+        <li><strong>Procedural fairness:</strong> Is the process fair? → need transparency, explainability, appeals mechanisms</li>
+        <li><strong>Temporal fairness:</strong> How does fairness evolve over time? → need continuous monitoring and adaptation</li>
+    </ul>
+
+    <h3>Feedback Loops & Fairness Drift</h3>
+    <p><strong>Dangerous dynamics:</strong> A model is initially fair but over time becomes unfair due to feedback loops:</p>
+    <ol>
+        <li>Model denies credit to minority applicants at higher rate due to historical data bias</li>
+        <li>Minority applicants default more (due to lack of opportunity, not intrinsic higher risk)</li>
+        <li>More recent data shows minority applicants defaulting more</li>
+        <li>Retrain model on new data, bias gets worse</li>
+    </ol>
+    <p><strong>Solution:</strong> Detect and break feedback loops. Monitor for these dynamics. Periodically retrain with constraints to prevent fairness drift.</p>
+
+    <h3>Fairness at Scale</h3>
+    <p>Measuring and maintaining fairness across millions of predictions, thousands of models, and global populations is a data engineering challenge:</p>
+    <ul>
+        <li>Fairness pipeline: automatically compute fairness metrics for all models daily</li>
+        <li>Federated fairness: measure fairness in each region/demographic separately, aggregate carefully</li>
+        <li>Prioritization: when you have thousands of models, which are most important to audit? (high-risk, high-impact, rapidly changing predictions)</li>
+    </ul>
+
+    <h3>From Fairness to Justice</h3>
+    <p><strong>Critical perspective:</strong> Fairness metrics are important but insufficient. A loan algorithm that denies everyone credit equally isn't fair if credit is necessary for economic participation. True AI justice requires understanding broader systemic inequalities.</p>
+    <p>RAI metrics should inform but not replace human judgment about what systems are just.</p>
+
+    <div class="info-box">
+    <h4>Research Frontier</h4>
+    <p>Active areas of RAI research: counterfactual fairness, causal fairness, fairness under distribution shift, intersectionality (fairness for combinations of protected attributes), and fairness for sequential decision-making (bandits, reinforcement learning).</p>
+</div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Practical Code Examples</h2>
+
+    <h3>1. Bias Detection with Fairlearn</h3>
+    <p><strong>Detect demographic disparities in loan approval model:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — Fairness Metrics with Fairlearn</div>
+    <div class="code-content">
+<span class="keyword">from</span> fairlearn.metrics <span class="keyword">import</span> demographic_parity_difference, equalized_odds_difference
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># y_true: actual outcomes, y_pred: model predictions</span>
+<span class="comment"># sensitive_features: protected attributes (race, gender)</span>
+
+<span class="comment"># Demographic Parity Difference</span>
+<span class="comment"># Measures: |P(Y'=1|A=a) - P(Y'=1|A=b)|</span>
+dpd = <span class="function">demographic_parity_difference</span>(
+    y_true, y_pred, sensitive_features=df[<span class="string">'race'</span>]
+)
+<span class="function">print</span>(<span class="string">f"Demographic Parity Difference: {dpd:.3f}"</span>)
+<span class="comment"># Range: [-1, 1], 0 is fair, &gt;0.1 indicates bias</span>
+
+<span class="comment"># Equalized Odds Difference</span>
+<span class="comment"># Measures: |TPR_a - TPR_b| and |FPR_a - FPR_b|</span>
+eod = <span class="function">equalized_odds_difference</span>(
+    y_true, y_pred, sensitive_features=df[<span class="string">'race'</span>]
+)
+<span class="function">print</span>(<span class="string">f"Equalized Odds Difference: {eod:.3f}"</span>)
+
+<span class="comment"># Group metrics: detailed breakdown by demographic group</span>
+<span class="keyword">from</span> fairlearn.metrics <span class="keyword">import</span> MetricFrame
+
+metrics_by_group = <span class="function">MetricFrame</span>(
+    metrics={<span class="string">'accuracy'</span>: accuracy_score, <span class="string">'approval_rate'</span>: <span class="keyword">lambda</span> y, y_pred: y_pred.<span class="function">mean</span>()},
+    y_true=y_true,
+    y_pred=y_pred,
+    sensitive_features=df[<span class="string">'race'</span>]
+)
+<span class="function">print</span>(metrics_by_group.by_group)
+</div>
+</div>
+
+    <h3>2. SHAP Explainability</h3>
+    <p><strong>Explain individual loan approval decisions:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — SHAP Feature Importance</div>
+    <div class="code-content">
+<span class="keyword">import</span> shap
+<span class="keyword">import</span> lightgbm <span class="keyword">as</span> lgb
+
+<span class="comment"># Train model</span>
+model = lgb.<span class="function">LGBMClassifier</span>()
+model.<span class="function">fit</span>(X_train, y_train)
+
+<span class="comment"># Create SHAP explainer</span>
+explainer = shap.<span class="function">TreeExplainer</span>(model)
+shap_values = explainer.<span class="function">shap_values</span>(X_test)
+
+<span class="comment"># Plot: which features influenced prediction for one instance?</span>
+shap.<span class="function">force_plot</span>(explainer.expected_value[<span class="number">1</span>], shap_values[<span class="number">1</span>], X_test.iloc[<span class="number">0</span>])
+
+<span class="comment"># Summary: overall feature importance across all predictions</span>
+shap.<span class="function">summary_plot</span>(shap_values[<span class="number">1</span>], X_test, feature_names=X_test.columns)
+
+<span class="comment"># Single prediction explanation</span>
+instance = X_test.iloc[<span class="number">0</span>]
+prediction = model.<span class="function">predict</span>(instance.values.<span class="function">reshape</span>(<span class="number">1</span>, -<span class="number">1</span>))[<span class="number">0</span>]
+importance = shap_values[<span class="number">1</span>][<span class="number">0</span>]  <span class="comment"># SHAP values for positive class</span>
+
+<span class="function">print</span>(<span class="string">f"Loan Approved: {prediction}"</span>)
+<span class="function">print</span>(<span class="string">f"Feature Contributions:"</span>)
+<span class="keyword">for</span> feat, val <span class="keyword">in</span> <span class="function">zip</span>(X_test.columns, importance):
+    direction = <span class="string">"increases"</span> <span class="keyword">if</span> val > <span class="number">0</span> <span class="keyword">else</span> <span class="string">"decreases"</span>
+    <span class="function">print</span>(<span class="string">f"  {feat}: {val:.4f} ({direction} approval probability)"</span>)
+</div>
+</div>
+
+    <h3>3. LIME Local Explanations</h3>
+    <p><strong>Explain predictions for hiring decisions:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — LIME Local Explanations</div>
+    <div class="code-content">
+<span class="keyword">from</span> lime.lime_tabular <span class="keyword">import</span> LimeTabularExplainer
+
+<span class="comment"># Create LIME explainer (for tabular data)</span>
+explainer = <span class="function">LimeTabularExplainer</span>(
+    X_train.values,
+    feature_names=X_train.columns,
+    class_names=[<span class="string">'Not Hired'</span>, <span class="string">'Hired'</span>],
+    mode=<span class="string">'classification'</span>
+)
+
+<span class="comment"># Explain individual prediction</span>
+instance = X_test.iloc[<span class="number">0</span>].values
+exp = explainer.<span class="function">explain_instance</span>(instance, model.predict_proba, num_features=<span class="number">5</span>)
+
+<span class="comment"># Display explanation</span>
+<span class="function">print</span>(<span class="string">"Prediction: Hired"</span> <span class="keyword">if</span> model.<span class="function">predict</span>([instance])[<span class="number">0</span>] == <span class="number">1</span> <span class="keyword">else</span> <span class="string">"Prediction: Not Hired"</span>)
+<span class="function">print</span>(<span class="string">"Local Explanation (top 5 features):"</span>)
+<span class="keyword">for</span> feature, weight <span class="keyword">in</span> exp.<span class="function">as_list</span>():
+    <span class="function">print</span>(<span class="string">f"  {feature}: {weight:.4f}"</span>)
+
+<span class="comment"># Visualization</span>
+exp.<span class="function">show_in_notebook</span>()  <span class="comment"># For Jupyter notebooks</span>
+<span class="comment"># Or save: exp.save_to_file('explanation.html')</span>
+</div>
+</div>
+
+    <h3>4. Fairness Metrics Computation</h3>
+    <p><strong>Compute comprehensive fairness dashboard:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — Fairness Metrics Dashboard</div>
+    <div class="code-content">
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, confusion_matrix
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="keyword">def</span> <span class="function">compute_fairness_metrics</span>(y_true, y_pred, sensitive_attr):
+    <span class="string">"""Compute comprehensive fairness metrics by demographic group"""</span>
+    results = []
+    
+    <span class="keyword">for</span> group <span class="keyword">in</span> sensitive_attr.<span class="function">unique</span>():
+        mask = sensitive_attr == group
+        y_true_group = y_true[mask]
+        y_pred_group = y_pred[mask]
+        
+        tn, fp, fn, tp = <span class="function">confusion_matrix</span>(y_true_group, y_pred_group).<span class="function">ravel</span>()
+        
+        metrics = {
+            <span class="string">'Group'</span>: group,
+            <span class="string">'Count'</span>: <span class="function">len</span>(y_true_group),
+            <span class="string">'Accuracy'</span>: <span class="function">accuracy_score</span>(y_true_group, y_pred_group),
+            <span class="string">'Precision'</span>: tp / (tp + fp) <span class="keyword">if</span> (tp + fp) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>,
+            <span class="string">'Recall'</span>: tp / (tp + fn) <span class="keyword">if</span> (tp + fn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>,
+            <span class="string">'TPR'</span>: tp / (tp + fn) <span class="keyword">if</span> (tp + fn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>,  <span class="comment"># True Positive Rate</span>
+            <span class="string">'FPR'</span>: fp / (fp + tn) <span class="keyword">if</span> (fp + tn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>,  <span class="comment"># False Positive Rate</span>
+            <span class="string">'Approval_Rate'</span>: y_pred_group.<span class="function">mean</span>(),
+        }
+        results.<span class="function">append</span>(metrics)
+    
+    df_metrics = pd.<span class="function">DataFrame</span>(results)
+    
+    <span class="comment"># Compute disparities</span>
+    tpr_max = df_metrics[<span class="string">'TPR'</span>].<span class="function">max</span>()
+    tpr_min = df_metrics[<span class="string">'TPR'</span>].<span class="function">min</span>()
+    fpr_max = df_metrics[<span class="string">'FPR'</span>].<span class="function">max</span>()
+    fpr_min = df_metrics[<span class="string">'FPR'</span>].<span class="function">min</span>()
+    
+    <span class="function">print</span>(df_metrics.<span class="function">to_string</span>(index=<span class="keyword">False</span>))
+    <span class="function">print</span>(<span class="string">f"\nTPR Disparity: {tpr_max - tpr_min:.4f}"</span>)
+    <span class="function">print</span>(<span class="string">f"FPR Disparity: {fpr_max - fpr_min:.4f}"</span>)
+    <span class="function">print</span>(<span class="string">f"\nEqualized Odds Fair: {tpr_max - tpr_min &lt; 0.1 and fpr_max - fpr_min &lt; 0.1}"</span>)
+    
+    <span class="keyword">return</span> df_metrics
+
+<span class="comment"># Usage</span>
+metrics_df = <span class="function">compute_fairness_metrics</span>(y_test, y_pred, df_test[<span class="string">'race'</span>])
+</div>
+</div>
+
+    <h3>5. Model Card Generation</h3>
+    <p><strong>Create documentation for model accountability:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — Model Card Template</div>
+    <div class="code-content">
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> <span class="function">create_model_card</span>(model_name, description, fairness_metrics, performance_metrics):
+    <span class="string">"""Generate model card for documentation"""</span>
+    
+    card = {
+        <span class="string">'model_details'</span>: {
+            <span class="string">'name'</span>: model_name,
+            <span class="string">'version'</span>: <span class="string">'1.0.0'</span>,
+            <span class="string">'date'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+            <span class="string">'description'</span>: description,
+            <span class="string">'type'</span>: <span class="string">'Classification'</span>,
+            <span class="string">'framework'</span>: <span class="string">'scikit-learn / XGBoost'</span>,
+        },
+        <span class="string">'intended_use'</span>: {
+            <span class="string">'primary_use'</span>: <span class="string">'Loan approval recommendations'</span>,
+            <span class="string">'primary_users'</span>: <span class="string">'Credit underwriting team'</span>,
+            <span class="string">'out_of_scope'</span>: [<span class="string">'Individual lending decisions without human review'</span>, <span class="string">'Non-US markets'</span>],
+        },
+        <span class="string">'performance'</span>: performance_metrics,  <span class="comment"># accuracy, precision, recall by group</span>
+        <span class="string">'fairness'</span>: fairness_metrics,  <span class="comment"># demographic parity, equalized odds</span>
+        <span class="string">'limitations'</span>: [
+            <span class="string">'Model trained on 2020-2022 data; may not reflect current market'</span>,
+            <span class="string">'Lower accuracy for ages 18-25 (small training sample)'</span>,
+            <span class="string">'Does not account for seasonal economic variations'</span>,
+        ],
+        <span class="string">'recommendations'</span>: {
+            <span class="string">'use_when'</span>: [<span class="string">'Credit decisions with values under $50k'</span>, <span class="string">'First-time borrowers'</span>],
+            <span class="string">'dont_use_when'</span>: [<span class="string">'High-risk loans'</span>, <span class="string">'International borrowers'</span>],
+            <span class="string">'human_oversight'</span>: <span class="string">'Loan decisions should be reviewed by human underwriter'</span>,
+        },
+        <span class="string">'contact'</span>: <span class="string">'ml-team@company.com'</span>,
+    }
+    
+    <span class="keyword">return</span> card
+
+<span class="comment"># Save model card</span>
+card = <span class="function">create_model_card</span>(
+    <span class="string">'LoanApprovalModel_v1'</span>,
+    <span class="string">'Predicts loan approval likelihood for prime borrowers'</span>,
+    fairness_metrics,  <span class="comment"># from earlier computation</span>
+    performance_metrics
+)
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'model_card.json'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+    json.<span class="function">dump</span>(card, f, indent=<span class="number">2</span>)
+
+<span class="function">print</span>(json.<span class="function">dumps</span>(card, indent=<span class="number">2</span>))
+</div>
+</div>
+
+    <h3>6. Audit Logging Framework</h3>
+    <p><strong>Track all model decisions for accountability:</strong></p>
+    <div class="code-block">
+    <div class="code-header">Python — Audit Logging System</div>
+    <div class="code-content">
+<span class="keyword">import</span> logging
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+<span class="keyword">import</span> uuid
+
+<span class="keyword">class</span> AuditLogger:
+    <span class="string">"""Log all model predictions and decisions for accountability"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, log_file=<span class="string">'model_audit.jsonl'</span>):
+        <span class="function">self</span>.log_file = log_file
+        <span class="function">self</span>.logger = logging.<span class="function">getLogger</span>(<span class="string">'audit'</span>)
+        handler = logging.<span class="function">FileHandler</span>(log_file)
+        handler.<span class="function">setFormatter</span>(logging.<span class="function">Formatter</span>(<span class="string">'%(message)s'</span>))
+        <span class="function">self</span>.logger.<span class="function">addHandler</span>(handler)
+        <span class="function">self</span>.logger.<span class="function">setLevel</span>(logging.INFO)
+    
+    <span class="keyword">def</span> <span class="function">log_prediction</span>(<span class="function">self</span>, model_name, user_id, input_data, prediction, 
+                       confidence, demographic_info=<span class="keyword">None</span>):
+        <span class="string">"""Log a model prediction"""</span>
+        log_entry = {
+            <span class="string">'timestamp'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+            <span class="string">'audit_id'</span>: <span class="function">str</span>(uuid.<span class="function">uuid4</span>()),
+            <span class="string">'model_name'</span>: model_name,
+            <span class="string">'user_id'</span>: user_id,
+            <span class="string">'input_features'</span>: input_data,
+            <span class="string">'prediction'</span>: prediction,
+            <span class="string">'confidence'</span>: <span class="function">float</span>(confidence),
+            <span class="string">'demographic_info'</span>: demographic_info,
+        }
+        <span class="function">self</span>.logger.<span class="function">info</span>(json.<span class="function">dumps</span>(log_entry))
+        <span class="keyword">return</span> log_entry[<span class="string">'audit_id'</span>]
+    
+    <span class="keyword">def</span> <span class="function">log_decision</span>(<span class="function">self</span>, audit_id, decision, decision_maker, reason):
+        <span class="string">"""Log human decision on model's recommendation"""</span>
+        log_entry = {
+            <span class="string">'timestamp'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+            <span class="string">'audit_id'</span>: audit_id,
+            <span class="string">'decision'</span>: decision,
+            <span class="string">'decision_maker'</span>: decision_maker,
+            <span class="string">'reason'</span>: reason,
+            <span class="string">'type'</span>: <span class="string">'human_decision'</span>,
+        }
+        <span class="function">self</span>.logger.<span class="function">info</span>(json.<span class="function">dumps</span>(log_entry))
+    
+    <span class="keyword">def</span> <span class="function">log_appeal</span>(<span class="function">self</span>, audit_id, appeal_reason, resolution):
+        <span class="string">"""Log appeal against model decision"""</span>
+        log_entry = {
+            <span class="string">'timestamp'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+            <span class="string">'audit_id'</span>: audit_id,
+            <span class="string">'appeal_reason'</span>: appeal_reason,
+            <span class="string">'resolution'</span>: resolution,
+            <span class="string">'type'</span>: <span class="string">'appeal'</span>,
+        }
+        <span class="function">self</span>.logger.<span class="function">info</span>(json.<span class="function">dumps</span>(log_entry))
+
+<span class="comment"># Usage</span>
+auditor = <span class="function">AuditLogger</span>()
+audit_id = auditor.<span class="function">log_prediction</span>(
+    <span class="string">'LoanApprovalModel'</span>,
+    user_id=<span class="string">'USER_12345'</span>,
+    input_data={<span class="string">'income'</span>: <span class="number">75000</span>, <span class="string">'credit_score'</span>: <span class="number">720</span>, <span class="string">'debt_ratio'</span>: <span class="number">0.25</span>},
+    prediction=<span class="number">1</span>,
+    confidence=<span class="number">0.87</span>,
+    demographic_info={<span class="string">'age_group'</span>: <span class="string">'30-40'</span>, <span class="string">'gender'</span>: <span class="string">'M'</span>, <span class="string">'race'</span>: <span class="string">'White'</span>}
+)
+
+<span class="comment"># Later: human reviews and decides</span>
+auditor.<span class="function">log_decision</span>(audit_id, decision=<span class="number">1</span>, decision_maker=<span class="string">'underwriter_042'</span>,
+                    reason=<span class="string">'Low debt ratio, good income'</span>)
+</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <p>These exercises build practical RAI skills using real-world scenarios.</p>
+
+    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <h4 style="margin-top: 0; color: #a855f7;">Exercise 1: Bias Detection in Hiring Data</h4>
+    <p>
+    <p><strong>Objective:</strong> Detect bias in a hiring dataset.</p>
+    <p><strong>Task:</strong></p>
+    <ol>
+        <li>Load the provided hiring dataset (resume screening data with 1000 applications)</li>
+        <li>Compute demographic breakdown: how many male/female, different races, age groups?</li>
+        <li>Train a logistic regression model to predict "hired/not hired"</li>
+        <li>Measure fairness metrics: demographic parity, equalized odds, calibration by gender</li>
+        <li>Identify: is the model fair? If not, where's the bias?</li>
+        <li>Bonus: try fairness constraints — retrain model optimized for equalized odds</li>
+    </ol>
+    <p><strong>Deliverable:</strong> Report with fairness analysis and recommendation (deploy or mitigate?)</p>
+    </p>
+</div>
+
+    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <h4 style="margin-top: 0; color: #a855f7;">Exercise 2: Explaining Model Decisions with <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a></h4>
+    <p>
+    <p><strong>Objective:</strong> Generate and interpret SHAP explanations for credit decisions.</p>
+    <p><strong>Task:</strong></p>
+    <ol>
+        <li>Train a credit scoring model (use provided loan dataset)</li>
+        <li>Install and use SHAP: <code>pip install shap</code></li>
+        <li>Compute SHAP values for test set</li>
+        <li>Generate summary plot showing feature importance across all predictions</li>
+        <li>For 3 specific loan applications: generate force plots explaining the decision</li>
+        <li>Compare: do explanations make sense? do they reveal bias?</li>
+    </ol>
+    <p><strong>Deliverable:</strong> Summary plot + 3 force plots with written explanations</p>
+    </p>
+</div>
+
+    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <h4 style="margin-top: 0; color: #a855f7;">Exercise 3: Implementing Fairness Constraints</h4>
+    <p>
+    <p><strong>Objective:</strong> Build a model with explicit fairness constraints.</p>
+    <p><strong>Task:</strong></p>
+    <ol>
+        <li>Use <a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn</a> library: <code>pip install fairlearn</code></li>
+        <li>Take the hiring model from Exercise 1</li>
+        <li>Apply fairness constraint: ThresholdOptimizer optimized for demographic parity</li>
+        <li>Compare original vs. constrained model: accuracy change? fairness improvement?</li>
+        <li>Try different fairness constraints: equalized odds, calibration</li>
+        <li>Analyze tradeoffs: which constraint is best for this use case?</li>
+    </ol>
+    <p><strong>Deliverable:</strong> Comparison table of constraints, fairness metrics, accuracy</p>
+    </p>
+</div>
+
+    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <h4 style="margin-top: 0; color: #a855f7;">Exercise 4: Creating a Model Card</h4>
+    <p>
+    <p><strong>Objective:</strong> Document a model comprehensively using model card format.</p>
+    <p><strong>Task:</strong></p>
+    <ol>
+        <li>Select one model from previous exercises</li>
+        <li>Create a model card covering: model details, intended use, performance, fairness, limitations, recommendations</li>
+        <li>Include: accuracy/precision/recall by demographic group, fairness metrics, known limitations</li>
+        <li>Add recommendations: when to use, when not to use, required human oversight</li>
+        <li>Get feedback: share with colleague or mentor, refine based on feedback</li>
+    </ol>
+    <p><strong>Deliverable:</strong> Formatted model card (JSON or markdown)</p>
+    </p>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions on Responsible AI</h2>
+
+    <p>Common questions in technical interviews and ethics discussions:</p>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's the difference between fairness and accuracy in ML?</div>
+    <div style="color: var(--text-dim);">A: Accuracy measures how often the model is correct overall. Fairness measures whether the model treats different demographic groups equitably. A model can be 95% accurate overall but have 99% accuracy for males and 70% accuracy for females — it's accurate but unfair. The goal is both accuracy and fairness across all groups.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: Explain demographic parity vs. equalized odds.</div>
+    <div style="color: var(--text-dim);">A: Demographic parity: P(prediction=positive|group A) = P(prediction=positive|group B). The model approves at equal rates for all groups. Equalized odds: P(prediction=positive|outcome=positive,group A) = P(prediction=positive|outcome=positive,group B). The true positive rate is equal across groups — people with the same outcome get the same prediction rate. Equalized odds is generally stronger but harder to achieve.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you detect bias in a trained model?</div>
+    <div style="color: var(--text-dim);">A: 1) Stratified evaluation: compute performance metrics separately for each demographic group. 2) Fairness metrics: compute demographic parity difference, equalized odds difference, or calibration error by group. 3) Explainability: use SHAP/LIME to check if protected attributes are influencing predictions. 4) Manual inspection: audit decisions for specific instances, check for patterns. 5) Statistical tests: chi-square tests for independence between predictions and protected attributes.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's the difference between SHAP and LIME?</div>
+    <div style="color: var(--text-dim);">A: Both explain model predictions post-hoc, but differently. LIME fits a local linear approximation around a prediction, explaining it through feature weights. SHAP uses Shapley values from game theory, distributing prediction across features based on marginal contributions. SHAP is theoretically more rigorous, LIME is faster. SHAP is model-agnostic but slower; LIME is faster but less robust. For critical decisions, SHAP is preferred.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you handle fairness-accuracy tradeoffs?</div>
+    <div style="color: var(--text-dim);">A: First, understand if the tradeoff exists. Sometimes fairness constraints actually improve accuracy by reducing overfitting. When tradeoffs do exist: 1) Quantify them: report both fairness and accuracy metrics. 2) Involve stakeholders: fairness vs. accuracy isn't purely technical, it's a values question. 3) Choose constraints aligned with values. 4) Consider domain: in criminal justice, false negatives (failing to flag high-risk offenders) may be worse than false positives. In hiring, false positives (rejecting qualified candidates) may be worse.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's a model card and why does it matter?</div>
+    <div style="color: var(--text-dim);">A: A model card documents a model's architecture, training data, performance, fairness metrics, limitations, and use cases. It matters because: 1) Accountability — clear record of what was built and how it performs. 2) Transparency — stakeholders understand model's capabilities and limitations. 3) Responsible deployment — documented limitations prevent misuse. 4) Reproducibility — future developers can understand decisions made. Model cards are becoming industry standard for responsible AI.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How would you implement monitoring for fairness in production?</div>
+    <div style="color: var(--text-dim);">A: 1) Define metrics: demographic parity, equalized odds, calibration — decide which matter for your use case. 2) Create dashboard: daily tracking of these metrics, broken down by demographic group. 3) Set alerts: if metrics degrade by >X%, trigger investigation. 4) Baseline comparison: compare current to previous month, flag significant changes. 5) Incident response: when alert fires, investigate root cause — data drift? model degradation? population change? 6) Corrective action: retrain, adjust thresholds, or deploy new model as needed.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What are common failures in implementing responsible AI?</div>
+    <div style="color: var(--text-dim);">A: 1) Measurement without action — compute fairness metrics but don't act on them. 2) Removing protected attributes isn't enough — other features proxy for them. 3) One fairness metric doesn't fit all — context matters. 4) No continuous monitoring — fairness only checked at launch. 5) No stakeholder engagement — build RAI in lab, deploy without consulting affected communities. 6) Explainability theater — generate explanations that don't help users understand decisions. 7) Governance without power — ethics board exists but can't block deployments. 8) Treating RAI as optional — only done for risk-conscious teams, not standard practice.</div>
+</div>
+
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you handle algorithmic bias in training data?</div>
+    <div style="color: var(--text-dim);">A: 1) Audit data: understand demographic composition, label quality, historical biases. 2) Quantify bias: compute fairness metrics on training data, identify sources. 3) Mitigate: options include (a) rebalancing/upsampling underrepresented groups, (b) adjusting sample weights, (c) removing or anonymizing biased features, (d) using fairness constraints during training. 4) Test mitigation: verify fairness improves without too much accuracy loss. 5) Document: record what bias was found, what mitigation was applied, why. 6) Monitor: track fairness in production, watch for feedback loops that could reintroduce bias.</div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Is fairness a legal requirement? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Increasingly yes. The EU AI Act (2024) requires transparency and fairness for high-risk systems. US Fair Lending regulations (under UDAAP) require lenders to audit models for discrimination. Healthcare (HIPAA/FDA) is moving toward fairness requirements. Criminal justice systems are under litigation regarding recidivism prediction fairness. While fairness isn't universally required yet, it's becoming a legal expectation for any system making consequential decisions.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Does removing protected attributes guarantee fairness? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No — this is a common misconception. Even without race or gender in the model, other features (ZIP code, education, employment history) can serve as proxies, and the model can learn discrimination indirectly. The only way to ensure fairness is to (1) actively measure fairness metrics against protected attributes, (2) identify proxy features, (3) apply fairness constraints. You can't achieve fairness through ignorance.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Which fairness metric should I use? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">It depends on your domain and values. Demographic parity (equal approval rates) is good for allocative decisions (hiring, loans, college admissions). Equalized odds (equal TPR/FPR) is better for prediction tasks where accuracy matters (recidivism, diagnosis). Calibration matters when you're communicating predicted probabilities. In practice, compute multiple metrics and understand tradeoffs. Engage stakeholders to decide which fairness definition aligns with your values.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How often should I audit models for fairness? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">High-risk systems should have continuous monitoring — daily automated checks with alerts if metrics degrade. Monthly deep-dive analysis. Quarterly ethics board review. Annual third-party audit for critical systems. Lower-risk systems might move to quarterly or annual audits. The key principle: fairness doesn't improve by itself; you need active monitoring and maintenance.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between explainability and interpretability? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Interpretability means the model is inherently transparent (e.g., decision tree, linear regression) — you can read the rules and understand directly. Explainability means the model is opaque, but you can explain its outputs (e.g., neural network + SHAP). Both matter. For critical decisions, prefer interpretable models when possible. When you need complex models, add explainability tools.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I respond to bias in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">1) Alert triggers: fairness metrics degrade beyond threshold. 2) Investigate: is it data distribution change? model update? population shift? feedback loops? 3) Assess impact: how many people affected? is impact severe? 4) Communicate: notify affected parties, transparency builds trust. 5) Fix: retrain model with fairness constraints, adjust decision thresholds, update business processes. 6) Prevent: implement monitoring to catch this earlier next time. Document lessons learned.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can AI ever be completely fair? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Likely no. Different fairness definitions are mathematically incompatible (you can't optimize for demographic parity AND equalized odds simultaneously). Fairness also depends on values — what's fair to society may not be fair to individuals. The goal isn't perfect fairness; it's good-enough fairness that's transparent, defensible, and continuously improved. Real responsibility comes from acknowledging limitations and engaging affected communities.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I explain fairness concepts to non-technical stakeholders? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use concrete examples: 'We want our hiring model to accept qualified candidates from all backgrounds at similar rates — that's demographic parity. Or we want the model to have the same false rejection rate for all groups — that's equalized odds. Here's the tradeoff: demographic parity might mean accepting slightly less-qualified candidates from underrepresented groups. Here's what we chose and why.' Use simple visuals: fairness bar charts, demographic breakdowns. Avoid jargon, focus on business impact (reduced legal risk, improved trust) and human impact (who does this decision affect?).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Is fairness one-size-fits-all? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No. Fairness depends on context. Hiring might need demographic parity (equal opportunity) while medical diagnosis needs calibration (equal accuracy). Criminal sentencing might prioritize equalized odds (equal false positive rates) to avoid wrongful incarceration. Fair lending needs demographic parity. There's no universal fairness metric — you need to choose based on domain values and legal requirements.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the ROI of implementing responsible AI? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Direct ROI: reduced regulatory fines, legal liability, reputational damage. Companies have paid $100M+ in discrimination settlements; proper fairness practices could have prevented this. Indirect ROI: improved stakeholder trust, better employee retention (people prefer working at responsible companies), expanded market access (can operate in regulated markets), better model robustness (fairness constraints often improve generalization). The cost is upfront (tools, processes, training); benefits accrue over time.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary: Building Responsible AI</h2>
+
+    <p>Responsible AI is the practice of designing, developing, and deploying AI systems that are fair, transparent, accountable, and aligned with human values.</p>
+
+    <h3>The Four Pillars</h3>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin: 2rem 0;">
+        <div style="background: #e0f2fe; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0; color: #0284c7;">Fairness</h4>
+            <p style="margin-bottom: 0;">Equitable treatment across demographic groups. Measure fairness metrics (demographic parity, equalized odds). Identify and mitigate bias.</p>
+        </div>
+        <div style="background: #f3e8ff; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0; color: #7c3aed;">Explainability</h4>
+            <p style="margin-bottom: 0;">Make decisions interpretable. Use SHAP, LIME, or inherently interpretable models. Enable stakeholders to understand why decisions were made.</p>
+        </div>
+        <div style="background: #fce7f3; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0; color: #d946ef;">Accountability</h4>
+            <p style="margin-bottom: 0;">Clear responsibility for outcomes. Audit trails. Mechanisms for investigation and remediation. Appeal processes.</p>
+        </div>
+        <div style="background: #fef3c7; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0; color: #f59e0b;">Governance</h4>
+            <p style="margin-bottom: 0;">Organizational frameworks and processes. Model cards and documentation. Continuous monitoring. Stakeholder engagement.</p>
+        </div>
+    </div>
+
+    <h3>Key Takeaways</h3>
+    <ul>
+        <li><strong>Fairness requires active measurement, not passivity.</strong> Removing protected attributes isn't enough; you must measure fairness metrics and monitor continuously.</li>
+        <li><strong>Context matters.</strong> Different fairness definitions fit different domains. Engage stakeholders to choose appropriate definitions.</li>
+        <li><strong>Explainability enables accountability.</strong> Black-box models undermine trust. Make decisions interpretable and explainable.</li>
+        <li><strong>Governance is essential.</strong> Tools and metrics alone don't ensure RAI; you need organizational processes, decision authority, and enforcement.</li>
+        <li><strong>RAI is continuous, not one-time.</strong> Monitor fairness in production. Respond to fairness degradation. Improve over time.</li>
+        <li><strong>Stakeholder engagement isn't optional.</strong> Include affected communities, domain experts, ethicists from design through deployment.</li>
+        <li><strong>Tradeoffs are real.</strong> Perfect fairness may require accuracy loss. Transparency about tradeoffs builds trust more than hiding them.</li>
+        <li><strong>RAI is becoming mandatory.</strong> <a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a>, Fair Lending regulations, and industry standards increasingly require fairness and explainability. Early adoption positions your organization as a leader.</li>
+    </ul>
+
+    <h3>Your RAI Journey</h3>
+    <p style="margin-bottom: 2rem;">Building responsible AI isn't a destination; it's a continuous journey. Start with:</p>
+    <ol style="margin-bottom: 2rem;">
+        <li><strong>Assess:</strong> Where are you today? Which models are high-risk? What fairness issues exist?</li>
+        <li><strong>Measure:</strong> Compute fairness metrics. Establish baselines. Identify bias sources.</li>
+        <li><strong>Mitigate:</strong> Apply fairness constraints. Retrain models. Document decisions.</li>
+        <li><strong>Govern:</strong> Build processes and governance structures. Create model cards. Establish monitoring.</li>
+        <li><strong>Scale:</strong> Apply RAI to all high-risk systems. Build culture. Continuous improvement.</li>
+    </ol>
+
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <p style="margin: 0;">The Future: Organizations that build responsible AI now will be the leaders of tomorrow — earning trust, reducing legal risk, building robust systems, and creating positive human impact. Responsible AI isn't a burden; it's the foundation of sustainable AI success.</p>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Reading</h2>
+
+    <h3>Books</h3>
+    <ul>
+        <li><strong>"<a href="https://fairmlbook.org/" target="_blank" rel="noopener">Fairness and Machine Learning</a>"</strong> by Barocas, Hardt, and Narayanan. Free online book covering mathematical foundations of fairness. Available at: https://fairmlbook.org/</li>
+        <li><strong>"<a href="https://weaponsofmathdestructionbook.com/" target="_blank" rel="noopener">Weapons of Math Destruction</a>"</strong> by Cathy O'Neil. Accessible exploration of AI bias in criminal justice, hiring, education, finance.</li>
+        <li><strong>"AI Ethics"</strong> by Jobin, Ienca, and Andorno. Comprehensive overview of ethical frameworks for AI.</li>
+    </ul>
+
+    <h3>Tools & Libraries</h3>
+    <ul>
+        <li><strong><a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn</a></strong> (Microsoft): Fairness metrics and mitigation algorithms. https://fairlearn.org/</li>
+        <li><strong><a href="https://aif360.res.ibm.com/" target="_blank" rel="noopener">AI Fairness 360</a></strong> (IBM): Toolkit for measuring and mitigating bias. https://aif360.res.ibm.com/</li>
+        <li><strong><a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a></strong>: Game-theoretic model explanations. https://shap.readthedocs.io/</li>
+        <li><strong><a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a></strong>: Local interpretable explanations. https://github.com/marcotcr/lime</li>
+        <li><strong><a href="https://pair-code.github.io/what-if-tool/" target="_blank" rel="noopener">What-If Tool</a></strong> (Google): Interactive exploration of model fairness. https://pair-code.github.io/what-if-tool/</li>
+        <li><strong><a href="https://modelcards.withgoogle.com/about" target="_blank" rel="noopener">Model Cards</a></strong>: Template for model documentation. https://github.com/google/model-cards</li>
+    </ul>
+
+    <h3>Courses & Training</h3>
+    <ul>
+        <li><strong>AI Ethics & Governance</strong> (<a href="https://www.coursera.org/" target="_blank" rel="noopener">Coursera</a>, UC Berkeley): Comprehensive course on fairness and AI ethics</li>
+        <li><strong>Responsible AI Practices</strong> (Google): Free course on fairness metrics and tools</li>
+        <li><strong>Stanford CS181: Computers, Ethics, and Public Policy</strong>: Explores broader implications of AI</li>
+    </ul>
+
+    <h3>Research Papers</h3>
+    <ul>
+        <li><strong>"<a href="https://arxiv.org/abs/1602.04938" target="_blank" rel="noopener">Why Should I Trust You?</a>"</strong> (Ribeiro et al., 2016): Introduces <a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a> explainability method</li>
+        <li><strong>"<a href="https://arxiv.org/abs/1705.07874" target="_blank" rel="noopener">A Unified Approach to Interpreting Model Predictions</a>"</strong> (Lundberg & Lee, 2017): Introduces <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a> values</li>
+        <li><strong>"<a href="https://dl.acm.org/doi/10.1145/3287560.3287598" target="_blank" rel="noopener">Fairness and Abstraction in Sociotechnical Systems</a>"</strong> (Selbst et al., 2019): Critical examination of fairness in context</li>
+        <li><strong>"<a href="https://arxiv.org/abs/1806.02887" target="_blank" rel="noopener">Algorithmic Fairness from a Non-ideal Perspective</a>"</strong> (Binns, 2018): Philosophical perspective on what fairness means</li>
+    </ul>
+
+    <h3>Regulatory & Governance</h3>
+    <ul>
+        <li><strong><a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a> (2024):</strong> https://eur-lex.europa.eu/eli/reg/2024/1689/oj — Binding regulation on high-risk AI systems</li>
+        <li><strong><a href="https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence" target="_blank" rel="noopener">NIST AI Risk Management Framework</a>:</strong> https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf — Comprehensive risk management approach</li>
+        <li><strong>Fair Lending Guide (FED):</strong> https://www.federalreserve.gov/supervisionreg/ccr/guidance.htm — Regulatory requirements for lending AI</li>
+        <li><strong>Microsoft AI Ethics & Effects Lab:</strong> https://www.microsoft.com/en-us/ai/responsible-ai — Industry perspective on sociotechnical RAI</li>
+    </ul>
+
+    <h3>Organizations & Communities</h3>
+    <ul>
+        <li><strong><a href="https://partnershiponai.org/" target="_blank" rel="noopener">Partnership on AI</a>:</strong> Multi-stakeholder organization focused on responsible AI development and governance</li>
+        <li><strong><a href="https://ainowinstitute.org/" target="_blank" rel="noopener">AI Now Institute</a>:</strong> Research institute at NYU examining societal implications of AI systems</li>
+        <li><strong><a href="https://www.safe.ai/" target="_blank" rel="noopener">Center for AI Safety</a>:</strong> Research organization focused on AI alignment and safety</li>
+        <li><strong>Data Ethics Lab:</strong> Community exploring ethics and fairness in data science</li>
+    </ul>
+
+    <h3>Datasets for Practice</h3>
+    <ul>
+        <li><strong>COMPAS Recidivism Data:</strong> Criminal justice dataset from ProPublica investigation. Good for fairness analysis. https://github.com/propublica/compas-analysis</li>
+        <li><strong>UCI Adult Dataset:</strong> Demographic data with income prediction task. Standard benchmark for fairness research</li>
+        <li><strong>Google AI Fairness Indicators Dataset:</strong> Various datasets with fairness benchmarks. https://ai.google.com/fairness-indicators/</li>
+        <li><strong>Bias in Bios:</strong> Dataset for studying gender bias in NLP. https://github.com/cbenge1/bias_in_bios</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Next Steps:</strong> Pick one responsible AI tool (<a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn</a>, <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a>, or <a href="https://aif360.res.ibm.com/" target="_blank" rel="noopener">AI Fairness 360</a>). Work through the exercises with a real dataset from your domain. Start measuring fairness in one production model. Build from there. Responsible AI is a journey, not a destination.</p>
+</div>
+</section>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar active link highlighting
+        const sections = document.querySelectorAll('.ml-section');
+        const sidebar_links = document.querySelectorAll('.ml-sidebar a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            sidebar_links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Collapsible sections
+        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isOpen = content.style.display === 'block';
+                content.style.display = isOpen ? 'none' : 'block';
+                header.querySelector('.toggle-icon').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+        });
+
+        // FAQ Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            question.addEventListener('click', () => {
+                const isOpen = answer.style.display === 'block';
+                answer.style.display = isOpen ? 'none' : 'block';
+                question.querySelector('.faq-icon').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Stagger timeline animations
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>

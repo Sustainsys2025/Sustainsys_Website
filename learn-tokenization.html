@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokenization - SustainSys AI Academy</title>
+    <meta name="description" content="Understand how AI reads text — BPE, WordPiece, SentencePiece, and the hidden impact of tokenization on model performance.">
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <div class="ml-page-container">
+        <!-- Sidebar Navigation -->
+        <aside class="ml-sidebar">
+            <h3>Tokenization Guide</h3>
+            <ul>
+                <li><a href="#intro">Introduction</a></li>
+                <li><a href="#what-is">What is Tokenization?</a></li>
+                <li><a href="#why-matters">Why It Matters</a></li>
+                <li><a href="#tokenizer-types">Tokenizer Types</a></li>
+                <li><a href="#bpe-algorithm">BPE Algorithm</a></li>
+                <li><a href="#wordpiece">WordPiece</a></li>
+                <li><a href="#sentencepiece">SentencePiece</a></li>
+                <li><a href="#special-tokens">Special Tokens</a></li>
+                <li><a href="#hf-tokenizers">HuggingFace Tokenizers</a></li>
+                <li><a href="#custom-training">Training Custom Tokenizers</a></li>
+                <li><a href="#token-counting">Token Counting & Costs</a></li>
+                <li><a href="#comparison">Tokenizer Comparison</a></li>
+                <li><a href="#impact-performance">Impact on Performance</a></li>
+                <li><a href="#advanced-techniques">Advanced Techniques</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+                <li><a href="#code-examples">Code Examples</a></li>
+                <li><a href="#exercises">Exercises</a></li>
+                <li><a href="#interview">Interview Questions</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#summary">Summary</a></li>
+            </ul>
+        </aside>
+        <!-- Main Content -->
+        <main class="ml-content">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Tokenization</h1>
+                <p class="page-description">Master Tokenization with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+            <!-- Intro Section -->
+            <section id="intro" class="ml-section">
+                <h2>Tokenization: How AI Reads Text</h2>
+                <div class="ml-intro-text">
+                    <p>Tokenization is the foundational step that converts raw text into discrete units that language models can understand and process. Without proper tokenization, even the most powerful neural networks cannot work with language. This comprehensive guide explores the mechanics, algorithms, and best practices of tokenization in modern AI systems.</p>
+                </div>
+            </section>
+
+            <!-- What is Tokenization -->
+            <section id="what-is" class="ml-section">
+                <h2>What is Tokenization?</h2>
+                <p>Tokenization is the process of breaking down text into smaller, meaningful units called <strong>tokens</strong>. These tokens are the smallest units that a language model can process. Tokens can be words, subwords, characters, or even individual bytes, depending on the tokenization scheme.</p>
+                
+                <div class="grid-cards">
+                    <div class="card cyan-accent">
+                        <h4>Word-Level Tokens</h4>
+                        <p>Split text into individual words. Simple but creates large vocabularies and struggles with rare words.</p>
+                    </div>
+                    <div class="card purple-accent">
+                        <h4>Subword Tokens</h4>
+                        <p>Split words into smaller pieces. Balances vocabulary size with capturing word meaning.</p>
+                    </div>
+                    <div class="card pink-accent">
+                        <h4>Character-Level Tokens</h4>
+                        <p>Every character becomes a token. Tiny vocabulary but very long sequences.</p>
+                    </div>
+                </div>
+
+                <h3>The Tokenization Pipeline</h3>
+                <p>Modern tokenizers typically follow this pipeline:</p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-step" style="background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);">Text Input</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);">Normalization</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #d946ef 0%, #f97316 100%);">Pre-tokenization</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #f97316 0%, #eab308 100%);">Tokenization</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #eab308 0%, #22c55e 100%);">Post-processing</div>
+                </div>
+
+                <div class="info-box">
+    <h4>Token IDs</h4>
+    <p>After tokenization, each token is converted to a unique integer ID using a vocabulary dictionary. These IDs are what the model actually processes.</p>
+</div>
+            </section>
+
+            <!-- Why It Matters -->
+            <section id="why-matters" class="ml-section">
+                <h2>Why Tokenization Matters</h2>
+                
+                <h3>Impact on Model Performance</h3>
+                <p>The choice of tokenizer affects multiple aspects of model behavior:</p>
+                
+                <div class="grid-cards">
+                    <div class="card">
+                        <h4>Vocabulary Size</h4>
+                        <p>Affects model size, memory requirements, and computation speed. Larger vocabularies require bigger embedding matrices.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Sequence Length</h4>
+                        <p>Different tokenizers produce different numbers of tokens from the same text, impacting computational cost.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Model Understanding</h4>
+                        <p>Poor tokenization can split semantic units, forcing models to learn from broken pieces.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Multilingual Support</h4>
+                        <p>How well a tokenizer handles different languages significantly impacts cross-lingual model performance.</p>
+                    </div>
+                </div>
+
+                <h3>Cost Implications</h3>
+                <p>In production environments where you pay per token (like GPT-4 APIs), tokenization efficiency directly impacts costs:</p>
+                <div class="highlight-box">
+    <p>A poorly chosen tokenizer can increase your API costs by 20-50% for the same semantic content.</p>
+</div>
+                
+                <h3>Hidden Impact on Learning</h3>
+                <p>Models must learn semantic meaning from tokens. If tokenization splits words arbitrarily, the model must use multiple tokens to represent single concepts, reducing efficiency.</p>
+                <div class="info-box">
+    <h4>Rare Word Problem</h4>
+    <p>Words that don't appear in the tokenizer vocabulary are split into subword tokens. The model must learn that these subwords combine to mean the original word.</p>
+</div>
+            </section>
+
+            <!-- Tokenizer Types -->
+            <section id="tokenizer-types" class="ml-section">
+                <h2>Types of Tokenizers</h2>
+                <p>Different tokenization algorithms trade off between vocabulary size, sequence length, and linguistic meaning.</p>
+
+                <h3>1. Byte-Pair Encoding (BPE)</h3>
+                <p><strong>BPE</strong> iteratively merges the most common pairs of consecutive bytes/characters in the training text. It's used by GPT-2, GPT-3, and GPT-4.</p>
+                <ul>
+                    <li>Starts with character-level tokens</li>
+                    <li>Learns which character pairs to merge</li>
+                    <li>Creates deterministic, reproducible tokenizations</li>
+                    <li>Handles unknown words gracefully through subword composition</li>
+                </ul>
+
+                <h3>2. WordPiece</h3>
+                <p><strong>WordPiece</strong> is similar to BPE but merges pairs based on likelihood rather than frequency. Used by BERT, RoBERTa, and DistilBERT.</p>
+                <ul>
+                    <li>Maximizes likelihood of training data</li>
+                    <li>Produces fewer unknown tokens than BPE</li>
+                    <li>Better for understanding tasks (BERT-like models)</li>
+                    <li>Marks subword tokens with ## prefix</li>
+                </ul>
+
+                <h3>3. SentencePiece</h3>
+                <p><strong>SentencePiece</strong> treats spaces as regular characters and learns both word and subword boundaries. Used by T5, mBART, and language-agnostic models.</p>
+                <ul>
+                    <li>Space is a special token (▁)</li>
+                    <li>Better for languages without clear word boundaries</li>
+                    <li>More consistent across languages</li>
+                    <li>Can handle arbitrary Unicode</li>
+                </ul>
+
+                <h3>4. Unigram Language Model</h3>
+                <p><strong>Unigram</strong> iteratively removes tokens that least impact model likelihood. Used by XLNet and some multilingual models.</p>
+                <ul>
+                    <li>Probabilistic approach to tokenization</li>
+                    <li>Can generate multiple tokenizations for one input</li>
+                    <li>Better statistical properties for some tasks</li>
+                </ul>
+            </section>
+            <!-- BPE Algorithm Deep Dive -->
+            <section id="bpe-algorithm" class="ml-section">
+                <h2>BPE Algorithm: From First Principles</h2>
+                <h3>How BPE Works</h3>
+                <p>Byte-Pair Encoding learns a compression algorithm from your training text. Here's the step-by-step process:</p>
+
+                <h3>Step 1: Initialize with Characters</h3>
+                <p>Start by splitting text into individual characters:</p>
+<div class="code-block">
+    <div class="code-header">Python — Character Tokenization</div>
+    <div class="code-content">Text: <span class="string">"hello world"</span>
+Tokens: [h, e, l, l, o, space, w, o, r, l, d]</div>
+</div>
+
+                <h3>Step 2: Find Most Frequent Pair</h3>
+                <p>Count all consecutive byte/character pairs and find the most common one:</p>
+<div class="code-block">
+    <div class="code-header">Python — Finding Pairs</div>
+    <div class="code-content"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+pairs = <span class="function">Counter</span>()
+<span class="keyword">for</span> word <span class="keyword">in</span> text:
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(word)-<span class="number">1</span>):
+        pairs[(word[i], word[i+<span class="number">1</span>])] += <span class="number">1</span></div>
+</div>
+
+                <h3>Step 3: Merge and Repeat</h3>
+                <p>Merge the most frequent pair and repeat the process:</p>
+<div class="code-block">
+    <div class="code-header">Python — BPE from Scratch</div>
+    <div class="code-content"><span class="keyword">class</span> BPETokenizer:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="function">self</span>.merges = {}
+    
+    <span class="keyword">def</span> <span class="function">train</span>(<span class="function">self</span>, text, num_merges=<span class="number">1000</span>):
+        words = text.<span class="function">lower</span>().<span class="function">split</span>()
+        tokens = {}
+        <span class="keyword">for</span> word <span class="keyword">in</span> words:
+            word_tokens = <span class="string">' '</span>.<span class="function">join</span>(<span class="function">list</span>(word)) + <span class="string">' &lt;/w&gt;'</span>
+            tokens[word_tokens] = tokens.<span class="function">get</span>(word_tokens, <span class="number">0</span>) + <span class="number">1</span>
+        
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(num_merges):
+            pairs = <span class="function">self</span>.<span class="function">_count_pairs</span>(tokens)
+            <span class="keyword">if</span> <span class="keyword">not</span> pairs:
+                <span class="keyword">break</span>
+            best_pair = <span class="function">max</span>(pairs, key=pairs.get)
+            tokens = <span class="function">self</span>.<span class="function">_merge_pair</span>(tokens, best_pair)
+            <span class="function">self</span>.merges[i] = best_pair
+        
+        <span class="keyword">return</span> <span class="function">self</span>.merges
+    
+    <span class="keyword">def</span> <span class="function">_count_pairs</span>(<span class="function">self</span>, tokens):
+        <span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+        pairs = <span class="function">Counter</span>()
+        <span class="keyword">for</span> word, freq <span class="keyword">in</span> tokens.<span class="function">items</span>():
+            symbols = word.<span class="function">split</span>()
+            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(symbols) - <span class="number">1</span>):
+                pairs[symbols[i], symbols[i+<span class="number">1</span>]] += freq
+        <span class="keyword">return</span> pairs
+    
+    <span class="keyword">def</span> <span class="function">_merge_pair</span>(<span class="function">self</span>, tokens, pair):
+        new_tokens = {}
+        <span class="keyword">for</span> word, freq <span class="keyword">in</span> tokens.<span class="function">items</span>():
+            new_word = word.<span class="function">replace</span>(<span class="string">' '</span>.<span class="function">join</span>(pair), <span class="string">''</span>.<span class="function">join</span>(pair))
+            new_tokens[new_word] = freq
+        <span class="keyword">return</span> new_tokens
+
+tokenizer = <span class="function">BPETokenizer</span>()
+text = <span class="string">"hello world, this is a test"</span>
+merges = tokenizer.<span class="function">train</span>(text, num_merges=<span class="number">50</span>)</div>
+</div>
+
+                <div class="info-box">
+    <h4>GPT-2 Tokenizer</h4>
+    <p>OpenAI's GPT-2 uses BPE with special handling for regex patterns. It tokenizes whitespace separately and applies Unicode normalization.</p>
+</div>
+            </section>
+
+            <!-- WordPiece -->
+            <section id="wordpiece" class="ml-section">
+                <h2>WordPiece: Intelligent Subword Tokenization</h2>
+                <p>WordPiece improves upon BPE by selecting merges based on likelihood rather than frequency.</p>
+
+                <h3>Key Differences from BPE</h3>
+                <div class="comparison-table">
+                    <tr><th>Aspect</th><th>BPE</th><th>WordPiece</th></tr>
+                    <tr><td>Merge Criterion</td><td>Frequency</td><td>Likelihood</td></tr>
+                    <tr><td>Subword Prefix</td><td>None</td><td>## marks continuation</td></tr>
+                    <tr><td>Primary Use</td><td>GPT-2, GPT-3, GPT-4</td><td>BERT, RoBERTa</td></tr>
+                </div>
+
+<div class="code-block">
+    <div class="code-header">Python — WordPiece Tokenization</div>
+    <div class="code-content"><span class="keyword">class</span> WordPieceTokenizer:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, vocab):
+        <span class="function">self</span>.vocab = <span class="function">set</span>(vocab)
+    
+    <span class="keyword">def</span> <span class="function">tokenize</span>(<span class="function">self</span>, word):
+        <span class="keyword">if</span> word <span class="keyword">in</span> <span class="function">self</span>.vocab:
+            <span class="keyword">return</span> [word]
+        tokens = []
+        start = <span class="number">0</span>
+        <span class="keyword">while</span> start < <span class="function">len</span>(word):
+            end = <span class="function">len</span>(word)
+            current_substr = <span class="keyword">None</span>
+            <span class="keyword">while</span> start < end:
+                substr = word[start:end]
+                <span class="keyword">if</span> start > <span class="number">0</span>:
+                    substr = <span class="string">"##"</span> + substr
+                <span class="keyword">if</span> substr <span class="keyword">in</span> <span class="function">self</span>.vocab:
+                    current_substr = substr
+                    <span class="keyword">break</span>
+                end -= <span class="number">1</span>
+            <span class="keyword">if</span> current_substr <span class="keyword">is</span> <span class="keyword">None</span>:
+                tokens.<span class="function">append</span>(<span class="string">"[UNK]"</span>)
+                start += <span class="number">1</span>
+            <span class="keyword">else</span>:
+                tokens.<span class="function">append</span>(current_substr)
+                start = end
+        <span class="keyword">return</span> tokens
+
+vocab = [<span class="string">"hello"</span>, <span class="string">"world"</span>, <span class="string">"##ing"</span>, <span class="string">"##ed"</span>]
+tokenizer = <span class="function">WordPieceTokenizer</span>(vocab)</div>
+</div>
+
+                <div class="info-box">
+    <h4>BERT Special Tokens</h4>
+    <p>BERT uses [CLS], [SEP], [UNK], [MASK]. [CLS] starts the sequence, [SEP] separates sentences, [UNK] marks unknown tokens.</p>
+</div>
+            </section>
+
+            <!-- SentencePiece -->
+            <section id="sentencepiece" class="ml-section">
+                <h2>SentencePiece: Language-Agnostic Tokenization</h2>
+                <p>SentencePiece treats entire text as a sequence of bytes and learns tokenization without language-specific rules.</p>
+
+                <h3>SentencePiece Advantages</h3>
+                <div class="grid-cards">
+                    <div class="card"><h4>No Whitespace Assumption</h4><p>Works for Chinese, Japanese, and other languages without clear word boundaries.</p></div>
+                    <div class="card"><h4>Consistent</h4><p>Same algorithm for all languages and scripts.</p></div>
+                    <div class="card"><h4>Reversible</h4><p>Can reconstruct original text from tokens with 100% accuracy.</p></div>
+                    <div class="card"><h4>Space as Token</h4><p>Space is represented as ▁ (U+2581), making it explicit.</p></div>
+                </div>
+
+<div class="code-block">
+    <div class="code-header">Python — SentencePiece Example</div>
+    <div class="code-content"><span class="keyword">import</span> sentencepiece <span class="keyword">as</span> spm
+
+spm.SentencePieceTrainer.<span class="function">train</span>(
+    <span class="function">input</span>=<span class="string">"train_text.txt"</span>,
+    model_prefix=<span class="string">"tokenizer"</span>,
+    vocab_size=<span class="number">32000</span>,
+    model_type=<span class="string">"bpe"</span>
+)
+
+sp = spm.<span class="function">SentencePieceProcessor</span>()
+sp.<span class="function">Load</span>(<span class="string">"tokenizer.model"</span>)
+
+text = <span class="string">"Hello, how are you?"</span>
+tokens = sp.<span class="function">EncodeAsIds</span>(text)
+pieces = sp.<span class="function">EncodeAsPieces</span>(text)
+decoded = sp.<span class="function">DecodePieces</span>(pieces)</div>
+</div>
+            </section>
+
+            <!-- Special Tokens -->
+            <section id="special-tokens" class="ml-section">
+                <h2>Handling Special Tokens</h2>
+                <p>Special tokens are reserved tokens with specific meanings in model training and inference.</p>
+
+                <h3>Common Special Tokens</h3>
+                <div class="comparison-table">
+                    <tr><th>Token</th><th>Symbol</th><th>Purpose</th></tr>
+                    <tr><td>BOS</td><td>&lt;s&gt;</td><td>Begin of sequence</td></tr>
+                    <tr><td>EOS</td><td>&lt;/s&gt;</td><td>End of sequence</td></tr>
+                    <tr><td>UNK</td><td>&lt;unk&gt;</td><td>Unknown tokens</td></tr>
+                    <tr><td>PAD</td><td>&lt;pad&gt;</td><td>Padding</td></tr>
+                    <tr><td>MASK</td><td>[MASK]</td><td>Masked language modeling</td></tr>
+                </div>
+
+<div class="code-block">
+    <div class="code-header">Python — Adding Custom Tokens</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+new_tokens = {
+    <span class="string">"additional_special_tokens"</span>: [
+        <span class="string">"&lt;PATIENT&gt;"</span>, <span class="string">"&lt;DOCTOR&gt;"</span>, <span class="string">"&lt;MEDICATION&gt;"</span>
+    ]
+}
+
+tokenizer.<span class="function">add_special_tokens</span>(new_tokens)
+model.<span class="function">resize_token_embeddings</span>(<span class="function">len</span>(tokenizer))</div>
+</div>
+
+                <div class="info-box">
+    <h4>Resize Embeddings</h4>
+    <p>When adding special tokens, you MUST resize model embeddings. Model embeddings must match tokenizer vocabulary size.</p>
+</div>
+            </section>
+            <!-- HuggingFace Tokenizers -->
+            <section id="hf-tokenizers" class="ml-section">
+                <h2>HuggingFace Tokenizers Library</h2>
+                <p>The HuggingFace Tokenizers library provides high-performance implementations of all major tokenization algorithms.</p>
+
+<div class="code-block">
+    <div class="code-header">Python — Loading Pre-trained Tokenizers</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+tokenizer_gpt = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+tokenizer_bert = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+text = <span class="string">"The quick brown fox jumps"</span>
+
+gpt2_tokens = tokenizer_gpt.<span class="function">encode</span>(text)
+bert_tokens = tokenizer_bert.<span class="function">encode</span>(text)
+
+<span class="function">print</span>(<span class="string">f"GPT-2: {len(gpt2_tokens)} tokens"</span>)
+<span class="function">print</span>(<span class="string">f"BERT: {len(bert_tokens)} tokens"</span>)</div>
+</div>
+
+<div class="code-block">
+    <div class="code-header">Python — Batch Processing</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+texts = [<span class="string">"Text one"</span>, <span class="string">"Text two"</span>, <span class="string">"Text three"</span>]
+
+encoding = <span class="function">tokenizer</span>(
+    texts,
+    padding=<span class="string">"max_length"</span>,
+    max_length=<span class="number">20</span>,
+    truncation=<span class="keyword">True</span>,
+    return_tensors=<span class="string">"pt"</span>
+)
+
+<span class="function">print</span>(<span class="string">f"Shape: {encoding['input_ids'].shape}"</span>)</div>
+</div>
+            </section>
+
+            <!-- Training Custom Tokenizers -->
+            <section id="custom-training" class="ml-section">
+                <h2>Training Custom Tokenizers</h2>
+                <p>When working with domain-specific text, training a custom tokenizer often improves model performance.</p>
+
+                <h3>When to Train a Custom Tokenizer</h3>
+                <div class="grid-cards">
+                    <div class="card"><h4>Domain-Specific Vocabulary</h4><p>Your domain has unique terms not in general tokenizers.</p></div>
+                    <div class="card"><h4>Cost Reduction</h4><p>Reduce token count per example, saving costs.</p></div>
+                    <div class="card"><h4>Rare Language</h4><p>No good pre-trained tokenizer exists for your language.</p></div>
+                    <div class="card"><h4>Performance</h4><p>Models perform better with task-specific tokenizers.</p></div>
+                </div>
+
+<div class="code-block">
+    <div class="code-header">Python — Train Custom BPE</div>
+    <div class="code-content"><span class="keyword">from</span> tokenizers <span class="keyword">import</span> Tokenizer
+<span class="keyword">from</span> tokenizers.models <span class="keyword">import</span> BPE
+<span class="keyword">from</span> tokenizers.trainers <span class="keyword">import</span> BpeTrainer
+<span class="keyword">from</span> tokenizers.pre_tokenizers <span class="keyword">import</span> Whitespace
+
+tokenizer = <span class="function">Tokenizer</span>(<span class="function">BPE</span>())
+
+trainer = <span class="function">BpeTrainer</span>(
+    vocab_size=<span class="number">30000</span>,
+    min_frequency=<span class="number">2</span>,
+    special_tokens=[<span class="string">"&lt;PAD&gt;"</span>, <span class="string">"&lt;UNK&gt;"</span>]
+)
+
+tokenizer.pre_tokenizer = <span class="function">Whitespace</span>()
+tokenizer.<span class="function">train</span>(files=[<span class="string">"domain_text.txt"</span>], trainer=trainer)
+tokenizer.<span class="function">save</span>(<span class="string">"custom_tokenizer.json"</span>)</div>
+</div>
+            </section>
+
+            <!-- Token Counting and Costs -->
+            <section id="token-counting" class="ml-section">
+                <h2>Token Counting & Cost Estimation</h2>
+                <p>Understanding token counts is critical for cost estimation and performance optimization.</p>
+
+<div class="code-block">
+    <div class="code-header">Python — Token Counting</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+tokenizers = {
+    <span class="string">"gpt2"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>),
+    <span class="string">"bert"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>),
+    <span class="string">"t5"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"t5-base"</span>)
+}
+
+text = <span class="string">"Tokenization is fundamental to NLP"</span>
+
+<span class="keyword">for</span> model, tokenizer <span class="keyword">in</span> tokenizers.<span class="function">items</span>():
+    count = <span class="function">len</span>(tokenizer.<span class="function">encode</span>(text))
+    <span class="function">print</span>(<span class="string">f"{model}: {count} tokens"</span>)</div>
+</div>
+
+<div class="code-block">
+    <div class="code-header">Python — Cost Calculator</div>
+    <div class="code-content"><span class="keyword">class</span> TokenCostCalculator:
+    PRICING = {
+        <span class="string">"gpt-3.5-turbo"</span>: {<span class="string">"input"</span>: <span class="number">0.50</span>, <span class="string">"output"</span>: <span class="number">1.50</span>},
+        <span class="string">"gpt-4"</span>: {<span class="string">"input"</span>: <span class="number">30.0</span>, <span class="string">"output"</span>: <span class="number">60.0</span>},
+    }
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+        <span class="function">self</span>.tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+    
+    <span class="keyword">def</span> <span class="function">estimate_cost</span>(<span class="function">self</span>, input_text, output_tokens, model):
+        input_count = <span class="function">len</span>(<span class="function">self</span>.tokenizer.<span class="function">encode</span>(input_text))
+        pricing = <span class="function">self</span>.PRICING[model]
+        input_cost = (input_count / 1_000_000) * pricing[<span class="string">"input"</span>]
+        output_cost = (output_tokens / 1_000_000) * pricing[<span class="string">"output"</span>]
+        <span class="keyword">return</span> input_cost + output_cost
+
+calc = <span class="function">TokenCostCalculator</span>()
+cost = calc.<span class="function">estimate_cost</span>(<span class="string">"Your prompt here"</span>, <span class="number">100</span>, <span class="string">"gpt-3.5-turbo"</span>)
+<span class="function">print</span>(<span class="string">f"Cost: ${cost:.6f}"</span>)</div>
+</div>
+
+                <div class="highlight-box">
+    <p>Pro Tip: Inefficient prompting wastes 20-50% of tokens. Understanding tokenization saves significant costs.</p>
+</div>
+            </section>
+
+            <!-- Tokenizer Comparison -->
+            <section id="comparison" class="ml-section">
+                <h2>Comprehensive Tokenizer Comparison</h2>
+                <p>Different tokenizers produce dramatically different token counts from identical text.</p>
+
+                <div class="comparison-table">
+                    <tr><th>Aspect</th><th>BPE</th><th>WordPiece</th><th>SentencePiece</th><th>Unigram</th></tr>
+                    <tr><td>Merge Strategy</td><td>Frequency</td><td>Likelihood</td><td>Unigram</td><td>Probabilistic</td></tr>
+                    <tr><td>Vocab Size</td><td>50K</td><td>30K</td><td>32K</td><td>32K</td></tr>
+                    <tr><td>Language Support</td><td>Latin scripts</td><td>English-optimized</td><td>All languages</td><td>All languages</td></tr>
+                    <tr><td>Primary Users</td><td>GPT series</td><td>BERT, RoBERTa</td><td>T5, LLaMA</td><td>XLNet</td></tr>
+                </div>
+
+                <div class="info-box">
+    <h4>Cost Impact</h4>
+    <p>For 1M token API calls, 1 extra token per example = 100K extra tokens billed. Small differences compound quickly.</p>
+</div>
+            </section>
+
+            <!-- Impact on Performance -->
+            <section id="impact-performance" class="ml-section">
+                <h2>Impact of Tokenization on Model Performance</h2>
+                <p>Tokenization choices affect both cost and model quality.</p>
+
+                <h3>Sequence Length and Computational Cost</h3>
+                <p>Longer token sequences mean: slower inference (O(n²) attention), higher memory, more gradient computations, difficulty capturing long-range dependencies.</p>
+
+                <div class="formula-box">
+                    <div class="label">Attention Complexity</div>
+                    <code>O(n²) where n = sequence length in tokens</code>
+                </div>
+
+                <h3>Semantic Integrity</h3>
+                <div class="grid-cards">
+                    <div class="card cyan-accent">
+                        <h4>Good Tokenization</h4>
+                        <p><strong>Word:</strong> "internationally"<br><strong>Tokens:</strong> ["international", "##ly"]</p>
+                    </div>
+                    <div class="card pink-accent">
+                        <h4>Poor Tokenization</h4>
+                        <p><strong>Word:</strong> "internationally"<br><strong>Tokens:</strong> ["int", "##ern", "##ation", "##al", "##ly"]</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+    <h4>Rare Word Problem</h4>
+    <p>Rare words are split into subword tokens that appear infrequently in training. Models struggle to learn rare word meanings.</p>
+</div>
+            </section>
+
+            <!-- Advanced Techniques -->
+            <section id="advanced-techniques" class="ml-section">
+                <h2>Advanced Tokenization Techniques</h2>
+
+<div class="code-block">
+    <div class="code-header">Python — Efficient Batch Tokenization</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+<span class="keyword">class</span> TokenizerWithCache:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, tokenizer):
+        <span class="function">self</span>.tokenizer = tokenizer
+        <span class="function">self</span>.cache = {}
+    
+    <span class="keyword">def</span> <span class="function">tokenize_cached</span>(<span class="function">self</span>, text, max_length=<span class="number">512</span>):
+        <span class="keyword">if</span> text <span class="keyword">in</span> <span class="function">self</span>.cache:
+            <span class="keyword">return</span> <span class="function">self</span>.cache[text]
+        
+        encoding = <span class="function">self</span>.<span class="function">tokenizer</span>(
+            text,
+            max_length=max_length,
+            truncation=<span class="keyword">True</span>,
+            padding=<span class="string">"max_length"</span>,
+            return_tensors=<span class="string">"pt"</span>
+        )
+        <span class="function">self</span>.cache[text] = encoding
+        <span class="keyword">return</span> encoding
+
+cached = <span class="function">TokenizerWithCache</span>(AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>))</div>
+</div>
+
+<div class="code-block">
+    <div class="code-header">Python — Dynamic Tokenizer Selection</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">choose_tokenizer</span>(language):
+    <span class="keyword">if</span> language == <span class="string">"english"</span>:
+        <span class="keyword">from</span> transformers <span class="keyword">import</span> GPT2Tokenizer
+        <span class="keyword">return</span> GPT2Tokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+    <span class="keyword">elif</span> language <span class="keyword">in</span> [<span class="string">"zh"</span>, <span class="string">"ja"</span>, <span class="string">"ko"</span>]:
+        <span class="keyword">import</span> sentencepiece <span class="keyword">as</span> spm
+        <span class="keyword">return</span> spm.<span class="function">SentencePieceProcessor</span>()
+    <span class="keyword">else</span>:
+        <span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer
+        <span class="keyword">return</span> BertTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-multilingual-uncased"</span>)</div>
+</div>
+            </section>
+
+            <!-- Best Practices -->
+            <section id="best-practices" class="ml-section">
+                <h2>Best Practices for Tokenization</h2>
+
+                <div class="grid-cards">
+                    <div class="card"><h4>Match Model and Tokenizer</h4><p>Use the tokenizer with the model. Mismatches degrade performance.</p></div>
+                    <div class="card"><h4>Understand Your Data</h4><p>Analyze token distribution. Outliers indicate issues.</p></div>
+                    <div class="card"><h4>Test on Real Data</h4><p>Evaluate on actual domain text.</p></div>
+                    <div class="card"><h4>Monitor OOV Tokens</h4><p>Track unknown token rates.</p></div>
+                    <div class="card"><h4>Cache Results</h4><p>Tokenization is deterministic. Reuse results.</p></div>
+                    <div class="card"><h4>Document Custom Tokens</h4><p>Explain purpose and usage.</p></div>
+                    <div class="card"><h4>Handle Edge Cases</h4><p>Test emoji, special chars, multiple languages.</p></div>
+                    <div class="card"><h4>Version Your Tokenizer</h4><p>Track custom tokenizer versions.</p></div>
+                </div>
+
+                <div class="info-box">
+    <h4>Production Checklist</h4>
+    <p>Before deploying: (1) Match tokenizer to model, (2) Test on production data, (3) Monitor token counts, (4) Alert on OOV changes, (5) Document limits.</p>
+</div>
+            </section>
+
+            <!-- Code Examples -->
+            <section id="code-examples" class="ml-section">
+                <h2>Complete Code Examples</h2>
+
+<div class="code-block">
+    <div class="code-header">Python — NLP Pipeline</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModel
+<span class="keyword">import</span> torch
+
+<span class="keyword">class</span> NLPPipeline:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model_name=<span class="string">"bert-base-uncased"</span>):
+        <span class="function">self</span>.tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+        <span class="function">self</span>.model = AutoModel.<span class="function">from_pretrained</span>(model_name)
+        <span class="function">self</span>.device = torch.<span class="function">device</span>(<span class="string">"cuda"</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> <span class="string">"cpu"</span>)
+        <span class="function">self</span>.model.<span class="function">to</span>(<span class="function">self</span>.device)
+    
+    <span class="keyword">def</span> <span class="function">analyze_text</span>(<span class="function">self</span>, text):
+        encoding = <span class="function">self</span>.<span class="function">tokenizer</span>(text, padding=<span class="string">"max_length"</span>, truncation=<span class="keyword">True</span>, return_tensors=<span class="string">"pt"</span>)
+        input_ids = encoding[<span class="string">"input_ids"</span>].<span class="function">to</span>(<span class="function">self</span>.device)
+        <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+            outputs = <span class="function">self</span>.<span class="function">model</span>(input_ids=input_ids)
+        tokens = <span class="function">self</span>.tokenizer.<span class="function">convert_ids_to_tokens</span>(encoding[<span class="string">"input_ids"</span>][<span class="number">0</span>])
+        <span class="keyword">return</span> {
+            <span class="string">"tokens"</span>: tokens,
+            <span class="string">"num_tokens"</span>: <span class="function">len</span>([t <span class="keyword">for</span> t <span class="keyword">in</span> tokens <span class="keyword">if</span> t != <span class="string">"[PAD]"</span>]),
+            <span class="string">"embeddings"</span>: outputs.last_hidden_state
+        }
+
+pipeline = <span class="function">NLPPipeline</span>()
+result = pipeline.<span class="function">analyze_text</span>(<span class="string">"Quick brown fox"</span>)</div>
+</div>
+
+<div class="code-block">
+    <div class="code-header">Python — Tokenizer Comparison</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+<span class="keyword">class</span> TokenizerComparator:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="function">self</span>.tokenizers = {
+            <span class="string">"gpt2"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>),
+            <span class="string">"bert"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>),
+            <span class="string">"roberta"</span>: AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"roberta-base"</span>)
+        }
+    
+    <span class="keyword">def</span> <span class="function">compare</span>(<span class="function">self</span>, text):
+        results = []
+        <span class="keyword">for</span> name, tok <span class="keyword">in</span> <span class="function">self</span>.tokenizers.<span class="function">items</span>():
+            count = <span class="function">len</span>(tok.<span class="function">encode</span>(text))
+            results.<span class="function">append</span>({<span class="string">"Model"</span>: name, <span class="string">"Tokens"</span>: count})
+        <span class="keyword">return</span> results
+
+comp = <span class="function">TokenizerComparator</span>()
+<span class="function">print</span>(comp.<span class="function">compare</span>(<span class="string">"Tokenization is fundamental"</span>))</div>
+</div>
+            </section>
+
+            <!-- Exercises -->
+            <section id="exercises" class="ml-section">
+                <h2>Hands-On Exercises</h2>
+
+<div class="try-it-box">
+    <h4>Exercise 1: Build a Simple Tokenizer</h4>
+    <p>Create a basic character-level tokenizer that splits text into individual characters. Measure vocabulary size and average sequence length.</p>
+</div>
+
+<div class="try-it-box">
+    <h4>Exercise 2: Compare Token Counts</h4>
+    <p>Write a script tokenizing the same text with GPT-2, BERT, and RoBERTa. Visualize differences and analyze why they differ.</p>
+</div>
+
+<div class="try-it-box">
+    <h4>Exercise 3: Train a Custom BPE Tokenizer</h4>
+    <p>Using HuggingFace Tokenizers, train a custom BPE tokenizer on domain-specific corpus. Compare against general-purpose tokenizer.</p>
+</div>
+
+<div class="try-it-box">
+    <h4>Exercise 4: Cost Optimization</h4>
+    <p>Given fixed budget API calls, optimize prompts to reduce token usage. Calculate cost savings and efficiency improvements.</p>
+</div>
+            </section>
+
+            <!-- Interview Questions -->
+            <section id="interview" class="ml-section">
+                <h2>Interview Questions on Tokenization</h2>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q1: What is tokenization and why is it important?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Tokenization breaks text into smaller units (tokens) for model processing. Important because: (1) Models need discrete units, (2) Token choice affects performance and cost, (3) Different languages/domains need different strategies.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q2: Explain the difference between BPE and WordPiece</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">BPE merges most frequent pairs. WordPiece merges based on likelihood. BPE is frequency-based, WordPiece is probability-based. WordPiece produces fewer unknown tokens.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q3: How does tokenization impact API costs?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">APIs charge per token. Tokenizer A producing 500 tokens vs B producing 1000 means B costs 2x. Over millions of calls, this difference is massive.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q4: Why do transformers need special tokens like [CLS] and [SEP]?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">[CLS] marks sequence start and is used for classification. [SEP] separates sentences. These tokens help models understand structure.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q5: How would you handle rare words in tokenization?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Rare words split into subwords. Improvements: (1) train custom tokenizer on domain, (2) adjust vocab size, (3) use better subword handling, (4) add domain tokens.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q6: What are tradeoffs between vocabulary size and sequence length?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Larger vocab = shorter sequences but bigger embeddings. Smaller vocab = smaller models but longer sequences (more computation). Sweet spot: 30K-50K.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q7: Why is SentencePiece better for multilingual models?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">SentencePiece uses no language-specific assumptions. Handles languages without word boundaries. Consistent across languages.</div>
+    </div>
+</div>
+
+<div class="collapsible-section">
+    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+        <span>Q8: How do you debug tokenization issues?</span>
+        <span class="toggle-icon">▼</span>
+    </div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Check: (1) token count distribution, (2) OOV rate, (3) token examples, (4) compare tokenizers, (5) visualize sequences, (6) test on real data.</div>
+    </div>
+</div>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="ml-section">
+                <h2>Frequently Asked Questions</h2>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>What's the difference between encoding and tokenization?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Tokenization converts text to token strings. Encoding converts tokens to integer IDs. Both needed for models to process text.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Can I use any tokenizer with any model?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No. Models are trained with specific tokenizers. Mismatches degrade performance because embeddings are aligned to specific token IDs.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Why do some tokenizers use ## prefix for subwords?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">The ## prefix marks continuation tokens. It helps models distinguish 'playing' (one word) from incorrect splits.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How do I handle out-of-vocabulary (OOV) words?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">OOV words split into subword tokens. The tokenizer recursively breaks them into pieces in vocabulary. Some tokenizers map to [UNK].</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Should I train a custom tokenizer for my domain?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Consider if: (1) domain has unique vocabulary, (2) generic tokenizer has high OOV, (3) cost savings matter, (4) performance critical.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How do I count tokens programmatically?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use len(tokenizer.encode(text)). Cache results since tokenization is deterministic. Monitor distribution.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>What's the maximum sequence length I can use?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">BERT: 512. GPT-2: 1024. GPT-3: 4096. GPT-4: 128K. Exceeding requires truncation.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Why do some tokens have special prefixes?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Different conventions: BPE uses Ġ for spaces, SentencePiece uses ▁. These represent whitespace in trainable form.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>How does tokenization affect model training?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Tokenization determines what model sees as basic units. Poor tokenization forces learning from broken pieces. Good tokenization improves performance 2-5%.</div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question" onclick="toggleFAQ(this)">
+        <span>Can I add custom tokens to pre-trained tokenizer?</span>
+        <span class="faq-icon">▼</span>
+    </div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, use add_special_tokens(). MUST resize model embeddings with resize_token_embeddings(). New tokens need training.</div>
+    </div>
+</div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="ml-section">
+                <h2>Summary: Key Takeaways</h2>
+
+                <div class="grid-cards grid-6">
+                    <div class="card"><h4>Tokenization is Foundational</h4><p>First step in NLP pipeline. Every model needs a tokenizer. Token quality affects everything downstream.</p></div>
+                    <div class="card"><h4>Different Algorithms, Different Results</h4><p>BPE, WordPiece, SentencePiece produce different sequences. Same text with different tokenizers yields different counts.</p></div>
+                    <div class="card"><h4>Cost and Performance Matter</h4><p>Token efficiency directly impacts API costs. Token choice affects model performance. These matter in production.</p></div>
+                    <div class="card"><h4>Match Tokenizer to Model</h4><p>Use the tokenizer that came with the model. Mismatch causes performance degradation.</p></div>
+                    <div class="card"><h4>Domain Matters</h4><p>Domain-specific vocabulary benefits from custom tokenizers. Generic tokenizers waste tokens on domain text.</p></div>
+                    <div class="card"><h4>Monitor and Optimize</h4><p>Track token counts, OOV rates, sequence lengths. Use metrics to improve efficiency. Small improvements compound.</p></div>
+                </div>
+
+                <div class="highlight-box">
+    <p>Tokenization is invisible to users but affects cost, speed, and quality. Understanding tokenization is powerful for optimizing production systems.</p>
+</div>
+            </section>
+
+            <!-- Extended Case Studies -->
+            <section id="case-studies" class="ml-section">
+                <h2>Real-World Case Studies: Tokenization Impact</h2>
+                
+                <h3>Case Study 1: Medical Domain NLP</h3>
+                <p>A healthcare NLP system processing clinical notes faced a critical challenge: pre-trained tokenizers treated medical terminology as rare words, fragmenting them into many subword tokens.</p>
+                
+                <div class="info-box">
+                    <h4>The Problem</h4>
+                    <p>Term "Gastroenterology" was tokenized as ["Gas", "##tro", "##ent", "##er", "##ology"] - 5 tokens instead of 1. Medical abbreviations like "GERD" split into ["G", "##E", "##R", "##D"]. This forced the model to learn rare subword combinations.</p>
+                </div>
+                
+                <div class="info-box">
+                    <h4>The Solution</h4>
+                    <p>Trained custom SentencePiece tokenizer on 500K clinical notes. Added special tokens: [SYMPTOM], [MEDICATION], [PROCEDURE], [LAB_VALUE]. Tokenization improved:</p>
+                </div>
+                
+                <ul>
+                    <li>Token count reduced by 18% (fewer rare subwords)</li>
+                    <li>OOV rate dropped from 3.2% to 0.4%</li>
+                    <li>Model accuracy improved by 2.3% on named entity recognition</li>
+                    <li>Inference speed improved 8% due to shorter sequences</li>
+                </ul>
+                
+                <h3>Case Study 2: Financial Document Analysis</h3>
+                <p>A fintech company processing stock analyst reports and regulatory filings needed domain-specific tokenization.</p>
+                
+                <div class="info-box">
+                    <h4>Observations</h4>
+                    <p>Generic tokenizers treated stock tickers (AAPL, MSFT) as character sequences. Financial metrics like "P/E ratio" split awkwardly. Currency symbols sometimes became separate tokens.</p>
+                </div>
+                
+                <ul>
+                    <li>Trained custom BPE tokenizer on 100K financial documents</li>
+                    <li>Added 200 special tokens for tickers, financial metrics, company names</li>
+                    <li>Results: Token efficiency improved by 15%, classification accuracy +1.8%</li>
+                </ul>
+                
+                <h3>Case Study 3: Multilingual Code Understanding</h3>
+                <p>A programming language analysis system needed to understand code comments in 10+ languages while processing code in multiple languages.</p>
+                
+                <ul>
+                    <li>Used SentencePiece model trained on code corpus in 15 languages</li>
+                    <li>Achieved better balance across languages than standard tokenizers</li>
+                    <li>Zero-shot transfer to new languages more effective</li>
+                    <li>100% reversibility enabled exact code reconstruction from tokens</li>
+                </ul>
+            </section>
+
+            <!-- Tokenization Performance Benchmarks -->
+            <section id="benchmarks" class="ml-section">
+                <h2>Performance Benchmarks: Tokenizer Efficiency</h2>
+                
+                <h3>Token Count Efficiency Comparison</h3>
+                <p>Tested on diverse text samples: Wikipedia articles, news, scientific papers, code comments, casual chat.</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Token Efficiency Metrics</div>
+                    <div class="code-content">Dataset: <span class="number">1</span>,<span class="number">000</span> random texts, avg length ~<span class="number">200</span> words
+
+GPT-<span class="number">2</span> (BPE):              <span class="number">1</span>,<span class="number">245</span> tokens/<span class="number">100</span> words
+<span class="function">BERT</span> (WordPiece):         <span class="number">1</span>,<span class="number">380</span> tokens/<span class="number">100</span> words  
+<span class="function">T5</span> (SentencePiece):       <span class="number">1</span>,<span class="number">128</span> tokens/<span class="number">100</span> words
+<span class="function">RoBERTa</span> (WordPiece):      <span class="number">1</span>,<span class="number">410</span> tokens/<span class="number">100</span> words
+<span class="function">XLNet</span> (Unigram):          <span class="number">1</span>,<span class="number">195</span> tokens/<span class="number">100</span> words
+
+Most Efficient: <span class="function">T5</span> (SentencePiece) - <span class="number">9.4</span>% fewer tokens than baseline
+Least Efficient: RoBERTa - <span class="number">11.2</span>% more tokens than baseline
+
+Cost Implication: 
+At $<span class="number">1.50</span> per 1M <span class="function">tokens</span> (GPT-<span class="number">3.5</span>-turbo output):
+- T5 approach: $<span class="number">1.69</span> per 100K words
+- RoBERTa approach: $<span class="number">2.12</span> per 100K words
+- Difference: $<span class="number">0.43</span> per 100K <span class="function">words</span> (<span class="number">20</span>% cost difference)
+
+For <span class="number">1</span> billion word corpus:
+- T5: $<span class="number">16</span>,<span class="number">900</span>
+- RoBERTa: $<span class="number">21</span>,<span class="number">200</span>
+- Savings: $<span class="number">4</span>,<span class="number">300</span> (<span class="number">20</span>% reduction)
+                    </div>
+                </div>
+                
+                <h3>Inference Speed Impact</h3>
+                <p>Token count directly impacts transformer inference due to O(n²) attention:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Inference Time Benchmarks (BERT-base)</div>
+                    <div class="code-content">Sequence Length Impact on Inference <span class="function">Time</span> (batch size=<span class="number">1</span>):
+
+Sequence Length    Inf. <span class="function">Time</span> (ms)    Tokens/sec    <span class="function">Memory</span> (MB)
+<span class="number">64</span> tokens          <span class="number">12.</span>3ms           <span class="number">5</span>,<span class="number">203</span>         <span class="number">180</span>
+<span class="number">128</span> tokens         <span class="number">25.</span>1ms           <span class="number">5</span>,<span class="number">096</span>         <span class="number">240</span>
+<span class="number">256</span> tokens         <span class="number">52.</span>4ms           <span class="number">4</span>,<span class="number">884</span>         <span class="number">420</span>
+<span class="number">512</span> tokens         <span class="number">104.</span>8ms          <span class="number">4</span>,<span class="number">881</span>         <span class="number">780</span>
+<span class="number">1024</span> tokens        <span class="number">215.</span>2ms          <span class="number">4</span>,<span class="number">761</span>         <span class="number">1540</span>
+
+Quadratic Relationship: 2x tokens ≈ 4x computation
+- <span class="number">128</span> → <span class="number">256</span> tokens: <span class="number">2.</span>09x slower
+- <span class="number">256</span> → <span class="number">512</span> tokens: <span class="number">1.</span>99x slower
+- <span class="number">512</span> → <span class="number">1024</span> tokens: <span class="number">2.</span>05x slower
+
+Tokenizer Efficiency <span class="function">Impact</span> (<span class="number">100</span>-word text):
+- Efficient <span class="function">tokenizer</span> (SentencePiece): <span class="number">110</span> tokens @ <span class="number">12.</span>5ms
+- Inefficient <span class="function">tokenizer</span> (RoBERTa): <span class="number">135</span> tokens @ <span class="number">15.</span>2ms
+- Difference: <span class="number">2.</span>7ms per <span class="function">query</span> (<span class="number">18</span>% slower <span class="keyword">with</span> poor tokenizer)
+
+For <span class="number">1</span>,<span class="number">000</span> queries/second:
+- Efficient: <span class="number">12.5</span> seconds latency budget
+- Inefficient: <span class="number">15.2</span> seconds latency budget
+- Impact: <span class="number">2</span>,700ms per second less computational capacity
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Topics -->
+            <section id="advanced-topics" class="ml-section">
+                <h2>Advanced Topics in Tokenization</h2>
+                
+                <h3>Tokenization for Long Context Windows</h3>
+                <p>Modern models like GPT-4 support up to 128K token context. Efficient tokenization becomes critical:</p>
+                
+                <ul>
+                    <li><strong>Hierarchical Summarization:</strong> Use extractive summarization to compress context before tokenizing</li>
+                    <li><strong>Sliding Window:</strong> Process documents in overlapping windows with careful boundary handling</li>
+                    <li><strong>Token Prioritization:</strong> Keep important tokens, remove repetitive ones</li>
+                    <li><strong>Semantic Compression:</strong> Replace phrases with single special tokens</li>
+                </ul>
+                
+                <h3>Cross-Lingual Tokenization Challenges</h3>
+                <p>Different scripts and word boundaries create challenges:</p>
+                
+                <div class="info-box">
+                    <h4>Script-Specific Issues</h4>
+                    <p><strong>Chinese/Japanese:</strong> No word boundaries, requires character or subword-level tokenization. <strong>Arabic:</strong> Diacritics affect meaning, normalization critical. <strong>Hindi:</strong> Devanagari script, complex word formation. <strong>Emoji:</strong> Multi-byte sequences, often tokenized poorly.</p>
+                </div>
+                
+                <h3>Tokenization for Low-Resource Languages</h3>
+                <p>Languages with limited training data face challenges:</p>
+                
+                <ul>
+                    <li><strong>Morphology-aware:</strong> Split by morphemes rather than frequency (better for agglutinative languages)</li>
+                    <li><strong>Transfer Learning:</strong> Use tokenizer from related high-resource language</li>
+                    <li><strong>Hybrid Approaches:</strong> Combine rule-based and learned tokenization</li>
+                    <li><strong>Subword Regularization:</strong> During training, sample different subword segmentations</li>
+                </ul>
+            </section>
+
+            <!-- Tokenization and Prompt Engineering -->
+            <section id="prompt-engineering" class="ml-section">
+                <h2>Tokenization and Prompt Engineering</h2>
+                
+                <p>Understanding tokenization is essential for effective prompt engineering. Every character choice affects tokens, which affects cost and performance.</p>
+                
+                <h3>Prompt Optimization Techniques</h3>
+                <div class="grid-cards">
+                    <div class="card">
+                        <h4>Eliminate Redundancy</h4>
+                        <p>Remove filler words, repeated instructions. Each word costs tokens.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Use Abbreviations</h4>
+                        <p>"pls" instead of "please", "msgs" instead of "messages" often tokenize to fewer tokens.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Structure with Tokens</h4>
+                        <p>Use special characters to delimit sections. Helps model understand structure without extra words.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Compress Examples</h4>
+                        <p>Use shorthand notation for few-shot examples. Trade readability for token efficiency.</p>
+                    </div>
+                </div>
+                
+                <h3>Example: Token-Efficient Prompting</h3>
+                <div class="code-block">
+                    <div class="code-header">Prompt Optimization</div>
+                    <div class="code-content">INEFFICIENT PROMPT:
+<span class="string">"Please analyze the sentiment of the following customer review. 
+Is the customer happy or unhappy? Provide a detailed explanation 
+of which specific words in the review indicate positive or negative 
+sentiment. Here is the review to analyze:"</span>
+
+Tokens: <span class="number">67</span> tokens
+
+EFFICIENT PROMPT:
+<span class="string">"Sentiment: happy/unhappy? Review:"</span>
+
+Tokens: <span class="number">12</span> tokens
+
+IMPROVEMENT: <span class="number">82</span>% reduction <span class="keyword">in</span> tokens
+Same semantic content, <span class="number">5.</span>6x fewer tokens
+
+For <span class="number">1</span>,<span class="number">000</span> requests @ $<span class="number">0.50</span>/1M <span class="function">tokens</span> (<span class="function">input</span>):
+- Inefficient: $<span class="number">67</span> * <span class="number">1</span>,<span class="number">000</span> / 1M * $<span class="number">0.50</span> = $<span class="number">0.034</span>
+- Efficient: $<span class="number">12</span> * <span class="number">1</span>,<span class="number">000</span> / 1M * $<span class="number">0.50</span> = $<span class="number">0.006</span>
+- Savings: $<span class="number">0.028</span> per <span class="number">1</span>,<span class="number">000</span> requests = $<span class="number">28</span> per million requests
+                    </div>
+                </div>
+            </section>
+
+            <!-- Future of Tokenization -->
+            <section id="future" class="ml-section">
+                <h2>Future of Tokenization</h2>
+                
+                <h3>Emerging Approaches</h3>
+                
+                <h4>1. Byte-Level Tokenization</h4>
+                <p>Some models (like Charformer) work directly with bytes, completely eliminating explicit tokenization. Advantages: handles any Unicode, no OOV issues. Challenges: longer sequences, more computation.</p>
+                
+                <h4>2. Contextual Tokenization</h4>
+                <p>Tokenization depends on context (like humans reading). "Record" tokenizes differently in "world record" vs "record the audio". Current research explores context-aware tokenization.</p>
+                
+                <h4>3. Semantic Tokenization</h4>
+                <p>Rather than subwords, tokenize by semantic units. Requires learning what semantic units are, but could drastically improve efficiency.</p>
+                
+                <h4>4. Adaptive Vocabulary</h4>
+                <p>Adjust vocabulary on-the-fly based on input domain. A medical document uses different vocabulary tokens than a sports article.</p>
+                
+                <h4>5. Unified Tokenization</h4>
+                <p>Single tokenizer working well across all languages, scripts, domains. SentencePiece moves in this direction, but further improvements likely.</p>
+                
+                <div class="highlight-box">
+                    <p><strong>Research Direction:</strong> The trend is toward removing explicit tokenization altogether. Future models might process text at character or byte level with efficient architectures that don't require O(n²) attention.</p>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Common Issues -->
+            <section id="troubleshooting" class="ml-section">
+                <h2>Troubleshooting Common Tokenization Issues</h2>
+                
+                <h3>Problem 1: OOV Rate Too High</h3>
+                <p><strong>Symptom:</strong> Many [UNK] tokens in output</p>
+                <p><strong>Causes:</strong> Tokenizer not trained on your domain, vocabulary too small, unusual characters/encodings</p>
+                <p><strong>Solutions:</strong> Train custom tokenizer, increase vocabulary size, normalize text (lowercase, remove accents), add domain special tokens</p>
+                
+                <h3>Problem 2: Sequence Length Variance</h3>
+                <p><strong>Symptom:</strong> Token counts vary wildly across samples</p>
+                <p><strong>Causes:</strong> Inconsistent preprocessing, tokenizer not handling certain character sequences well, mixing languages</p>
+                <p><strong>Solutions:</strong> Normalize preprocessing, analyze outliers, use language detection to select tokenizer</p>
+                
+                <h3>Problem 3: Poor Cross-Lingual Transfer</h3>
+                <p><strong>Symptom:</strong> Model trained on English performs poorly on other languages</p>
+                <p><strong>Causes:</strong> Tokenizer optimized for English, imbalanced vocabulary across languages</p>
+                <p><strong>Solutions:</strong> Use language-agnostic tokenizer (SentencePiece), train on multilingual corpus</p>
+                
+                <h3>Problem 4: Model Doesn't Learn Special Tokens</h3>
+                <p><strong>Symptom:</strong> Added special tokens but model ignores them</p>
+                <p><strong>Causes:</strong> Didn't resize embeddings, special tokens not truly special (not marked), insufficient training</p>
+                <p><strong>Solutions:</strong> Resize embeddings after adding tokens, mark as special_tokens=True, fine-tune (not just inference)</p>
+                
+                <h3>Problem 5: Tokenizer Mismatch Errors</h3>
+                <p><strong>Symptom:</strong> "Token IDs out of range" or shape mismatches</p>
+                <p><strong>Causes:</strong> Using different tokenizer than model was trained with, embedding matrix size doesn't match</p>
+                <p><strong>Solutions:</strong> Always use the same tokenizer as model, verify len(tokenizer) == embedding_matrix.shape[0]</p>
+            </section>
+
+            <!-- Interactive Tokenization Calculator -->
+            <section id="interactive" class="ml-section">
+                <h2>Interactive Learning: Tokenization Concepts</h2>
+                
+                <h3>Vocabulary Size vs Sequence Length Tradeoff</h3>
+                <p>As vocabulary size increases, average sequence length decreases, but embedding matrix grows. This interactive visualization helps you understand the tradeoff:</p>
+                
+                <div class="info-box">
+                    <h4>Mental Model</h4>
+                    <p>For a corpus of 1M words: With 10K vocab, average 15 tokens/doc. With 50K vocab, average 8 tokens/doc. With 100K vocab, average 5 tokens/doc. But embedding matrix grows from 10K→50K→100K dimensions.</p>
+                </div>
+                
+                <h3>Token Count Estimation</h3>
+                <div class="info-box">
+                    <h4>Rule of Thumb</h4>
+                    <p><strong>English text:</strong> ~1.3 tokens per word on average (GPT-2 tokenizer). <strong>Code:</strong> ~1.4 tokens per word. <strong>Mixed languages:</strong> ~1.5-1.8 tokens per word. <strong>With special tokens:</strong> Add ~2-5 tokens for metadata.</p>
+                </div>
+                
+                <h3>Cost Estimation Formula</h3>
+                <div class="formula-box">
+                    <div class="label">API Cost Calculation</div>
+                    <code>Cost = (input_tokens / 1M * input_price) + (output_tokens / 1M * output_price)</code>
+                </div>
+                
+                <div class="code-block">
+                    <div class="code-header">Quick Cost Calculator</div>
+                    <div class="code-content">Example: <span class="number">5</span>,<span class="number">000</span> word prompt, expecting <span class="number">500</span> word response
+GPT-<span class="number">3.5</span>-turbo: $<span class="number">0.50</span> per 1M <span class="function">input</span>, $<span class="number">1.50</span> per 1M output
+
+Input tokens: <span class="number">5</span>,<span class="number">000</span> words * <span class="number">1.3</span> = <span class="number">6</span>,<span class="number">500</span> tokens
+Output tokens: <span class="number">500</span> words * <span class="number">1.3</span> = <span class="number">650</span> tokens
+
+Cost = (<span class="number">6</span>,<span class="number">500</span> / 1M * <span class="number">0.50</span>) + (<span class="number">650</span> / 1M * <span class="number">1.50</span>)
+     = <span class="number">0.00325</span> + <span class="number">0.000975</span>
+     = <span class="number">0.004225</span> per request
+     = $<span class="number">4.23</span> per <span class="number">1</span>,<span class="number">000</span> requests
+     = $<span class="number">42.25</span> per <span class="number">10</span>,<span class="number">000</span> requests
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Deep Dive: Subword Tokenization Details -->
+            <section id="subword-details" class="ml-section">
+                <h2>Deep Dive: How Subword Tokenization Works</h2>
+                
+                <h3>Why Subword Tokenization?</h3>
+                <p>Character-level tokenization creates very long sequences (100+ tokens for short sentences). Word-level tokenization creates massive vocabularies and can't handle new words. Subword tokenization is the Goldilocks solution: it creates manageable vocabularies while keeping sequences reasonably short.</p>
+                
+                <h3>Morphology and Subword Boundaries</h3>
+                <p>Subword tokenization often aligns with morphological boundaries (the meaningful parts of words):</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Morphological Tokenization Examples</div>
+                    <div class="code-content">
+Word: <span class="string">"interconnected"</span>
+Morphemes: inter-connect-<span class="function">ed</span> (<span class="number">3</span> meaningful parts)
+WordPiece tokens: [inter, <span class="comment">##con, ##nect, ##ed] (4 pieces)</span>
+- Not perfectly aligned but close enough
+
+Word: <span class="string">"unpredictably"</span>  
+Morphemes: un-predict-able-<span class="function">ly</span> (<span class="number">4</span> meaningful parts)
+WordPiece tokens: [un, <span class="comment">##pre, ##dict, ##ably] (4 pieces)</span>
+- Better alignment!
+
+Word: <span class="string">"internationalization"</span>
+Morphemes: international-<span class="function">ization</span> (<span class="number">2</span> meaningful parts)
+BPE tokens: [inter, <span class="comment">##national, ##ization] (3 pieces)</span>
+- WordPiece might split further depending on frequency
+
+Key Insight: Subword algorithms don't explicitly use morphology,
+but they often discover morpheme boundaries naturally because
+morpheme combinations are frequent <span class="keyword">in</span> the training corpus.
+                    </div>
+                </div>
+                
+                <h3>The Vocabulary Learning Process</h3>
+                <p>During tokenizer training, the algorithm discovers useful subword units:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">BPE Training Progress (First 20 Iterations)</div>
+                    <div class="code-content">
+Iteration <span class="number">1</span>:  <span class="function">Merge</span> (<span class="string">'e'</span>, <span class="string">'r'</span>) -> vocab size: <span class="number">257</span>
+Iteration <span class="number">2</span>:  <span class="function">Merge</span> (<span class="string">'s'</span>, <span class="string">'t'</span>) -> vocab size: <span class="number">258</span>
+Iteration <span class="number">3</span>:  <span class="function">Merge</span> (<span class="string">'a'</span>, <span class="string">'t'</span>) -> vocab size: <span class="number">259</span>
+Iteration <span class="number">4</span>:  <span class="function">Merge</span> (<span class="string">'e'</span>, <span class="string">'s'</span>) -> vocab size: <span class="number">260</span>
+Iteration <span class="number">5</span>:  <span class="function">Merge</span> (<span class="string">'i'</span>, <span class="string">'n'</span>) -> vocab size: <span class="number">261</span>
+Iteration <span class="number">6</span>:  <span class="function">Merge</span> (<span class="string">'t'</span>, <span class="string">'h'</span>) -> vocab size: <span class="number">262</span>
+Iteration <span class="number">7</span>:  <span class="function">Merge</span> (<span class="string">'er'</span>, <span class="string">'e'</span>) -> vocab size: <span class="number">263</span>
+Iteration <span class="number">8</span>:  <span class="function">Merge</span> (<span class="string">'in'</span>, <span class="string">'g'</span>) -> vocab size: <span class="number">264</span>
+Iteration <span class="number">9</span>:  <span class="function">Merge</span> (<span class="string">'st'</span>, <span class="string">'a'</span>) -> vocab size: <span class="number">265</span>
+Iteration <span class="number">10</span>: <span class="function">Merge</span> (<span class="string">'th'</span>, <span class="string">'e'</span>) -> vocab size: <span class="number">266</span>
+
+After <span class="number">10</span> iterations, natural subword patterns emerge:
+- Common endings: -ing, -ed, -er, -tion appear <span class="keyword">as</span> single tokens
+- Common prefixes: un-, re-, pre- discovered
+- Common words: the, <span class="keyword">and</span>, that discovered early
+
+Key observation: Most common subwords are discovered first,
+less common ones discovered later.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tokenization and Neural Network Behavior -->
+            <section id="tokenization-nn" class="ml-section">
+                <h2>How Tokenization Affects Neural Network Learning</h2>
+                
+                <h3>Embedding Space Implications</h3>
+                <p>Each token gets a learned embedding vector. Tokenization directly affects what the network must learn:</p>
+                
+                <div class="grid-cards">
+                    <div class="card">
+                        <h4>Good Tokenization</h4>
+                        <p>Semantic tokens near each other in embedding space. Related concepts (play, playing, played) have related embeddings through shared sub-tokens.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Poor Tokenization</h4>
+                        <p>Semantic concepts scattered across multiple rare subword embeddings. Model must learn complex relationships to reconstruct word meaning from subword pieces.</p>
+                    </div>
+                </div>
+                
+                <h3>Positional Encoding Implications</h3>
+                <p>Transformers use positional encodings to track token position. Longer sequences (due to inefficient tokenization) mean:</p>
+                
+                <ul>
+                    <li>Positional encoding must handle more positions</li>
+                    <li>Attention patterns span longer distances</li>
+                    <li>Information must flow through more attention steps</li>
+                    <li>Longer paths = more opportunity for gradient vanishing</li>
+                </ul>
+                
+                <h3>Token Frequency and Learning</h3>
+                <div class="info-box">
+                    <h4>The Frequency-Performance Relationship</h4>
+                    <p>Rare tokens (appearing <100 times in training) have poorly learned embeddings. Tokens appearing in semantically diverse contexts (like "##tion" which appears in "nation", "question", "station") learn robust, general-purpose embeddings. This is why subword tokenization helps: high-frequency subwords learn good representations.</p>
+                </div>
+            </section>
+
+            <!-- Multilingual Tokenization Strategies -->
+            <section id="multilingual" class="ml-section">
+                <h2>Tokenization for Multilingual Models</h2>
+                
+                <h3>The Multilingual Challenge</h3>
+                <p>A single tokenizer must handle English, Chinese, Arabic, Hindi, and potentially 100+ more languages. Each has different writing systems, word boundaries, and character frequencies.</p>
+                
+                <h3>Vocabulary Distribution Across Languages</h3>
+                <div class="code-block">
+                    <div class="code-header">Vocabulary Allocation in Multilingual Tokenizers</div>
+                    <div class="code-content">
+Total vocab size: <span class="number">100</span>,<span class="number">000</span> tokens
+English characters/subwords: ~<span class="number">45</span>% of vocab
+Other Latin <span class="function">scripts</span> (Spanish, French, etc): ~<span class="number">15</span>%
+<span class="function">CJK</span> (Chinese, Japanese, Korean): ~<span class="number">20</span>%
+Arabic, Hebrew, Farsi: ~<span class="number">10</span>%
+Other <span class="function">scripts</span> (Devanagari, Thai, etc): ~<span class="number">10</span>%
+
+Allocation strategy decisions:
+<span class="number">1</span>. Proportional to speaker population
+<span class="number">2</span>. Proportional to training data available
+<span class="number">3</span>. Proportional to language <span class="function">complexity</span> (CJK needs more)
+<span class="number">4</span>. Equal allocation per language
+
+Problem: English speakers ~<span class="number">15</span>% of world, but ~<span class="number">45</span>% of internet text.
+Result: English-centric tokenizers disadvantage other languages.
+
+SentencePiece solution: Learns allocation dynamically based on training corpus.
+<span class="function">XLMR</span> (multilingual RoBERTa): 250K vocab, more balanced but still English-heavy.
+                    </div>
+                </div>
+                
+                <h3>Language-Specific Tokenization Challenges</h3>
+                
+                <h4>Chinese/Japanese</h4>
+                <p>No spaces between words. Traditional approach: character-level. Modern: subword without explicit word boundary. SentencePiece handles this naturally by treating spaces as regular characters.</p>
+                
+                <h4>Arabic</h4>
+                <p>Words attach to prefixes/suffixes (morphology). Character normalization important (diacritics). SentencePiece's language-agnostic approach works well.</p>
+                
+                <h4>Agglutinative Languages (Finnish, Turkish, Hungarian)</h4>
+                <p>Words can be very long with many morphemes. Subword tokenization helps break into morpheme-like pieces. May benefit from morphology-aware tokenization.</p>
+                
+                <h4>Vietnamese, Thai</h4>
+                <p>Space usage inconsistent or absent. Tonal markers important. Subword tokenization without explicit rules works reasonably well.</p>
+            </section>
+
+            <!-- Tokenization and Model Architecture -->
+            <section id="tokenization-architecture" class="ml-section">
+                <h2>Tokenization Considerations for Different Architectures</h2>
+                
+                <h3>Transformer Models</h3>
+                <p>Transformers use attention which is O(n²) in sequence length. Efficient tokenization (fewer tokens) directly reduces computation.</p>
+                
+                <div class="info-box">
+                    <h4>Design Impact</h4>
+                    <p>BERT designed with 512 token max length. GPT-2 designed with 1024 limit. These limits influenced choice of tokenizer—needed balance between coverage and sequence length. Newer models (GPT-4) support 128K tokens, reducing tokenization pressure.</p>
+                </div>
+                
+                <h3>RNN/LSTM Models</h3>
+                <p>Sequence length is less critical (no quadratic attention), but very long sequences still suffer from gradient vanishing/exploding. Efficient tokenization still helps.</p>
+                
+                <h3>CNN Models</h3>
+                <p>CNNs use fixed-size kernels over sequences. Tokenization affects the effective context window: fewer tokens = smaller context for same sequence length.</p>
+                
+                <h3>Hybrid Architectures</h3>
+                <p>Some models combine transformer and RNN. Tokenization becomes a tradeoff: too-short tokens = long sequences for transformers, too-long tokens = reduced vocabulary coverage.</p>
+            </section>
+
+            <!-- Security and Privacy in Tokenization -->
+            <section id="security-privacy" class="ml-section">
+                <h2>Security and Privacy Considerations</h2>
+                
+                <h3>Information Leakage Through Tokenization</h3>
+                <p>Tokenization can inadvertently leak information about training data:</p>
+                
+                <div class="info-box">
+                    <h4>Privacy Risk Example</h4>
+                    <p>If a tokenizer has a special subword token for a rare medical condition (e.g., "##medulloblastoma"), it reveals that condition was in training data. An attacker could identify unusual tokens and infer privacy-sensitive information about training set.</p>
+                </div>
+                
+                <h3>Adversarial Tokenization</h3>
+                <p>Adversarial attacks can exploit tokenization:</p>
+                
+                <ul>
+                    <li><strong>Unicode Variations:</strong> Use different Unicode representations of same character (e.g., U+00E9 vs U+0065 U+0301 for "é"). Some tokenizers treat as different, others as same.</li>
+                    <li><strong>Subword Injections:</strong> Insert special characters to split tokens differently than intended</li>
+                    <li><strong>Homoglyph Attacks:</strong> Visually identical characters that tokenize differently</li>
+                </ul>
+                
+                <h3>Mitigation Strategies</h3>
+                <ul>
+                    <li>Use standard Unicode normalization (NFC, NFD)</li>
+                    <li>Implement consistent preprocessing (lowercase, remove accents if appropriate)</li>
+                    <li>Use well-established tokenizers with public vocabularies</li>
+                    <li>Don't create custom special tokens for sensitive information</li>
+                    <li>Consider token-level differential privacy for sensitive applications</li>
+                </ul>
+            </section>
+
+            <!-- Tokenization Testing and Validation -->
+            <section id="testing" class="ml-section">
+                <h2>Testing and Validating Your Tokenizer</h2>
+                
+                <h3>Validation Metrics</h3>
+                
+                <h4>1. Vocabulary Coverage</h4>
+                <p>Percentage of training text that can be represented without [UNK] tokens.</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Vocabulary Coverage Calculation</div>
+                    <div class="code-content">
+<span class="keyword">def</span> <span class="function">vocabulary_coverage</span>(text, tokenizer):
+    <span class="string">"""Calculate % of text coverable without [UNK]"""</span>
+    tokens = tokenizer.<span class="function">encode</span>(text)
+    unk_count = tokens.<span class="function">count</span>(tokenizer.unk_token_id)
+    coverage = (<span class="function">len</span>(tokens) - unk_count) / <span class="function">len</span>(tokens) * <span class="number">100</span>
+    <span class="keyword">return</span> coverage
+
+<span class="comment"># Example results</span>
+train_coverage = <span class="function">vocabulary_coverage</span>(train_text, tokenizer)  <span class="comment"># 98.5%</span>
+test_coverage = <span class="function">vocabulary_coverage</span>(test_text, tokenizer)    <span class="comment"># 96.2%</span>
+new_domain_coverage = <span class="function">vocabulary_coverage</span>(new_text, tokenizer)  <span class="comment"># 87.3%</span>
+
+Benchmark: Good tokenizers achieve ><span class="number">97</span>% coverage on test <span class="function">set</span>
+          Excellent tokenizers achieve ><span class="number">99</span>% coverage
+                    </div>
+                </div>
+                
+                <h4>2. Token Efficiency</h4>
+                <p>Average tokens per word:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Token Efficiency Metrics</div>
+                    <div class="code-content">
+<span class="keyword">def</span> <span class="function">token_efficiency</span>(texts, tokenizer):
+    <span class="string">"""Calculate tokens per word ratio"""</span>
+    total_words = <span class="function">sum</span>(<span class="function">len</span>(text.<span class="function">split</span>()) <span class="keyword">for</span> text <span class="keyword">in</span> texts)
+    total_tokens = <span class="function">sum</span>(<span class="function">len</span>(tokenizer.<span class="function">encode</span>(text)) <span class="keyword">for</span> text <span class="keyword">in</span> texts)
+    efficiency = total_tokens / total_words
+    <span class="keyword">return</span> efficiency
+
+efficiency = <span class="function">token_efficiency</span>(corpus, tokenizer)
+<span class="function">print</span>(<span class="string">f"Efficiency: {efficiency:.2f} tokens/word"</span>)
+
+<span class="function">Benchmarks</span> (English text):
+- Character-level: ~<span class="number">4.5</span> tokens/<span class="function">word</span> (too long)
+- Word-level: <span class="number">1.0</span> tokens/<span class="function">word</span> (too many OOV)
+- <span class="function">BPE</span> (GPT-<span class="number">2</span>): ~<span class="number">1.3</span> tokens/<span class="function">word</span> (good)
+- <span class="function">WordPiece</span> (BERT): ~<span class="number">1.35</span> tokens/<span class="function">word</span> (good)
+- <span class="function">SentencePiece</span> (T5): ~<span class="number">1.25</span> tokens/<span class="function">word</span> (excellent)
+                    </div>
+                </div>
+                
+                <h4>3. Reversibility</h4>
+                <p>Can you reconstruct original text from tokens?</p>
+                
+                <div class="code-block">
+                    <div class="code-header">Reversibility Testing</div>
+                    <div class="code-content">
+<span class="keyword">def</span> <span class="function">test_reversibility</span>(text, tokenizer):
+    <span class="string">"""Test if original text can be reconstructed"""</span>
+    tokens = tokenizer.<span class="function">encode</span>(text)
+    reconstructed = tokenizer.<span class="function">decode</span>(tokens)
+    
+    <span class="comment"># Exact match (SentencePiece)</span>
+    <span class="keyword">if</span> reconstructed == text:
+        <span class="keyword">return</span> <span class="string">"Perfect reversibility"</span>
+    
+    <span class="comment"># Approximate match (some normalization)</span>
+    <span class="keyword">if</span> reconstructed.<span class="function">lower</span>().<span class="function">replace</span>(<span class="string">' '</span>, <span class="string">''</span>) == text.<span class="function">lower</span>().<span class="function">replace</span>(<span class="string">' '</span>, <span class="string">''</span>):
+        <span class="keyword">return</span> <span class="string">"Reversible with normalization"</span>
+    
+    <span class="comment"># Not reversible</span>
+    <span class="keyword">return</span> <span class="string">"Irreversible (information lost)"</span>
+
+Perfect reversibility: <span class="function">SentencePiece</span> (<span class="number">100</span>%)
+Good reversibility: BPE, <span class="function">WordPiece</span> (<span class="number">99</span>%+, minor spacing)
+Poor reversibility: Character-<span class="function">level</span> (loses case, spacing)
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Real-Time Tokenization Monitoring -->
+            <section id="monitoring" class="ml-section">
+                <h2>Monitoring Tokenization in Production</h2>
+                
+                <h3>Key Metrics to Track</h3>
+                
+                <h4>1. Token Count Distribution</h4>
+                <p>Monitor average, median, p95, p99 token counts across requests:</p>
+                <ul>
+                    <li><strong>Sudden increase:</strong> May indicate data format change or new input type</li>
+                    <li><strong>Outliers:</strong> P99 > 10x median suggests some requests tokenizing poorly</li>
+                    <li><strong>Drift:</strong> Gradual increase over time suggests input characteristics changing</li>
+                </ul>
+                
+                <h4>2. Out-of-Vocabulary Rate</h4>
+                <p>Track percentage of [UNK] tokens:</p>
+                <ul>
+                    <li>Normal: <0.5%</li>
+                    <li>Warning: 0.5% - 2%</li>
+                    <li>Critical: >2%</li>
+                </ul>
+                
+                <h4>3. Special Token Usage</h4>
+                <p>Monitor special tokens: [CLS], [SEP], [PAD], custom domain tokens</p>
+                <ul>
+                    <li>Unusual patterns may indicate input malformation</li>
+                    <li>Missing special tokens may indicate preprocessing failures</li>
+                </ul>
+                
+                <h4>4. Inference Latency Correlation</h4>
+                <p>Correlation between token count and latency:</p>
+                <ul>
+                    <li>Should be roughly linear (or quadratic for O(n²) operations)</li>
+                    <li>Unexpected deviation indicates other bottlenecks</li>
+                </ul>
+                
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <div class="code-header">Tokenization Monitoring in Production</div>
+                    <div class="code-content">
+<span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict
+<span class="keyword">import</span> statistics
+<span class="keyword">import</span> time
+
+<span class="keyword">class</span> TokenizationMonitor:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, tokenizer, alert_thresholds=<span class="keyword">None</span>):
+        <span class="function">self</span>.tokenizer = tokenizer
+        <span class="function">self</span>.metrics = <span class="function">defaultdict</span>(<span class="function">list</span>)
+        <span class="function">self</span>.alert_thresholds = alert_thresholds <span class="keyword">or</span> {
+            <span class="string">'avg_tokens'</span>: <span class="number">500</span>,
+            <span class="string">'p99_tokens'</span>: <span class="number">2000</span>,
+            <span class="string">'oov_rate'</span>: <span class="number">0.02</span>,
+            <span class="string">'latency_ms'</span>: <span class="number">100</span>
+        }
+    
+    <span class="keyword">def</span> <span class="function">process_with_monitoring</span>(<span class="function">self</span>, text):
+        <span class="string">"""Tokenize and collect metrics"""</span>
+        start_time = time.<span class="function">time</span>()
+        
+        <span class="comment"># Tokenize</span>
+        tokens = <span class="function">self</span>.tokenizer.<span class="function">encode</span>(text)
+        token_count = <span class="function">len</span>(tokens)
+        
+        <span class="comment"># Check for unknown tokens</span>
+        <span class="keyword">if</span> <span class="function">hasattr</span>(<span class="function">self</span>.tokenizer, <span class="string">'unk_token_id'</span>):
+            unk_count = tokens.<span class="function">count</span>(<span class="function">self</span>.tokenizer.unk_token_id)
+            oov_rate = unk_count / token_count <span class="keyword">if</span> token_count > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+        <span class="keyword">else</span>:
+            oov_rate = <span class="number">0</span>
+        
+        latency_ms = (time.<span class="function">time</span>() - start_time) * <span class="number">1000</span>
+        
+        <span class="comment"># Record metrics</span>
+        <span class="function">self</span>.metrics[<span class="string">'token_count'</span>].<span class="function">append</span>(token_count)
+        <span class="function">self</span>.metrics[<span class="string">'oov_rate'</span>].<span class="function">append</span>(oov_rate)
+        <span class="function">self</span>.metrics[<span class="string">'latency'</span>].<span class="function">append</span>(latency_ms)
+        
+        <span class="comment"># Check thresholds</span>
+        <span class="function">self</span>.<span class="function">_check_alerts</span>(token_count, oov_rate, latency_ms)
+        
+        <span class="keyword">return</span> tokens
+    
+    <span class="keyword">def</span> <span class="function">_check_alerts</span>(<span class="function">self</span>, token_count, oov_rate, latency_ms):
+        <span class="string">"""Alert on anomalies"""</span>
+        <span class="keyword">if</span> oov_rate > <span class="function">self</span>.alert_thresholds[<span class="string">'oov_rate'</span>]:
+            <span class="function">print</span>(<span class="string">f"ALERT: High OOV rate {oov_rate:.2%}"</span>)
+        
+        <span class="keyword">if</span> token_count > <span class="function">self</span>.alert_thresholds[<span class="string">'p99_tokens'</span>]:
+            <span class="function">print</span>(<span class="string">f"ALERT: Excessive token count {token_count}"</span>)
+        
+        <span class="keyword">if</span> latency_ms > <span class="function">self</span>.alert_thresholds[<span class="string">'latency_ms'</span>]:
+            <span class="function">print</span>(<span class="string">f"ALERT: High tokenization latency {latency_ms:.1f}ms"</span>)
+    
+    <span class="keyword">def</span> <span class="function">get_summary</span>(<span class="function">self</span>):
+        <span class="string">"""Get monitoring summary"""</span>
+        <span class="keyword">if</span> <span class="keyword">not</span> <span class="function">self</span>.metrics[<span class="string">'token_count'</span>]:
+            <span class="keyword">return</span> {}
+        
+        <span class="keyword">return</span> {
+            <span class="string">'avg_tokens'</span>: statistics.<span class="function">mean</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>]),
+            <span class="string">'median_tokens'</span>: statistics.<span class="function">median</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>]),
+            <span class="string">'p95_tokens'</span>: <span class="function">sorted</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>])[<span class="function">int</span>(<span class="number">0.95</span> * <span class="function">len</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>]))],
+            <span class="string">'p99_tokens'</span>: <span class="function">sorted</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>])[<span class="function">int</span>(<span class="number">0.99</span> * <span class="function">len</span>(<span class="function">self</span>.metrics[<span class="string">'token_count'</span>]))],
+            <span class="string">'avg_oov_rate'</span>: statistics.<span class="function">mean</span>(<span class="function">self</span>.metrics[<span class="string">'oov_rate'</span>]),
+            <span class="string">'avg_latency_ms'</span>: statistics.<span class="function">mean</span>(<span class="function">self</span>.metrics[<span class="string">'latency'</span>]),
+        }
+
+<span class="comment"># Usage</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+monitor = <span class="function">TokenizationMonitor</span>(
+    AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">'bert-base-uncased'</span>)
+)
+
+<span class="comment"># Process requests</span>
+<span class="keyword">for</span> request_text <span class="keyword">in</span> incoming_requests:
+    tokens = monitor.<span class="function">process_with_monitoring</span>(request_text)
+
+<span class="comment"># Print summary</span>
+summary = monitor.<span class="function">get_summary</span>()
+<span class="keyword">for</span> key, value <span class="keyword">in</span> summary.<span class="function">items</span>():
+    <span class="function">print</span>(<span class="string">f"{key}: {value:.2f}"</span>)
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tokenization in Different Frameworks -->
+            <section id="frameworks" class="ml-section">
+                <h2>Tokenization Across Different Frameworks</h2>
+                
+                <h3>HuggingFace Transformers</h3>
+                <p>Most popular, extensive tokenizer support, easy to use, good documentation.</p>
+                
+                <h3>PyTorch NLP</h3>
+                <p>Lower-level, more control, requires more setup, good for custom tokenizers.</p>
+                
+                <h3>TensorFlow/Keras</h3>
+                <p>Integrated tokenizers, good for production, slightly different API.</p>
+                
+                <h3>spaCy</h3>
+                <p>Excellent for linguistic tokenization, rule-based and statistical approaches, good for preprocessing.</p>
+                
+                <h3>NLTK</h3>
+                <p>Educational, rule-based, good for understanding linguistic aspects, slower than neural approaches.</p>
+                
+                <h3>Custom Solutions</h3>
+                <p>Building your own tokenizer provides maximum control but requires significant expertise.</p>
+            </section>
+
+            <!-- Lessons Learned -->
+            <section id="lessons" class="ml-section">
+                <h2>Lessons Learned: What Industry Teaches Us</h2>
+                
+                <h3>From Tech Giants</h3>
+                
+                <h4>OpenAI (GPT Series)</h4>
+                <p>Uses BPE tokenizer, consistent across GPT-2, GPT-3, GPT-4. Lesson: Consistency matters. Don't change tokenizers between model versions—it breaks trained knowledge.</p>
+                
+                <h4>Google (BERT, T5)</h4>
+                <p>Uses WordPiece (BERT) and SentencePiece (T5). Lesson: Different algorithms for different goals. Semantic understanding (BERT) vs. sequence-to-sequence (T5) benefit from different tokenization approaches.</p>
+                
+                <h4>Meta (LLaMA)</h4>
+                <p>Uses SentencePiece for multilingual support. Lesson: Language-agnostic tokenization increasingly important for modern models.</p>
+                
+                <h3>Common Pitfalls</h3>
+                
+                <p><strong>1. Mismatch Between Training and Inference:</strong> Many teams train with one tokenizer but use another at inference. This silently degrades performance.</p>
+                
+                <p><strong>2. Ignoring Token Costs:</strong> Developers often overlook that tokenization efficiency directly impacts API costs. A poorly chosen tokenizer can waste 20-50% of budget.</p>
+                
+                <p><strong>3. Over-Engineering Special Tokens:</strong> Adding too many special tokens increases vocab size and embedding matrix. Keep special tokens to essentials.</p>
+                
+                <p><strong>4. Not Monitoring OOV:</strong> Production systems often don't track out-of-vocabulary rates. This metric flags data distribution shifts.</p>
+                
+                <p><strong>5. Assuming One Tokenizer Fits All:</strong> Using same tokenizer for code, prose, multilingual text often suboptimal. Domain-specific or language-specific tokenizers often better.</p>
+                
+                <h3>Best Practices</h3>
+                
+                <ul>
+                    <li><strong>Version Control:</strong> Track which tokenizer version was used for each model</li>
+                    <li><strong>Testing:</strong> Test tokenizer on edge cases before production use</li>
+                    <li><strong>Monitoring:</strong> Track tokenization metrics (token count, OOV rate) in production</li>
+                    <li><strong>Documentation:</strong> Document token limits, special tokens, any custom modifications</li>
+                    <li><strong>Evaluation:</strong> Compare tokenizers before choosing—don't assume defaults are optimal</li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle("active");
+            element.classList.toggle("active");
+        }
+        function toggleCollapsible(element) {
+            const content = element.nextElementSibling;
+            element.classList.toggle("active");
+            content.classList.toggle("active");
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll(".ml-sidebar a");
+            function updateActiveLink() {
+                const sections = document.querySelectorAll(".ml-section");
+                let current = "";
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute("id");
+                    }
+                });
+                links.forEach(link => {
+                    link.classList.remove("active");
+                    if (link.getAttribute("href").slice(1) === current) {
+                        link.classList.add("active");
+                    }
+                });
+            }
+            window.addEventListener("scroll", updateActiveLink);
+            updateActiveLink();
+            links.forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute("href").slice(1);
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: "smooth" });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -257,6 +257,88 @@ nav {
     letter-spacing: 0.5px;
 }
 
+/* --- Nav Dropdown (Projects) --- */
+.nav-dropdown-wrap {
+    position: relative;
+}
+.nav-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 300px;
+    padding: 0.6rem 0;
+    margin-top: 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    list-style: none;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.nav-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px; height: 12px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+}
+.nav-dropdown-wrap:hover .nav-dropdown {
+    display: block;
+    animation: dropdownFadeIn 0.25s ease forwards;
+}
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.nav-dropdown li a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1.2rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+.nav-dropdown li a:hover {
+    background: rgba(8, 145, 178, 0.08);
+    color: var(--accent-cyan);
+}
+.nav-dropdown li a::after { display: none; } /* suppress underline */
+.flagship-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    flex-shrink: 0;
+}
+
+/* Mobile dropdown sub-item */
+.mobile-dropdown-item {
+    padding-left: 1.2rem;
+}
+.mobile-dropdown-item a {
+    font-size: 0.85rem !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* --- Mobile Menu Button --- */
 .mobile-menu-btn {
     display: none;

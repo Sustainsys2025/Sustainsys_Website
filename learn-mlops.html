@@ -1,0 +1,3136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps - SustainSys AI Academy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .comparison-table th {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text);
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--text);
+        }
+        .comparison-table tbody tr:hover {
+            background: #f8fafc;
+        }
+        .comparison-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .maturity-bar {
+            margin: 1.5rem 0;
+        }
+        .bar-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .bar-container {
+            display: flex;
+            width: 100%;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            transition: width 0.5s ease;
+        }
+        .bar-level {
+            position: absolute;
+            margin-left: 1rem;
+            margin-top: 0.5rem;
+            font-weight: 700;
+            color: white;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+</ul>
+    </div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    <!-- Progress Ring -->
+    <svg class="progress-ring" viewBox="0 0 50 50">
+        <circle class="progress-ring-circle" stroke="var(--accent-cyan)" stroke-width="3" fill="transparent" r="20" cx="25" cy="25"/>
+    </svg>
+
+    <!-- Page Header -->
+    <div class="container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">MLOps</h1>
+                <p class="page-description">Deploy, monitor, and manage ML systems in production — experiment tracking, CI/CD, model serving, and observability.</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <div class="ml-page-container">
+            <aside class="ml-sidebar">
+                <h3>Learning Path</h3>
+                <ul>
+                    <li><a href="#intro" class="sidebar-link active">Introduction</a></li>
+                    <li><a href="#why-mlops" class="sidebar-link">Why MLOps Matters</a></li>
+                    <li><a href="#core-concepts" class="sidebar-link">Core Concepts</a></li>
+                    <li><a href="#experiment-tracking" class="sidebar-link">Experiment Tracking</a></li>
+                    <li><a href="#containerization" class="sidebar-link">Containerization</a></li>
+                    <li><a href="#model-serving" class="sidebar-link">Model Serving</a></li>
+                    <li><a href="#cicd" class="sidebar-link">CI/CD Pipelines</a></li>
+                    <li><a href="#kubernetes" class="sidebar-link">Kubernetes Deployment</a></li>
+                    <li><a href="#monitoring" class="sidebar-link">Monitoring & Observability</a></li>
+                    <li><a href="#data-drift" class="sidebar-link">Data Drift Detection</a></li>
+                    <li><a href="#comparison" class="sidebar-link">Tool Comparison</a></li>
+                    <li><a href="#maturity" class="sidebar-link">Maturity Model</a></li>
+                    <li><a href="#best-practices" class="sidebar-link">Best Practices</a></li>
+                    <li><a href="#architecture" class="sidebar-link">Architecture Patterns</a></li>
+                    <li><a href="#code-examples" class="sidebar-link">Code Examples</a></li>
+                    <li><a href="#exercises" class="sidebar-link">Exercises</a></li>
+                    <li><a href="#interview" class="sidebar-link">Interview Questions</a></li>
+                    <li><a href="#faq" class="sidebar-link">FAQ</a></li>
+                    <li><a href="#summary" class="sidebar-link">Summary</a></li>
+                    <li><a href="#resources" class="sidebar-link">Resources</a></li>
+                </ul>
+            </aside>
+            <div class="ml-content">
+
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to MLOps</h2>
+    
+    <div class="ml-intro-text">
+        <p><strong>MLOps</strong> (Machine Learning Operations) bridges the gap between ML development and production systems. It combines the principles of DevOps with machine learning, focusing on operationalizing models, automating workflows, and ensuring systems are reliable, scalable, and maintainable.</p>
+    </div>
+
+    <p>In 2024, the industry consensus is clear: <strong>building a model is only 5% of the work</strong>. The remaining 95% is infrastructure, monitoring, retraining, and maintenance. This section will guide you through every critical aspect of MLOps, from experiment tracking through production deployment and monitoring.</p>
+
+    <h3>What This Page Covers</h3>
+    <p>You'll learn about:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Experiment Tracking:</strong> <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>, <a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a>, <a href="https://neptune.ai/" target="_blank" rel="noopener">Neptune</a></li>
+        <li><strong>Containerization:</strong> <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> for reproducible ML environments</li>
+        <li><strong>Model Serving:</strong> <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a>, <a href="https://pytorch.org/serve/" target="_blank" rel="noopener">TorchServe</a>, <a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a></li>
+        <li><strong>CI/CD Pipelines:</strong> GitHub Actions, GitLab CI, automating ML workflows</li>
+        <li><strong><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> Deployment:</strong> Orchestrating containerized models at scale</li>
+        <li><strong>Monitoring & Observability:</strong> Production model behavior tracking</li>
+        <li><strong>Data Drift Detection:</strong> Using <a href="https://www.evidentlyai.com/" target="_blank" rel="noopener">Evidently</a>, <a href="https://greatexpectations.io/" target="_blank" rel="noopener">Great Expectations</a></li>
+    </ul>
+
+    <h3>Prerequisites</h3>
+    <p>This guide assumes you understand Python, machine learning basics, and version control (Git). Familiarity with <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> and cloud platforms is helpful but not required.</p>
+</section>
+
+<!-- SECTION: Why MLOps Matters -->
+<section id="why-mlops" class="ml-section">
+    <h2>Why MLOps Matters</h2>
+
+    <h3>The ML Project Lifecycle</h3>
+    <p>A typical ML project spans multiple phases, each with distinct operational challenges:</p>
+    
+    <div class="info-box">
+    <h4>Development Phase</h4>
+    <p>Data scientists experiment with models, hyperparameters, and features. Tools: Jupyter, MLflow, Git. Challenge: dozens of experiments with no versioning.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Validation Phase</h4>
+    <p>Models are tested against holdout data, cross-validation, and edge cases. Challenge: reproducing results across machines.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Deployment Phase</h4>
+    <p>Models move to production for real-world predictions. Challenge: ensuring performance, latency, and reliability.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Monitoring Phase</h4>
+    <p>Models perform inference on live data. Challenge: data distribution shifts, model drift, silent failures.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Maintenance Phase</h4>
+    <p>Models are retrained, versioned, and rolled back as needed. Challenge: automating the entire pipeline.</p>
+</div>
+
+    <h3>Key MLOps Benefits</h3>
+    <div class="card-grid grid-5">
+        <div class="card cyan-accent">
+    <h4>Reproducibility</h4>
+    <p>Every experiment is tracked with code, data, and hyperparameters. Reproduce any result months later.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Speed to Market</h4>
+    <p>Automated pipelines deploy models from code to production in hours, not weeks.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Risk Reduction</h4>
+    <p>Automated testing, canary deployments, and monitoring catch failures before users see them.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Team Collaboration</h4>
+    <p>Data scientists, engineers, and ops work with shared tools, reducing handoffs and friction.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Cost Efficiency</h4>
+    <p>Efficient resource allocation, model optimization, and automated scaling reduce cloud costs.</p>
+</div>
+    </div>
+
+    <h3>The MLOps Maturity Journey</h3>
+    <p>Most organizations evolve through predictable stages:</p>
+    <div class="maturity-bar">
+    <div class="bar-label">Ad Hoc: Manual experiments, no versioning, notebooks in email</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 20%;"></div>
+    </div>
+    <div class="bar-level">Level 1</div>
+</div>
+    <div class="maturity-bar">
+    <div class="bar-label">Organized: Git repos, experiment tracking, but manual deployments</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 40%;"></div>
+    </div>
+    <div class="bar-level">Level 2</div>
+</div>
+    <div class="maturity-bar">
+    <div class="bar-label">Operationalized: Automated CI/CD, model registry, monitoring alerts</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 60%;"></div>
+    </div>
+    <div class="bar-level">Level 3</div>
+</div>
+    <div class="maturity-bar">
+    <div class="bar-label">Advanced: Automated retraining, A/B testing, feature stores</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 80%;"></div>
+    </div>
+    <div class="bar-level">Level 4</div>
+</div>
+    <div class="maturity-bar">
+    <div class="bar-label">World-Class: End-to-end automation, multi-model ensembles, zero-downtime updates</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 100%;"></div>
+    </div>
+    <div class="bar-level">Level 5</div>
+</div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core MLOps Concepts</h2>
+
+    <h3>Model Versioning</h3>
+    <p>Unlike code versioning (git), models require tracking input features, training data, hyperparameters, and metrics. A model version is uniquely identified by:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Code:</strong> Exact training script (git commit SHA)</li>
+        <li><strong>Data:</strong> Training/test data fingerprint or git-like hash</li>
+        <li><strong>Parameters:</strong> Hyperparameters (learning rate, layers, etc.)</li>
+        <li><strong>Artifacts:</strong> Serialized model weights (pickle, ONNX, SavedModel)</li>
+        <li><strong>Metrics:</strong> Evaluation metrics (accuracy, F1, AUC, etc.)</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Model Registry Pattern</h4>
+    <p>A central repository of production models with metadata. Examples: MLflow Model Registry, HuggingFace Hub, cloud-provided registries. Tracks which version is in production, staging, and development.</p>
+</div>
+
+    <h3>Experiment Tracking</h3>
+    <p>Record every experiment's parameters, metrics, and artifacts. Benefits:</p>
+    <ul style="margin-left: 2rem;">
+        <li>Compare models side-by-side</li>
+        <li>Reproduce previous results</li>
+        <li>Identify which hyperparameters matter most</li>
+        <li>Share results with the team</li>
+        <li>Audit which model made a prediction</li>
+    </ul>
+
+    <h3>Feature Stores</h3>
+    <p>Centralized repositories of processed features with versioning, lineage, and monitoring. Problems solved:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Training-serving skew:</strong> Same features in training and production</li>
+        <li><strong>Duplicate work:</strong> Features computed once, reused everywhere</li>
+        <li><strong>Data lineage:</strong> Track which raw data feeds which features</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Production Feature Store Examples</h4>
+    <p>Tecton, Feast, Databricks Feature Store. Map raw data to ML-ready features automatically.</p>
+</div>
+
+    <h3>Model Serving Patterns</h3>
+    <p>How models go from disk to serving predictions in production:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Batch Serving:</strong> Process entire datasets at once (daily/hourly). High throughput, high latency.</li>
+        <li><strong>Real-time Serving:</strong> HTTP API responds to individual requests. Low latency, resource-intensive.</li>
+        <li><strong>Embedded:</strong> Model runs inside the application (mobile, edge). No network latency.</li>
+        <li><strong>Streaming:</strong> Process continuous event streams. Complex orchestration.</li>
+    </ul>
+
+    <h3>Data Drift vs Model Drift</h3>
+    <p><strong>Data Drift:</strong> The input data distribution changes (e.g., customer demographics shift). Detected via statistics on input features.</p>
+    <p><strong>Model Drift:</strong> Model performance on the data degrades, even without distribution shift. Detected via monitoring prediction confidence and actual outcomes.</p>
+    <p><strong>Concept Drift:</strong> The relationship between inputs and outputs changes (e.g., customer behavior patterns evolve). Hardest to detect and handle.</p>
+</section>
+
+<!-- SECTION: Experiment Tracking -->
+<section id="experiment-tracking" class="ml-section">
+    <h2>Experiment Tracking with MLflow</h2>
+
+    <p><strong>MLflow</strong> is an open-source platform for managing ML workflows. Its core components are: Tracking, Projects, Models, and Registry.</p>
+
+    <h3><a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a> Tracking Basics</h3>
+    <p>Log parameters, metrics, and artifacts for every experiment:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — MLflow Experiment Tracking</div>
+    <div class="code-content"><span class="keyword">import</span> mlflow
+<span class="keyword">import</span> mlflow.sklearn
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Load data</span>
+X_train = pd.<span class="function">read_csv</span>(<span class="string">'train_features.csv'</span>)
+y_train = pd.<span class="function">read_csv</span>(<span class="string">'train_labels.csv'</span>).values.<span class="function">ravel</span>()
+X_test = pd.<span class="function">read_csv</span>(<span class="string">'test_features.csv'</span>)
+y_test = pd.<span class="function">read_csv</span>(<span class="string">'test_labels.csv'</span>).values.<span class="function">ravel</span>()
+
+<span class="comment"># Start tracking experiment</span>
+mlflow.<span class="function">set_experiment</span>(<span class="string">"credit-risk-classification"</span>)
+
+<span class="keyword">with</span> mlflow.<span class="function">start_run</span>(run_name=<span class="string">"rf-baseline"</span>):
+    <span class="comment"># Log parameters</span>
+    n_estimators = <span class="number">100</span>
+    max_depth = <span class="number">10</span>
+    mlflow.<span class="function">log_param</span>(<span class="string">"n_estimators"</span>, n_estimators)
+    mlflow.<span class="function">log_param</span>(<span class="string">"max_depth"</span>, max_depth)
+    
+    <span class="comment"># Train model</span>
+    model = <span class="function">RandomForestClassifier</span>(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        random_state=<span class="number">42</span>
+    )
+    model.<span class="function">fit</span>(X_train, y_train)
+    
+    <span class="comment"># Evaluate</span>
+    y_pred = model.<span class="function">predict</span>(X_test)
+    accuracy = <span class="function">accuracy_score</span>(y_test, y_pred)
+    
+    <span class="comment"># Log metrics</span>
+    mlflow.<span class="function">log_metric</span>(<span class="string">"accuracy"</span>, accuracy)
+    mlflow.<span class="function">log_metric</span>(<span class="string">"f1"</span>, <span class="function">f1_score</span>(y_test, y_pred, average=<span class="string">'weighted'</span>))
+    
+    <span class="comment"># Log model</span>
+    mlflow.sklearn.<span class="function">log_model</span>(model, <span class="string">"model"</span>)
+    
+    <span class="comment"># Log artifacts (plots, reports, etc.)</span>
+    <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+    <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix
+    cm = <span class="function">confusion_matrix</span>(y_test, y_pred)
+    plt.<span class="function">figure</span>(figsize=(<span class="number">8</span>, <span class="number">6</span>))
+    plt.<span class="function">imshow</span>(cm, cmap=<span class="string">'Blues'</span>)
+    plt.<span class="function">title</span>(<span class="string">'Confusion Matrix'</span>)
+    plt.<span class="function">colorbar</span>()
+    plt.<span class="function">savefig</span>(<span class="string">'confusion_matrix.png'</span>)
+    mlflow.<span class="function">log_artifact</span>(<span class="string">'confusion_matrix.png'</span>)
+    
+    <span class="function">print</span>(<span class="string">f"Logged experiment with accuracy: {accuracy:.4f}"</span>)</div>
+</div>
+
+    <h3>Viewing Results</h3>
+    <p>Start the MLflow UI with:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Launch MLflow UI</div>
+    <div class="code-content">mlflow ui --host <span class="number">127.0</span>.<span class="number">0.1</span> --port <span class="number">5000</span></div>
+</div>
+
+    <p>Then visit <code>http://127.0.0.1:5000</code>. You'll see all experiments, runs, parameters, metrics, and artifacts.</p>
+
+    <div class="info-box">
+    <h4>MLflow Model Registry</h4>
+    <p>Centralized model management. Register models, manage versions (Staging/Production/Archived), and transition them through lifecycle stages with approval workflows.</p>
+</div>
+
+    <h3>Hyperparameter Tuning with MLflow</h3>
+    <p>Combined with <a href="https://optuna.org/" target="_blank" rel="noopener">Optuna</a> or Ray Tune for automated hyperparameter optimization:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — MLflow + Optuna</div>
+    <div class="code-content"><span class="keyword">import</span> optuna
+<span class="keyword">import</span> mlflow
+
+<span class="keyword">def</span> <span class="function">objective</span>(trial):
+    n_estimators = trial.<span class="function">suggest_int</span>(<span class="string">"n_estimators"</span>, <span class="number">50</span>, <span class="number">500</span>)
+    max_depth = trial.<span class="function">suggest_int</span>(<span class="string">"max_depth"</span>, <span class="number">5</span>, <span class="number">50</span>)
+    min_samples_split = trial.<span class="function">suggest_int</span>(<span class="string">"min_samples_split"</span>, <span class="number">2</span>, <span class="number">20</span>)
+    
+    <span class="keyword">with</span> mlflow.<span class="function">start_run</span>():
+        mlflow.<span class="function">log_param</span>(<span class="string">"n_estimators"</span>, n_estimators)
+        mlflow.<span class="function">log_param</span>(<span class="string">"max_depth"</span>, max_depth)
+        mlflow.<span class="function">log_param</span>(<span class="string">"min_samples_split"</span>, min_samples_split)
+        
+        model = <span class="function">RandomForestClassifier</span>(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            random_state=<span class="number">42</span>
+        )
+        model.<span class="function">fit</span>(X_train, y_train)
+        
+        y_pred = model.<span class="function">predict</span>(X_test)
+        accuracy = <span class="function">accuracy_score</span>(y_test, y_pred)
+        mlflow.<span class="function">log_metric</span>(<span class="string">"accuracy"</span>, accuracy)
+        
+        <span class="keyword">return</span> accuracy
+
+<span class="comment"># Run optimization</span>
+study = optuna.<span class="function">create_study</span>(direction=<span class="string">'maximize'</span>)
+study.<span class="function">optimize</span>(objective, n_trials=<span class="number">20</span>)
+
+<span class="function">print</span>(<span class="string">f"Best trial: {study.best_trial.number}"</span>)
+<span class="function">print</span>(<span class="string">f"Best accuracy: {study.best_value:.4f}"</span>)</div>
+</div>
+
+    <h3>Comparing with Other Tools</h3>
+    <p>MLflow is open-source and self-hosted. Alternatives:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong><a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a> (W&B):</strong> Cloud-based, excellent visualizations, integrates with many frameworks</li>
+        <li><strong><a href="https://neptune.ai/" target="_blank" rel="noopener">Neptune</a>:</strong> Cloud-based, lightweight, good for large experiments</li>
+        <li><strong><a href="https://www.comet.com/" target="_blank" rel="noopener">Comet</a> ML:</strong> Cloud-based, free tier available</li>
+    </ul>
+</section>
+
+<!-- SECTION: Containerization -->
+<section id="containerization" class="ml-section">
+    <h2>Containerization with Docker</h2>
+
+    <p><strong>Docker</strong> packages your model and all its dependencies (Python, libraries, system libraries) into a container. Benefits:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Reproducibility:</strong> Runs identically on your laptop, staging, and production</li>
+        <li><strong>Dependency Management:</strong> No "works on my machine" problems</li>
+        <li><strong>Isolation:</strong> Multiple containers can run different versions simultaneously</li>
+        <li><strong>Scalability:</strong> Containers are lightweight and start quickly</li>
+    </ul>
+
+    <h3>Building a Model Serving Container</h3>
+    <p>Create a <code>Dockerfile</code> for your model:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Dockerfile for ML Model</div>
+    <div class="code-content">FROM python:<span class="number">3.10</span>-slim
+
+WORKDIR /app
+
+<span class="comment"># Copy requirements and install dependencies</span>
+COPY requirements.txt .
+RUN pip install --no-cache-<span class="function">dir</span> -r requirements.txt
+
+<span class="comment"># Copy model, code, and config</span>
+COPY model.pkl .
+COPY app.py .
+
+<span class="comment"># Expose port for API</span>
+EXPOSE <span class="number">8000</span>
+
+<span class="comment"># Health check</span>
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=<span class="number">3</span> \
+    CMD python -c <span class="string">"import requests; requests.get('http://localhost:8000/health')"</span>
+
+<span class="comment"># Start the API server</span>
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"app:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>, <span class="string">"--port"</span>, <span class="string">"8000"</span>]</div>
+</div>
+
+    <h3>Requirements File</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — requirements.txt</div>
+    <div class="code-content">scikit-learn==<span class="number">1.3</span>.<span class="number">0</span>
+numpy==<span class="number">1.24</span>.<span class="number">0</span>
+pandas==<span class="number">2.0</span>.<span class="number">0</span>
+fastapi==<span class="number">0.104</span>.<span class="number">0</span>
+uvicorn==<span class="number">0.24</span>.<span class="number">0</span>
+pydantic==<span class="number">2.4</span>.<span class="number">0</span>
+python-multipart==<span class="number">0.0</span>.<span class="number">6</span></div>
+</div>
+
+    <h3>Multi-stage Build for Smaller Images</h3>
+    <p>Reduce image size by building in one stage and copying artifacts to a minimal runtime stage:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Multi-stage Dockerfile</div>
+    <div class="code-content"><span class="comment"># Stage 1: Builder</span>
+FROM python:<span class="number">3.10</span>-slim <span class="keyword">as</span> builder
+
+WORKDIR /build
+
+COPY requirements.txt .
+RUN pip install --user --no-cache-<span class="function">dir</span> -r requirements.txt
+
+<span class="comment"># Stage 2: Runtime</span>
+FROM python:<span class="number">3.10</span>-slim
+
+WORKDIR /app
+
+<span class="comment"># Copy only necessary files from builder</span>
+COPY --<span class="keyword">from</span>=builder /root/.local /root/.local
+COPY model.pkl .
+COPY app.py .
+
+ENV PATH=/root/.local/<span class="function">bin</span>:$PATH
+
+EXPOSE <span class="number">8000</span>
+HEALTHCHECK --interval=30s CMD python -c <span class="string">"import requests; requests.get('http://localhost:8000/health')"</span>
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"app:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>, <span class="string">"--port"</span>, <span class="string">"8000"</span>]</div>
+</div>
+
+    <h3>Building and Running the Container</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — Docker Commands</div>
+    <div class="code-content"><span class="comment"># Build the image</span>
+docker build -t credit-risk-model:<span class="number">1.0</span> .
+
+<span class="comment"># Run the container</span>
+docker run -p <span class="number">8000</span>:<span class="number">8000</span> credit-risk-model:<span class="number">1.0</span>
+
+<span class="comment"># Push to registry (Docker Hub, AWS ECR, etc.)</span>
+docker tag credit-risk-model:<span class="number">1.0</span> myrepo/credit-risk-model:<span class="number">1.0</span>
+docker push myrepo/credit-risk-model:<span class="number">1.0</span>
+
+<span class="comment"># Run with environment variables</span>
+docker run -p <span class="number">8000</span>:<span class="number">8000</span> \
+    -e MODEL_PATH=/models/model.pkl \
+    -e LOG_LEVEL=INFO \
+    credit-risk-model:<span class="number">1.0</span></div>
+</div>
+
+    <div class="info-box">
+    <h4>Container Registry Best Practices</h4>
+    <p>Use AWS ECR, Google Artifact Registry, or Docker Hub to store images. Tag images with git commit SHA for full traceability.</p>
+</div>
+
+    <h3>Image Optimization</h3>
+    <ul style="margin-left: 2rem;">
+        <li>Use <code>slim</code> or <code>alpine</code> base images (50-100MB vs 300MB+)</li>
+        <li>Combine RUN commands to reduce layers</li>
+        <li>Use <code>.dockerignore</code> to exclude unnecessary files</li>
+        <li>Install only runtime dependencies (not dev tools)</li>
+        <li>Cache layers efficiently (dependencies before code)</li>
+    </ul>
+</section>
+
+<!-- SECTION: Model Serving -->
+<section id="model-serving" class="ml-section">
+    <h2>Model Serving with FastAPI</h2>
+
+    <p><strong>FastAPI</strong> is a modern Python web framework for building high-performance APIs. Perfect for ML model serving.</p>
+
+    <h3>Building a Simple Prediction API</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — FastAPI Model Server</div>
+    <div class="code-content"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, Field
+<span class="keyword">import</span> pickle
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> typing <span class="keyword">import</span> List
+<span class="keyword">import</span> uvicorn
+
+<span class="comment"># Load model once at startup</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">'model.pkl'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:
+    model = pickle.<span class="function">load</span>(f)
+
+app = <span class="function">FastAPI</span>(
+    title=<span class="string">"Credit Risk Prediction API"</span>,
+    version=<span class="string">"1.0.0"</span>,
+    docs_url=<span class="string">"/docs"</span>  <span class="comment"># Swagger UI at /docs</span>
+)
+
+<span class="comment"># Define request/response schemas</span>
+<span class="keyword">class</span> <span class="function">PredictionRequest</span>(BaseModel):
+    age: <span class="function">int</span> = <span class="function">Field</span>(..., ge=<span class="number">18</span>, le=<span class="number">120</span>)
+    income: <span class="function">float</span> = <span class="function">Field</span>(..., gt=<span class="number">0</span>)
+    credit_score: <span class="function">int</span> = <span class="function">Field</span>(..., ge=<span class="number">300</span>, le=<span class="number">850</span>)
+    existing_loans: <span class="function">int</span> = <span class="function">Field</span>(..., ge=<span class="number">0</span>)
+    employment_years: <span class="function">float</span> = <span class="function">Field</span>(..., ge=<span class="number">0</span>)
+
+<span class="keyword">class</span> <span class="function">PredictionResponse</span>(BaseModel):
+    prediction: <span class="function">int</span>  <span class="comment"># 0 or 1</span>
+    probability: <span class="function">float</span>
+    risk_level: <span class="function">str</span>
+
+<span class="decorator">@app.get</span>(<span class="string">"/health"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">health_check</span>():
+    <span class="string">"""Health check endpoint"""</span>
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"healthy"</span>}
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>, response_model=PredictionResponse)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(request: PredictionRequest):
+    <span class="string">"""Make a prediction"""</span>
+    <span class="keyword">try</span>:
+        <span class="comment"># Prepare features</span>
+        features = np.<span class="function">array</span>([[
+            request.age,
+            request.income,
+            request.credit_score,
+            request.existing_loans,
+            request.employment_years
+        ]])
+        
+        <span class="comment"># Make prediction</span>
+        prediction = model.<span class="function">predict</span>(features)[<span class="number">0</span>]
+        probability = model.<span class="function">predict_proba</span>(features)[<span class="number">0</span>, prediction]
+        
+        <span class="comment"># Determine risk level</span>
+        risk_level = <span class="string">"HIGH"</span> <span class="keyword">if</span> prediction == <span class="number">1</span> <span class="keyword">else</span> <span class="string">"LOW"</span>
+        
+        <span class="keyword">return</span> <span class="function">PredictionResponse</span>(
+            prediction=<span class="function">int</span>(prediction),
+            probability=<span class="function">float</span>(probability),
+            risk_level=risk_level
+        )
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        <span class="keyword">raise</span> <span class="function">HTTPException</span>(status_code=<span class="number">500</span>, detail=<span class="function">str</span>(e))
+
+<span class="decorator">@app.post</span>(<span class="string">"/batch-predict"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">batch_predict</span>(requests: List[PredictionRequest]):
+    <span class="string">"""Batch predictions"""</span>
+    features = np.<span class="function">array</span>([[
+        r.age, r.income, r.credit_score, r.existing_loans, r.employment_years
+    ] <span class="keyword">for</span> r <span class="keyword">in</span> requests])
+    
+    predictions = model.<span class="function">predict</span>(features)
+    probabilities = model.<span class="function">predict_proba</span>(features)[:, <span class="number">1</span>]
+    
+    <span class="keyword">return</span> {
+        <span class="string">"predictions"</span>: predictions.<span class="function">tolist</span>(),
+        <span class="string">"probabilities"</span>: probabilities.<span class="function">tolist</span>()
+    }
+
+<span class="keyword">if</span> <span class="function">__name__</span> == <span class="string">"__main__"</span>:
+    uvicorn.<span class="function">run</span>(app, host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div>
+</div>
+
+    <h3>Advanced Features</h3>
+
+    <h4>Request Validation & Documentation</h4>
+    <p>FastAPI automatically generates OpenAPI documentation (Swagger UI at <code>/docs</code>) from your Pydantic models.</p>
+
+    <h4>Async Predictions</h4>
+    <p>Use <code>async def</code> for I/O-bound operations (database queries, external API calls):</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Async FastAPI Endpoint</div>
+    <div class="code-content"><span class="decorator">@app.post</span>(<span class="string">"/async-predict"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">async_predict</span>(request: PredictionRequest):
+    <span class="comment"># Async database lookup</span>
+    user_history = <span class="keyword">await</span> db.<span class="function">get_user_history</span>(request.user_id)
+    
+    <span class="comment"># Async external call</span>
+    credit_bureaus = <span class="keyword">await</span> <span class="function">fetch_from_credit_bureau</span>(request.ssn)
+    
+    <span class="comment"># Inference</span>
+    features = <span class="function">prepare_features</span>(request, user_history, credit_bureaus)
+    prediction = model.<span class="function">predict</span>(features)
+    
+    <span class="keyword">return</span> {<span class="string">"prediction"</span>: prediction}</div>
+</div>
+
+    <h4>Model Caching & Versioning</h4>
+
+    <div class="code-block">
+    <div class="code-header">Code — Multiple Model Versions</div>
+    <div class="code-content"><span class="keyword">import</span> os
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Load multiple models</span>
+models = {
+    <span class="string">"v1.0"</span>: pickle.<span class="function">load</span>(<span class="function">open</span>(<span class="string">"models/model_v1.pkl"</span>, <span class="string">"rb"</span>)),
+    <span class="string">"v1.1"</span>: pickle.<span class="function">load</span>(<span class="function">open</span>(<span class="string">"models/model_v1_1.pkl"</span>, <span class="string">"rb"</span>)),
+    <span class="string">"v2.0"</span>: pickle.<span class="function">load</span>(<span class="function">open</span>(<span class="string">"models/model_v2.pkl"</span>, <span class="string">"rb"</span>)),
+}
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(request: PredictionRequest, model_version: <span class="function">str</span> = <span class="string">"v2.0"</span>):
+    <span class="keyword">if</span> model_version <span class="keyword">not</span> <span class="keyword">in</span> models:
+        <span class="keyword">raise</span> <span class="function">HTTPException</span>(status_code=<span class="number">404</span>, detail=<span class="string">"Model version not found"</span>)
+    
+    model = models[model_version]
+    features = <span class="function">prepare_features</span>(request)
+    prediction = model.<span class="function">predict</span>(features)
+    
+    <span class="keyword">return</span> {<span class="string">"prediction"</span>: prediction, <span class="string">"model_version"</span>: model_version}</div>
+</div>
+
+    <h3>Production Serving Platforms</h3>
+    <ul style="margin-left: 2rem;">
+        <li><strong>TorchServe:</strong> Purpose-built for PyTorch models, with batching and A/B testing</li>
+        <li><strong>KServe:</strong> Kubernetes-native model serving (InferenceService CRD)</li>
+        <li><strong>Seldon Core:</strong> Kubernetes serving with advanced deployment patterns</li>
+        <li><strong>Ray Serve:</strong> Distributed Python serving with auto-scaling</li>
+        <li><strong>Cloud Functions:</strong> AWS Lambda, Google Cloud Functions (serverless)</li>
+    </ul>
+</section>
+
+<!-- SECTION: CI/CD Pipelines -->
+<section id="cicd" class="ml-section">
+    <h2>CI/CD Pipelines with GitHub Actions</h2>
+
+    <p><strong>CI/CD</strong> (Continuous Integration / Continuous Deployment) automates testing, building, and deploying your models. GitHub Actions is a free, built-in solution for GitHub repos.</p>
+
+    <h3>ML Pipeline Workflow</h3>
+    <p>A typical ML CI/CD pipeline includes:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Trigger:</strong> Push to main branch</li>
+        <li><strong>Install:</strong> Set up environment and dependencies</li>
+        <li><strong>Test:</strong> Run unit tests on model code</li>
+        <li><strong>Train:</strong> Train model on test dataset</li>
+        <li><strong>Validate:</strong> Check metrics meet thresholds</li>
+        <li><strong>Build:</strong> Create Docker image</li>
+        <li><strong>Push:</strong> Push image to registry</li>
+        <li><strong>Deploy:</strong> Deploy to staging/production</li>
+    </ul>
+
+    <h3>GitHub Actions Workflow File</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — .github/workflows/ml-pipeline.yaml</div>
+    <div class="code-content">name: ML Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout<span class="decorator">@v3</span>
+      
+      - name: Set up Python
+        uses: actions/setup-python<span class="decorator">@v4</span>
+        <span class="keyword">with</span>:
+          python-version: <span class="string">'3.10'</span>
+          cache: <span class="string">'pip'</span>
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+      
+      - name: Lint <span class="keyword">with</span> flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      
+      - name: Run unit tests
+        run: pytest tests/ --cov --cov-report=xml
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action<span class="decorator">@v3</span>
+        <span class="keyword">with</span>:
+          files: ./coverage.xml
+
+  train:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout<span class="decorator">@v3</span>
+      
+      - name: Set up Python
+        uses: actions/setup-python<span class="decorator">@v4</span>
+        <span class="keyword">with</span>:
+          python-version: <span class="string">'3.10'</span>
+          cache: <span class="string">'pip'</span>
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Train model
+        run: python train.py
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_URI }}
+      
+      - name: Validate metrics
+        run: |
+          python validate.py
+          <span class="keyword">if</span> [ $? -ne <span class="number">0</span> ]; then
+            echo <span class="string">"Model metrics below threshold"</span>
+            exit <span class="number">1</span>
+          fi
+      
+      - name: Upload model artifact
+        uses: actions/upload-artifact<span class="decorator">@v3</span>
+        <span class="keyword">with</span>:
+          name: model
+          path: models/model.pkl
+
+  build:
+    runs-on: ubuntu-latest
+    needs: train
+    <span class="keyword">if</span>: github.ref == <span class="string">'refs/heads/main'</span>
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout<span class="decorator">@v3</span>
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action<span class="decorator">@v2</span>
+      
+      - name: Log <span class="keyword">in</span> to Container Registry
+        uses: docker/login-action<span class="decorator">@v2</span>
+        <span class="keyword">with</span>:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Download model artifact
+        uses: actions/download-artifact<span class="decorator">@v3</span>
+        <span class="keyword">with</span>:
+          name: model
+      
+      - name: Build <span class="keyword">and</span> push
+        uses: docker/build-push-action<span class="decorator">@v4</span>
+        <span class="keyword">with</span>:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          cache-<span class="keyword">from</span>: <span class="function">type</span>=gha
+          cache-to: <span class="function">type</span>=gha,mode=<span class="function">max</span>
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    <span class="keyword">if</span>: github.ref == <span class="string">'refs/heads/main'</span>
+    steps:
+      - uses: actions/checkout<span class="decorator">@v3</span>
+      
+      - name: Deploy to Kubernetes
+        run: |
+          mkdir -p $HOME/.kube
+          echo <span class="string">"${{ secrets.KUBE_CONFIG }}"</span> | base64 -d > $HOME/.kube/config
+          
+          <span class="comment"># Update image in deployment</span>
+          kubectl <span class="function">set</span> image deployment/model-server \
+            model=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -n production
+          
+          <span class="comment"># Wait for rollout</span>
+          kubectl rollout status deployment/model-server -n production</div>
+</div>
+
+    <h3>Training Script (train.py)</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — train.py</div>
+    <div class="code-content"><span class="keyword">import</span> mlflow
+<span class="keyword">import</span> mlflow.sklearn
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> os
+
+<span class="comment"># Load data</span>
+df = pd.<span class="function">read_csv</span>(<span class="string">'data/train.csv'</span>)
+X = df.<span class="function">drop</span>(<span class="string">'target'</span>, axis=<span class="number">1</span>)
+y = df[<span class="string">'target'</span>]
+
+X_train, X_test, y_train, y_test = <span class="function">train_test_split</span>(
+    X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>
+)
+
+<span class="comment"># MLflow setup</span>
+mlflow.<span class="function">set_experiment</span>(<span class="string">"credit-risk-production"</span>)
+
+<span class="keyword">with</span> mlflow.<span class="function">start_run</span>():
+    <span class="comment"># Hyperparameters</span>
+    params = {
+        <span class="string">"n_estimators"</span>: <span class="number">100</span>,
+        <span class="string">"max_depth"</span>: <span class="number">15</span>,
+        <span class="string">"min_samples_split"</span>: <span class="number">5</span>,
+        <span class="string">"random_state"</span>: <span class="number">42</span>
+    }
+    
+    <span class="keyword">for</span> key, value <span class="keyword">in</span> params.<span class="function">items</span>():
+        mlflow.<span class="function">log_param</span>(key, value)
+    
+    <span class="comment"># Train</span>
+    model = <span class="function">RandomForestClassifier</span>(**params)
+    model.<span class="function">fit</span>(X_train, y_train)
+    
+    <span class="comment"># Evaluate</span>
+    y_pred = model.<span class="function">predict</span>(X_test)
+    accuracy = <span class="function">accuracy_score</span>(y_test, y_pred)
+    f1 = <span class="function">f1_score</span>(y_test, y_pred, average=<span class="string">'weighted'</span>)
+    
+    mlflow.<span class="function">log_metric</span>(<span class="string">"accuracy"</span>, accuracy)
+    mlflow.<span class="function">log_metric</span>(<span class="string">"f1"</span>, f1)
+    
+    <span class="comment"># Save model</span>
+    mlflow.sklearn.<span class="function">log_model</span>(model, <span class="string">"model"</span>)
+    
+    <span class="function">print</span>(<span class="string">f"Training complete. Accuracy: {accuracy:.4f}"</span>)</div>
+</div>
+
+    <h3>Validation Script (validate.py)</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — validate.py</div>
+    <div class="code-content"><span class="keyword">import</span> mlflow
+<span class="keyword">import</span> mlflow.sklearn
+<span class="keyword">import</span> json
+
+<span class="comment"># Load latest model run</span>
+client = mlflow.tracking.<span class="function">MlflowClient</span>()
+experiment = client.<span class="function">get_experiment_by_name</span>(<span class="string">"credit-risk-production"</span>)
+runs = client.<span class="function">search_runs</span>(experiment.experiment_id, order_by=[<span class="string">"start_time DESC"</span>])
+latest_run = runs[<span class="number">0</span>]
+
+<span class="comment"># Get metrics</span>
+metrics = latest_run.data.metrics
+
+<span class="comment"># Check thresholds</span>
+MIN_ACCURACY = <span class="number">0.85</span>
+MIN_F1 = <span class="number">0.80</span>
+
+<span class="keyword">if</span> metrics[<span class="string">'accuracy'</span>] < MIN_ACCURACY:
+    <span class="function">print</span>(<span class="string">f"FAIL: Accuracy {metrics['accuracy']:.4f} &lt; {MIN_ACCURACY}"</span>)
+    <span class="function">exit</span>(<span class="number">1</span>)
+
+<span class="keyword">if</span> metrics[<span class="string">'f1'</span>] < MIN_F1:
+    <span class="function">print</span>(<span class="string">f"FAIL: F1 {metrics['f1']:.4f} &lt; {MIN_F1}"</span>)
+    <span class="function">exit</span>(<span class="number">1</span>)
+
+<span class="function">print</span>(<span class="string">"PASS: All metrics pass thresholds"</span>)
+<span class="function">print</span>(json.<span class="function">dumps</span>(metrics, indent=<span class="number">2</span>))</div>
+</div>
+</section>
+
+<!-- SECTION: Kubernetes Deployment -->
+<section id="kubernetes" class="ml-section">
+    <h2>Kubernetes Deployment at Scale</h2>
+
+    <p><strong>Kubernetes</strong> orchestrates containerized applications, handling deployment, scaling, and networking. Essential for production ML systems.</p>
+
+    <h3>Deployment YAML</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — kubernetes/deployment.yaml</div>
+    <div class="code-content">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-risk-model
+  namespace: production
+  labels:
+    app: credit-risk-model
+    version: v1.<span class="number">0</span>
+spec:
+  replicas: <span class="number">3</span>
+  selector:
+    matchLabels:
+      app: credit-risk-model
+  template:
+    metadata:
+      labels:
+        app: credit-risk-model
+        version: v1.<span class="number">0</span>
+    spec:
+      containers:
+      - name: model
+        image: ghcr.io/company/credit-risk-model:<span class="number">1.0</span>.<span class="number">0</span>
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: <span class="number">8000</span>
+        
+        <span class="comment"># Resource requests and limits</span>
+        resources:
+          requests:
+            memory: <span class="string">"512Mi"</span>
+            cpu: <span class="string">"500m"</span>
+          limits:
+            memory: <span class="string">"1Gi"</span>
+            cpu: <span class="string">"1000m"</span>
+        
+        <span class="comment"># Environment variables</span>
+        env:
+        - name: LOG_LEVEL
+          value: <span class="string">"INFO"</span>
+        - name: MODEL_VERSION
+          value: <span class="string">"1.0.0"</span>
+        - name: MAX_BATCH_SIZE
+          value: <span class="string">"100"</span>
+        
+        <span class="comment"># Health checks</span>
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: <span class="number">30</span>
+          periodSeconds: <span class="number">10</span>
+          timeoutSeconds: <span class="number">5</span>
+          failureThreshold: <span class="number">3</span>
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: <span class="number">10</span>
+          periodSeconds: <span class="number">5</span>
+          timeoutSeconds: <span class="number">3</span>
+          failureThreshold: <span class="number">2</span>
+        
+        <span class="comment"># Graceful shutdown</span>
+        lifecycle:
+          preStop:
+            exec:
+              command: [<span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, <span class="string">"sleep 15"</span>]
+      
+      <span class="comment"># Pod disruption budget</span>
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: <span class="number">100</span>
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - credit-risk-model
+              topologyKey: kubernetes.io/hostname</div>
+</div>
+
+    <h3>Service YAML</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — kubernetes/service.yaml</div>
+    <div class="code-content">apiVersion: v1
+kind: Service
+metadata:
+  name: credit-risk-model
+  namespace: production
+spec:
+  selector:
+    app: credit-risk-model
+  <span class="function">type</span>: ClusterIP
+  ports:
+  - name: http
+    port: <span class="number">80</span>
+    targetPort: http
+    protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: <span class="number">10800</span></div>
+</div>
+
+    <h3>Horizontal Pod Autoscaler</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — kubernetes/hpa.yaml</div>
+    <div class="code-content">apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: credit-risk-model-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: credit-risk-model
+  minReplicas: <span class="number">3</span>
+  maxReplicas: <span class="number">10</span>
+  metrics:
+  - <span class="function">type</span>: Resource
+    resource:
+      name: cpu
+      target:
+        <span class="function">type</span>: Utilization
+        averageUtilization: <span class="number">70</span>
+  - <span class="function">type</span>: Resource
+    resource:
+      name: memory
+      target:
+        <span class="function">type</span>: Utilization
+        averageUtilization: <span class="number">80</span>
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: <span class="number">300</span>
+      policies:
+      - <span class="function">type</span>: Percent
+        value: <span class="number">50</span>
+        periodSeconds: <span class="number">60</span>
+    scaleUp:
+      stabilizationWindowSeconds: <span class="number">0</span>
+      policies:
+      - <span class="function">type</span>: Percent
+        value: <span class="number">100</span>
+        periodSeconds: <span class="number">15</span>
+      - <span class="function">type</span>: Pods
+        value: <span class="number">4</span>
+        periodSeconds: <span class="number">15</span>
+      selectPolicy: Max</div>
+</div>
+
+    <h3>Applying to <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a></h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — kubectl Commands</div>
+    <div class="code-content"><span class="comment"># Apply configuration</span>
+kubectl apply -f kubernetes/
+
+<span class="comment"># Check status</span>
+kubectl get deployment credit-risk-model -n production
+kubectl get pods -n production -l app=credit-risk-model
+
+<span class="comment"># View logs</span>
+kubectl logs -f deployment/credit-risk-model -n production
+
+<span class="comment"># Port forward for local testing</span>
+kubectl port-forward service/credit-risk-model <span class="number">8000</span>:<span class="number">80</span> -n production
+
+<span class="comment"># Rolling update (change image tag in deployment.yaml first)</span>
+kubectl apply -f kubernetes/deployment.yaml
+
+<span class="comment"># Rollback if needed</span>
+kubectl rollout history deployment/credit-risk-model -n production
+kubectl rollout undo deployment/credit-risk-model -n production</div>
+</div>
+
+    <h3><a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a> for Advanced Serving</h3>
+    <p>KServe provides a Kubernetes-native way to deploy, monitor, and manage ML models with advanced features like traffic splitting and canary deployments:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — kubernetes/kserve-inference.yaml</div>
+    <div class="code-content">apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: credit-risk-model
+  namespace: production
+spec:
+  predictor:
+    minReplicas: <span class="number">3</span>
+    maxReplicas: <span class="number">10</span>
+    sklearnserver:
+      storageUri: s3://model-registry/credit-risk-model.pkl
+      resources:
+        requests:
+          memory: <span class="string">"512Mi"</span>
+          cpu: <span class="string">"500m"</span>
+        limits:
+          memory: <span class="string">"1Gi"</span>
+          cpu: <span class="string">"1000m"</span>
+  transformer:
+    image: company/feature-transformer:v1
+    resources:
+      requests:
+        memory: <span class="string">"256Mi"</span>
+        cpu: <span class="string">"100m"</span>
+  canaryTrafficPercent: <span class="number">10</span></div>
+</div>
+</section>
+
+<!-- SECTION: Monitoring & Observability -->
+<section id="monitoring" class="ml-section">
+    <h2>Monitoring and Observability</h2>
+
+    <p>Production models fail silently. A model that returns confident predictions on out-of-distribution data is worse than no model. Comprehensive monitoring is essential.</p>
+
+    <h3>Key Metrics to Monitor</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Latency</h4>
+    <p>P50, P95, P99 response times. Target <100ms for real-time models. Monitor database query time, model inference time, and network overhead separately.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Throughput</h4>
+    <p>Requests per second. Track separately for batch and real-time. Monitor queue depth and processing time.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Error Rate</h4>
+    <p>Percentage of failed predictions. Alert if >0.1%. Track by error type (timeout, OOM, invalid input, etc.).</p>
+</div>
+        <div class="card green-accent">
+    <h4>Model Performance</h4>
+    <p>Track prediction confidence, positive class ratio. Alert on sudden changes.</p>
+</div>
+    </div>
+
+    <h3><a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> Metrics</h3>
+    <p>Export metrics from your model server using Prometheus client:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Prometheus Metrics in <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a></div>
+    <div class="code-content"><span class="keyword">from</span> prometheus_client <span class="keyword">import</span> Counter, Histogram, Gauge, generate_latest
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> Response
+<span class="keyword">import</span> time
+
+<span class="comment"># Define metrics</span>
+request_count = <span class="function">Counter</span>(
+    <span class="string">'model_predictions_total'</span>,
+    <span class="string">'Total predictions'</span>,
+    [<span class="string">'model_version'</span>, <span class="string">'status'</span>]
+)
+
+prediction_latency = <span class="function">Histogram</span>(
+    <span class="string">'model_prediction_duration_seconds'</span>,
+    <span class="string">'Prediction latency'</span>,
+    [<span class="string">'model_version'</span>],
+    buckets=(<span class="number">0.01</span>, <span class="number">0.05</span>, <span class="number">0.1</span>, <span class="number">0.5</span>, <span class="number">1.0</span>)
+)
+
+prediction_confidence = <span class="function">Histogram</span>(
+    <span class="string">'model_prediction_confidence'</span>,
+    <span class="string">'Prediction confidence distribution'</span>,
+    buckets=(<span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">0.9</span>, <span class="number">0.95</span>, <span class="number">0.99</span>)
+)
+
+model_errors = <span class="function">Counter</span>(
+    <span class="string">'model_errors_total'</span>,
+    <span class="string">'Total model errors'</span>,
+    [<span class="string">'error_type'</span>]
+)
+
+active_requests = <span class="function">Gauge</span>(
+    <span class="string">'model_active_requests'</span>,
+    <span class="string">'Currently processing requests'</span>
+)
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">predict</span>(request: PredictionRequest):
+    active_requests.<span class="function">inc</span>()
+    start = time.<span class="function">time</span>()
+    
+    <span class="keyword">try</span>:
+        features = <span class="function">prepare_features</span>(request)
+        prediction = model.<span class="function">predict</span>(features)[<span class="number">0</span>]
+        probability = model.<span class="function">predict_proba</span>(features).<span class="function">max</span>()
+        
+        latency = time.<span class="function">time</span>() - start
+        prediction_latency.<span class="function">labels</span>(model_version=<span class="string">"1.0"</span>).<span class="function">observe</span>(latency)
+        prediction_confidence.<span class="function">observe</span>(probability)
+        request_count.<span class="function">labels</span>(model_version=<span class="string">"1.0"</span>, status=<span class="string">"success"</span>).<span class="function">inc</span>()
+        
+        <span class="keyword">return</span> {<span class="string">"prediction"</span>: prediction, <span class="string">"confidence"</span>: probability}
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        model_errors.<span class="function">labels</span>(error_type=<span class="function">type</span>(e).<span class="function">__name__</span>).<span class="function">inc</span>()
+        request_count.<span class="function">labels</span>(model_version=<span class="string">"1.0"</span>, status=<span class="string">"error"</span>).<span class="function">inc</span>()
+        <span class="keyword">raise</span>
+    <span class="keyword">finally</span>:
+        active_requests.<span class="function">dec</span>()
+
+<span class="decorator">@app.get</span>(<span class="string">"/metrics"</span>)
+<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">metrics</span>():
+    <span class="keyword">return</span> <span class="function">Response</span>(<span class="function">generate_latest</span>(), media_type=<span class="string">"text/plain"</span>)</div>
+</div>
+
+    <h3>Dashboard Example (<a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a>)</h3>
+    <p>Configure Grafana to query Prometheus. Key dashboard panels:</p>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Request Rate (QPS):</strong> <code>rate(model_predictions_total[1m])</code></li>
+        <li><strong>Error Rate:</strong> <code>rate(model_errors_total[1m])</code></li>
+        <li><strong>P95 Latency:</strong> <code>histogram_quantile(0.95, model_prediction_duration_seconds)</code></li>
+        <li><strong>Median Confidence:</strong> <code>histogram_quantile(0.5, model_prediction_confidence)</code></li>
+    </ul>
+
+    <h3>Alerting Rules</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — prometheus-alerts.yml</div>
+    <div class="code-content">groups:
+- name: model-alerts
+  interval: 30s
+  rules:
+  - alert: HighErrorRate
+    expr: <span class="function">rate</span>(model_errors_total[5m]) > <span class="number">0.01</span>
+    <span class="keyword">for</span>: 5m
+    annotations:
+      summary: <span class="string">"High error rate detected"</span>
+      description: <span class="string">"Error rate is {{ $value | humanizePercentage }}"</span>
+  
+  - alert: HighLatency
+    expr: <span class="function">histogram_quantile</span>(<span class="number">0.95</span>, <span class="function">rate</span>(model_prediction_duration_seconds_bucket[5m])) > <span class="number">0.5</span>
+    <span class="keyword">for</span>: 5m
+    annotations:
+      summary: <span class="string">"Model latency too high"</span>
+      description: <span class="string">"P95 latency is {{ $value }}s"</span>
+  
+  - alert: ZeroThroughput
+    expr: <span class="function">rate</span>(model_predictions_total[1m]) == <span class="number">0</span>
+    <span class="keyword">for</span>: 2m
+    annotations:
+      summary: <span class="string">"Model receiving no traffic"</span>
+  
+  - alert: LowPredictionConfidence
+    expr: <span class="function">histogram_quantile</span>(<span class="number">0.5</span>, model_prediction_confidence) < <span class="number">0.6</span>
+    <span class="keyword">for</span>: 10m
+    annotations:
+      summary: <span class="string">"Model confidence dropped"</span></div>
+</div>
+</section>
+
+<!-- SECTION: Data Drift Detection -->
+<section id="data-drift" class="ml-section">
+    <h2>Data Drift Detection with <a href="https://www.evidentlyai.com/" target="_blank" rel="noopener">Evidently</a></h2>
+
+    <p><strong>Data drift</strong> occurs when the distribution of input features changes over time. <strong>Evidently</strong> detects drift, monitors model performance, and generates reports.</p>
+
+    <h3>Evidently Setup</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — Data Drift Detection</div>
+    <div class="code-content"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">from</span> evidently.report <span class="keyword">import</span> Report
+<span class="keyword">from</span> evidently.metric_preset <span class="keyword">import</span> DataDriftPreset, RegressionPreset
+<span class="keyword">from</span> evidently.metrics <span class="keyword">import</span> (
+    DataDriftTable,
+    ColumnDriftMetric,
+    DatasetMissingValuesMetric,
+)
+<span class="keyword">import</span> json
+
+<span class="comment"># Load reference (training) and current (production) data</span>
+reference_data = pd.<span class="function">read_csv</span>(<span class="string">'data/train.csv'</span>)
+production_data = pd.<span class="function">read_csv</span>(<span class="string">'data/production_batch.csv'</span>)
+
+<span class="comment"># Create drift report</span>
+drift_report = <span class="function">Report</span>(metrics=[
+    <span class="function">DataDriftPreset</span>(),
+    <span class="function">DatasetMissingValuesMetric</span>(),
+])
+
+drift_report.<span class="function">run</span>(reference_data=reference_data, current_data=production_data)
+
+<span class="comment"># Get results</span>
+results = drift_report.<span class="function">as_dict</span>()
+drifted_columns = [
+    col <span class="keyword">for</span> col <span class="keyword">in</span> results[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'drift_by_columns'</span>]
+    <span class="keyword">if</span> results[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'drift_by_columns'</span>][col][<span class="string">'drift_detected'</span>]
+]
+
+<span class="function">print</span>(<span class="string">f"Drifted columns: {drifted_columns}"</span>)
+
+<span class="comment"># Save report</span>
+drift_report.<span class="function">save_html</span>(<span class="string">'drift_report.html'</span>)
+
+<span class="comment"># Alert if significant drift detected</span>
+<span class="keyword">if</span> <span class="function">len</span>(drifted_columns) > <span class="number">3</span>:
+    <span class="function">send_alert</span>(<span class="string">f"High drift detected: {drifted_columns}"</span>)</div>
+</div>
+
+    <h3>Model Performance Monitoring</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — Model Performance Report</div>
+    <div class="code-content"><span class="keyword">from</span> evidently.report <span class="keyword">import</span> Report
+<span class="keyword">from</span> evidently.metric_preset <span class="keyword">import</span> RegressionPreset, ClassificationPreset
+
+<span class="comment"># For classification</span>
+perf_report = <span class="function">Report</span>(metrics=[<span class="function">ClassificationPreset</span>()])
+
+perf_report.<span class="function">run</span>(
+    reference_data=reference_data,
+    current_data=production_data,
+    column_mapping={
+        <span class="string">"target"</span>: <span class="string">"y_true"</span>,
+        <span class="string">"prediction"</span>: <span class="string">"y_pred"</span>
+    }
+)
+
+perf_report.<span class="function">save_html</span>(<span class="string">'performance_report.html'</span>)
+
+<span class="comment"># Extract metrics</span>
+metrics = perf_report.<span class="function">as_dict</span>()
+current_accuracy = metrics[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'metrics'</span>][<span class="string">'accuracy'</span>]
+current_f1 = metrics[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'metrics'</span>][<span class="string">'f1'</span>]
+
+<span class="function">print</span>(<span class="string">f"Current accuracy: {current_accuracy:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Current F1: {current_f1:.4f}"</span>)</div>
+</div>
+
+    <h3>Continuous Monitoring Pipeline</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — Daily Drift Check</div>
+    <div class="code-content"><span class="keyword">import</span> schedule
+<span class="keyword">import</span> time
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+<span class="keyword">import</span> logging
+
+logger = logging.<span class="function">getLogger</span>(<span class="function">__name__</span>)
+
+<span class="keyword">def</span> <span class="function">check_drift</span>():
+    <span class="string">"""Run daily drift check"""</span>
+    <span class="keyword">try</span>:
+        <span class="comment"># Load reference data (monthly retraining baseline)</span>
+        reference_date = datetime.<span class="function">now</span>() - <span class="function">timedelta</span>(days=<span class="number">30</span>)
+        reference_data = <span class="function">load_from_database</span>(
+            start_date=reference_date - <span class="function">timedelta</span>(days=<span class="number">30</span>),
+            end_date=reference_date
+        )
+        
+        <span class="comment"># Load current data (last 24 hours)</span>
+        current_data = <span class="function">load_from_database</span>(
+            start_date=datetime.<span class="function">now</span>() - <span class="function">timedelta</span>(hours=<span class="number">24</span>),
+            end_date=datetime.<span class="function">now</span>()
+        )
+        
+        <span class="comment"># Run drift detection</span>
+        drift_report = <span class="function">Report</span>(metrics=[<span class="function">DataDriftPreset</span>()])
+        drift_report.<span class="function">run</span>(reference_data=reference_data, current_data=current_data)
+        
+        <span class="comment"># Check results</span>
+        results = drift_report.<span class="function">as_dict</span>()
+        drifted_columns = [
+            col <span class="keyword">for</span> col <span class="keyword">in</span> results[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'drift_by_columns'</span>]
+            <span class="keyword">if</span> results[<span class="string">'metrics'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'drift_by_columns'</span>][col][<span class="string">'drift_detected'</span>]
+        ]
+        
+        <span class="comment"># Alert if necessary</span>
+        <span class="keyword">if</span> <span class="function">len</span>(drifted_columns) > <span class="number">3</span>:
+            logger.<span class="function">warning</span>(<span class="string">f"Drift detected in {len(drifted_columns)} columns: {drifted_columns}"</span>)
+            <span class="function">send_slack_alert</span>(
+                <span class="string">f"Data drift alert: {drifted_columns}\n"</span>
+                <span class="string">f"Recommend model retraining"</span>
+            )
+        <span class="keyword">else</span>:
+            logger.<span class="function">info</span>(<span class="string">"No significant drift detected"</span>)
+        
+        <span class="comment"># Save report to monitoring database</span>
+        <span class="function">save_report_to_db</span>(drift_report, datetime.<span class="function">now</span>())
+        
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        logger.<span class="function">error</span>(<span class="string">f"Drift check failed: {e}"</span>)
+        <span class="function">send_slack_alert</span>(<span class="string">f"Drift check failed: {e}"</span>)
+
+<span class="comment"># Schedule daily check</span>
+schedule.<span class="function">every</span>().day.<span class="function">at</span>(<span class="string">"02:00"</span>).<span class="function">do</span>(check_drift)
+
+<span class="keyword">while</span> <span class="keyword">True</span>:
+    schedule.<span class="function">run_pending</span>()
+    time.<span class="function">sleep</span>(<span class="number">60</span>)</div>
+</div>
+
+    <h3><a href="https://greatexpectations.io/" target="_blank" rel="noopener">Great Expectations</a> Integration</h3>
+    <p><strong>Great Expectations</strong> provides data quality checks. Use it to validate that production data meets expectations:</p>
+
+    <div class="code-block">
+    <div class="code-header">Code — Great Expectations Validation</div>
+    <div class="code-content"><span class="keyword">from</span> great_expectations.dataset <span class="keyword">import</span> PandasDataset
+<span class="keyword">import</span> great_expectations <span class="keyword">as</span> ge
+
+<span class="comment"># Create expectation suite</span>
+context = ge.<span class="function">get_context</span>()
+batch = context.<span class="function">get_batch</span>(
+    datasource_name=<span class="string">"production_db"</span>,
+    data_connector_name=<span class="string">"daily_data"</span>,
+    data_asset_name=<span class="string">"predictions"</span>
+)
+
+<span class="comment"># Add expectations</span>
+batch.<span class="function">expect_column_values_to_be_between</span>(<span class="string">'age'</span>, min_value=<span class="number">18</span>, max_value=<span class="number">120</span>)
+batch.<span class="function">expect_column_values_to_be_in_set</span>(<span class="string">'gender'</span>, value_set=[<span class="string">'M'</span>, <span class="string">'F'</span>])
+batch.<span class="function">expect_column_values_to_not_be_null</span>(<span class="string">'income'</span>)
+batch.<span class="function">expect_column_kl_divergence_from_list</span>(
+    <span class="string">'credit_score'</span>,
+    partition_object={<span class="string">'column'</span>: <span class="string">'date'</span>, <span class="string">'value'</span>: <span class="string">'2024-01-01'</span>}
+)
+
+<span class="comment"># Run validation</span>
+checkpoint = context.<span class="function">add_checkpoint</span>(
+    name=<span class="string">"production_validation"</span>,
+    validations=[
+        {
+            <span class="string">"batch_request"</span>: batch_request,
+            <span class="string">"expectation_suite_name"</span>: <span class="string">"production_suite"</span>
+        }
+    ]
+)
+
+result = checkpoint.<span class="function">run</span>()
+
+<span class="keyword">if</span> <span class="keyword">not</span> result.success:
+    logger.<span class="function">warning</span>(<span class="string">f"Validation failed: {result}"</span>)
+    <span class="function">send_alert</span>(<span class="string">"Data quality check failed"</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Tool Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>MLOps Tool Comparison</h2>
+
+    <h3>Experiment Tracking Tools</h3>
+
+    <table class="comparison-table"><thead><tr><th>Tool</th><th>Hosting</th><th>Cost</th><th>Best For</th><th>Community</th></tr></thead><tbody><tr><td>MLflow</td><td>Self-hosted or cloud</td><td>Free (open-source)</td><td>Enterprise, full control</td><td>Large, growing</td></tr><tr><td>Weights & Biases</td><td>Cloud only</td><td>Freemium</td><td>Research, beautiful UI</td><td>Large, academic</td></tr><tr><td>Neptune</td><td>Cloud</td><td>Freemium</td><td>Production teams, lightweight</td><td>Growing</td></tr><tr><td>Comet ML</td><td>Cloud</td><td>Freemium</td><td>Team collaboration</td><td>Small-medium</td></tr></tbody></table>
+
+    <h3>Model Registry Comparison</h3>
+
+    <table class="comparison-table"><thead><tr><th>Tool</th><th>Versioning</th><th>Staging Support</th><th>Approval Workflows</th><th>Integration</th></tr></thead><tbody><tr><td>MLflow Model Registry</td><td>Semantic versioning</td><td>Staging/Production/Archived</td><td>Manual approval</td><td>Tight with MLflow</td></tr><tr><td>HuggingFace Hub</td><td>Git-based</td><td>Not built-in</td><td>Not built-in</td><td>HF ecosystem</td></tr><tr><td>AWS SageMaker Model Registry</td><td>Model package versioning</td><td>Development/Approved/Production</td><td>AWS approval</td><td>AWS services</td></tr><tr><td>Google Vertex AI Registry</td><td>Full version history</td><td>Not clearly separated</td><td>Not built-in</td><td>GCP services</td></tr></tbody></table>
+
+    <h3>Model Serving Platforms</h3>
+
+    <table class="comparison-table"><thead><tr><th>Tool</th><th>Framework Support</th><th>Scaling</th><th>Latency</th><th>Ease of Use</th></tr></thead><tbody><tr><td><a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a> + Uvicorn</td><td>Any (custom)</td><td>Manual <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a></td><td>Low (20-50ms)</td><td>High</td></tr><tr><td><a href="https://pytorch.org/serve/" target="_blank" rel="noopener">TorchServe</a></td><td><a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a></td><td>Built-in batching & scaling</td><td>Low</td><td>Medium</td></tr><tr><td><a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a></td><td>Any (via containers)</td><td>Auto-scaling, GPU</td><td>Low</td><td>Medium</td></tr><tr><td><a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">AWS SageMaker</a></td><td>Any</td><td>Auto-scaling, serverless</td><td>Medium</td><td>Easy (AWS native)</td></tr><tr><td>Ray Serve</td><td>Any</td><td>Automatic</td><td>Low</td><td>Medium</td></tr></tbody></table>
+</section>
+
+<!-- SECTION: Maturity Model -->
+<section id="maturity" class="ml-section">
+    <h2>MLOps Maturity Model</h2>
+
+    <p>Organizations mature through five stages of MLOps capability. Understanding your current stage helps prioritize improvements.</p>
+
+    <h3>Level 1: Ad Hoc</h3>
+    <div class="maturity-bar">
+    <div class="bar-label">Manual experiments, no tracking, notebooks, no version control</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 20%;"></div>
+    </div>
+    <div class="bar-level">Level 1</div>
+</div>
+    <p><strong>Characteristics:</strong> Models in Jupyter notebooks, manual deployment, no monitoring. Data scientists work in silos. "It works on my machine."</p>
+    <p><strong>Pain points:</strong> Impossible to reproduce results, high error rates in production, no accountability.</p>
+
+    <h3>Level 2: Organized</h3>
+    <div class="maturity-bar">
+    <div class="bar-label">Git repos, basic experiment tracking, documented processes</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 40%;"></div>
+    </div>
+    <div class="bar-level">Level 2</div>
+</div>
+    <p><strong>Characteristics:</strong> Code is versioned, experiments are tracked with MLflow, but deployments are manual. Test/production environments exist but are inconsistent.</p>
+    <p><strong>Pain points:</strong> Slow deployments (days), training-serving skew, limited monitoring.</p>
+
+    <h3>Level 3: Operationalized</h3>
+    <div class="maturity-bar">
+    <div class="bar-label">Automated CI/CD, containerization, basic monitoring, model registry</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 60%;"></div>
+    </div>
+    <div class="bar-level">Level 3</div>
+</div>
+    <p><strong>Characteristics:</strong> Models are containerized and deployed via CI/CD. Model registry tracks versions. Automated tests ensure code quality. Basic monitoring alerts on obvious failures.</p>
+    <p><strong>Pain points:</strong> Retraining is still manual, limited drift detection, no feature store.</p>
+
+    <h3>Level 4: Advanced</h3>
+    <div class="maturity-bar">
+    <div class="bar-label">Automated retraining, data drift detection, feature store, A/B testing</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 80%;"></div>
+    </div>
+    <div class="bar-level">Level 4</div>
+</div>
+    <p><strong>Characteristics:</strong> Retraining pipelines are automated on schedules or drift triggers. A feature store provides consistent features. Data drift is detected and alerts team. A/B testing infrastructure supports canary deployments.</p>
+    <p><strong>Pain points:</strong> Complex orchestration, storage costs, talent bottleneck.</p>
+
+    <h3>Level 5: World-Class</h3>
+    <div class="maturity-bar">
+    <div class="bar-label">End-to-end automation, multi-model systems, zero-downtime updates</div>
+    <div class="bar-container">
+        <div class="bar-fill" style="width: 100%;"></div>
+    </div>
+    <div class="bar-level">Level 5</div>
+</div>
+    <p><strong>Characteristics:</strong> Entire ML system is fully automated from data ingestion through deployment. Multiple models work together (ensemble, cascading). Updates occur with zero downtime. Self-healing systems recover from failures automatically.</p>
+    <p><strong>Examples:</strong> Google, Meta, OpenAI production systems.</p>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>MLOps Best Practices</h2>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Version Everything</h4>
+    <p>Code, data, models, and configuration. Use git for code/config, data versioning tools for datasets (DVC, Delta Lake), MLflow for models.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Automate Testing</h4>
+    <p>Unit tests for data processing, integration tests for pipelines, property tests for model outputs. Aim for >80% code coverage.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Containerize Everything</h4>
+    <p>Docker ensures reproducibility across environments. Use multi-stage builds to minimize image size.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Monitor Continuously</h4>
+    <p>Track latency, throughput, error rates, and model performance metrics. Alert on anomalies.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Document Everything</h4>
+    <p>README for datasets, docstrings for functions, runbooks for deployments. Future you will thank present you.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>Use Feature Stores</h4>
+    <p>Centralize feature engineering. Prevents training-serving skew and reduces redundant computation.</p>
+</div>
+    </div>
+
+    <h3>Common Anti-Patterns to Avoid</h3>
+
+    <div class="info-box">
+    <h4>Training on All Data</h4>
+    <p>Always hold out a test set. Better: use time-based splits (train on past, test on future). Never touch test data during development.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Ignoring Data Drift</h4>
+    <p>Models degrade silently when data distribution shifts. Monitor drift continuously and retrain when detected.</p>
+</div>
+
+    <div class="info-box">
+    <h4>No Monitoring</h4>
+    <p>"Silent failures" are common. A model confidently predicting on out-of-distribution data can cause massive damage.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Manual Deployments</h4>
+    <p>Error-prone and slow. Automate everything with CI/CD. Make deployments boring.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Treating Infrastructure as Secondary</h4>
+    <p>The infrastructure is as important as the model. Poor infrastructure causes production outages, data quality issues, and slow deployments.</p>
+</div>
+</section>
+
+<!-- SECTION: Architecture Patterns -->
+<section id="architecture" class="ml-section">
+    <h2>MLOps Architecture Patterns</h2>
+
+    <h3>Batch Prediction Pipeline</h3>
+    <p>Process large datasets periodically (hourly, daily).</p>
+    <pre style="background: #f0f4f8; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+Raw Data → Feature Engineering → Model Inference → Results Storage → Reporting
+    ↓               ↓                   ↓              ↓
+  S3/DW      Feature Store       Model Registry    Database
+    </pre>
+
+    <p><strong>Use cases:</strong> Batch credit scoring, daily churn predictions, nightly recommendations.</p>
+
+    <h3>Real-time Serving Architecture</h3>
+    <pre style="background: #f0f4f8; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+REST Request → Load Balancer → Model Replicas → Result
+                                     ↓
+                            Shared Model Cache
+                                     ↓
+                            Monitoring/Logging
+    </pre>
+
+    <p><strong>Use cases:</strong> Fraud detection API, recommendation engine, real-time bidding.</p>
+
+    <h3>Feature Store Architecture</h3>
+    <pre style="background: #f0f4f8; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+Raw Data Sources
+    ↓
+Feature Computation Layer
+    ↓
+Feature Store (Offline + Online)
+    ↓
+Model Training (Offline) AND Model Serving (Online)
+    </pre>
+
+    <p>Feature Store enables consistent features between training and serving, preventing skew.</p>
+
+    <h3>Multi-Model Ensemble</h3>
+    <pre style="background: #f0f4f8; padding: 1rem; border-radius: 8px; overflow-x: auto;">
+Request
+  ↓
+Router (decides which model(s) to use)
+  ↓
+Model A  Model B  Model C
+  ↓        ↓        ↓
+Ensemble/Voting
+  ↓
+Response
+    </pre>
+
+    <p>Combine multiple models for robustness and improved performance.</p>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete Code Examples</h2>
+
+    <h3>End-to-End MLOps Pipeline</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — Complete ML Pipeline Script</div>
+    <div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="string">"""End-to-end MLOps pipeline: data → model → deployment"""</span>
+
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score, roc_auc_score
+<span class="keyword">import</span> mlflow
+<span class="keyword">import</span> mlflow.sklearn
+<span class="keyword">import</span> pickle
+<span class="keyword">import</span> logging
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+<span class="keyword">import</span> yaml
+<span class="keyword">import</span> argparse
+
+logging.<span class="function">basicConfig</span>(level=logging.INFO)
+logger = logging.<span class="function">getLogger</span>(<span class="function">__name__</span>)
+
+<span class="keyword">def</span> <span class="function">load_config</span>(config_path):
+    <span class="string">"""Load configuration from YAML"""</span>
+    <span class="keyword">with</span> <span class="function">open</span>(config_path) <span class="keyword">as</span> f:
+        <span class="keyword">return</span> yaml.<span class="function">safe_load</span>(f)
+
+<span class="keyword">def</span> <span class="function">load_data</span>(config):
+    <span class="string">"""Load and preprocess data"""</span>
+    logger.<span class="function">info</span>(<span class="string">"Loading data..."</span>)
+    df = pd.<span class="function">read_csv</span>(config[<span class="string">'data'</span>][<span class="string">'train_path'</span>])
+    
+    <span class="comment"># Handle missing values</span>
+    df = df.<span class="function">dropna</span>()
+    
+    <span class="comment"># Remove outliers</span>
+    numeric_cols = df.<span class="function">select_dtypes</span>(include=[np.number]).columns
+    <span class="keyword">for</span> col <span class="keyword">in</span> numeric_cols:
+        Q1 = df[col].<span class="function">quantile</span>(<span class="number">0.25</span>)
+        Q3 = df[col].<span class="function">quantile</span>(<span class="number">0.75</span>)
+        IQR = Q3 - Q1
+        df = df[(df[col] >= Q1 - <span class="number">1.5</span>*IQR) & (df[col] <= Q3 + <span class="number">1.5</span>*IQR)]
+    
+    <span class="keyword">return</span> df
+
+<span class="keyword">def</span> <span class="function">prepare_features</span>(df, target_col):
+    <span class="string">"""Prepare features and target"""</span>
+    X = df.<span class="function">drop</span>(target_col, axis=<span class="number">1</span>)
+    y = df[target_col]
+    <span class="keyword">return</span> X, y
+
+<span class="keyword">def</span> <span class="function">train_model</span>(X_train, y_train, config):
+    <span class="string">"""Train model"""</span>
+    logger.<span class="function">info</span>(<span class="string">"Training model..."</span>)
+    params = config[<span class="string">'model'</span>][<span class="string">'params'</span>]
+    model = <span class="function">RandomForestClassifier</span>(**params, random_state=<span class="number">42</span>)
+    model.<span class="function">fit</span>(X_train, y_train)
+    <span class="keyword">return</span> model
+
+<span class="keyword">def</span> <span class="function">evaluate_model</span>(model, X_test, y_test):
+    <span class="string">"""Evaluate model performance"""</span>
+    y_pred = model.<span class="function">predict</span>(X_test)
+    y_pred_proba = model.<span class="function">predict_proba</span>(X_test)[:, <span class="number">1</span>]
+    
+    metrics = {
+        <span class="string">'accuracy'</span>: <span class="function">accuracy_score</span>(y_test, y_pred),
+        <span class="string">'f1'</span>: <span class="function">f1_score</span>(y_test, y_pred, average=<span class="string">'weighted'</span>),
+        <span class="string">'roc_auc'</span>: <span class="function">roc_auc_score</span>(y_test, y_pred_proba),
+    }
+    
+    <span class="keyword">return</span> metrics, y_pred
+
+<span class="keyword">def</span> <span class="function">main</span>(config_path):
+    config = <span class="function">load_config</span>(config_path)
+    
+    <span class="comment"># MLflow setup</span>
+    mlflow.<span class="function">set_experiment</span>(config[<span class="string">'mlflow'</span>][<span class="string">'experiment_name'</span>])
+    
+    <span class="keyword">with</span> mlflow.<span class="function">start_run</span>(run_name=<span class="string">f"run-{datetime.now().strftime('%Y%m%d-%H%M%S')}"</span>):
+        <span class="comment"># Load and prepare data</span>
+        df = <span class="function">load_data</span>(config)
+        X, y = <span class="function">prepare_features</span>(df, config[<span class="string">'data'</span>][<span class="string">'target_col'</span>])
+        
+        X_train, X_test, y_train, y_test = <span class="function">train_test_split</span>(
+            X, y, test_size=config[<span class="string">'data'</span>][<span class="string">'test_size'</span>], random_state=<span class="number">42</span>
+        )
+        
+        <span class="comment"># Scale features</span>
+        scaler = <span class="function">StandardScaler</span>()
+        X_train_scaled = scaler.<span class="function">fit_transform</span>(X_train)
+        X_test_scaled = scaler.<span class="function">transform</span>(X_test)
+        
+        <span class="comment"># Train model</span>
+        model = <span class="function">train_model</span>(X_train_scaled, y_train, config)
+        
+        <span class="comment"># Evaluate</span>
+        metrics, y_pred = <span class="function">evaluate_model</span>(model, X_test_scaled, y_test)
+        
+        <span class="comment"># Log to MLflow</span>
+        mlflow.<span class="function">log_params</span>(config[<span class="string">'model'</span>][<span class="string">'params'</span>])
+        <span class="keyword">for</span> metric_name, metric_value <span class="keyword">in</span> metrics.<span class="function">items</span>():
+            mlflow.<span class="function">log_metric</span>(metric_name, metric_value)
+        
+        <span class="comment"># Save artifacts</span>
+        mlflow.sklearn.<span class="function">log_model</span>(model, <span class="string">"model"</span>)
+        
+        <span class="comment"># Save scaler</span>
+        <span class="keyword">with</span> <span class="function">open</span>(<span class="string">'scaler.pkl'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:
+            pickle.<span class="function">dump</span>(scaler, f)
+        mlflow.<span class="function">log_artifact</span>(<span class="string">'scaler.pkl'</span>)
+        
+        logger.<span class="function">info</span>(<span class="string">f"Metrics: {metrics}"</span>)
+        
+        <span class="comment"># Check thresholds</span>
+        <span class="keyword">if</span> metrics[<span class="string">'accuracy'</span>] >= config[<span class="string">'model'</span>][<span class="string">'min_accuracy'</span>]:
+            logger.<span class="function">info</span>(<span class="string">"Model passed validation!"</span>)
+        <span class="keyword">else</span>:
+            logger.<span class="function">error</span>(<span class="string">f"Model failed: accuracy {metrics['accuracy']} &lt; {config['model']['min_accuracy']}"</span>)
+            <span class="function">exit</span>(<span class="number">1</span>)
+
+<span class="keyword">if</span> <span class="function">__name__</span> == <span class="string">"__main__"</span>:
+    parser = argparse.<span class="function">ArgumentParser</span>()
+    parser.<span class="function">add_argument</span>(<span class="string">"--config"</span>, default=<span class="string">"config.yaml"</span>)
+    args = parser.<span class="function">parse_args</span>()
+    <span class="function">main</span>(args.config)</div>
+</div>
+
+    <h3>Configuration File (config.yaml)</h3>
+
+    <div class="code-block">
+    <div class="code-header">Code — config.yaml</div>
+    <div class="code-content">data:
+  train_path: <span class="string">"data/train.csv"</span>
+  test_size: <span class="number">0.2</span>
+  target_col: <span class="string">"target"</span>
+
+model:
+  params:
+    n_estimators: <span class="number">100</span>
+    max_depth: <span class="number">15</span>
+    min_samples_split: <span class="number">5</span>
+  min_accuracy: <span class="number">0.85</span>
+
+mlflow:
+  experiment_name: <span class="string">"credit-risk-production"</span>
+  tracking_uri: <span class="string">"http://localhost:5000"</span></div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-on Exercises</h2>
+
+    <h3>Exercise 1: Set Up MLflow Experiment Tracking</h3>
+    <p><strong>Goal:</strong> Track 5 model experiments with different hyperparameters.</p>
+    <div style="background: #f0f4f8; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+        <p><strong>Steps:</strong></p>
+        <ol style="margin-left: 1rem;">
+            <li>Install MLflow: <code>pip install mlflow</code></li>
+            <li>Create a training script that trains 5 RandomForest models with different max_depth values (5, 10, 15, 20, 25)</li>
+            <li>Log parameters and metrics for each run</li>
+            <li>Launch MLflow UI and compare experiments</li>
+            <li>Identify which hyperparameters gave best results</li>
+        </ol>
+    </div>
+
+    <h3>Exercise 2: Containerize a Model Server</h3>
+    <p><strong>Goal:</strong> Create a Docker image for a FastAPI model server.</p>
+    <div style="background: #f0f4f8; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+        <p><strong>Steps:</strong></p>
+        <ol style="margin-left: 1rem;">
+            <li>Create a FastAPI endpoint that loads a pre-trained model and serves predictions</li>
+            <li>Write a Dockerfile</li>
+            <li>Build the image: <code>docker build -t mymodel:1.0 .</code></li>
+            <li>Run the container: <code>docker run -p 8000:8000 mymodel:1.0</code></li>
+            <li>Test the API with curl: <code>curl -X POST http://localhost:8000/predict -d '{...}'</code></li>
+        </ol>
+    </div>
+
+    <h3>Exercise 3: Deploy to Kubernetes</h3>
+    <p><strong>Goal:</strong> Deploy the containerized model to Kubernetes with auto-scaling.</p>
+    <div style="background: #f0f4f8; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+        <p><strong>Steps:</strong></p>
+        <ol style="margin-left: 1rem;">
+            <li>Push Docker image to a registry (Docker Hub, ECR, etc.)</li>
+            <li>Create Deployment and Service YAML files</li>
+            <li>Deploy: <code>kubectl apply -f deployment.yaml service.yaml</code></li>
+            <li>Create HPA for auto-scaling</li>
+            <li>Generate load and watch it scale: <code>kubectl get hpa -w</code></li>
+        </ol>
+    </div>
+
+    <h3>Exercise 4: Detect Data Drift</h3>
+    <p><strong>Goal:</strong> Use Evidently to detect drift in production data.</p>
+    <div style="background: #f0f4f8; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+        <p><strong>Steps:</strong></p>
+        <ol style="margin-left: 1rem;">
+            <li>Install Evidently: <code>pip install evidently</code></li>
+            <li>Load reference data (training data) and production data</li>
+            <li>Create a DataDriftPreset report</li>
+            <li>Identify which columns show drift</li>
+            <li>Generate an HTML report and visualize the drift</li>
+        </ol>
+    </div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+
+    <p>These questions test your understanding of production ML systems and are commonly asked in interviews.</p>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q1: Explain the difference between data drift and model drift. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Data Drift:</strong> The distribution of input features changes. Example: customer income distribution shifts after a recession. Detected via statistical tests on input features.</p><p><strong>Model Drift:</strong> Model performance degrades on current data. Can happen with or without data drift. Detected via monitoring prediction metrics and comparing to holdout performance.</p><p><strong>Concept Drift:</strong> The relationship between inputs and outputs changes. Example: customer preferences shift. Hardest to detect — requires outcome monitoring.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q2: You deployed a model to production and accuracy dropped from 92% to 78% overnight. What could cause this? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>Possible causes: (1) Data drift — input distribution changed. (2) Missing data — pipeline started returning nulls. (3) Data quality issue — garbage in, garbage out. (4) Infrastructure problem — wrong model was deployed. (5) Concept drift — the problem itself changed.</p><p><strong>Debugging approach:</strong> Check prediction distribution, analyze input feature distributions, compare current data to training data, look at logs for errors, monitor latency/throughput. Have alerts on these metrics to catch issues faster.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q3: How do you handle the training-serving skew problem? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p>Training-serving skew occurs when features are computed differently during training vs serving. Solutions: (1) Use a <strong>feature store</strong> (Feast, Tecton) to compute features once and share. (2) Version features and track lineage. (3) Unit test that training and serving code compute identical features. (4) Use the same feature library in both pipelines. (5) Log features used in production and compare to training distribution.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q4: Design a system to retrain models automatically when drift is detected. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Architecture:</strong></p><p>(1) <strong>Drift Detection:</strong> Daily batch job compares current data to baseline using Evidently or Great Expectations. If drift detected, publish event.</p><p>(2) <strong>Retraining Trigger:</strong> Listen for drift events. If significant drift (e.g., >3 features), trigger retraining pipeline.</p><p>(3) <strong>Retraining:</strong> Async job trains new model with recent data. Logs metrics to MLflow.</p><p>(4) <strong>Validation:</strong> Automatically validate that new model outperforms old model on holdout test set.</p><p>(5) <strong>Deployment:</strong> If validation passes, deploy new model. If fails, alert humans.</p><p><strong>Challenges:</strong> Concept drift can't be detected without outcome labels. Need to monitor prediction feedback loop.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q5: How do you A/B test models in production? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Setup:</strong> Route traffic between control (old model) and treatment (new model). Typically 90% old, 10% new initially.</p><p><strong>Metrics:</strong> Track business metrics (revenue, conversion, retention), not just ML metrics (accuracy). Use statistical tests (t-test, chi-squared) to determine if difference is significant.</p><p><strong>Duration:</strong> Run for at least 7 days to capture weekly patterns, or until statistical significance is reached.</p><p><strong>Rollout:</strong> If treatment wins, gradually increase traffic to new model (50%, then 100%). If fails, rollback immediately.</p><p><strong>Tools:</strong> Kubernetes service mesh (Istio) for traffic splitting, Argo for progressive deployments.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q6: What metrics should you monitor for a production ML system? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>System Metrics:</strong></p><ul style="margin-left: 1rem;"><li>Latency (P50, P95, P99)</li><li>Throughput (requests/second)</li><li>Error rate</li><li>Resource usage (CPU, memory, GPU)</li></ul><p><strong>Model Metrics:</strong></p><ul style="margin-left: 1rem;"><li>Prediction confidence distribution</li><li>Positive class ratio (for classification)</li><li>Feature distributions</li><li>Model performance (if outcomes available)</li></ul><p><strong>Business Metrics:</strong></p><ul style="margin-left: 1rem;"><li>Revenue impact</li><li>Conversion rate</li><li>User satisfaction</li></ul></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q7: How do you version models and manage deployments? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Versioning Strategy:</strong> Store model artifacts in a registry (MLflow, Hugging Face, cloud provider). Tag each version with: code commit SHA, training data hash, hyperparameters, metrics, timestamp.</p><p><strong>Deployment Stages:</strong> Development (on-demand) → Staging (auto-scaled) → Canary (10% traffic) → Production (100% traffic).</p><p><strong>Rollback:</strong> Keep previous model version available for quick rollback if new version fails.</p><p><strong>Tools:</strong> MLflow Model Registry, ArgoCD, Spinnaker for deployment orchestration.</p></div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q8: Explain the MLOps maturity model and where most companies are. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body"><p><strong>Level 1 (Ad Hoc):</strong> Notebooks, manual deployments. Very common in startups.</p><p><strong>Level 2 (Organized):</strong> Git repos, experiment tracking, manual deployments. Common in growing companies.</p><p><strong>Level 3 (Operationalized):</strong> CI/CD, containerization, monitoring. Target for most organizations.</p><p><strong>Level 4 (Advanced):</strong> Automated retraining, feature store, A/B testing. Companies with mature ML practices.</p><p><strong>Level 5 (World-Class):</strong> End-to-end automation, self-healing. Only Google, Meta, etc.</p><p><strong>Reality:</strong> Most companies are stuck at Level 2. The jump to Level 3 requires significant infrastructure investment but pays off quickly.</p></div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the minimum infrastructure needed to do MLOps? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Bare minimum:</strong> Git (versioning), a monitoring tool (Prometheus/Grafana), and one server to deploy to.</p><p><strong>Realistic minimum:</strong> Git, Docker, Kubernetes cluster (managed: EKS/GKE), CI/CD runner (GitHub Actions, GitLab CI), and experiment tracker (MLflow). Budget: $500-2000/month for infrastructure.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How often should we retrain models? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>It depends on drift: (1) <strong>Stable domains:</strong> retrain monthly or quarterly. (2) <strong>Drifting domains:</strong> retrain weekly or on-demand when drift detected. (3) <strong>Fast-moving domains:</strong> retrain daily.</p><p>Best approach: monitor drift continuously and retrain when detected, rather than on a fixed schedule.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">Should we use cloud or on-premises infrastructure? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Cloud (AWS, GCP, Azure):</strong> Easier to scale, less ops burden, higher cost at scale. Good for startups and companies without data center expertise.</p><p><strong>On-premises:</strong> Lower long-term cost at scale, full control, requires infrastructure expertise. Good for enterprises with existing data centers.</p><p><strong>Hybrid:</strong> Keep sensitive data on-premises, use cloud for compute-heavy training.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do we prevent data leakage in ML pipelines? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p>Data leakage occurs when information from test/future data leaks into training. Prevention:</p><p>(1) <strong>Temporal split:</strong> train on past data, test on future. Never shuffle time-series.</p><p>(2) <strong>Group split:</strong> For grouped data (users, sessions), ensure groups don't split across train/test.</p><p>(3) <strong>Feature engineering:</strong> Compute aggregations using only training data, then apply to test data. Use the same normalizers/scalers fitted on training data.</p><p>(4) <strong>Code review:</strong> Have another engineer review pipeline code specifically for leakage.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do we handle model explainability in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Tools:</strong> SHAP, LIME, or model-specific explanations (feature importance for trees, attention weights for transformers).</p><p><strong>Serve explanations alongside predictions:</strong> Many regulations (GDPR, Fair Lending) require explaining predictions. Log explanations to enable audits.</p><p><strong>Challenge:</strong> Explanations are expensive to compute. Cache or pre-compute where possible.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What's the ROI on MLOps infrastructure investment? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Hard benefits:</strong> Faster deployments (hours vs weeks), fewer production failures, reduced debugging time.</p><p><strong>Soft benefits:</strong> Team alignment, reproducibility, confidence in models.</p><p><strong>Typical payback:</strong> 6-12 months for teams with 3+ data scientists. The investment in infrastructure pays for itself through efficiency gains.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do we ensure model fairness in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Monitoring:</strong> Track model performance separately for demographic groups. Alert if accuracy drops significantly for any group.</p><p><strong>Fairness constraints:</strong> Train models with fairness objectives (demographic parity, equal opportunity) rather than just accuracy.</p><p><strong>Regular audits:</strong> Quarterly fairness reviews of model behavior across populations.</p><p><strong>Tools:</strong> Fairness Toolkit (Microsoft), Aequitas, Responsible AI (Google).</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What's the best tool stack for a startup? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Development:</strong> Jupyter, DVC (data versioning), Git.</p><p><strong>Experiment tracking:</strong> MLflow (self-hosted) or Weights & Biases (cloud).</p><p><strong>Serving:</strong> FastAPI + Docker + Kubernetes (or cloud-managed options).</p><p><strong>Monitoring:</strong> Prometheus + Grafana, or cloud-native solutions.</p><p><strong>Feature store:</strong> Start without one (too complex early on), add later if needed.</p><p><strong>Cost-saving:</strong> Use GitHub Actions (free), managed Kubernetes (cheaper than self-managed), and open-source tools where possible.</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">How do we handle model serving during traffic spikes? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>Auto-scaling:</strong> Use Horizontal Pod Autoscaler (Kubernetes) to add replicas when load increases. Typically scales up in seconds.</p><p><strong>Load balancing:</strong> Distribute requests across replicas with round-robin or least-connections algorithm.</p><p><strong>Caching:</strong> Cache frequent predictions to reduce model invocations. Be careful about stale predictions.</p><p><strong>Queueing:</strong> If you can accept some latency, queue requests and process in batches (better GPU utilization).</p></div>
+    </div>
+</div>
+    <div class="faq-item">
+    <div class="faq-question">What are the biggest MLOps challenges we'll face? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><p><strong>1. Data quality:</strong> Garbage in, garbage out. Data quality directly impacts model quality. No shortcut.</p><p><strong>2. Reproducibility:</strong> Ensuring results are reproducible across teams and time requires discipline with versioning.</p><p><strong>3. Monitoring:</strong> Knowing when models fail. Silent failures are the worst.</p><p><strong>4. Organizational:</strong> Getting teams to adopt practices requires culture change, not just tools.</p><p><strong>5. Cost:</strong> ML infrastructure is expensive. Storage, compute, and monitoring costs add up quickly.</p></div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary and Key Takeaways</h2>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>MLOps is Essential</h4>
+    <p>Building a model is 5% of the work. The remaining 95% is infrastructure, monitoring, and maintenance. MLOps bridges this gap.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Version Everything</h4>
+    <p>Code, data, models, and config must be versioned. Use git for code, MLflow for models, DVC for data.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Automate the Pipeline</h4>
+    <p>Trigger training and deployment automatically. Use CI/CD to automate testing, building, and deployment.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Monitor Continuously</h4>
+    <p>Track system metrics (latency, throughput), model metrics (confidence, drift), and business metrics. Alert on anomalies.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Expect Drift</h4>
+    <p>Data distribution will change. Monitor drift continuously and retrain when detected.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>Tools Are Secondary</h4>
+    <p>The specific tools matter less than having solid engineering practices. Start simple, add tools as you grow.</p>
+</div>
+    </div>
+
+    <h3>The MLOps Journey</h3>
+    <p>Most teams follow a similar path:</p>
+    <ol style="margin-left: 2rem; line-height: 1.8;">
+        <li><strong>Phase 1 (Chaos):</strong> Notebooks, manual experiments, frustrated data scientists. 3-6 months.</li>
+        <li><strong>Phase 2 (Organization):</strong> Git repos, experiment tracking, documented processes. Deployments still manual. 6-12 months.</li>
+        <li><strong>Phase 3 (Automation):</strong> CI/CD pipelines, containerization, monitoring. Models deploy to production reliably. 12-24 months.</li>
+        <li><strong>Phase 4 (Intelligence):</strong> Automated retraining, drift detection, feature stores. Models heal themselves. 24+ months.</li>
+    </ol>
+
+    <p>The jump from Phase 2 to Phase 3 is transformative. Suddenly, data scientists can focus on model quality instead of ops. The investment in infrastructure pays for itself immediately.</p>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources and Further Learning</h2>
+
+    <h3>Essential Reading</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>ML Engineering for Production</h4>
+    <p>Andrew Ng's course on <a href="https://www.coursera.org/" target="_blank" rel="noopener">Coursera</a>. Covers data pipelines, experiment tracking, deployment. Highly recommended.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Building Machine Learning Systems</h4>
+    <p>Willi Richert & Luis Pedro Coelho. Best practical guide for production ML systems.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Machine Learning Operations (MLOps)</h4>
+    <p>Google Cloud's MLOps guide. Free, comprehensive, cloud-agnostic.</p>
+</div>
+        <div class="card green-accent">
+    <h4>MLOps.community</h4>
+    <p>Community resources, case studies, and best practices. Active Slack community.</p>
+</div>
+    </div>
+
+    <h3>Tools and Platforms</h3>
+    <ul style="margin-left: 2rem;">
+        <li><strong>Experiment Tracking:</strong> <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>, <a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a>, <a href="https://neptune.ai/" target="_blank" rel="noopener">Neptune</a></li>
+        <li><strong>Feature Stores:</strong> <a href="https://feast.dev/" target="_blank" rel="noopener">Feast</a>, <a href="https://www.tecton.ai/" target="_blank" rel="noopener">Tecton</a>, <a href="https://www.databricks.com/" target="_blank" rel="noopener">Databricks</a> Feature Store</li>
+        <li><strong>Data Versioning:</strong> <a href="https://dvc.org/" target="_blank" rel="noopener">DVC</a>, <a href="https://delta.io/" target="_blank" rel="noopener">Delta Lake</a>, Iceberg</li>
+        <li><strong>Model Serving:</strong> <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">FastAPI</a>, <a href="https://pytorch.org/serve/" target="_blank" rel="noopener">TorchServe</a>, <a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a>, <a href="https://www.seldon.io/solutions/seldon-core" target="_blank" rel="noopener">Seldon Core</a></li>
+        <li><strong>Monitoring:</strong> <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a>, <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a>, <a href="https://www.datadoghq.com/" target="_blank" rel="noopener">DataDog</a>, <a href="https://newrelic.com/" target="_blank" rel="noopener">New Relic</a></li>
+        <li><strong>Data Drift:</strong> <a href="https://www.evidentlyai.com/" target="_blank" rel="noopener">Evidently</a>, <a href="https://greatexpectations.io/" target="_blank" rel="noopener">Great Expectations</a>, Whylabs</li>
+        <li><strong>Model Registry:</strong> <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>, HuggingFace Hub, cloud providers</li>
+    </ul>
+
+    <h3>Community and Events</h3>
+    <ul style="margin-left: 2rem;">
+        <li><strong><a href="https://mlops.community/" target="_blank" rel="noopener">MLOps.community</a>:</strong> Online community for practitioners. Slack, forums, weekly discussions.</li>
+        <li><strong><a href="https://mlopsworld.com/" target="_blank" rel="noopener">MLOps World</a>:</strong> Annual conference with talks on production ML systems.</li>
+        <li><strong>Women in ML Ops:</strong> Community focusing on diversity in MLOps.</li>
+        <li><strong>GitHub:</strong> Explore MLOps projects and examples on GitHub.</li>
+    </ul>
+
+    <h3>Next Steps</h3>
+    <p>To get started with MLOps:</p>
+    <ol style="margin-left: 2rem;">
+        <li>Set up experiment tracking with <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a> on your next project</li>
+        <li>Containerize your model with <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a></li>
+        <li>Create a simple CI/CD pipeline with GitHub Actions</li>
+        <li>Deploy to <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a> or a cloud provider</li>
+        <li>Add monitoring with <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a> and <a href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a></li>
+        <li>Implement drift detection with <a href="https://www.evidentlyai.com/" target="_blank" rel="noopener">Evidently</a></li>
+        <li>Iterate and improve based on your specific needs</li>
+    </ol>
+</section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Sidebar Navigation Active State
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const isActive = this.classList.contains('active');
+                document.querySelectorAll('.faq-question').forEach(fq => { fq.classList.remove('active'); fq.nextElementSibling.classList.remove('active'); });
+                if (!isActive) { this.classList.add('active'); answer.classList.add('active'); }
+            });
+        });
+
+        // Collapsible Interview Sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll spy for sidebar
+        const sections = document.querySelectorAll('.ml-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

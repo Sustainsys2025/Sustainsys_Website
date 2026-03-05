@@ -1,0 +1,3741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine-Tuning - SustainSys AI Academy</title>
+    <meta name="description" content="Learn to adapt pre-trained models for your tasks — full fine-tuning, LoRA, instruction tuning, RLHF, and DPO.">
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+<style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <div class="ml-container" style="padding-top: 120px;">
+        <div class="sidebar">
+<div class="sidebar-title">Topics</div>
+
+</div>
+        
+        <div class="ml-content">
+            <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Fine-Tuning: Adapting Pre-Trained Models</h1>
+                <p class="page-description">Learn to adapt pre-trained models for your tasks — full fine-tuning, LoRA, instruction tuning, RLHF, and DPO.</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Fine-Tuning: Adapting Pre-Trained Models</h2>
+
+    <div class="ml-intro-text">
+        <p>Fine-tuning is the process of taking a pre-trained neural network model and adapting it to perform well on a specific downstream task. Instead of training a model from scratch (which requires massive amounts of data and compute), you leverage the knowledge already captured by the pre-trained model and only adjust its parameters for your specific domain or task.</p>
+    </div>
+
+    <p>Pre-trained models like GPT-3, BERT, Mistral, and Llama have learned rich representations of language from enormous amounts of text. Fine-tuning lets you transfer this knowledge to your specific problem — customer support, medical diagnosis, code generation, or any custom task — with much less data and compute than training from scratch.</p>
+
+    <h3>Core Concepts</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Transfer Learning</h4>
+    <p>Leverage knowledge learned on large datasets for your specific task, reducing data and compute requirements by 10-100x.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Parameter Efficiency</h4>
+    <p>Modern methods like LoRA fine-tune only a fraction of parameters (0.1-1%), making it practical to run on consumer GPUs.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Task Adaptation</h4>
+    <p>Adapt models for instruction-following, classification, generation, Q&A, and more through specialized tuning approaches.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Alignment</h4>
+    <p>Use RLHF and DPO to align models with human preferences and values, reducing hallucinations and harmful outputs.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Key Difference: Pre-training vs Fine-tuning</h4>
+    <p><strong>Pre-training:</strong> Training on massive datasets (billions of tokens) to learn general language patterns. Expensive, done rarely by labs like OpenAI/Anthropic.<br><br><strong>Fine-tuning:</strong> Training on your specific task/domain dataset (thousands to millions of examples). Cheap, can be done by anyone with a GPU.</p>
+</div>
+
+    <h3>Why Fine-Tuning Works</h3>
+    <p>Fine-tuning succeeds because:</p>
+    <ul style="font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>Early layers already know useful features:</strong> Early transformer layers have learned to extract phonemes, syntax, named entities, etc. You don't need to relearn these.</li>
+        <li><strong>Task-specific information lives in later layers:</strong> Later layers learn task-specific patterns. Fine-tuning primarily adjusts these layers.</li>
+        <li><strong>Smooth loss landscape:</strong> Pre-trained models start near a good solution, so fine-tuning rarely gets stuck in bad local minima.</li>
+        <li><strong>Data efficiency:</strong> You need maybe 100-1000 examples for fine-tuning vs millions for training from scratch.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Why Fine-Tuning Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Fine-Tuning Matters</h2>
+
+    <p>Fine-tuning is the bridge between cutting-edge research models and practical business applications. It's how companies deploy AI on their specific problems without massive R&D budgets.</p>
+
+    <h3>The Economics of Fine-Tuning</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Training from Scratch (BERT-scale)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #dc2626, #ef4444);">$500K+ GPUs, 3-6 months</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Fine-tuning Full (GPT-2)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 25%; background: linear-gradient(90deg, #f97316, #fb923c);">$2-10K, 1-3 days</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">LoRA (GPT-3.5 scale)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 3%; background: linear-gradient(90deg, #22c55e, #4ade80);">$50-500, 1-4 hours</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Prompt Engineering Only</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 1%; background: linear-gradient(90deg, #0891b2, #22d3ee);">Free, 0-1 hours</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Approximate cost/time for adapting a model to your task</em></p>
+
+    <h3>Real-World Impact</h3>
+    <div class="info-box">
+    <h4>Customer Support Chatbot</h4>
+    <p>A company fine-tuned Llama-2 on 5,000 internal support tickets and documentation. The fine-tuned model answered customer questions with 92% accuracy, reducing support costs by 40%.</p>
+</div>
+    <div class="info-box">
+    <h4>Medical Diagnosis</h4>
+    <p>Researchers fine-tuned PubMedBERT on 10,000 medical notes to predict diagnoses. The fine-tuned model outperformed specialists on rare disease detection by 15%.</p>
+</div>
+    <div class="info-box">
+    <h4>Code Generation</h4>
+    <p>A startup fine-tuned CodeLlama on their proprietary codebase and coding standards. The model now generates code that passes tests 78% of the time, vs 35% for the base model.</p>
+</div>
+
+    <h3>Methods Comparison: Cost vs Performance</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>GPU Memory</th>
+                    <th>Training Time</th>
+                    <th>Performance</th>
+                    <th>Customization</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Prompt Engineering</strong></td>
+                    <td>GPU not needed</td>
+                    <td>Hours (manual)</td>
+                    <td style="color: #f97316;">Low-Medium</td>
+                    <td style="color: #f97316;">Limited</td>
+                </tr>
+                <tr>
+                    <td><strong>Full Fine-Tuning</strong></td>
+                    <td>24-80 GB</td>
+                    <td>Hours-Days</td>
+                    <td style="color: #22c55e;">Very High</td>
+                    <td style="color: #22c55e;">Maximal</td>
+                </tr>
+                <tr>
+                    <td><strong>LoRA</strong></td>
+                    <td>8-16 GB</td>
+                    <td>30min-4 hours</td>
+                    <td style="color: #22c55e;">High</td>
+                    <td style="color: #22c55e;">Very High</td>
+                </tr>
+                <tr>
+                    <td><strong>QLoRA</strong></td>
+                    <td>4-8 GB</td>
+                    <td>1-6 hours</td>
+                    <td style="color: #0891b2;">High</td>
+                    <td style="color: #0891b2;">Very High</td>
+                </tr>
+                <tr>
+                    <td><strong>IA3</strong></td>
+                    <td>2-4 GB</td>
+                    <td>30min-2 hours</td>
+                    <td style="color: #0891b2;">Medium-High</td>
+                    <td style="color: #0891b2;">High</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> Full fine-tuning gives maximum performance but is expensive. LoRA gives 95% of full fine-tuning performance at 1/10 the cost. The right method depends on your constraints and performance requirements.</p>
+</div>
+</section>
+
+<!-- SECTION: Full Fine-Tuning -->
+<section id="full-fine-tuning" class="ml-section">
+    <h2>Full Fine-Tuning with HuggingFace Trainer</h2>
+
+    <p>Full fine-tuning updates all parameters of the model. It's the most flexible approach and gives the best performance, but requires the most compute. Let's build a complete example using the HuggingFace Transformers library.</p>
+
+    <h3>Setup and Dependencies</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Install Dependencies</div>
+    <div class="code-content">pip install torch transformers datasets evaluate scikit-learn
+pip install peft accelerate wandb
+pip install optuna </div>
+</div>
+
+    <h3>Step 1: Load and Prepare Data</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Loading and Preprocessing Data</div>
+    <div class="code-content"><span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer
+
+<span class="comment"># Load a dataset (e.g., AG News for text classification)</span>
+dataset = <span class="function">load_dataset</span>(<span class="string">"ag_news"</span>)
+
+<span class="comment"># Load tokenizer from pre-trained model</span>
+model_name = <span class="string">"bert-base-uncased"</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+
+<span class="keyword">def</span> <span class="function">preprocess_function</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(
+        examples[<span class="string">"text"</span>],
+        truncation=<span class="keyword">True</span>,
+        max_length=<span class="number">512</span>,
+        padding=<span class="string">"max_length"</span>
+    )
+
+<span class="comment"># Apply tokenization to all examples</span>
+tokenized_dataset = dataset.<span class="function">map</span>(
+    preprocess_function,
+    batched=<span class="keyword">True</span>,
+    num_proc=<span class="number">4</span>  <span class="comment"># Use 4 CPU cores</span>
+)
+
+<span class="comment"># Split into train/val</span>
+train_dataset = tokenized_dataset[<span class="string">"train"</span>].<span class="function">shuffle</span>(seed=<span class="number">42</span>)
+eval_dataset = tokenized_dataset[<span class="string">"test"</span>]
+
+<span class="function">print</span>(<span class="string">f"Training samples: {len(train_dataset)}"</span>)
+<span class="function">print</span>(<span class="string">f"Eval samples: {len(eval_dataset)}"</span>)
+<span class="function">print</span>(<span class="string">f"Feature keys: {train_dataset.column_names}"</span>)
+</div>
+</div>
+
+    <h3>Step 2: Load Pre-Trained Model</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Load Model for Fine-Tuning</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSequenceClassification
+<span class="keyword">import</span> torch
+
+device = torch.<span class="function">device</span>(<span class="string">"cuda"</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> <span class="string">"cpu"</span>)
+<span class="function">print</span>(<span class="string">f"Using device: {device}"</span>)
+
+<span class="comment"># Load model with number of labels for classification task</span>
+num_labels = <span class="number">4</span>  <span class="comment"># AG News has 4 categories</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    model_name,
+    num_labels=num_labels,
+    problem_type=<span class="string">"single_label_classification"</span>
+).<span class="function">to</span>(device)
+
+<span class="function">print</span>(<span class="string">f"Model parameters: {model.num_parameters():,}"</span>)
+<span class="function">print</span>(<span class="string">f"Trainable parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad):,}"</span>)
+</div>
+</div>
+
+    <h3>Step 3: Configure Training Arguments</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Training Configuration</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments
+
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./results"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">16</span>,
+    per_device_eval_batch_size=<span class="number">32</span>,
+    gradient_accumulation_steps=<span class="number">2</span>,
+    warmup_steps=<span class="number">500</span>,
+    weight_decay=<span class="number">0.01</span>,
+    learning_rate=<span class="number">2e-5</span>,
+    logging_dir=<span class="string">"./logs"</span>,
+    logging_steps=<span class="number">100</span>,
+    evaluation_strategy=<span class="string">"steps"</span>,
+    eval_steps=<span class="number">500</span>,
+    save_strategy=<span class="string">"steps"</span>,
+    save_steps=<span class="number">500</span>,
+    save_total_limit=<span class="number">2</span>,
+    load_best_model_at_end=<span class="keyword">True</span>,
+    metric_for_best_model=<span class="string">"accuracy"</span>,
+    greater_is_better=<span class="keyword">True</span>,
+    fp16=<span class="keyword">True</span>,  <span class="comment"># Mixed precision training</span>
+    gradient_checkpointing=<span class="keyword">True</span>,  <span class="comment"># Memory efficient</span>
+    report_to=[<span class="string">"tensorboard"</span>, <span class="string">"wandb"</span>],
+)
+</div>
+</div>
+
+    <h3>Step 4: Define Metrics and Trainer</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Metrics and Trainer Setup</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> datasets <span class="keyword">import</span> load_metric
+<span class="keyword">from</span> transformers <span class="keyword">import</span> Trainer, TrainerCallback
+
+<span class="comment"># Load accuracy metric</span>
+metric = <span class="function">load_metric</span>(<span class="string">"accuracy"</span>)
+
+<span class="keyword">def</span> <span class="function">compute_metrics</span>(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.<span class="function">argmax</span>(predictions, axis=<span class="number">1</span>)
+    <span class="keyword">return</span> metric.<span class="function">compute</span>(predictions=predictions, references=labels)
+
+<span class="comment"># Create trainer</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    compute_metrics=compute_metrics,
+    callbacks=[],
+)
+
+<span class="function">print</span>(<span class="string">"Trainer initialized and ready for training"</span>)
+</div>
+</div>
+
+    <h3>Step 5: Train and Evaluate</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Run Training</div>
+    <div class="code-content"><span class="comment"># Train the model</span>
+train_result = trainer.<span class="function">train</span>()
+
+<span class="comment"># Evaluate on test set</span>
+eval_results = trainer.<span class="function">evaluate</span>(eval_dataset)
+<span class="function">print</span>(<span class="string">f"\nEvaluation Results: {eval_results}"</span>)
+
+<span class="comment"># Save the fine-tuned model</span>
+trainer.<span class="function">save_model</span>(<span class="string">"./fine_tuned_model"</span>)
+<span class="function">print</span>(<span class="string">"Model saved to ./fine_tuned_model"</span>)
+</div>
+</div>
+
+    <h3>Step 6: Make Predictions</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Inference with Fine-Tuned Model</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+
+<span class="comment"># Load the fine-tuned model</span>
+pipe = <span class="function">pipeline</span>(
+    <span class="string">"text-classification"</span>,
+    model=<span class="string">"./fine_tuned_model"</span>,
+    device=device
+)
+
+<span class="comment"># Make predictions</span>
+texts = [
+    <span class="string">"Apple releases new iPhone with better battery"</span>,
+    <span class="string">"Stock market crashes amid economic concerns"</span>,
+    <span class="string">"Sports: Team wins championship after overtime"</span>
+]
+
+predictions = <span class="function">pipe</span>(texts, batch_size=<span class="number">8</span>)
+<span class="keyword">for</span> text, pred <span class="keyword">in</span> <span class="function">zip</span>(texts, predictions):
+    <span class="function">print</span>(<span class="string">f"Text: {text}"</span>)
+    <span class="function">print</span>(<span class="string">f"  -&gt; Label: {pred['label']}, Score: {pred['score']:.4f}\n"</span>)
+</div>
+</div>
+
+    <h3>Key Parameters Explained</h3>
+    <div class="info-box">
+    <h4>Learning Rate (2e-5)</h4>
+    <p>Fine-tuning uses much smaller learning rates than training from scratch (typically 1e-5 to 5e-5). The model already knows a lot — we're making small adjustments.</p>
+</div>
+    <div class="info-box">
+    <h4>Warmup Steps</h4>
+    <p>Gradually increase learning rate at the start. Without warmup, large gradient updates can throw the model off the pre-trained solution.</p>
+</div>
+    <div class="info-box">
+    <h4>Weight Decay</h4>
+    <p>L2 regularization penalty. Prevents overfitting when fine-tuning on small datasets.</p>
+</div>
+    <div class="info-box">
+    <h4>Gradient Accumulation</h4>
+    <p>Accumulate gradients over multiple batches before updating. Simulates larger batch size without needing more GPU memory.</p>
+</div>
+
+    <h3>Memory and Speed Optimizations</h3>
+    <ul style="font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>Gradient Checkpointing:</strong> Trade compute for memory. Store fewer activations during forward pass, recompute during backward. Reduces memory by ~50%, increases training time by ~20-30%.</li>
+        <li><strong>Mixed Precision (fp16):</strong> Use 16-bit floats instead of 32-bit. Faster and less memory, nearly identical results.</li>
+        <li><strong>Gradient Accumulation:</strong> Simulate larger batch sizes without more GPU memory.</li>
+        <li><strong>LoRA (next section):</strong> Update only a tiny fraction of parameters.</li>
+    </ul>
+</section>
+
+<!-- SECTION: LoRA & Efficient Methods -->
+<section id="lora" class="ml-section">
+    <h2>LoRA: Efficient Fine-Tuning with Low-Rank Adaptation</h2>
+
+    <p>LoRA (Low-Rank Adaptation) is a technique that reduces the number of trainable parameters by 100-1000x while maintaining most of the performance of full fine-tuning. Instead of updating all parameters, LoRA adds small, trainable "adapter" matrices to the model.</p>
+
+    <h3>The LoRA Idea</h3>
+    <p>The key insight: adaptation to a downstream task doesn't require updating all parameters. Instead, we can express the weight updates as a low-rank decomposition.</p>
+
+    <div class="formula-box">
+    <div class="label">LoRA Weight Update</div>
+    For a weight matrix W (dimensions d × k), instead of:
+  W' = W + ΔW  (d × k update, expensive)
+
+We compute:
+  W' = W + AB^T  where A is (d × r) and B is (k × r)
+  with r << min(d, k)  (the rank)
+
+This reduces parameters from d·k to r·(d+k)
+Example: For W = 4096 × 4096:
+  Full update: 16.8M parameters
+  LoRA (r=8):  65.5K parameters (0.4%!)
+</div>
+
+    <h3>LoRA Setup with <a href="https://huggingface.co/docs/peft/" target="_blank" rel="noopener">PEFT</a></h3>
+    <div class="code-block">
+    <div class="code-header">Python — LoRA Configuration</div>
+    <div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+
+<span class="comment"># Configure LoRA</span>
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">8</span>,  <span class="comment"># LoRA rank</span>
+    lora_alpha=<span class="number">16</span>,  <span class="comment"># Scaling factor (usually 2 * r)</span>
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],  <span class="comment"># Which modules to apply LoRA to</span>
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>  <span class="comment"># Or "SEQ_2_SEQ_LM", "QUESTION_ANS", etc.</span>
+)
+
+<span class="comment"># Wrap model with LoRA</span>
+model = <span class="function">get_peft_model</span>(model, lora_config)
+model.<span class="function">print_trainable_parameters</span>()
+
+<span class="comment"># Output:</span>
+<span class="comment"># trainable params: 4194304 || all params: 124439552 || trainable%: 3.37%</span>
+</div>
+</div>
+
+    <h3>Full LoRA Fine-Tuning Example</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Complete LoRA Fine-Tuning</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> Trainer, TrainingArguments
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+
+<span class="comment"># 1. Load base model and tokenizer</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"bert-base-uncased"</span>,
+    num_labels=<span class="number">4</span>
+)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+<span class="comment"># 2. Apply LoRA</span>
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">8</span>,
+    lora_alpha=<span class="number">16</span>,
+    target_modules=[<span class="string">"query"</span>, <span class="string">"value"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"SEQ_CLS"</span>
+)
+model = <span class="function">get_peft_model</span>(model, lora_config)
+
+<span class="comment"># 3. Setup training (same as full fine-tuning)</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./lora_results"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">32</span>,  <span class="comment"># Can use larger batch</span>
+    learning_rate=<span class="number">1e-4</span>,  <span class="comment"># Slightly higher than full FT</span>
+    fp16=<span class="keyword">True</span>,
+    logging_steps=<span class="number">100</span>,
+    evaluation_strategy=<span class="string">"steps"</span>,
+    eval_steps=<span class="number">500</span>,
+)
+
+<span class="comment"># 4. Create and run trainer</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    compute_metrics=compute_metrics,
+)
+
+trainer.<span class="function">train</span>()
+
+<span class="comment"># 5. Save LoRA weights (only ~4MB!)</span>
+model.<span class="function">save_pretrained</span>(<span class="string">"./lora_weights"</span>)
+<span class="function">print</span>(<span class="string">"LoRA weights saved"</span>)
+</div>
+</div>
+
+    <h3>LoRA Hyperparameters</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Typical Range</th>
+                <th>Effect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>r (rank)</strong></td>
+                <td>4, 8, 16, 32</td>
+                <td>Higher = more capacity but slower. 8 is often optimal.</td>
+            </tr>
+            <tr>
+                <td><strong>lora_alpha</strong></td>
+                <td>8, 16, 32</td>
+                <td>Scaling factor. Usually 2x rank. Controls adapter strength.</td>
+            </tr>
+            <tr>
+                <td><strong>lora_dropout</strong></td>
+                <td>0.05, 0.1, 0.15</td>
+                <td>Regularization. Prevents overfitting on small datasets.</td>
+            </tr>
+            <tr>
+                <td><strong>target_modules</strong></td>
+                <td>["q_proj", "v_proj"]</td>
+                <td>Which layers to apply LoRA. Keys have less impact than query/value.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>QLoRA: Even More Efficient</h3>
+    <p>QLoRA combines LoRA with quantization to reduce memory even further. It quantizes the base model to 4-bit, then adds tiny LoRA adapters on top.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — QLoRA Configuration</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> BitsAndBytesConfig
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+
+<span class="comment"># Quantization config (4-bit)</span>
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_use_double_quant=<span class="keyword">True</span>,
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+)
+
+<span class="comment"># Load quantized model</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"meta-llama/Llama-2-7b-hf"</span>,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>,
+)
+
+<span class="comment"># Apply LoRA on top</span>
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">16</span>,
+    lora_alpha=<span class="number">32</span>,
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>, <span class="string">"k_proj"</span>, <span class="string">"o_proj"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>
+)
+model = <span class="function">get_peft_model</span>(model, lora_config)
+
+<span class="comment"># Now training uses only ~8GB VRAM for 7B model!</span>
+<span class="function">print</span>(model.<span class="function">print_trainable_parameters</span>())
+</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>LoRA Insight:</strong> Most of the fine-tuning updates are low-rank! This is why LoRA works so well. The model is doing something fundamentally different for your task, but that difference lives in a low-rank subspace.</p>
+</div>
+
+    <h3>Loading and Using LoRA Models</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Inference with LoRA</div>
+    <div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> AutoPeftModelForSequenceClassification
+
+<span class="comment"># Load base model + LoRA weights automatically</span>
+model = AutoPeftModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"path/to/lora_weights"</span>
+)
+
+<span class="comment"># Option 1: Use as-is for inference</span>
+outputs = <span class="function">model</span>(input_ids, attention_mask=attention_mask)
+
+<span class="comment"># Option 2: Merge LoRA into base weights (one-time cost)</span>
+merged_model = model.<span class="function">merge_and_unload</span>()
+
+<span class="comment"># Save merged model (can use with any inference framework)</span>
+merged_model.<span class="function">save_pretrained</span>(<span class="string">"./merged_model"</span>)
+</div>
+</div>
+</section>
+
+<!-- SECTION: Instruction Tuning -->
+<section id="instruction-tuning" class="ml-section">
+    <h2>Instruction Tuning: Teaching Models to Follow Instructions</h2>
+
+    <p>Instruction tuning teaches language models to follow user instructions and respond appropriately. Instead of just predicting the next token, the model learns to understand tasks described in natural language and execute them correctly.</p>
+
+    <h3>Why Instruction Tuning?</h3>
+    <p>Pre-trained language models are trained to predict the next token. They don't inherently understand task descriptions or follow instructions. A model might complete "The capital of France is" with accurate information, but fail at "Answer in French: What is the capital of France?"</p>
+
+    <p>Instruction tuning aligns the model with human expectations: given a task description (prompt), generate the correct output.</p>
+
+    <h3>Dataset Format</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Instruction Tuning Dataset Format</div>
+    <div class="code-content">{
+  <span class="string">"instruction"</span>: <span class="string">"Classify the sentiment of this review."</span>,
+  <span class="string">"input"</span>: <span class="string">"This movie was absolutely terrible. Boring, slow, and a waste of time."</span>,
+  <span class="string">"output"</span>: <span class="string">"negative"</span>
+}
+
+{
+  <span class="string">"instruction"</span>: <span class="string">"Summarize the following article in 2-3 sentences."</span>,
+  <span class="string">"input"</span>: <span class="string">"New research shows that regular exercise..."</span>,
+  <span class="string">"output"</span>: <span class="string">"The study found that..."</span>
+}
+
+{
+  <span class="string">"instruction"</span>: <span class="string">"Translate to French"</span>,
+  <span class="string">"input"</span>: <span class="string">"Hello, how are you?"</span>,
+  <span class="string">"output"</span>: <span class="string">"Bonjour, comment allez-vous?"</span>
+}
+
+{
+  <span class="string">"instruction"</span>: <span class="string">"Write a Python function that..."</span>,
+  <span class="string">"input"</span>: <span class="string">"that takes a list and returns unique elements"</span>,
+  <span class="string">"output"</span>: <span class="string">"def unique(lst):\n    return list(set(lst))"</span>
+}
+</div>
+</div>
+
+    <h3>Building an Instruction Dataset</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Creating Instruction Tuning Data</div>
+    <div class="code-content"><span class="keyword">import</span> json
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset
+
+<span class="comment"># Create instruction tuning examples</span>
+examples = [
+    {
+        <span class="string">"instruction"</span>: <span class="string">"Classify the sentiment"</span>,
+        <span class="string">"input"</span>: <span class="string">"This product is amazing!"</span>,
+        <span class="string">"output"</span>: <span class="string">"positive"</span>
+    },
+    {
+        <span class="string">"instruction"</span>: <span class="string">"Classify the sentiment"</span>,
+        <span class="string">"input"</span>: <span class="string">"Worst purchase ever"</span>,
+        <span class="string">"output"</span>: <span class="string">"negative"</span>
+    },
+    <span class="comment"># ... more examples</span>
+]
+
+<span class="comment"># Format for training</span>
+<span class="keyword">def</span> <span class="function">format_instruction</span>(example):
+    <span class="keyword">return</span> {
+        <span class="string">"text"</span>: <span class="string">f"""Instruction: {example['instruction']}
+Input: {example['input']}
+Output: {example['output']}&lt;|endoftext|&gt;"""</span>
+    }
+
+formatted = [<span class="function">format_instruction</span>(ex) <span class="keyword">for</span> ex <span class="keyword">in</span> examples]
+dataset = Dataset.<span class="function">from_dict</span>({
+    <span class="string">"text"</span>: [ex[<span class="string">"text"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> formatted]
+})
+
+<span class="function">print</span>(<span class="string">f"Dataset size: {len(dataset)} examples"</span>)
+</div>
+</div>
+
+    <h3>Fine-Tuning for Instruction Following</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Instruction Tuning with Trainer</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
+
+<span class="comment"># Load model</span>
+model_name = <span class="string">"gpt2"</span>  <span class="comment"># Or mistral, llama, etc.</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(model_name)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+
+<span class="comment"># Prepare dataset</span>
+<span class="keyword">def</span> <span class="function">preprocess_function</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(
+        examples[<span class="string">"text"</span>],
+        truncation=<span class="keyword">True</span>,
+        max_length=<span class="number">512</span>,
+    )
+
+train_dataset = dataset.<span class="function">map</span>(preprocess_function, batched=<span class="keyword">True</span>)
+
+<span class="comment"># Training arguments (instruction tuning is lighter than pretraining)</span>
+args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./instruction_model"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">8</span>,
+    learning_rate=<span class="number">5e-5</span>,
+    warmup_steps=<span class="number">100</span>,
+    weight_decay=<span class="number">0.01</span>,
+    logging_steps=<span class="number">10</span>,
+    save_strategy=<span class="string">"epoch"</span>,
+    fp16=<span class="keyword">True</span>,
+)
+
+<span class="comment"># Train</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=args,
+    train_dataset=train_dataset,
+)
+
+trainer.<span class="function">train</span>()
+model.<span class="function">save_pretrained</span>(<span class="string">"./instruction_tuned_model"</span>)
+</div>
+</div>
+
+    <h3>Inference: Using the Instruction-Tuned Model</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Generating Outputs with Instructions</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+
+pipe = <span class="function">pipeline</span>(
+    <span class="string">"text-generation"</span>,
+    model=<span class="string">"./instruction_tuned_model"</span>,
+    device=<span class="number">0</span>
+)
+
+<span class="comment"># Create prompt in same format as training</span>
+prompt = <span class="string">"""Instruction: Classify sentiment
+Input: This is great!
+Output:"""</span>
+
+output = <span class="function">pipe</span>(
+    prompt,
+    max_length=<span class="number">50</span>,
+    num_return_sequences=<span class="number">1</span>,
+    temperature=<span class="number">0.7</span>,
+    top_p=<span class="number">0.9</span>,
+)
+
+<span class="function">print</span>(output[<span class="number">0</span>][<span class="string">"generated_text"</span>])
+</div>
+</div>
+
+    <h3>Best Practices for Instruction Data</h3>
+    <div class="info-box">
+    <h4>Diversity</h4>
+    <p>Include variety: different tasks, domains, difficulty levels. A dataset with only classification gets overtrained on that task.</p>
+</div>
+    <div class="info-box">
+    <h4>Quality > Quantity</h4>
+    <p>100 high-quality instruction examples beat 10,000 low-quality ones. Spend time curating.</p>
+</div>
+    <div class="info-box">
+    <h4>Clear Instructions</h4>
+    <p>Write instructions that a human could understand. Avoid ambiguity. Bad: 'Do something'. Good: 'Classify the sentiment as positive, negative, or neutral.'</p>
+</div>
+    <div class="info-box">
+    <h4>Balanced Outputs</h4>
+    <p>If possible, balance output lengths and task types. Prevents bias toward one type of response.</p>
+</div>
+
+    <h3>Instruction Tuning vs Full Fine-Tuning</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Instruction Tuning</th>
+                    <th>Full Fine-Tuning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Task Type</td>
+                    <td>General purpose (any task)</td>
+                    <td>Specific task</td>
+                </tr>
+                <tr>
+                    <td>Data Format</td>
+                    <td>instruction + input → output</td>
+                    <td>input → output</td>
+                </tr>
+                <tr>
+                    <td>Model Flexibility</td>
+                    <td>High (understands new tasks)</td>
+                    <td>Low (locked to task)</td>
+                </tr>
+                <tr>
+                    <td>Data Required</td>
+                    <td>500-5000 diverse examples</td>
+                    <td>100-1000 task-specific examples</td>
+                </tr>
+                <tr>
+                    <td>Best For</td>
+                    <td>Building helpful assistants</td>
+                    <td>Specific applications</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- SECTION: RLHF and DPO -->
+<section id="rlhf" class="ml-section">
+    <h2>Alignment: RLHF and Direct Preference Optimization (DPO)</h2>
+
+    <p>After instruction tuning, models often hallucinate, refuse valid requests, or produce harmful content. RLHF (Reinforcement Learning from Human Feedback) and DPO (Direct Preference Optimization) align models with human preferences and values.</p>
+
+    <h3>The Problem: Why Fine-Tuning Isn't Enough</h3>
+    <p>Consider these issues:</p>
+    <ul style="font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>Hallucination:</strong> Model confidently states false information.</li>
+        <li><strong>Refusal:</strong> Model refuses to help with legitimate requests.</li>
+        <li><strong>Helpfulness:</strong> Model gives technically correct but unhelpful answers.</li>
+        <li><strong>Harmfulness:</strong> Model generates toxic, biased, or dangerous content.</li>
+    </ul>
+
+    <p>Standard fine-tuning on examples doesn't address these — we need to optimize for preferences.</p>
+
+    <h3>RLHF: Reinforcement Learning from Human Feedback</h3>
+    <p>RLHF has 4 phases:</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>1. Supervised Fine-Tuning</h4>
+    <p>Fine-tune on high-quality instruction examples (previous section).</p>
+</div>
+        <div class="card purple-accent">
+    <h4>2. Reward Modeling</h4>
+    <p>Collect human preferences (good vs bad outputs). Train a model to predict which output humans prefer.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>3. Reinforcement Learning</h4>
+    <p>Use the reward model to train the language model. Maximize expected reward while staying close to pre-trained model.</p>
+</div>
+        <div class="card green-accent">
+    <h4>4. Red Teaming</h4>
+    <p>Find and fix failure modes. Repeat until model is safe and helpful.</p>
+</div>
+    </div>
+
+    <h3>Reward Model Training</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Training a Reward Model</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForSequenceClassification, Trainer
+<span class="keyword">import</span> torch
+
+<span class="comment"># Dataset format: prompt + chosen response + rejected response</span>
+<span class="comment"># Collect via human annotations</span>
+preference_data = [
+    {
+        <span class="string">"prompt"</span>: <span class="string">"Tell me a joke"</span>,
+        <span class="string">"chosen"</span>: <span class="string">"Why did the chicken cross the road? To get to the other side!"</span>,
+        <span class="string">"rejected"</span>: <span class="string">"I cannot tell jokes."</span>
+    },
+    <span class="comment"># More examples...</span>
+]
+
+<span class="keyword">class</span> <span class="function">PairwiseDataset</span>(Dataset):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, data, tokenizer):
+        <span class="function">self</span>.tokenizer = tokenizer
+        <span class="function">self</span>.data = data
+    
+    <span class="keyword">def</span> <span class="function">__len__</span>(<span class="function">self</span>):
+        <span class="keyword">return</span> <span class="function">len</span>(<span class="function">self</span>.data)
+    
+    <span class="keyword">def</span> <span class="function">__getitem__</span>(<span class="function">self</span>, idx):
+        example = <span class="function">self</span>.data[idx]
+        
+        <span class="comment"># Tokenize chosen response</span>
+        chosen = <span class="function">self</span>.<span class="function">tokenizer</span>(
+            example[<span class="string">"prompt"</span>] + example[<span class="string">"chosen"</span>],
+            max_length=<span class="number">512</span>,
+            truncation=<span class="keyword">True</span>,
+            return_tensors=<span class="string">"pt"</span>
+        )
+        
+        <span class="comment"># Tokenize rejected response</span>
+        rejected = <span class="function">self</span>.<span class="function">tokenizer</span>(
+            example[<span class="string">"prompt"</span>] + example[<span class="string">"rejected"</span>],
+            max_length=<span class="number">512</span>,
+            truncation=<span class="keyword">True</span>,
+            return_tensors=<span class="string">"pt"</span>
+        )
+        
+        <span class="keyword">return</span> {
+            <span class="string">"chosen_input_ids"</span>: chosen[<span class="string">"input_ids"</span>].<span class="function">squeeze</span>(),
+            <span class="string">"chosen_attention_mask"</span>: chosen[<span class="string">"attention_mask"</span>].<span class="function">squeeze</span>(),
+            <span class="string">"rejected_input_ids"</span>: rejected[<span class="string">"input_ids"</span>].<span class="function">squeeze</span>(),
+            <span class="string">"rejected_attention_mask"</span>: rejected[<span class="string">"attention_mask"</span>].<span class="function">squeeze</span>(),
+        }
+
+<span class="comment"># Train reward model</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"gpt2"</span>,
+    num_labels=<span class="number">1</span>  <span class="comment"># Single scalar reward</span>
+)
+
+<span class="comment"># Custom loss: maximize difference between chosen and rejected</span>
+<span class="keyword">def</span> <span class="function">reward_loss</span>(model_output_chosen, model_output_rejected):
+    <span class="keyword">return</span> -torch.nn.functional.<span class="function">logsigmoid</span>(
+        model_output_chosen.logits - model_output_rejected.logits
+    ).<span class="function">mean</span>()
+
+<span class="function">print</span>(<span class="string">"Reward model training setup ready"</span>)
+</div>
+</div>
+
+    <h3>Direct Preference Optimization (DPO)</h3>
+    <p>DPO is a simpler alternative to RLHF that doesn't require training a separate reward model. Instead, it directly optimizes the language model using preference data.</p>
+
+    <div class="formula-box">
+    <div class="label">DPO Objective</div>
+    Instead of:
+  1. Training reward model
+  2. RL to maximize reward
+
+DPO directly minimizes:
+  L_DPO = -log σ(β log(π_θ(y|x) / π_ref(y|x)) - β log(π_θ(y'|x) / π_ref(y'|x)))
+
+Where:
+  σ = sigmoid function
+  β = temperature controlling preference strength
+  π_θ = our model
+  π_ref = reference (pre-trained) model
+  y = chosen response
+  y' = rejected response
+</div>
+
+    <h3>DPO Implementation</h3>
+    <div class="code-block">
+    <div class="code-header">Python — DPO Fine-Tuning with TRL</div>
+    <div class="code-content"><span class="keyword">from</span> trl <span class="keyword">import</span> DPOTrainer, DPOConfig
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer
+
+<span class="comment"># Prepare preference data</span>
+preference_dataset = [
+    {
+        <span class="string">"prompt"</span>: <span class="string">"Tell me a joke"</span>,
+        <span class="string">"chosen"</span>: <span class="string">"Why did the chicken cross the road?"</span>,
+        <span class="string">"rejected"</span>: <span class="string">"I can't tell jokes."</span>,
+    },
+    <span class="comment"># More examples...</span>
+]
+
+<span class="comment"># Load models</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+
+<span class="comment"># DPO training</span>
+dpo_config = <span class="function">DPOConfig</span>(
+    beta=<span class="number">0.1</span>,  <span class="comment"># Temperature for preference</span>
+    learning_rate=<span class="number">1e-5</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">4</span>,
+    output_dir=<span class="string">"./dpo_model"</span>,
+)
+
+trainer = <span class="function">DPOTrainer</span>(
+    model=model,
+    args=dpo_config,
+    train_dataset=preference_dataset,
+    tokenizer=tokenizer,
+)
+
+trainer.<span class="function">train</span>()
+model.<span class="function">save_pretrained</span>(<span class="string">"./dpo_model"</span>)
+</div>
+</div>
+
+    <h3>RLHF vs DPO Comparison</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>RLHF</th>
+                    <th>DPO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Complexity</td>
+                    <td>High (4 phases)</td>
+                    <td>Low (direct optimization)</td>
+                </tr>
+                <tr>
+                    <td>Training Cost</td>
+                    <td>Expensive (RL + reward model)</td>
+                    <td>Cheap (direct training)</td>
+                </tr>
+                <tr>
+                    <td>Reward Model</td>
+                    <td>Separate model needed</td>
+                    <td>No separate model</td>
+                </tr>
+                <tr>
+                    <td>Stability</td>
+                    <td>Can be unstable</td>
+                    <td>More stable</td>
+                </tr>
+                <tr>
+                    <td>Performance</td>
+                    <td>Excellent</td>
+                    <td>Excellent</td>
+                </tr>
+                <tr>
+                    <td>When to Use</td>
+                    <td>Production systems needing fine control</td>
+                    <td>Most practitioners</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> DPO has become increasingly popular because it's simpler than RLHF while achieving similar or better results. Unless you have specific reasons for RLHF, start with DPO.</p>
+</div>
+</section>
+
+<!-- SECTION: Dataset Preparation -->
+<section id="dataset-prep" class="ml-section">
+    <h2>Dataset Preparation for Fine-Tuning</h2>
+
+    <p>Quality data is everything in fine-tuning. A small dataset of high-quality examples beats a large dataset of noisy examples. Let's cover practical dataset preparation techniques.</p>
+
+    <h3>Data Sources and Collection</h3>
+    <div class="info-box">
+    <h4>Internal Data</h4>
+    <p>Customer tickets, documentation, past conversations. Most valuable! Domain-specific and private.</p>
+</div>
+    <div class="info-box">
+    <h4>Public Datasets</h4>
+    <p>HuggingFace Hub, Kaggle, academic datasets. Free but may not match your domain exactly.</p>
+</div>
+    <div class="info-box">
+    <h4>Synthetic Data</h4>
+    <p>Generate examples using GPT-4 or other strong models. Useful for augmentation or when real data is scarce.</p>
+</div>
+    <div class="info-box">
+    <h4>Crowdsourcing</h4>
+    <p>Hire annotators to create or label data. Expensive but high quality if managed well.</p>
+</div>
+
+    <h3>Data Cleaning and Preprocessing</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Cleaning and Validation</div>
+    <div class="code-content"><span class="keyword">import</span> json
+<span class="keyword">import</span> re
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset
+
+<span class="keyword">def</span> <span class="function">clean_text</span>(text):
+    <span class="string">'''Remove noise from text'''</span>
+    <span class="comment"># Remove HTML tags</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'&lt;[^&gt;]+&gt;'</span>, <span class="string">''</span>, text)
+    <span class="comment"># Remove extra whitespace</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'\s+'</span>, <span class="string">' '</span>, text).<span class="function">strip</span>()
+    <span class="comment"># Remove special characters (but keep punctuation)</span>
+    text = re.<span class="function">sub</span>(<span class="string">r'[^a-zA-Z0-9\s.!?,-]'</span>, <span class="string">''</span>, text)
+    <span class="keyword">return</span> text
+
+<span class="keyword">def</span> <span class="function">validate_example</span>(example):
+    <span class="string">'''Check if example is valid for fine-tuning'''</span>
+    <span class="keyword">if</span> <span class="function">len</span>(example.<span class="function">get</span>(<span class="string">"input"</span>, <span class="string">""</span>)) < <span class="number">5</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    <span class="keyword">if</span> <span class="function">len</span>(example.<span class="function">get</span>(<span class="string">"output"</span>, <span class="string">""</span>)) < <span class="number">5</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    <span class="keyword">if</span> <span class="string">"input"</span> <span class="keyword">not</span> <span class="keyword">in</span> example <span class="keyword">or</span> <span class="string">"output"</span> <span class="keyword">not</span> <span class="keyword">in</span> example:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="comment"># Load and clean data</span>
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"raw_data.jsonl"</span>) <span class="keyword">as</span> f:
+    raw_examples = [json.<span class="function">loads</span>(line) <span class="keyword">for</span> line <span class="keyword">in</span> f]
+
+<span class="comment"># Filter and clean</span>
+cleaned = []
+<span class="keyword">for</span> ex <span class="keyword">in</span> raw_examples:
+    <span class="keyword">if</span> <span class="function">validate_example</span>(ex):
+        ex[<span class="string">"input"</span>] = <span class="function">clean_text</span>(ex[<span class="string">"input"</span>])
+        ex[<span class="string">"output"</span>] = <span class="function">clean_text</span>(ex[<span class="string">"output"</span>])
+        cleaned.<span class="function">append</span>(ex)
+
+<span class="function">print</span>(<span class="string">f"Kept {len(cleaned)}/{len(raw_examples)} examples"</span>)
+
+dataset = Dataset.<span class="function">from_dict</span>({
+    <span class="string">"input"</span>: [ex[<span class="string">"input"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> cleaned],
+    <span class="string">"output"</span>: [ex[<span class="string">"output"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> cleaned],
+})
+</div>
+</div>
+
+    <h3>Train/Validation/Test Split</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Creating Dataset Splits</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+
+<span class="comment"># Split: 80% train, 10% val, 10% test</span>
+train, temp = <span class="function">train_test_split</span>(cleaned, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)
+val, test = <span class="function">train_test_split</span>(temp, test_size=<span class="number">0.5</span>, random_state=<span class="number">42</span>)
+
+<span class="function">print</span>(<span class="string">f"Train: {len(train)} | Val: {len(val)} | Test: {len(test)}"</span>)
+
+<span class="comment"># Create datasets</span>
+train_dataset = Dataset.<span class="function">from_dict</span>({
+    <span class="string">"input"</span>: [ex[<span class="string">"input"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> train],
+    <span class="string">"output"</span>: [ex[<span class="string">"output"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> train],
+})
+val_dataset = Dataset.<span class="function">from_dict</span>({
+    <span class="string">"input"</span>: [ex[<span class="string">"input"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> val],
+    <span class="string">"output"</span>: [ex[<span class="string">"output"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> val],
+})
+test_dataset = Dataset.<span class="function">from_dict</span>({
+    <span class="string">"input"</span>: [ex[<span class="string">"input"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> test],
+    <span class="string">"output"</span>: [ex[<span class="string">"output"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> test],
+})
+
+<span class="comment"># Save splits</span>
+train_dataset.<span class="function">save_to_disk</span>(<span class="string">"./train_data"</span>)
+val_dataset.<span class="function">save_to_disk</span>(<span class="string">"./val_data"</span>)
+test_dataset.<span class="function">save_to_disk</span>(<span class="string">"./test_data"</span>)
+</div>
+</div>
+
+    <h3>Data Augmentation Techniques</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Augmenting Training Data</div>
+    <div class="code-content"><span class="keyword">import</span> random
+
+<span class="keyword">def</span> <span class="function">paraphrase_instruction</span>(instruction):
+    <span class="string">'''Simple paraphrasing of instructions'''</span>
+    templates = [
+        <span class="string">"Can you {}?"</span>,
+        <span class="string">"Please {}."</span>,
+        <span class="string">"I need you to {}."</span>,
+        <span class="string">"Would you {}?"</span>,
+        <span class="string">"How would you {}?"</span>,
+    ]
+    <span class="comment"># Extract key verbs and use different template</span>
+    base = instruction.<span class="function">lower</span>()
+    template = random.<span class="function">choice</span>(templates)
+    <span class="keyword">return</span> template.<span class="function">format</span>(base)
+
+<span class="keyword">def</span> <span class="function">add_variations</span>(dataset):
+    <span class="string">'''Augment dataset with variations'''</span>
+    augmented = []
+    
+    <span class="keyword">for</span> example <span class="keyword">in</span> dataset:
+        <span class="comment"># Original</span>
+        augmented.<span class="function">append</span>(example)
+        
+        <span class="comment"># Paraphrased instruction (if it's an instruction task)</span>
+        <span class="keyword">if</span> <span class="string">"instruction"</span> <span class="keyword">in</span> example:
+            aug_ex = example.<span class="function">copy</span>()
+            aug_ex[<span class="string">"instruction"</span>] = <span class="function">paraphrase_instruction</span>(example[<span class="string">"instruction"</span>])
+            augmented.<span class="function">append</span>(aug_ex)
+    
+    <span class="keyword">return</span> augmented
+
+<span class="comment"># Augment training data</span>
+augmented_train = <span class="function">add_variations</span>(train)
+<span class="function">print</span>(<span class="string">f"Training size after augmentation: {len(augmented_train)}"</span>)
+</div>
+</div>
+
+    <h3>Data Analysis and Debugging</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Analyzing Your Dataset</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+
+<span class="comment"># Length statistics</span>
+input_lengths = [<span class="function">len</span>(ex[<span class="string">"input"</span>].<span class="function">split</span>()) <span class="keyword">for</span> ex <span class="keyword">in</span> dataset]
+output_lengths = [<span class="function">len</span>(ex[<span class="string">"output"</span>].<span class="function">split</span>()) <span class="keyword">for</span> ex <span class="keyword">in</span> dataset]
+
+<span class="function">print</span>(<span class="string">f"Input length - Mean: {np.mean(input_lengths):.0f}, "</span>
+      <span class="string">f"Min: {np.min(input_lengths)}, Max: {np.max(input_lengths)}"</span>)
+<span class="function">print</span>(<span class="string">f"Output length - Mean: {np.mean(output_lengths):.0f}, "</span>
+      <span class="string">f"Min: {np.min(output_lengths)}, Max: {np.max(output_lengths)}"</span>)
+
+<span class="comment"># Check for duplicates</span>
+inputs = [ex[<span class="string">"input"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> dataset]
+<span class="function">print</span>(<span class="string">f"Duplicates: {len(inputs) - len(set(inputs))}"</span>)
+
+<span class="comment"># Class balance (for classification)</span>
+<span class="keyword">if</span> <span class="string">"label"</span> <span class="keyword">in</span> dataset[<span class="number">0</span>]:
+    labels = [ex[<span class="string">"label"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> dataset]
+    <span class="function">print</span>(<span class="string">"Label distribution:"</span>, <span class="function">Counter</span>(labels))
+</div>
+</div>
+
+    <h3>Dataset Size Guidelines</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Fine-Tuning Method</th>
+                    <th>Minimum Data</th>
+                    <th>Recommended</th>
+                    <th>Optimal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Full Fine-Tuning (Classification)</td>
+                    <td>100</td>
+                    <td>500-1000</td>
+                    <td>5000+</td>
+                </tr>
+                <tr>
+                    <td>Full Fine-Tuning (Generation)</td>
+                    <td>200</td>
+                    <td>1000-2000</td>
+                    <td>10000+</td>
+                </tr>
+                <tr>
+                    <td>LoRA (Classification)</td>
+                    <td>50</td>
+                    <td>200-500</td>
+                    <td>2000+</td>
+                </tr>
+                <tr>
+                    <td>LoRA (Generation)</td>
+                    <td>100</td>
+                    <td>500-1000</td>
+                    <td>5000+</td>
+                </tr>
+                <tr>
+                    <td>Instruction Tuning</td>
+                    <td>200</td>
+                    <td>1000-2000</td>
+                    <td>5000+</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Rule of Thumb:</strong> You need at least 100 examples to improve over a pre-trained model. 500-2000 gives good results for most tasks. More data always helps, but with diminishing returns.</p>
+</div>
+</section>
+
+<!-- SECTION: Evaluation and Metrics -->
+<section id="evaluation" class="ml-section">
+    <h2>Evaluation During Training: Metrics and Monitoring</h2>
+
+    <p>You can't improve what you don't measure. Proper evaluation during fine-tuning is crucial for understanding progress and preventing overfitting.</p>
+
+    <h3>Classification Metrics</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Computing Classification Metrics</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (
+    accuracy_score,
+    precision_recall_fscore_support,
+    confusion_matrix,
+    roc_auc_score,
+    classification_report,
+)
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">compute_classification_metrics</span>(predictions, labels, num_classes=<span class="keyword">None</span>):
+    <span class="string">'''Compute standard classification metrics'''</span>
+    
+    <span class="comment"># Accuracy</span>
+    accuracy = <span class="function">accuracy_score</span>(labels, predictions)
+    
+    <span class="comment"># Precision, Recall, F1</span>
+    precision, recall, f1, _ = <span class="function">precision_recall_fscore_support</span>(
+        labels, predictions, average=<span class="string">"weighted"</span>
+    )
+    
+    <span class="comment"># Per-class metrics</span>
+    report = <span class="function">classification_report</span>(labels, predictions, output_dict=<span class="keyword">True</span>)
+    
+    <span class="comment"># Confusion matrix</span>
+    cm = <span class="function">confusion_matrix</span>(labels, predictions)
+    
+    <span class="keyword">return</span> {
+        <span class="string">"accuracy"</span>: accuracy,
+        <span class="string">"precision"</span>: precision,
+        <span class="string">"recall"</span>: recall,
+        <span class="string">"f1"</span>: f1,
+        <span class="string">"per_class"</span>: report,
+        <span class="string">"confusion_matrix"</span>: cm,
+    }
+
+<span class="comment"># Usage in training</span>
+predictions = np.<span class="function">argmax</span>(logits, axis=<span class="number">1</span>)
+metrics = <span class="function">compute_classification_metrics</span>(predictions, labels)
+<span class="function">print</span>(<span class="string">f"Accuracy: {metrics['accuracy']:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"F1: {metrics['f1']:.4f}"</span>)
+</div>
+</div>
+
+    <h3>Generation Metrics</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Evaluating Text Generation</div>
+    <div class="code-content"><span class="keyword">from</span> rouge_score <span class="keyword">import</span> rouge_scorer
+<span class="keyword">from</span> nltk.translate.bleu_score <span class="keyword">import</span> corpus_bleu
+<span class="keyword">import</span> nltk
+
+<span class="comment"># Download NLTK data</span>
+nltk.<span class="function">download</span>(<span class="string">'punkt'</span>)
+
+<span class="keyword">def</span> <span class="function">compute_generation_metrics</span>(predictions, references):
+    <span class="string">'''Compute metrics for generation tasks (summarization, translation)'''</span>
+    
+    <span class="comment"># ROUGE (for summarization)</span>
+    rouge = rouge_scorer.<span class="function">RougeScorer</span>([<span class="string">'rouge1'</span>, <span class="string">'rougeL'</span>], use_stemmer=<span class="keyword">True</span>)
+    rouge_scores = [rouge.<span class="function">score</span>(ref, pred) <span class="keyword">for</span> pred, ref <span class="keyword">in</span> <span class="function">zip</span>(predictions, references)]
+    avg_rouge1 = np.<span class="function">mean</span>([s[<span class="string">'rouge1'</span>].fmeasure <span class="keyword">for</span> s <span class="keyword">in</span> rouge_scores])
+    
+    <span class="comment"># BLEU (for translation)</span>
+    references_tokens = [[ref.<span class="function">split</span>()] <span class="keyword">for</span> ref <span class="keyword">in</span> references]
+    predictions_tokens = [pred.<span class="function">split</span>() <span class="keyword">for</span> pred <span class="keyword">in</span> predictions]
+    bleu = <span class="function">corpus_bleu</span>(references_tokens, predictions_tokens)
+    
+    <span class="comment"># Exact Match (for QA, simple tasks)</span>
+    exact_match = <span class="function">sum</span>([p.<span class="function">strip</span>() == r.<span class="function">strip</span>() <span class="keyword">for</span> p, r <span class="keyword">in</span> <span class="function">zip</span>(predictions, references)]) / <span class="function">len</span>(predictions)
+    
+    <span class="keyword">return</span> {
+        <span class="string">"rouge1"</span>: avg_rouge1,
+        <span class="string">"bleu"</span>: bleu,
+        <span class="string">"exact_match"</span>: exact_match,
+    }
+
+<span class="comment"># Usage</span>
+preds = [<span class="string">"The cat sat on the mat"</span>, <span class="string">"Dogs are animals"</span>]
+refs = [<span class="string">"A cat was sitting on the mat"</span>, <span class="string">"Dogs are mammals"</span>]
+metrics = <span class="function">compute_generation_metrics</span>(preds, refs)
+<span class="function">print</span>(<span class="string">f"ROUGE-1: {metrics['rouge1']:.4f}"</span>)
+</div>
+</div>
+
+    <h3>Custom Evaluation Metrics</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Creating Domain-Specific Metrics</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">evaluate_code_generation</span>(predictions, references):
+    <span class="string">'''Custom metric: code generation accuracy'''</span>
+    scores = []
+    <span class="keyword">for</span> pred, ref <span class="keyword">in</span> <span class="function">zip</span>(predictions, references):
+        <span class="keyword">try</span>:
+            <span class="comment"># Try to execute both and compare output</span>
+            pred_result = <span class="function">eval</span>(pred)
+            ref_result = <span class="function">eval</span>(ref)
+            scores.<span class="function">append</span>(<span class="number">1.0</span> <span class="keyword">if</span> pred_result == ref_result <span class="keyword">else</span> <span class="number">0.0</span>)
+        <span class="keyword">except</span>:
+            <span class="comment"># Execution failed</span>
+            scores.<span class="function">append</span>(<span class="number">0.0</span>)
+    <span class="keyword">return</span> np.<span class="function">mean</span>(scores)
+
+<span class="keyword">def</span> <span class="function">evaluate_medical_diagnosis</span>(predictions, references, task=<span class="string">"sensitivity"</span>):
+    <span class="string">'''Custom metric: sensitivity/specificity trade-off'''</span>
+    <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> recall_score, precision_score
+    
+    <span class="keyword">if</span> task == <span class="string">"sensitivity"</span>:
+        <span class="comment"># Maximize recall (catch all positives)</span>
+        <span class="keyword">return</span> <span class="function">recall_score</span>(references, predictions)
+    <span class="keyword">elif</span> task == <span class="string">"specificity"</span>:
+        <span class="comment"># Maximize specificity (avoid false alarms)</span>
+        <span class="keyword">return</span> <span class="function">recall_score</span>(references, predictions, pos_label=<span class="number">0</span>)
+    
+<span class="comment"># Use in evaluation</span>
+<span class="keyword">def</span> <span class="function">compute_metrics</span>(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.<span class="function">argmax</span>(predictions, axis=<span class="number">1</span>)
+    
+    <span class="comment"># Standard metrics</span>
+    accuracy = <span class="function">accuracy_score</span>(labels, predictions)
+    
+    <span class="comment"># Custom metrics</span>
+    sensitivity = <span class="function">evaluate_medical_diagnosis</span>(predictions, labels, <span class="string">"sensitivity"</span>)
+    
+    <span class="keyword">return</span> {
+        <span class="string">"accuracy"</span>: accuracy,
+        <span class="string">"sensitivity"</span>: sensitivity,
+    }
+</div>
+</div>
+
+    <h3>Monitoring Training with Logging</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Setup Logging and Monitoring</div>
+    <div class="code-content"><span class="keyword">import</span> wandb
+<span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments, Trainer
+
+<span class="comment"># Initialize wandb</span>
+wandb.<span class="function">init</span>(project=<span class="string">"fine-tuning"</span>, name=<span class="string">"my-experiment"</span>)
+
+<span class="comment"># Configure logging</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./results"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">16</span>,
+    logging_dir=<span class="string">"./logs"</span>,
+    logging_steps=<span class="number">100</span>,
+    evaluation_strategy=<span class="string">"steps"</span>,
+    eval_steps=<span class="number">500</span>,
+    
+    <span class="comment"># Wandb integration</span>
+    report_to=[<span class="string">"wandb"</span>],
+    run_name=<span class="string">"gpt2-finetuning-v1"</span>,
+)
+
+<span class="comment"># Create trainer with callbacks</span>
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    compute_metrics=compute_metrics,
+    callbacks=[],
+)
+
+<span class="comment"># Log custom metrics</span>
+wandb.<span class="function">log</span>({
+    <span class="string">"dataset_size"</span>: <span class="function">len</span>(train_dataset),
+    <span class="string">"model_parameters"</span>: model.<span class="function">num_parameters</span>(),
+})
+
+trainer.<span class="function">train</span>()
+</div>
+</div>
+
+    <h3>Detecting Overfitting</h3>
+    <p>Look for these signs during training:</p>
+    <ul style="font-size: 0.95rem; line-height: 1.8;">
+        <li><strong>Training loss keeps decreasing:</strong> Good, model is learning.</li>
+        <li><strong>Validation loss increases:</strong> Overfitting! Regularize more (higher dropout, weight decay, data augmentation).</li>
+        <li><strong>Training and validation loss diverge:</strong> Model overfitting. Too many epochs or not enough data.</li>
+        <li><strong>Metrics plateau:</strong> Diminishing returns. Training longer won't help. Try more data, adjust hyperparameters, or accept current performance.</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Early Stopping</h4>
+    <p>Stop training when validation loss stops improving for N evaluations. Prevents overfitting and saves compute. Most trainers support this via callbacks.</p>
+</div>
+</section>
+
+<!-- SECTION: Hyperparameter Search with Optuna -->
+<section id="hyperparameters" class="ml-section">
+    <h2>Hyperparameter Search and Optimization</h2>
+
+    <p>Fine-tuning success depends heavily on hyperparameters: learning rate, batch size, warmup steps, weight decay, etc. Random hyperparameter search is inefficient. Optuna enables systematic optimization.</p>
+
+    <h3>Common Hyperparameters to Tune</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Hyperparameter</th>
+                    <th>Typical Range</th>
+                    <th>Impact</th>
+                    <th>Tuning Order</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Learning Rate</td>
+                    <td>1e-5 to 5e-4</td>
+                    <td>Very High</td>
+                    <td>1st</td>
+                </tr>
+                <tr>
+                    <td>Batch Size</td>
+                    <td>8 to 128</td>
+                    <td>High</td>
+                    <td>2nd</td>
+                </tr>
+                <tr>
+                    <td>Warmup Steps</td>
+                    <td>0 to 1000</td>
+                    <td>Medium</td>
+                    <td>3rd</td>
+                </tr>
+                <tr>
+                    <td>Weight Decay</td>
+                    <td>0 to 0.1</td>
+                    <td>Medium</td>
+                    <td>3rd</td>
+                </tr>
+                <tr>
+                    <td>Epochs</td>
+                    <td>2 to 10</td>
+                    <td>Medium</td>
+                    <td>4th</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Optuna-Based Hyperparameter Search</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Systematic Hyperparameter Tuning</div>
+    <div class="code-content"><span class="keyword">import</span> optuna
+<span class="keyword">from</span> transformers <span class="keyword">import</span> Trainer, TrainingArguments
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">objective</span>(trial):
+    <span class="string">'''Objective function for Optuna to optimize'''</span>
+    
+    <span class="comment"># Suggest hyperparameters</span>
+    learning_rate = trial.<span class="function">suggest_float</span>(<span class="string">"learning_rate"</span>, <span class="number">1e-5</span>, <span class="number">5e-4</span>, log=<span class="keyword">True</span>)
+    batch_size = trial.<span class="function">suggest_int</span>(<span class="string">"batch_size"</span>, <span class="number">8</span>, <span class="number">32</span>)
+    warmup_steps = trial.<span class="function">suggest_int</span>(<span class="string">"warmup_steps"</span>, <span class="number">0</span>, <span class="number">1000</span>, step=<span class="number">100</span>)
+    weight_decay = trial.<span class="function">suggest_float</span>(<span class="string">"weight_decay"</span>, <span class="number">0.0</span>, <span class="number">0.1</span>)
+    
+    <span class="comment"># Create trainer with these hyperparameters</span>
+    training_args = <span class="function">TrainingArguments</span>(
+        output_dir=<span class="string">f"./trial_{trial.number}"</span>,
+        num_train_epochs=<span class="number">3</span>,
+        per_device_train_batch_size=batch_size,
+        per_device_eval_batch_size=<span class="number">32</span>,
+        learning_rate=learning_rate,
+        warmup_steps=warmup_steps,
+        weight_decay=weight_decay,
+        evaluation_strategy=<span class="string">"steps"</span>,
+        eval_steps=<span class="number">500</span>,
+        save_strategy=<span class="string">"no"</span>,  <span class="comment"># Don't save to speed up search</span>
+        logging_steps=<span class="number">100</span>,
+        fp16=<span class="keyword">True</span>,
+    )
+    
+    trainer = <span class="function">Trainer</span>(
+        model=model,
+        args=training_args,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
+        compute_metrics=compute_metrics,
+    )
+    
+    <span class="comment"># Train and get best validation metric</span>
+    trainer.<span class="function">train</span>()
+    eval_result = trainer.<span class="function">evaluate</span>()
+    
+    <span class="keyword">return</span> eval_result[<span class="string">"eval_accuracy"</span>]
+
+<span class="comment"># Create and run study</span>
+study = optuna.<span class="function">create_study</span>(direction=<span class="string">"maximize"</span>)
+study.<span class="function">optimize</span>(objective, n_trials=<span class="number">20</span>)  <span class="comment"># Try 20 different configurations</span>
+
+<span class="comment"># Get best hyperparameters</span>
+best_trial = study.best_trial
+<span class="function">print</span>(<span class="string">f"Best accuracy: {best_trial.value:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Best hyperparameters: {best_trial.params}"</span>)
+</div>
+</div>
+
+    <h3>Grid Search vs Random Search vs Bayesian Optimization</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Efficiency</th>
+                    <th>Complexity</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Grid Search</strong></td>
+                    <td>Low</td>
+                    <td>Low</td>
+                    <td>Small search spaces</td>
+                </tr>
+                <tr>
+                    <td><strong>Random Search</strong></td>
+                    <td>Medium</td>
+                    <td>Low</td>
+                    <td>Quick experiments</td>
+                </tr>
+                <tr>
+                    <td><strong>Bayesian Opt (Optuna)</strong></td>
+                    <td>High</td>
+                    <td>Medium</td>
+                    <td>Production tuning</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Learning Rate Scheduling</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Advanced Learning Rate Scheduling</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments
+<span class="keyword">import</span> math
+
+<span class="comment"># Different scheduling strategies</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./results"</span>,
+    
+    <span class="comment"># Learning rate schedule options:</span>
+    
+    <span class="comment"># 1. Constant with warmup (default)</span>
+    learning_rate=<span class="number">2e-5</span>,
+    warmup_steps=<span class="number">500</span>,
+    
+    <span class="comment"># 2. Linear decay (specify via lr_scheduler_type)</span>
+    lr_scheduler_type=<span class="string">"linear"</span>,
+    
+    <span class="comment"># 3. Cosine decay</span>
+    lr_scheduler_type=<span class="string">"cosine"</span>,
+    
+    <span class="comment"># 4. Cosine with hard restarts (learning rate resets during training)</span>
+    lr_scheduler_type=<span class="string">"cosine_with_restarts"</span>,
+    
+    <span class="comment"># Number of hard restarts</span>
+    num_cycles=<span class="number">3</span>,
+)
+
+<span class="comment"># Custom schedule via callback</span>
+<span class="keyword">class</span> CustomScheduleCallback:
+    <span class="keyword">def</span> <span class="function">on_step_end</span>(<span class="function">self</span>, args, state, control, **kwargs):
+        <span class="comment"># Custom logic to adjust learning rate</span>
+        <span class="keyword">pass</span>
+</div>
+</div>
+
+    <h3>Learning Rate Finder</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Finding Optimal Learning Rate</div>
+    <div class="code-content"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">learning_rate_finder</span>(model, train_loader, device, start_lr=<span class="number">1e-6</span>, end_lr=<span class="number">1e-1</span>, num_iterations=<span class="number">100</span>):
+    <span class="string">'''Find optimal learning rate by training with increasing LR'''</span>
+    
+    lrs = np.<span class="function">logspace</span>(np.<span class="function">log10</span>(start_lr), np.<span class="function">log10</span>(end_lr), num_iterations)
+    losses = []
+    
+    <span class="keyword">for</span> lr <span class="keyword">in</span> lrs:
+        <span class="comment"># Set learning rate</span>
+        <span class="keyword">for</span> param_group <span class="keyword">in</span> optimizer.param_groups:
+            param_group[<span class="string">'lr'</span>] = lr
+        
+        <span class="comment"># Train for one batch</span>
+        model.<span class="function">train</span>()
+        batch = <span class="function">next</span>(<span class="function">iter</span>(train_loader))
+        outputs = <span class="function">model</span>(batch)
+        loss = outputs.loss
+        optimizer.<span class="function">zero_grad</span>()
+        loss.<span class="function">backward</span>()
+        optimizer.<span class="function">step</span>()
+        
+        losses.<span class="function">append</span>(loss.<span class="function">item</span>())
+    
+    <span class="comment"># Plot results</span>
+    plt.<span class="function">figure</span>(figsize=(<span class="number">10</span>, <span class="number">6</span>))
+    plt.<span class="function">xscale</span>(<span class="string">'log'</span>)
+    plt.<span class="function">plot</span>(lrs, losses)
+    plt.<span class="function">xlabel</span>(<span class="string">'Learning Rate'</span>)
+    plt.<span class="function">ylabel</span>(<span class="string">'Loss'</span>)
+    plt.<span class="function">title</span>(<span class="string">'Learning Rate Finder'</span>)
+    plt.<span class="function">savefig</span>(<span class="string">'./lr_finder.png'</span>)
+    
+    <span class="comment"># Find steepest descent</span>
+    best_lr = lrs[np.<span class="function">argmin</span>(losses)]
+    <span class="function">print</span>(<span class="string">f"Suggested learning rate: {best_lr:.2e}"</span>)
+    
+    <span class="keyword">return</span> best_lr
+</div>
+</div>
+</section>
+
+<!-- SECTION: Methods Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Comprehensive Comparison: Full vs LoRA vs QLoRA vs Adapters</h2>
+
+    <p>Multiple efficient fine-tuning methods exist. Each has trade-offs in memory, speed, and performance. This section compares them across practical dimensions.</p>
+
+    <h3>Visual Comparison: Memory vs Performance</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Full Fine-Tuning</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #7c3aed, #a855f7);">100% Performance, 100% Memory</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">LoRA (r=8)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #0891b2, #22d3ee);">95% Performance, 30% Memory</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">QLoRA</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #059669, #10b981);">92% Performance, 10% Memory</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">IA3</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 87%; background: linear-gradient(90deg, #f97316, #fb923c);">85% Performance, 5% Memory</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Prompt Tuning</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 70%; background: linear-gradient(90deg, #64748b, #94a3b8);">70% Performance, 2% Memory</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Approximate relative performance and memory usage for a 7B model</em></p>
+
+    <h3>Detailed Comparison Table</h3>
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table" style="font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Trainable Params</th>
+                    <th>GPU Memory</th>
+                    <th>Training Time</th>
+                    <th>Final Performance</th>
+                    <th>Complexity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Full Fine-Tuning</strong></td>
+                    <td>100%</td>
+                    <td>80 GB (7B model)</td>
+                    <td>8-24h</td>
+                    <td>100%</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>LoRA</strong></td>
+                    <td>0.1-1%</td>
+                    <td>24-40 GB</td>
+                    <td>2-8h</td>
+                    <td>95-98%</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>QLoRA</strong></td>
+                    <td>0.1-1%</td>
+                    <td>8-16 GB</td>
+                    <td>4-12h</td>
+                    <td>92-96%</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>IA3</strong></td>
+                    <td>0.01-0.1%</td>
+                    <td>4-8 GB</td>
+                    <td>2-6h</td>
+                    <td>80-90%</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><strong>Prefix Tuning</strong></td>
+                    <td>0.1-1%</td>
+                    <td>16-24 GB</td>
+                    <td>3-6h</td>
+                    <td>90-95%</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>Prompt Tuning</strong></td>
+                    <td>0.01-0.1%</td>
+                    <td>2-4 GB</td>
+                    <td>30min-2h</td>
+                    <td>70-85%</td>
+                    <td>Low</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Which Method to Use?</h3>
+    <div class="card-grid">
+        <div class="card purple-accent">
+    <h4>Full Fine-Tuning</h4>
+    <p>Use when: Maximum performance is critical, you have compute budget, task is very different from pre-training. Gives best results.</p>
+</div>
+        <div class="card cyan-accent">
+    <h4>LoRA</h4>
+    <p>Use when: Good performance with moderate efficiency needed. Most practitioners should start here. Great balance of quality and cost.</p>
+</div>
+        <div class="card green-accent">
+    <h4>QLoRA</h4>
+    <p>Use when: Limited GPU memory (RTX 3090, RTX 4090). Adds 20-30% training time but saves 5x memory vs LoRA.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>IA3</h4>
+    <p>Use when: Extreme memory constraints or many small adaptations needed. Performance trade-off is acceptable.</p>
+</div>
+    </div>
+
+    <h3>Combining Methods: Multi-Adapter Fine-Tuning</h3>
+    <p>Advanced: Train multiple task-specific adapters and switch between them at inference time.</p>
+    <div class="code-block">
+    <div class="code-header">Python — Using Multiple Task Adapters</div>
+    <div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> PeftModel, LoraConfig, get_peft_model
+
+<span class="comment"># Load base model once</span>
+base_model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(<span class="string">"mistral-7b"</span>)
+
+<span class="comment"># Create adapters for different tasks</span>
+adapters = {}
+tasks = [<span class="string">"sentiment"</span>, <span class="string">"translation"</span>, <span class="string">"summarization"</span>]
+
+<span class="keyword">for</span> task <span class="keyword">in</span> tasks:
+    lora_config = <span class="function">LoraConfig</span>(
+        r=<span class="number">8</span>,
+        lora_alpha=<span class="number">16</span>,
+        target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],
+        task_type=<span class="string">"CAUSAL_LM"</span>
+    )
+    
+    model = <span class="function">get_peft_model</span>(base_model, lora_config)
+    
+    <span class="comment"># Fine-tune for this task...</span>
+    trainer.<span class="function">train</span>()
+    
+    <span class="comment"># Save adapter</span>
+    model.<span class="function">save_pretrained</span>(<span class="string">f"./adapters/{task}"</span>)
+    adapters[task] = model
+
+<span class="comment"># At inference, load the right adapter for the task</span>
+loaded_model = PeftModel.<span class="function">from_pretrained</span>(
+    base_model,
+    <span class="string">f"./adapters/sentiment"</span>
+)
+
+<span class="comment"># Switch adapters without reloading model</span>
+loaded_model.<span class="function">set_adapter</span>(<span class="string">"translation"</span>)  <span class="comment"># Switch to translation adapter</span>
+</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Practical Tip:</strong> If you're unsure, start with LoRA. It has great performance, is memory efficient, and is well-supported across frameworks.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Fine-Tuning Best Practices and Common Pitfalls</h2>
+
+    <h3>10 Essential Best Practices</h3>
+
+    <div class="info-box">
+    <h4>1. Start Small and Iterate</h4>
+    <p>Don't fine-tune on 10,000 examples immediately. Start with 100-200 examples. If performance is poor, the issue is likely not data size but hyperparameters or data quality.</p>
+</div>
+
+    <div class="info-box">
+    <h4>2. Always Use a Validation Set</h4>
+    <p>Monitor validation metrics during training. Without validation, you can't detect overfitting. Use early stopping to prevent wasted compute.</p>
+</div>
+
+    <div class="info-box">
+    <h4>3. Lower Learning Rate Than Pre-training</h4>
+    <p>Fine-tuning uses 10-100x smaller learning rates than pre-training. Typically 1e-5 to 5e-4. Too high and you destroy pre-trained knowledge. Too low and training is painfully slow.</p>
+</div>
+
+    <div class="info-box">
+    <h4>4. Use Mixed Precision Training</h4>
+    <p>Enable fp16=True in training args. Speeds up training by 20-30%, uses half the memory, and accuracy is nearly identical. It's a free win.</p>
+</div>
+
+    <div class="info-box">
+    <h4>5. Data Quality Beats Quantity</h4>
+    <p>100 perfect examples beat 10,000 noisy ones. Spend time cleaning, deduplicating, and validating data. This is often the highest ROI task.</p>
+</div>
+
+    <div class="info-box">
+    <h4>6. Try Different Model Sizes</h4>
+    <p>Bigger models are often better, but smaller models can work for simple tasks. A 7B model fine-tuned on your data might beat a 70B base model with prompts.</p>
+</div>
+
+    <div class="info-box">
+    <h4>7. Monitor for Mode Collapse</h4>
+    <p>If your fine-tuned model generates identical outputs regardless of input, it's collapsed. Increase data diversity, reduce regularization, or lower learning rate.</p>
+</div>
+
+    <div class="info-box">
+    <h4>8. Save Checkpoints Regularly</h4>
+    <p>Don't save only the final model. Save intermediate checkpoints. Sometimes earlier checkpoints are better due to overfitting.</p>
+</div>
+
+    <div class="info-box">
+    <h4>9. Use Gradient Accumulation for Large Batches</h4>
+    <p>If you can't fit large batches in memory, use gradient accumulation. Simulates larger batches with equivalent results but lower memory.</p>
+</div>
+
+    <div class="info-box">
+    <h4>10. Test on Domain-Specific Data</h4>
+    <p>Evaluate on examples from your actual use case, not just public benchmarks. A model that scores 95% on GLUE might perform poorly on your specific task.</p>
+</div>
+
+    <h3>Common Pitfalls and Solutions</h3>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Fine-tuned model performs worse than base model <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>Likely causes:</strong></p>
+                <ul style="margin: 10px 0;">
+                    <li>Learning rate too high — reduces to 1e-5</li>
+                    <li>Not enough training data — gather more examples</li>
+                    <li>Data distribution mismatch — ensure data is from your domain</li>
+                    <li>Task is too different from pre-training — try different architecture</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Training is very slow or OOM errors <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li>Reduce batch size (try 2-4 instead of 32)</li>
+                    <li>Enable gradient checkpointing: gradient_checkpointing=True</li>
+                    <li>Use LoRA instead of full fine-tuning</li>
+                    <li>Use QLoRA for even more memory savings</li>
+                    <li>Reduce max_seq_length (e.g., 256 instead of 512)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Model overfits on training data <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li>Increase weight decay (try 0.01 or 0.1)</li>
+                    <li>Increase dropout (lora_dropout=0.1 or higher)</li>
+                    <li>Reduce number of epochs (try 1-2 instead of 3-5)</li>
+                    <li>Add data augmentation</li>
+                    <li>Use early stopping based on validation loss</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Fine-Tuning Techniques</h2>
+
+    <h3>Multi-task Fine-Tuning</h3>
+    <p>Train on multiple tasks simultaneously. The model learns shared representations and often performs better on individual tasks.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Multi-Task Fine-Tuning</div>
+    <div class="code-content"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> ConcatDataset, DataLoader
+
+<span class="comment"># Combine multiple task datasets</span>
+sentiment_data = <span class="function">load_dataset</span>(<span class="string">"amazon_reviews_multi"</span>)[<span class="string">"train"</span>]
+topic_data = <span class="function">load_dataset</span>(<span class="string">"ag_news"</span>)[<span class="string">"train"</span>]
+
+<span class="comment"># Create multi-task examples</span>
+<span class="keyword">def</span> <span class="function">add_task_marker</span>(example, task_name):
+    example[<span class="string">"task"</span>] = task_name
+    example[<span class="string">"text"</span>] = <span class="string">f"Task: {task_name}\n{example['text']}"</span>
+    <span class="keyword">return</span> example
+
+sentiment_data = sentiment_data.<span class="function">map</span>(
+    <span class="keyword">lambda</span> x: <span class="function">add_task_marker</span>(x, <span class="string">"sentiment"</span>)
+)
+topic_data = topic_data.<span class="function">map</span>(
+    <span class="keyword">lambda</span> x: <span class="function">add_task_marker</span>(x, <span class="string">"topic"</span>)
+)
+
+<span class="comment"># Combine datasets</span>
+combined = <span class="function">ConcatDataset</span>([sentiment_data, topic_data])
+
+<span class="comment"># The model learns to solve both tasks</span>
+trainer = <span class="function">Trainer</span>(...)
+trainer.<span class="function">train</span>()
+</div>
+</div>
+
+    <h3>Continued Pre-training (Domain Adaptation)</h3>
+    <p>Sometimes better than fine-tuning: continue pre-training on unlabeled data from your domain before fine-tuning on labeled data.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Domain Adaptation Pipeline</div>
+    <div class="code-content"><span class="comment"># Phase 1: Continued pre-training on domain data</span>
+<span class="comment"># Use causal language modeling loss on unlabeled data from your domain</span>
+
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./domain_adapted_model"</span>,
+    num_train_epochs=<span class="number">1</span>,
+    per_device_train_batch_size=<span class="number">16</span>,
+    learning_rate=<span class="number">5e-5</span>,
+    fp16=<span class="keyword">True</span>,
+)
+
+<span class="comment"># Use a dataset of unlabeled text from your domain</span>
+unlabeled_data = <span class="function">load_dataset</span>(<span class="string">"text"</span>, data_files=<span class="string">"domain_corpus.txt"</span>)
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=unlabeled_data,
+    data_collator=<span class="function">DataCollatorForLanguageModeling</span>(tokenizer, mlm=<span class="keyword">False</span>),
+)
+
+trainer.<span class="function">train</span>()
+
+<span class="comment"># Phase 2: Fine-tune on labeled task data</span>
+<span class="comment"># Now fine-tune the domain-adapted model on your task</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"./domain_adapted_model"</span>,
+    num_labels=<span class="number">4</span>
+)
+
+trainer = <span class="function">Trainer</span>(...)
+trainer.<span class="function">train</span>()
+</div>
+</div>
+
+    <h3>Few-Shot In-Context Learning</h3>
+    <p>Alternative to fine-tuning: include examples in the prompt.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Few-Shot Prompting</div>
+    <div class="code-content"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+
+pipe = <span class="function">pipeline</span>(<span class="string">"text-classification"</span>, model=<span class="string">"gpt2"</span>)
+
+<span class="comment"># Few-shot examples in the prompt</span>
+prompt = <span class="string">"""Classify the sentiment.
+
+Example 1:
+Input: Great movie!
+Output: positive
+
+Example 2:
+Input: Terrible experience
+Output: negative
+
+Now classify:
+Input: This is okay.
+Output:"""</span>
+
+output = <span class="function">pipe</span>(prompt, max_length=<span class="number">200</span>)
+<span class="function">print</span>(output)
+</div>
+</div>
+
+    <h3>Knowledge Distillation</h3>
+    <p>Train a smaller, faster model to mimic a larger fine-tuned model.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Knowledge Distillation Setup</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+
+<span class="keyword">def</span> <span class="function">distillation_loss</span>(student_logits, teacher_logits, labels, temperature=<span class="number">3.0</span>, alpha=<span class="number">0.7</span>):
+    <span class="string">'''Combined supervised + distillation loss'''</span>
+    <span class="comment"># Supervised loss</span>
+    ce_loss = F.<span class="function">cross_entropy</span>(student_logits, labels)
+    
+    <span class="comment"># Distillation loss: KL divergence of softened distributions</span>
+    kl_loss = F.<span class="function">kl_div</span>(
+        F.<span class="function">log_softmax</span>(student_logits / temperature, dim=<span class="number">1</span>),
+        F.<span class="function">softmax</span>(teacher_logits / temperature, dim=<span class="number">1</span>),
+        reduction=<span class="string">'batchmean'</span>
+    ) * (temperature ** <span class="number">2</span>)
+    
+    <span class="comment"># Combined</span>
+    loss = alpha * ce_loss + (<span class="number">1</span> - alpha) * kl_loss
+    <span class="keyword">return</span> loss
+
+<span class="comment"># Train student model with teacher guidance</span>
+<span class="keyword">for</span> batch <span class="keyword">in</span> train_loader:
+    student_logits = <span class="function">student_model</span>(batch)
+    <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+        teacher_logits = <span class="function">teacher_model</span>(batch)
+    
+    loss = <span class="function">distillation_loss</span>(student_logits, teacher_logits, batch[<span class="string">'labels'</span>])
+    loss.<span class="function">backward</span>()
+    optimizer.<span class="function">step</span>()
+</div>
+</div>
+</section>
+
+<!-- SECTION: Deployment and Model Merging -->
+<section id="deployment" class="ml-section">
+    <h2>Deployment: Saving, Merging, and Serving Fine-Tuned Models</h2>
+
+    <h3>Saving Fine-Tuned Models</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Saving Different Fine-Tuning Methods</div>
+    <div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> AutoPeftModelForCausalLM
+
+<span class="comment"># Full fine-tuning: save complete model</span>
+model.<span class="function">save_pretrained</span>(<span class="string">"./full_ft_model"</span>)
+
+<span class="comment"># LoRA: save only adapter weights (~4-10 MB)</span>
+peft_model.<span class="function">save_pretrained</span>(<span class="string">"./lora_weights"</span>)
+
+<span class="comment"># Save tokenizer too</span>
+tokenizer.<span class="function">save_pretrained</span>(<span class="string">"./full_ft_model"</span>)
+tokenizer.<span class="function">save_pretrained</span>(<span class="string">"./lora_weights"</span>)
+</div>
+</div>
+
+    <h3>Merging LoRA Adapters with Base Model</h3>
+    <p>For deployment, you may want to merge LoRA weights into the base model. This creates a single model file without needing PEFT at inference.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Merging LoRA into Base Model</div>
+    <div class="code-content"><span class="keyword">from</span> peft <span class="keyword">import</span> PeftModel, PeftConfig
+
+<span class="comment"># Load the base model and LoRA weights</span>
+base_model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(<span class="string">"mistral-7b"</span>)
+peft_model = PeftModel.<span class="function">from_pretrained</span>(base_model, <span class="string">"./lora_weights"</span>)
+
+<span class="comment"># Merge: converts LoRA weights into base weights</span>
+merged_model = peft_model.<span class="function">merge_and_unload</span>()
+
+<span class="comment"># Save merged model (can now be used with any inference framework)</span>
+merged_model.<span class="function">save_pretrained</span>(<span class="string">"./merged_model"</span>)
+tokenizer.<span class="function">save_pretrained</span>(<span class="string">"./merged_model"</span>)
+
+<span class="comment"># At inference, just load normally (no PEFT needed)</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+pipe = <span class="function">pipeline</span>(<span class="string">"text-generation"</span>, model=<span class="string">"./merged_model"</span>)
+</div>
+</div>
+
+    <h3>Serving Fine-Tuned Models</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — REST API with FastAPI</div>
+    <div class="code-content"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+<span class="keyword">import</span> torch
+
+app = <span class="function">FastAPI</span>()
+
+<span class="comment"># Load model once at startup</span>
+device = <span class="number">0</span> <span class="keyword">if</span> torch.cuda.<span class="function">is_available</span>() <span class="keyword">else</span> -<span class="number">1</span>
+pipe = <span class="function">pipeline</span>(
+    <span class="string">"text-generation"</span>,
+    model=<span class="string">"./fine_tuned_model"</span>,
+    device=device,
+    torch_dtype=torch.float16,
+)
+
+<span class="decorator">@app.post</span>(<span class="string">"/predict"</span>)
+<span class="keyword">def</span> <span class="function">predict</span>(text: <span class="function">str</span>, max_length: <span class="function">int</span> = <span class="number">100</span>):
+    outputs = <span class="function">pipe</span>(text, max_length=max_length, num_return_sequences=<span class="number">1</span>)
+    <span class="keyword">return</span> {<span class="string">"output"</span>: outputs[<span class="number">0</span>][<span class="string">"generated_text"</span>]}
+
+<span class="comment"># Run: uvicorn app:app --host 0.0.0.0 --port 8000</span>
+<span class="comment"># Curl: curl -X POST http://localhost:8000/predict -d '{"text": "Hello"}'</span>
+
+</div>
+</div>
+
+    <h3>Quantization for Efficient Serving</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — ONNX Quantization</div>
+    <div class="code-content"><span class="keyword">from</span> optimum.onnxruntime <span class="keyword">import</span> ORTModelForSequenceClassification
+
+<span class="comment"># Convert to ONNX and quantize</span>
+ort_model = ORTModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"./fine_tuned_model"</span>,
+    from_transformers=<span class="keyword">True</span>,
+    file_name=<span class="string">"model_quantized.onnx"</span>
+)
+
+<span class="comment"># Save quantized model (much faster inference, 4x smaller)</span>
+ort_model.<span class="function">save_pretrained</span>(<span class="string">"./quantized_model"</span>)
+
+<span class="comment"># Use quantized model</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+pipe = <span class="function">pipeline</span>(<span class="string">"text-classification"</span>, model=<span class="string">"./quantized_model"</span>)
+</div>
+</div>
+
+    <h3>Model Comparison and Versioning</h3>
+    <p>Keep track of multiple fine-tuned versions:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Model Registry</div>
+    <div class="code-content"><span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+model_registry = {
+    <span class="string">"v1"</span>: {
+        <span class="string">"date"</span>: <span class="string">"2024-01-15"</span>,
+        <span class="string">"method"</span>: <span class="string">"full-ft"</span>,
+        <span class="string">"dataset_size"</span>: <span class="number">5000</span>,
+        <span class="string">"val_accuracy"</span>: <span class="number">0.92</span>,
+        <span class="string">"path"</span>: <span class="string">"./models/ft_v1"</span>,
+    },
+    <span class="string">"v2"</span>: {
+        <span class="string">"date"</span>: <span class="string">"2024-01-20"</span>,
+        <span class="string">"method"</span>: <span class="string">"lora"</span>,
+        <span class="string">"dataset_size"</span>: <span class="number">10000</span>,
+        <span class="string">"val_accuracy"</span>: <span class="number">0.94</span>,
+        <span class="string">"path"</span>: <span class="string">"./models/ft_v2"</span>,
+    }
+}
+
+<span class="keyword">with</span> <span class="function">open</span>(<span class="string">"model_registry.json"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    json.<span class="function">dump</span>(model_registry, f, indent=<span class="number">2</span>)
+
+<span class="comment"># Later, load the best version</span>
+best_model_path = model_registry[<span class="string">"v2"</span>][<span class="string">"path"</span>]
+</div>
+</div>
+</section>
+
+<!-- SECTION: Troubleshooting -->
+<section id="troubleshooting" class="ml-section">
+    <h2>Troubleshooting Common Issues</h2>
+
+    <h3>Training Issues</h3>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">RuntimeError: CUDA out of memory <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>Solutions (in order of effectiveness):</strong></p>
+                <ol style="margin: 10px 0;">
+                    <li>Reduce batch size: <code>per_device_train_batch_size=4</code> (from 16)</li>
+                    <li>Enable gradient checkpointing: <code>gradient_checkpointing=True</code></li>
+                    <li>Reduce max sequence length: <code>max_length=256</code> (from 512)</li>
+                    <li>Enable 8-bit optimization: Install bitsandbytes, use <code>load_in_8bit=True</code></li>
+                    <li>Use LoRA: reduces memory by 50-70%</li>
+                    <li>Use QLoRA: reduces memory by 90%+</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">NaN loss or loss becomes 0 <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li><strong>NaN loss:</strong> Usually learning rate too high. Reduce by 10x.</li>
+                    <li><strong>Loss stays 0:</strong> Model has converged or collapsed. Try different initialization or check data.</li>
+                    <li><strong>Solutions:</strong> Use smaller learning rate, add warmup steps, check data for NaN values, try different random seed.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Model generates repetitive or nonsensical text <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li><strong>Mode collapse:</strong> Model learned a single "safe" output.</li>
+                    <li><strong>Solutions:</strong> Increase data diversity, lower learning rate, add temperature to decoding (temperature=0.7), check training examples for quality.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3>Data Issues</h3>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Data loading is very slow <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li>Use Arrow format (.arrow) instead of JSON for faster loading</li>
+                    <li>Set <code>num_proc=4</code> in dataset.map() for parallel processing</li>
+                    <li>Cache preprocessed data: <code>dataset.save_to_disk("./cached_data")</code></li>
+                    <li>Use smaller batches to see progress faster during development</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Tokenizer adds special tokens I didn't expect <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ul style="margin: 10px 0;">
+                    <li>Check what special tokens your tokenizer has: <code>tokenizer.special_tokens_map</code></li>
+                    <li>Add custom tokens: <code>tokenizer.add_special_tokens({'additional_special_tokens': ['<USER>', '<BOT>']})</code></li>
+                    <li>Resize model embeddings: <code>model.resize_token_embeddings(len(tokenizer))</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3>Inference Issues</h3>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Fine-tuned model doesn't work better than base model <span class="toggle-icon">▼</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <ol style="margin: 10px 0;">
+                    <li>Check that you're loading the right model (fine-tuned version, not base)</li>
+                    <li>Evaluate on task-specific metrics, not generic ones</li>
+                    <li>Fine-tune longer: increase epochs to 5-10</li>
+                    <li>Add more data: may need 500+ examples for measurable improvement</li>
+                    <li>Check data quality: bad labels hurt more than no labels</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Complete Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete End-to-End Code Examples</h2>
+
+    <h3>Example 1: Fine-Tune BERT for Sentiment Classification</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — BERT Fine-Tuning Complete</div>
+    <div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="keyword">from</span> datasets <span class="keyword">import</span> load_dataset
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer, AutoModelForSequenceClassification
+<span class="keyword">from</span> transformers <span class="keyword">import</span> TrainingArguments, Trainer
+<span class="keyword">import</span> torch
+
+<span class="comment"># 1. Load dataset</span>
+dataset = <span class="function">load_dataset</span>(<span class="string">"rotten_tomatoes"</span>)
+
+<span class="comment"># 2. Tokenize</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"bert-base-uncased"</span>)
+
+<span class="keyword">def</span> <span class="function">tokenize_function</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(examples[<span class="string">"text"</span>], padding=<span class="string">"max_length"</span>, truncation=<span class="keyword">True</span>, max_length=<span class="number">128</span>)
+
+tokenized = dataset.<span class="function">map</span>(tokenize_function, batched=<span class="keyword">True</span>)
+
+<span class="comment"># 3. Load model</span>
+model = AutoModelForSequenceClassification.<span class="function">from_pretrained</span>(
+    <span class="string">"bert-base-uncased"</span>,
+    num_labels=<span class="number">2</span>
+)
+
+<span class="comment"># 4. Training</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./bert_sentiment"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">32</span>,
+    per_device_eval_batch_size=<span class="number">64</span>,
+    learning_rate=<span class="number">2e-5</span>,
+    logging_steps=<span class="number">100</span>,
+    evaluation_strategy=<span class="string">"epoch"</span>,
+    save_strategy=<span class="string">"epoch"</span>,
+    load_best_model_at_end=<span class="keyword">True</span>,
+    metric_for_best_model=<span class="string">"accuracy"</span>,
+)
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized[<span class="string">"train"</span>],
+    eval_dataset=tokenized[<span class="string">"validation"</span>],
+)
+
+trainer.<span class="function">train</span>()
+
+<span class="comment"># 5. Inference</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline
+pipe = <span class="function">pipeline</span>(<span class="string">"text-classification"</span>, model=<span class="string">"./bert_sentiment"</span>)
+<span class="function">print</span>(<span class="function">pipe</span>(<span class="string">"This movie is amazing!"</span>))
+</div>
+</div>
+
+    <h3>Example 2: LoRA Fine-Tune Mistral 7B</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Mistral 7B with LoRA</div>
+    <div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="keyword">from</span> peft <span class="keyword">import</span> LoraConfig, get_peft_model
+<span class="keyword">from</span> transformers <span class="keyword">import</span> (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+    BitsAndBytesConfig,
+)
+<span class="keyword">import</span> torch
+
+<span class="comment"># Load model with 4-bit quantization</span>
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+)
+
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    <span class="string">"mistralai/Mistral-7B-v0.1"</span>,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>,
+)
+
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"mistralai/Mistral-7B-v0.1"</span>)
+
+<span class="comment"># Add LoRA adapters</span>
+lora_config = <span class="function">LoraConfig</span>(
+    r=<span class="number">16</span>,
+    lora_alpha=<span class="number">32</span>,
+    target_modules=[<span class="string">"q_proj"</span>, <span class="string">"v_proj"</span>],
+    lora_dropout=<span class="number">0.05</span>,
+    bias=<span class="string">"none"</span>,
+    task_type=<span class="string">"CAUSAL_LM"</span>
+)
+
+model = <span class="function">get_peft_model</span>(model, lora_config)
+<span class="function">print</span>(model.<span class="function">print_trainable_parameters</span>())
+
+<span class="comment"># Prepare data</span>
+dataset = <span class="function">load_dataset</span>(<span class="string">"openwebtext"</span>, split=<span class="string">"train[:1%]"</span>)
+
+<span class="keyword">def</span> <span class="function">tokenize</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(examples[<span class="string">"text"</span>], truncation=<span class="keyword">True</span>, max_length=<span class="number">512</span>)
+
+tokenized = dataset.<span class="function">map</span>(tokenize, batched=<span class="keyword">True</span>, remove_columns=[<span class="string">"text"</span>])
+
+<span class="comment"># Train</span>
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./mistral_lora"</span>,
+    num_train_epochs=<span class="number">1</span>,
+    per_device_train_batch_size=<span class="number">4</span>,
+    gradient_accumulation_steps=<span class="number">4</span>,
+    learning_rate=<span class="number">5e-5</span>,
+    warmup_steps=<span class="number">100</span>,
+    logging_steps=<span class="number">10</span>,
+    save_steps=<span class="number">500</span>,
+    fp16=<span class="keyword">True</span>,
+)
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized,
+)
+
+trainer.<span class="function">train</span>()
+model.<span class="function">save_pretrained</span>(<span class="string">"./mistral_lora"</span>)
+</div>
+</div>
+
+    <h3>Example 3: Instruction Tuning GPT-2</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Instruction Tuning</div>
+    <div class="code-content"><span class="comment">#!/usr/bin/env python3</span>
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset
+<span class="keyword">from</span> transformers <span class="keyword">import</span> (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+    DataCollatorForLanguageModeling,
+)
+
+<span class="comment"># Create instruction dataset</span>
+instructions = [
+    {
+        <span class="string">"instruction"</span>: <span class="string">"Classify the sentiment"</span>,
+        <span class="string">"input"</span>: <span class="string">"This product is great!"</span>,
+        <span class="string">"output"</span>: <span class="string">"positive"</span>
+    },
+    {
+        <span class="string">"instruction"</span>: <span class="string">"Classify the sentiment"</span>,
+        <span class="string">"input"</span>: <span class="string">"Terrible experience"</span>,
+        <span class="string">"output"</span>: <span class="string">"negative"</span>
+    },
+]
+
+<span class="keyword">def</span> <span class="function">format_example</span>(example):
+    text = <span class="string">f"Instruction: {example['instruction']}\n"</span>
+    text += <span class="string">f"Input: {example['input']}\n"</span>
+    text += <span class="string">f"Output: {example['output']}&lt;|endoftext|&gt;"</span>
+    <span class="keyword">return</span> {<span class="string">"text"</span>: text}
+
+formatted = [<span class="function">format_example</span>(ex) <span class="keyword">for</span> ex <span class="keyword">in</span> instructions]
+dataset = Dataset.<span class="function">from_dict</span>({<span class="string">"text"</span>: [ex[<span class="string">"text"</span>] <span class="keyword">for</span> ex <span class="keyword">in</span> formatted]})
+
+<span class="comment"># Tokenize</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+tokenizer.pad_token = tokenizer.eos_token
+
+<span class="keyword">def</span> <span class="function">tokenize</span>(examples):
+    <span class="keyword">return</span> <span class="function">tokenizer</span>(examples[<span class="string">"text"</span>], truncation=<span class="keyword">True</span>, max_length=<span class="number">512</span>)
+
+tokenized = dataset.<span class="function">map</span>(tokenize, batched=<span class="keyword">True</span>)
+
+<span class="comment"># Train</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(<span class="string">"gpt2"</span>)
+
+training_args = <span class="function">TrainingArguments</span>(
+    output_dir=<span class="string">"./instruction_gpt2"</span>,
+    num_train_epochs=<span class="number">3</span>,
+    per_device_train_batch_size=<span class="number">8</span>,
+    learning_rate=<span class="number">5e-5</span>,
+    warmup_steps=<span class="number">100</span>,
+    save_steps=<span class="number">100</span>,
+    save_total_limit=<span class="number">2</span>,
+)
+
+trainer = <span class="function">Trainer</span>(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized,
+    data_collator=<span class="function">DataCollatorForLanguageModeling</span>(tokenizer, mlm=<span class="keyword">False</span>),
+)
+
+trainer.<span class="function">train</span>()
+</div>
+</div>
+</section>
+
+<!-- SECTION: Hands-On Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <h3>Exercise 1: Fine-Tune a Model on Your Own Data</h3>
+    <p><strong>Task:</strong> Collect or create 100-200 examples of text with labels (sentiment, intent, topic, etc.). Fine-tune a BERT or RoBERTa model on your data.</p>
+    <p><strong>Learning goals:</strong> Understand the full fine-tuning pipeline, learn how to preprocess real data, evaluate on test set.</p>
+    <p><strong>Deliverables:</strong> Working code, trained model, evaluation metrics on test set.</p>
+
+    <h3>Exercise 2: Compare Full Fine-Tuning vs LoRA</h3>
+    <p><strong>Task:</strong> Fine-tune the same model using both full fine-tuning and LoRA on the same dataset. Compare final performance, training time, and model size.</p>
+    <p><strong>Learning goals:</strong> Understand trade-offs between methods, see LoRA in action.</p>
+    <p><strong>Deliverables:</strong> Comparison table with metrics and time/memory usage.</p>
+
+    <h3>Exercise 3: Debug a Failing Fine-Tuning</h3>
+    <p><strong>Task:</strong> You're given a broken fine-tuning script. Fix the following issues: learning rate too high (NaN loss), data loading bug, incorrect model loading.</p>
+    <p><strong>Learning goals:</strong> Practical debugging skills, common error recognition.</p>
+
+    <h3>Exercise 4: Build a Custom Evaluation Metric</h3>
+    <p><strong>Task:</strong> For your domain (medical, legal, code, etc.), implement a custom evaluation metric beyond generic accuracy. Integrate it into HuggingFace Trainer.</p>
+    <p><strong>Learning goals:</strong> Design metrics for specific use cases, integrate into training pipeline.</p>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions on Fine-Tuning</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="card cyan-accent">
+    <h4>Why fine-tune instead of prompt engineering?</h4>
+    <p>Fine-tuning adapts model internals to your task. Prompts are limited to context window. Fine-tuning gives better performance on specific tasks with custom data.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>How do you prevent overfitting during fine-tuning?</h4>
+    <p>Use validation set, early stopping, weight decay, dropout, data augmentation. Monitor train/val loss divergence. Fine-tune fewer epochs.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>What's the difference between full fine-tuning and LoRA?</h4>
+    <p>Full: updates all weights. LoRA: updates only low-rank adapters (0.1% of params). LoRA is more efficient but slightly lower quality (95% of full performance).</p>
+</div>
+        <div class="card green-accent">
+    <h4>When would you use QLoRA over LoRA?</h4>
+    <p>When memory is critical. QLoRA quantizes base model to 4-bit, reducing memory by 10x. Trade-off: slower training. Use if you only have consumer GPU.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>How do you choose learning rate for fine-tuning?</h4>
+    <p>Typically 1e-5 to 5e-4. Much lower than pre-training (5e-4 to 1e-3). Start with 2e-5, use learning rate finder or grid search if performance is poor.</p>
+</div>
+        <div class="card blue-accent">
+    <h4>What's the minimum data needed for fine-tuning?</h4>
+    <p>50-100 examples can improve over base model. 500-2000 gives good results. 5000+ gives very good results. Depends on task complexity.</p>
+</div>
+        <div class="card rose-accent">
+    <h4>How do you know if a fine-tuned model is better than base?</h4>
+    <p>Evaluate on task-specific metrics and domain-specific test set. Not on generic benchmarks. Compare inference speed and memory too.</p>
+</div>
+        <div class="card violet-accent">
+    <h4>Should you freeze earlier layers during fine-tuning?</h4>
+    <p>Usually no. Unfrozen early layers can adapt to your domain better. Only freeze if you have very little data. Modern practice: fine-tune all layers.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">How long does fine-tuning take? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Depends on method and hardware. Full fine-tuning on 7B model: 4-24 hours on H100/A100. LoRA: 1-4 hours. QLoRA: 2-8 hours on consumer GPU.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I fine-tune a model on CPU? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, but very slow (10-100x slower than GPU). Not practical for large models. Use Google Colab or cloud GPUs for practical fine-tuning.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How much data do I need? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">As little as 50 examples can help. But sweet spot is 500-2000 for good results. More data helps up to a point (diminishing returns around 10,000-50,000 examples).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Should I use LoRA or full fine-tuning? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Start with LoRA. It's faster, cheaper, and good enough for most tasks (95% of full FT quality). Use full FT only if LoRA performance is insufficient and you have budget.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I know if I'm overfitting? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Validation loss increases while training loss decreases. Model memorizes training examples instead of learning generalizable patterns. Use early stopping or regularization.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I fine-tune on multiple GPUs? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes. HuggingFace Trainer supports DistributedDataParallel. Just set up your environment and Trainer handles the rest.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between fine-tuning and transfer learning? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Transfer learning is the broad concept. Fine-tuning is a specific transfer learning approach. All fine-tuning is transfer learning, but not all transfer learning is fine-tuning.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I save multiple adapters for different tasks? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes with PEFT. Train different LoRA adapters, save them separately, load the right one at inference based on the task.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I serve a fine-tuned model in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Merge LoRA weights into base model, then use standard inference (FastAPI, TorchServe, vLLM, etc.). Or quantize for faster inference.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Is fine-tuning still relevant with in-context learning? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes. Large context windows help, but fine-tuning still beats few-shot for specific domains. Hybrid: few-shot + retrieval + fine-tuning often wins.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary: Key Takeaways</h2>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Fine-tuning is transfer learning</h4>
+    <p>Adapt pre-trained models to your task. Requires 10-100x less data than training from scratch.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>LoRA is the practical default</h4>
+    <p>Fine-tune with 0.1-1% of parameters. 95% of full FT performance at 1/10 the cost. PEFT library makes it easy.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Data quality matters most</h4>
+    <p>100 perfect examples beat 10,000 noisy ones. Spend time cleaning, deduplicating, validating.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Use validation sets always</h4>
+    <p>Monitor validation metrics during training. Detect overfitting early with early stopping.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Start small and iterate</h4>
+    <p>Begin with 100-200 examples and LoRA. Increase data and switch methods if needed.</p>
+</div>
+        <div class="card blue-accent">
+    <h4>Lower learning rates for fine-tuning</h4>
+    <p>Use 1e-5 to 5e-4, not 5e-4 to 1e-3. Pre-trained weights are delicate.</p>
+</div>
+    </div>
+
+    <h3>The Fine-Tuning Workflow</h3>
+    <div class="flow-diagram" style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee); text-align: center;">
+            <strong>1. Prepare Data</strong><br><small>Clean, split, validate (100-2000 examples)</small>
+        </div>
+        <div style="text-align: center; color: #666;">↓</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7); text-align: center;">
+            <strong>2. Choose Method</strong><br><small>LoRA (default) or full FT or QLoRA</small>
+        </div>
+        <div style="text-align: center; color: #666;">↓</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981); text-align: center;">
+            <strong>3. Setup Training</strong><br><small>Learning rate, batch size, epochs</small>
+        </div>
+        <div style="text-align: center; color: #666;">↓</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #db2777, #f472b6); text-align: center;">
+            <strong>4. Monitor & Evaluate</strong><br><small>Watch for overfitting, use early stopping</small>
+        </div>
+        <div style="text-align: center; color: #666;">↓</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #f97316, #fb923c); text-align: center;">
+            <strong>5. Deploy</strong><br><small>Save, merge (if LoRA), serve with FastAPI/vLLM</small>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Further Resources</h2>
+
+    <h3>Libraries and Tools</h3>
+    <ul style="font-size: 0.95rem; line-height: 2;">
+        <li><strong><a href="https://huggingface.co/docs/transformers/" target="_blank" rel="noopener">HuggingFace Transformers</a>:</strong> https://github.com/huggingface/transformers — industry standard library</li>
+        <li><strong><a href="https://huggingface.co/docs/peft/" target="_blank" rel="noopener">PEFT</a>:</strong> https://github.com/huggingface/peft — parameter efficient fine-tuning methods</li>
+        <li><strong><a href="https://huggingface.co/docs/trl/" target="_blank" rel="noopener">TRL</a>:</strong> https://github.com/huggingface/trl — RLHF, DPO, and alignment</li>
+        <li><strong><a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a>:</strong> https://github.com/lm-sys/vllm — fast LLM inference</li>
+        <li><strong><a href="https://optuna.org/" target="_blank" rel="noopener">Optuna</a>:</strong> https://optuna.org — hyperparameter optimization</li>
+        <li><strong><a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a>:</strong> https://wandb.ai — experiment tracking</li>
+    </ul>
+
+    <h3>Papers to Read</h3>
+    <ul style="font-size: 0.95rem; line-height: 2;">
+        <li><strong>LoRA:</strong> Hu et al., 2021 — "<a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">LoRA: Low-Rank Adaptation of Large Language Models</a>"</li>
+        <li><strong>QLoRA:</strong> Dettmers et al., 2023 — "<a href="https://arxiv.org/abs/2305.14314" target="_blank" rel="noopener">QLoRA: Efficient Finetuning of Quantized LLMs</a>"</li>
+        <li><strong>InstructGPT:</strong> Ouyang et al., 2022 — "<a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">Training language models to follow instructions with human feedback</a>"</li>
+        <li><strong>DPO:</strong> Rafailov et al., 2023 — "<a href="https://arxiv.org/abs/2305.18290" target="_blank" rel="noopener">Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a>"</li>
+        <li><strong>Scaling Laws:</strong> Kaplan et al., 2020 — "<a href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener">Scaling Laws for Neural Language Models</a>"</li>
+    </ul>
+
+    <h3>Practical Guides</h3>
+    <ul style="font-size: 0.95rem; line-height: 2;">
+        <li><strong><a href="https://huggingface.co/learn/nlp-course/" target="_blank" rel="noopener">HuggingFace Course</a>:</strong> https://huggingface.co/course — free comprehensive course</li>
+        <li><strong>LoRA Fine-Tuning Guide:</strong> https://huggingface.co/docs/peft/conceptual_guides/lora</li>
+        <li><strong>Llama 2 Fine-Tuning:</strong> Meta's official guide and examples</li>
+        <li><strong>HuggingFace Blog:</strong> Regular posts on fine-tuning techniques and best practices</li>
+    </ul>
+
+    <h3>Communities</h3>
+    <ul style="font-size: 0.95rem; line-height: 2;">
+        <li><strong><a href="https://discuss.huggingface.co/" target="_blank" rel="noopener">HuggingFace Forums</a>:</strong> Active community, questions answered by maintainers</li>
+        <li><strong>r/MachineLearning:</strong> Reddit community with fine-tuning discussions</li>
+        <li><strong>Hugging Face Slack:</strong> Real-time chat with researchers and practitioners</li>
+        <li><strong><a href="https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard" target="_blank" rel="noopener">Open LLM Leaderboard</a>:</strong> See what fine-tuning techniques lead to SOTA</li>
+    </ul>
+
+    <h3>Next Steps</h3>
+    <p style="font-size: 0.95rem; line-height: 1.8;">Now that you understand fine-tuning fundamentals:</p>
+    <ul style="font-size: 0.95rem; line-height: 2;">
+        <li>Pick a task and dataset that interests you</li>
+        <li>Start with LoRA fine-tuning on a small model (7B-13B)</li>
+        <li>Experiment with hyperparameters using the techniques here</li>
+        <li>Share results and get feedback from the community</li>
+        <li>When comfortable, explore RLHF/DPO for alignment</li>
+    </ul>
+</section>
+
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('.toggle-icon');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.textContent = '▼';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.textContent = '▲';
+                }
+            });
+        });
+
+        // FAQ items
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const icon = this.querySelector('.faq-icon');
+                
+                if (answer.style.maxHeight) {
+                    answer.style.maxHeight = null;
+                    icon.textContent = '▼';
+                } else {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    icon.textContent = '▲';
+                }
+            });
+        });
+
+        // Smooth scroll to sections
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

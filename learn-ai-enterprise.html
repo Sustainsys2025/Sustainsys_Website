@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Enterprise - SustainSys AI Academy</title>
+    <meta name="description" content="Deploy AI at enterprise scale — strategy, governance, data platforms, team structure, and measuring ROI.">
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <div class="main-container" style="padding-top: 120px;">
+        <div class="sidebar-nav">
+    <a href="#intro" class="sidebar-link">Introduction</a>
+    <a href="#why-matters" class="sidebar-link">Why It Matters</a>
+    <a href="#history" class="sidebar-link">Historical Evolution</a>
+    <a href="#core-concepts" class="sidebar-link">Core Concepts</a>
+    <a href="#architecture" class="sidebar-link">Architecture Deep Dive</a>
+    <a href="#components" class="sidebar-link">Key Components</a>
+    <a href="#implementation" class="sidebar-link">Implementation Guide</a>
+    <a href="#advanced" class="sidebar-link">Advanced Techniques</a>
+    <a href="#comparison" class="sidebar-link">Comparison</a>
+    <a href="#use-cases" class="sidebar-link">Real-World Use Cases</a>
+    <a href="#enterprise" class="sidebar-link">Enterprise Applications</a>
+    <a href="#mistakes" class="sidebar-link">Common Mistakes</a>
+    <a href="#best-practices" class="sidebar-link">Best Practices</a>
+    <a href="#advanced-insights" class="sidebar-link">Advanced Insights</a>
+    <a href="#code-examples" class="sidebar-link">Code Examples</a>
+    <a href="#exercises" class="sidebar-link">Exercises</a>
+    <a href="#interview" class="sidebar-link">Interview Questions</a>
+    <a href="#faq" class="sidebar-link">FAQ</a>
+    <a href="#summary" class="sidebar-link">Summary</a>
+    <a href="#resources" class="sidebar-link">Resources</a>
+</div>
+        
+        <div class="content">
+            <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">AI in Enterprise</h1>
+                <p class="page-description">Deploy AI Systems at Enterprise Scale: Strategy, Governance, Infrastructure, and ROI Measurement</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+            
+            <section id="intro" class="ml-section">
+    <h2>Introduction to AI in Enterprise</h2>
+    <p>Deploying artificial intelligence at enterprise scale is fundamentally different from experimentation with ML models in research settings. Enterprise AI requires robust governance, scalable infrastructure, careful ROI measurement, and comprehensive team structures. This guide covers the entire journey from strategy to production deployment.</p>
+    <p>In this comprehensive guide, you'll learn how leading organizations like Google, Microsoft, and Amazon deploy AI systems at scale, handle governance and compliance, build AI platforms, and measure the true business impact of their AI investments.</p>
+    <p>Enterprise AI adoption has accelerated significantly. In 2023, over 55% of enterprises reported using AI in at least one business function, compared to just 20% in 2017. However, the path to successful AI adoption is fraught with challenges. Our research shows that 85% of ML projects never make it to production, and of those that do, 40% fail within the first 18 months due to operational issues.</p>
+<div class="info-box">
+    <h4>What You'll Learn</h4>
+    <p>This course covers AI strategy, infrastructure design, governance frameworks, team structures, cost optimization, ROI measurement, and real-world case studies of successful enterprise AI deployments.</p>
+</div>
+    <p>The economics of enterprise AI are compelling. According to McKinsey research, companies that successfully deploy AI see:</p>
+    <ul>
+        <li>15-20% improvement in operational efficiency</li>
+        <li>20-30% increase in revenue from new AI-enabled products</li>
+        <li>10-15% reduction in operational costs through automation</li>
+        <li>2-3 year payback period on AI investments for mature programs</li>
+    </ul>
+</div>
+
+<section id="why-matters" class="ml-section">
+    <h2>Why Enterprise AI Matters</h2>
+    <p>AI adoption in enterprises has grown from 20% in 2017 to over 50% by 2023. However, the majority of AI projects fail to move from pilot to production. Understanding enterprise AI is critical because:</p>
+    <ul>
+        <li><strong>Scale:</strong> Enterprise AI systems serve millions of users and process petabytes of data. Netflix processes 125 million hours of video watched daily.</li>
+        <li><strong>Governance:</strong> Compliance, explainability, and fairness are non-negotiable. Regulatory frameworks like EU AI Act impose strict requirements.</li>
+        <li><strong>ROI:</strong> AI investments must deliver measurable business value. Average enterprise AI budget is $5M+ annually.</li>
+        <li><strong>Reliability:</strong> Downtime costs thousands per minute in production systems. Google Search outage for 10 minutes costs millions in lost ad revenue.</li>
+        <li><strong>Team Structure:</strong> Building the right teams is as important as the technology. Most enterprises lack data engineering expertise.</li>
+        <li><strong>Data Quality:</strong> 87% of ML projects fail due to data quality issues, not model complexity.</li>
+    </ul>
+<div class="highlight-box">
+    <p>Key Insight: 90% of AI projects fail in production because organizations don't address governance, monitoring, and organizational issues. Only 10% fail due to poor model quality.</p>
+</div>
+    <p><strong>The Cost of Failure:</strong> IBM estimates that poor data quality costs the US economy $3 trillion annually. For enterprises, a single data quality issue can lead to:</p>
+    <ul>
+        <li>Incorrect decisions affecting millions of customers</li>
+        <li>Regulatory fines and legal liability</li>
+        <li>Reputational damage and loss of customer trust</li>
+        <li>Wasted resources on failed projects</li>
+    </ul>
+</div>
+
+<section id="history" class="ml-section">
+    <h2>Historical Evolution of Enterprise AI</h2>
+    <p><strong>2010-2015: Big Data Era</strong> - Hadoop, Spark, data warehousing dominated. Companies built massive data lakes but struggled with analytics. MapReduce and Spark became industry standards. Data volume exceeded processing capability.</p>
+    <p><strong>2015-2018: ML Adoption Wave</strong> - Cloud ML platforms emerged (AWS SageMaker in 2017, Google Cloud ML, Azure ML). Deep learning for computer vision and NLP gained momentum. The ImageNet competition drove innovation. GPU computing became accessible via cloud.</p>
+    <p><strong>2018-2021: MLOps Era</strong> - Organizations realized ML requires DevOps practices. ML deployment failure rates forced infrastructure focus. MLflow (2018), Kubeflow, and similar tools emerged to manage ML lifecycle. Model monitoring and drift detection became critical.</p>
+    <p><strong>2021-2024: LLM Revolution</strong> - Transformers and large language models changed enterprise AI fundamentally. GPT-3 (2020), ChatGPT (2022), and open-source models (LLaMA) disrupted the field. Enterprises suddenly needed prompt engineering expertise. Fine-tuning and RAG systems became standard approaches.</p>
+    <p><strong>2024+: Agentic AI Era</strong> - AI systems with autonomy, planning, and tool usage. Enterprise focus on responsible AI, governance, and measurable ROI. Multi-agent systems handling complex workflows. Integration with business processes rather than isolated predictions.</p>
+    <p><strong>Key Inflection Points:</strong></p>
+    <ul>
+        <li>2012: Deep learning breakthrough on ImageNet</li>
+        <li>2016: AlphaGo defeats world champion</li>
+        <li>2017: Transformer architecture invented</li>
+        <li>2018: BERT surpasses human performance on NLU benchmarks</li>
+        <li>2020: GPT-3 demonstrates few-shot learning</li>
+        <li>2022: ChatGPT reaches 1 million users in 5 days</li>
+    </ul>
+</div>
+
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts in Enterprise AI</h2>
+    <div class="concept-cards">
+<div class="card cyan-accent">
+    <h4>AI Strategy</h4>
+    <p>Defining business objectives, identifying high-ROI use cases, assessing data readiness, and building organizational buy-in. Average time: 4-8 weeks.</p>
+</div><div class="card cyan-accent">
+    <h4>Data Platform</h4>
+    <p>Centralized infrastructure for data collection, storage, transformation, and governance. Enables self-service analytics and consistent feature engineering.</p>
+</div><div class="card cyan-accent">
+    <h4>Model Governance</h4>
+    <p>Frameworks for model lifecycle management, version control, compliance, monitoring, and audit trails. Critical for regulated industries.</p>
+</div>
+    </div>
+    <div class="concept-cards">
+<div class="card cyan-accent">
+    <h4>MLOps</h4>
+    <p>Combining ML development with DevOps practices: CI/CD, monitoring, rollback, infrastructure-as-code. Enables 10-50x faster model deployment.</p>
+</div><div class="card cyan-accent">
+    <h4>ROI Measurement</h4>
+    <p>Tracking business metrics tied to AI systems: revenue impact, cost savings, efficiency gains, risk reduction. Justifies continued investment.</p>
+</div><div class="card cyan-accent">
+    <h4>Team Structure</h4>
+    <p>Data scientists, ML engineers, data engineers, DevOps engineers, and domain experts working in coordinated teams. Avoid silos.</p>
+</div>
+    </div>
+    <h3>The AI Maturity Journey</h3>
+    <p>Most enterprises progress through distinct maturity levels:</p>
+    <ul>
+        <li><strong>Level 1 (Pilot):</strong> Single use case, manual processes, limited automation. Examples: chatbots, basic recommendation systems.</li>
+        <li><strong>Level 2 (Scaled):</strong> Multiple models, basic pipelines, some monitoring. Average company spends $2-5M here.</li>
+        <li><strong>Level 3 (Operationalized):</strong> Automated pipelines, A/B testing, governance. Requires 20-50 person ML team.</li>
+        <li><strong>Level 4 (Autonomous):</strong> Self-healing systems, automated retraining, closed-loop feedback. Only 5% of enterprises reach this level.</li>
+    </ul>
+    <p><strong>Enterprise Data Platform Architecture:</strong></p>
+    <pre><code>
+┌─────────────────────────────────────────────────────┐
+│         Data Sources (APIs, Databases, Logs)       │
+│  (20+ sources, 100+ data streams, 10+ TB/day)      │
+└──────────────────┬──────────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────────┐
+│    Data Collection & Ingestion (Kafka, Fivetran)   │
+│   (99.99% uptime, 1M+ events/second)               │
+└──────────────────┬──────────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────────┐
+│  Data Warehouse/Lake (Snowflake, <a href="https://delta.io/" target="_blank" rel="noopener">Delta Lake</a>)       │
+│  (Petabyte scale, ACID transactions)               │
+└──────────────────┬──────────────────────────────────┘
+                   │
+       ┌───────────┼───────────┐
+       │           │           │
+   ┌───▼──┐   ┌───▼──┐   ┌───▼──┐
+   │ ETL  │   │ dbt  │   │Spark │
+   │(Airflow) │(Transformation)│(Processing)
+   └───┬──┘   └───┬──┘   └───┬──┘
+       │          │          │
+   ┌───▼──────────▼──────────▼──┐
+   │  Feature Store/Lakehouse   │
+   │  (<a href="https://feast.dev/" target="_blank" rel="noopener">Feast</a>/<a href="https://www.tecton.ai/" target="_blank" rel="noopener">Tecton</a>)            │
+   └───┬──────────────────────┬──┘
+       │                      │
+   ┌───▼──┐            ┌──────▼───┐
+   │Model │            │Analytics │
+   │Train │            │& BI      │
+   │(SageMaker/Vertex) │(Looker)  │
+   └──────┘            └──────────┘
+    </code></pre>
+</div>
+
+<section id="architecture" class="ml-section">
+    <h2>Enterprise AI Architecture Deep Dive</h2>
+    <p>Modern enterprise AI systems follow a layered architecture that separates concerns and enables independent scaling:</p>
+    <p><strong>Layer 1 - Data Foundation (Lowest Layer):</strong> Data ingestion, storage, and transformation. Must handle 24/7 data ingestion at scale. Tools: Kafka, Apache Beam, Spark, Airflow, Snowflake, Delta Lake, S3, GCS. Critical considerations: data lineage, schema validation, retention policies, disaster recovery.</p>
+    <p><strong>Layer 2 - Feature Engineering:</strong> Feature stores that serve pre-computed features at scale. Eliminates redundant computation and training/serving skew. Tools: Feast, Tecton, Chip. Benefits: 30-50% reduction in compute costs, faster model development, consistency between training and serving.</p>
+    <p><strong>Layer 3 - Model Development:</strong> Experiment tracking, model registry, and development environments. Enables reproducibility and collaboration. Tools: MLflow, Weights & Biases, Comet. Average team tracks 100+ experiments per month.</p>
+    <p><strong>Layer 4 - Model Serving:</strong> Inference infrastructure for real-time and batch predictions. Handles mission-critical traffic. Tools: KServe, BentoML, TFServing, Seldon. Requirements: <100ms latency, 99.99% availability, auto-scaling.</p>
+    <p><strong>Layer 5 - Monitoring & Governance:</strong> Model monitoring, data drift detection, compliance tracking. Prevents silent failures. Tools: Evidently, WhyLabs, Arthur, Fiddler. Monitored metrics: accuracy, latency, fairness, data distribution.</p>
+    <p><strong>Layer 6 - Business Analytics:</strong> Dashboards and reporting for business stakeholders. Connects technical metrics to business impact. Tools: Tableau, Looker, Power BI.</p>
+<div class="info-box">
+    <h4>Scalability First</h4>
+    <p>Enterprise AI architectures prioritize scalability from day one. Systems must handle millions of transactions per day while maintaining sub-100ms latency. Pinterest serves 1B+ daily active users with ML.</p>
+</div>
+</div>
+
+<section id="components" class="ml-section">
+    <h2>Key Components of Enterprise AI Systems</h2>
+    <h3>1. Data Pipeline & Orchestration</h3>
+    <p>Orchestrates data flow from sources to models. Apache Airflow is the industry standard (used by Uber, Airbnb, LinkedIn). Key responsibilities:</p>
+    <ul>
+        <li>Schedule and execute recurring data jobs (daily, hourly)</li>
+        <li>Handle failures and retries with exponential backoff</li>
+        <li>Monitor execution and alert on failures</li>
+        <li>Maintain data lineage for audit trails</li>
+        <li>Version all code and configurations</li>
+    </ul>
+    <h3>2. Feature Store</h3>
+    <p>Centralizes feature management. Enables consistency between training and serving. Reduces redundant computation. Example: Netflix uses its feature store to serve 10M+ features to 100+ models daily.</p>
+    <h3>3. Model Registry</h3>
+    <p>Version control for models. Tracks lineage, metadata, and deployment history. Critical for compliance (FDA requires model versioning for healthcare ML).</p>
+    <h3>4. A/B Testing Framework</h3>
+    <p>Safely tests model improvements on real user traffic. Measures statistical significance of changes. Facebook runs 10,000+ A/B tests per year.</p>
+    <h3>5. Monitoring & Alerting</h3>
+    <p>Detects data drift, model drift, and performance degradation. Triggers automatic alerts and rollbacks. Average enterprise monitors 50+ metrics per model.</p>
+    <h3>6. Cost Management</h3>
+    <p>Tracks compute, storage, and inference costs. Identifies optimization opportunities. Average enterprise overspends 3-5x on ML infrastructure.</p>
+    <h3>7. Governance & Compliance</h3>
+    <p>Audit trails, fairness testing, model cards, data governance. Non-negotiable in regulated industries (finance, healthcare, insurance).</p>
+    <h3>8. Serving Infrastructure</h3>
+    <p>Handles production predictions. Must support: batch (daily scoring), real-time (REST API), streaming (Kafka). Typical SLA: <100ms latency, 99.99% uptime.</p>
+<div class="highlight-box">
+    <p>Real-World Fact: A typical enterprise AI system generates 100+ metrics that require monitoring. Manual monitoring is impossible at scale. Automatization is critical.</p>
+</div>
+</div>
+
+<section id="implementation" class="ml-section">
+    <h2>Implementation Guide: Building Enterprise AI</h2>
+    <h3>Phase 1: Strategy & Discovery (2-4 weeks)</h3>
+    <ul>
+        <li>Identify high-impact use cases with clear ROI (look for 10x+ improvements)</li>
+        <li>Assess data readiness and quality (most companies fail here)</li>
+        <li>Define success metrics and KPIs tied to business outcomes</li>
+        <li>Build stakeholder alignment (get executive sponsorship)</li>
+        <li>Calculate projected ROI and required investment</li>
+    </ul>
+    <p><strong>Typical outputs:</strong> Prioritized use case list, ROI projections, executive sponsorship, required budget.</p>
+    <h3>Phase 2: Data Foundation (4-8 weeks)</h3>
+    <ul>
+        <li>Build data pipelines and ETL processes (this is 50% of effort)</li>
+        <li>Create data catalog and documentation</li>
+        <li>Implement data governance and quality checks</li>
+        <li>Set up feature engineering pipelines</li>
+        <li>Establish data access controls and security</li>
+    </ul>
+    <p><strong>Typical outputs:</strong> Automated daily data pipeline, 500+ features computed, data quality dashboard, 95%+ data completeness.</p>
+    <h3>Phase 3: Model Development (6-12 weeks)</h3>
+    <ul>
+        <li>Develop baseline models and experiments (start simple)</li>
+        <li>Track experiments with proper tooling (compare 50+ models)</li>
+        <li>Validate models on holdout test sets</li>
+        <li>Prepare models for production (containerization, versioning)</li>
+        <li>Conduct fairness and bias audits</li>
+    </ul>
+    <p><strong>Typical outputs:</strong> Champion model with >0.85 AUC, complete audit trail, model card documentation.</p>
+    <h3>Phase 4: Production Deployment (2-4 weeks)</h3>
+    <ul>
+        <li>Set up model serving infrastructure (test for 99.99% uptime)</li>
+        <li>Configure monitoring and alerting (100+ metrics)</li>
+        <li>Implement A/B testing framework</li>
+        <li>Execute safe rollout (canary with 5%, then 50%, then 100%)</li>
+        <li>Establish incident response procedures</li>
+    </ul>
+    <p><strong>Typical outputs:</strong> Production serving infrastructure, monitoring dashboard, automated alerts, incident runbooks.</p>
+    <h3>Phase 5: Ongoing Operations (Continuous)</h3>
+    <ul>
+        <li>Monitor model and data drift (daily checks)</li>
+        <li>Measure business impact and ROI (monthly reviews)</li>
+        <li>Iterate and improve models (monthly releases)</li>
+        <li>Optimize costs and performance (quarterly reviews)</li>
+        <li>Retrain models as needed (triggered by drift)</li>
+    </ul>
+    <p><strong>Key metrics to track:</strong> Model accuracy, latency, fairness, data drift, business ROI, infrastructure cost.</p>
+</div>
+
+<section id="advanced" class="ml-section">
+    <h2>Advanced Techniques in Enterprise AI</h2>
+    <h3>Multi-Armed Bandits</h3>
+    <p>Balance exploration and exploitation in recommendations. Adapt to changing user preferences in real-time without waiting for A/B test results. Used by: Spotify (music recommendations), YouTube (video recommendations).</p>
+    <h3>Federated Learning</h3>
+    <p>Train models on decentralized data without moving sensitive information. Critical for privacy-preserving enterprise ML. Google uses federated learning for Gboard predictions.</p>
+    <h3>Transfer Learning at Scale</h3>
+    <p>Leverage pre-trained models from major clouds (Google, OpenAI) to accelerate model development in specialized domains. Example: Use a pre-trained BERT model and fine-tune for industry-specific tasks in 2-3 weeks instead of 3-4 months.</p>
+    <h3>Causal Inference</h3>
+    <p>Go beyond correlation to understand cause-and-effect relationships. Essential for optimizing business interventions. Example: Understand which marketing channels actually drive sales (vs. which just correlate).</p>
+    <h3>Model Compression</h3>
+    <p>Reduce model size and latency through quantization, pruning, and knowledge distillation. Critical for edge deployment. Example: Compress a 100MB model to 10MB with 99% accuracy using quantization.</p>
+    <h3>Online Learning</h3>
+    <p>Update models continuously as new data arrives instead of retraining from scratch. Essential for systems that must adapt quickly (fraud detection, dynamic pricing).</p>
+    <h3>Ensemble Methods</h3>
+    <p>Combine multiple models for better predictions and robustness. Example: Netflix ensemble of 1000+ models for recommendations. Improves accuracy by 5-10% at 10x infrastructure cost.</p>
+<div class="info-box">
+    <h4>Enterprise Challenge</h4>
+    <p>Large language models with 70B+ parameters are too expensive to fine-tune and serve. LoRA, QLoRA, and retrieval-augmented generation enable cost-effective enterprise LLM deployment. LoRA reduces fine-tuning memory by 100x.</p>
+</div>
+</div>
+
+<section id="comparison" class="ml-section">
+    <h2>Comparison: Cloud ML Platforms</h2>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Platform</th>
+                <th>Best For</th>
+                <th>Strengths</th>
+                <th>Weaknesses</th>
+                <th>Cost Model</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Google Vertex AI</strong></td>
+                <td>Enterprise with structured data</td>
+                <td>AutoML, excellent integration with GCP ecosystem, strong data governance</td>
+                <td>Vendor lock-in, steep learning curve, smaller marketplace</td>
+                <td>Pay-per-prediction + infrastructure</td>
+            </tr>
+            <tr>
+                <td><strong>AWS SageMaker</strong></td>
+                <td>Flexibility and scale</td>
+                <td>Largest ML marketplace, comprehensive feature store, multi-model endpoints, strong community</td>
+                <td>Complex pricing, many moving parts, integration complexity</td>
+                <td>Pay-per-instance + data transfer</td>
+            </tr>
+            <tr>
+                <td><strong>Azure ML</strong></td>
+                <td>Enterprise with existing Microsoft stack</td>
+                <td>Strong governance, MLflow integration, responsible AI tools, enterprise support</td>
+                <td>Less mature than AWS/GCP, smaller ecosystem, pricing less competitive</td>
+                <td>Compute + storage + API calls</td>
+            </tr>
+            <tr>
+                <td><strong>Databricks</strong></td>
+                <td>Data + AI unified platform</td>
+                <td>Apache Spark foundation, lakehouse architecture, strong data engineering, MLflow native</td>
+                <td>Relatively new, pricing can be high, learning curve for non-data teams</td>
+                <td>DBU-based (Databricks Units)</td>
+            </tr>
+            <tr>
+                <td><strong>Open-source (Kubernetes)</strong></td>
+                <td>Maximum flexibility and control</td>
+                <td>No vendor lock-in, customize everything, multi-cloud, lowest long-term cost</td>
+                <td>High operational burden, slow innovation, need DevOps expertise, risk of technical debt</td>
+                <td>Infrastructure only</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><strong>Selection Criteria:</strong> Start with cloud platforms for speed (6-12 months to first models). Move to hybrid/open-source after you've proven ROI and have dedicated DevOps team.</p>
+    <p><strong>Enterprise Maturity Model:</strong></p>
+    <div style="margin: 20px 0;">
+        <div style="margin-bottom: 15px;">
+            <strong>Level 1: Experimentation (3-6 months)</strong>
+            <div style="background: #ddd; border-radius: 4px; overflow: hidden; height: 20px;">
+                <div style="background: #4CAF50; width: 20%; height: 100%;"></div>
+            </div>
+            <small>Ad-hoc experiments, Jupyter notebooks, single models, manual processes, $200K investment</small>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Level 2: Pipeline (6-12 months)</strong>
+            <div style="background: #ddd; border-radius: 4px; overflow: hidden; height: 20px;">
+                <div style="background: #4CAF50; width: 40%; height: 100%;"></div>
+            </div>
+            <small>Automated data pipelines, model versioning, basic monitoring, 3-5 models, $1-2M investment</small>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Level 3: Production (12-24 months)</strong>
+            <div style="background: #ddd; border-radius: 4px; overflow: hidden; height: 20px;">
+                <div style="background: #4CAF50; width: 60%; height: 100%;"></div>
+            </div>
+            <small>A/B testing, drift detection, governance framework, 10-20 models, $3-5M investment, 10-20 ML engineers</small>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Level 4: Autonomous (24-36 months)</strong>
+            <div style="background: #ddd; border-radius: 4px; overflow: hidden; height: 20px;">
+                <div style="background: #4CAF50; width: 80%; height: 100%;"></div>
+            </div>
+            <small>Automated retraining, closed-loop feedback, causal inference, 50+ models, $5-10M investment</small>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <strong>Level 5: Transformational (36+ months)</strong>
+            <div style="background: #ddd; border-radius: 4px; overflow: hidden; height: 20px;">
+                <div style="background: #4CAF50; width: 100%; height: 100%;"></div>
+            </div>
+            <small>Agentic AI, self-optimizing systems, business model innovation, 100+ models, $10M+ investment</small>
+        </div>
+    </div>
+</div>
+
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Use Cases</h2>
+    <h3>1. Personalization at Scale (Netflix, Spotify)</h3>
+    <p><strong>Challenge:</strong> Recommend content to 200M+ users in real-time with sub-100ms latency.</p>
+    <p><strong>Solution:</strong> Multi-stage ranking with embeddings, collaborative filtering, and real-time bandit algorithms. Netflix uses matrix factorization + neural networks. Spotify uses graph embeddings + contextual bandits.</p>
+    <p><strong>Impact:</strong> 30-40% improvement in watch time and engagement. Netflix attributes $5B+ annual revenue to recommendations.</p>
+    <p><strong>ML Stack:</strong> Spark for data processing, Kafka for streaming, internal feature store, real-time serving on GPUs.</p>
+    <h3>2. Fraud Detection (PayPal, Square)</h3>
+    <p><strong>Challenge:</strong> Detect fraudulent transactions in milliseconds to prevent loss and user friction.</p>
+    <p><strong>Solution:</strong> Real-time feature engineering with feature stores, gradient boosted trees (XGBoost), and anomaly detection with isolation forests. Explainability critical for customer disputes.</p>
+    <p><strong>Impact:</strong> 5-10x improvement in fraud catch rate with <1% false positive rate. PayPal blocks $25B+ in fraud annually.</p>
+    <p><strong>Key Metrics:</strong> Precision >99%, latency <50ms, coverage >99%.</p>
+    <h3>3. Predictive Maintenance (Manufacturing)</h3>
+    <p><strong>Challenge:</strong> Predict equipment failures before they happen to minimize unplanned downtime (costs $50-200K per hour).</p>
+    <p><strong>Solution:</strong> Time-series forecasting with LSTMs or Prophet, anomaly detection on sensor streams, feature engineering from raw telemetry data.</p>
+    <p><strong>Impact:</strong> 30-50% reduction in unplanned downtime, massive savings on maintenance costs. Typical ROI: 3-5x within first year.</p>
+    <h3>4. Customer Churn Prediction (Telecom, SaaS)</h3>
+    <p><strong>Challenge:</strong> Identify customers likely to leave and intervene with targeted offers before they churn.</p>
+    <p><strong>Solution:</strong> Classification models with gradient boosting, survival analysis, causal inference to identify optimal interventions.</p>
+    <p><strong>Impact:</strong> 20-30% improvement in retention through targeted campaigns. Average CLV increase: $500-1000 per retained customer.</p>
+    <h3>5. Dynamic Pricing (Uber, Airlines)</h3>
+    <p><strong>Challenge:</strong> Set prices in real-time to maximize revenue given demand, supply, and competition.</p>
+    <p><strong>Solution:</strong> Reinforcement learning, contextual bandits, causal inference. Complex optimization balancing revenue and customer satisfaction.</p>
+    <p><strong>Impact:</strong> 10-15% revenue improvement while maintaining customer satisfaction. Uber's surge pricing increased revenue by 13%.</p>
+    <h3>6. Document Intelligence (Legal)</h3>
+    <p><strong>Challenge:</strong> Extract key information from 10,000+ legal documents to speed up due diligence (saves 100+ hours per deal).</p>
+    <p><strong>Solution:</strong> Fine-tuned transformers, optical character recognition (OCR), named entity recognition (NER), question-answering systems.</p>
+    <p><strong>Impact:</strong> 10x speedup in document review. Cost savings: $200K+ per deal.</p>
+</div>
+
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise AI Platform Design</h2>
+    <h3>Reference Architecture</h3>
+    <pre><code>
+LAYER 1: COMPUTE & ORCHESTRATION
+┌─────────────────────────────────────────────────────┐
+│  Kubernetes Cluster / Cloud Compute                 │
+│  (GKE, EKS, AKS with GPU/TPU nodes)                │
+│  Auto-scaling: 0-1000 nodes based on load          │
+└──────────────────┬──────────────────────────────────┘
+
+LAYER 2: DATA PLATFORM
+┌──────────────┬──────────────┬──────────────────────┐
+│   Ingestion  │   Storage    │   Processing         │
+│  (Kafka)     │  (S3/GCS)    │  (Spark/Prefect)     │
+│(1M ev/sec)   │(Petabyte)    │(100+ daily jobs)     │
+└──────────────┴──────────────┴──────────────────────┘
+
+LAYER 3: FEATURE & MODEL MANAGEMENT
+┌──────────────┬──────────────┬──────────────────────┐
+│ Feature Store│ Model Registry│ Experiment Tracking │
+│  (Feast)     │  (MLflow)    │   (Weights&Biases)  │
+│(10M features)│(1000+ models)│  (10K+ experiments) │
+└──────────────┴──────────────┴──────────────────────┘
+
+LAYER 4: MODEL SERVING
+┌──────────────┬──────────────┬──────────────────────┐
+│Online Serving│Batch Scoring │   Edge Deployment    │
+│ (KServe)     │  (Spark)     │   (TensorFlow Lite)  │
+│(1M reqs/sec) │(1B scores/day)│(Mobile, IoT devices)│
+└──────────────┴──────────────┴──────────────────────┘
+
+LAYER 5: MONITORING & GOVERNANCE
+┌──────────────┬──────────────┬──────────────────────┐
+│Model Metrics │Data Monitoring│ Governance & Audit  │
+│(Prometheus) │  (Evidently) │  (Great Expectations)│
+│(100+ metrics)│(Drift alerts)│  (Full audit trail)  │
+└──────────────┴──────────────┴──────────────────────┘
+
+LAYER 6: BUSINESS ANALYTICS
+┌───────────────────────────────────────────────────┐
+│  Dashboards & Reporting (Tableau, Looker)        │
+│  (Business impact metrics, ROI tracking)         │
+└───────────────────────────────────────────────────┘
+    </code></pre>
+    <h3>Key Architectural Decisions</h3>
+    <ul>
+        <li><strong>Batch vs Online:</strong> Use batch for most predictions (cost-effective), online only when latency <100ms required. Uber uses 90% batch, 10% real-time.</li>
+        <li><strong>Single vs Multiple Models:</strong> Start with single model per use case. Migrate to ensemble (5-10 models) after proven success. Netflix uses ensemble of 1000+ models.</li>
+        <li><strong>Centralized vs Federated:</strong> Centralized data and models for governance, federated for data privacy (healthcare, finance).</li>
+        <li><strong>Cloud vs On-Premise:</strong> Cloud for 95% of cases (scalability, cost, innovation). On-premise for: sensitive/regulated data, very high volume (>10B predictions/day), specific compliance needs.</li>
+        <li><strong>Monolithic vs Microservices:</strong> Start monolithic, migrate to microservices when managing 20+ models. Microservices enable independent scaling and deployment.</li>
+    </ul>
+<div class="info-box">
+    <h4>Design Principle</h4>
+    <p>Decouple data pipelines, feature computation, and model training. This enables independent scaling and reduces blast radius of failures. If model fails, features still available for other models.</p>
+</div>
+</div>
+
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes in Enterprise AI</h2>
+    <h3>1. Building Without Clear ROI</h3>
+    <p><strong>Mistake:</strong> Starting AI projects without defining business value or success metrics upfront. Organizations build models that don't impact revenue or cost.</p>
+    <p><strong>Fix:</strong> Always start with business problem, not technology. Define ROI before building. Quantify baseline metric (current conversion rate, churn rate, cost) and project improvement.</p>
+    <h3>2. Ignoring Data Quality</h3>
+    <p><strong>Mistake:</strong> Investing in sophisticated models while data quality is poor (missing values, duplicates, inconsistencies).</p>
+    <p><strong>Fix:</strong> Spend 50% of time on data quality and feature engineering, only 30% on modeling, 20% on infrastructure. Bad data is unfixable with fancy models.</p>
+    <h3>3. No Production Readiness</h3>
+    <p><strong>Mistake:</strong> Models work in notebooks but fail in production due to missing error handling, monitoring, versioning. 40% of deployed models fail within 18 months.</p>
+    <p><strong>Fix:</strong> Build MLOps infrastructure early. Automation first, then modeling. Treat production deployment same rigor as software engineering.</p>
+    <h3>4. Centralized ML Teams</h3>
+    <p><strong>Mistake:</strong> Centralizing all ML expertise in one team that becomes bottleneck. Slows entire organization.</p>
+    <p><strong>Fix:</strong> Embed ML engineers in product teams. Centralize platforms and data, not people. Center-of-excellence for best practices sharing.</p>
+    <h3>5. Siloed Teams</h3>
+    <p><strong>Mistake:</strong> Data engineers, ML engineers, and product managers not communicating. Lead to incompatible systems.</p>
+    <p><strong>Fix:</strong> Cross-functional teams with shared KPIs and communication channels. Daily standups, shared metrics, aligned incentives.</p>
+    <h3>6. Ignoring Fairness & Bias</h3>
+    <p><strong>Mistake:</strong> Deploying models that discriminate against protected groups. Leads to legal and reputational risk.</p>
+    <p><strong>Fix:</strong> Bias testing and fairness audits as part of model validation. Use tools like Fairlearn, AI Fairness Toolkit. Monitor fairness in production.</p>
+    <h3>7. Manual Retraining</h3>
+    <p><strong>Mistake:</strong> Models degrade over time, but retraining is manual and infrequent.</p>
+    <p><strong>Fix:</strong> Implement automated retraining pipelines triggered by data drift detection. Most enterprise models need monthly retraining.</p>
+    <h3>8. Insufficient Monitoring</h3>
+    <p><strong>Mistake:</strong> No monitoring of model performance in production. Discover issues from customer complaints.</p>
+    <p><strong>Fix:</strong> Comprehensive monitoring of model outputs, data distribution, and business metrics. Automated alerting and incident response.</p>
+</div>
+
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices in Enterprise AI</h2>
+    <h3>1. Business-First Approach</h3>
+    <ul>
+        <li>Always tie AI projects to clear business metrics (revenue, cost savings, efficiency)</li>
+        <li>Start with simplest possible model that delivers ROI (linear regression > neural network if same results)</li>
+        <li>Iterate based on business feedback, not model accuracy alone</li>
+        <li>Measure actual ROI post-deployment, not just model metrics</li>
+    </ul>
+    <h3>2. Data as a Product</h3>
+    <ul>
+        <li>Treat data pipelines and data quality with same rigor as software engineering</li>
+        <li>Implement data contracts and schema validation</li>
+        <li>Create data catalog and documentation that anyone can discover</li>
+        <li>Data lineage and audit trails for governance</li>
+    </ul>
+    <h3>3. MLOps First</h3>
+    <ul>
+        <li>Automate everything: data pipelines, feature engineering, model training, testing, deployment</li>
+        <li>Version control: data, code, models, hyperparameters, configurations</li>
+        <li>Infrastructure-as-code for reproducibility and disaster recovery</li>
+        <li>CI/CD pipelines for models (test on every code change)</li>
+    </ul>
+    <h3>4. Safe Deployment Practices</h3>
+    <ul>
+        <li>Never deploy directly to all users. Use canary (5%), shadow (live testing offline), or A/B testing (50/50)</li>
+        <li>Implement automatic rollback when metrics degrade (e.g., accuracy drops >2%)</li>
+        <li>Set up circuit breakers to fall back to previous model if current model fails</li>
+        <li>Gradual rollout: 5% → 25% → 50% → 100% over days/weeks</li>
+    </ul>
+    <h3>5. Comprehensive Monitoring</h3>
+    <ul>
+        <li>Monitor model predictions (accuracy, calibration, fairness)</li>
+        <li>Monitor data (distribution shift, missing values, outliers)</li>
+        <li>Monitor infrastructure (latency, throughput, cost, errors)</li>
+        <li>Monitor business impact (actual ROI, customer satisfaction)</li>
+        <li>Set alerting thresholds and incident response procedures</li>
+    </ul>
+    <h3>6. Responsible AI</h3>
+    <ul>
+        <li>Audit models for bias and discrimination before deployment</li>
+        <li>Implement explainability mechanisms so business users understand model decisions</li>
+        <li>Get consent for data use and provide opt-out mechanisms</li>
+        <li>Regular fairness audits (quarterly minimum)</li>
+    </ul>
+    <h3>7. Team Structure</h3>
+    <ul>
+        <li>Hire T-shaped people: deep expertise in one area + broad knowledge across ML/data/eng</li>
+        <li>Ratio: 50% data engineers, 30% ML engineers, 20% data scientists (not 10/40/50 like many companies)</li>
+        <li>Cross-functional teams with product, data science, and engineering working together</li>
+        <li>Clear ownership and accountability for each component</li>
+    </ul>
+    <h3>8. Cost Management</h3>
+    <ul>
+        <li>Right-size compute resources. Most teams over-provision by 3-5x</li>
+        <li>Use spot instances and preemptible VMs when possible (save 70-80% on compute)</li>
+        <li>Implement resource quotas and chargeback models to encourage efficiency</li>
+        <li>Regularly audit and optimize expensive operations (data transfers, storage, inference)</li>
+        <li>Negotiate volume discounts with cloud providers (30-50% typical discounts)</li>
+    </ul>
+<div class="highlight-box">
+    <p>Golden Rule: 90% of production ML systems fail not because of model quality but because of infrastructure, monitoring, and organizational issues. Only 10% fail due to poor model accuracy.</p>
+</div>
+</div>
+
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights & Emerging Trends</h2>
+    <h3>1. Large Language Models in Enterprise</h3>
+    <p>LLMs have shifted enterprise AI from supervised learning to foundation models + fine-tuning/RAG. Key considerations:</p>
+    <ul>
+        <li>Cost: Inference on 70B+ parameter models costs $0.001-$0.01 per request. Use quantization, LoRA, and retrieval instead of fine-tuning.</li>
+        <li>Latency: Stream responses rather than waiting for complete generation. Reduce latency from 10s to 1s with caching.</li>
+        <li>Safety: Implement guardrails and content filtering. Use jailbreak-resistant models.</li>
+        <li>Data privacy: Be careful what data you feed to proprietary APIs (GPT-4, Claude). Use open-source models for sensitive data.</li>
+        <li>Hallucination: Models make up confident false answers. Use retrieval-augmented generation and grounding.</li>
+    </ul>
+    <h3>2. Responsible AI & Governance</h3>
+    <p>Regulatory pressures (<a href="https://artificialintelligenceact.eu/" target="_blank" rel="noopener">EU AI Act</a>, GDPR, various fairness regulations) make governance critical:</p>
+    <ul>
+        <li>Model cards and datasheets documenting model capabilities and limitations</li>
+        <li>Regular bias and fairness audits (quarterly minimum)</li>
+        <li>Impact assessments before deployment</li>
+        <li>Audit trails and explainability for regulatory compliance</li>
+        <li>Consent and opt-out mechanisms for users</li>
+    </ul>
+    <h3>3. Agentic AI Systems</h3>
+    <p>Moving from reactive models to autonomous agents that plan and take actions:</p>
+    <ul>
+        <li>Tool use: Models that call APIs and integrations to accomplish goals</li>
+        <li>Planning: Multi-step reasoning before execution</li>
+        <li>Feedback loops: Learning from execution results</li>
+        <li>Autonomy levels: supervised → conditional → fully autonomous</li>
+    </ul>
+    <h3>4. Multimodal Models</h3>
+    <p>Models handling multiple modalities (text, image, video, audio) unlocking new use cases in document understanding, visual search, and more. GPT-4V, Gemini, Claude enabling multimodal enterprises.</p>
+    <h3>5. Real-time ML & Online Learning</h3>
+    <p>Moving beyond batch retraining to online learning that adapts to new data in real-time. Critical for fraud detection and recommendation systems.</p>
+    <h3>6. Edge AI & On-Device ML</h3>
+    <p>Deploying models on edge devices (phones, IoT) for privacy and latency. Model compression enables trillion-parameter models on 100MB devices.</p>
+</div>
+
+<section id="code-examples" class="ml-section">
+    <h2>Code Examples: Building Enterprise AI Systems</h2>
+    <h3>1. ML Platform Architecture</h3>
+<div class="code-block">
+    <div class="code-header">Python — ML Platform Class</div>
+    <div class="code-content"><span class="keyword">class</span> MLPlatform:
+    <span class="string">"""Enterprise ML Platform abstraction."""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, config):
+        <span class="function">self</span>.feature_store = <span class="function">FeatureStore</span>(config[<span class="string">'feature_store'</span>])
+        <span class="function">self</span>.model_registry = <span class="function">ModelRegistry</span>(config[<span class="string">'model_registry'</span>])
+        <span class="function">self</span>.experiment_tracker = <span class="function">ExperimentTracker</span>(config[<span class="string">'tracking'</span>])
+        <span class="function">self</span>.inference_server = <span class="function">InferenceServer</span>(config[<span class="string">'serving'</span>])
+        <span class="function">self</span>.monitor = <span class="function">ModelMonitor</span>(config[<span class="string">'monitoring'</span>])
+    
+    <span class="keyword">def</span> <span class="function">train_pipeline</span>(<span class="function">self</span>, data_path, model_name):
+        <span class="string">"""End-to-end training with versioning and tracking."""</span>
+        <span class="keyword">with</span> <span class="function">self</span>.experiment_tracker.<span class="function">run</span>() <span class="keyword">as</span> run:
+            <span class="comment"># Load features from feature store (consistent with serving)</span>
+            features = <span class="function">self</span>.feature_store.<span class="function">get_features</span>(data_path)
+            X, y = features[<span class="string">'X'</span>], features[<span class="string">'y'</span>]
+            
+            <span class="comment"># Train model</span>
+            model = <span class="function">self</span>.<span class="function">_train_model</span>(X, y)
+            
+            <span class="comment"># Validate on holdout set</span>
+            metrics = <span class="function">self</span>.<span class="function">_evaluate</span>(model, X, y)
+            run.<span class="function">log_metrics</span>(metrics)
+            
+            <span class="comment"># Register in model registry with metadata</span>
+            <span class="function">self</span>.model_registry.<span class="function">register</span>(
+                model, 
+                name=model_name, 
+                metrics=metrics,
+                features=features.columns.<span class="function">tolist</span>()
+            )
+            
+            <span class="keyword">return</span> model, metrics
+    
+    <span class="keyword">def</span> <span class="function">deploy</span>(<span class="function">self</span>, model_name, version, deployment_config):
+        <span class="string">"""Safe deployment with canary rollout."""</span>
+        model = <span class="function">self</span>.model_registry.<span class="function">get</span>(model_name, version)
+        
+        <span class="comment"># Start with 5% of traffic (canary)</span>
+        deployment = <span class="function">self</span>.inference_server.<span class="function">deploy</span>(
+            model, 
+            deployment_config,
+            canary_percentage=<span class="number">5</span>
+        )
+        
+        <span class="comment"># Monitor for 1 hour</span>
+        <span class="function">self</span>.monitor.<span class="function">setup_alerts</span>(deployment)
+        
+        <span class="comment"># Gradually increase traffic</span>
+        <span class="keyword">for</span> percentage <span class="keyword">in</span> [<span class="number">25</span>, <span class="number">50</span>, <span class="number">100</span>]:
+            time.<span class="function">sleep</span>(<span class="number">3600</span>)  <span class="comment"># Monitor for 1 hour</span>
+            <span class="keyword">if</span> <span class="function">self</span>.monitor.<span class="function">check_health</span>(deployment):
+                <span class="function">self</span>.inference_server.<span class="function">update_traffic</span>(percentage)
+            <span class="keyword">else</span>:
+                <span class="function">self</span>.monitor.<span class="function">rollback</span>(deployment)
+                <span class="keyword">return</span> <span class="keyword">None</span>
+        
+        <span class="keyword">return</span> deployment
+</div>
+</div>
+    <h3>2. Data Pipeline with <a href="https://airflow.apache.org/" target="_blank" rel="noopener">Apache Airflow</a></h3>
+<div class="code-block">
+    <div class="code-header">Python — Airflow Data Pipeline</div>
+    <div class="code-content"><span class="keyword">from</span> airflow <span class="keyword">import</span> DAG
+<span class="keyword">from</span> airflow.operators.python <span class="keyword">import</span> PythonOperator
+<span class="keyword">from</span> airflow.operators.kubernetes_pod <span class="keyword">import</span> <a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes</a>PodOperator
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+
+default_args = {
+    <span class="string">'owner'</span>: <span class="string">'data-team'</span>,
+    <span class="string">'retries'</span>: <span class="number">2</span>,
+    <span class="string">'retry_delay'</span>: <span class="function">timedelta</span>(minutes=<span class="number">5</span>),
+    <span class="string">'email_on_failure'</span>: [<span class="string">'alerts@company.com'</span>],
+}
+
+dag = <span class="function">DAG</span>(
+    <span class="string">'enterprise_ml_pipeline'</span>,
+    default_args=default_args,
+    schedule_interval=<span class="string">'0 2 * * *'</span>,  <span class="comment"># Daily at 2 AM</span>
+    catchup=<span class="keyword">False</span>,
+)
+
+<span class="keyword">def</span> <span class="function">extract_data</span>():
+    <span class="string">"""Extract from multiple sources."""</span>
+    df = pd.<span class="function">concat</span>([
+        pd.<span class="function">read_sql</span>(<span class="string">"SELECT * FROM customers"</span>, conn),
+        pd.<span class="function">read_parquet</span>(<span class="string">"s3://data/events/"</span>),
+    ])
+    df.<span class="function">to_parquet</span>(<span class="string">'/tmp/extracted.parquet'</span>)
+
+<span class="keyword">def</span> <span class="function">validate_data</span>(ti):
+    <span class="string">"""Data quality checks."""</span>
+    data = pd.<span class="function">read_parquet</span>(<span class="string">'/tmp/extracted.parquet'</span>)
+    
+    <span class="comment"># Check volume</span>
+    <span class="keyword">assert</span> <span class="function">len</span>(data) > <span class="number">0</span>, <span class="string">"No data extracted"</span>
+    
+    <span class="comment"># Check completeness</span>
+    null_rate = data.<span class="function">isnull</span>().<span class="function">sum</span>() / <span class="function">len</span>(data)
+    <span class="keyword">assert</span> (null_rate < <span class="number">0.05</span>).<span class="function">all</span>(), <span class="string">"Too many nulls"</span>
+    
+    <span class="comment"># Check uniqueness</span>
+    <span class="keyword">assert</span> data[<span class="string">'customer_id'</span>].is_unique, <span class="string">"Duplicate customers"</span>
+    
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="keyword">def</span> <span class="function">engineer_features</span>(ti):
+    <span class="string">"""Create ML features."""</span>
+    data = pd.<span class="function">read_parquet</span>(<span class="string">'/tmp/extracted.parquet'</span>)
+    
+    <span class="comment"># Aggregate features</span>
+    features = data.<span class="function">groupby</span>(<span class="string">'customer_id'</span>).<span class="function">agg</span>({
+        <span class="string">'amount'</span>: [<span class="string">'sum'</span>, <span class="string">'mean'</span>, <span class="string">'std'</span>],
+        <span class="string">'timestamp'</span>: <span class="string">'max'</span>,
+    })
+    
+    features.<span class="function">to_parquet</span>(<span class="string">'/feature_store/daily_features.parquet'</span>)
+
+<span class="comment"># Kubernetes-based model training (scales with demand)</span>
+train_task = <span class="function">KubernetesPodOperator</span>(
+    task_id=<span class="string">'train_model'</span>,
+    image=<span class="string">'ml-platform:latest'</span>,
+    cmds=[<span class="string">'python'</span>, <span class="string">'train.py'</span>],
+    env_vars={<span class="string">'DATA_PATH'</span>: <span class="string">'/feature_store/daily_features.parquet'</span>},
+    memory_request=<span class="string">'16G'</span>,
+    cpu_request=<span class="string">'4'</span>,
+)
+
+<span class="comment"># DAG orchestration</span>
+extract = <span class="function">PythonOperator</span>(task_id=<span class="string">'extract'</span>, python_callable=extract_data, dag=dag)
+validate = <span class="function">PythonOperator</span>(task_id=<span class="string">'validate'</span>, python_callable=validate_data, dag=dag)
+features = <span class="function">PythonOperator</span>(task_id=<span class="string">'features'</span>, python_callable=engineer_features, dag=dag)
+
+extract >> validate >> features >> train_task
+</div>
+</div>
+    <h3>3. Model Governance Registry</h3>
+<div class="code-block">
+    <div class="code-header">Python — Model Registry with Governance</div>
+    <div class="code-content"><span class="keyword">class</span> ModelRegistry:
+    <span class="string">"""<a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>-based model registry with governance."""</span>
+    
+    <span class="keyword">def</span> <span class="function">register_model</span>(<span class="function">self</span>, model, metadata):
+        <span class="string">"""Register with complete governance metadata."""</span>
+        client = mlflow.tracking.<span class="function">MlflowClient</span>()
+        
+        <span class="keyword">with</span> mlflow.<span class="function">start_run</span>() <span class="keyword">as</span> run:
+            <span class="comment"># Log model artifacts</span>
+            mlflow.sklearn.<span class="function">log_model</span>(model, <span class="string">"model"</span>)
+            
+            <span class="comment"># Log hyperparameters</span>
+            mlflow.<span class="function">log_params</span>({
+                <span class="string">'algorithm'</span>: metadata[<span class="string">'algorithm'</span>],
+                <span class="string">'hyperparameters'</span>: <span class="function">str</span>(model.<span class="function">get_params</span>()),
+                <span class="string">'training_date'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+                <span class="string">'data_version'</span>: metadata[<span class="string">'data_version'</span>],
+                <span class="string">'trained_by'</span>: metadata[<span class="string">'trained_by'</span>],
+            })
+            
+            <span class="comment"># Log performance metrics</span>
+            mlflow.<span class="function">log_metrics</span>({
+                <span class="string">'auc'</span>: metadata[<span class="string">'auc'</span>],
+                <span class="string">'precision'</span>: metadata[<span class="string">'precision'</span>],
+                <span class="string">'recall'</span>: metadata[<span class="string">'recall'</span>],
+                <span class="string">'f1'</span>: metadata[<span class="string">'f1'</span>],
+                <span class="string">'inference_latency_ms'</span>: metadata[<span class="string">'latency_ms'</span>],
+            })
+            
+            <span class="comment"># Log fairness metrics</span>
+            mlflow.<span class="function">log_metrics</span>({
+                <span class="string">'fairness_gap_male_female'</span>: metadata[<span class="string">'fairness'</span>][<span class="string">'gender_gap'</span>],
+                <span class="string">'equalized_odds'</span>: metadata[<span class="string">'fairness'</span>][<span class="string">'equalized_odds'</span>],
+            })
+            
+            <span class="comment"># Log data governance</span>
+            mlflow.<span class="function">log_artifact</span>(<span class="string">'data_lineage.json'</span>, <span class="string">'governance'</span>)
+            mlflow.<span class="function">log_artifact</span>(<span class="string">'bias_audit.json'</span>, <span class="string">'governance'</span>)
+        
+        <span class="comment"># Register in model registry</span>
+        client.<span class="function">create_model_version</span>(
+            name=metadata[<span class="string">'model_name'</span>],
+            source=<span class="string">f"runs:/{run.info.run_id}/model"</span>,
+            description=metadata[<span class="string">'description'</span>],
+            tags={
+                <span class="string">'environment'</span>: <span class="string">'production'</span>,
+                <span class="string">'owner'</span>: metadata[<span class="string">'owner'</span>],
+                <span class="string">'risk_level'</span>: metadata[<span class="string">'risk_level'</span>],
+            },
+        )
+</div>
+</div>
+    <h3>4. A/B Testing Framework</h3>
+<div class="code-block">
+    <div class="code-header">Python — Statistical A/B Testing</div>
+    <div class="code-content"><span class="keyword">class</span> ABTestFramework:
+    <span class="string">"""Statistical A/B testing for ML model deployment."""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, significance_level=<span class="number">0.05</span>, power=<span class="number">0.8</span>):
+        <span class="function">self</span>.significance_level = significance_level
+        <span class="function">self</span>.power = power
+    
+    <span class="keyword">def</span> <span class="function">run_test</span>(<span class="function">self</span>, control_model, treatment_model, test_data):
+        <span class="string">"""Run A/B test and compute statistical significance."""</span>
+        control_preds = control_model.<span class="function">predict_proba</span>(test_data)[:, <span class="number">1</span>]
+        treatment_preds = treatment_model.<span class="function">predict_proba</span>(test_data)[:, <span class="number">1</span>]
+        
+        <span class="comment"># Compute metrics</span>
+        control_auc = <span class="function">roc_auc_score</span>(test_data[<span class="string">'target'</span>], control_preds)
+        treatment_auc = <span class="function">roc_auc_score</span>(test_data[<span class="string">'target'</span>], treatment_preds)
+        
+        <span class="comment"># Statistical test</span>
+        <span class="keyword">from</span> scipy.stats <span class="keyword">import</span> ttest_ind
+        _, p_value = <span class="function">ttest_ind</span>(control_preds, treatment_preds)
+        
+        <span class="keyword">return</span> {
+            <span class="string">'control_auc'</span>: control_auc,
+            <span class="string">'treatment_auc'</span>: treatment_auc,
+            <span class="string">'improvement_pct'</span>: (treatment_auc - control_auc) / control_auc * <span class="number">100</span>,
+            <span class="string">'p_value'</span>: p_value,
+            <span class="string">'significant'</span>: p_value < <span class="function">self</span>.significance_level,
+            <span class="string">'recommendation'</span>: <span class="string">'Deploy'</span> <span class="keyword">if</span> p_value < <span class="function">self</span>.significance_level <span class="keyword">else</span> <span class="string">'Continue testing'</span>,
+        }
+</div>
+</div>
+    <h3>5. Cost Optimization Calculator</h3>
+<div class="code-block">
+    <div class="code-header">Python — Infrastructure Cost Analysis</div>
+    <div class="code-content">
+<span class="keyword">class</span> CostOptimizer:
+    <span class="string">"""Calculate and optimize ML infrastructure costs."""</span>
+    
+    <span class="keyword">def</span> <span class="function">calculate_ml_costs</span>(<span class="function">self</span>, workload):
+        <span class="string">"""Calculate total cost of ML operations."""</span>
+        costs = {}
+        
+        <span class="comment"># Training costs</span>
+        training_gpu_hours = workload[<span class="string">'training_iterations'</span>] * workload[<span class="string">'hours_per_iteration'</span>]
+        costs[<span class="string">'training'</span>] = training_gpu_hours * <span class="number">3.06</span>  <span class="comment"># A100 GPU on-demand pricing</span>
+        
+        <span class="comment"># Inference costs (typically largest)</span>
+        daily_predictions = workload[<span class="string">'predictions_per_day'</span>]
+        inference_cost_per_1k = <span class="number">0.0005</span>  <span class="comment"># Per 1K predictions</span>
+        costs[<span class="string">'inference'</span>] = (daily_predictions / <span class="number">1000</span>) * inference_cost_per_1k * <span class="number">30</span>
+        
+        <span class="comment"># Storage costs</span>
+        model_size_gb = workload[<span class="string">'model_size_gb'</span>]
+        data_size_gb = workload[<span class="string">'training_data_gb'</span>]
+        costs[<span class="string">'storage'</span>] = (model_size_gb + data_size_gb) * <span class="number">0.023</span> * <span class="number">1</span>  <span class="comment"># $0.023/GB/month</span>
+        
+        costs[<span class="string">'total'</span>] = <span class="function">sum</span>(costs.<span class="function">values</span>())
+        <span class="keyword">return</span> costs
+    
+    <span class="keyword">def</span> <span class="function">optimize</span>(<span class="function">self</span>, current_workload):
+        <span class="string">"""Identify optimization opportunities."""</span>
+        current_costs = <span class="function">self</span>.<span class="function">calculate_ml_costs</span>(current_workload)
+        optimizations = []
+        
+        <span class="comment"># Optimization 1: Spot instances (70% savings)</span>
+        spot_savings = current_costs[<span class="string">'training'</span>] * <span class="number">0.7</span>
+        optimizations.<span class="function">append</span>({<span class="string">'name'</span>: <span class="string">'Spot instances'</span>, <span class="string">'savings'</span>: spot_savings, <span class="string">'effort'</span>: <span class="string">'Low'</span>})
+        
+        <span class="comment"># Optimization 2: Batch inference (60% savings)</span>
+        batch_savings = current_costs[<span class="string">'inference'</span>] * <span class="number">0.6</span>
+        optimizations.<span class="function">append</span>({<span class="string">'name'</span>: <span class="string">'Batch inference'</span>, <span class="string">'savings'</span>: batch_savings, <span class="string">'effort'</span>: <span class="string">'Medium'</span>})
+        
+        <span class="comment"># Optimization 3: Model quantization (75% savings)</span>
+        quantization_savings = current_costs[<span class="string">'inference'</span>] * <span class="number">0.75</span>
+        optimizations.<span class="function">append</span>({<span class="string">'name'</span>: <span class="string">'Quantization'</span>, <span class="string">'savings'</span>: quantization_savings, <span class="string">'effort'</span>: <span class="string">'Low'</span>})
+        
+        <span class="keyword">return</span> {
+            <span class="string">'current_cost'</span>: current_costs[<span class="string">'total'</span>],
+            <span class="string">'optimizations'</span>: optimizations,
+            <span class="string">'total_savings'</span>: <span class="function">sum</span>(o[<span class="string">'savings'</span>] <span class="keyword">for</span> o <span class="keyword">in</span> optimizations),
+        }
+</div>
+</div>
+    <h3>6. ROI Measurement Dashboard</h3>
+<div class="code-block">
+    <div class="code-header">Python — ROI & Business Impact Metrics</div>
+    <div class="code-content">
+<span class="keyword">class</span> ROIDashboard:
+    <span class="string">"""Measure business impact and ROI of ML systems."""</span>
+    
+    <span class="keyword">def</span> <span class="function">calculate_roi</span>(<span class="function">self</span>, model_id, deployment_date):
+        <span class="string">"""Calculate ROI metrics for deployed model."""</span>
+        
+        <span class="comment"># Revenue impact</span>
+        revenue_before = <span class="function">self</span>.<span class="function">_get_metric</span>(<span class="string">'revenue'</span>, before=deployment_date)
+        revenue_after = <span class="function">self</span>.<span class="function">_get_metric</span>(<span class="string">'revenue'</span>, after=deployment_date)
+        revenue_lift = revenue_after - revenue_before
+        
+        <span class="comment"># Cost savings</span>
+        cost_before = <span class="function">self</span>.<span class="function">_get_metric</span>(<span class="string">'cost'</span>, before=deployment_date)
+        cost_after = <span class="function">self</span>.<span class="function">_get_metric</span>(<span class="string">'cost'</span>, after=deployment_date)
+        cost_savings = cost_before - cost_after
+        
+        <span class="comment"># ML costs (training, serving, monitoring)</span>
+        ml_costs = <span class="function">self</span>.<span class="function">_get_ml_infrastructure_costs</span>(model_id) * <span class="number">12</span>
+        
+        <span class="comment"># Calculate ROI</span>
+        total_benefit = revenue_lift + cost_savings
+        roi_pct = (total_benefit - ml_costs) / ml_costs * <span class="number">100</span>
+        payback_months = ml_costs / (total_benefit / <span class="number">12</span>)
+        
+        <span class="keyword">return</span> {
+            <span class="string">'revenue_lift'</span>: revenue_lift,
+            <span class="string">'cost_savings'</span>: cost_savings,
+            <span class="string">'total_benefit'</span>: total_benefit,
+            <span class="string">'ml_costs'</span>: ml_costs,
+            <span class="string">'net_benefit'</span>: total_benefit - ml_costs,
+            <span class="string">'roi_percentage'</span>: roi_pct,
+            <span class="string">'payback_months'</span>: payback_months,
+            <span class="string">'recommendation'</span>: <span class="string">'Continue investing'</span> <span class="keyword">if</span> roi_pct > <span class="number">50</span> <span class="keyword">else</span> <span class="string">'Review model'</span>,
+        }
+</div>
+</div>
+</div>
+
+<section id="exercises" class="ml-section">
+    <h2>Practical Exercises</h2>
+    <h3>Exercise 1: Design an Enterprise ML Platform</h3>
+<div class="try-it-box">
+    <h4>Build Your ML Platform Architecture</h4>
+    <p>Design a complete ML platform for a fintech company with 10M users, 100K transactions per day, and strict compliance requirements. Include: data pipelines, feature store, model serving (real-time <100ms), monitoring, governance, and cost optimization. Consider: What cloud provider? How handle real-time vs batch? How prevent model degradation? How ensure fairness?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+platform_design = {
+    <span class="string">"data_layer"</span>: {
+        <span class="string">"sources"</span>: [],
+        <span class="string">"ingestion_tool"</span>: <span class="string">""</span>,
+        <span class="string">"ingestion_sla"</span>: <span class="string">"sub-second"</span>,
+        <span class="string">"storage"</span>: <span class="string">""</span>,
+        <span class="string">"volume_gbday"</span>: <span class="number">0</span>,
+    },
+    <span class="string">"feature_layer"</span>: {
+        <span class="string">"feature_store"</span>: <span class="string">""</span>,
+        <span class="string">"freshness_sla_ms"</span>: <span class="number">0</span>,
+        <span class="string">"retraining_frequency"</span>: <span class="string">""</span>,
+    },
+    <span class="string">"model_layer"</span>: {
+        <span class="string">"training_platform"</span>: <span class="string">""</span>,
+        <span class="string">"serving_platform"</span>: <span class="string">""</span>,
+        <span class="string">"latency_requirement_ms"</span>: <span class="number">0</span>,
+        <span class="string">"throughput_reqs_per_sec"</span>: <span class="number">0</span>,
+    },
+    <span class="string">"monitoring"</span>: {
+        <span class="string">"model_metrics"</span>: [],
+        <span class="string">"data_metrics"</span>: [],
+        <span class="string">"infrastructure_metrics"</span>: [],
+        <span class="string">"business_metrics"</span>: [],
+        <span class="string">"alerting_channels"</span>: [],
+    },
+    <span class="string">"governance"</span>: {
+        <span class="string">"audit_trail"</span>: <span class="string">""</span>,
+        <span class="string">"fairness_testing"</span>: <span class="string">""</span>,
+        <span class="string">"compliance_requirements"</span>: [],
+    },
+    <span class="string">"cost_optimization"</span>: {
+        <span class="string">"monthly_budget"</span>: <span class="number">0</span>,
+        <span class="string">"spot_instance_usage"</span>: <span class="string">"0%"</span>,
+        <span class="string">"batch_vs_realtime_split"</span>: <span class="string">"80/20"</span>,
+    },
+}
+</div>
+</div>
+</div>
+    <h3>Exercise 2: Implement Data Pipeline & Feature Engineering</h3>
+<div class="try-it-box">
+    <h4>Build Production Data Pipeline</h4>
+    <p>Implement an Apache Airflow DAG that: (1) Ingests customer transaction data from database, (2) Validates data quality (checks for nulls, duplicates, outliers), (3) Computes 50+ features for ML (daily spend, customer lifetime value, fraud signals), (4) Stores features in a feature store, (5) Trains a classification model, (6) Evaluates performance, (7) Deploys if metrics good. Include error handling, logging, and monitoring.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">from</span> airflow <span class="keyword">import</span> DAG
+<span class="keyword">from</span> airflow.operators.python <span class="keyword">import</span> PythonOperator
+<span class="keyword">from</span> airflow.exceptions <span class="keyword">import</span> AirflowException
+
+dag = <span class="function">DAG</span>(<span class="string">'customer_ml_pipeline'</span>, schedule_interval=<span class="string">'daily'</span>)
+
+<span class="keyword">def</span> <span class="function">extract_transactions</span>():
+    <span class="comment"># Query database for yesterday's transactions</span>
+    df = <span class="function">query_database</span>("SELECT * FROM transactions WHERE date=yesterday")
+    df.<span class="function">to_parquet</span>('/tmp/raw_transactions.parquet<span class="string">')
+
+def validate_quality(ti):
+    # Check data quality
+    df = pd.read_parquet('</span>/tmp/raw_transactions.parquet<span class="string">')
+    assert len(df) &gt; 0, "No transactions"
+    assert df['</span>amount<span class="string">'].isnull().sum() &lt; 100, "Too many nulls"
+    # More checks...
+
+def engineer_features(ti):
+    # Create 50+ features
+    # TODO: implement
+
+def train_model(ti):
+    # Train classification model
+    # TODO: implement
+
+def evaluate_model(ti):
+    # Evaluate on holdout set
+    # TODO: implement
+    return metrics
+
+def deploy_if_good(ti):
+    # Only deploy if metrics exceed threshold
+    metrics = ti.xcom_pull(task_ids='</span>evaluate<span class="string">')
+    if metrics['</span>auc<span class="string">'] &gt; 0.85:
+        return '</span>deploy<span class="string">'
+    return '</span>skip'
+
+<span class="comment"># Define tasks and dependencies</span>
+extract >> validate >> features >> train >> evaluate >> deploy
+</div>
+</div>
+</div>
+    <h3>Exercise 3: Design A/B Test for Model Deployment</h3>
+<div class="try-it-box">
+    <h4>Plan Production A/B Test</h4>
+    <p>Design an A/B test for deploying improved fraud detection model. Calculate required sample size for 10% lift with 95% confidence and 80% power. Define test duration, success metrics, rollback criteria, and how you'll communicate results to stakeholders.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+ab_test_plan = {
+    <span class="string">"hypothesis"</span>: <span class="string">"New fraud model reduces false positives by 10% while maintaining catch rate"</span>,
+    <span class="string">"baseline_metric"</span>: <span class="number">0.95</span>,  <span class="comment"># Current fraud catch rate</span>
+    <span class="string">"desired_improvement"</span>: <span class="number">0.10</span>,
+    <span class="string">"success_metrics"</span>: {
+        <span class="string">"primary"</span>: <span class="string">"fraud_detection_rate"</span>,
+        <span class="string">"secondary"</span>: [<span class="string">"false_positive_rate"</span>, <span class="string">"user_friction_score"</span>],
+        <span class="string">"guardrails"</span>: [<span class="string">"latency_ms &lt; 100"</span>, <span class="string">"error_rate &lt; 0.1%"</span>],
+    },
+    <span class="string">"test_design"</span>: {
+        <span class="string">"sample_size"</span>: <span class="number">0</span>,  <span class="comment"># Calculate using power analysis</span>
+        <span class="string">"test_duration_days"</span>: <span class="number">0</span>,
+        <span class="string">"traffic_split"</span>: <span class="string">"50/50 control vs treatment"</span>,
+        <span class="string">"stratification"</span>: <span class="string">"by user segment"</span>,
+    },
+    <span class="string">"rollback_criteria"</span>: {
+        <span class="string">"degradation_threshold"</span>: -<span class="number">0.05</span>,  <span class="comment"># Rollback if -5%</span>
+        <span class="string">"error_rate_threshold"</span>: <span class="number">0.005</span>,
+        <span class="string">"latency_spike"</span>: <span class="number">150</span>,  <span class="comment"># ms</span>
+    },
+    <span class="string">"communication"</span>: {
+        <span class="string">"stakeholders"</span>: [<span class="string">"fraud_team"</span>, <span class="string">"product"</span>, <span class="string">"exec"</span>],
+        <span class="string">"reporting_frequency"</span>: <span class="string">"daily"</span>,
+        <span class="string">"decision_rule"</span>: <span class="string">"p-value &lt; 0.05 to deploy"</span>,
+    },
+}
+</div>
+</div>
+</div>
+    <h3>Exercise 4: Cost Optimization Analysis</h3>
+<div class="try-it-box">
+    <h4>Reduce ML Spending by 30%</h4>
+    <p>Analyze a $100K/month ML infrastructure bill and identify 5+ cost optimization opportunities to reduce spending to $70K/month. Consider: compute (GPU, CPU), storage, data transfer, inference, monitoring. Prioritize by: impact first, then ease of implementation.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+current_bill = {
+    <span class="string">"training_compute"</span>: <span class="number">30000</span>,  <span class="comment"># GPU hours</span>
+    <span class="string">"inference_serving"</span>: <span class="number">45000</span>,  <span class="comment"># Real-time serving</span>
+    <span class="string">"data_storage"</span>: <span class="number">15000</span>,  <span class="comment"># Warehouse + features</span>
+    <span class="string">"data_transfer"</span>: <span class="number">5000</span>,  <span class="comment"># Between services</span>
+    <span class="string">"monitoring_tools"</span>: <span class="number">3000</span>,  <span class="comment"># Datadog, etc.</span>
+    <span class="string">"other"</span>: <span class="number">2000</span>,
+    <span class="string">"total"</span>: <span class="number">100000</span>,
+}
+
+optimizations = [
+    {
+        <span class="string">"name"</span>: <span class="string">"Switch training to spot instances"</span>,
+        <span class="string">"current_cost"</span>: <span class="number">30000</span>,
+        <span class="string">"optimized_cost"</span>: <span class="number">9000</span>,
+        <span class="string">"savings"</span>: <span class="number">21000</span>,
+        <span class="string">"effort"</span>: <span class="string">"Low"</span>,
+        <span class="string">"risk"</span>: <span class="string">"Low"</span>,
+        <span class="string">"timeline_weeks"</span>: <span class="number">1</span>,
+    },
+    <span class="comment"># TODO: Add 4+ more optimizations</span>
+]
+
+target_savings = <span class="number">30000</span>
+projected_savings = <span class="function">sum</span>(opt[<span class="string">'savings'</span>] <span class="keyword">for</span> opt <span class="keyword">in</span> optimizations)
+confidence_level = <span class="string">"High"</span> <span class="keyword">if</span> projected_savings >= target_savings <span class="keyword">else</span> <span class="string">"Low"</span>
+</div>
+</div>
+</div>
+</div>
+
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+<div class="interview-question">
+    <div class="interview-header">Q1: How would you design an end-to-end fraud detection system for an enterprise payment platform processing 1M transactions per day?</div>
+    <div class="interview-answer">
+        <p>Start with business requirements: false negative rate <0.1% (catch fraud), false positive rate <2% (user friction). Then explain architecture: 1) Real-time data pipeline ingesting transactions into Kafka, 2) Feature store serving pre-computed customer behavior features, 3) Ensemble of models (gradient boosted trees for structured features, RNNs for time-series patterns, isolation forests for anomalies), 4) Sub-100ms serving latency requirement using edge caching, 5) Continuous monitoring for model drift and performance degradation, 6) A/B testing framework for model improvements with statistical significance testing, 7) Explainability component (SHAP values) to explain why transaction flagged for customer support, 8) Automated retraining triggered by PSI > 0.1 indicating data drift, 9) Cost optimization using quantization and batch inference where possible.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q2: What are the key challenges in deploying large language models in production for enterprise use cases, and how would you address them?</div>
+    <div class="interview-answer">
+        <p>Discuss technical and business challenges: 1) Cost - inference on 70B+ parameter models is $0.001-$0.01 per request; mitigate with LoRA fine-tuning instead of full fine-tuning (reduces VRAM by 100x), retrieval-augmented generation (RAG) to avoid fine-tuning, prompt caching, and model quantization; 2) Latency - models take 5-10s per response in naive implementation; mitigate with speculative decoding, token streaming (show results as they're generated), and caching; 3) Hallucination - models confidently make up false information; mitigate with RAG using authoritative sources, grounding with external tools, and confidence scoring; 4) Safety & Alignment - harmful outputs possible; implement input/output filtering, jailbreak-resistant prompting, and red-team testing; 5) Data privacy - customer data sent to external APIs is risky; use self-hosted open-source models (Llama, Mistral) for sensitive data; 6) Monitoring - traditional ML metrics don't work; monitor output relevance, toxicity, informativeness using separate evaluator models.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q3: Walk me through how you'd implement end-to-end MLOps for a high-traffic recommendation system serving 1B+ predictions per day with <100ms latency SLA.</div>
+    <div class="interview-answer">
+        <p>Explain complete lifecycle with specific tools and practices: 1) Version control: Git for code, DVC for large artifacts (data, models), feature versioning in feature store; 2) Experiment tracking: MLflow to track 100+ experiments per week, compare model performance, manage hyperparameters; 3) Automated training pipeline: Apache Airflow orchestrating daily retraining triggered by data drift detection, automated hyperparameter tuning (Ray Tune); 4) Model registry: MLflow Model Registry storing model artifacts, performance metrics, fairness audits, deployment history for audit trail; 5) Safe deployment: Canary rollout starting at 5% traffic, monitoring for latency increase, accuracy drop; gradually scale to 100% if healthy; 6) Real-time serving: KServe handling 100K+ predictions/sec with auto-scaling, model versioning, A/B test routing; 7) Comprehensive monitoring: 100+ metrics tracked (accuracy, latency, fairness), data drift detection (KL divergence), model drift detection (performance degradation), automated alerts; 8) Automated rollback: If model accuracy drops >1%, latency spikes >50%, or error rate >1%, automatically rollback to previous version; 9) Infrastructure: Kubernetes for orchestration, GPUs for training, CPUs for serving, Spark for batch, Kafka for streaming; 10) Cost optimization: Use spot instances for training, batch inference for non-urgent predictions, model compression.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q4: How do you measure and communicate ROI of ML systems to non-technical stakeholders like CFO, and what metrics would you track?</div>
+    <div class="interview-answer">
+        <p>Explain that ROI requires tying ML to business metrics, not just model accuracy: 1) Define baseline: Current state before ML (conversion rate, churn rate, cost, revenue). Example: Current churn prediction accuracy is 60%, costs $100K annually to contact low-value customers. 2) Measure impact: Post-deployment, measure actual business improvement. Isolate using A/B testing. Example: Improved churn model increases precision to 85%, reduces wasted outreach costs by $60K annually, while recovering $500K in retention value. 3) Calculate ROI = (benefit - cost) / cost. Example: Total benefit $560K, ML costs $200K (compute, salaries, tools), ROI = 180%. 4) Payback period: 200K / (560K/12) = 4.3 months. 5) Track leading indicators (model accuracy) and lagging indicators (business impact separately). Don't confuse the two. 6) Communicate simply: 'We invested $200K in ML, it generated $560K in value, that's 2.8x return'. Report monthly. 7) Attribute correctly: Use control groups and A/B testing to prove your model caused the improvement, not other factors.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q5: What is data drift and model drift? How do you detect and handle them in production systems that must run 24/7?</div>
+    <div class="interview-answer">
+        <p>Explain these critical concepts: Data drift occurs when input feature distribution changes over time, causing model performance degradation. Model drift occurs when relationship between inputs and outputs changes. Example: Fraud model trained on pre-pandemic data doesn't work well during recession when spending patterns change dramatically. Detection methods: 1) Statistical tests: Kolmogorov-Smirnov test, Population Stability Index (PSI > 0.1 signals drift), Chi-square test for categorical features; 2) Visualization: Compare distributions with histograms, quantile plots, box plots; 3) Performance monitoring: Track accuracy, precision, recall; if degrading without clear cause, likely drift; 4) Automated triggers: Set up daily checks, alert if drift detected. Handling: 1) Automated retraining: Retrain immediately when drift detected, A/B test new model, deploy if performance better; 2) Online learning: Update model parameters continuously with new data instead of retraining from scratch; 3) Adaptive thresholds: Adjust decision thresholds based on new data distribution; 4) Monitoring frequency depends on use case: Real-time systems (fraud) monitor every hour; batch systems (churn) monitor daily. Typical enterprise retrains models monthly.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q6: How would you approach designing and building a feature store for a large enterprise with 100+ ML teams and 1000+ models? What problems does it solve?</div>
+    <div class="interview-answer">
+        <p>Feature stores solve a critical problem: feature engineering is repeated across teams, causing inconsistency and wasted compute. Design considerations: 1) What is a feature store: Centralized system that computes features once, stores them, serves to multiple models for training and serving. Eliminates training/serving skew. 2) Architecture: Online store (Redis for <100ms latency) serves features for real-time predictions; offline store (S3, BigQuery) serves for batch training. 3) Key features: Version control (know which features used to train which model), monitoring (track feature quality and staleness), lineage (trace feature back to source data), discovery (data scientists can browse available features). 4) Example workflow: Data engineer writes feature definition (SQL), feature store computes daily and stores both online and offline; ML engineer requests features for model training; data scientist uses same features for inference; no skew between train and serve. 5) Benefits: 30-50% reduction in ML development time, prevents bugs from feature discrepancy, cost savings from deduplication. 6) Tools: Feast (open-source), Tecton (enterprise), Chip (data-centric). 7) Challenges: Data quality, staleness, cost of maintaining online and offline stores.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q7: How do you ensure responsible AI and prevent bias in production systems? Give concrete examples.</div>
+    <div class="interview-answer">
+        <p>Bias and fairness are critical for ethics and legal compliance: 1) Define fairness for your use case: Group fairness (no disparate impact on protected groups), individual fairness (similar individuals treated similarly), calibration (predicted probability matches actual rate); 2) Audit data: Check for historical discrimination in labels (hiring models trained on biased hiring patterns perpetuate bias), demographic imbalance (does training data represent all populations); 3) Measure fairness: Compute metrics like demographic parity (same approval rate across groups), equalized odds (same false positive rate across groups), calibration; 4) Mitigate bias: Rebalancing training data, fair representation learning, threshold adjustment; 5) Example: Credit lending model that rejects minorities at higher rate must be detected (fairness audit), understood (why is this happening?), and fixed (retrain with balanced data or adjust thresholds); 6) Production monitoring: Continuously audit fairness, especially as data distribution changes; 7) Transparency: Document model limitations, get informed consent, provide explanation when decisions made, offer appeals process; 8) Tools: Fairlearn, AI Fairness Toolkit, What-If Tool.</p>
+    </div>
+</div><div class="interview-question">
+    <div class="interview-header">Q8: How do you balance model complexity vs operational burden in enterprise environments? When should you use simple vs complex models?</div>
+    <div class="interview-answer">
+        <p>This is a critical decision affecting infrastructure cost and reliability: 1) Simple models (logistic regression, decision trees) are fast, interpretable, easy to monitor, but may underfit and have lower accuracy. 2) Complex models (deep learning, large ensembles) can be very accurate but require: 10x more compute (GPU training + serving), longer training time, harder to debug and explain, higher latency (model inference time), more careful monitoring (more ways to fail). 3) Real question: Is 2% accuracy improvement worth 10x compute cost? Almost never. 4) Enterprise best practice: Start with simple baseline (logistic regression). Only move to complex model if: simple model clearly insufficient AND business value justifies cost AND team has expertise to maintain it. 5) Example: Netflix doesn't use single best model; uses ensemble of 10-100 simple models because simpler to manage at scale. 6) Strategy: Use transfer learning to reduce complexity (fine-tune pre-trained model instead of training from scratch). Use model compression (quantization, pruning) to reduce inference cost. 7) Monitoring: Complex models need 10x more monitoring because more failure modes. 8) Rule of thumb: 60% of time/effort goes to data and features, 20% to modeling, 20% to infrastructure and operations. If you're spending 50% on modeling, your architecture is wrong.</p>
+    </div>
+</div>
+</div>
+
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+<div class="faq-item">
+    <div class="faq-question">Q: Should we build ML infrastructure in-house or use managed cloud platforms like SageMaker? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Both have tradeoffs. Managed cloud platforms (SageMaker, Vertex AI) offer faster time-to-market (6-12 months vs 12-24 months), built-in governance, managed scaling, and access to latest innovations. Cons: vendor lock-in, limited customization, 30-50% higher long-term cost. Open-source on Kubernetes gives maximum flexibility, no lock-in, and lower long-term cost, but requires 2-3x DevOps effort and slower innovation. Recommendation: Start with cloud for first 1-2 years to prove ROI. After that, re-evaluate based on scale (if serving 1B+ predictions/day, savings from optimization justify investment in infrastructure).</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: How often should we retrain models in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">It depends on the rate of data drift. Monitor using Population Stability Index (PSI): PSI < 0.1 (no drift), 0.1-0.25 (small drift), > 0.25 (significant drift). Real-time systems (fraud, ads): daily or continuous retraining. Batch systems (churn, recommendations): weekly or monthly retraining. Trigger retraining when: 1) model accuracy drops below threshold (e.g., AUC < 0.80), 2) data drift detected (PSI > 0.2), 3) business context changes (new products, market shifts). Automate this with Airflow or similar. Manual retraining is a sign of immaturity.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: What is typical cost structure for enterprise ML systems? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Rough breakdown for $1M annual budget: 30% infrastructure (compute, storage), 30% people (data engineers, ML engineers), 20% tools/licenses (cloud services, monitoring), 20% other (data acquisition, compliance). Most teams spend 3-5x more on compute than necessary due to over-provisioning. Optimize: use spot instances (70% savings), right-size GPUs, cache features, batch process where possible. Average enterprise ML spend: $5-10M annually at scale.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: How do you handle model explainability and interpretability in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Different stakeholders need different explanations. For customers: simple, human-understandable reasons. For regulators: complete audit trail and model documentation. For data scientists: feature importance, SHAP values. Tools: SHAP for model-agnostic explanations, feature importance from tree models, attention weights from neural networks. Important: explainability has costs (slower inference, reduced accuracy), use judiciously. For regulated industries (finance, healthcare), non-negotiable. For recommendations, nice-to-have.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: What is the best approach to scaling from 1 model to 100+ models in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">As models proliferate: 1) Centralize infrastructure (feature store, model registry, serving, monitoring); 2) Decentralize teams (embed ML engineers in product teams); 3) Self-service tools and documentation; 4) Standardized processes for development and deployment; 5) Governance framework (who can deploy, audit trails); 6) Cost allocation to make teams aware of resource usage; 7) Community of practice for knowledge sharing; 8) Allow flexibility (different tools/frameworks if needed). Critical: avoid centralized ML team bottleneck. Invest in platforms.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: How do we prevent models from creating unfair or discriminatory outcomes? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">This requires proactive effort: 1) Audit training data for historical bias; 2) Measure fairness metrics for protected groups (disparate impact ratio, equalized odds); 3) Set fairness requirements upfront (e.g., 'maximum 2% difference in approval rates'); 4) Use bias mitigation techniques: reweighting, threshold adjustment, fair representation learning; 5) Test on diverse populations; 6) Monitor fairness in production continuously; 7) Have processes to handle fairness violations (model review, potential retraction); 8) Document model limitations and get informed consent. Tools: Fairlearn, AI Fairness Toolkit, What-If Tool.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: What is the difference between model accuracy and business impact? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Model accuracy is a proxy but not guarantee of business impact. Example: Model with 99% accuracy might deliver no ROI if: 1) it's predicting something that doesn't impact business; 2) marginal improvement from 95% to 99% doesn't justify infrastructure costs; 3) predictions don't drive actionable decisions. Always measure actual business metrics (revenue, cost savings, efficiency, user satisfaction) post-deployment. Use A/B testing to isolate ML system's impact from other factors. Don't confuse model metrics with business metrics.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: How do we handle data privacy and compliance (GDPR, CCPA) with ML systems? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Data governance is critical: 1) Audit data collection practices; get proper consent; 2) Implement data minimization: only collect/retain necessary data; 3) Anonymization/pseudonymization (but be careful: not truly private); 4) Access controls: who sees what data; 5) Right to explanation: explain model decisions to individuals affected; 6) Right to deletion: delete personal data when requested; 7) Audit trails: track who accessed data when; 8) Regular privacy impact assessments; 9) Differential privacy for ML (adds formal privacy guarantees); 10) Partner with legal/compliance teams early. For healthcare/finance, non-negotiable.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: What skills and team structure do we need for enterprise AI? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Typical mature enterprise ML team structure: 50% data engineers (build pipelines, feature stores), 30% ML engineers (model development, serving), 20% data scientists (experiments, research). Avoid pure data scientist teams (50% data scientists, 50% engineers). Most enterprises have this backwards. Also need: product managers (understand business), domain experts (subject matter), DevOps/platform engineers (infrastructure). Team size: ~1 data engineer per 5-10 data scientists. Hiring: look for T-shaped people with deep expertise in one area and broad knowledge across ML/data/engineering.</div>
+    </div>
+</div><div class="faq-item">
+    <div class="faq-question">Q: What are key metrics to monitor for ML systems in production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Monitor four categories: 1) Model metrics (accuracy, AUC, precision, recall, calibration); 2) Data metrics (distribution, missing values, outliers, drift detection using PSI); 3) Infrastructure metrics (latency, throughput, error rate, cost); 4) Business metrics (revenue impact, user satisfaction, fairness). Set alerting thresholds. Example: alert if latency > 150ms, accuracy drops > 2%, error rate > 1%, PSI > 0.2. Monitor continuously (hourly for real-time, daily for batch). Automated alerts with escalation procedures.</div>
+    </div>
+</div>
+</div>
+
+<section id="summary" class="ml-section">
+    <h2>Summary & Key Takeaways</h2>
+    <h3>The Enterprise AI Journey</h3>
+    <ul>
+        <li><strong>Success requires more than good models:</strong> Infrastructure, governance, monitoring, and organizational alignment matter more than model accuracy.</li>
+        <li><strong>Start with business problem:</strong> Define clear ROI before building. Most projects fail because they solve the wrong problem.</li>
+        <li><strong>Data quality is foundational:</strong> 50% of effort should be data quality and feature engineering. Good features beat complex models.</li>
+        <li><strong>MLOps is non-negotiable:</strong> Automate everything. Manual processes don't scale.</li>
+        <li><strong>Safe deployment practices:</strong> Use canary, shadow, or A/B testing. Never deploy to all users immediately.</li>
+        <li><strong>Monitor everything:</strong> Model metrics, data drift, infrastructure, business impact. Silent failures are worst failures.</li>
+        <li><strong>Responsible AI is critical:</strong> Audit for bias, ensure fairness, provide explainability. Legal and ethical requirements.</li>
+        <li><strong>Team structure matters:</strong> 50% data engineers, 30% ML engineers, 20% data scientists. Embed teams in products, not centralized.</li>
+        <li><strong>Manage costs aggressively:</strong> Most teams overspend 3-5x. Spot instances, batch processing, model compression offer 50-70% savings.</li>
+    </ul>
+    <h3>The 5 Levels of Enterprise AI Maturity</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="background: #f0f0f0;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Level</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Characteristics</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Timeline</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Investment</th>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">1: Experimentation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Ad-hoc Jupyter notebooks, 1-2 models, manual processes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">0-6 months</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$200K</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">2: Pipeline</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Automated pipelines, 3-10 models, basic monitoring</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">6-12 months</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$1-2M</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">3: Production</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">A/B testing, governance, 10-50 models, drift detection</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">12-24 months</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$3-5M</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">4: Autonomous</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Automated retraining, 50-200 models, causal inference</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">24-36 months</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$5-10M</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">5: Transformational</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Agentic AI, 100+ models, business model innovation</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">36+ months</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">$10M+</td>
+        </tr>
+    </table>
+<div class="highlight-box">
+    <p>The 90/10 Rule: 90% of ML system failures in production are due to infrastructure, monitoring, and organizational issues. Only 10% are due to poor model quality. Invest accordingly.</p>
+</div>
+</div>
+
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Learning</h2>
+    <h3>Essential Reading</h3>
+    <ul>
+        <li><strong>Designing Machine Learning Systems</strong> by Chip Huyen - Comprehensive guide to production ML</li>
+        <li><strong>Trustworthy Machine Learning</strong> by Kush Varshney - Focus on governance and responsibility</li>
+        <li><strong>Fairness and Machine Learning</strong> (free online) by Barocas, Hardt, Narayanan - Deep dive on bias and fairness</li>
+        <li><strong>Machine Learning Yearning</strong> by Andrew Ng - How to structure ML projects for success</li>
+    </ul>
+    <h3>Enterprise ML Tools</h3>
+    <ul>
+        <li><strong>Orchestration:</strong> <a href="https://airflow.apache.org/" target="_blank" rel="noopener">Apache Airflow</a>, <a href="https://www.prefect.io/" target="_blank" rel="noopener">Prefect</a>, <a href="https://dagster.io/" target="_blank" rel="noopener">Dagster</a>, dbt</li>
+        <li><strong>Feature Store:</strong> <a href="https://feast.dev/" target="_blank" rel="noopener">Feast</a>, <a href="https://www.tecton.ai/" target="_blank" rel="noopener">Tecton</a>, Chip</li>
+        <li><strong>Model Registry:</strong> <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>, <a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a>, <a href="https://www.comet.com/" target="_blank" rel="noopener">Comet</a></li>
+        <li><strong>Model Serving:</strong> <a href="https://kserve.github.io/website/" target="_blank" rel="noopener">KServe</a>, <a href="https://www.bentoml.com/" target="_blank" rel="noopener">BentoML</a>, <a href="https://www.tensorflow.org/tfx/guide/serving" target="_blank" rel="noopener">TensorFlow Serving</a>, <a href="https://www.seldon.io/" target="_blank" rel="noopener">Seldon</a></li>
+        <li><strong>Monitoring:</strong> <a href="https://www.evidentlyai.com/" target="_blank" rel="noopener">Evidently</a>, <a href="https://whylabs.ai/" target="_blank" rel="noopener">WhyLabs</a>, <a href="https://arize.com/" target="_blank" rel="noopener">Arize</a>, <a href="https://www.arthur.ai/" target="_blank" rel="noopener">Arthur</a>, Fiddler</li>
+        <li><strong>Cloud ML Platforms:</strong> <a href="https://cloud.google.com/vertex-ai" target="_blank" rel="noopener">Google Vertex AI</a>, <a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">AWS SageMaker</a>, <a href="https://azure.microsoft.com/en-us/products/machine-learning" target="_blank" rel="noopener">Azure ML</a>, <a href="https://www.databricks.com/" target="_blank" rel="noopener">Databricks</a></li>
+    </ul>
+    <h3>Courses & Certifications</h3>
+    <ul>
+        <li><a href="https://www.coursera.org/" target="_blank" rel="noopener">Coursera</a>: "<a href="https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops" target="_blank" rel="noopener">Machine Learning Operations (MLOps)</a>" Specialization - 4-course series</li>
+        <li><a href="https://www.udacity.com/" target="_blank" rel="noopener">Udacity</a>: "Machine Learning DevOps Engineer" Nanodegree - Hands-on MLOps</li>
+        <li>Cloud Provider Certifications: Google Cloud Professional Data Engineer, AWS Certified ML Specialty</li>
+        <li><a href="https://www.fast.ai/" target="_blank" rel="noopener">fast.ai</a>: "<a href="https://course.fast.ai/" target="_blank" rel="noopener">Practical Deep Learning for Coders</a>" - Free, practical ML course</li>
+    </ul>
+    <h3>Communities & Events</h3>
+    <ul>
+        <li>MLOps Community (Slack, monthly webinars, 5K+ members)</li>
+        <li><a href="https://www.datacouncil.ai/" target="_blank" rel="noopener">Data Council</a> (conferences in SF, NYC, Boston, London, EU)</li>
+        <li><a href="https://datatalks.club/" target="_blank" rel="noopener">DataTalks.Club</a> (free learning community with Slack, podcasts)</li>
+        <li>Local ML/AI meetups in your city (networking, learning)</li>
+        <li><a href="https://www.kaggle.com/" target="_blank" rel="noopener">Kaggle</a> Competitions (hands-on experience with real datasets)</li>
+    </ul>
+    <h3>Key Research Papers</h3>
+    <ul>
+        <li>"<a href="https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html" target="_blank" rel="noopener">Hidden Technical Debt in Machine Learning Systems</a>" (NIPS 2015) - Foundational MLOps paper</li>
+        <li>"<a href="https://fairmlbook.org/" target="_blank" rel="noopener">Fairness and Machine Learning</a>" (2019) - Comprehensive fairness framework</li>
+        <li>"What We Need to Build Trustworthy AI" (2021) - Enterprise governance</li>
+    </ul>
+</div>
+
+
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                content.style.display = content.style.display === 'none' ? 'block' : 'none';
+                this.querySelector('.toggle-icon').textContent = content.style.display === 'none' ? '▶' : '▼';
+            });
+        });
+        
+        // FAQ collapsibles
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+                this.querySelector('.faq-icon').textContent = answer.style.display === 'none' ? '▶' : '▼';
+            });
+        });
+    </script>
+</body>
+</html>

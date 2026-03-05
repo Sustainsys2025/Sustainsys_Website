@@ -1,0 +1,3054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive guide to embeddings in AI: Word2Vec, BERT, sentence embeddings, semantic search, and applications.">
+    <title>Embeddings - SustainSys AI Academy</title>
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <main class="ml-page-container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Embeddings</h1>
+                <p class="page-description">Master Embeddings with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        
+    <aside class="ml-sidebar">
+        <h3>Contents</h3>
+        <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#why-matters">Why It Matters</a></li>
+            <li><a href="#history">Historical Evolution</a></li>
+            <li><a href="#core-concepts">Core Concepts</a></li>
+            <li><a href="#architecture">Architecture Deep Dive</a></li>
+            <li><a href="#components">Key Components</a></li>
+            <li><a href="#implementation">Implementation Guide</a></li>
+            <li><a href="#advanced">Advanced Techniques</a></li>
+            <li><a href="#comparison">Comparison</a></li>
+            <li><a href="#use-cases">Real-World Use Cases</a></li>
+            <li><a href="#enterprise">Enterprise Applications</a></li>
+            <li><a href="#mistakes">Common Mistakes</a></li>
+            <li><a href="#best-practices">Best Practices</a></li>
+            <li><a href="#advanced-insights">Advanced Insights</a></li>
+            <li><a href="#code-examples">Code Examples</a></li>
+            <li><a href="#exercises">Exercises</a></li>
+            <li><a href="#interview">Interview Questions</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#resources">Resources</a></li>
+        </ul>
+    </aside>
+
+
+        <div class="ml-content">
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to Embeddings</h2>
+
+    <div class="ml-intro-text">
+        <p>Word embeddings are numerical representations of text that capture semantic meaning in a continuous vector space. Instead of treating words as discrete symbols with no relationship to each other, embeddings represent words as dense vectors where semantic similarity is reflected in vector proximity. This breakthrough in NLP — enabling computers to understand that "king" and "queen" are more similar than "king" and "table" — has become foundational to all modern AI systems.</p>
+    </div>
+
+    <p>The journey from one-hot encoding (sparse vectors with a single 1 and rest 0s) to dense embeddings represents a fundamental shift in how machines learn from text. Modern embeddings capture not just individual word meanings but semantic relationships, syntactic patterns, and even world knowledge. When you ask GPT-4 a question or use semantic search, embeddings are working behind the scenes.</p>
+
+    <p>Embeddings bridge the gap between human language and machine learning. They allow algorithms to perform mathematical operations on concepts — you can literally compute "king - man + woman = queen" and recover meaningful vectors. This mathematical structure enables similarity search, clustering, and semantic understanding at scale.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Embedding Fundamentals</h4>
+    <p>Understand vector spaces, semantic similarity, and how text becomes numbers while preserving meaning.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Embedding Architectures</h4>
+    <p>Learn Word2Vec, GloVe, FastText, and modern contextual embeddings from BERT and <a href="https://www.sbert.net/" target="_blank" rel="noopener">sentence-transformers</a>.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Practical Applications</h4>
+    <p>Build similarity search, clustering, recommendation systems, and semantic retrieval with real embeddings.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Advanced Techniques</h4>
+    <p>Fine-tune embeddings, handle domain-specific language, and optimize for production systems.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Why Embeddings Matter Now</h4>
+    <p>Every modern AI system uses embeddings. ChatGPT uses them for semantic understanding, vector databases use them for retrieval, and recommendation systems use them for matching. Understanding embeddings is essential to understanding modern AI.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Embeddings Matter</h2>
+
+    <p>Embeddings solved one of NLP's fundamental problems: <strong>how to represent text numerically while preserving meaning</strong>. Before embeddings, NLP relied on sparse, high-dimensional representations that captured little semantic information. Embeddings introduced dense, low-dimensional vectors that capture rich semantic relationships and enable powerful machine learning.</p>
+
+    <h3>The Problem With Traditional Approaches</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label"><a href="https://www.sbert.net/" target="_blank" rel="noopener">Sentence-Transformers</a> (Semantic Search)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #0891b2, #7c3aed);">94%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Word2Vec + Simple Model</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #059669, #10b981);">78%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">TF-IDF + Cosine</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 65%; background: linear-gradient(90deg, #d97706, #f59e0b);">65%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Bag of Words</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 48%; background: linear-gradient(90deg, #db2777, #f472b6);">48%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">One-Hot Encoding</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 35%; background: linear-gradient(90deg, #64748b, #94a3b8);">35%</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Semantic similarity retrieval accuracy (higher is better)</em></p>
+
+    <h3>Why Embeddings Changed Everything</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Semantic Relationships</h4>
+    <p>Embeddings capture meaning. 'Dog' and 'puppy' are close in embedding space; 'dog' and 'table' are far apart. This is automatic, not hand-coded.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Dimensionality Efficiency</h4>
+    <p>One-hot encoding requires vocab_size dimensions. Embeddings use 100-1536 dimensions. Lower dimensionality = faster computation and less memory.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Transfer Learning</h4>
+    <p>A word2vec embedding trained on Wikipedia works well for new tasks without retraining. Pre-trained embeddings are immediately useful.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Compositionality</h4>
+    <p>You can combine embeddings mathematically. 'king' - 'man' + 'woman' = 'queen'. Meaning composes in vector space.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> Embeddings are so effective because they compress semantic information into a learnable, continuous space. This enables similarity comparison, clustering, and downstream ML tasks to work with meaningful representations.</p>
+</div>
+
+    <h3>Real-World Impact</h3>
+    <p>Today, embeddings power:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong>Semantic Search:</strong> Google uses embeddings to understand search intent beyond keywords</li>
+        <li><strong>Recommendation Systems:</strong> Netflix, Spotify, and Amazon use embeddings to match users with similar tastes</li>
+        <li><strong>Duplicate Detection:</strong> Finding near-duplicate documents or emails using embedding similarity</li>
+        <li><strong>Chatbots & RAG:</strong> ChatGPT uses embeddings to find relevant context for answering questions</li>
+        <li><strong>Clustering & Classification:</strong> Unsupervised grouping of documents, customers, or products</li>
+    </ul>
+</section>
+
+<!-- SECTION: Historical Evolution -->
+<section id="history" class="ml-section">
+    <h2>Historical Evolution of Embeddings</h2>
+
+    <p>The journey from symbolic NLP to embeddings represents a paradigm shift from rule-based systems to learned representations. Understanding this history provides insight into why modern embeddings work so well.</p>
+
+    <h3>The Timeline</h3>
+    
+    <div class="collapsible-section">
+    <div class="collapsible-header">1950s-1990s: Symbolic NLP Era <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>One-Hot Encoding & TF-IDF</strong>: Words were represented as vectors with exactly one 1 and the rest 0s. A vocabulary of 50,000 words meant 50,000-dimensional vectors. Relationships between words had to be manually defined through lexicons like WordNet. This approach was sparse (mostly zeros), high-dimensional, and captured no semantic relationships automatically.</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Challenge</em>: Vocabulary sparsity, no way to capture "dog" and "puppy" are similar without manual annotation.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2003: Bengio's Neural Language Model <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>First Dense Representations</strong>: Yoshua Bengio showed that learning small, dense representations as part of language modeling was effective. His model learned embeddings implicitly while predicting the next word. This planted the seed for the embedding revolution but was computationally expensive for large vocabularies.</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Innovation</em>: Embeddings emerged naturally from neural language modeling, not as a separate task.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2013: Word2Vec (Mikolov et al.) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>The Breakthrough</strong>: Tomas Mikolov introduced two efficient methods to learn embeddings at scale: Skip-gram and CBOW. Instead of using embeddings as a byproduct of language modeling, Word2Vec made learning embeddings the primary objective. This was revolutionary because:</p>
+    <ul style="margin-top: 1rem; margin-left: 1.5rem; font-size: 0.95rem;">
+        <li>Incredibly fast to train on billions of words</li>
+        <li>Produced embeddings with surprising semantic properties (king - man + woman ≈ queen)</li>
+        <li> 300-dimensional embeddings beat previous approaches with 50,000+ dimensions</li>
+    </ul>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Impact</em>: Word2Vec made embeddings practical and started the modern embedding era.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2014: GloVe (Pennington et al.) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Combining Local & Global Statistics</strong>: While Word2Vec used local context windows, GloVe combined local context with global word co-occurrence statistics. The insight: word embeddings should reflect both how often words appear together locally (like Word2Vec captures) and globally (like matrix factorization captures).</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Advantage</em>: More efficient training, better theoretical grounding, competitive or superior performance on downstream tasks.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2016: FastText (Bojanowski et al.) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Subword Information</strong>: FastText extended Word2Vec by learning embeddings for character n-grams, not just whole words. This enabled handling of misspellings, rare words, and morphologically rich languages. Words are represented as sums of their character n-grams.</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Benefit</em>: Better out-of-vocabulary handling and knowledge of word structure.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2018: BERT & Contextual Embeddings <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Context-Aware Representations</strong>: BERT introduced contextual embeddings where the same word gets different embeddings depending on context. "Bank" in "river bank" and "blood bank" had different representations. This required bidirectional transformer training on masked language modeling.</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Revolution</em>: Moving from static embeddings (one vector per word) to dynamic embeddings (context-dependent representations).</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2019-Present: Sentence Embeddings & Dense Passage Retrieval <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Embedding Entire Sentences</strong>: Sentence-BERT (SBERT) and similar models learn to embed entire sentences or documents into single vectors while preserving semantic meaning. Models like SimCSE use contrastive learning to push similar texts close together in embedding space.</p>
+    <p style="margin-top: 1rem; color: var(--text-dim);"><em>Current State</em>: Specialized embedding models for different tasks (semantic search, clustering, recommendation, paraphrase detection). Dense retrieval systems using embeddings beat sparse methods like BM25.</p>
+    </div>
+    </div>
+</div>
+
+    <h3>Key Evolution Points</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Dimensionality Reduction</h4>
+    <p>50,000 dimensions → 300 → 768-1536. Smaller embeddings enable faster similarity computation.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Static to Contextual</h4>
+    <p>Word2Vec (one embedding per word) → BERT (context-dependent embeddings). Same word, different context = different embeddings.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Word to Document</h4>
+    <p>Embedding single tokens → Embedding sentences/passages → Embedding documents. Scaling up the unit of encoding.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Objective Functions</h4>
+    <p>Language modeling → Skip-gram/CBOW → Contrastive learning → Multi-task training. Better learning objectives = better representations.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts</h2>
+
+    <h3>Vector Space & Dimensionality</h3>
+    <p>An embedding is a point in high-dimensional space. A 300-dimensional embedding is a point in 300D space. A 1536-dimensional embedding (like OpenAI's) is a point in 1536D space. In this space, semantic similarity is reflected in geometric proximity.</p>
+
+    <div class="formula-box">
+    <div class="label">Cosine Similarity</div>
+    <div style="font-size: 1rem; font-family: 'Courier New', monospace; text-align: center; padding: 1rem;">
+        cos(θ) = (A · B) / (||A|| × ||B||)
+    </div>
+    <p style="font-size: 0.9rem; text-align: center; color: var(--text-dim);">Measures the angle between vectors. Range: -1 to 1. Higher = more similar.</p>
+</div>
+
+    <div class="formula-box">
+    <div class="label">Euclidean Distance</div>
+    <div style="font-size: 1rem; font-family: 'Courier New', monospace; text-align: center; padding: 1rem;">
+        d(A, B) = √(Σ(aᵢ - bᵢ)²)
+    </div>
+    <p style="font-size: 0.9rem; text-align: center; color: var(--text-dim);">Measures straight-line distance. Range: 0 to ∞. Lower = more similar.</p>
+</div>
+
+    <div class="formula-box">
+    <div class="label">Dot Product</div>
+    <div style="font-size: 1rem; font-family: 'Courier New', monospace; text-align: center; padding: 1rem;">
+        A · B = Σ(aᵢ × bᵢ)
+    </div>
+    <p style="font-size: 0.9rem; text-align: center; color: var(--text-dim);">Inner product of vectors. Computationally fast. Used for ranking similar items.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Similarity vs. Distance</h4>
+    <p>Cosine similarity and dot product measure similarity (higher = more similar). Euclidean distance measures distance (lower = more similar). For normalized vectors, cosine similarity = scaled dot product.</p>
+</div>
+
+    <h3>Semantic Space Properties</h3>
+    <p>A well-trained embedding space has remarkable properties:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Linearity</h4>
+    <p>Relationships are linear. 'king' - 'man' + 'woman' ≈ 'queen'. This works surprisingly often with algebraic operations on embeddings.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Clustering</h4>
+    <p>Similar concepts cluster together. All animals are near each other, all colors are clustered, all countries are nearby in the space.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Isotropy</h4>
+    <p>Directions matter. One direction might encode gender, another might encode size. Different axes capture different semantic dimensions.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Compositionality</h4>
+    <p>Meaning combines. Embedding('very happy') ≈ constant × (embedding('happy') + embedding('intensifier')). Meanings add up.</p>
+</div>
+    </div>
+
+    <h3>Three Key Embedding Types</h3>
+    
+    <div class="collapsible-section">
+    <div class="collapsible-header">Static Embeddings (Word2Vec, GloVe, FastText) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>One embedding per word, regardless of context.</strong></p>
+    <ul style="margin: 1rem 0 1rem 1.5rem; font-size: 0.95rem;">
+        <li>Fast inference (embedding lookup is O(1))</li>
+        <li>Small memory footprint</li>
+        <li>Trained on co-occurrence patterns</li>
+        <li>Cannot capture word sense ambiguity (bank as river vs. bank as financial)</li>
+        <li>Works well for: document classification, clustering, simple similarity search</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Contextual Embeddings (BERT, ELMo, GPT) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Different embedding per word depending on its context.</strong></p>
+    <ul style="margin: 1rem 0 1rem 1.5rem; font-size: 0.95rem;">
+        <li>Understand word sense: "bank" has different embeddings in different contexts</li>
+        <li>Require running text through a neural network (slower)</li>
+        <li>Learned from language modeling objectives</li>
+        <li>Larger model size</li>
+        <li>Works well for: NLP tasks, semantic understanding, fine-tuning for downstream tasks</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Sentence/Document Embeddings (Sentence-BERT, Universal Sentence Encoder) <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Single vector for entire sentence or document.</strong></p>
+    <ul style="margin: 1rem 0 1rem 1.5rem; font-size: 0.95rem;">
+        <li>Fast semantic similarity between long texts</li>
+        <li>Trained with contrastive learning or metric learning</li>
+        <li>Great for: semantic search, clustering, recommendation</li>
+        <li>Less rich than contextual embeddings for fine-grained tasks</li>
+        <li>Very efficient for large-scale retrieval</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Mental Model:</strong> Think of embeddings as learned coordinates in semantic space. Cosine similarity measures the angle between coordinates. The goal of embedding training is to position similar concepts close together and dissimilar ones far apart.</p>
+</div>
+</section>
+
+<!-- SECTION: Architecture Deep Dive -->
+<section id="architecture" class="ml-section">
+    <h2>Architecture Deep Dive</h2>
+
+    <p>Different embedding architectures use different training objectives and neural network designs. Understanding these differences helps you choose the right embeddings for your task.</p>
+
+    <h3>Word2Vec Skip-gram Architecture</h3>
+    <p>Skip-gram learns embeddings by predicting context words from a target word. Given "the quick brown fox", it learns to predict "the brown" from "quick".</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Input word (one-hot) → Embedding matrix → Word embedding vector → Output matrix → Softmax → Predict context words</p>
+    </div>
+
+    <div class="formula-box">
+    <div class="label">Skip-gram Objective</div>
+    <div style="font-size: 0.9rem; font-family: 'Courier New', monospace; text-align: center; padding: 1rem;">
+        Loss = -log(P(context | target)) = -log(softmax(vₜ · v_c))
+    </div>
+    <p style="font-size: 0.9rem; text-align: center; color: var(--text-dim);">Maximize probability of actual context words, minimize probability of random words.</p>
+</div>
+
+    <h3>Contrastive Learning (Modern Approach)</h3>
+    <p>Modern sentence embeddings use contrastive learning: pull similar texts together, push dissimilar texts apart.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Anchor sentence → Embed → Calculate similarity to positive examples (similar sentences) and negative examples (dissimilar sentences) → Pull positives close, push negatives far</p>
+    </div>
+
+    <div class="formula-box">
+    <div class="label">Contrastive Loss (NT-Xent)</div>
+    <div style="font-size: 0.85rem; font-family: 'Courier New', monospace; text-align: center; padding: 1rem;">
+        L = -log(exp(sim(a,p)/τ) / Σ exp(sim(a,n)/τ))
+    </div>
+    <p style="font-size: 0.9rem; text-align: center; color: var(--text-dim);">Where τ is temperature, a is anchor, p is positive, n is negative. Maximize similarity to positives relative to negatives.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Why Contrastive Learning Works</h4>
+    <p>By explicitly comparing to negative examples, contrastive learning creates embeddings that separate dissimilar concepts. This is more effective than implicit learning through language modeling alone.</p>
+</div>
+
+    <h3>Transformer-Based Embeddings (BERT)</h3>
+    <p>BERT uses masked language modeling: randomly mask 15% of words, then predict them using context.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Input text with [MASK] tokens → Bidirectional transformer → Hidden states → Predict masked words using context</p>
+    </div>
+    <p>The hidden state of the [CLS] token (or average of all tokens) becomes the sentence embedding.</p>
+
+    <h3>Architecture Comparison Table</h3>
+    <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;">
+        <thead>
+            <tr style="background: #f0f4f8; border-bottom: 2px solid var(--accent-cyan);">
+                <th style="padding: 1rem; text-align: left;">Architecture</th>
+                <th style="padding: 1rem; text-align: left;">Training Method</th>
+                <th style="padding: 1rem; text-align: left;">Speed</th>
+                <th style="padding: 1rem; text-align: left;">Quality</th>
+                <th style="padding: 1rem; text-align: left;">Best For</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Word2Vec</strong></td>
+                <td style="padding: 1rem;">Skip-gram/CBOW</td>
+                <td style="padding: 1rem;">Very fast</td>
+                <td style="padding: 1rem;">Good</td>
+                <td style="padding: 1rem;">Document classification, clustering</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>GloVe</strong></td>
+                <td style="padding: 1rem;">Matrix factorization</td>
+                <td style="padding: 1rem;">Fast</td>
+                <td style="padding: 1rem;">Good</td>
+                <td style="padding: 1rem;">NLP baselines, word relationships</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>BERT</strong></td>
+                <td style="padding: 1rem;">Masked language modeling</td>
+                <td style="padding: 1rem;">Moderate</td>
+                <td style="padding: 1rem;">Excellent</td>
+                <td style="padding: 1rem;">Fine-tuning, contextual understanding</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Sentence-BERT</strong></td>
+                <td style="padding: 1rem;">Contrastive + triplet</td>
+                <td style="padding: 1rem;">Fast</td>
+                <td style="padding: 1rem;">Excellent</td>
+                <td style="padding: 1rem;">Semantic search, clustering, similarity</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components of Embedding Systems</h2>
+
+    <h3>1. Tokenization & Vocabulary</h3>
+    <p>Before embedding, text must be split into tokens (words, subwords, or characters) and mapped to integer IDs.</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Word Tokenization</h4>
+    <p>Split on spaces/punctuation. Vocabulary size: 10K-50K words. Problem: out-of-vocabulary words.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Subword Tokenization</h4>
+    <p>Use BPE, WordPiece, or SentencePiece. Vocabulary: 30K-50K tokens. Handles rare words by breaking them into pieces.</p>
+</div>
+    </div>
+
+    <h3>2. Embedding Matrix</h3>
+    <p>A learnable lookup table mapping token IDs to vectors. For a vocabulary of 50,000 words and 300-dimensional embeddings, the matrix is 50,000 × 300.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><code>embedding_matrix[token_id] = embedding_vector</code></p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-dim);">During training, weights are updated via backpropagation to minimize the training objective.</p>
+    </div>
+
+    <div class="info-box">
+    <h4>Memory Consideration</h4>
+    <p>Large embedding matrices consume significant memory. A 50K vocab × 1536-dim (OpenAI size) = 75MB just for the matrix. Production systems often use quantization to reduce this.</p>
+</div>
+
+    <h3>3. Context Window</h3>
+    <p>For static embeddings like Word2Vec, the context window is how many surrounding words influence the embedding. A window of 5 means 2 words before and 2 words after.</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Small Window (2-5)</h4>
+    <p>Captures syntactic relationships. 'run' and 'walk' are similar because they appear in similar contexts.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Large Window (10+)</h4>
+    <p>Captures topic/semantic relationships. 'machine learning' and 'neural networks' might appear in the same documents.</p>
+</div>
+    </div>
+
+    <h3>4. Similarity Metrics</h3>
+    <p>After computing embeddings, we measure similarity between them. Different metrics have different properties.</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem;">
+        <thead>
+            <tr style="background: #f0f4f8; border-bottom: 2px solid var(--accent-cyan);">
+                <th style="padding: 1rem; text-align: left;">Metric</th>
+                <th style="padding: 1rem; text-align: left;">Formula</th>
+                <th style="padding: 1rem; text-align: left;">Range</th>
+                <th style="padding: 1rem; text-align: left;">Pros</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Cosine</strong></td>
+                <td style="padding: 1rem; font-size: 0.85rem;">A·B/(||A||×||B||)</td>
+                <td style="padding: 1rem;">-1 to 1</td>
+                <td style="padding: 1rem;">Normalized, direction only</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Dot Product</strong></td>
+                <td style="padding: 1rem; font-size: 0.85rem;">Σ(aᵢ×bᵢ)</td>
+                <td style="padding: 1rem;">-∞ to ∞</td>
+                <td style="padding: 1rem;">Fast, hardware-optimized</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Euclidean</strong></td>
+                <td style="padding: 1rem; font-size: 0.85rem;">√(Σ(aᵢ-bᵢ)²)</td>
+                <td style="padding: 1rem;">0 to ∞</td>
+                <td style="padding: 1rem;">Geometric distance, intuitive</td>
+            </tr>
+            <tr>
+                <td style="padding: 1rem;"><strong>Hamming</strong></td>
+                <td style="padding: 1rem; font-size: 0.85rem;">Count differing bits</td>
+                <td style="padding: 1rem;">0 to n</td>
+                <td style="padding: 1rem;">Fast for binary embeddings</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>5. Vector Normalization</h3>
+    <p>Normalizing embeddings to unit length (L2 normalization) makes cosine similarity equivalent to dot product, enabling faster computation on GPUs.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><code>normalized = vector / ||vector||</code></p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-dim);">After normalization, cosine similarity = dot product. GPU matrix multiplication becomes the bottleneck-free operation.</p>
+    </div>
+
+    <h3>6. Dimension & Trade-offs</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>64-128 dims</h4>
+    <p>Fast, small memory. Lower quality for complex semantic relationships.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>256-512 dims</h4>
+    <p>Good balance. Works well for most applications.</p>
+</div>
+        <div class="card green-accent">
+    <h4>768-1536 dims</h4>
+    <p>High quality, captures fine-grained semantics. Slower, more memory.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>2048+ dims</h4>
+    <p>State-of-the-art quality. Only for when speed/memory not constraints.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> Most embedding quality improvements come from better training objectives and larger training data, not from larger dimensions. A 384-dimensional sentence embedding trained with contrastive learning often outperforms a 3000-dimensional Word2Vec embedding.</p>
+</div>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation Guide</h2>
+
+    <h3>Step 1: Choose Your Embedding Model</h3>
+    <p>The choice depends on your task and constraints:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong>Fast lookup, simple tasks:</strong> Word2Vec, GloVe, FastText (static)</li>
+        <li><strong>High quality NLP, fine-tuning needed:</strong> BERT, RoBERTa (contextual)</li>
+        <li><strong>Semantic search, clustering, similarity:</strong> Sentence-BERT, Universal Sentence Encoder (sentence-level)</li>
+        <li><strong>Production systems, cost matters:</strong> Smaller models like ONNX-optimized sentence-transformers</li>
+    </ul>
+
+    <h3>Step 2: Prepare Your Data</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Tokenization</h4>
+    <p>Split text into tokens using the model's tokenizer. Most modern models handle this automatically.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Padding & Truncation</h4>
+    <p>Ensure all sequences are the same length (pad shorter ones, truncate longer ones).</p>
+</div>
+        <div class="card green-accent">
+    <h4>Batching</h4>
+    <p>Group sequences into batches for parallel GPU processing.</p>
+</div>
+    </div>
+
+    <h3>Step 3: Generate Embeddings</h3>
+    <p>Pass your data through the model to get embedding vectors. For inference (not training):</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Set model to eval mode (no gradients, batch norm uses running stats) → Forward pass → Extract hidden states → Optionally normalize</p>
+    </div>
+
+    <h3>Step 4: Store & Index</h3>
+    <p>For large-scale similarity search, use vector databases:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>FAISS (Facebook)</h4>
+    <p>Approximate nearest neighbor search. Scales to billions of vectors. Open source.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Pinecone</h4>
+    <p>Managed vector database. Pay-per-use. Great for production with auto-scaling.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Milvus</h4>
+    <p>Open-source vector DB. Deploy yourself, full control.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Weaviate</h4>
+    <p>Vector DB with hybrid search. Combines vector + keyword search.</p>
+</div>
+    </div>
+
+    <h3>Step 5: Search & Retrieval</h3>
+    <p>Query vectors through your index to find similar items. Typical performance:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>FAISS: milliseconds to find top-k in billions of vectors on GPU</li>
+        <li>Pinecone: sub-second search on enterprise servers</li>
+        <li>Milvus: sub-100ms for millions of vectors</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Optimization Tip:</strong> For production, compress embeddings to int8 (quantization) or binary (hashing). This reduces memory 4-32x with minimal quality loss, making search faster and cheaper.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Techniques</h2>
+
+    <h3>Hard Negative Mining</h3>
+    <p>For contrastive learning, not all negatives are equal. Hard negatives (similar to anchor but labeled different) are more informative than easy negatives (very different).</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Easy negative: "cat" vs "bicycle" (obviously different)<br/>Hard negative: "dog" vs "puppy" (very similar but different concept)<br/>Training on hard negatives creates more discriminative embeddings.</p>
+    </div>
+
+    <h3>In-Batch Negatives</h3>
+    <p>During training, use other examples in the batch as negative samples. If batch size = 64, you have 63 negatives per example. This is computationally efficient and works surprisingly well.</p>
+
+    <h3>Curriculum Learning</h3>
+    <p>Start with easy examples (very dissimilar negatives), gradually increase difficulty. This stabilizes training and often improves final quality.</p>
+
+    <h3>Multi-Task Learning</h3>
+    <p>Train on multiple objectives simultaneously:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong>Semantic similarity:</strong> Similar sentences should have similar embeddings</li>
+        <li><strong>Paraphrase detection:</strong> Learn to identify paraphrases</li>
+        <li><strong>Natural language inference:</strong> Entailment relationships</li>
+    </ul>
+    <p style="margin-top: 1rem;">Multi-task training reduces overfitting and creates more robust embeddings.</p>
+
+    <h3>Dimensionality Reduction</h3>
+    <p>Reduce embedding dimensions while preserving semantic structure:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>PCA</h4>
+    <p>Linear projection preserving variance. Fast, interpretable, but limited.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>UMAP</h4>
+    <p>Non-linear, preserves local structure. Better quality, more complex.</p>
+</div>
+        <div class="card green-accent">
+    <h4>t-SNE</h4>
+    <p>For visualization only. Not suitable for downstream ML tasks.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>When to Use Dimensionality Reduction</h4>
+    <p>Use PCA or UMAP if embeddings are too large (> 1536 dims) and you need to reduce compute/memory. For most modern embeddings (384-768 dims), reduction isn't necessary.</p>
+</div>
+
+    <h3>Quantization</h3>
+    <p>Compress embeddings from float32 to int8, binary, or other formats. A 32-dimensional int8 embedding uses 32 bytes instead of 128 bytes (4x smaller).</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Trade-off:</strong> Quality loss of ~5-10% but 4-32x smaller embeddings and faster similarity computation.</p>
+    </div>
+
+    <h3>Domain-Specific Fine-Tuning</h3>
+    <p>Pretrained embeddings work well generally, but fine-tuning on domain data improves performance significantly.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Collect domain-specific sentence pairs (similar/dissimilar) → Fine-tune with contrastive loss → Get embeddings optimized for your domain.</p>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Real Example:</strong> A legal document search system fine-tuned sentence-BERT on legal similarity judgments, improving retrieval accuracy from 76% to 91%. Domain data is powerful.</p>
+</div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Embedding Models Comparison</h2>
+
+    <h3>Popular Embedding Models</h3>
+    <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem;">
+        <thead>
+            <tr style="background: #f0f4f8; border-bottom: 2px solid var(--accent-cyan);">
+                <th style="padding: 0.8rem; text-align: left;">Model</th>
+                <th style="padding: 0.8rem; text-align: left;">Type</th>
+                <th style="padding: 0.8rem; text-align: left;">Dims</th>
+                <th style="padding: 0.8rem; text-align: left;">Speed</th>
+                <th style="padding: 0.8rem; text-align: left;">Quality</th>
+                <th style="padding: 0.8rem; text-align: left;">Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>Word2Vec</strong></td>
+                <td style="padding: 0.8rem;">Static</td>
+                <td style="padding: 0.8rem;">300</td>
+                <td style="padding: 0.8rem;">Fast</td>
+                <td style="padding: 0.8rem;">Good</td>
+                <td style="padding: 0.8rem;">Free</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>GloVe</strong></td>
+                <td style="padding: 0.8rem;">Static</td>
+                <td style="padding: 0.8rem;">100-300</td>
+                <td style="padding: 0.8rem;">Fast</td>
+                <td style="padding: 0.8rem;">Good</td>
+                <td style="padding: 0.8rem;">Free</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>FastText</strong></td>
+                <td style="padding: 0.8rem;">Static</td>
+                <td style="padding: 0.8rem;">300</td>
+                <td style="padding: 0.8rem;">Fast</td>
+                <td style="padding: 0.8rem;">Good</td>
+                <td style="padding: 0.8rem;">Free</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>BERT</strong></td>
+                <td style="padding: 0.8rem;">Contextual</td>
+                <td style="padding: 0.8rem;">768</td>
+                <td style="padding: 0.8rem;">Moderate</td>
+                <td style="padding: 0.8rem;">Excellent</td>
+                <td style="padding: 0.8rem;">Free</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>Sentence-BERT (base)</strong></td>
+                <td style="padding: 0.8rem;">Sentence</td>
+                <td style="padding: 0.8rem;">384</td>
+                <td style="padding: 0.8rem;">Very fast</td>
+                <td style="padding: 0.8rem;">Excellent</td>
+                <td style="padding: 0.8rem;">Free</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>OpenAI text-embedding-3-small</strong></td>
+                <td style="padding: 0.8rem;">Sentence</td>
+                <td style="padding: 0.8rem;">1536</td>
+                <td style="padding: 0.8rem;">Very fast</td>
+                <td style="padding: 0.8rem;">Best-in-class</td>
+                <td style="padding: 0.8rem;">$0.02/1M tokens</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>OpenAI text-embedding-3-large</strong></td>
+                <td style="padding: 0.8rem;">Sentence</td>
+                <td style="padding: 0.8rem;">3072</td>
+                <td style="padding: 0.8rem;">Very fast</td>
+                <td style="padding: 0.8rem;">Best-in-class</td>
+                <td style="padding: 0.8rem;">$0.13/1M tokens</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 0.8rem;"><strong>Cohere Embed</strong></td>
+                <td style="padding: 0.8rem;">Sentence</td>
+                <td style="padding: 0.8rem;">1024</td>
+                <td style="padding: 0.8rem;">Very fast</td>
+                <td style="padding: 0.8rem;">Excellent</td>
+                <td style="padding: 0.8rem;">$0.10/1M tokens</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Model Quality on MTEB Benchmark</h3>
+    <p>MTEB (Massive Text Embedding Benchmark) evaluates embeddings on 58 tasks across 112 languages.</p>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">OpenAI text-embedding-3-large</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #0891b2, #7c3aed);">96.0</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Cohere Embed v3</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #0891b2, #7c3aed);">95.0</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">OpenAI text-embedding-3-small</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 92%; background: linear-gradient(90deg, #059669, #10b981);">92.0</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">sentence-transformers/all-MiniLM-L12-v2</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 86%; background: linear-gradient(90deg, #d97706, #f59e0b);">86.0</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">BERT-base-uncased</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #db2777, #f472b6);">78.0</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Word2Vec (Google News)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #64748b, #94a3b8);">62.0</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>MTEB average score (higher is better)</em></p>
+
+    <h3>Choosing the Right Model</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Best Quality + Budget</h4>
+    <p>OpenAI text-embedding-3-small: 92 MTEB score, cost-effective, easiest to use.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Best Quality (Cost OK)</h4>
+    <p>OpenAI text-embedding-3-large or Cohere Embed: Top benchmark scores, enterprise support.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Free, Self-Hosted</h4>
+    <p>sentence-transformers/all-MiniLM-L12-v2: Good quality, runs on CPU, no API calls.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Legacy/Specific Use</h4>
+    <p>Word2Vec, GloVe: Only if you need static embeddings or have specific reasons.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Recommendation:</strong> For new projects, use OpenAI embeddings or self-hosted sentence-transformers. Older static embeddings (Word2Vec) are rarely the best choice for new applications.</p>
+</div>
+</section>
+
+<!-- SECTION: Real-World Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Use Cases</h2>
+
+    <h3>1. Semantic Search</h3>
+    <p>Find documents by meaning, not just keywords. A query "car accident" matches "vehicular collision" even without matching words.</p>
+    <div class="try-it-box">
+    <h4>Implement Semantic Search</h4>
+    <p>Build a simple semantic search system using sentence embeddings and cosine similarity.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+documents = [
+    <span class="string">"The cat is on the mat"</span>,
+    <span class="string">"A feline sits on furniture"</span>,
+    <span class="string">"Dogs are friendly animals"</span>
+]
+
+embeddings = model.<span class="function">encode</span>(documents)
+query = <span class="string">"A pet lying on fabric"</span>
+query_emb = model.<span class="function">encode</span>(query)
+
+similarities = np.<span class="function">dot</span>(embeddings, query_emb) / (np.linalg.<span class="function">norm</span>(embeddings, axis=<span class="number">1</span>) * np.linalg.<span class="function">norm</span>(query_emb))
+top_match = documents[np.<span class="function">argmax</span>(similarities)]
+<span class="function">print</span>(<span class="string">f"Best match: {top_match}"</span>)</div>
+</div>
+</div>
+
+    <h3>2. Duplicate Detection</h3>
+    <p>Find near-duplicate documents, emails, or reviews. Compute embeddings once, then compare new documents to corpus.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);">Use case: A customer service company finds that 40% of support tickets are duplicates or near-duplicates. Embedding all tickets and finding similar ones helps route customers to existing solutions.</p>
+    </div>
+
+    <h3>3. Recommendation Systems</h3>
+    <p>Recommend similar products, articles, or users. Embedding products by their descriptions, then finding similar embeddings to user-viewed items.</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Product Recommendation</h4>
+    <p>Embed product descriptions. When user views an item, find similar embeddings to recommend.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>User-Based Collab Filtering</h4>
+    <p>Embed user profiles/preferences. Find users with similar embeddings, recommend items they like.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Content-Based Filtering</h4>
+    <p>Embed content (books, movies, articles). Recommend items similar to user preferences.</p>
+</div>
+    </div>
+
+    <h3>4. Clustering & Categorization</h3>
+    <p>Automatically group similar items. Embed all items, then use k-means or hierarchical clustering on the embeddings.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Example:</strong> An e-commerce company clusters products into categories without manual tagging. Embeddings of product titles and descriptions naturally form clusters matching the true categories.</p>
+    </div>
+
+    <h3>5. Question Answering & Semantic Retrieval</h3>
+    <p>Find the most relevant passage for a question. Embed question and all passages, find the highest cosine similarity match.</p>
+    <div class="info-box">
+    <h4>RAG (Retrieval Augmented Generation)</h4>
+    <p>Modern LLMs like ChatGPT use embeddings to find relevant documents, then generate answers based on the retrieved context. This is how it can answer questions about custom documents.</p>
+</div>
+
+    <h3>6. Anomaly Detection</h3>
+    <p>Detect unusual or fraudulent items. Train on normal items, find points far from the learned manifold (high reconstruction error or low density).</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Credit Card Fraud</h4>
+    <p>Embed transaction descriptions. Transactions with unusual embeddings relative to user history = flagged for review.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Network Security</h4>
+    <p>Embed network traffic patterns. Anomalous traffic patterns appear as outliers in embedding space.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Content Moderation</h4>
+    <p>Embed social media posts. Spam or policy-violating content has different embeddings than normal content.</p>
+</div>
+    </div>
+
+    <h3>7. Paraphrase Detection</h3>
+    <p>Determine if two texts mean the same thing. High embedding similarity = paraphrase.</p>
+
+    <h3>8. Knowledge Graph Completion</h3>
+    <p>Predict missing relationships in knowledge graphs using embedding arithmetic. "John is to king as Mary is to ?" → Embed entities and use vector operations.</p>
+
+    <div class="highlight-box">
+    <p><strong>Common Pattern:</strong> Many embedding applications follow: 1) Embed texts, 2) Compute similarities, 3) Act based on similarity (retrieve, rank, classify). The embeddings do the heavy lifting; the application logic is simple.</p>
+</div>
+</section>
+
+<!-- SECTION: Enterprise Applications -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise Applications</h2>
+
+    <h3>At Scale: Requirements</h3>
+    <p>Moving embeddings from research to production requires addressing:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Latency</h4>
+    <p>Must be < 100ms per embedding for interactive applications, < 1s for batch processing.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Throughput</h4>
+    <p>Handle millions of embeddings/day or billions/month at cost-effective rates.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Quality Consistency</h4>
+    <p>Embeddings must be deterministic and consistent across different systems.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Cost</h4>
+    <p>Embedding large corpora costs money. Optimization (quantization, distillation) is critical.</p>
+</div>
+    </div>
+
+    <h3>Key Enterprise Challenges</h3>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">1. Cold Start Problem <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Challenge:</strong> New items don't have embeddings. Can't recommend until they're in the system.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use metadata (title, description, category) to generate embeddings immediately</li>
+        <li>Use content-based + collaborative filtering hybrid</li>
+        <li>Fall back to popularity-based recommendations for new items</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">2. Embedding Drift <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Challenge:</strong> If you retrain embeddings (to improve quality), old embeddings become incompatible with the index.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Version embeddings. Keep old index running during transition period</li>
+        <li>Re-embed entire corpus with new model before switching</li>
+        <li>Use learned transformations to map old embeddings to new space</li>
+        <li>Carefully A/B test before full rollout</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">3. Language & Domain Diversity <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Challenge:</strong> Single embedding model may not work equally well across languages or domains.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use multilingual models (e.g., multilingual-MiniLM) or domain-specific models</li>
+        <li>Fine-tune on domain-specific data if quality is critical</li>
+        <li>Use different models for different segments (by language, by category)</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">4. Indexing Costs <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Challenge:</strong> Indexing billions of embeddings consumes significant compute and storage.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use approximate nearest neighbor search (FAISS, HNSW) instead of exact search</li>
+        <li>Quantize embeddings to int8 or binary (4-32x compression)</li>
+        <li>Shard across multiple indexes/machines</li>
+        <li>Use managed services (Pinecone, Weaviate) that handle scaling automatically</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <h3>Production Checklist</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>Model selection: Justify choice (cost vs. quality trade-off documented)</li>
+        <li>Versioning: Track which model created which embeddings</li>
+        <li>Monitoring: Track embedding quality metrics (retrieval coverage, relevance feedback)</li>
+        <li>Retraining: Plan for periodic retraining to improve quality</li>
+        <li>Fallback: Have strategy for when embeddings unavailable or slow</li>
+        <li>Privacy: Ensure PII handling complies with regulations (GDPR, etc.)</li>
+        <li>Cost tracking: Monitor API costs, optimize if needed</li>
+    </ul>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes</h2>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Using Embeddings Without Normalization</h4>
+    <p>Unnormalized embeddings make dot product unsuitable for similarity. Always normalize before cosine similarity or use normalized embeddings from the start.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Comparing Different Model Embeddings</h4>
+    <p>OpenAI embeddings and Sentence-BERT embeddings are in different spaces. Comparing them directly is meaningless. Use consistent models.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Over-Relying on Semantic Similarity</h4>
+    <p>Embeddings capture semantic similarity well, but miss lexical/syntactic details. 'Dog' and 'dogs' might have different embeddings. Combine with keyword matching when needed.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Freezing Old Embeddings</h4>
+    <p>If using pretrained embeddings, sometimes fine-tuning them on your task outperforms freezing. Experiment with both.</p>
+</div>
+    </div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Mistake 1: Not Handling Out-of-Vocabulary <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> Static embeddings (Word2Vec) have no embedding for words not in training data.</p>
+    <p style="margin-top: 1rem;"><strong>Wrong approach:</strong> Skip unknown words, use zero vectors, or random vectors.</p>
+    <p style="margin-top: 1rem;"><strong>Right approach:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use FastText (subword embeddings) for better OOV coverage</li>
+        <li>Use contextual embeddings (BERT) which handle any word through tokenization</li>
+        <li>Use average of similar word embeddings or pretrained character embeddings</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Mistake 2: Assuming Embeddings are Interpretable <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> Individual dimensions of embeddings don't have human-interpretable meanings. You can't ask "what does dimension 42 mean?"</p>
+    <p style="margin-top: 1rem;"><strong>Consequence:</strong> Don't try to manually edit embeddings or understand what each dimension captures. Treat them as black boxes.</p>
+    <p style="margin-top: 1rem;"><strong>Note:</strong> Some dimensions correlate with properties (gender, sentiment) but this varies across models and isn't reliable.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Mistake 3: Using Too Few Training Examples <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> Fine-tuning embeddings requires diverse, high-quality examples. Using 100 pairs might not be enough for good domain adaptation.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Collect at least 1000-5000 training pairs for reliable fine-tuning</li>
+        <li>Use data augmentation (paraphrasing, back-translation) to expand training data</li>
+        <li>Start with a good pretrained model and fine-tune lightly to avoid overfitting</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Mistake 4: Not Measuring Embedding Quality <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> Deployed embeddings performing poorly because quality wasn't validated before production.</p>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Benchmark on standard datasets (MTEB) to compare models objectively</li>
+        <li>Collect domain-specific evaluation set to measure quality on your task</li>
+        <li>Use metrics: Recall@k, Mean Reciprocal Rank (MRR), Normalized Discounted Cumulative Gain (NDCG)</li>
+        <li>Monitor quality metrics in production continuously</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Mistake 5: Ignoring Privacy and Security <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> Embeddings can leak information about training data or individual records.</p>
+    <p style="margin-top: 1rem;"><strong>Risks:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Embeddings of sensitive text (medical records, financial data) might reveal private information</li>
+        <li>Adversaries can query embedding APIs to extract training data</li>
+        <li>GDPR requires handling PII properly — embedding PII without safeguards violates regulations</li>
+    </ul>
+    <p style="margin-top: 1rem;"><strong>Solutions:</strong> Differential privacy, federated learning, anonymization before embedding, access controls.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Key Lesson:</strong> The biggest mistake is treating embeddings as a solved problem. Your specific use case requires validation. Always measure quality on your task before deploying.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices</h2>
+
+    <h3>1. Choose the Right Model First</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>Benchmark multiple models on your specific task, not generic benchmarks</li>
+        <li>Consider: quality, cost (API or compute), latency, and whether you need self-hosted or API-based</li>
+        <li>Default choice: sentence-transformers for self-hosted, OpenAI for API-based</li>
+        <li>Only build custom embeddings if you have domain with very different semantics</li>
+    </ul>
+
+    <h3>2. Validate Before Deployment</h3>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Validation Pipeline:</strong> 1) Evaluate on standard benchmarks (<a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" rel="noopener">MTEB</a>, task-specific) 2) Collect human evaluation (domain experts rate quality) 3) A/B test in production 4) Monitor quality metrics continuously</p>
+    </div>
+
+    <h3>3. Normalize Embeddings</h3>
+    <p>Always normalize embeddings to unit length before storing or comparing:</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; font-family: 'Courier New', monospace;"><code>normalized = embedding / np.linalg.norm(embedding)</code></p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-dim);">After normalization, cosine similarity equals dot product, enabling fast GPU computation.</p>
+    </div>
+
+    <h3>4. Version Your Embeddings</h3>
+    <p>Track which model created which embeddings. Store model name, version, and creation date with embeddings.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Why:</strong> When you upgrade models, you need to know which embeddings are old and need recomputation.</p>
+    </div>
+
+    <h3>5. Batch and Cache Aggressively</h3>
+    <p>Embedding computation is expensive. Cache results whenever possible:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>Cache embeddings for frequently accessed documents (LRU cache)</li>
+        <li>Batch similar requests together for throughput efficiency</li>
+        <li>Use vector databases (<a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>, <a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a>) which handle caching/indexing</li>
+    </ul>
+
+    <h3>6. Monitor Quality in Production</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Retrieval Metrics</h4>
+    <p>Track Recall@10, NDCG, MRR on validation set continuously. Alert if quality drops.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Latency</h4>
+    <p>Monitor embedding computation and search latency. Alert if latency increases.</p>
+</div>
+        <div class="card green-accent">
+    <h4>User Feedback</h4>
+    <p>Collect explicit feedback (users rate if retrieved results are relevant) and implicit feedback (click-through rates).</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Data Drift</h4>
+    <p>Monitor if input data distribution changes. Different domains might need different embeddings.</p>
+</div>
+    </div>
+
+    <h3>7. Fine-Tune for Your Domain When It Matters</h3>
+    <p>If semantic relevance is critical to your business, fine-tune embeddings on domain-specific pairs:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>Collect 1000+ pairs of (text_a, text_b, similarity_label) relevant to your domain</li>
+        <li>Fine-tune with contrastive learning: pull similar pairs together, push dissimilar apart</li>
+        <li>Validate improvement on held-out test set</li>
+        <li>Expected improvement: 5-20% depending on domain difference from pretraining</li>
+    </ul>
+
+    <h3>8. Use Hybrid Search When Needed</h3>
+    <p>Semantic search alone misses keyword matches. Combine semantic and keyword search:</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim;"><strong>Hybrid Search:</strong> 1) Get top-k results from semantic search (embeddings) 2) Get top-k results from keyword search (BM25) 3) Merge and rank by relevance. Example: Weaviate, Milvus support hybrid search natively.</p>
+    </div>
+
+    <h3>9. Handle Multimodal Embeddings</h3>
+    <p>For applications with images, audio, code, etc., use models that embed multiple modalities into the same space:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>CLIP: Image + text in same space. Find images by text queries.</li>
+        <li>LLaVA: Vision + language understanding</li>
+        <li>Jina: Long context (8K tokens) embeddings</li>
+    </ul>
+
+    <h3>10. Document the Trade-offs</h3>
+    <p>Every embedding model involves trade-offs. Document your choices:</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Example:</strong> "We chose <a href="https://www.sbert.net/" target="_blank" rel="noopener">sentence-transformers</a>/all-MiniLM-L6-v2 over OpenAI embeddings because: (1) cost/scale required self-hosting, (2) latency needs < 50ms, (3) quality on semantic similarity is comparable. We sacrificed: no multilingual support, slightly lower quality on very similar texts."</p>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Golden Rule:</strong> The best practices apply to your specific context. Validate, measure, monitor. Generic advice is just a starting point.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights</h2>
+
+    <h3>The Geometry of Semantic Space</h3>
+    <p>Well-trained embeddings exhibit surprising geometric properties. Understanding these helps you use embeddings more effectively.</p>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Isotropy vs. Anisotropy <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Isotropy:</strong> All directions in embedding space are equally meaningful. Vectors are uniformly distributed.</p>
+    <p style="margin-top: 1rem;"><strong>Anisotropy:</strong> Some directions are more important than others. Vectors cluster along specific directions.</p>
+    <p style="margin-top: 1rem;"><strong>Implication:</strong> Anisotropic embeddings (like BERT, Word2Vec) have a "dominant direction" where most vectors point. This can hurt performance because cosine similarity becomes dominated by vector magnitude rather than direction. Solution: Use contrastive learning (which produces more isotropic embeddings) or explicitly regularize for isotropy.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Hubness Problem <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Problem:</strong> In high-dimensional spaces, a small number of vectors become "hubs" — they're nearest neighbors to many other vectors.</p>
+    <p style="margin-top: 1rem;"><strong>Why it happens:</strong> High-dimensional geometry is counterintuitive. Distance from origin increases rapidly with dimension. Some vectors end up at distances where they're equidistant to almost everything.</p>
+    <p style="margin-top: 1rem;"><strong>Solution:</strong> 1) Use lower-dimensional embeddings (768 is safer than 3072) 2) Normalize embeddings 3) Use non-Euclidean metrics for high-dimensional spaces.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Dimensionality Tradeoff <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>Higher dimensions capture more nuance:</strong> 1536-dim embeddings can distinguish more fine-grained semantic relationships than 384-dim.</p>
+    <p style="margin-top: 1rem;"><strong>But:</strong> Computational cost is linear with dimension. 1536-dim embedding is 4x slower to compute similarity than 384-dim.</p>
+    <p style="margin-top: 1rem;"><strong>Modern approach:</strong> Use higher-dim embeddings during indexing, then compress for search using quantization or learned projections.</p>
+    </div>
+    </div>
+</div>
+
+    <h3>Why Embeddings Generalize</h3>
+    <p>A word2vec embedding trained on Wikipedia works reasonably well for scientific papers, news articles, and tweets. Why do embeddings transfer so well?</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim);"><strong>Answer:</strong> Co-occurrence patterns are universal across text. "Einstein" appears near "physics" and "relativity" regardless of whether you're reading Wikipedia, papers, or tweets. Embeddings capture these co-occurrence patterns, which generalize to new domains.</p>
+    </div>
+
+    <h3>The Scaling Laws of Embeddings</h3>
+    <p>Empirical observation: embedding quality improves predictably with training data size and model size.</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; color: var(--text-dim;"><strong>Scaling Laws:</strong> Quality ∝ (data_size)^0.07 × (model_size)^0.08</p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-dim);">Doubling training data improves quality by ~5%. Doubling model size improves by ~6%. Both matter, but data size often has more impact for embeddings.</p>
+    </div>
+
+    <h3>Nearest Neighbor Complexity</h3>
+    <p>Finding the most similar embedding from a million candidates is computationally expensive. Exact search is O(n) in corpus size.</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem;">
+        <thead>
+            <tr style="background: #f0f4f8; border-bottom: 2px solid var(--accent-cyan);">
+                <th style="padding: 1rem; text-align: left;">Method</th>
+                <th style="padding: 1rem; text-align: left;">Time Complexity</th>
+                <th style="padding: 1rem; text-align: left;">Space</th>
+                <th style="padding: 1rem; text-align: left;">Approximate?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>Brute Force</strong></td>
+                <td style="padding: 1rem;">O(n·d)</td>
+                <td style="padding: 1rem;">O(n·d)</td>
+                <td style="padding: 1rem;">No</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>FAISS IVF</strong></td>
+                <td style="padding: 1rem;">O(n/k + k·d)</td>
+                <td style="padding: 1rem;">O(n·d)</td>
+                <td style="padding: 1rem;">Yes</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 1rem;"><strong>HNSW</strong></td>
+                <td style="padding: 1rem;">O(log n)</td>
+                <td style="padding: 1rem;">O(n)</td>
+                <td style="padding: 1rem;">Yes</td>
+            </tr>
+            <tr>
+                <td style="padding: 1rem;"><strong>LSH</strong></td>
+                <td style="padding: 1rem;">O(1)</td>
+                <td style="padding: 1rem;">O(n)</td>
+                <td style="padding: 1rem;">Yes</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;"><em>For billion-scale retrieval, FAISS or HNSW are standard. LSH is fast but requires careful tuning.</em></p>
+
+    <h3>Embedding Space Interpolation</h3>
+    <p>Vector spaces support interpolation. You can blend between embeddings:</p>
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--accent-cyan);">
+        <p style="margin: 0; font-size: 0.9rem; font-family: 'Courier New', monospace;"><code>interpolated = α·embedding_A + (1-α)·embedding_B</code></p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-dim);">This creates smooth transitions between concepts. Used in generative models for controllable generation.</p>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Deep Insight:</strong> Embeddings are not magical. They're learned compressed representations of statistical patterns in text. Understanding their properties (isotropy, hubness, dimensionality) helps you use them more effectively and debug when they fail.</p>
+</div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Code Examples</h2>
+
+    <h3>Example 1: Train Word2Vec with Gensim</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Word2Vec Training</div>
+    <div class="code-content"><span class="keyword">from</span> gensim.models <span class="keyword">import</span> Word2Vec
+<span class="keyword">import</span> nltk
+
+<span class="comment"># Prepare text data (tokenized sentences)</span>
+sentences = [
+    <span class="string">"the quick brown fox jumps over the lazy dog"</span>.<span class="function">split</span>(),
+    <span class="string">"never jump over the lazy dog"</span>.<span class="function">split</span>(),
+    <span class="string">"the fast brown fox"</span>.<span class="function">split</span>()
+]
+
+<span class="comment"># Train Word2Vec</span>
+model = <span class="function">Word2Vec</span>(sentences, vector_size=<span class="number">100</span>, window=<span class="number">5</span>, min_count=<span class="number">1</span>, epochs=<span class="number">100</span>)
+
+<span class="comment"># Get embedding for a word</span>
+embedding = model.wv[<span class="string">'fox'</span>]  <span class="comment"># numpy array, shape (100,)</span>
+
+<span class="comment"># Find most similar words</span>
+similar = model.wv.<span class="function">most_similar</span>(<span class="string">'fox'</span>, topn=<span class="number">5</span>)
+<span class="comment"># [('brown', 0.92), ('quick', 0.88), ...]</span>
+
+<span class="comment"># Arithmetic on embeddings</span>
+result = model.wv[<span class="string">'king'</span>] - model.wv[<span class="string">'man'</span>] + model.wv[<span class="string">'woman'</span>]
+closest_word = model.wv.<span class="function">most_similar</span>(positive=[result], topn=<span class="number">1</span>)
+<span class="comment"># [('queen', 0.85)]</span></div>
+</div>
+
+    <h3>Example 2: Using OpenAI Embeddings API</h3>
+    <div class="code-block">
+    <div class="code-header">Python — OpenAI Embeddings</div>
+    <div class="code-content"><span class="keyword">import</span> openai
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+openai.api_key = <span class="string">"your-api-key"</span>
+
+<span class="comment"># Embed texts</span>
+texts = [
+    <span class="string">"The quick brown fox"</span>,
+    <span class="string">"A fast reddish dog"</span>,
+    <span class="string">"Technology and innovation"</span>
+]
+
+response = openai.Embedding.<span class="function">create</span>(
+    <span class="function">input</span>=texts,
+    model=<span class="string">"text-embedding-3-small"</span>
+)
+
+embeddings = [item[<span class="string">'embedding'</span>] <span class="keyword">for</span> item <span class="keyword">in</span> response[<span class="string">'data'</span>]]
+<span class="comment"># Each embedding is a list of 1536 floats</span>
+
+<span class="comment"># Compute similarity between first two texts</span>
+<span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity
+similarity = <span class="function">cosine_similarity</span>(
+    [embeddings[<span class="number">0</span>]], 
+    [embeddings[<span class="number">1</span>]]
+)[<span class="number">0</span>][<span class="number">0</span>]
+<span class="function">print</span>(<span class="string">f"Similarity: {similarity:.3f}"</span>)  <span class="comment"># ~0.85 (similar)</span></div>
+</div>
+
+    <h3>Example 3: Semantic Search with Sentence-Transformers</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Sentence-Transformers Semantic Search</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarities
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Load model</span>
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+<span class="comment"># Corpus of documents</span>
+documents = [
+    <span class="string">"The capital of France is Paris"</span>,
+    <span class="string">"Python is a programming language"</span>,
+    <span class="string">"Machine learning is a subset of AI"</span>,
+    <span class="string">"Dogs are loyal pets"</span>,
+    <span class="string">"The Eiffel Tower is in Paris"</span>
+]
+
+<span class="comment"># Embed all documents</span>
+corpus_embeddings = model.<span class="function">encode</span>(documents)
+
+<span class="comment"># Query</span>
+query = <span class="string">"Where is the Eiffel Tower?"</span>
+query_embedding = model.<span class="function">encode</span>(query)
+
+<span class="comment"># Find most similar documents</span>
+similarities = <span class="function">cosine_similarities</span>([query_embedding], corpus_embeddings)[<span class="number">0</span>]
+sorted_indices = np.<span class="function">argsort</span>(similarities)[::-<span class="number">1</span>]
+
+<span class="comment"># Print top results</span>
+<span class="keyword">for</span> idx <span class="keyword">in</span> sorted_indices[:<span class="number">3</span>]:
+    <span class="function">print</span>(<span class="string">f"[{similarities[idx]:.3f}] {documents[idx]}"</span>)
+<span class="comment"># [0.825] The Eiffel Tower is in Paris</span>
+<span class="comment"># [0.641] The capital of France is Paris</span>
+<span class="comment"># [0.285] Python is a programming language</span></div>
+</div>
+
+    <h3>Example 4: Cosine Similarity Computation</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Computing Similarity Metrics</div>
+    <div class="code-content"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">cosine_similarity</span>(a, b):
+    <span class="string">"""Compute cosine similarity between vectors a and b"""</span>
+    <span class="keyword">return</span> np.<span class="function">dot</span>(a, b) / (np.linalg.<span class="function">norm</span>(a) * np.linalg.<span class="function">norm</span>(b))
+
+<span class="keyword">def</span> <span class="function">euclidean_distance</span>(a, b):
+    <span class="string">"""Compute Euclidean distance between vectors"""</span>
+    <span class="keyword">return</span> np.<span class="function">sqrt</span>(np.<span class="function">sum</span>((a - b) ** <span class="number">2</span>))
+
+<span class="keyword">def</span> <span class="function">dot_product_similarity</span>(a, b):
+    <span class="string">"""Dot product (for normalized vectors = cosine)"""</span>
+    <span class="keyword">return</span> np.<span class="function">dot</span>(a, b)
+
+<span class="comment"># Example embeddings</span>
+embedding_1 = np.<span class="function">array</span>([<span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, <span class="number">0.4</span>])
+embedding_2 = np.<span class="function">array</span>([<span class="number">0.15</span>, <span class="number">0.25</span>, <span class="number">0.35</span>, <span class="number">0.45</span>])
+embedding_3 = np.<span class="function">array</span>([<span class="number">0.9</span>, <span class="number">0.8</span>, <span class="number">0.1</span>, <span class="number">0.2</span>])
+
+<span class="comment"># Embeddings 1 and 2 are similar, 1 and 3 are different</span>
+<span class="function">print</span>(<span class="string">f"Cosine 1-2: {cosine_similarity(embedding_1, embedding_2):.3f}"</span>)  <span class="comment"># 0.990</span>
+<span class="function">print</span>(<span class="string">f"Cosine 1-3: {cosine_similarity(embedding_1, embedding_3):.3f}"</span>)  <span class="comment"># 0.365</span>
+<span class="function">print</span>(<span class="string">f"Distance 1-2: {euclidean_distance(embedding_1, embedding_2):.3f}"</span>)  <span class="comment"># 0.110</span>
+<span class="function">print</span>(<span class="string">f"Distance 1-3: {euclidean_distance(embedding_1, embedding_3):.3f}"</span>)  <span class="comment"># 0.816</span></div>
+</div>
+
+    <h3>Example 5: Visualize Embeddings with t-SNE</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Visualizing Embeddings</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+<span class="comment"># Sample documents with labels</span>
+documents = [
+    (<span class="string">"dog barks loudly"</span>, <span class="string">"animals"</span>),
+    (<span class="string">"cat meows softly"</span>, <span class="string">"animals"</span>),
+    (<span class="string">"python programming language"</span>, <span class="string">"tech"</span>),
+    (<span class="string">"machine learning AI"</span>, <span class="string">"tech"</span>),
+    (<span class="string">"paris france city"</span>, <span class="string">"geography"</span>),
+    (<span class="string">"london england city"</span>, <span class="string">"geography"</span>)
+]
+
+texts = [d[<span class="number">0</span>] <span class="keyword">for</span> d <span class="keyword">in</span> documents]
+labels = [d[<span class="number">1</span>] <span class="keyword">for</span> d <span class="keyword">in</span> documents]
+
+<span class="comment"># Embed</span>
+embeddings = model.<span class="function">encode</span>(texts)
+
+<span class="comment"># Reduce to 2D with t-SNE</span>
+tsne = <span class="function">TSNE</span>(n_components=<span class="number">2</span>, random_state=<span class="number">42</span>)
+embeddings_2d = tsne.<span class="function">fit_transform</span>(embeddings)
+
+<span class="comment"># Plot</span>
+colors = {<span class="string">'animals'</span>: <span class="string">'red'</span>, <span class="string">'tech'</span>: <span class="string">'blue'</span>, <span class="string">'geography'</span>: <span class="string">'green'</span>}
+plt.<span class="function">figure</span>(figsize=(<span class="number">8</span>, <span class="number">6</span>))
+<span class="keyword">for</span> i, (x, y) <span class="keyword">in</span> <span class="function">enumerate</span>(embeddings_2d):
+    plt.<span class="function">scatter</span>(x, y, c=colors[labels[i]], s=<span class="number">100</span>, alpha=<span class="number">0.7</span>)
+    plt.<span class="function">annotate</span>(texts[i], (x, y), fontsize=<span class="number">8</span>)
+plt.<span class="function">title</span>(<span class="string">"Embedding Space Visualization"</span>)
+plt.<span class="function">show</span>()</div>
+</div>
+
+    <h3>Example 6: Fine-Tune Embeddings for Custom Domain</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Fine-Tuning Sentence-Transformers</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer, InputExample, losses
+<span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+<span class="comment"># Domain-specific training pairs: (text1, text2, similarity 0-1)</span>
+train_examples = [
+    <span class="function">InputExample</span>(texts=[<span class="string">"python function definition"</span>, <span class="string">"def foo()"</span>], label=<span class="number">0.9</span>),
+    <span class="function">InputExample</span>(texts=[<span class="string">"python function definition"</span>, <span class="string">"dogs barking"</span>], label=<span class="number">0.1</span>),
+    <span class="function">InputExample</span>(texts=[<span class="string">"machine learning AI"</span>, <span class="string">"neural networks deep"</span>], label=<span class="number">0.85</span>),
+    <span class="function">InputExample</span>(texts=[<span class="string">"machine learning AI"</span>, <span class="string">"pizza recipe"</span>], label=<span class="number">0.05</span>)
+]
+
+<span class="comment"># Create data loader</span>
+train_dataloader = <span class="function">DataLoader</span>(train_examples, shuffle=<span class="keyword">True</span>, batch_size=<span class="number">16</span>)
+
+<span class="comment"># Use contrastive loss (pulls similar examples together)</span>
+train_loss = losses.<span class="function">ContrastiveLoss</span>(model)
+
+<span class="comment"># Fine-tune</span>
+model.<span class="function">fit</span>(
+    [(train_dataloader, train_loss)],
+    epochs=<span class="number">1</span>,
+    warmup_steps=<span class="number">100</span>
+)
+
+<span class="comment"># Evaluate on new domain data</span>
+test_texts = [<span class="string">"python programming"</span>, <span class="string">"coding in Python"</span>]
+test_embeddings = model.<span class="function">encode</span>(test_texts)
+similarity = np.<span class="function">dot</span>(test_embeddings[<span class="number">0</span>], test_embeddings[<span class="number">1</span>]) / (
+    np.linalg.<span class="function">norm</span>(test_embeddings[<span class="number">0</span>]) * np.linalg.<span class="function">norm</span>(test_embeddings[<span class="number">1</span>])
+)
+<span class="function">print</span>(<span class="string">f"Similarity after fine-tuning: {similarity:.3f}"</span>)</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Running These Examples:</strong> All examples require: <code>pip install gensim sentence-transformers scikit-learn matplotlib openai</code>. Each is self-contained and runnable with your own data.</p>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Exercises</h2>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Word Analogies</h4>
+    <p>Train a Word2Vec model on the provided text and test the king-queen analogy. Can you extend it to other analogies (man:woman, Paris:France)?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> gensim.models <span class="keyword">import</span> Word2Vec
+
+text = <span class="string">"""
+The king sat on his throne in the palace. 
+The queen also sat on her throne.
+The prince was the son of the king.
+The princess was the daughter of the queen.
+The man walked down the street.
+The woman also walked down the street.
+"""</span>
+
+sentences = [line.<span class="function">split</span>() <span class="keyword">for</span> line <span class="keyword">in</span> text.<span class="function">split</span>(<span class="string">'\n'</span>)]
+model = <span class="function">Word2Vec</span>(sentences, vector_size=<span class="number">100</span>, window=<span class="number">5</span>, epochs=<span class="number">50</span>)
+
+<span class="comment"># Test king - man + woman = queen</span>
+result = model.wv[<span class="string">'king'</span>] - model.wv[<span class="string">'man'</span>] + model.wv[<span class="string">'woman'</span>]
+most_similar = model.wv.<span class="function">most_similar</span>(positive=[result], topn=<span class="number">1</span>)
+<span class="function">print</span>(most_similar)
+
+<span class="comment"># TODO: Try other analogies like prince/princess, palace/...</span></div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Build a Similarity Search</h4>
+    <p>Implement a similarity search over a corpus. Query different sentences and see if the most similar documents match your intuition.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+corpus = [
+    <span class="string">"Machine learning models require training data"</span>,
+    <span class="string">"Neural networks are inspired by biological brains"</span>,
+    <span class="string">"Python is popular for data science"</span>,
+    <span class="string">"The weather today is rainy"</span>,
+    <span class="string">"Transformers use attention mechanisms"</span>
+]
+
+<span class="comment"># Embed corpus</span>
+corpus_embeddings = model.<span class="function">encode</span>(corpus)
+
+queries = [
+    <span class="string">"How do you train AI models?"</span>,
+    <span class="string">"What programming language should I use for AI?"</span>,
+    <span class="string">"What is the weather like?"</span>
+]
+
+<span class="keyword">for</span> query <span class="keyword">in</span> queries:
+    query_emb = model.<span class="function">encode</span>(query)
+    similarities = np.<span class="function">dot</span>(corpus_embeddings, query_emb) / (
+        np.linalg.<span class="function">norm</span>(corpus_embeddings, axis=<span class="number">1</span>) * np.linalg.<span class="function">norm</span>(query_emb)
+    )
+    top_idx = np.<span class="function">argmax</span>(similarities)
+    <span class="function">print</span>(<span class="string">f"Query: {query}"</span>)
+    <span class="function">print</span>(<span class="string">f"Best match: {corpus[top_idx]} (score: {similarities[top_idx]:.3f})\n"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Clustering with Embeddings</h4>
+    <p>Embed a set of diverse documents, then use k-means clustering to group them. Do the clusters match your expectations?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+model = <span class="function">SentenceTransformer</span>(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+documents = [
+    <span class="string">"Python is a programming language"</span>,
+    <span class="string">"Java is also a programming language"</span>,
+    <span class="string">"The dog is brown"</span>,
+    <span class="string">"Cats are pets"</span>,
+    <span class="string">"Machine learning uses data"</span>,
+    <span class="string">"Artificial intelligence is growing"</span>,
+    <span class="string">"Paris is in France"</span>,
+    <span class="string">"London is in England"</span>
+]
+
+embeddings = model.<span class="function">encode</span>(documents)
+kmeans = <span class="function">KMeans</span>(n_clusters=<span class="number">3</span>, random_state=<span class="number">42</span>)
+labels = kmeans.<span class="function">fit_predict</span>(embeddings)
+
+<span class="keyword">for</span> i, doc <span class="keyword">in</span> <span class="function">enumerate</span>(documents):
+    <span class="function">print</span>(<span class="string">f"Cluster {labels[i]}: {doc}"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Embedding Quality Measurement</h4>
+    <p>Compare embedding quality across different models on a simple semantic similarity task. Which model performs best?</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> cosine
+
+<span class="comment"># Test pairs with human-judged similarity (0-1)</span>
+test_pairs = [
+    (<span class="string">"The dog is brown"</span>, <span class="string">"A brown dog"</span>, <span class="number">0.9</span>),
+    (<span class="string">"Machine learning is AI"</span>, <span class="string">"Cars are vehicles"</span>, <span class="number">0.3</span>),
+    (<span class="string">"Paris is the capital of France"</span>, <span class="string">"France\'s capital is Paris"</span>, <span class="number">0.95</span>),
+]
+
+models = [
+    <span class="string">'all-MiniLM-L6-v2'</span>,
+    <span class="string">'paraphrase-MiniLM-L6-v2'</span>,
+    <span class="string">'all-mpnet-base-v2'</span>
+]
+
+<span class="keyword">for</span> model_name <span class="keyword">in</span> models:
+    model = <span class="function">SentenceTransformer</span>(model_name)
+    correlations = []
+    
+    <span class="keyword">for</span> text1, text2, human_score <span class="keyword">in</span> test_pairs:
+        emb1 = model.<span class="function">encode</span>(text1)
+        emb2 = model.<span class="function">encode</span>(text2)
+        sim = <span class="number">1</span> - <span class="function">cosine</span>(emb1, emb2)  <span class="comment"># Convert distance to similarity</span>
+        correlations.<span class="function">append</span>(<span class="function">abs</span>(sim - human_score))
+    
+    avg_error = np.<span class="function">mean</span>(correlations)
+    <span class="function">print</span>(<span class="string">f"{model_name}: avg error = {avg_error:.3f}"</span>)</div>
+</div>
+</div>
+
+    <h3>Harder Challenges</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong>Challenge 1:</strong> Implement your own similarity metric that combines cosine similarity with keyword matching. Is it better than pure semantic similarity?</li>
+        <li><strong>Challenge 2:</strong> Fine-tune a sentence-transformer model on your own domain-specific data. Measure improvement over the base model.</li>
+        <li><strong>Challenge 3:</strong> Build a recommendation system using embeddings. Embed items, then recommend similar items to each user's viewed history.</li>
+        <li><strong>Challenge 4:</strong> Implement a deduplication system that finds near-duplicate documents in a corpus using embeddings.</li>
+        <li><strong>Challenge 5:</strong> Create a retrieval-augmented generation (RAG) system: embed documents, retrieve relevant ones for a query, then generate answers using an LLM.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+
+    <p>Embedding fundamentals come up frequently in AI/ML interviews. Here are common questions with guidance on how to answer them effectively.</p>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q1: Explain word embeddings. Why are they better than one-hot encoding? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Understanding of the problem (sparse, high-dimensional) and the solution (dense, low-dimensional).</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "One-hot encoding represents each word as a vector with exactly one 1 and rest 0s. For a 50,000-word vocabulary, this is 50,000 dimensions. Word embeddings are dense, low-dimensional (e.g., 300-dim) vectors learned through training. They're better because: (1) They preserve semantic relationships — similar words have similar embeddings; (2) Much lower dimensionality makes computation faster; (3) Pre-trained embeddings transfer to new tasks without retraining from scratch."</p>
+    <p style="margin-top: 1rem;"><strong>Bonus points:</strong> Mention "king - man + woman = queen" to show you understand the geometric properties.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q2: How does Word2Vec work? Explain Skip-gram. <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Understanding of the training objective and why it produces useful embeddings.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "Skip-gram learns embeddings by predicting context words from a target word. Given a sentence, skip-gram uses a sliding window. For target word at position i, it tries to predict words at positions i-2, i-1, i+1, i+2 (with window size 2). Training minimizes: -log(P(context | target)). The neural network is simple: input word → embedding matrix → hidden layer → output softmax over vocabulary. During training, embeddings that make context words likely get high scores, and over many iterations, semantic patterns emerge."</p>
+    <p style="margin-top: 1rem;"><strong>Bonus points:</strong> Mention negative sampling to explain why this is computationally tractable for large vocabularies.</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q3: What are the differences between Word2Vec, GloVe, and contextual embeddings? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Ability to compare and contrast different approaches.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "Word2Vec (Skip-gram) learns embeddings by predicting context from a target word using a sliding window. GloVe combines local context (like Word2Vec) with global co-occurrence statistics — it learns embeddings by factorizing a word co-occurrence matrix. Contextual embeddings like BERT/ELMo compute embeddings based on the full context of a word — the same word gets different embeddings in different contexts.</p>
+    <p style="margin-top: 1rem;"><strong>Trade-offs:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Word2Vec: Fast, efficient, captures some semantics, but loses word sense ambiguity</li>
+        <li>GloVe: Theoretically grounded, good balance, competitive with Word2Vec</li>
+        <li>Contextual: Best quality, handles ambiguity, but slower and requires GPUs</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q4: How do you measure embedding quality? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Understanding of evaluation methodology and metrics.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "Embedding quality depends on the downstream task. For general-purpose embeddings: (1) Benchmark on standard datasets (MTEB, word similarity datasets), (2) Measure correlations: if human judges rate similarity between word pairs 0-1, compute how well embedding similarity correlates with human ratings. For domain-specific embeddings: (3) Evaluate on your actual use case (retrieval: use Recall@k, MRR, NDCG; clustering: use silhouette score, purity).</p>
+    <p style="margin-top: 1rem;">Common metrics:</p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li><strong>Spearman correlation:</strong> Correlation between embedding-based and human-based similarity rankings</li>
+        <li><strong>Recall@k:</strong> For retrieval tasks — did the relevant document appear in top-k results?</li>
+        <li><strong>Normalized DCG (NDCG):</strong> Weighted ranking metric — better to miss relevant item at rank 5 than rank 50</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q5: What is contrastive learning and why is it popular for embeddings? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Understanding of modern training objectives and their advantages.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "Contrastive learning learns embeddings by pulling similar examples together and pushing dissimilar examples apart. For each anchor example, you have positive examples (similar) and negative examples (dissimilar). The loss function: minimize distance to positives, maximize distance to negatives.</p>
+    <p style="margin-top: 1rem;">Why it's effective:</p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Explicit supervision: You're directly telling the model what similarity means for your task</li>
+        <li>Better transfer: More robust embeddings that work across tasks</li>
+        <li>Theoretical grounding: Information theory shows this maximizes mutual information</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q6: How do you fine-tune embeddings for a specific domain? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Practical knowledge of domain adaptation.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "To fine-tune embeddings for a domain: (1) Collect domain-specific training pairs — sentences/documents labeled as similar (0.8-1.0) or dissimilar (0.0-0.3). Need at least 1000-5000 pairs. (2) Start with a pretrained model (e.g., Sentence-BERT). (3) Fine-tune with contrastive loss using your domain data. (4) Validate on a held-out test set to measure improvement.</p>
+    <p style="margin-top: 1rem;"><strong>Tips:</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use low learning rate (1e-5 to 1e-4) to avoid catastrophic forgetting</li>
+        <li>If limited data, use data augmentation (paraphrasing, back-translation)</li>
+        <li>Monitor validation performance to avoid overfitting</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q7: What are the computational challenges in large-scale similarity search? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Understanding of scalability and optimization.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "Finding the k most similar embeddings from a corpus of n items is O(n) with exact search (compute similarity to all items). For billion-scale, this is too slow. Solutions: (1) Use approximate nearest neighbor search (FAISS, HNSW) — trades accuracy for speed, typically 95%+ recall at 100x+ speedup; (2) Quantize embeddings to int8 (4x smaller) or binary (32x smaller); (3) Use learned indices that hash similar embeddings to the same buckets.</p>
+    <p style="margin-top: 1rem;"><strong>Trade-offs:</strong> Approximate search is faster but misses some relevant items. Quantization reduces memory but loses some signal. Choose based on your requirements (latency vs. quality).</p>
+    </div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Q8: How do you handle out-of-vocabulary words? <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">
+    <p><strong>What they're looking for:</strong> Practical problem-solving ability.</p>
+    <p style="margin-top: 1rem;"><strong>Good answer:</strong> "There are several approaches depending on your embedding model:</p>
+    <p style="margin-top: 1rem;"><strong>For static embeddings (Word2Vec, GloVe):</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>Use FastText (subword embeddings) — rare words are represented as sums of character n-grams</li>
+        <li>Average embeddings of similar in-vocabulary words</li>
+        <li>Use a learnable OOV token embedding</li>
+    </ul>
+    <p style="margin-top: 1rem;"><strong>For contextual embeddings (BERT, GPT):</strong></p>
+    <ul style="margin: 1rem 0 0 1.5rem; font-size: 0.95rem;">
+        <li>These handle any word through subword tokenization (BPE, WordPiece). OOV is less of a problem.</li>
+    </ul>
+    </div>
+    </div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Interview Tip:</strong> These questions test both conceptual understanding and practical knowledge. Be ready to explain tradeoffs, discuss why you'd choose one approach over another, and mention you'd validate your choice with experiments.</p>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-list">
+        <div class="faq-item">
+    <div class="faq-question">What size embeddings should I use? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">It depends on your task and budget. General guidance: 384-dim for most tasks, 768-dim for high-quality retrieval, 1536-dim for state-of-the-art. Larger isn't always better — a 384-dim sentence embedding often outperforms a 3000-dim Word2Vec embedding on similar tasks.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Should I use static embeddings (Word2Vec) or contextual embeddings (BERT)? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use contextual embeddings for NLP tasks (classification, QA, generation). Use static embeddings if you need fast lookup, offline inference, or have very limited compute. For new projects, start with Sentence-BERT (fast, good quality) or OpenAI embeddings (best quality, API-based).</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How much training data do I need to fine-tune embeddings? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Start with 1000-5000 good quality examples. With fewer than 1000, risk of overfitting. With more, quality typically improves. Use data augmentation if you can't collect enough natural examples.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Can I mix embeddings from different models? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No. Each model creates embeddings in its own space. Mixing Word2Vec and BERT embeddings directly (e.g., averaging) is meaningless. You need to keep embeddings from the same model in the same space.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How do I handle multilingual text? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use multilingual embedding models: multilingual-BERT, multilingual-sentence-BERT (covers 50+ languages), or OpenAI embeddings (support 25+ languages). These learn a shared space where similar texts in different languages are close together.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">What's the difference between similarity and distance? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Similarity increases as items become more alike (higher = more similar). Distance increases as items become more different (higher = more different). Cosine similarity: range -1 to 1, higher is better. Euclidean distance: range 0 to infinity, lower is better.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How do I reduce embedding dimensionality? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Use PCA for linear reduction or UMAP for non-linear. PCA is faster and more interpretable. UMAP preserves local structure better but is slower. For most modern embeddings, reduction isn't necessary unless you're optimizing for memory/speed.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Can embeddings be made differentially private? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes. You can add noise to embeddings to provide privacy guarantees. This comes at a cost: reduced quality. Practical differential privacy for embeddings is an active research area.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How do I debug embedding quality issues? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Checklist: (1) Verify the embeddings are actually being computed (not cached wrong version), (2) Check if the model was fine-tuned correctly (validate loss curve), (3) Evaluate quality on standard benchmarks, (4) Manually inspect similar pairs to see if they make sense, (5) Check for data drift — did input distribution change?</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Should I normalize embeddings before storing them? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes. Always normalize to unit length before computing cosine similarity or storing. This makes dot product equivalent to cosine similarity and enables GPU-optimized matrix multiplication for fast retrieval.</div>
+    </div>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary</h2>
+
+    <h3>Key Takeaways</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Embeddings Compress Semantics</h4>
+    <p>Text is converted to dense numerical vectors in a way that preserves semantic meaning. Similar texts cluster in embedding space.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Multiple Approaches Exist</h4>
+    <p>Word2Vec (fast, static), GloVe (well-grounded), BERT (contextual), Sentence-Transformers (semantic search). Choose based on your task and constraints.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Quality Varies Dramatically</h4>
+    <p>OpenAI embeddings (96 MTEB), Sentence-BERT (86 MTEB), Word2Vec (62 MTEB). Better models cost more but dramatically improve application performance.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Embeddings Enable Everything</h4>
+    <p>Semantic search, recommendation systems, clustering, duplicate detection, anomaly detection. Most modern NLP applications use embeddings.</p>
+</div>
+    </div>
+
+    <h3>What You've Learned</h3>
+    <ul style="font-size: 1rem; line-height: 2; margin-left: 2rem;">
+        <li><strong>Foundations:</strong> Vector spaces, similarity metrics, why embeddings work</li>
+        <li><strong>Architectures:</strong> Word2Vec skip-gram, GloVe matrix factorization, contrastive learning, transformers</li>
+        <li><strong>Practical Skills:</strong> Training embeddings, fine-tuning, building retrieval systems</li>
+        <li><strong>Advanced Techniques:</strong> Quantization, dimensionality reduction, domain adaptation</li>
+        <li><strong>Production Considerations:</strong> Scalability, versioning, monitoring, evaluation</li>
+    </ul>
+
+    <h3>Next Steps</h3>
+    <ol style="font-size: 1rem; line-height: 2; margin-left: 2rem;">
+        <li><strong>Experiment:</strong> Run the code examples. Build a simple semantic search system on your own data.</li>
+        <li><strong>Benchmark:</strong> Compare embedding models on your task. Measure quality rigorously.</li>
+        <li><strong>Fine-tune:</strong> If domain-specific, collect training pairs and fine-tune a model.</li>
+        <li><strong>Deploy:</strong> Move to production with versioning, monitoring, and fallback strategies.</li>
+        <li><strong>Iterate:</strong> Continuously measure quality, collect feedback, improve the system.</li>
+    </ol>
+
+    <h3>Common Pitfalls to Avoid</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li>Don't assume older models (Word2Vec) are the best choice without benchmarking</li>
+        <li>Don't mix embeddings from different models</li>
+        <li>Don't deploy without validating quality on your specific task</li>
+        <li>Don't ignore the cold start problem in recommendation systems</li>
+        <li>Don't neglect versioning and monitoring in production</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Final Thought:</strong> Embeddings are now foundational to AI. Understanding them deeply — not just using APIs — gives you a competitive edge. Embeddings are mathematics turned into practical AI. Master them and you master modern NLP.</p>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources for Further Learning</h2>
+
+    <h3>Papers (Foundational Reading)</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Efficient Estimation of Word Representations (2013)</h4>
+    <p>Mikolov et al. Introduces Word2Vec. Still essential reading. Short and clear.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>GloVe: Global Vectors for Word Representation (2014)</h4>
+    <p>Pennington et al. Combines local and global co-occurrence statistics. Theoretical foundation.</p>
+</div>
+        <div class="card green-accent">
+    <h4>BERT: Pre-training of Deep Bidirectional Transformers (2018)</h4>
+    <p>Devlin et al. Contextual embeddings breakthrough. Changed NLP forever.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks (2019)</h4>
+    <p>Reimers & Gupta. Practical sentence embeddings. Contrastive learning approach.</p>
+</div>
+    </div>
+
+    <h3>Benchmark Datasets</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong><a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" rel="noopener">MTEB</a> (Massive Text Embedding Benchmark):</strong> Evaluate embeddings on 58 tasks, 112 languages. <code style="color: var(--accent-cyan);">huggingface.co/spaces/mteb/leaderboard</code></li>
+        <li><strong>STS (Semantic Textual Similarity):</strong> Classic benchmark. Human judges rate sentence similarity 0-5.</li>
+        <li><strong>TREC-COVID, DBPedia:</strong> Dense retrieval benchmarks. Real IR tasks.</li>
+    </ul>
+
+    <h3>Libraries & Tools</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4><a href="https://www.sbert.net/" target="_blank" rel="noopener">Sentence-Transformers</a></h4>
+    <p>Python library for computing sentence embeddings. Easy fine-tuning. Recommended starting point. <code style="font-size:0.85rem; color:var(--accent-cyan);">pip install <a href="https://www.sbert.net/" target="_blank" rel="noopener">sentence-transformers</a></code></p>
+</div>
+        <div class="card purple-accent">
+    <h4><a href="https://radimrehurek.com/gensim/" target="_blank" rel="noopener">Gensim</a></h4>
+    <p>Word2Vec, FastText, Doc2Vec. Simple to use. Good for word-level embeddings. <code style="font-size:0.85rem; color:var(--accent-cyan);">pip install gensim</code></p>
+</div>
+        <div class="card green-accent">
+    <h4><a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener">FAISS</a> (Facebook AI)</h4>
+    <p>Efficient similarity search at scale. Billion-scale retrieval. <code style="font-size:0.85rem; color:var(--accent-cyan);">pip install faiss-cpu</code></p>
+</div>
+        <div class="card gold-accent">
+    <h4><a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a></h4>
+    <p>Managed vector database. Production-ready. API-based. Pay per use.</p>
+</div>
+    </div>
+
+    <h3>Online Learning Resources</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong><a href="https://huggingface.co/learn/nlp-course/" target="_blank" rel="noopener">HuggingFace Course</a> (free):</strong> <code style="color: var(--accent-cyan);">huggingface.co/course</code> — Natural language processing with transformers, including embeddings</li>
+        <li><strong><a href="https://www.fast.ai/" target="_blank" rel="noopener">Fast.ai</a> Course:</strong> Practical deep learning, includes word embeddings</li>
+        <li><strong><a href="https://web.stanford.edu/class/cs224n/" target="_blank" rel="noopener">Stanford CS224N</a>:</strong> NLP with deep learning. Lectures on word vectors</li>
+        <li><strong>Andrew Ng's ML Course:</strong> Foundational machine learning concepts</li>
+    </ul>
+
+    <h3>Practical Guides & Blogs</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong>Embedding lookup:</strong> Blog posts on word embeddings by <a href="https://www.fast.ai/" target="_blank" rel="noopener">fast.ai</a> and Distill.pub</li>
+        <li><strong><a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" rel="noopener">MTEB</a> Blog:</strong> Benchmarking embeddings. Latest research on embedding models</li>
+        <li><strong>Semantic Search Guide:</strong> Practical guides on using embeddings for retrieval</li>
+        <li><strong>Vector Database Comparisons:</strong> Detailed comparisons of <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>, <a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a>, Milvus</li>
+    </ul>
+
+    <h3>Cutting-Edge Models</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>OpenAI text-embedding-3</h4>
+    <p>State-of-the-art. Proprietary but best quality. text-embedding-3-small and text-embedding-3-large.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Cohere Embed v3</h4>
+    <p>Strong performance, enterprise support. Rerank feature for better accuracy.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Jina Embeddings</h4>
+    <p>Supports very long context (8K tokens). Multimodal support.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>E5 (Microsoft)</h4>
+    <p>Open-source, multilingual. Simple yet effective approach.</p>
+</div>
+    </div>
+
+    <h3>Recommended Learning Path</h3>
+    <ol style="font-size: 1rem; line-height: 2; margin-left: 2rem;">
+        <li>Read foundational papers (Word2Vec, GloVe, BERT) — 2 days</li>
+        <li>Run the code examples in this guide — 1-2 days</li>
+        <li>Build a semantic search system on your own data — 1 week</li>
+        <li>Benchmark multiple embedding models on your task — 1 week</li>
+        <li>Fine-tune an embedding model for your domain (if needed) — 1-2 weeks</li>
+        <li>Deploy to production with monitoring — 2 weeks</li>
+    </ol>
+
+    <h3>Communities & Support</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; margin-left: 2rem;">
+        <li><strong><a href="https://discuss.huggingface.co/" target="_blank" rel="noopener">HuggingFace Forums</a>:</strong> Active community. Ask questions about embedding models.</li>
+        <li><strong>Reddit r/MachineLearning, r/LanguageTechnology:</strong> Discussions of latest embedding research.</li>
+        <li><strong>Papers With Code:</strong> Embeddings leaderboards. See state-of-the-art models and their evaluations.</li>
+        <li><strong>Twitter/X:</strong> Follow researchers working on embeddings (search #embeddings #nlp)</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Pro Tip:</strong> The field of embeddings is moving fast. Bookmark <a href="https://huggingface.co/spaces/mteb/leaderboard" target="_blank" rel="noopener">MTEB</a> leaderboard and follow HuggingFace blog for latest models. What's best-in-class changes every few months.</p>
+</div>
+</section>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar active link tracking
+        const sections = document.querySelectorAll('.ml-section');
+        const links = document.querySelectorAll('.ml-sidebar a');
+
+        window.addEventListener('scroll', () => {
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+                answer.style.maxHeight = isOpen ? '0px' : answer.scrollHeight + 'px';
+                answer.style.opacity = isOpen ? '0' : '1';
+            });
+        });
+
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+                content.style.maxHeight = isOpen ? '0px' : content.scrollHeight + 'px';
+                content.style.opacity = isOpen ? '0' : '1';
+            });
+        });
+
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(anchor.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

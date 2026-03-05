@@ -19,19 +19,50 @@
     <style>
     /* ======= INDEX PAGE-SPECIFIC STYLES ======= */
 
-    /* --- Animated gradient mesh background --- */
+    /* --- Video background for hero --- */
+    .hero-video-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        overflow: hidden;
+        z-index: 0;
+    }
+    .hero-video-bg video,
+    .hero-video-bg .hero-fallback-img {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    .hero-video-bg .hero-fallback-img {
+        display: none; /* shown only when video fails */
+    }
+    .hero-video-bg .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(15, 23, 42, 0.72) 0%,
+            rgba(15, 23, 42, 0.58) 40%,
+            rgba(15, 23, 42, 0.78) 100%
+        );
+        z-index: 1;
+    }
+
+    /* --- Animated gradient mesh background (kept as extra layer) --- */
     .hero-mesh {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         overflow: hidden;
         pointer-events: none;
-        z-index: 0;
+        z-index: 1;
     }
     .hero-mesh .orb {
         position: absolute;
         border-radius: 50%;
         filter: blur(80px);
-        opacity: 0.18;
+        opacity: 0.12;
         animation: orbFloat 12s ease-in-out infinite;
     }
     .hero-mesh .orb-1 {
@@ -60,7 +91,7 @@
 
     /* --- Hero override for landing page --- */
     .hero--landing {
-        min-height: 85vh;
+        min-height: 100vh;
         padding-top: 140px;
         padding-bottom: 4rem;
         position: relative;
@@ -68,42 +99,48 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        /* Break out of .container so video spans full viewport */
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        width: 100vw;
+        overflow: hidden;
     }
     .hero--landing .hero-content {
         position: relative;
         z-index: 2;
         max-width: 800px;
         margin: 0 auto;
+        padding: 0 2rem;
     }
     .hero--landing .subtitle {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.85rem;
-        color: var(--accent-cyan);
+        color: #22d3ee;
         text-transform: uppercase;
         letter-spacing: 4px;
         margin-bottom: 1.8rem;
         opacity: 0;
         animation: fadeInUp 0.8s var(--ease) 0.3s forwards;
+        text-shadow: 0 0 20px rgba(34, 211, 238, 0.5), 0 2px 8px rgba(0,0,0,0.6);
     }
     .hero--landing h1 {
         font-size: 4.2rem;
         margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: gradientShift 6s ease infinite;
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        text-shadow: 0 2px 20px rgba(0,0,0,0.7), 0 4px 40px rgba(0,0,0,0.4);
         line-height: 1.1;
+        font-weight: 900;
     }
     .hero--landing .hero-tagline {
         font-size: 1.2rem;
-        color: var(--text-dim);
+        color: #e2e8f0;
         line-height: 1.75;
         max-width: 620px;
         margin: 0 auto 2.5rem;
         opacity: 0;
         animation: fadeInUp 0.8s var(--ease) 0.6s forwards;
+        text-shadow: 0 1px 10px rgba(0,0,0,0.7), 0 2px 20px rgba(0,0,0,0.4);
     }
     .hero--landing .hero-ctas {
         display: flex;
@@ -123,18 +160,21 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         border-radius: var(--radius-sm);
-        border: 2px solid var(--border);
-        color: var(--text);
-        background: var(--surface);
+        border: 2px solid rgba(255,255,255,0.4);
+        color: #ffffff;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         transition: var(--transition);
         cursor: pointer;
         text-decoration: none;
     }
     .hero--landing .hero-ctas .btn-ghost:hover {
-        border-color: var(--accent-cyan);
-        color: var(--accent-cyan);
+        border-color: #22d3ee;
+        color: #22d3ee;
+        background: rgba(255,255,255,0.15);
         transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
 
     /* --- Trusted badges / logos strip --- */
@@ -423,7 +463,15 @@
         }
         .hero--landing h1 { font-size: 2.4rem; }
         .hero--landing .hero-tagline { font-size: 1rem; }
-        .hero-mesh .orb { filter: blur(60px); opacity: 0.12; }
+        .hero-mesh .orb { filter: blur(60px); opacity: 0.08; }
+        .hero-video-bg .hero-overlay {
+            background: linear-gradient(
+                180deg,
+                rgba(15, 23, 42, 0.80) 0%,
+                rgba(15, 23, 42, 0.65) 40%,
+                rgba(15, 23, 42, 0.85) 100%
+            );
+        }
         .stats-ribbon {
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
@@ -467,15 +515,17 @@
                 </video>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a></li>
-                <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
-                <li><a href="job-openings.html">Careers</a></li>
-                <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
-                <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
         </div>
     </nav>
 
@@ -483,15 +533,14 @@
     <div class="mobile-overlay" id="mobileOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
         <ul class="mobile-nav-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><span style="color:var(--text-dim);cursor:default;opacity:0.5;">Team</span></li>
-            <li><a href="job-openings.html">Careers</a></li>
-            <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
-            <li><a href="sustainsys-ai-powered.html" class="ai-highlight">AI Platform</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
+</ul>
     </div>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
@@ -508,6 +557,17 @@
 
         <!-- ===== HERO ===== -->
         <section class="hero--landing" id="home">
+            <!-- Video background with image fallback -->
+            <div class="hero-video-bg">
+                <video id="heroVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_video_hd.webm" type="video/webm">
+                    <source src="Sustainsys_video_hd.mp4" type="video/mp4">
+                    <source src="Sustainsys_video.mp4" type="video/mp4">
+                </video>
+                <img class="hero-fallback-img" src="Suatsinsys_hero.png" alt="SustainSys Hero Background" id="heroFallbackImg">
+                <div class="hero-overlay"></div>
+            </div>
+            <!-- Orb mesh overlay for extra depth -->
             <div class="hero-mesh">
                 <div class="orb orb-1"></div>
                 <div class="orb orb-2"></div>
@@ -763,6 +823,35 @@
         </div>
     </footer>
 
+    <script>
+    // Hero video fallback: show image if video cannot play
+    (function() {
+        var v = document.getElementById('heroVideo');
+        var img = document.getElementById('heroFallbackImg');
+        if (!v || !img) return;
+        v.addEventListener('error', function() {
+            v.style.display = 'none';
+            img.style.display = 'block';
+        });
+        // Also handle source-level errors
+        var src = v.querySelector('source');
+        if (src) {
+            src.addEventListener('error', function() {
+                v.style.display = 'none';
+                img.style.display = 'block';
+            });
+        }
+        // If video can't play at all (e.g. unsupported format)
+        v.addEventListener('stalled', function() {
+            setTimeout(function() {
+                if (v.readyState === 0) {
+                    v.style.display = 'none';
+                    img.style.display = 'block';
+                }
+            }, 3000);
+        });
+    })();
+    </script>
     <script src="main.js"></script>
 </body>
 </html>

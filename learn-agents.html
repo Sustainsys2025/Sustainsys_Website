@@ -1,0 +1,3517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agents - SustainSys AI Academy</title>
+    <meta name="description" content="Build autonomous AI systems with tool use, planning, memory, and multi-agent collaboration.">
+    
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <div class="ml-page-container">
+        
+<aside class="ml-sidebar">
+    <h3>Sections</h3>
+    <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#why-matters">Why AI Agents Matter</a></li>
+        <li><a href="#core-concepts">Core Concepts</a></li>
+        <li><a href="#agent-loop">The Agent Loop</a></li>
+        <li><a href="#reasoning-frameworks">Reasoning Frameworks</a></li>
+        <li><a href="#tool-use">Tool Use & Grounding</a></li>
+        <li><a href="#planning">Planning & Task Decomposition</a></li>
+        <li><a href="#memory">Memory Management</a></li>
+        <li><a href="#multi-agent">Multi-Agent Systems</a></li>
+        <li><a href="#frameworks">Agent Frameworks</a></li>
+        <li><a href="#implementation">Implementation Guide</a></li>
+        <li><a href="#code-examples">Code Examples</a></li>
+        <li><a href="#comparison">Framework Comparison</a></li>
+        <li><a href="#memory-patterns">Memory Patterns</a></li>
+        <li><a href="#evaluation">Agent Evaluation</a></li>
+        <li><a href="#best-practices">Best Practices</a></li>
+        <li><a href="#interview">Interview Questions</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#exercises">Exercises</a></li>
+        <li><a href="#resources">Resources</a></li>
+
+    </ul>
+</aside>
+
+        
+        <main class="ml-main">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">AI Agents</h1>
+                <p class="page-description">Master AI Agents with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to AI Agents</h2>
+
+    <div class="ml-intro-text">
+        <p>AI Agents represent a fundamental shift in how we build intelligent systems. Rather than creating static models that map inputs to outputs, agents are <strong>autonomous systems that can perceive their environment, reason about it, take actions, and learn from the results</strong>. They combine language models, planning, memory, and tool use to solve complex, multi-step problems that require interaction with the real world.</p>
+    </div>
+
+    <p>The emergence of capable language models like GPT-4, Claude, and others has made building agents practical and powerful. An AI agent can be thought of as a loop: <strong>Observe → Think → Act → Observe</strong>. At each step, the agent uses reasoning frameworks (like ReAct), calls tools (APIs, databases, search engines), maintains memory of what it has learned, and coordinates with other agents to accomplish complex tasks.</p>
+
+    <p>What makes agents different from simple LLM applications is their <strong>agency</strong> — the ability to make decisions autonomously, call tools as needed, recover from errors, and interact with dynamic environments. A chatbot responds to one message at a time. An agent can decompose a task into subtasks, fetch information, integrate results, and iterate toward a goal.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Agent Fundamentals</h4>
+    <p>Understand the agent loop, perception, reasoning, planning, and action. Learn why agents are fundamentally different from prompt engineering.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Reasoning Frameworks</h4>
+    <p>Explore ReAct (Reasoning + Acting), Chain-of-Thought, Tree-of-Thought, and Plan-and-Execute approaches for structured agent behavior.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Tool Use & Grounding</h4>
+    <p>Learn how agents use tools (APIs, search, databases) to ground language in reality. Implement custom tools and handle failures gracefully.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Memory & Learning</h4>
+    <p>Master conversation memory, episodic memory, semantic memory, and vector-based retrieval to help agents learn and leverage past interactions.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Multi-Agent Systems</h4>
+    <p>Design systems where multiple agents collaborate (or compete) to solve problems. Understand emergent behaviors and coordination mechanisms.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Practical Implementation</h4>
+    <p>Build real agents using <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a>, AutoGPT, <a href="https://github.com/joaomdmoura/crewai" target="_blank" rel="noopener">CrewAI</a>, and other frameworks. Deploy, evaluate, and iterate on agent behavior.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Understanding of LLMs (transformers, prompt engineering), Python programming, basic NLP concepts, and APIs. Familiarity with LangChain or similar frameworks is helpful but not required.</p>
+</div>
+</section>
+
+<!-- SECTION: Why AI Agents Matter -->
+<section id="why-matters" class="ml-section">
+    <h2>Why AI Agents Matter</h2>
+
+    <p>Agents represent the next frontier of AI capability. While large language models are powerful, they are fundamentally <strong>reactionary</strong> — they generate responses based on input. Agents are <strong>proactive and goal-directed</strong>. They persist over time, maintain state, take actions, and adapt based on results.</p>
+
+    <h3>Agents vs. Traditional LLM Applications</h3>
+
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>Traditional LLM</th>
+                    <th>AI Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Control Flow</strong></td>
+                    <td>Single pass: Prompt → Response</td>
+                    <td>Loop: Observe → Think → Act → Observe</td>
+                </tr>
+                <tr>
+                    <td><strong>Tool Use</strong></td>
+                    <td>No tools; only generates text</td>
+                    <td>Calls APIs, databases, search, calculators</td>
+                </tr>
+                <tr>
+                    <td><strong>Autonomy</strong></td>
+                    <td>Responds to user input</td>
+                    <td>Pursues goals with minimal supervision</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory</strong></td>
+                    <td>Context window only</td>
+                    <td>Persistent memory, retrieval, learning</td>
+                </tr>
+                <tr>
+                    <td><strong>Error Handling</strong></td>
+                    <td>One chance; errors end the interaction</td>
+                    <td>Detects failures, retries, adapts strategy</td>
+                </tr>
+                <tr>
+                    <td><strong>Scalability</strong></td>
+                    <td>Handles one task per prompt</td>
+                    <td>Breaks complex tasks into subtasks</td>
+                </tr>
+                <tr>
+                    <td><strong>Collaboration</strong></td>
+                    <td>Single model only</td>
+                    <td>Multiple agents coordinate & specialize</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Real-World Agent Applications</h3>
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Research Agents</h4>
+    <p>Autonomously search scientific literature, summarize findings, generate hypotheses, and propose experiments. Multi-day research cycles with human oversight.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Code Generation Agents</h4>
+    <p>Generate, test, debug, and refactor code. Agents that write code, run tests, analyze failures, and iterate until tests pass.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Customer Service Agents</h4>
+    <p>Resolve customer issues, access CRM systems, process returns, escalate to humans when needed. Available 24/7 with context awareness.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Business Intelligence Agents</h4>
+    <p>Query databases, generate reports, extract insights, create visualizations, explain trends to executives in plain language.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Robotics & Embodied AI</h4>
+    <p>Control robots, perceive environments, plan actions, adjust based on feedback. The agent loop becomes the control loop.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Scientific Discovery</h4>
+    <p>Run simulations, analyze results, propose new experiments, iterate toward breakthrough discoveries with minimal human intervention.</p>
+</div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> Agents are not just a technical advancement — they fundamentally change how we think about AI systems. Instead of asking 'What is this text about?' we can ask 'What should this system do to achieve this goal?' This shift unlocks orders of magnitude more capability.</p>
+</div>
+
+    <h3>The Agent Capability Spectrum</h3>
+    <p>Different applications require different levels of agent sophistication:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Simple Tool Use (90% of current use cases)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 90%; background: linear-gradient(90deg, #0891b2, #22d3ee);">Single tool call with reasoning</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Multi-Step Agents (70% adoption in enterprise)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 70%; background: linear-gradient(90deg, #059669, #10b981);">Multiple tools, basic planning</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Autonomous Agents (emerging frontier)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 45%; background: linear-gradient(90deg, #7c3aed, #a855f7);">Full autonomy, learning, adaptation</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Multi-Agent Systems (research & advanced)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 25%; background: linear-gradient(90deg, #db2777, #f472b6);">Coordination, specialization, emergence</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts and Terminology</h2>
+
+    <p>Before building agents, we need to establish a shared vocabulary. These concepts form the foundation of all agent design.</p>
+
+    <h3>1. The Agent Loop: Observe → Think → Act → Observe</h3>
+    <p>Every agent operates on a fundamental cycle:</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>Observe</strong><br>Perceive environment<br><small>Read sensors, fetch data, get context</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>Think</strong><br>Reason about situation<br><small>Use reasoning framework, plan actions</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>Act</strong><br>Execute actions<br><small>Call tools, modify environment</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>Observe</strong><br>Perceive results<br><small>Check success, handle errors</small>
+        </div>
+    </div>
+
+    <p>This loop continues until the agent reaches a terminal state (goal achieved, max steps reached, or unrecoverable error).</p>
+
+    <div class="info-box">
+    <h4>State Management</h4>
+    <p>Between iterations, the agent maintains state: the conversation history, memory of past actions, progress toward goals, and learned information. This state is crucial for coherent agent behavior across multiple steps.</p>
+</div>
+
+    <h3>2. Perception and Grounding</h3>
+    <p><strong>Perception</strong> is how agents understand the world. Unlike human perception (visual, auditory), AI agents perceive through:</p>
+    <ul>
+        <li><strong>Language input:</strong> User queries, descriptions of the environment</li>
+        <li><strong>Structured data:</strong> Database queries, API responses, sensor readings</li>
+        <li><strong>Multimodal:</strong> Text + images, text + audio, text + video</li>
+        <li><strong>Implicit signals:</strong> Rewards, success/failure feedback, error messages</li>
+    </ul>
+
+    <p><strong>Grounding</strong> means connecting abstract concepts to concrete reality. An agent that only generates text is not grounded — it can hallucinate facts. An agent that calls APIs is grounded — it can verify facts against reality.</p>
+
+    <div class="info-box">
+    <h4>Why Grounding Matters</h4>
+    <p>A language model asked 'What's the current weather?' will make up an answer. An agent with a weather API tool will fetch real data. This distinction between knowledge and access is fundamental to building trustworthy AI systems.</p>
+</div>
+
+    <h3>3. Goals and Task Decomposition</h3>
+    <p>Agents are goal-directed. Given a goal, they must:</p>
+    <ul>
+        <li>Break it into subgoals or subtasks</li>
+        <li>Reason about dependencies between tasks</li>
+        <li>Execute subtasks in the right order</li>
+        <li>Integrate results to achieve the overall goal</li>
+    </ul>
+
+    <p>This is fundamentally different from single-prompt response. A user might say "Compare the 2026 revenue of Competitor A and Competitor B." The agent must decompose this into subtasks:</p>
+    <ol>
+        <li>Find Competitor A's 2026 revenue (from their financial reports or APIs)</li>
+        <li>Find Competitor B's 2026 revenue (same source type)</li>
+        <li>Compare the two numbers and explain the difference</li>
+        <li>Draw conclusions about market position</li>
+    </ol>
+
+    <h3>4. Tool Use and Grounding Functions</h3>
+    <p>Tools are how agents interact with the world. Common tools include:</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Knowledge Tools</h4>
+    <p>Search engines, Wikipedia, knowledge bases, vector databases for semantic search.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Computational Tools</h4>
+    <p>Calculators, code execution, scientific computing, symbolic math.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Data Tools</h4>
+    <p>Database queries, API calls, data transformation, analytics.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Action Tools</h4>
+    <p>Sending emails, posting to social media, triggering workflows, file I/O.</p>
+</div>
+    </div>
+
+    <h3>5. Memory: The Agent's Long-Term Storage</h3>
+    <p>While LLM context windows are limited (4K to 200K tokens), agents need to remember:</p>
+    <ul>
+        <li><strong>Episodic memory:</strong> What happened in past interactions (conversation history)</li>
+        <li><strong>Semantic memory:</strong> Facts and knowledge learned (vector embeddings)</li>
+        <li><strong>Procedural memory:</strong> How to accomplish tasks (learned patterns, heuristics)</li>
+        <li><strong>State memory:</strong> Current progress toward goals</li>
+    </ul>
+
+    <p>Agents use techniques like retrieval-augmented generation (RAG) to efficiently access relevant memories without overloading the context window.</p>
+
+    <h3>6. Reasoning and Decision-Making</h3>
+    <p>How agents decide what to do next is critical. Different reasoning frameworks include:</p>
+    <ul>
+        <li><strong>Chain-of-Thought (CoT):</strong> Generate intermediate reasoning steps</li>
+        <li><strong>ReAct:</strong> Interleave reasoning (Thought) and acting (Action)</li>
+        <li><strong>Plan-and-Execute:</strong> Create a full plan first, then execute it</li>
+        <li><strong>Tree-of-Thought:</strong> Explore multiple reasoning paths and backtrack</li>
+        <li><strong>Hierarchical Planning:</strong> Abstract high-level goals into lower-level tactics</li>
+    </ul>
+
+    <h3>7. Error Handling and Recovery</h3>
+    <p>Agents must be robust. When something goes wrong:</p>
+    <ul>
+        <li><strong>Detection:</strong> Recognize that an action failed (error message, validation failure)</li>
+        <li><strong>Analysis:</strong> Understand why it failed</li>
+        <li><strong>Recovery:</strong> Try a different approach or ask for help</li>
+        <li><strong>Learning:</strong> Update mental model to avoid the same error next time</li>
+    </ul>
+
+    <p>A naive agent that stops after the first failure is useless. A sophisticated agent adapts, retries with different parameters, or escalates to a human operator.</p>
+</section>
+
+<!-- SECTION: The Agent Loop -->
+<section id="agent-loop" class="ml-section">
+    <h2>The Agent Loop in Detail</h2>
+
+    <p>Let's zoom in on each phase of the agent loop and understand what happens.</p>
+
+    <h3>Phase 1: Observation</h3>
+    <p>The agent perceives its environment. This might be:</p>
+    <ul>
+        <li>A user query: "What is the market cap of Tesla?"</li>
+        <li>Sensor data: A robot perceives an obstacle in its path</li>
+        <li>API response: The agent receives feedback from a previous action</li>
+        <li>Internal state: The agent checks its memory and current progress</li>
+    </ul>
+
+    <p>The observation is encoded as context — usually text — that the agent processes.</p>
+
+    <h3>Phase 2: Thinking</h3>
+    <p>Given the observation, the agent thinks about what to do. The agent's "thinking" involves:</p>
+    <ul>
+        <li><strong>Reasoning:</strong> Apply reasoning frameworks (ReAct, CoT) to understand the situation</li>
+        <li><strong>Planning:</strong> Generate one or more candidate next actions</li>
+        <li><strong>Evaluation:</strong> Estimate which action is most likely to make progress toward the goal</li>
+        <li><strong>Decision:</strong> Select the best action</li>
+    </ul>
+
+    <p>This is where the LLM's reasoning comes in. Modern LLMs are remarkably good at this step when given proper prompting.</p>
+
+    <div class="info-box">
+    <h4>Internal vs External Reasoning</h4>
+    <p>The agent can use tokens for 'internal' reasoning (thoughts that don't appear to the user) or 'external' reasoning (visible to observers). Some agent frameworks maximize reasoning steps; others minimize them for latency.</p>
+</div>
+
+    <h3>Phase 3: Action</h3>
+    <p>The agent executes the selected action. This might be:</p>
+    <ul>
+        <li><strong>Calling a tool:</strong> "Search the web for Tesla's market cap"</li>
+        <li><strong>Memory operation:</strong> "Store this fact for later retrieval"</li>
+        <li><strong>Communication:</strong> "Send this email"</li>
+        <li><strong>Environment modification:</strong> "Move the robot forward 1 meter"</li>
+        <li><strong>Special actions:</strong> "Ask the user for clarification" (escalation)</li>
+    </ul>
+
+    <p>The action is typically structured (not free-form text). Modern agent frameworks use function calling — the LLM outputs a structured representation of what it wants to do.</p>
+
+    <h3>Phase 4: Observation of Results</h3>
+    <p>After the action, the agent observes the results:</p>
+    <ul>
+        <li><strong>Success:</strong> The tool returned useful data</li>
+        <li><strong>Partial success:</strong> The tool returned something, but it's incomplete or noisy</li>
+        <li><strong>Failure:</strong> The tool returned an error</li>
+    </ul>
+
+    <p>The agent feeds this result back into the reasoning loop. If the goal is achieved, it stops. Otherwise, it loops back to thinking.</p>
+
+    <h3>Termination Conditions</h3>
+    <p>Agents must have clear stopping conditions:</p>
+    <ul>
+        <li><strong>Goal achieved:</strong> The agent has successfully completed the task</li>
+        <li><strong>Max iterations reached:</strong> The agent has taken N steps and should stop</li>
+        <li><strong>Unrecoverable error:</strong> The agent has encountered a fatal failure</li>
+        <li><strong>User interruption:</strong> The user has stopped the agent</li>
+        <li><strong>Escalation:</strong> The agent has decided the task requires human intervention</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Design Principle:</strong> Always set a maximum number of agent iterations. An agent in an infinite loop is worse than a failed agent. Most tasks should complete in 5-15 steps; if it takes more, the problem decomposition is likely wrong.</p>
+</div>
+
+    <h3>Animated Loop Diagram</h3>
+    <div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 2px solid #0891b2; border-radius: 8px; padding: 2rem; margin: 1.5rem 0; text-align: center;">
+        <svg width="100%" height="300" viewBox="0 0 600 300" style="max-width: 600px; margin: 0 auto;">
+            <!-- Central goal -->
+            <circle cx="300" cy="150" r="40" fill="#7c3aed" opacity="0.1" stroke="#7c3aed" stroke-width="2" stroke-dasharray="5,5"/>
+            <text x="300" y="155" text-anchor="middle" font-size="12" font-weight="bold" fill="#7c3aed">GOAL</text>
+            
+            <!-- Observe (top) -->
+            <circle cx="300" cy="40" r="35" fill="#0891b2" opacity="0.2" stroke="#0891b2" stroke-width="2"/>
+            <text x="300" y="45" text-anchor="middle" font-size="14" font-weight="bold" fill="#0891b2">Observe</text>
+            
+            <!-- Think (right) -->
+            <circle cx="470" cy="150" r="35" fill="#6366f1" opacity="0.2" stroke="#6366f1" stroke-width="2"/>
+            <text x="470" y="155" text-anchor="middle" font-size="14" font-weight="bold" fill="#6366f1">Think</text>
+            
+            <!-- Act (bottom) -->
+            <circle cx="300" cy="260" r="35" fill="#059669" opacity="0.2" stroke="#059669" stroke-width="2"/>
+            <text x="300" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="#059669">Act</text>
+            
+            <!-- Left (feedback) -->
+            <circle cx="130" cy="150" r="35" fill="#db2777" opacity="0.2" stroke="#db2777" stroke-width="2"/>
+            <text x="130" y="150" text-anchor="middle" font-size="12" font-weight="bold" fill="#db2777">Process</text>
+            <text x="130" y="163" text-anchor="middle" font-size="12" font-weight="bold" fill="#db2777">Result</text>
+            
+            <!-- Arrows -->
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                    <polygon points="0 0, 10 3, 0 6" fill="#666"/>
+                </marker>
+            </defs>
+            
+            <!-- Top arrow: Observe → Think -->
+            <path d="M 340 70 L 430 120" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- Right arrow: Think → Act -->
+            <path d="M 440 190 L 330 230" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- Bottom arrow: Act → Result -->
+            <path d="M 270 270 L 170 190" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- Left arrow: Result → Observe -->
+            <path d="M 155 130 L 275 65" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+        </svg>
+        <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--text-dim);"><em>Continuous loop until goal achieved or termination condition reached</em></p>
+    </div>
+</section>
+
+<!-- SECTION: Reasoning Frameworks -->
+<section id="reasoning-frameworks" class="ml-section">
+    <h2>Reasoning Frameworks: ReAct, Chain-of-Thought, and Beyond</h2>
+
+    <p>Different situations require different reasoning approaches. Here are the major frameworks and when to use each.</p>
+
+    <h3>1. Chain-of-Thought (CoT): Making Reasoning Visible</h3>
+    <p>Chain-of-Thought is the simplest reasoning framework. The agent generates intermediate reasoning steps before arriving at a conclusion. Instead of jumping directly to an answer, it shows its work.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Chain-of-Thought Example</div>
+    <div class="code-content">
+<span class="comment"># Prompt</span>
+You are a helpful assistant. Think through this step by step.
+
+Question: Alice has <span class="number">3</span> apples. She buys <span class="number">5</span> more. Her friend gives her <span class="number">2</span>.
+How many apples does Alice have now?
+
+<span class="comment"># Expected output</span>
+Thought: Let me work through this step by step.
+- Alice starts <span class="keyword">with</span> <span class="number">3</span> apples
+- She buys <span class="number">5</span> more: <span class="number">3</span> + <span class="number">5</span> = <span class="number">8</span> apples
+- Her friend gives her <span class="number">2</span>: <span class="number">8</span> + <span class="number">2</span> = <span class="number">10</span> apples
+- So Alice has <span class="number">10</span> apples total.
+
+Answer: Alice has <span class="number">10</span> apples.
+</div>
+</div>
+
+    <p>CoT is helpful because:</p>
+    <ul>
+        <li>It improves accuracy on multi-step reasoning tasks (often 5-10% improvement)</li>
+        <li>It makes the agent's thinking transparent and debuggable</li>
+        <li>It helps the LLM avoid rushing to conclusions</li>
+    </ul>
+
+    <p>However, CoT has limitations:</p>
+    <ul>
+        <li>It increases token usage (longer responses)</li>
+        <li>It doesn't improve performance on all tasks (only complex reasoning)</li>
+        <li>It still can't fix hallucinations from lack of knowledge</li>
+    </ul>
+
+    <h3>2. ReAct: Reasoning + Acting (The Agent Framework)</h3>
+    <p>ReAct interleaves reasoning with action. Instead of thinking of everything then acting, the agent thinks, acts, observes results, then thinks again based on what it learned.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — ReAct Loop Example</div>
+    <div class="code-content">
+User: <span class="string">"Who won the 2024 Nobel Prize in Physiology or Medicine?"</span>
+
+Agent Loop:
+[Thought <span class="number">1</span>] I need to find information about the <span class="number">2024</span> Nobel Prize <span class="keyword">in</span> Physiology <span class="keyword">or</span> Medicine.
+Let me search <span class="keyword">for</span> this information.
+
+[Action <span class="number">1</span>] Search: <span class="string">"2024 Nobel Prize Physiology Medicine winner"</span>
+
+[Observation <span class="number">1</span>] The search returned: <span class="string">"The 2024 Nobel Prize in Physiology or Medicine
+was awarded to Victor Ambros and Gary Ruvkun for the discovery of microRNA and its
+role in post-transcriptional gene regulation."</span>
+
+[Thought <span class="number">2</span>] Great! I found the answer. The <span class="number">2024</span> Nobel Prize was awarded to two scientists:
+Victor Ambros <span class="keyword">and</span> Gary Ruvkun. Let me provide this information to the user.
+
+[Action <span class="number">2</span>] Respond to user
+
+[Final Response] The <span class="number">2024</span> Nobel Prize <span class="keyword">in</span> Physiology <span class="keyword">or</span> Medicine was awarded to
+Victor Ambros <span class="keyword">and</span> Gary Ruvkun <span class="keyword">for</span> their discovery of microRNA <span class="keyword">and</span> its role <span class="keyword">in</span>
+post-transcriptional gene regulation.
+</div>
+</div>
+
+    <p>ReAct is powerful because:</p>
+    <ul>
+        <li>Agents can verify their reasoning against reality</li>
+        <li>If reasoning was wrong, they can correct it based on observation</li>
+        <li>Tool calls are motivated by explicit reasoning</li>
+        <li>It's interpretable — you can see why the agent took each action</li>
+    </ul>
+
+    <h3>3. Plan-and-Execute: Two-Phase Reasoning</h3>
+    <p>Some tasks benefit from planning before acting. In Plan-and-Execute, the agent first creates a full plan, then executes it step by step.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Plan-and-Execute Example</div>
+    <div class="code-content">
+User: <span class="string">"Plan a 3-day trip to Tokyo for someone interested in technology and food."</span>
+
+[Planning Phase]
+I<span class="string">'ll break this into a plan:
+
+Plan:
+Day 1:
+  - Visit teamLab Borderless (digital art/tech experience)
+  - Lunch at a tech-themed café
+  - Visit Akihabara electronics district
+  - Dinner at Michelin-starred restaurant
+
+Day 2:
+  - Visit Sony Building
+  - Lunch at conveyor belt sushi
+  - Visit Mori Art Museum (tech architecture)
+  - Dinner at traditional izakaya
+
+Day 3:
+  - Visit Robot Restaurant (closing soon, see it!)
+  - Lunch at food market
+  - Visit Roppongi tech district
+  - Dinner recommendations and packing
+
+[Execution Phase]
+Now I'</span>ll flesh out each item:
+
+Day <span class="number">1</span>:
+  - teamLab Borderless: Located <span class="keyword">in</span> Odaiba. <span class="number">2</span>-<span class="number">3</span> hours needed. Entry fee: ¥<span class="number">3</span>,<span class="number">400</span>.
+    Hours: <span class="number">10</span> AM - <span class="number">7</span> PM. (Getting more details about current exhibits)...
+</div>
+</div>
+
+    <p>Use Plan-and-Execute when:</p>
+    <ul>
+        <li>The task is complex with multiple steps</li>
+        <li>There are dependencies between steps (some tasks must happen before others)</li>
+        <li>You want to ensure comprehensive coverage of the task</li>
+        <li>You want the user to see and approve the plan before execution</li>
+    </ul>
+
+    <h3>4. Tree-of-Thought: Exploring Multiple Paths</h3>
+    <p>For problems where the solution path is uncertain, Tree-of-Thought explores multiple reasoning branches and selects the most promising ones.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Tree-of-Thought Pseudocode</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">tree_of_thought</span>(problem, max_depth=<span class="number">3</span>):
+    <span class="string">"""Explore multiple reasoning paths like a game tree."""</span>
+    
+    root = <span class="function">Node</span>(problem)
+    nodes_to_explore = [root]
+    
+    <span class="keyword">for</span> depth <span class="keyword">in</span> <span class="function">range</span>(max_depth):
+        next_nodes = []
+        
+        <span class="keyword">for</span> node <span class="keyword">in</span> nodes_to_explore:
+            <span class="comment"># Generate multiple possible next steps</span>
+            candidates = <span class="function">generate_candidates</span>(node.state, k=<span class="number">3</span>)
+            
+            <span class="keyword">for</span> candidate <span class="keyword">in</span> candidates:
+                child = <span class="function">Node</span>(candidate)
+                <span class="comment"># Evaluate if this path looks promising</span>
+                score = <span class="function">evaluate_promising</span>(child)
+                next_nodes.<span class="function">append</span>((child, score))
+        
+        <span class="comment"># Keep only the top K most promising paths (prune the tree)</span>
+        nodes_to_explore = [n <span class="keyword">for</span> n, s <span class="keyword">in</span> <span class="function">sorted</span>(next_nodes, 
+                                                  key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], 
+                                                  reverse=<span class="keyword">True</span>)][:<span class="number">5</span>]
+    
+    <span class="comment"># Return the best final state found</span>
+    <span class="keyword">return</span> <span class="function">best_solution</span>(nodes_to_explore)
+</div>
+</div>
+
+    <p>Tree-of-Thought is useful for:</p>
+    <ul>
+        <li>Mathematical problem-solving</li>
+        <li>Complex reasoning tasks where multiple solution paths exist</li>
+        <li>Scenarios where the LLM might initially choose a suboptimal path</li>
+    </ul>
+
+    <p>However, it's more computationally expensive (multiple LLM calls) and better for problems where verification is possible.</p>
+
+    <h3>Comparison: Which Framework to Use?</h3>
+
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Framework</th>
+                    <th>When to Use</th>
+                    <th>Token Cost</th>
+                    <th>Accuracy Gain</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Chain-of-Thought</strong></td>
+                    <td>Simple reasoning, need transparency</td>
+                    <td>~+20%</td>
+                    <td>+5-10%</td>
+                </tr>
+                <tr>
+                    <td><strong>ReAct</strong></td>
+                    <td>Need grounding in tools/reality</td>
+                    <td>~+40%</td>
+                    <td>+15-30%</td>
+                </tr>
+                <tr>
+                    <td><strong>Plan-and-Execute</strong></td>
+                    <td>Complex multi-step tasks</td>
+                    <td>~+50%</td>
+                    <td>+10-25%</td>
+                </tr>
+                <tr>
+                    <td><strong>Tree-of-Thought</strong></td>
+                    <td>Uncertain solution paths, math</td>
+                    <td>~+200-300%</td>
+                    <td>+20-50%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Practical Recommendation:</strong> Start with ReAct for most agent applications. It provides excellent results without excessive token cost. Use Tree-of-Thought only for high-stakes problems where accuracy matters more than latency.</p>
+</div>
+</section>
+
+<!-- SECTION: Tool Use & Grounding -->
+<section id="tool-use" class="ml-section">
+    <h2>Tool Use and Grounding: Connecting Agents to Reality</h2>
+
+    <p>A language model without tools is just a text predictor. Tools are what make agents real. Tools connect the agent to databases, APIs, sensors, and the outside world.</p>
+
+    <h3>Why Tools Matter</h3>
+    <ul>
+        <li><strong>Grounding:</strong> Agents can verify knowledge against reality</li>
+        <li><strong>Actions:</strong> Agents can modify the world, not just talk about it</li>
+        <li><strong>Freshness:</strong> Agents can access real-time information (stock prices, weather)</li>
+        <li><strong>Accuracy:</strong> Agents can use specialized tools (calculators, code execution)</li>
+        <li><strong>Delegation:</strong> Agents can offload computation to appropriate systems</li>
+    </ul>
+
+    <h3>Types of Tools</h3>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>API Tools</h4>
+    <p>Call REST APIs, GraphQL endpoints, RPC services. Examples: weather API, stock data, payment processors.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Database Tools</h4>
+    <p>Query databases, retrieve structured data. Examples: SQL queries, document stores, search indices.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Search Tools</h4>
+    <p>Search engines, vector similarity search, RAG. Examples: web search, internal knowledge base.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Compute Tools</h4>
+    <p>Code execution, calculations, simulations. Examples: Python interpreter, math engines, ML inference.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>File System Tools</h4>
+    <p>Read/write files, directory operations. Examples: document processing, logs.</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Custom Tools</h4>
+    <p>Domain-specific operations. Examples: domain registration, sensor control, payment integration.</p>
+</div>
+    </div>
+
+    <h3>Implementing a Simple Tool: Weather Lookup</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Tool Definition in LangChain</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain.agents <span class="keyword">import</span> tool
+<span class="keyword">import</span> requests
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">get_weather</span>(location: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Get current weather for a location.
+    
+    Args:
+        location: City name, e.g. "London" or "London, UK"
+    
+    Returns:
+        Current weather conditions and temperature
+    """</span>
+    <span class="keyword">try</span>:
+        <span class="comment"># Call a weather API (example: Open-Meteo which is free)</span>
+        url = <span class="string">f"https://geocoding-api.open-meteo.com/v1/search?name={location}&amp;count=1"</span>
+        geo_response = requests.<span class="function">get</span>(url).<span class="function">json</span>()
+        
+        <span class="keyword">if</span> <span class="keyword">not</span> geo_response.<span class="function">get</span>(<span class="string">'results'</span>):
+            <span class="keyword">return</span> <span class="string">f"Location '{location}' not found"</span>
+        
+        result = geo_response[<span class="string">'results'</span>][<span class="number">0</span>]
+        lat, lon = result[<span class="string">'latitude'</span>], result[<span class="string">'longitude'</span>]
+        
+        <span class="comment"># Get weather data</span>
+        weather_url = <span class="string">f"https://api.open-meteo.com/v1/forecast?latitude={lat}&amp;longitude={lon}&amp;current=temperature_2m,weather_code"</span>
+        weather_data = requests.<span class="function">get</span>(weather_url).<span class="function">json</span>()
+        
+        current = weather_data[<span class="string">'current'</span>]
+        temp = current[<span class="string">'temperature_2m'</span>]
+        
+        <span class="keyword">return</span> <span class="string">f"Current weather in {location}: {temp}°C, conditions: {current.get('weather_code', 'Clear')}"</span>
+    
+    <span class="keyword">except</span> <span class="function">Exception</span> <span class="keyword">as</span> e:
+        <span class="keyword">return</span> <span class="string">f"Error getting weather: {str(e)}"</span>
+
+<span class="comment"># The @tool decorator makes this available to the agent</span>
+<span class="comment"># The agent can call it like: get_weather(location="London")</span>
+</div>
+</div>
+
+    <h3>Best Practices for Tool Design</h3>
+    <ul>
+        <li><strong>Clear Names:</strong> Tool names should clearly indicate what they do</li>
+        <li><strong>Clear Docstrings:</strong> The agent uses the docstring to decide whether to call the tool</li>
+        <li><strong>Typed Arguments:</strong> Include type hints so the agent knows what to pass</li>
+        <li><strong>Error Handling:</strong> Tools should never crash; return error messages instead</li>
+        <li><strong>Reasonable Output:</strong> Tool output should be in a form the LLM can understand</li>
+        <li><strong>Feedback:</strong> Include information in the output that helps the agent decide next steps</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Tool Composition</h4>
+    <p>Complex tools can be built from simpler tools. For example, a 'research' tool might internally use web search, then summarize results. This layering makes agents more maintainable.</p>
+</div>
+
+    <h3>Common Tool Patterns</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Search + Summarize Pattern</div>
+    <div class="code-content">
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">research_topic</span>(topic: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Research a topic and return key findings.
+    
+    Args:
+        topic: The topic to research
+    
+    Returns:
+        Summary of key findings
+    """</span>
+    <span class="comment"># Step 1: Search for information</span>
+    search_results = <span class="function">search_web</span>(topic)
+    
+    <span class="keyword">if</span> <span class="keyword">not</span> search_results:
+        <span class="keyword">return</span> <span class="string">f"No results found for '{topic}'"</span>
+    
+    <span class="comment"># Step 2: Summarize results</span>
+    summaries = [r[<span class="string">'summary'</span>] <span class="keyword">for</span> r <span class="keyword">in</span> search_results[:<span class="number">3</span>]]
+    combined = <span class="string">"\n"</span>.<span class="function">join</span>(summaries)
+    
+    <span class="comment"># Step 3: Let the LLM synthesize (via calling another tool)</span>
+    synthesis = <span class="function">summarize_text</span>(combined)
+    
+    <span class="keyword">return</span> synthesis
+</div>
+</div>
+
+    <h3>Tool Chaining: Complex Operations from Simple Tools</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Tool Chaining Example</div>
+    <div class="code-content">
+<span class="comment"># Scenario: User asks "What was Tesla's Q3 2024 revenue compared to Q3 2023?"</span>
+
+<span class="comment"># The agent decomposes this into steps:</span>
+
+Step <span class="number">1</span>: Call search_financial_data
+Result: <span class="string">"Tesla Q3 2024 revenue: $24.18 billion (found in investor relations)"</span>
+
+Step <span class="number">2</span>: Call search_financial_data
+Result: <span class="string">"Tesla Q3 2023 revenue: $21.45 billion (found in investor relations)"</span>
+
+Step <span class="number">3</span>: Call calculate_comparison
+Input: (<span class="number">24.18</span>, <span class="number">21.45</span>)
+Result: <span class="string">"Q3 2024 revenue was $2.73B more than Q3 2023, a 12.7% year-over-year increase"</span>
+
+Step <span class="number">4</span>: Format <span class="keyword">and</span> respond to user
+Result: <span class="string">"Tesla's Q3 2024 revenue of $24.18B represented a 12.7% increase over
+Q3 2023's $21.45B..."</span>
+</div>
+</div>
+
+    <h3>Error Handling: Making Tools Robust</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Robust Tool with Fallbacks</div>
+    <div class="code-content">
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">fetch_document</span>(doc_id: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Fetch a document by ID with graceful error handling.
+    
+    Args:
+        doc_id: Document identifier
+    
+    Returns:
+        Document content or helpful error message
+    """</span>
+    <span class="comment"># Try primary source first</span>
+    <span class="keyword">try</span>:
+        <span class="keyword">return</span> <span class="function">fetch_from_database</span>(doc_id)
+    <span class="keyword">except</span> DatabaseTimeout:
+        <span class="comment"># If primary source is slow, try cache</span>
+        <span class="keyword">try</span>:
+            <span class="keyword">return</span> <span class="function">fetch_from_cache</span>(doc_id)
+        <span class="keyword">except</span> CacheError:
+            <span class="comment"># If everything fails, explain to the agent</span>
+            <span class="keyword">return</span> <span class="string">f"Document {doc_id} is temporarily unavailable. Try again in a few moments."</span>
+    <span class="keyword">except</span> DocumentNotFound:
+        <span class="comment"># Clear error message</span>
+        <span class="keyword">return</span> <span class="string">f"Document {doc_id} does not exist in the system."</span>
+    <span class="keyword">except</span> <span class="function">PermissionError</span>:
+        <span class="comment"># Escalation info</span>
+        <span class="keyword">return</span> <span class="string">f"You don't have permission to access document {doc_id}. Request access from your manager."</span>
+</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Key Principle:</strong> Good tool error messages contain actionable information. Instead of 'Error', say 'Database timeout - retrying would likely succeed' or 'Permission denied - contact admin@company.com'.</p>
+</div>
+</section>
+
+<!-- SECTION: Planning & Task Decomposition -->
+<section id="planning" class="ml-section">
+    <h2>Planning and Task Decomposition</h2>
+
+    <p>The difference between a capable agent and a floundering one often comes down to planning. Complex tasks require breaking them into subtasks, understanding dependencies, and executing in the right order.</p>
+
+    <h3>Task Decomposition: The Core Skill</h3>
+    <p>Given a goal, the agent must ask:</p>
+    <ul>
+        <li>What are the subgoals needed to achieve this goal?</li>
+        <li>What information do I need to gather first?</li>
+        <li>Are there any prerequisites or dependencies?</li>
+        <li>What could go wrong at each step?</li>
+        <li>How will I know if I've succeeded?</li>
+    </ul>
+
+    <div class="code-block">
+    <div class="code-header">Python — Task Decomposition Example</div>
+    <div class="code-content">
+User Goal: <span class="string">"Create a marketing strategy for our new AI product targeting SMBs"</span>
+
+Decomposition:
+
+Level <span class="number">1</span> (High-level tasks):
+<span class="number">1</span>. Research the SMB market <span class="keyword">and</span> competitive landscape
+<span class="number">2</span>. Define our target audience segments
+<span class="number">3</span>. Analyze competitor positioning
+<span class="number">4</span>. Develop messaging <span class="keyword">and</span> value propositions
+<span class="number">5</span>. Plan marketing channels <span class="keyword">and</span> tactics
+<span class="number">6</span>. Create a budget <span class="keyword">and</span> resource allocation plan
+<span class="number">7</span>. Define success metrics <span class="keyword">and</span> KPIs
+
+Level <span class="number">2</span> (Expanding task <span class="number">1</span>):
+<span class="number">1.1</span>. Define <span class="string">"SMB"</span> <span class="keyword">for</span> our <span class="function">product</span> (size, industry, geography)
+<span class="number">1.2</span>. Research SMB AI adoption rates <span class="keyword">and</span> needs
+<span class="number">1.3</span>. Research SMB tech budgets <span class="keyword">and</span> purchasing processes
+<span class="number">1.4</span>. Analyze market size <span class="keyword">and</span> growth trends
+<span class="number">1.5</span>. Identify pain points SMBs face that our product solves
+
+Level <span class="number">2</span> (Expanding task <span class="number">3</span>):
+<span class="number">3.1</span>. List <span class="number">5</span>-<span class="number">10</span> competitors <span class="keyword">in</span> the SMB AI space
+<span class="number">3.2</span>. For each competitor: pricing, features, target market, messaging
+<span class="number">3.3</span>. Identify competitive <span class="function">gaps</span> (features they lack, markets they ignore)
+<span class="number">3.4</span>. Identify our unique advantages
+<span class="number">3.5</span>. Determine how to position against each competitor
+
+...<span class="keyword">and</span> so on
+</div>
+</div>
+
+    <h3>Hierarchical Planning</h3>
+    <p>Agents work best with hierarchical plans — breaking problems from abstract to concrete:</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>Level 1</strong><br><small>High-level goal</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>Level 2</strong><br><small>Subgoals</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>Level 3</strong><br><small>Concrete tasks</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>Level 4</strong><br><small>Actions</small>
+        </div>
+    </div>
+
+    <h3>Handling Dependencies</h3>
+    <p>Not all subtasks can be done in parallel. Some depend on results from others:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Dependency-Aware Planning</div>
+    <div class="code-content">
+<span class="comment"># Tasks and their dependencies</span>
+tasks = {
+    <span class="string">"research_market"</span>: {
+        <span class="string">"depends_on"</span>: [],  <span class="comment"># No dependencies</span>
+        <span class="string">"effort"</span>: <span class="string">"high"</span>
+    },
+    <span class="string">"define_target_audience"</span>: {
+        <span class="string">"depends_on"</span>: [<span class="string">"research_market"</span>],  <span class="comment"># Must do market research first</span>
+        <span class="string">"effort"</span>: <span class="string">"medium"</span>
+    },
+    <span class="string">"analyze_competitors"</span>: {
+        <span class="string">"depends_on"</span>: [<span class="string">"define_target_audience"</span>],  <span class="comment"># Need to know audience first</span>
+        <span class="string">"effort"</span>: <span class="string">"high"</span>
+    },
+    <span class="string">"develop_messaging"</span>: {
+        <span class="string">"depends_on"</span>: [<span class="string">"define_target_audience"</span>, <span class="string">"analyze_competitors"</span>],
+        <span class="string">"effort"</span>: <span class="string">"medium"</span>
+    },
+    <span class="string">"plan_channels"</span>: {
+        <span class="string">"depends_on"</span>: [<span class="string">"develop_messaging"</span>],
+        <span class="string">"effort"</span>: <span class="string">"medium"</span>
+    },
+    <span class="string">"allocate_budget"</span>: {
+        <span class="string">"depends_on"</span>: [<span class="string">"plan_channels"</span>],  <span class="comment"># Need to know channels first</span>
+        <span class="string">"effort"</span>: <span class="string">"low"</span>
+    }
+}
+
+<span class="comment"># Execution order respects dependencies:</span>
+<span class="comment"># 1. research_market (no deps)</span>
+<span class="comment"># 2. define_target_audience (after 1)</span>
+<span class="comment"># 3. analyze_competitors (after 2)</span>
+<span class="comment"># 4. develop_messaging (after 3)</span>
+<span class="comment"># 5. plan_channels (after 4)</span>
+<span class="comment"># 6. allocate_budget (after 5)</span>
+</div>
+</div>
+
+    <h3>Adaptive Planning: Replanning When Things Change</h3>
+    <p>Agents should monitor if their plan is still valid and replan if needed:</p>
+
+    <ul>
+        <li><strong>Assumption violation:</strong> A fact the plan depends on turned out to be wrong</li>
+        <li><strong>New information:</strong> Data discovered mid-plan suggests a better approach</li>
+        <li><strong>Tool failure:</strong> A tool the plan relied on is unavailable</li>
+        <li><strong>Resource constraint:</strong> Time or budget is running out</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Replanning Threshold</h4>
+    <p>Agents should replan if the cost of replanning is less than the cost of continuing with a suboptimal plan. This is a heuristic decision, not always optimal.</p>
+</div>
+</section>
+
+<!-- SECTION: Memory Management -->
+<section id="memory" class="ml-section">
+    <h2>Memory Management: Building Agent Context</h2>
+
+    <p>Memory is the agent's long-term knowledge. Without memory, each agent interaction is isolated. With good memory, agents build understanding over time.</p>
+
+    <h3>Types of Agent Memory</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Episodic Memory</h4>
+    <p>What happened during this interaction. Conversation history, past actions, outcomes.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Semantic Memory</h4>
+    <p>Facts and knowledge. Learned during training or from documents. Indexed for retrieval.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Procedural Memory</h4>
+    <p>How to do things. Learned skills, patterns, heuristics. Implicit in agent behavior.</p>
+</div>
+        <div class="card green-accent">
+    <h4>State Memory</h4>
+    <p>Current progress. What goals are being pursued, what's been completed, what's next.</p>
+</div>
+    </div>
+
+    <h3>Episodic Memory: Conversation History</h3>
+    <p>The simplest form of memory is keeping the full conversation history:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Basic Conversation Memory</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationBufferMemory
+<span class="keyword">from</span> langchain.agents <span class="keyword">import</span> AgentExecutor, create_openai_tools_agent
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>)
+
+<span class="comment"># Create memory that stores all messages</span>
+memory = <span class="function">ConversationBufferMemory</span>(
+    memory_key=<span class="string">"chat_history"</span>,
+    return_messages=<span class="keyword">True</span>
+)
+
+<span class="comment"># Agents can access this memory</span>
+<span class="comment"># Problem: Memory grows infinitely, eventually exceeds context window</span>
+</div>
+</div>
+
+    <p>Problem: Full conversation history grows too large. Eventually exceeds the LLM's context window.</p>
+
+    <h3>Episodic Memory: Summarization and Sliding Window</h3>
+    <p>Instead of storing everything, summarize old conversations or use a sliding window:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Summarized Memory</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain.memory <span class="keyword">import</span> ConversationSummaryMemory
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>)
+
+<span class="comment"># Memory that summarizes old conversations</span>
+memory = <span class="function">ConversationSummaryMemory</span>(
+    llm=llm,
+    buffer="Last <span class="number">10</span> messages are stored verbatim.\
+            Older messages are summarized to key points."
+)
+
+<span class="comment"># Example:</span>
+<span class="comment"># After 50 messages, the memory might look like:</span>
+<span class="comment"># [Summary of messages 1-40 in 2-3 sentences]</span>
+<span class="comment"># [Messages 41-50 verbatim]</span>
+
+<span class="comment"># This keeps recent context while being compact</span>
+</div>
+</div>
+
+    <h3>Semantic Memory: Vector-Based Retrieval</h3>
+    <p>For large knowledge bases, agents use vector embeddings and semantic search:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Vector-Based Memory (RAG)</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain.embeddings <span class="keyword">import</span> OpenAIEmbeddings
+<span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma
+<span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> CharacterTextSplitter
+
+<span class="comment"># Create vector embeddings of documents</span>
+documents = <span class="function">load_documents</span>(<span class="string">"company_knowledge_base/"</span>)  <span class="comment"># PDFs, docs, etc.</span>
+text_splitter = <span class="function">CharacterTextSplitter</span>(chunk_size=<span class="number">1000</span>)
+texts = text_splitter.<span class="function">split_documents</span>(documents)
+
+embeddings = <span class="function">OpenAIEmbeddings</span>()
+vector_store = Chroma.<span class="function">from_documents</span>(texts, embeddings)
+
+<span class="comment"># Agent can now retrieve relevant documents</span>
+<span class="keyword">def</span> <span class="function">search_memory</span>(query: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Search the knowledge base."""</span>
+    results = vector_store.<span class="function">similarity_search</span>(query, k=<span class="number">3</span>)
+    <span class="keyword">return</span> <span class="string">"\n"</span>.<span class="function">join</span>([r.page_content <span class="keyword">for</span> r <span class="keyword">in</span> results])
+
+<span class="comment"># Agent uses this for grounding knowledge:</span>
+<span class="comment"># User: "What's our refund policy?"</span>
+<span class="comment"># Agent calls: search_memory("refund policy")</span>
+<span class="comment"># Gets: [Relevant policy documents]</span>
+<span class="comment"># Responds with accurate information grounded in reality</span>
+</div>
+</div>
+
+    <h3>State Memory: Progress Tracking</h3>
+    <p>Agents need to track what they're doing and what they've accomplished:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — State Management</div>
+    <div class="code-content">
+<span class="keyword">class</span> AgentState:
+    <span class="string">"""Track agent progress toward a goal."""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, goal: <span class="function">str</span>):
+        <span class="function">self</span>.goal = goal
+        <span class="function">self</span>.completed_steps = []
+        <span class="function">self</span>.pending_steps = []
+        <span class="function">self</span>.learned_facts = {}
+        <span class="function">self</span>.failures = []
+        <span class="function">self</span>.max_iterations = <span class="number">15</span>
+        <span class="function">self</span>.iteration_count = <span class="number">0</span>
+    
+    <span class="keyword">def</span> <span class="function">add_completed_step</span>(<span class="function">self</span>, step: <span class="function">str</span>, result: <span class="function">str</span>):
+        <span class="string">"""Record a completed step."""</span>
+        <span class="function">self</span>.completed_steps.<span class="function">append</span>({
+            <span class="string">"step"</span>: step,
+            <span class="string">"result"</span>: result,
+            <span class="string">"timestamp"</span>: datetime.<span class="function">now</span>()
+        })
+    
+    <span class="keyword">def</span> <span class="function">mark_failure</span>(<span class="function">self</span>, step: <span class="function">str</span>, error: <span class="function">str</span>, retry_count: <span class="function">int</span>):
+        <span class="string">"""Track failures for debugging."""</span>
+        <span class="function">self</span>.failures.<span class="function">append</span>({
+            <span class="string">"step"</span>: step,
+            <span class="string">"error"</span>: error,
+            <span class="string">"retry_count"</span>: retry_count
+        })
+    
+    <span class="keyword">def</span> <span class="function">should_continue</span>(<span class="function">self</span>) -> <span class="function">bool</span>:
+        <span class="string">"""Check if agent should keep going."""</span>
+        <span class="keyword">if</span> <span class="function">self</span>.iteration_count >= <span class="function">self</span>.max_iterations:
+            <span class="keyword">return</span> <span class="keyword">False</span>
+        <span class="keyword">if</span> <span class="function">too_many_failures</span>(<span class="function">self</span>.failures):
+            <span class="keyword">return</span> <span class="keyword">False</span>
+        <span class="keyword">return</span> <span class="keyword">True</span>
+</div>
+</div>
+
+    <h3>Conversation Memory + Vector Memory Integration</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Hybrid Memory System</div>
+    <div class="code-content">
+<span class="keyword">class</span> HybridMemory:
+    <span class="string">"""Combine conversation history with semantic search."""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, llm, vector_store):
+        <span class="function">self</span>.conversation_memory = <span class="function">ConversationSummaryMemory</span>(llm=llm)
+        <span class="function">self</span>.semantic_memory = vector_store  <span class="comment"># Vector database</span>
+        
+    <span class="keyword">def</span> <span class="function">remember</span>(<span class="function">self</span>, input_text: <span class="function">str</span>) -> <span class="function">str</span>:
+        <span class="string">"""Get relevant context for the agent.
+        
+        Returns both:
+        1. Recent conversation history (episodic)
+        2. Relevant documents from knowledge base (semantic)
+        """</span>
+        <span class="comment"># Get recent conversation</span>
+        conversation = <span class="function">self</span>.conversation_memory.<span class="function">load_memory_variables</span>()[<span class="string">"history"</span>]
+        
+        <span class="comment"># Get semantically similar documents</span>
+        relevant_docs = <span class="function">self</span>.semantic_memory.<span class="function">similarity_search</span>(input_text, k=<span class="number">3</span>)
+        
+        <span class="comment"># Combine them</span>
+        context = <span class="string">f"""
+Current Conversation Context:
+{conversation}
+
+Relevant Knowledge Base Documents:
+{relevant_docs}
+"""</span>
+        <span class="keyword">return</span> context
+
+<span class="comment"># Usage in agent:</span>
+<span class="comment"># Agent receives:</span>
+<span class="comment"># 1. The current user query</span>
+<span class="comment"># 2. Recent conversation history</span>
+<span class="comment"># 3. Semantically relevant documents</span>
+<span class="comment"># 4. This combination provides grounded, contextual understanding</span>
+</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Memory Design Principle:</strong> Different types of information need different storage. Recent conversations stay in full detail. Old conversations get summarized. Semantic facts go in vector databases. Current progress goes in state objects.</p>
+</div>
+</section>
+
+<!-- SECTION: Multi-Agent Systems -->
+<section id="multi-agent" class="ml-section">
+    <h2>Multi-Agent Systems: Specialization and Coordination</h2>
+
+    <p>Some problems are too complex for a single agent. Multi-agent systems use multiple specialized agents that collaborate (or compete) to solve problems.</p>
+
+    <h3>Why Multi-Agent Systems?</h3>
+    <ul>
+        <li><strong>Specialization:</strong> Different agents can specialize in different domains (research, writing, analysis)</li>
+        <li><strong>Scalability:</strong> Agents can work in parallel on different subproblems</li>
+        <li><strong>Robustness:</strong> If one agent fails, others can continue</li>
+        <li><strong>Diversity:</strong> Multiple agents with different reasoning styles may find better solutions</li>
+        <li><strong>Realistic:</strong> Mirrors how humans solve complex problems (teamwork)</li>
+    </ul>
+
+    <h3>Types of Multi-Agent Architectures</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Pipeline Architecture</h4>
+    <p>Agents process in sequence: Agent A's output becomes Agent B's input. Like an assembly line.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Hierarchical Architecture</h4>
+    <p>Manager agent decomposes tasks and delegates to worker agents. Manager coordinates results.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Democracy/Voting Architecture</h4>
+    <p>Multiple agents propose solutions. Best is selected by consensus or voting.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Pool Architecture</h4>
+    <p>All agents work on the same problem in parallel. Results are merged or ranked.</p>
+</div>
+    </div>
+
+    <h3>Example: Research Paper Writing Pipeline</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Multi-Agent Writing Pipeline</div>
+    <div class="code-content">
+<span class="comment"># Agent 1: Researcher Agent</span>
+researcher = <span class="function">Agent</span>(
+    role=<span class="string">"Research Specialist"</span>,
+    tools=[<span class="string">"search_papers"</span>, <span class="string">"fetch_pdf"</span>, <span class="string">"extract_key_findings"</span>],
+    goal=<span class="string">"Find relevant papers and extract key findings"</span>
+)
+
+<span class="comment"># Agent 2: Analysis Agent</span>
+analyst = <span class="function">Agent</span>(
+    role=<span class="string">"Data Analyst"</span>,
+    tools=[<span class="string">"analyze_trends"</span>, <span class="string">"identify_gaps"</span>, <span class="string">"compare_methodologies"</span>],
+    goal=<span class="string">"Analyze research trends and identify knowledge gaps"</span>
+)
+
+<span class="comment"># Agent 3: Writing Agent</span>
+writer = <span class="function">Agent</span>(
+    role=<span class="string">"Technical Writer"</span>,
+    tools=[<span class="string">"outline_paper"</span>, <span class="string">"draft_sections"</span>, <span class="string">"citations"</span>],
+    goal=<span class="string">"Write a comprehensive research paper"</span>
+)
+
+<span class="comment"># Coordinator: Managers the flow</span>
+coordinator = <span class="function">Agent</span>(
+    role=<span class="string">"Project Manager"</span>,
+    agents=[researcher, analyst, writer],
+    goal=<span class="string">"Ensure all agents work together effectively"</span>
+)
+
+<span class="comment"># Pipeline:</span>
+<span class="comment"># 1. Researcher finds papers on topic</span>
+<span class="comment"># 2. Analyst extracts insights and identifies gaps</span>
+<span class="comment"># 3. Writer uses insights to draft the paper</span>
+<span class="comment"># 4. Coordinator validates progress and ensures quality</span>
+</div>
+</div>
+
+    <h3>Consensus-Based Decision Making</h3>
+    <p>When multiple agents disagree, consensus mechanisms help:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Consensus Agent System</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">consensus_decision</span>(agents: List[Agent], question: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Get consensus from multiple agents.
+    
+    Useful when you want multiple perspectives on a decision.
+    """</span>
+    
+    <span class="comment"># Step 1: Get each agent's answer</span>
+    answers = []
+    <span class="keyword">for</span> agent <span class="keyword">in</span> agents:
+        response = agent.<span class="function">answer</span>(question)
+        answers.<span class="function">append</span>(response)
+    
+    <span class="comment"># Step 2: Check for agreement</span>
+    <span class="keyword">if</span> <span class="function">all</span>(a == answers[<span class="number">0</span>] <span class="keyword">for</span> a <span class="keyword">in</span> answers):
+        <span class="keyword">return</span> answers[<span class="number">0</span>]  <span class="comment"># Full consensus</span>
+    
+    <span class="comment"># Step 3: If disagreement, debate</span>
+    debate_history = []
+    <span class="keyword">for</span> round_num <span class="keyword">in</span> <span class="function">range</span>(<span class="number">3</span>):  <span class="comment"># 3 rounds of debate</span>
+        <span class="keyword">for</span> i, agent <span class="keyword">in</span> <span class="function">enumerate</span>(agents):
+            <span class="comment"># Each agent sees others' views and can change mind</span>
+            other_views = [answers[j] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(agents)) <span class="keyword">if</span> j != i]
+            updated = agent.<span class="function">reconsider</span>(question, other_views)
+            answers[i] = updated
+            debate_history.<span class="function">append</span>((agent.role, updated))
+    
+    <span class="comment"># Step 4: Final vote</span>
+    votes = <span class="function">Counter</span>(answers)
+    <span class="keyword">return</span> votes.<span class="function">most_common</span>(<span class="number">1</span>)[<span class="number">0</span>][<span class="number">0</span>]  <span class="comment"># Return most common answer</span>
+
+<span class="comment"># Usage:</span>
+<span class="comment"># agents = [research_agent, coding_agent, design_agent]</span>
+<span class="comment"># decision = consensus_decision(agents, "Should we use React or Vue?")</span>
+<span class="comment"># Even if one agent has biased preferences, consensus gives balanced decision</span>
+</div>
+</div>
+
+    <h3>CrewAI: A Framework for Multi-Agent Teams</h3>
+    <p>CrewAI is a Python framework that simplifies building multi-agent teams:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — CrewAI Example</div>
+    <div class="code-content">
+<span class="keyword">from</span> crewai <span class="keyword">import</span> Agent, Task, Crew, Process
+
+<span class="comment"># Define specialized agents</span>
+researcher = <span class="function">Agent</span>(
+    role=<span class="string">"Market Research Analyst"</span>,
+    goal=<span class="string">"Find and analyze market opportunities"</span>,
+    backstory=<span class="string">"You are an expert at analyzing markets and identifying trends"</span>,
+    tools=[search_tool, analyze_tool],
+    verbose=<span class="keyword">True</span>
+)
+
+writer = <span class="function">Agent</span>(
+    role=<span class="string">"Content Writer"</span>,
+    goal=<span class="string">"Create compelling market analysis reports"</span>,
+    backstory=<span class="string">"You are an excellent writer skilled at explaining complex data"</span>,
+    tools=[write_tool, format_tool],
+    verbose=<span class="keyword">True</span>
+)
+
+<span class="comment"># Define tasks for each agent</span>
+research_task = <span class="function">Task</span>(
+    description=<span class="string">"Research the AI agent market. Find size, growth, key players, trends."</span>,
+    agent=researcher
+)
+
+writing_task = <span class="function">Task</span>(
+    description=<span class="string">"Write a compelling market analysis report based on the research"</span>,
+    agent=writer
+)
+
+<span class="comment"># Create crew (team) with a process</span>
+crew = <span class="function">Crew</span>(
+    agents=[researcher, writer],
+    tasks=[research_task, writing_task],
+    process=Process.sequential,  <span class="comment"># Tasks done in order</span>
+    verbose=<span class="keyword">True</span>
+)
+
+<span class="comment"># Execute</span>
+result = crew.<span class="function">kickoff</span>()
+<span class="function">print</span>(result)
+</div>
+</div>
+
+    <h3>Emergent Behavior in Multi-Agent Systems</h3>
+    <p>Interestingly, multi-agent systems can exhibit <strong>emergent behavior</strong> — collective properties that arise from agent interactions but aren't explicitly programmed.</p>
+
+    <p>Examples:</p>
+    <ul>
+        <li>A team of agents independently working on subtasks naturally learns to avoid duplicate work</li>
+        <li>Agents sharing findings naturally create higher-quality synthesis than any single agent</li>
+        <li>Weak individual agents in a diverse team can outperform strong individual agents</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>The Diversity Hypothesis</h4>
+    <p>A team of diverse agents (different backgrounds, reasoning styles, knowledge) often outperforms a team of identical copies of the best agent. This mirrors human team dynamics and suggests depth of expertise matters less than diversity of perspective.</p>
+</div>
+</section>
+
+<!-- SECTION: Agent Frameworks -->
+<section id="frameworks" class="ml-section">
+    <h2>Agent Frameworks: Tools for Building Agents</h2>
+
+    <p>Building agents from scratch is complex. Frameworks abstract away boilerplate and best practices.</p>
+
+    <h3>Major Agent Frameworks</h3>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">LangChain</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #0891b2, #22d3ee);">Most popular, best docs</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">AutoGPT</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 70%; background: linear-gradient(90deg, #059669, #10b981);">Experimental, research-focused</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">CrewAI</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 65%; background: linear-gradient(90deg, #7c3aed, #a855f7);">Multi-agent, growing adoption</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Anthropic SDK</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 50%; background: linear-gradient(90deg, #db2777, #f472b6);">Native Claude integration</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>LangChain: The Standard</h3>
+    <p>LangChain is the most widely used agent framework. It provides:</p>
+    <ul>
+        <li>Predefined agent types (ReAct, OpenAI Functions, etc.)</li>
+        <li>A large library of tools and integrations</li>
+        <li>Memory management abstractions</li>
+        <li>Chain-of-thought execution</li>
+    </ul>
+
+    <div class="code-block">
+    <div class="code-header">Python — LangChain Agent Quickstart</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.agents <span class="keyword">import</span> AgentExecutor, create_openai_tools_agent
+<span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool
+<span class="keyword">from</span> langchain <span class="keyword">import</span> hub
+
+<span class="comment"># Define tools</span>
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">calculator</span>(expression: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Evaluate a mathematical expression."""</span>
+    <span class="keyword">return</span> <span class="function">str</span>(<span class="function">eval</span>(expression))
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">web_search</span>(query: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Search the web."""</span>
+    <span class="comment"># Actual implementation would call a search API</span>
+    <span class="keyword">return</span> <span class="string">f"Results for '{query}'..."</span>
+
+<span class="comment"># Get the prompt template</span>
+prompt = hub.<span class="function">pull</span>(<span class="string">"hwchase17/openai-tools-agent"</span>)
+
+<span class="comment"># Create the agent</span>
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>)
+tools = [calculator, web_search]
+
+agent = <span class="function">create_openai_tools_agent</span>(llm, tools, prompt)
+executor = AgentExecutor.<span class="function">from_agent_and_tools</span>(
+    agent=agent,
+    tools=tools,
+    verbose=<span class="keyword">True</span>,
+    max_iterations=<span class="number">10</span>
+)
+
+<span class="comment"># Run the agent</span>
+result = executor.<span class="function">invoke</span>({<span class="string">"input"</span>: <span class="string">"What is 42 * 3? Also, search for recent AI news."</span>})
+<span class="function">print</span>(result[<span class="string">"output"</span>])
+</div>
+</div>
+
+    <h3>Comparison: LangChain vs CrewAI</h3>
+
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>LangChain</th>
+                    <th>CrewAI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Maturity</strong></td>
+                    <td>Mature, 2+ years</td>
+                    <td>Newer, rapidly evolving</td>
+                </tr>
+                <tr>
+                    <td><strong>Single vs Multi-Agent</strong></td>
+                    <td>Primarily single-agent</td>
+                    <td>Multi-agent focus</td>
+                </tr>
+                <tr>
+                    <td><strong>Learning Curve</strong></td>
+                    <td>Steep, lots to learn</td>
+                    <td>Gentler, simpler API</td>
+                </tr>
+                <tr>
+                    <td><strong>Flexibility</strong></td>
+                    <td>Highly flexible, low-level</td>
+                    <td>Opinionated, high-level</td>
+                </tr>
+                <tr>
+                    <td><strong>Community</strong></td>
+                    <td>Large, many examples</td>
+                    <td>Growing fast</td>
+                </tr>
+                <tr>
+                    <td><strong>Best For</strong></td>
+                    <td>Custom solutions, production</td>
+                    <td>Teams, prototyping</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Building Your First Agent: Implementation Guide</h2>
+
+    <p>Let's build a complete, working agent from scratch. This agent researches companies and generates investment summaries.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Complete Working Agent</div>
+    <div class="code-content">
+<span class="comment">#!/usr/bin/env python3</span>
+<span class="string">"""Build a simple investment research agent."""</span>
+
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.agents <span class="keyword">import</span> AgentExecutor, create_openai_tools_agent
+<span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool
+<span class="keyword">from</span> langchain <span class="keyword">import</span> hub
+
+<span class="comment"># Setup</span>
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>, temperature=<span class="number">0</span>)
+
+<span class="comment"># Define tools the agent can use</span>
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">search_financial_data</span>(company_name: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Search for a company's financial data.
+    
+    Args:
+        company_name: Name of the company (e.g., 'Apple Inc', 'Tesla')
+    
+    Returns:
+        Financial summary including revenue, profit, growth rates
+    """</span>
+    <span class="comment"># In real implementation, query financial database or API</span>
+    data = {
+        <span class="string">"Apple"</span>: <span class="string">"Revenue: $383B (2023), Net Income: $100B, Growth: 5%"</span>,
+        <span class="string">"Tesla"</span>: <span class="string">"Revenue: $82B (2023), Net Income: $13B, Growth: 20%"</span>,
+        <span class="string">"Microsoft"</span>: <span class="string">"Revenue: $211B (2023), Net Income: $72B, Growth: 15%"</span>
+    }
+    <span class="keyword">return</span> data.<span class="function">get</span>(company_name, <span class="string">"Company not found in database"</span>)
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">search_recent_news</span>(company_name: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Search for recent news about a company.
+    
+    Args:
+        company_name: Company name
+    
+    Returns:
+        Summary of recent news
+    """</span>
+    <span class="comment"># In real implementation, query news API</span>
+    <span class="keyword">return</span> <span class="string">f"Recent news about {company_name}: Strong Q4 results, new product launches, market expansion"</span>
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">get_industry_data</span>(industry: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Get industry trends and benchmarks.
+    
+    Args:
+        industry: Industry name (e.g., 'technology', 'healthcare')
+    
+    Returns:
+        Industry metrics and trends
+    """</span>
+    <span class="keyword">return</span> <span class="string">f"Industry {industry}: Average growth 12%, profit margin 15%, key trends: AI adoption"</span>
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">calculate_ratios</span>(revenue: <span class="function">float</span>, net_income: <span class="function">float</span>) -> <span class="function">str</span>:
+    <span class="string">"""Calculate financial ratios.
+    
+    Args:
+        revenue: Company revenue
+        net_income: Company net income
+    
+    Returns:
+        Calculated financial ratios
+    """</span>
+    profit_margin = (net_income / revenue) * <span class="number">100</span>
+    <span class="keyword">return</span> <span class="string">f"Profit Margin: {profit_margin:.1f}%"</span>
+
+<span class="comment"># Get prompt template</span>
+prompt = hub.<span class="function">pull</span>(<span class="string">"hwchase17/openai-tools-agent"</span>)
+
+<span class="comment"># Create agent</span>
+tools = [search_financial_data, search_recent_news, get_industry_data, calculate_ratios]
+agent = <span class="function">create_openai_tools_agent</span>(llm, tools, prompt)
+
+<span class="comment"># Create executor with safety limits</span>
+executor = AgentExecutor.<span class="function">from_agent_and_tools</span>(
+    agent=agent,
+    tools=tools,
+    verbose=<span class="keyword">True</span>,
+    max_iterations=<span class="number">10</span>,
+    early_stopping_method=<span class="string">"force"</span>  <span class="comment"># Stop if loops too much</span>
+)
+
+<span class="comment"># Run the agent</span>
+<span class="keyword">if</span> <span class="function">__name__</span> == <span class="string">"__main__"</span>:
+    result = executor.<span class="function">invoke</span>({
+        <span class="string">"input"</span>: <span class="string">"Compare Apple and Tesla. Which is a better investment right now?"</span>
+    })
+    <span class="function">print</span>(<span class="string">"\n=== FINAL RESPONSE ==="</span>)
+    <span class="function">print</span>(result[<span class="string">"output"</span>])
+</div>
+</div>
+
+    <h3>Key Implementation Considerations</h3>
+    <ul>
+        <li><strong>Error Handling:</strong> Tools should never crash; return error messages instead</li>
+        <li><strong>Rate Limiting:</strong> Don't overwhelm APIs; add delays if needed</li>
+        <li><strong>Timeout Protection:</strong> Set timeouts on tool calls to prevent hangs</li>
+        <li><strong>Logging:</strong> Log all agent decisions for debugging and auditing</li>
+        <li><strong>Cost Control:</strong> Monitor API costs; set spending limits if needed</li>
+        <li><strong>Testing:</strong> Test tools independently before adding to agent</li>
+    </ul>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Code Examples: Multiple Frameworks</h2>
+
+    <h3>Example 1: ReAct Agent with <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a></h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — ReAct Pattern</div>
+    <div class="code-content">
+<span class="comment"># ReAct = Reasoning + Acting</span>
+<span class="comment"># Agent alternates between:</span>
+<span class="comment"># 1. Thought: Reason about what to do</span>
+<span class="comment"># 2. Action: Call a tool</span>
+<span class="comment"># 3. Observation: See the result</span>
+<span class="comment"># 4. Back to Thought (until goal reached)</span>
+
+<span class="keyword">from</span> langchain.agents <span class="keyword">import</span> AgentExecutor, create_react_agent
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">get_current_date</span>() -> <span class="function">str</span>:
+    <span class="string">"""Get today's date."""</span>
+    <span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+    <span class="keyword">return</span> datetime.<span class="function">now</span>().<span class="function">strftime</span>(<span class="string">"%Y-%m-%d"</span>)
+
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">calculate</span>(expression: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Calculate math expressions."""</span>
+    <span class="keyword">return</span> <span class="function">str</span>(<span class="function">eval</span>(expression))
+
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>)
+tools = [get_current_date, calculate]
+
+<span class="comment"># ReAct automatically structures thoughts and actions</span>
+agent = <span class="function">create_react_agent</span>(llm, tools, prompt_template)
+executor = AgentExecutor.<span class="function">from_agent_and_tools</span>(agent=agent, tools=tools, verbose=<span class="keyword">True</span>)
+
+result = executor.<span class="function">invoke</span>({<span class="string">"input"</span>: <span class="string">"What date is it? Add 7 days."</span>})
+</div>
+</div>
+
+    <h3>Example 2: Tool-Calling Agent (Native Function Calls)</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Function Calling Agent</div>
+    <div class="code-content">
+<span class="comment"># Modern LLMs support native function calling</span>
+<span class="comment"># This is simpler than ReAct for many use cases</span>
+
+<span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI
+<span class="keyword">import</span> json
+
+llm = <span class="function">ChatOpenAI</span>(model=<span class="string">"gpt-4"</span>)
+
+<span class="comment"># Define tools as JSON schemas</span>
+tools = [
+    {
+        <span class="string">"type"</span>: <span class="string">"function"</span>,
+        <span class="string">"function"</span>: {
+            <span class="string">"name"</span>: <span class="string">"get_weather"</span>,
+            <span class="string">"description"</span>: <span class="string">"Get weather for a location"</span>,
+            <span class="string">"parameters"</span>: {
+                <span class="string">"type"</span>: <span class="string">"object"</span>,
+                <span class="string">"properties"</span>: {
+                    <span class="string">"location"</span>: {<span class="string">"type"</span>: <span class="string">"string"</span>, <span class="string">"description"</span>: <span class="string">"City name"</span>}
+                },
+                <span class="string">"required"</span>: [<span class="string">"location"</span>]
+            }
+        }
+    }
+]
+
+<span class="comment"># Call LLM with tools</span>
+response = llm.<span class="function">invoke</span>([
+    {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"What's the weather in London?"</span>}
+], tools=tools)
+
+<span class="comment"># LLM returns structured function calls</span>
+<span class="comment"># Agent executes them and provides results</span>
+</div>
+</div>
+
+    <h3>Example 3: Multi-Agent System with <a href="https://github.com/joaomdmoura/crewai" target="_blank" rel="noopener">CrewAI</a></h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — CrewAI Multi-Agent Example</div>
+    <div class="code-content">
+<span class="keyword">from</span> crewai <span class="keyword">import</span> Agent, Task, Crew, Process
+<span class="keyword">from</span> crewai_tools <span class="keyword">import</span> SerperDevTool, ScrapeWebsiteTool
+
+<span class="comment"># Create agents with different specializations</span>
+researcher = <span class="function">Agent</span>(
+    role=<span class="string">"Senior Researcher"</span>,
+    goal=<span class="string">"Conduct thorough research and summarize findings"</span>,
+    backstory=<span class="string">"You are an expert researcher with deep knowledge of technology trends"</span>,
+    tools=[<span class="function">SerperDevTool</span>()],
+    verbose=<span class="keyword">True</span>
+)
+
+analyst = <span class="function">Agent</span>(
+    role=<span class="string">"Business Analyst"</span>,
+    goal=<span class="string">"Analyze information and identify key insights"</span>,
+    backstory=<span class="string">"You are a seasoned analyst who identifies business opportunities"</span>,
+    tools=[<span class="function">ScrapeWebsiteTool</span>()],
+    verbose=<span class="keyword">True</span>
+)
+
+<span class="comment"># Create tasks</span>
+research = <span class="function">Task</span>(
+    description=<span class="string">"Research AI agent adoption in enterprise"</span>,
+    agent=researcher,
+    expected_output=<span class="string">"Detailed research report on AI agents in enterprises"</span>
+)
+
+analysis = <span class="function">Task</span>(
+    description=<span class="string">"Analyze the research and identify market opportunities"</span>,
+    agent=analyst,
+    expected_output=<span class="string">"Analysis of market opportunities and trends"</span>
+)
+
+<span class="comment"># Create crew</span>
+crew = <span class="function">Crew</span>(
+    agents=[researcher, analyst],
+    tasks=[research, analysis],
+    process=Process.sequential,
+    verbose=<span class="keyword">True</span>
+)
+
+<span class="comment"># Execute</span>
+result = crew.<span class="function">kickoff</span>()
+<span class="function">print</span>(result)
+</div>
+</div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Reasoning Frameworks Comparison</h2>
+
+    <p>Different frameworks suit different problems. Here's how to choose:</p>
+
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Framework</th>
+                    <th>ReAct</th>
+                    <th>Plan-and-Execute</th>
+                    <th>Tree-of-Thought</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>How It Works</strong></td>
+                    <td>Interleave reasoning + acting. Think → Act → Observe → Think</td>
+                    <td>Create full plan first, then execute step by step</td>
+                    <td>Explore multiple reasoning paths, keep best ones</td>
+                </tr>
+                <tr>
+                    <td><strong>Best For</strong></td>
+                    <td>Tasks with tools & feedback loops</td>
+                    <td>Complex multi-step tasks with clear structure</td>
+                    <td>Math, logic, planning where wrong path is costly</td>
+                </tr>
+                <tr>
+                    <td><strong>Token Cost</strong></td>
+                    <td>Moderate (~1.5x base)</td>
+                    <td>Higher (~2x base)</td>
+                    <td>Very High (~5-10x base)</td>
+                </tr>
+                <tr>
+                    <td><strong>Accuracy Improvement</strong></td>
+                    <td>+15-30% on grounded tasks</td>
+                    <td>+10-25% on complex tasks</td>
+                    <td>+30-50% on math/logic</td>
+                </tr>
+                <tr>
+                    <td><strong>Latency</strong></td>
+                    <td>Can be quick if few steps</td>
+                    <td>Slower (planning + execution phases)</td>
+                    <td>Much slower (explores many paths)</td>
+                </tr>
+                <tr>
+                    <td><strong>Debuggability</strong></td>
+                    <td>Very good (see each step)</td>
+                    <td>Good (plan is visible)</td>
+                    <td>Hard (many parallel paths)</td>
+                </tr>
+                <tr>
+                    <td><strong>Failure Recovery</strong></td>
+                    <td>Excellent (adapts to failures)</td>
+                    <td>Good (can replan if needed)</td>
+                    <td>Built-in (tries other paths)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Decision Tree: Which Framework?</h3>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Do you need real-time tool interaction? <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>YES:</strong> Use ReAct. Your agent will benefit from observing tool results and adapting.</p>
+                <p><strong>NO:</strong> Continue to next question.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Is the task primarily mathematical or logic-heavy? <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>YES:</strong> Use Tree-of-Thought if cost/time allows, otherwise ReAct.</p>
+                <p><strong>NO:</strong> Continue to next question.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="collapsible-section">
+        <div class="collapsible-header">Does the task have clear sequential steps? <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <div class="collapsible-body">
+                <p><strong>YES:</strong> Use Plan-and-Execute. Create a plan first.</p>
+                <p><strong>NO:</strong> Use ReAct (most flexible).</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Memory Patterns -->
+<section id="memory-patterns" class="ml-section">
+    <h2>Memory Patterns in Production</h2>
+
+    <p>How do production agents manage memory at scale?</p>
+
+    <h3>Pattern 1: Summary + Sliding Window</h3>
+    <p>Keep recent messages verbatim, summarize older ones:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Memory: Summary + Window</div>
+    <div class="code-content">
+<span class="keyword">class</span> SmartMemory:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, keep_recent=<span class="number">10</span>, max_summary_length=<span class="number">500</span>):
+        <span class="function">self</span>.messages = []
+        <span class="function">self</span>.keep_recent = keep_recent
+        <span class="function">self</span>.summary = <span class="string">""</span>
+        <span class="function">self</span>.max_summary_length = max_summary_length
+    
+    <span class="keyword">def</span> <span class="function">add_message</span>(<span class="function">self</span>, role, content):
+        <span class="function">self</span>.messages.<span class="function">append</span>({<span class="string">"role"</span>: role, <span class="string">"content"</span>: content})
+        
+        <span class="comment"># If we have too many messages, summarize old ones</span>
+        <span class="keyword">if</span> <span class="function">len</span>(<span class="function">self</span>.messages) > <span class="function">self</span>.keep_recent * <span class="number">2</span>:
+            <span class="function">self</span>.<span class="function">_compress_memory</span>()
+    
+    <span class="keyword">def</span> <span class="function">_compress_memory</span>(<span class="function">self</span>):
+        <span class="comment"># Keep last N messages, summarize the rest</span>
+        recent = <span class="function">self</span>.messages[-<span class="function">self</span>.keep_recent:]
+        old = <span class="function">self</span>.messages[:-<span class="function">self</span>.keep_recent]
+        
+        <span class="keyword">if</span> old:
+            <span class="comment"># Summarize old messages (in real implementation, use LLM)</span>
+            old_text = <span class="string">"\n"</span>.<span class="function">join</span>([m[<span class="string">"content"</span>] <span class="keyword">for</span> m <span class="keyword">in</span> old])
+            <span class="function">self</span>.summary = <span class="function">summarize_text</span>(old_text)
+        
+        <span class="function">self</span>.messages = recent
+    
+    <span class="keyword">def</span> <span class="function">get_context</span>(<span class="function">self</span>):
+        <span class="string">"""Get memory in a compact form."""</span>
+        <span class="keyword">if</span> <span class="function">self</span>.summary:
+            context = <span class="string">f"[Previous Summary]\n{self.summary}\n\n"</span>
+        <span class="keyword">else</span>:
+            context = <span class="string">""</span>
+        
+        context += <span class="string">"[Recent Messages]\n"</span>
+        <span class="keyword">for</span> msg <span class="keyword">in</span> <span class="function">self</span>.messages:
+            context += <span class="string">f"{msg['role']}: {msg['content']}\n"</span>
+        
+        <span class="keyword">return</span> context
+</div>
+</div>
+
+    <h3>Pattern 2: Hierarchical Memory</h3>
+    <p>Different types of information at different levels:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Hierarchical Memory</div>
+    <div class="code-content">
+<span class="keyword">class</span> HierarchicalMemory:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="comment"># Level 1: Very recent (full detail)</span>
+        <span class="function">self</span>.current_session = []
+        
+        <span class="comment"># Level 2: Recent history (compressed)</span>
+        <span class="function">self</span>.recent_history = []
+        
+        <span class="comment"># Level 3: Semantic/vector store</span>
+        <span class="function">self</span>.semantic_memory = <span class="function">VectorStore</span>()
+        
+        <span class="comment"># Level 4: Long-term facts (database)</span>
+        <span class="function">self</span>.long_term_facts = <span class="function">Database</span>()
+    
+    <span class="keyword">def</span> <span class="function">retrieve</span>(<span class="function">self</span>, query):
+        <span class="string">"""Retrieve relevant information for a query."""</span>
+        
+        results = []
+        
+        <span class="comment"># 1. Check current session (most relevant)</span>
+        current_relevant = <span class="function">search</span>(<span class="function">self</span>.current_session, query)
+        results.<span class="function">extend</span>(current_relevant)
+        
+        <span class="comment"># 2. Check recent history if needed</span>
+        <span class="keyword">if</span> <span class="function">len</span>(results) < <span class="number">3</span>:
+            history_relevant = <span class="function">search</span>(<span class="function">self</span>.recent_history, query)
+            results.<span class="function">extend</span>(history_relevant)
+        
+        <span class="comment"># 3. Do semantic search in vector store</span>
+        semantic_relevant = <span class="function">self</span>.semantic_memory.<span class="function">search</span>(query, k=<span class="number">3</span>)
+        results.<span class="function">extend</span>(semantic_relevant)
+        
+        <span class="keyword">return</span> results[:<span class="number">5</span>]  <span class="comment"># Return top 5 results</span>
+</div>
+</div>
+
+    <h3>Pattern 3: Fact-Based Memory</h3>
+    <p>Extract and store discrete facts from conversations:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Fact Extraction Memory</div>
+    <div class="code-content">
+<span class="keyword">class</span> FactMemory:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="function">self</span>.facts = []  <span class="comment"># List of {fact, confidence, timestamp, source}</span>
+    
+    <span class="keyword">def</span> <span class="function">extract_facts</span>(<span class="function">self</span>, text):
+        <span class="string">"""Extract facts from text using LLM."""</span>
+        
+        prompt = <span class="string">f"""
+Extract key facts from this text. For each fact, rate confidence (0-1).
+Format: {{fact, confidence}}
+
+Text: {text}
+"""</span>
+        
+        response = llm.<span class="function">invoke</span>(prompt)
+        <span class="comment"># Parse response and store facts</span>
+        <span class="keyword">for</span> fact_line <span class="keyword">in</span> response.<span class="function">split</span>(<span class="string">"\n"</span>):
+            fact, confidence = <span class="function">parse_fact</span>(fact_line)
+            <span class="keyword">if</span> confidence > <span class="number">0.7</span>:
+                <span class="function">self</span>.facts.<span class="function">append</span>({
+                    <span class="string">"fact"</span>: fact,
+                    <span class="string">"confidence"</span>: confidence,
+                    <span class="string">"timestamp"</span>: datetime.<span class="function">now</span>(),
+                    <span class="string">"source"</span>: <span class="string">"conversation"</span>
+                })
+    
+    <span class="keyword">def</span> <span class="function">query_facts</span>(<span class="function">self</span>, question):
+        <span class="string">"""Find relevant facts for a question."""</span>
+        
+        <span class="comment"># Score each fact for relevance</span>
+        scored = []
+        <span class="keyword">for</span> fact <span class="keyword">in</span> <span class="function">self</span>.facts:
+            relevance = <span class="function">compute_similarity</span>(question, fact[<span class="string">"fact"</span>])
+            scored.<span class="function">append</span>((fact, relevance))
+        
+        <span class="comment"># Return high-confidence, relevant facts</span>
+        <span class="keyword">return</span> [f <span class="keyword">for</span> f, s <span class="keyword">in</span> <span class="function">sorted</span>(scored, key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="keyword">True</span>)
+                <span class="keyword">if</span> f[<span class="string">"confidence"</span>] > <span class="number">0.7</span>][:<span class="number">5</span>]
+</div>
+</div>
+</section>
+
+<!-- SECTION: Evaluation -->
+<section id="evaluation" class="ml-section">
+    <h2>Evaluating Agent Performance</h2>
+
+    <p>How do you know if your agent is good? Evaluation is critical but non-obvious.</p>
+
+    <h3>Evaluation Metrics</h3>
+
+    <div class="card-grid grid-6">
+        <div class="card cyan-accent">
+    <h4>Task Completion</h4>
+    <p>Did the agent achieve its goal? Binary yes/no or success rate %.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Tool Usage Efficiency</h4>
+    <p>How many tool calls were needed? Fewer is better (lower cost, latency).</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Reasoning Quality</h4>
+    <p>Are the agent's reasoning steps logical and justified?</p>
+</div>
+        <div class="card green-accent">
+    <h4>Error Recovery</h4>
+    <p>When the agent fails, does it recover gracefully?</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Grounding</h4>
+    <p>Does the agent use tools appropriately? Avoids hallucinations?</p>
+</div>
+        <div class="card orange-accent">
+    <h4>Alignment</h4>
+    <p>Does agent behavior match intended values and constraints?</p>
+</div>
+    </div>
+
+    <h3>Building an Evaluation Framework</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Simple Agent Evaluation</div>
+    <div class="code-content">
+<span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass
+<span class="keyword">from</span> typing <span class="keyword">import</span> List
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="decorator">@dataclass</span>
+<span class="keyword">class</span> EvaluationMetric:
+    name: <span class="function">str</span>
+    value: <span class="function">float</span>  <span class="comment"># 0-1 score</span>
+    weight: <span class="function">float</span>  <span class="comment"># importance weight</span>
+
+<span class="keyword">class</span> AgentEvaluator:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="function">self</span>.test_cases = []
+        <span class="function">self</span>.results = []
+    
+    <span class="keyword">def</span> <span class="function">add_test_case</span>(<span class="function">self</span>, input_text: <span class="function">str</span>, expected_output: <span class="function">str</span>):
+        <span class="string">"""Add a test case."""</span>
+        <span class="function">self</span>.test_cases.<span class="function">append</span>({
+            <span class="string">"input"</span>: input_text,
+            <span class="string">"expected"</span>: expected_output
+        })
+    
+    <span class="keyword">def</span> <span class="function">evaluate_agent</span>(<span class="function">self</span>, agent):
+        <span class="string">"""Run evaluation on agent."""</span>
+        
+        metrics = []
+        
+        <span class="keyword">for</span> test_case <span class="keyword">in</span> <span class="function">self</span>.test_cases:
+            <span class="comment"># Run agent</span>
+            result = agent.<span class="function">run</span>(test_case[<span class="string">"input"</span>])
+            
+            <span class="comment"># Metric 1: Task Completion</span>
+            completed = result[<span class="string">"success"</span>]  <span class="comment"># Boolean</span>
+            metrics.<span class="function">append</span>(<span class="function">EvaluationMetric</span>(
+                name=<span class="string">"task_completion"</span>,
+                value=<span class="function">float</span>(completed),
+                weight=<span class="number">0.4</span>
+            ))
+            
+            <span class="comment"># Metric 2: Token Efficiency</span>
+            token_ratio = result[<span class="string">"tokens_used"</span>] / result[<span class="string">"expected_tokens"</span>]
+            efficiency = <span class="number">1.0</span> / <span class="function">min</span>(token_ratio, <span class="number">3.0</span>)  <span class="comment"># Cap penalty at 3x</span>
+            metrics.<span class="function">append</span>(<span class="function">EvaluationMetric</span>(
+                name=<span class="string">"efficiency"</span>,
+                value=efficiency,
+                weight=<span class="number">0.2</span>
+            ))
+            
+            <span class="comment"># Metric 3: Reasoning Quality (evaluated by another LLM)</span>
+            reasoning_score = <span class="function">evaluate_reasoning</span>(result[<span class="string">"reasoning"</span>], 
+                                                 test_case[<span class="string">"expected"</span>])
+            metrics.<span class="function">append</span>(<span class="function">EvaluationMetric</span>(
+                name=<span class="string">"reasoning_quality"</span>,
+                value=reasoning_score,
+                weight=<span class="number">0.2</span>
+            ))
+            
+            <span class="comment"># Metric 4: Tool Usage Appropriateness</span>
+            appropriate = <span class="function">evaluate_tool_usage</span>(result[<span class="string">"tool_calls"</span>],
+                                             test_case[<span class="string">"input"</span>])
+            metrics.<span class="function">append</span>(<span class="function">EvaluationMetric</span>(
+                name=<span class="string">"tool_appropriateness"</span>,
+                value=appropriate,
+                weight=<span class="number">0.2</span>
+            ))
+        
+        <span class="comment"># Calculate weighted average</span>
+        total_weight = <span class="function">sum</span>(m.weight <span class="keyword">for</span> m <span class="keyword">in</span> metrics)
+        weighted_score = <span class="function">sum</span>(m.value * m.weight <span class="keyword">for</span> m <span class="keyword">in</span> metrics) / total_weight
+        
+        <span class="keyword">return</span> {
+            <span class="string">"overall_score"</span>: weighted_score,
+            <span class="string">"metrics"</span>: metrics,
+            <span class="string">"pass_rate"</span>: <span class="function">sum</span>(<span class="number">1</span> <span class="keyword">for</span> m <span class="keyword">in</span> metrics <span class="keyword">if</span> m.name == <span class="string">"task_completion"</span>) / <span class="function">len</span>(metrics)
+        }
+</div>
+</div>
+
+    <h3>Common Evaluation Pitfalls</h3>
+    <ul>
+        <li><strong>Only measuring final output:</strong> Good reasoning matters even if output is slightly off</li>
+        <li><strong>Ignoring token cost:</strong> An agent that solves everything in 10x tokens is impractical</li>
+        <li><strong>Not testing edge cases:</strong> Test error conditions, ambiguous inputs, adversarial examples</li>
+        <li><strong>Overfitting to benchmarks:</strong> Improve on the actual task, not the test set</li>
+        <li><strong>Ignoring human judgment:</strong> Sometimes LLM evaluation misses important aspects</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Pro Tip:</strong> Build a comprehensive test suite with diverse examples. Include normal cases, edge cases, and adversarial cases. Evaluate not just whether the agent gets the 'right' answer, but whether it reasons soundly.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices for Building Agents</h2>
+
+    <h3>Design Principles</h3>
+    <ul>
+        <li><strong>Explicit Goals:</strong> Agents should have clear, measurable goals. Vague goals lead to vague behavior.</li>
+        <li><strong>Bounded Reasoning:</strong> Set max iterations. An infinite loop is worse than failure.</li>
+        <li><strong>Graceful Degradation:</strong> When things go wrong, agents should fail safely and informatively.</li>
+        <li><strong>Observable Behavior:</strong> Log and monitor agent decisions. Black boxes are dangerous.</li>
+        <li><strong>Human Oversight:</strong> Critical actions should require human approval or logging.</li>
+    </ul>
+
+    <h3>Prompt Engineering for Agents</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Good Agent Prompt</div>
+    <div class="code-content">
+You are a helpful research assistant. Your goal <span class="keyword">is</span> to answer questions accurately
+using available tools. Follow these guidelines:
+
+<span class="number">1</span>. Think carefully about what tools to use
+<span class="number">2</span>. Use tools only when necessary
+<span class="number">3</span>. If a tool returns an error, <span class="keyword">try</span> a different approach
+<span class="number">4</span>. Never make up information - always ground claims <span class="keyword">in</span> tool results
+<span class="number">5</span>. Show your reasoning step by step
+<span class="number">6</span>. If you're unsure, ask clarifying questions rather than guessing
+
+Available tools: [web_search, database_query, calculator]
+
+Maximum steps: <span class="number">10</span> (to prevent infinite loops)
+</div>
+</div>
+
+    <h3>Error Handling and Robustness</h3>
+
+    <div class="info-box">
+        <h4>Defensive Tool Design</h4>
+        <p>Every tool should handle errors gracefully. Instead of failing, return a helpful message explaining what went wrong and suggesting next steps. Example: Instead of "Error: HTTP 500", return "The data service is temporarily unavailable. Try again in a moment, or I can use cached data from 2 hours ago."</p>
+    </div>
+
+    <h3>Cost Management</h3>
+    <ul>
+        <li><strong>Monitor API Costs:</strong> Track LLM API calls; they're expensive at scale</li>
+        <li><strong>Use Caching:</strong> Cache tool results when possible (e.g., weather for the same location)</li>
+        <li><strong>Optimize Token Usage:</strong> Shorter prompts, relevant context only</li>
+        <li><strong>Batch Operations:</strong> Process multiple requests together when possible</li>
+        <li><strong>Cheaper Models:</strong> Use cheaper models for simple tasks, save expensive models for complex reasoning</li>
+    </ul>
+
+    <h3>Testing and Iteration</h3>
+    <ul>
+        <li>Start with a simple agent, add complexity gradually</li>
+        <li>Test each tool independently before integrating</li>
+        <li>Build test suites covering normal and edge cases</li>
+        <li>Use logging extensively during development</li>
+        <li>Get feedback from actual users early</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>The Prototype-to-Production Journey</h4>
+    <p>A simple agent that works is better than a complex agent that doesn't. Start simple, test thoroughly, add features based on real user feedback. Many successful agents are surprisingly simple.</p>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions on AI Agents</h2>
+
+    <p>If you're interviewing for agent-focused roles, you might encounter these questions:</p>
+
+    <div class="faq-item">
+    <div class="faq-question">1. What's the difference between an LLM and an AI agent? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">An LLM is a tool for generating text; an agent is a system that uses tools (including LLMs) to achieve goals. LLMs are reactive (given input, produce output); agents are proactive (pursue goals over time). Agents have memory, use reasoning, call external tools, and iterate toward success. A chatbot using an LLM is not an agent. A system that decomposes a goal into subtasks, calls APIs, learns from results, and adapts is an agent.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">2. Explain ReAct. Why is it effective? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">ReAct = Reasoning + Acting. The agent interleaves reasoning (thinking steps) with acting (tool calls). Instead of planning everything then executing, it thinks, acts, observes results, and thinks again. It's effective because: (1) Agents can verify reasoning against reality, catching hallucinations. (2) Observations inform future reasoning. (3) It's interpretable - you see why the agent took each action. (4) It handles uncertain environments better. The cycle is: Thought → Action → Observation → Thought...</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">3. How would you design an agent to research companies for investment? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">I'd structure it as: (1) Define clear goal - 'Analyze company X and recommend buy/hold/sell'. (2) Define tools - financial data API, news search, analyst reports, calculation. (3) Design reasoning - Plan-and-Execute or ReAct. (4) Build memory - store findings, avoid re-fetching. (5) Create evaluation criteria - completeness, accuracy, cost/efficiency. (6) Add safety - human review before making decisions. (7) Test extensively with past companies where the answer is known.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">4. What are the main challenges in building production agents? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Key challenges: (1) Reliability - agents must fail gracefully and be debuggable. (2) Cost - LLM API calls are expensive; must optimize token usage. (3) Latency - agent loops are slower than single LLM calls. (4) Tool availability - not all tools work reliably; need fallbacks. (5) Hallucinations - even with grounding, agents can make up information. (6) Scope creep - agents can go off-task if goals aren't clear. (7) Evaluation - hard to measure agent quality; no single metric captures it all.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">5. How would you make an agent more robust against errors? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Multi-level approach: (1) Tool level - each tool has error handling and returns helpful messages. (2) Agent level - agent detects failures and tries alternative approaches. (3) Fallbacks - if primary tool fails, try cached data or simpler tool. (4) Escalation - if agent can't solve it, clearly escalate to human. (5) Monitoring - log all decisions for debugging. (6) Timeouts - prevent infinite loops. (7) Validation - check outputs before using them. (8) User feedback - collect user corrections to improve agent.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">6. Compare ReAct, Plan-and-Execute, and Tree-of-Thought approaches. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">ReAct: Interleave reasoning and acting. Good for tool-based tasks. Moderate cost. Excellent recovery from failures. Best for most practical applications. Plan-and-Execute: Create full plan first, then execute. Good for complex multi-step tasks. Higher cost. Requires upfront planning overhead. Tree-of-Thought: Explore multiple reasoning paths. Highest cost. Best for math/logic. Can backtrack. Use when accuracy >> cost. My recommendation: Start with ReAct; it's the sweet spot for most agents.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">7. What are the main types of memory in agents? How would you implement them? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Four types: (1) Episodic - conversation history. Keep recent messages verbatim, summarize old ones. (2) Semantic - facts and knowledge. Use vector databases for similarity search. (3) Procedural - skills/patterns. Implicit in agent behavior and prompting. (4) State - current progress. Explicit tracking of goals and completed steps. Implementation: Hybrid approach - conversation buffer for recent, vector store for semantic, state object for progress tracking.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">8. Design a multi-agent system for content creation. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Structure: (1) Researcher agent - finds relevant information, sources, trends. (2) Writer agent - drafts content using research. (3) Editor agent - reviews for clarity and accuracy. (4) SEO agent - optimizes for search. Coordination: Manager agent decomposes 'Create blog post about AI agents' into subtasks for each agent. Handles dependencies (research before writing, writing before editing). Aggregates results. Alternative: Hierarchical - manager delegates, workers execute, manager synthesizes.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">9. How do you evaluate whether an agent is working well? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Multi-dimensional evaluation: (1) Task success rate - does it achieve its goal? (2) Token efficiency - how expensive per task? (3) Reasoning quality - are steps logical? (4) Tool appropriateness - does it use tools correctly? (5) Error recovery - graceful failures? (6) Alignment - does it follow guidelines? Build test suites with diverse cases. Use another LLM to evaluate reasoning. Monitor costs. Collect user feedback. A 'good' agent isn't perfect; it's reliable, understandable, and delivers value.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">10. What's your opinion on autonomous agents vs. human-in-the-loop? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Current state: Fully autonomous agents are not yet reliable for critical decisions. Human-in-the-loop is the practical approach - agent proposes, human reviews/approves. Future: As agents improve, more autonomy is possible. My take: The right model depends on stakes. Autonomous is fine for low-stakes (recommendations). For high-stakes (financial, medical, legal), always include human review. Transparency matters - users should understand agent reasoning.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Can an LLM be an agent? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Not by itself. An LLM is a text generator. It becomes part of an agent when combined with tools, memory, planning, and a control loop. The agent uses the LLM as a reasoning component, but the agent is the larger system.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How many iterations should an agent take? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Usually 3-10. If an agent needs more than 15-20 steps to solve a task, the problem decomposition is likely wrong. Set max_iterations as a safety valve. Most well-designed agents should complete tasks in 5 steps or fewer.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What happens if an agent calls the same tool multiple times? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">This is often a sign the agent is stuck in a loop. (1) Add loop detection - track tool calls and bail if a tool is called repeatedly. (2) Improve tool error messages - help the agent understand why the previous call failed. (3) Check tool outputs - are they helpful? (4) Adjust the prompt - make the goal clearer. (5) Simplify task - break it into smaller pieces.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I make agents faster? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Latency optimization: (1) Use cheaper/faster models for simple tasks. (2) Reduce reasoning steps - not all tasks need Chain-of-Thought. (3) Cache tool results - reuse recent data. (4) Parallel tool calls - call multiple tools simultaneously. (5) Shorter prompts - relevant context only. (6) Tool optimization - make tools faster. In practice, agents are 2-5x slower than single LLM calls but provide much higher quality.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can agents learn from past interactions? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, but not automatically. (1) Store past interactions in memory/database. (2) Extract lessons/facts from past interactions. (3) Use those lessons to improve future behavior. This is different from traditional ML learning. It's more like human learning - reflecting on past experiences. Some frameworks like LangChain have memory mechanisms that support this.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I prevent agent hallucinations? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Key strategies: (1) Grounding - require tool use for factual claims. (2) Verification - have agent check its own outputs. (3) Clear instructions - 'Never make up information; always use tools'. (4) Tool design - tools return structured, verifiable data. (5) Testing - hallucination detection should be part of evaluation. (6) Monitoring - log and review all outputs. You can't eliminate hallucinations; you can reduce and detect them.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the difference between agents and workflows? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Workflows are fixed sequences of steps. Agents are flexible - they decide what to do based on the situation. Workflow: Step 1 → Step 2 → Step 3. Agent: Observe → Decide what to do → Do it → Observe → Decide next step. Agents are more powerful but more complex. Use workflows for deterministic tasks; agents for reasoning-intensive tasks.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I deploy agents to production? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Key considerations: (1) Containerize - use Docker. (2) API wrapper - expose agent as HTTP endpoint. (3) Monitoring - log all decisions, monitor costs/latency. (4) Rate limiting - protect against abuse. (5) Error handling - graceful failures with user-friendly messages. (6) Updates - how do you push new prompts/tools? (7) Scaling - agents are compute-intensive; plan for horizontal scaling. (8) User feedback loop - collect feedback to improve the agent.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I test agents? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Multi-level testing: (1) Unit tests - test each tool independently. (2) Integration tests - test agent with real tools. (3) Benchmark tests - does agent solve example problems? (4) Edge case tests - how does agent handle unusual inputs? (5) Regression tests - does agent still work after changes? (6) A/B tests - compare agent versions. (7) User acceptance tests - real users try the agent. Start with unit tests; build up test coverage iteratively.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What are the ethical concerns with agents? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Important concerns: (1) Autonomy - agents making decisions with real consequences need careful design. (2) Transparency - users should understand what agent can/can't do. (3) Bias - agents inherit biases from training data. (4) Privacy - agents accessing sensitive data. (5) Security - agents calling external APIs. (6) Liability - who's responsible if agent fails? Build in human oversight, make reasoning transparent, handle errors gracefully, and respect user data.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Practical Exercises</h2>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Build a Simple Tool</h4>
+    <p>Create a Python function that acts as a tool. It should have a clear docstring, take typed arguments, and return structured output. Example: a tool that fetches the current time in different timezones.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="decorator">@tool</span>
+<span class="keyword">def</span> <span class="function">get_timezone_time</span>(timezone: <span class="function">str</span>) -> <span class="function">str</span>:
+    <span class="string">"""Get current time in a timezone.
+    
+    Args:
+        timezone: Timezone name (e.g., 'US/Eastern', 'Europe/London')
+    
+    Returns:
+        Current time in that timezone
+    """</span>
+    <span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+    <span class="keyword">import</span> pytz
+    
+    tz = pytz.<span class="function">timezone</span>(timezone)
+    current_time = datetime.<span class="function">now</span>(tz).<span class="function">strftime</span>(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)
+    <span class="keyword">return</span> <span class="string">f"Current time in {timezone}: {current_time}"</span>
+</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Write Agent Prompts</h4>
+    <p>Write two versions of a system prompt - one for a bad agent (vague goals, no constraints) and one for a good agent (clear goals, error handling, tool usage guidelines). Compare them.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="comment"># BAD: Vague agent prompt</span>
+You are a helpful assistant. Be nice <span class="keyword">and</span> <span class="keyword">try</span> your best.
+
+<span class="comment"># GOOD: Clear agent prompt</span>
+You are a financial research assistant. Your goal <span class="keyword">is</span> to analyze
+companies <span class="keyword">and</span> provide investment recommendations. Use the available
+<span class="function">tools</span> (financial_data, news_search) to ground your analysis <span class="keyword">in</span>
+reality. Never make up numbers. If unsure, ask <span class="keyword">for</span> clarification.
+Maximum <span class="number">10</span> steps. Always show your reasoning.
+</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Design a Multi-Step Task</h4>
+    <p>Think of a complex task that requires multiple steps and tool use (e.g., 'Plan a trip to Japan'). Break it into subtasks. Identify dependencies. Sketch which tools you'd need.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+Task: <span class="string">"Plan a week-long trip to Japan for a family with teenagers"</span>
+
+Subtasks:
+<span class="number">1</span>. Research visa <span class="function">requirements</span> (tool: search_visa_info)
+<span class="number">2</span>. Find <span class="function">flights</span> (tool: flight_search)
+<span class="number">3</span>. Book <span class="function">accommodations</span> (tool: hotel_search)
+<span class="number">4</span>. Plan <span class="function">activities</span> (tool: attraction_search)
+<span class="number">5</span>. Check weather & pack <span class="function">advice</span> (tool: weather_forecast)
+<span class="number">6</span>. Create <span class="function">budget</span> (tool: currency_converter, cost_calculator)
+
+Dependencies:
+- Know dates before searching flights/hotels
+- Know rough itinerary before planning activities
+- All of the above before calculating budget
+
+Tools needed: search, flight API, hotel API, currency converter
+</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Error Handling Scenarios</h4>
+    <p>For an agent that answers customer service questions, write error messages for these scenarios: (1) Database is down, (2) Tool times out, (3) Answer is unclear. Make the messages actionable, not just 'Error'.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+Scenarios <span class="keyword">and</span> good error messages:
+
+<span class="number">1</span>. Database down
+   BAD: <span class="string">"Error: Database connection failed"</span>
+   GOOD: <span class="string">"I'm having trouble accessing customer data right now.
+           This should be resolved in a few minutes.
+           I can provide general help while we wait."</span>
+
+<span class="number">2</span>. Tool timeout
+   BAD: <span class="string">"Timeout"</span>
+   GOOD: <span class="string">"The search is taking longer than expected.
+           Would you like me to: (A) Wait a bit longer,
+           (B) Provide cached results from yesterday,
+           (C) Search a smaller date range?"</span>
+
+<span class="number">3</span>. Answer unclear
+   BAD: <span class="string">"I don't know"</span>
+   GOOD: <span class="string">"I found some information, but it's not
+           completely clear. Let me ask: Are you asking
+           about return policy for physical products
+           or digital services?"</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Summary & Resources -->
+<section id="summary" class="ml-section">
+    <h2>Summary: Key Takeaways</h2>
+
+    <h3>The Big Picture</h3>
+    <ul>
+        <li><strong>Agents are systems, not models:</strong> Built by combining LLMs, tools, memory, and reasoning frameworks.</li>
+        <li><strong>The agent loop is fundamental:</strong> Observe → Think → Act → Observe. Repeat until goal achieved.</li>
+        <li><strong>Grounding is critical:</strong> Agents without tools are just text generators. Tools connect agents to reality.</li>
+        <li><strong>Memory matters:</strong> Episodic, semantic, procedural, and state memory together enable learning over time.</li>
+        <li><strong>Design trumps complexity:</strong> A well-designed simple agent beats a complex one that doesn't work.</li>
+    </ul>
+
+    <h3>When to Use Agents</h3>
+    <ul>
+        <li>Tasks requiring multiple steps and external tools</li>
+        <li>Problems needing reasoning and adaptation</li>
+        <li>Systems that must interact with dynamic environments</li>
+        <li>Applications where transparency (showing reasoning) is important</li>
+        <li>Domains where errors need graceful recovery</li>
+    </ul>
+
+    <h3>When NOT to Use Agents</h3>
+    <ul>
+        <li>Simple classification or generation tasks (use LLM directly)</li>
+        <li>When latency is critical and you can't afford LLM loops</li>
+        <li>Fully deterministic workflows (use traditional software)</li>
+        <li>When you need guaranteed correctness (agents aren't 100% reliable)</li>
+    </ul>
+
+    <h3>Getting Started</h3>
+    <ol>
+        <li>Pick a simple task (e.g., answer a frequently asked question)</li>
+        <li>Build a basic agent with 1-2 tools using <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a></li>
+        <li>Test thoroughly with diverse inputs</li>
+        <li>Add complexity gradually (more tools, memory, reasoning)</li>
+        <li>Collect user feedback and iterate</li>
+    </ol>
+
+    <h3>Key Resources</h3>
+    <ul>
+        <li><strong><a href="https://python.langchain.com/docs/" target="_blank" rel="noopener">LangChain Documentation</a>:</strong> https://python.langchain.com - Most comprehensive agent framework docs</li>
+        <li><strong><a href="https://github.com/joaomdmoura/crewai" target="_blank" rel="noopener">CrewAI</a> GitHub:</strong> https://github.com/joaomdmoura/crewai - Multi-agent framework</li>
+        <li><strong>Anthropic Documentation:</strong> https://docs.anthropic.com - Claude API docs with agent examples</li>
+        <li><strong>Research Papers:</strong>
+            <ul>
+                <li>"<a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">ReAct: Synergizing Reasoning and Acting in Language Models</a>" (Yao et al., 2023)</li>
+                <li>"<a href="https://arxiv.org/abs/2304.08354" target="_blank" rel="noopener">Tool Learning with Foundation Models</a>" (Qin et al., 2024)</li>
+                <li>"<a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>" (Wei et al., 2023)</li>
+            </ul>
+        </li>
+    </ul>
+</section>
+
+<section id="resources" class="ml-section">
+    <h2>Further Learning</h2>
+
+    <h3>Online Courses</h3>
+    <ul>
+        <li><a href="https://www.deeplearning.ai/" target="_blank" rel="noopener">DeepLearning.AI</a>: "Agentic Design Patterns with Claude" - Excellent practical course</li>
+        <li>Anthropic: "Building with Claude" - Free resources on agent building</li>
+    </ul>
+
+    <h3>Books</h3>
+    <ul>
+        <li>"<a href="https://melaniemitchell.me/aibook/" target="_blank" rel="noopener">Artificial Intelligence: A Guide for Thinking Humans</a>" by Melanie Mitchell - Broader AI context</li>
+        <li>"<a href="https://brianchristian.org/the-alignment-problem/" target="_blank" rel="noopener">The Alignment Problem</a>" by Brian Christian - Ethics and safety in AI systems</li>
+    </ul>
+
+    <h3>Community Resources</h3>
+    <ul>
+        <li>GitHub Discussions - <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a> and <a href="https://github.com/joaomdmoura/crewai" target="_blank" rel="noopener">CrewAI</a> communities are active and helpful</li>
+        <li>Discord servers - Many AI communities discussing agents and frameworks</li>
+        <li>Academic conferences - ICLR, NeurIPS, ACL publish cutting-edge agent research</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Final Thought:</strong> The field of AI agents is rapidly evolving. What you learned here is foundational, but the best practices will change. Stay current by reading research papers, following key researchers on social media, and building real projects. Theory is important; practice is essential.</p>
+</div>
+</section>
+
+        </main>
+    </div>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+            });
+        });
+        
+        // FAQ items
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

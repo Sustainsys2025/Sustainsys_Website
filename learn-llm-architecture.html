@@ -1,0 +1,3117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Architecture - SustainSys AI Academy</title>
+    <meta name="description" content="Understand how GPT, Claude, LLaMA, and modern large language models are built — from tokenization to generation.">
+    <meta name="og:title" content="LLM Architecture - SustainSys AI Academy">
+    <meta name="og:description" content="Complete guide to LLM architecture: transformers, attention, generation, optimization, and hands-on code examples.">
+    
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+    
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --surface: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-dim: #64748b;
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-pink: #db2777;
+            --accent-gold: #f59e0b;
+            --accent-green: #059669;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #f8fafc;
+                --secondary: #e2e8f0;
+                --surface: #1e293b;
+                --border: #334155;
+                --text: #f8fafc;
+                --text-dim: #94a3b8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <main class="ml-page-container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">LLM Architecture</h1>
+                <p class="page-description">Master LLM Architecture with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <div class="ml-sidebar">
+    <h3>Sections</h3>
+    <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#why-matters">Why It Matters</a></li>
+        <li><a href="#history">Historical Evolution</a></li>
+        <li><a href="#core-concepts">Core Concepts</a></li>
+        <li><a href="#architecture">Architecture Deep Dive</a></li>
+        <li><a href="#components">Key Components</a></li>
+        <li><a href="#implementation">Implementation Guide</a></li>
+        <li><a href="#advanced">Advanced Techniques</a></li>
+        <li><a href="#comparison">Model Comparison</a></li>
+        <li><a href="#use-cases">Real-World Use Cases</a></li>
+        <li><a href="#enterprise">Enterprise Applications</a></li>
+        <li><a href="#mistakes">Common Mistakes</a></li>
+        <li><a href="#best-practices">Best Practices</a></li>
+        <li><a href="#advanced-insights">Advanced Insights</a></li>
+        <li><a href="#code-examples">Code Examples</a></li>
+        <li><a href="#exercises">Try It Yourself</a></li>
+        <li><a href="#interview">Interview Questions</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#resources">Resources</a></li>
+    </ul>
+</div>
+        <div class="ml-content">
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>LLM Architecture: From Tokens to Generation</h2>
+
+    <div class="ml-intro-text">
+        <p>Large Language Models (LLMs) like GPT-4, Claude, LLaMA, and Mistral are among the most powerful AI systems ever built. Yet their architecture, while sophisticated, is fundamentally built on a foundation of elegant principles: self-attention, transformer blocks, and scaling laws. This comprehensive guide explains exactly how these models work — from tokenization through to generation.</p>
+    </div>
+
+    <p>Modern LLMs are <strong>decoder-only transformer models</strong> that generate text one token at a time, using previously generated tokens to predict the next one. Unlike traditional machine learning where you train once and deploy, LLMs are pre-trained on massive datasets (trillions of tokens), then fine-tuned for specific behaviors and safety constraints.</p>
+
+    <p>The secret to their capability isn't a single breakthrough but the combination of: (1) the transformer architecture, (2) massive scale (billions to trillions of parameters), (3) high-quality training data, and (4) techniques like RLHF (Reinforcement Learning from Human Feedback) that align models with human preferences.</p>
+
+    <h3>What You'll Learn in This Guide</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Complete Pipeline</h4>
+    <p>Understand the full journey: raw text → tokenization → embedding → transformer layers → logits → sampling → output tokens.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Core Architecture</h4>
+    <p>Deep dive into decoder blocks, causal attention, layer normalization, and why these design choices matter for generation.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Advanced Techniques</h4>
+    <p>Explore KV caching, quantization, speculative decoding, and other optimizations that make LLMs practical at scale.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Hands-On Code</h4>
+    <p>Build core LLM components from scratch in <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a> and use HuggingFace to load and run real models like LLaMA, GPT, and Mistral.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Comfort with Python, basic neural networks concepts (layers, activations, backpropagation), and linear algebra. PyTorch familiarity is helpful. You do NOT need to understand transformers beforehand — we'll build up from first principles.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why LLM Architecture Matters</h2>
+
+    <p>Understanding LLM architecture is critical for several reasons:</p>
+
+    <h3>For AI Practitioners and Engineers</h3>
+    <p>If you work with LLMs — fine-tuning, prompt engineering, deploying to production, or building applications — you need to understand the architecture to:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Optimize Performance</h4>
+    <p>Know why KV caching speeds up generation, how batching affects latency, and when quantization is appropriate.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Debug Issues</h4>
+    <p>When outputs seem biased, repetitive, or incoherent, architectural understanding helps diagnose the problem.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Fine-Tune Effectively</h4>
+    <p>Understand which layers to adapt, what learning rates work, and why certain techniques like LoRA are powerful.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Estimate Costs</h4>
+    <p>Predict inference time, compute requirements, and memory usage based on model size and sequence length.</p>
+</div>
+    </div>
+
+    <h3>For Researchers</h3>
+    <p>If you're advancing the field, you need to know:</p>
+    <ul>
+        <li><strong>Why current designs exist:</strong> Each component (attention, normalization, residual connections) solves a specific problem.</li>
+        <li><strong>What's being improved:</strong> The field is actively optimizing for longer sequences, faster inference, fewer parameters, and better alignment.</li>
+        <li><strong>How to innovate:</strong> Breakthroughs come from understanding the architecture deeply and identifying inefficiencies.</li>
+    </ul>
+
+    <h3>For Managers and Product Leaders</h3>
+    <p>Architectural knowledge enables you to:</p>
+    <ul>
+        <li>Evaluate different model choices (GPT-4 vs Claude vs open-source) based on technical tradeoffs.</li>
+        <li>Understand the limitations of current systems and what's theoretically possible.</li>
+        <li>Make informed decisions about model deployment, fine-tuning, and RAG architectures.</li>
+        <li>Participate credibly in technical discussions about model capabilities and safety.</li>
+    </ul>
+
+    <h3>The Scale Impact</h3>
+    <p>A remarkable discovery in deep learning is that the same architecture works across vastly different scales. The decoder architecture used in a 7B parameter LLaMA model is identical in structure to a 70B or 405B model — only the number of layers and hidden dimensions scale up. This means understanding a small model gives you insight into the largest systems in the world.</p>
+</section>
+
+<!-- SECTION: Historical Evolution -->
+<section id="history" class="ml-section">
+    <h2>Historical Evolution: From RNNs to LLMs</h2>
+
+    <p>LLM architecture didn't emerge fully formed. It's the result of decades of research, with each breakthrough building on previous discoveries.</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
+            <strong>1986-1997</strong><br>RNNs &amp; LSTMs<br><small>Sequential, vanishing gradients</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>2014</strong><br>Attention Mechanism<br><small>Bahdanau attention for sequence-to-sequence</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+            <strong>2017</strong><br>Transformers<br><small>"Attention Is All You Need"</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>2018-2019</strong><br>BERT &amp; GPT<br><small>Pre-training era begins</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>2020</strong><br>GPT-3<br><small>175B parameters, emergent abilities</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>2023</strong><br>GPT-4, Claude, LLaMA<br><small>Multimodal, instruction-tuned, safe</small>
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #db2777, #f472b6);">
+            <strong>2024+</strong><br>Open-Source Explosion<br><small>Mixtral, Llama 2/3, DeepSeek</small>
+        </div>
+    </div>
+
+    <h3>Key Milestones Explained</h3>
+
+    <div class="info-box">
+    <h4>The Transformer Paper (2017)</h4>
+    <p>Vaswani et al.'s 'Attention Is All You Need' replaced sequential RNN processing with parallel self-attention. This single architectural change enabled 100x speedups in training and opened the door to pre-training on massive datasets.</p>
+</div>
+
+    <div class="info-box">
+    <h4>GPT (2018)</h4>
+    <p>OpenAI's Generative Pre-trained Transformer showed that a decoder-only transformer, pre-trained on massive unlabeled text, could perform diverse tasks without task-specific fine-tuning through prompt engineering.</p>
+</div>
+
+    <div class="info-box">
+    <h4>GPT-3 (2020)</h4>
+    <p>The 175-billion parameter model demonstrated 'few-shot learning' — the ability to solve tasks after seeing just a few examples in the prompt. This sparked the modern LLM era and led directly to ChatGPT, GPT-4, and the explosion of LLM applications.</p>
+</div>
+
+    <div class="info-box">
+    <h4>RLHF & Instruction Tuning (2021-2022)</h4>
+    <p>Instead of just pre-training, researchers discovered that fine-tuning on human feedback and instruction examples made models more helpful, harmless, and honest. This is why ChatGPT feels so much more useful than raw GPT-3.</p>
+</div>
+
+    <h3>Architecture Evolution Timeline</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Era</th>
+                <th>Model</th>
+                <th>Architecture</th>
+                <th>Key Innovation</th>
+                <th>Scale</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>RNN Era</strong></td>
+                <td>LSTM, GRU</td>
+                <td>Sequential + gates</td>
+                <td>Gated information flow</td>
+                <td>~100M params</td>
+            </tr>
+            <tr>
+                <td><strong>Early Attention</strong></td>
+                <td>Seq2Seq</td>
+                <td>Encoder-Decoder + Attention</td>
+                <td>Focus on relevant context</td>
+                <td>~100M params</td>
+            </tr>
+            <tr>
+                <td><strong>Transformer</strong></td>
+                <td>BERT, GPT</td>
+                <td>Pure self-attention, parallel</td>
+                <td>No recurrence = massive scale</td>
+                <td>100M - 1B params</td>
+            </tr>
+            <tr>
+                <td><strong>Large Scale</strong></td>
+                <td>GPT-3</td>
+                <td>Decoder-only, pre-trained</td>
+                <td>Few-shot learning emerges</td>
+                <td>175B params</td>
+            </tr>
+            <tr>
+                <td><strong>Modern LLMs</strong></td>
+                <td>GPT-4, Claude, LLaMA</td>
+                <td>Optimized decoder + safety</td>
+                <td>Multimodal, aligned, efficient</td>
+                <td>7B - 405B+ params</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts and Theory</h2>
+
+    <p>Before diving into the full architecture, let's establish the fundamental concepts that modern LLMs are built on.</p>
+
+    <h3>1. Tokens and Tokenization</h3>
+    <p>LLMs don't process raw text. Instead, they break text into small pieces called <strong>tokens</strong> and process these tokens as integers.</p>
+
+    <div class="formula-box">
+    <div class="label">Tokenization</div>
+    Text = "Hello, world!"<br><br>After tokenization: [Hello] [,] [world] [!]<br><br>As token IDs: [15496, 11, 995, 0]<br><br>Modern tokenizers use byte-pair encoding (BPE):<br>- Start with all bytes<br>- Iteratively merge most common pairs<br>- Result: vocabulary of 50K-100K tokens
+</div>
+
+    <p>Different models use different tokenizers (GPT-4 vs Claude vs LLaMA have different vocabularies), so the same text produces different token sequences. This matters for understanding context length and computing costs.</p>
+
+    <h3>2. Self-Attention: The Core Mechanism</h3>
+    <p>Self-attention is the core innovation enabling LLMs. Each token computes <strong>how much it should attend to every other token</strong> in the sequence.</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Query (Q)</h4>
+    <p>What am I looking for? For each token, a learned projection that represents what information it seeks from other tokens.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Key (K)</h4>
+    <p>What do I contain? For each token, what information it offers. Used to compute attention scores.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Value (V)</h4>
+    <p>What do I pass along? The actual content vectors that get combined based on attention weights.</p>
+</div>
+    </div>
+
+    <div class="formula-box">
+    <div class="label">Scaled Dot-Product Attention</div>
+    Attention(Q, K, V) = softmax(Q · K<sup>T</sup> / √d<sub>k</sub>) · V<br><br>Where:<br>  Q ∈ ℝ^(n × d_k) = Query matrix<br>  K ∈ ℝ^(n × d_k) = Key matrix<br>  V ∈ ℝ^(n × d_v) = Value matrix<br>  n = sequence length<br>  d_k = dimension of keys<br>  √d_k = scaling factor (prevents softmax saturation)
+</div>
+
+    <p>The scaling factor √d_k is crucial. Without it, large dot products push the softmax into flat regions with near-zero gradients, killing training. With it, the distributions stay in reasonable ranges.</p>
+
+    <div class="highlight-box">
+    <p><strong>Intuition:</strong> You're at a conference with many people. Your Query is 'I want information about AI safety.' Each person has a Key representing their expertise. You compute similarity (dot product) between your query and each Key. Higher similarity = more attention weight. Then you combine everyone's Values (what they tell you) weighted by these attention scores.</p>
+</div>
+
+    <h3>3. Multi-Head Attention</h3>
+    <p>Instead of computing attention once, we run it in parallel with different learned projections (called "heads"). Each head captures different types of relationships.</p>
+
+    <div class="formula-box">
+    <div class="label">Multi-Head Attention</div>
+    head_i = Attention(Q·W<sup>Q</sup>_i, K·W<sup>K</sup>_i, V·W<sup>V</sup>_i)<br><br>MultiHead(Q,K,V) = Concat(head_1,...,head_h) · W<sup>O</sup><br><br>Typical: h = 8, 12, 16, or 32 heads<br>     d_k = d_model / h<br><br>Example: d_model=768 with 12 heads → d_k=64 per head
+</div>
+
+    <p>Why multiple heads? One head might capture word order dependencies, another semantic similarity, another coreference (what pronouns refer to). Having multiple heads dramatically increases representational capacity.</p>
+
+    <h3>4. Causal Attention (Masking)</h3>
+    <p>LLMs generate text token-by-token. During training, a token at position t can only attend to tokens at positions 0 through t-1 (not future tokens). This is enforced with a <strong>causal mask</strong>.</p>
+
+    <div class="formula-box">
+    <div class="label">Causal Masking</div>
+    For position t, set attention scores to future positions (t+1, t+2, ...) to -∞<br><br>This ensures softmax ignores future positions.<br><br>Attention matrix (4-token sequence, before softmax):<br>Token 0: [score_0→0  -∞       -∞       -∞     ]<br>Token 1: [score_1→0  score_1→1 -∞     -∞     ]<br>Token 2: [score_2→0  score_2→1 score_2→2 -∞]<br>Token 3: [score_3→0  score_3→1 score_3→2 score_3→3]
+</div>
+
+    <p>Without causal masking, during training the model could cheat by looking at the answer before generating it. With causal masking, generation is autoregressive: each token is predicted given only previous tokens.</p>
+
+    <h3>5. Positional Encoding</h3>
+    <p>Self-attention treats input as a set (position-invariant). To encode position information, we add positional encodings to input embeddings.</p>
+
+    <div class="formula-box">
+    <div class="label">Rotary Position Embeddings (RoPE)</div>
+    Modern LLMs use RoPE instead of sinusoidal encoding:<br><br>Rotate query and key vectors in 2D subspaces<br>by angles proportional to position.<br><br>Elegant property: relative position is encoded directly<br>in the attention computation via rotation.<br><br>Advantage over sinusoidal:<br>- Better extrapolation to longer sequences<br>- More interpretable<br>- Simpler implementation
+</div>
+
+    <h3>6. Layer Normalization and Residual Connections</h3>
+    <p>These stabilize training in deep networks by allowing gradients to flow and preventing activation explosion/vanishing.</p>
+
+    <div class="formula-box">
+    <div class="label">Pre-Norm Residual Block (Used in Modern LLMs)</div>
+    y = x + Sublayer(LayerNorm(x))<br><br>LayerNorm(x) = (x - μ) / √(σ² + ε) · γ + β<br><br>RMSNorm (simpler variant):<br>RMSNorm(x) = x / RMS(x) · γ<br>where RMS(x) = √(mean(x²))<br><br>Residual connections enable:<br>- Direct gradient flow through layers<br>- Layers can learn as incremental modifications<br>- Stability with very deep networks (100+ layers)
+</div>
+</section>
+
+<!-- SECTION: Architecture Deep Dive -->
+<section id="architecture" class="ml-section">
+    <h2>LLM Architecture Deep Dive</h2>
+
+    <p>An LLM is fundamentally a sequence of transformer decoder blocks. Let's understand each component.</p>
+
+    <h3>The Pipeline: Text to Output</h3>
+    <div class="data-flow-anim">
+        <h4>Data Flow Through an LLM</h4>
+        <div class="pipeline-track">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
+                <span class="stage-icon">📝</span>Tokenize
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+                <span class="stage-icon">⬆</span>Embed
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                <span class="stage-icon">🧠</span>Transform
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <span class="stage-icon">📊</span>Logits
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+                <span class="stage-icon">🎲</span>Sample
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                <span class="stage-icon">📄</span>Detokenize
+            </div>
+        </div>
+        <div class="data-particle"></div>
+        <div class="data-particle"></div>
+        <div class="data-particle"></div>
+    </div>
+
+    <h3>Transformer Decoder Block (The Core)</h3>
+    <p>Every LLM is built from stacked decoder blocks. A GPT-3 has 96 blocks, a LLaMA-70B has 80 blocks, etc.</p>
+
+    <div class="formula-box">
+    <div class="label">Single Decoder Block</div>
+    Input: x ∈ ℝ^(batch × seq_len × d_model)<br><br>1. Attention Layer:<br>   attn_out = MultiHeadAttention(x, x, x)  [self-attention]<br>   x = x + attn_out  [residual connection]<br>   x = LayerNorm(x)<br><br>2. Feed-Forward Layer:<br>   ff_out = Linear_2(GELU(Linear_1(x)))<br>   x = x + ff_out  [residual connection]<br>   x = LayerNorm(x)<br><br>Output: x ∈ ℝ^(batch × seq_len × d_model)<br><br>Key insight: Both self-attention and FFN<br>process each position independently in parallel.
+</div>
+
+    <h3>Feed-Forward Network</h3>
+    <p>Despite the name, the FFN in transformers is just two linear layers with a nonlinearity between them:</p>
+
+    <div class="formula-box">
+    <div class="label">FFN Computation</div>
+    FFN(x) = Linear_2(GELU(Linear_1(x)))<br><br>Dimensions (in GPT-3 with d_model=12288):<br>- Linear_1: 12288 → 49152  [4x expansion]<br>- GELU: element-wise nonlinearity<br>- Linear_2: 49152 → 12288<br><br>Variant used in some models:<br>FFN_out = (Linear_1(x) * Linear_1_gate(x)) · W_out<br><br>Accounts for ~66% of parameters in a typical LLM
+</div>
+
+    <h3>Complete Model Architecture</h3>
+    <div class="nn-animated">
+        <h4>LLM Architecture Overview</h4>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; margin: 2rem 0;">
+            <div style="flex: 1; text-align: center; color: white;">
+                <div style="font-weight: 600; margin-bottom: 1rem;">Input Tokens</div>
+                <div style="background: #0891b2; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token IDs</div>
+                <div style="background: #0891b2; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len]</div>
+            </div>
+            <div style="flex: 1; text-align: center; color: white;">
+                <div style="font-weight: 600; margin-bottom: 1rem;">Embedding Layer</div>
+                <div style="background: #6366f1; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token Embedding</div>
+                <div style="background: #6366f1; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len, d_model]</div>
+            </div>
+            <div style="flex: 1; text-align: center; color: white;">
+                <div style="font-weight: 600; margin-bottom: 1rem;">Decoder Blocks (×N)</div>
+                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Self-Attention</div>
+                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Feed-Forward</div>
+            </div>
+            <div style="flex: 1; text-align: center; color: white;">
+                <div style="font-weight: 600; margin-bottom: 1rem;">Output Layer</div>
+                <div style="background: #059669; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Layer Norm</div>
+                <div style="background: #059669; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Linear to vocab</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Decoder-Only vs Encoder-Decoder</h3>
+    <p>LLMs use decoder-only architecture. Here's why it's better than encoder-decoder for language generation:</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Encoder-Decoder</th>
+                <th>Decoder-Only (LLMs)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Architecture</strong></td>
+                <td>Separate encoder &amp; decoder</td>
+                <td>Single stack of blocks</td>
+            </tr>
+            <tr>
+                <td><strong>Attention</strong></td>
+                <td>Encoder self-attn + cross-attn in decoder</td>
+                <td>Causal self-attention only</td>
+            </tr>
+            <tr>
+                <td><strong>Training</strong></td>
+                <td>Requires paired input/output examples</td>
+                <td>Can use plain text (next-token prediction)</td>
+            </tr>
+            <tr>
+                <td><strong>Inference</strong></td>
+                <td>Process input once, then decode output</td>
+                <td>Generate tokens autoregressively</td>
+            </tr>
+            <tr>
+                <td><strong>Examples</strong></td>
+                <td>BERT, T5, machine translation models</td>
+                <td>GPT, Claude, LLaMA, Mistral</td>
+            </tr>
+            <tr>
+                <td><strong>Advantage</strong></td>
+                <td>More efficient for seq2seq tasks</td>
+                <td>Can handle arbitrary text → text tasks via prompting</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>The decoder-only design's elegance: <em>any task can be framed as text generation</em>. Translation? "Translate to French: ..." Classification? "Classify sentiment: ..." Q&A? "Answer: ..." Code generation? "Write Python for: ..."</p>
+</section>
+
+<!-- SECTION: Key Components -->
+<section id="components" class="ml-section">
+    <h2>Key Components Explained</h2>
+
+    <h3>Token Embeddings</h3>
+    <p>The first layer maps token IDs to dense vectors.</p>
+
+    <div class="formula-box">
+    <div class="label">Token Embedding</div>
+    embedding_matrix ∈ ℝ^(vocab_size × d_model)<br><br>For token_id = 42:<br>embedding = embedding_matrix[42]<br><br>Shape: [batch_size, seq_len, d_model]<br><br>Example with GPT-4 (estimated):<br>vocab_size ≈ 100K<br>d_model = 12288<br>embedding_matrix size ≈ 1.2B parameters
+</div>
+
+    <h3>Positional Information</h3>
+    <p>Added to embeddings to convey position. Modern LLMs use Rotary Position Embeddings (RoPE).</p>
+
+    <h3>Attention Heads</h3>
+    <p>Multi-head attention is crucial for performance:</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Hidden Size</th>
+                <th>Num Heads</th>
+                <th>Head Dim</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GPT-2 (small)</td>
+                <td>768</td>
+                <td>12</td>
+                <td>64</td>
+            </tr>
+            <tr>
+                <td>GPT-3</td>
+                <td>12288</td>
+                <td>96</td>
+                <td>128</td>
+            </tr>
+            <tr>
+                <td>LLaMA-7B</td>
+                <td>4096</td>
+                <td>32</td>
+                <td>128</td>
+            </tr>
+            <tr>
+                <td>Mistral-7B</td>
+                <td>4096</td>
+                <td>32</td>
+                <td>128</td>
+            </tr>
+            <tr>
+                <td>Claude 3</td>
+                <td>Hidden (estimated 10K+)</td>
+                <td>Estimated 100+</td>
+                <td>~128</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Feed-Forward Networks</h3>
+    <p>The "hidden" parameters. Each decoder block has an FFN that accounts for 2/3 of its parameters:</p>
+
+    <div class="formula-box">
+    <div class="label">FFN Parameter Count</div>
+    If d_model = 4096 (like LLaMA-7B):<br><br>Standard FFN (4x expansion):<br>- Layer 1: 4096 × (4 × 4096) = ~67M params<br>- Layer 2: (4 × 4096) × 4096 = ~67M params<br>- Total per block: ~134M params<br><br>For 32 decoder blocks: 32 × 134M = 4.3B params<br>Total model size ≈ 7B (embedding + attn + FFN)
+</div>
+
+    <h3>Normalization Strategies</h3>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Strategy</th>
+                <th>Location</th>
+                <th>Formula</th>
+                <th>Used In</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Post-Norm</strong></td>
+                <td>After sublayer</td>
+                <td>x + LayerNorm(sublayer(x))</td>
+                <td>BERT, Early GPT</td>
+            </tr>
+            <tr>
+                <td><strong>Pre-Norm</strong></td>
+                <td>Before sublayer</td>
+                <td>x + sublayer(LayerNorm(x))</td>
+                <td>GPT-3, LLaMA</td>
+            </tr>
+            <tr>
+                <td><strong>RMSNorm</strong></td>
+                <td>Variant of LayerNorm</td>
+                <td>x / RMS(x) · γ</td>
+                <td>LLaMA, LLaMA 2, Mistral</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Activation Functions</h3>
+    <p>In transformer FFNs:</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Function</th>
+                <th>Formula</th>
+                <th>Properties</th>
+                <th>Used In</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GELU</strong></td>
+                <td>x · Φ(x)</td>
+                <td>Smooth, popular in transformers</td>
+                <td>Most modern LLMs</td>
+            </tr>
+            <tr>
+                <td><strong>SwiGLU</strong></td>
+                <td>(xW + b) ⊗ (xV + c)</td>
+                <td>Gating mechanism, reduces dead neurons</td>
+                <td>LLaMA 2</td>
+            </tr>
+            <tr>
+                <td><strong>ReLU</strong></td>
+                <td>max(0, x)</td>
+                <td>Simple but can have dead neurons</td>
+                <td>Older architectures</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation: Building an LLM from Scratch</h2>
+
+    <p>Understanding the architecture means being able to implement it. Here's the core structure in PyTorch.</p>
+
+    <div class="try-it-box">
+    <h4>LLM Architecture Overview</h4>
+    <p>Let's understand the full structure before implementing individual components.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="comment"># High-level LLM structure</span>
+<span class="keyword">class</span> <span class="function">SimpleLLM</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, vocab_size, d_model, num_layers, num_heads):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.embedding = nn.<span class="function">Embedding</span>(vocab_size, d_model)
+        <span class="function">self</span>.pos_encoding = <span class="function">RoPEPositionalEncoding</span>(d_model)
+        
+        <span class="function">self</span>.decoder_blocks = nn.<span class="function">ModuleList</span>([
+            <span class="function">DecoderBlock</span>(d_model, num_heads) 
+            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(num_layers)
+        ])
+        
+        <span class="function">self</span>.final_norm = <span class="function">RMSNorm</span>(d_model)
+        <span class="function">self</span>.lm_head = nn.<span class="function">Linear</span>(d_model, vocab_size)
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, token_ids, attention_mask=<span class="keyword">None</span>):
+        <span class="comment"># token_ids: [batch, seq_len]</span>
+        x = <span class="function">self</span>.<span class="function">embedding</span>(token_ids)  <span class="comment"># [batch, seq_len, d_model]</span>
+        x = <span class="function">self</span>.<span class="function">pos_encoding</span>(x)  <span class="comment"># Add position info</span>
+        
+        <span class="keyword">for</span> block <span class="keyword">in</span> <span class="function">self</span>.decoder_blocks:
+            x = <span class="function">block</span>(x, attention_mask)  <span class="comment"># Apply decoder block</span>
+        
+        x = <span class="function">self</span>.<span class="function">final_norm</span>(x)  <span class="comment"># Final normalization</span>
+        logits = <span class="function">self</span>.<span class="function">lm_head</span>(x)  <span class="comment"># [batch, seq_len, vocab_size]</span>
+        <span class="keyword">return</span> logits
+        </div>
+</div>
+</div>
+
+    <h3>Decoder Block Implementation</h3>
+    <p>The core building block of every LLM:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Decoder Block with Pre-Norm</div>
+    <div class="code-content">
+<span class="keyword">class</span> <span class="function">DecoderBlock</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, num_heads, ff_dim=<span class="keyword">None</span>):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="keyword">if</span> ff_dim <span class="keyword">is</span> <span class="keyword">None</span>:
+            ff_dim = <span class="number">4</span> * d_model
+        
+        <span class="comment"># Multi-head self-attention</span>
+        <span class="function">self</span>.self_attn = <span class="function">MultiHeadAttention</span>(d_model, num_heads)
+        <span class="function">self</span>.norm1 = <span class="function">RMSNorm</span>(d_model)
+        
+        <span class="comment"># Feed-forward network</span>
+        <span class="function">self</span>.ff = nn.<span class="function">Sequential</span>(
+            nn.<span class="function">Linear</span>(d_model, ff_dim),
+            nn.<span class="function">GELU</span>(),
+            nn.<span class="function">Linear</span>(ff_dim, d_model)
+        )
+        <span class="function">self</span>.norm2 = <span class="function">RMSNorm</span>(d_model)
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x, attention_mask=<span class="keyword">None</span>):
+        <span class="comment"># Pre-norm residual: attention</span>
+        x = x + <span class="function">self</span>.<span class="function">self_attn</span>(
+            <span class="function">self</span>.<span class="function">norm1</span>(x), 
+            <span class="function">self</span>.<span class="function">norm1</span>(x), 
+            <span class="function">self</span>.<span class="function">norm1</span>(x),
+            attention_mask=attention_mask
+        )
+        
+        <span class="comment"># Pre-norm residual: feed-forward</span>
+        x = x + <span class="function">self</span>.<span class="function">ff</span>(<span class="function">self</span>.<span class="function">norm2</span>(x))
+        
+        <span class="keyword">return</span> x
+        </div>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Techniques & Optimizations</h2>
+
+    <h3>KV Cache (Key-Value Caching)</h3>
+    <p>The primary bottleneck in LLM inference: we recompute attention over the entire sequence for every new token. KV caching stores previously computed keys and values, dramatically reducing computation.</p>
+
+    <div class="formula-box">
+    <div class="label">Without KV Cache</div>
+    At each step t, compute attention over all positions 0...t<br><br>Step 1: Attention over positions [0]<br>Step 2: Attention over positions [0, 1]<br>Step 3: Attention over positions [0, 1, 2]<br>...<br>Step 1000: Attention over positions [0...999]<br><br>Total: 1 + 2 + 3 + ... + 1000 = 500,500 attention computations
+</div>
+
+    <div class="formula-box">
+    <div class="label">With KV Cache</div>
+    Cache previous K and V matrices<br><br>Step 1: Compute K_1, V_1. Save them.<br>Step 2: Reuse cached K_1, V_1. Compute new K_2, V_2.<br>Step 3: Reuse cached K_1, V_1, K_2, V_2. Compute K_3, V_3.<br>...<br><br>Total: 1 + 1 + 1 + ... + 1 = 1000 computations<br><br>Speedup: ~500x for long sequences!
+</div>
+
+    <p><strong>Tradeoff:</strong> Cache requires memory. For a 7B model generating 1000 tokens, cache uses ~13GB of VRAM. This is why quantization (see below) is crucial.</p>
+
+    <h3>Model Quantization</h3>
+    <p>Reduce memory footprint by storing weights at lower precision (4-bit, 8-bit) instead of 32-bit floats.</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Precision</th>
+                <th>Bits</th>
+                <th>Memory per 7B Model</th>
+                <th>Speed</th>
+                <th>Accuracy Loss</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>FP32 (float32)</td>
+                <td>32</td>
+                <td>~26 GB</td>
+                <td>Baseline</td>
+                <td>None</td>
+            </tr>
+            <tr>
+                <td>FP16 / BF16</td>
+                <td>16</td>
+                <td>~13 GB</td>
+                <td>2x faster (often)</td>
+                <td>Minimal</td>
+            </tr>
+            <tr>
+                <td>8-bit</td>
+                <td>8</td>
+                <td>~6.5 GB</td>
+                <td>Varies</td>
+                <td>Small</td>
+            </tr>
+            <tr>
+                <td>4-bit (GGUF, GPTQ)</td>
+                <td>4</td>
+                <td>~3.25 GB</td>
+                <td>Slower (CPU-bound)</td>
+                <td>Noticeable but manageable</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="info-box">
+    <h4>bitsandbytes</h4>
+    <p>The bitsandbytes library provides 8-bit and 4-bit quantization for PyTorch models. Works seamlessly with HuggingFace models. Trade-off: slightly lower quality for massive memory savings.</p>
+</div>
+
+    <h3>Attention Optimizations</h3>
+    <p>Standard attention is O(n²) in sequence length. For long documents, this becomes prohibitive.</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Flash Attention</h4>
+    <p>Reorder attention computation to reduce memory bandwidth (main bottleneck in attention). Up to 3x faster without changing results.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Grouped Query Attention (GQA)</h4>
+    <p>Share key/value heads across multiple query heads. Reduces KV cache size by 8-16x with minimal accuracy loss.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Multi-Query Attention (MQA)</h4>
+    <p>Extreme case: only 1 KV head for all Q heads. Even smaller cache, used in Mistral.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Sparse Attention</h4>
+    <p>Only attend to nearby tokens + a few distant landmarks. Linear complexity, but harder to implement correctly.</p>
+</div>
+    </div>
+
+    <h3>Speculative Decoding</h3>
+    <p>Generate multiple tokens ahead using a smaller draft model, then verify with the main model. Significantly faster if draft predictions are correct.</p>
+
+    <h3>Mixture of Experts (MoE)</h3>
+    <p>Instead of all FFN computations for every token, route each token to only a small subset of expert networks. Dramatically reduces compute while maintaining quality.</p>
+
+    <div class="formula-box">
+    <div class="label">Mixture of Experts Example</div>
+    Instead of 1 large FFN (144M params in LLaMA-7B):<br><br>Use 8 expert FFNs, each 18M params<br>Learn a router: P(expert | token) for each expert<br>Each token activates ~2 experts<br><br>Total active params per token: ~36M (75% reduction)<br>Total params: 144M (unchanged)<br>Effective speedup: ~4x with same quality<br><br>Used in: Mistral 8x7B, Mixtral, others
+</div>
+</section>
+
+<!-- SECTION: Model Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Modern LLMs: Architecture Comparison</h2>
+
+    <p>While all modern LLMs share the same decoder-only transformer core, they differ in training data, size, optimization techniques, and safety alignment. Here's a comparison of major open and closed models:</p>
+
+    <h3>Capabilities Across Model Families</h3>
+
+    <div style="margin: 2rem 0; padding: 1.5rem; background: #f8fafc; border-radius: 8px;">
+        <h4 style="text-align: center; color: var(--accent-cyan); margin-top: 0;">Performance by Model Size</h4>
+        <div class="model-bars">
+            <div class="model-bar">
+                <div class="model-bar-label">GPT-4</div>
+                <div class="model-bar-track">
+                    <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #0891b2, #22d3ee);">98</div>
+                </div>
+            </div>
+            <div class="model-bar">
+                <div class="model-bar-label">Claude 3 Opus</div>
+                <div class="model-bar-track">
+                    <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a855f7);">96</div>
+                </div>
+            </div>
+            <div class="model-bar">
+                <div class="model-bar-label">LLaMA-70B</div>
+                <div class="model-bar-track">
+                    <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #059669, #10b981);">82</div>
+                </div>
+            </div>
+            <div class="model-bar">
+                <div class="model-bar-label">Mistral 8x7B</div>
+                <div class="model-bar-track">
+                    <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #f59e0b, #fbbf24);">75</div>
+                </div>
+            </div>
+            <div class="model-bar">
+                <div class="model-bar-label">LLaMA-7B</div>
+                <div class="model-bar-track">
+                    <div class="model-bar-fill" style="width: 55%; background: linear-gradient(90deg, #db2777, #f472b6);">55</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Org</th>
+                <th>Params</th>
+                <th>Architecture</th>
+                <th>Training Data</th>
+                <th>License</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GPT-4</strong></td>
+                <td>OpenAI</td>
+                <td>Unknown (Est. 1-1.8T)</td>
+                <td>Decoder-only, post-norm</td>
+                <td>Mixed, proprietary</td>
+                <td>Proprietary</td>
+            </tr>
+            <tr>
+                <td><strong>GPT-3.5</strong></td>
+                <td>OpenAI</td>
+                <td>Unknown (175B?)</td>
+                <td>Decoder-only, post-norm</td>
+                <td>Web, books, code</td>
+                <td>Proprietary</td>
+            </tr>
+            <tr>
+                <td><strong>Claude 3 Opus</strong></td>
+                <td>Anthropic</td>
+                <td>Unknown (Est. 100B+)</td>
+                <td>Decoder-only, unknown details</td>
+                <td>High-quality text, synthetic</td>
+                <td>Proprietary</td>
+            </tr>
+            <tr>
+                <td><strong>LLaMA-70B</strong></td>
+                <td>Meta</td>
+                <td>70B</td>
+                <td>Decoder-only, pre-norm, RoPE, SwiGLU</td>
+                <td>2T tokens (web, books, code)</td>
+                <td>Open (commercial use allowed)</td>
+            </tr>
+            <tr>
+                <td><strong>Mistral-7B</strong></td>
+                <td>Mistral AI</td>
+                <td>7B</td>
+                <td>Decoder-only, pre-norm, RoPE, SwiGLU</td>
+                <td>5T tokens</td>
+                <td>Open (Apache 2.0)</td>
+            </tr>
+            <tr>
+                <td><strong>Mixtral 8x7B</strong></td>
+                <td>Mistral AI</td>
+                <td>7B active (47B total)</td>
+                <td>MoE (8 experts), 2 active</td>
+                <td>Diverse web, code, papers</td>
+                <td>Open (Apache 2.0)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Key Architectural Differences</h3>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>GPT-3</th>
+                <th>LLaMA</th>
+                <th>Mistral</th>
+                <th>Claude</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Position Encoding</strong></td>
+                <td>Sinusoidal</td>
+                <td>RoPE</td>
+                <td>RoPE</td>
+                <td>Unknown (likely RoPE)</td>
+            </tr>
+            <tr>
+                <td><strong>Normalization</strong></td>
+                <td>Post-norm LayerNorm</td>
+                <td>Pre-norm RMSNorm</td>
+                <td>Pre-norm RMSNorm</td>
+                <td>Likely pre-norm</td>
+            </tr>
+            <tr>
+                <td><strong>Activation</strong></td>
+                <td>GELU</td>
+                <td>SwiGLU</td>
+                <td>SwiGLU</td>
+                <td>Unknown</td>
+            </tr>
+            <tr>
+                <td><strong>Attention</strong></td>
+                <td>Standard multi-head</td>
+                <td>Standard multi-head</td>
+                <td>Grouped Query Attention</td>
+                <td>Unknown (possibly optimized)</td>
+            </tr>
+            <tr>
+                <td><strong>Context Length</strong></td>
+                <td>2K tokens</td>
+                <td>4K - 32K variants</td>
+                <td>32K</td>
+                <td>100K (Claude 3.5)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Emerging Architectures</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Linear Attention</h4>
+    <p>Replace softmax(QK^T)V with other kernels for linear complexity. Research stage but promising for long sequences.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>State Space Models (SSMs)</h4>
+    <p>Mamba, xLSTM: Alternative to transformers. Handle long sequences better, but less proven at scale.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Hybrid Architectures</h4>
+    <p>Mix transformer and RNN-like components. Seeking best of both worlds.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Vision-Language Models</h4>
+    <p>GPT-4V, Claude 3: Transformers extended to handle images + text via image tokenization.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Use Cases</h2>
+
+    <p>Understanding LLM architecture helps you choose and deploy models effectively for different applications:</p>
+
+    <h3>Text Generation</h3>
+    <p><strong>Use case:</strong> Chatbots, content creation, code generation.</p>
+    <ul>
+        <li><strong>Key consideration:</strong> Context length matters. Long documents need models with extended context (32K-100K tokens).</li>
+        <li><strong>Deployment:</strong> Temperature and top-p sampling affect output diversity. Lower temp = more deterministic.</li>
+        <li><strong>Cost:</strong> KV cache size dominates memory. Quantization enables running 70B models on consumer GPUs.</li>
+    </ul>
+
+    <h3>Classification & Structured Extraction</h3>
+    <p><strong>Use case:</strong> Sentiment analysis, NER, entity extraction, form-filling.</p>
+    <ul>
+        <li><strong>Key consideration:</strong> Can use prompt engineering (few-shot) or fine-tuning for better accuracy.</li>
+        <li><strong>Alternative:</strong> Token classification (directly predicting labels per token) avoids full generation.</li>
+        <li><strong>Cost:</strong> Inference-only, can batch many examples in parallel.</li>
+    </ul>
+
+    <h3>Retrieval-Augmented Generation (RAG)</h3>
+    <p><strong>Use case:</strong> Q&A over documents, fact-grounded generation, reducing hallucinations.</p>
+    <ul>
+        <li><strong>Pipeline:</strong> Query → Retrieve relevant chunks → Inject into context → Generate answer.</li>
+        <li><strong>Key insight:</strong> LLM architecture enables in-context learning. Longer context (100K tokens) lets you include more documents.</li>
+        <li><strong>Implementation:</strong> Usually retrieval from vector DB (embeddings), then LLM generation.</li>
+    </ul>
+
+    <h3>Fine-Tuning</h3>
+    <p><strong>Use case:</strong> Domain-specific adaptation, style transfer, instruction-following.</p>
+    <ul>
+        <li><strong>Parameter-efficient methods:</strong> LoRA (Low-Rank Adaptation) fine-tunes only a small fraction of parameters, reducing memory and training time by 10-100x.</li>
+        <li><strong>Full fine-tuning:</strong> Updates all parameters. Better quality but expensive (requires GPU).</li>
+        <li><strong>Architectural insight:</strong> Only fine-tune upper layers if you want to preserve general knowledge.</li>
+    </ul>
+
+    <h3>Agents & Function Calling</h3>
+    <p><strong>Use case:</strong> LLM-powered applications that call APIs, database queries, tools.</p>
+    <ul>
+        <li><strong>Mechanism:</strong> LLM generates structured output (function name + args) in XML or JSON format.</li>
+        <li><strong>Architecture consideration:</strong> Requires models trained on function calling (most modern LLMs support this).</li>
+        <li><strong>Example:</strong> ChatGPT with plugins, Claude with tool_use, LLaMA with function calling.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Enterprise Applications -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise Deployment & Considerations</h2>
+
+    <h3>On-Premises vs Cloud Inference</h3>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>On-Premises (Self-Hosted)</th>
+                <th>Cloud API (OpenAI/Anthropic)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Cost Model</strong></td>
+                <td>High upfront (hardware), low marginal cost</td>
+                <td>Pay-per-token (variable cost)</td>
+            </tr>
+            <tr>
+                <td><strong>Privacy</strong></td>
+                <td>Complete data control</td>
+                <td>Data sent to vendor (potentially logged)</td>
+            </tr>
+            <tr>
+                <td><strong>Latency</strong></td>
+                <td>Can optimize, but dependent on setup</td>
+                <td>Network latency included, usually 1-5s</td>
+            </tr>
+            <tr>
+                <td><strong>Control</strong></td>
+                <td>Full control over model behavior, updates</td>
+                <td>Vendor updates models, may change behavior</td>
+            </tr>
+            <tr>
+                <td><strong>Effort</strong></td>
+                <td>Significant ops burden, monitoring, scaling</td>
+                <td>Fully managed, simple API calls</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Hardware Requirements</h3>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>FP32 (GB)</th>
+                <th>FP16 (GB)</th>
+                <th>4-bit (GB)</th>
+                <th>Recommended Hardware</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>LLaMA-7B</td>
+                <td>28</td>
+                <td>14</td>
+                <td>4</td>
+                <td>RTX 4070 (12GB) with quantization</td>
+            </tr>
+            <tr>
+                <td>LLaMA-13B</td>
+                <td>52</td>
+                <td>26</td>
+                <td>8</td>
+                <td>RTX 4090 (24GB)</td>
+            </tr>
+            <tr>
+                <td>LLaMA-70B</td>
+                <td>280</td>
+                <td>140</td>
+                <td>35</td>
+                <td>8x A100 (80GB) or equivalent</td>
+            </tr>
+            <tr>
+                <td>Mixtral 8x7B</td>
+                <td>176</td>
+                <td>88</td>
+                <td>22</td>
+                <td>4x A100 (80GB) or 1x H100</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Safety & Alignment</h3>
+    <p>Raw pre-trained LLMs can generate harmful content. Production systems require alignment:</p>
+
+    <ul>
+        <li><strong>RLHF (Reinforcement Learning from Human Feedback):</strong> Fine-tune with human preferences. Makes models more helpful and less harmful.</li>
+        <li><strong>Constitutional AI:</strong> Anthropic's approach. Fine-tune against a set of safety principles before human feedback.</li>
+        <li><strong>Red-teaming:</strong> Adversarial testing to find edge cases and harmful outputs.</li>
+        <li><strong>Output filtering:</strong> Post-processing to detect and block harmful outputs. Less reliable than training.</li>
+    </ul>
+
+    <h3>Monitoring & Observability</h3>
+    <p>In production, track:</p>
+    <ul>
+        <li><strong>Latency:</strong> P50, P99, P99.9 to detect slowdowns.</li>
+        <li><strong>Throughput:</strong> Tokens/sec, requests/sec.</li>
+        <li><strong>Quality:</strong> User ratings, error rates, toxicity scores.</li>
+        <li><strong>Cost:</strong> Cost per request, tokens per request.</li>
+        <li><strong>Model behavior:</strong> Are outputs drifting from expected patterns?</li>
+    </ul>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common Mistakes When Working with LLMs</h2>
+
+    <h3>1. Ignoring Context Length Limits</h3>
+    <p><strong>Mistake:</strong> Throwing large documents at a 4K-context model and expecting good results.</p>
+    <p><strong>Why it fails:</strong> Tokens beyond the context window are lost. The model can't attend to information outside its context.</p>
+    <p><strong>Fix:</strong> Check model context length. Use RAG (Retrieval-Augmented Generation) for large documents. Use long-context models (32K-100K) when available.</p>
+
+    <h3>2. Using Greedy Decoding for Creative Tasks</h3>
+    <p><strong>Mistake:</strong> Always taking the highest-probability token. Great for deterministic tasks (classification), terrible for creative writing.</p>
+    <p><strong>Why it fails:</strong> Same input → same output every time. No variety in outputs.</p>
+    <p><strong>Fix:</strong> Use temperature ≠ 1. Use top-p (nucleus) sampling. Try top-k sampling.</p>
+
+    <h3>3. Expecting Numeric Reasoning from LLMs</h3>
+    <p><strong>Mistake:</strong> Asking for exact calculations (e.g., "What's 234 * 567?") and trusting the first output.</p>
+    <p><strong>Why it fails:</strong> LLMs generate text token-by-token, not compute. They can make arithmetic errors.</p>
+    <p><strong>Fix:</strong> Use prompting techniques (chain-of-thought, scratchpad). Better: use the LLM to write code that calls a calculator.</p>
+
+    <h3>4. Not Using Prompt Engineering Techniques</h3>
+    <p><strong>Mistake:</strong> Using simple prompts without few-shot examples or structured formats.</p>
+    <p><strong>Why it fails:</strong> Ambiguous prompts lead to inconsistent outputs.</p>
+    <p><strong>Fix:</strong> Use:
+    <ul>
+        <li><strong>Few-shot examples:</strong> Show 1-3 examples of input→output before your actual query.</li>
+        <li><strong>Chain-of-thought:</strong> Ask the model to "think step by step."</li>
+        <li><strong>Structured output:</strong> Request JSON/XML format for parsing.</li>
+        <li><strong>Role-play:</strong> "You are an expert in X..." to set context.</li>
+    </ul>
+    </p>
+
+    <h3>5. Forgetting About Tokenization Differences</h3>
+    <p><strong>Mistake:</strong> Assuming "1000 tokens" means the same thing across all models.</p>
+    <p><strong>Why it fails:</strong> Different tokenizers → different token counts. Cost estimates and timing will be wrong.</p>
+    <p><strong>Fix:</strong> Use model-specific tokenizers. When comparing models, use actual token counts, not word counts.</p>
+
+    <h3>6. Improper Batching Strategy</h3>
+    <p><strong>Mistake:</strong> Processing requests one-by-one instead of batching.</p>
+    <p><strong>Why it fails:</strong> Severe throughput loss. GPUs are massively underutilized.</p>
+    <p><strong>Fix:</strong> Batch multiple requests together. Balance throughput vs latency based on your SLA.</p>
+
+    <h3>7. Not Handling Hallucinations</h3>
+    <p><strong>Mistake:</strong> Treating LLM outputs as facts without verification.</p>
+    <p><strong>Why it fails:</strong> LLMs confidently generate false information.</p>
+    <p><strong>Fix:</strong> For factual tasks, use RAG with retrieved sources. Provide verification mechanisms. Add disclaimers.</p>
+
+    <h3>8. Underestimating Memory Requirements</h3>
+    <p><strong>Mistake:</strong> Assuming a model's parameter count is the only memory consideration.</p>
+    <p><strong>Why it fails:</strong> KV cache grows with sequence length. Batch size * seq_len * model_size can be huge.</p>
+    <p><strong>Fix:</strong> Budget for weights + KV cache + optimizer state. Use quantization. Monitor actual memory during load testing.</p>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices for LLM Architecture</h2>
+
+    <h3>Design Principles</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Start Small, Scale Up</h4>
+    <p>Prototype with smaller models (7B). If it works and metrics are good, scale to larger models or optimize.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Measure Everything</h4>
+    <p>Latency, throughput, accuracy, cost. Don't optimize without metrics. Use A/B tests for major changes.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Understand Your Requirements</h4>
+    <p>Real-time vs batch? Accuracy vs cost trade-offs? Privacy needs? Choose model accordingly.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Use the Right Tool</h4>
+    <p>Not every task needs an LLM. Sometimes embeddings, fine-tuned models, or rules are better.</p>
+</div>
+    </div>
+
+    <h3>Deployment Best Practices</h3>
+
+    <ul>
+        <li><strong>Load testing:</strong> Test at expected peak load before production. Watch for memory leaks, gradual slowdown.</li>
+        <li><strong>Monitoring:</strong> Track latency percentiles, error rates, token costs. Alert on anomalies.</li>
+        <li><strong>Graceful degradation:</strong> Have a fallback model (smaller, faster) if main model is overloaded.</li>
+        <li><strong>Caching:</strong> Cache identical requests. Use semantic caching for similar requests (embedding-based).</li>
+        <li><strong>Rate limiting:</strong> Prevent abuse. Budget tokens per user/hour.</li>
+        <li><strong>Versioning:</strong> Never change production model without testing. Keep old version available to rollback.</li>
+    </ul>
+
+    <h3>Optimization Techniques</h3>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">KV Cache Optimization <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Store keys and values from previous tokens so they don't need recomputation. Critical for fast inference. Tradeoff: uses memory.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Batching Strategy <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Batch multiple requests together. Higher throughput but higher latency. Find your sweet spot based on SLA.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Quantization <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">Use 4-bit or 8-bit weights instead of 32-bit. 4-8x memory reduction with ~5-10% quality loss. Depends on task.</div>
+    </div>
+</div>
+
+    <div class="collapsible-section">
+    <div class="collapsible-header">Context Pruning <span class="toggle-icon">&#9660;</span></div>
+    <div class="collapsible-content">
+        <div class="collapsible-body">If context is very long, remove least-relevant documents/chunks. Reduces KV cache size and latency.</div>
+    </div>
+</div>
+
+    <h3>Prompt Engineering Best Practices</h3>
+
+    <ul>
+        <li><strong>Be explicit:</strong> Tell the model exactly what you want. Ambiguous prompts → inconsistent outputs.</li>
+        <li><strong>Use examples:</strong> Few-shot learning (showing examples) is more effective than just instructions.</li>
+        <li><strong>Structure output:</strong> Request JSON/XML/Markdown format for easier parsing.</li>
+        <li><strong>Test variations:</strong> Try different phrasings. Some prompts work better than others for unknown reasons.</li>
+        <li><strong>Avoid ambiguity:</strong> "Summarize" is vague. "Summarize in 3 bullet points, focusing on risk factors" is clear.</li>
+        <li><strong>Chain-of-thought:</strong> Ask the model to explain reasoning step-by-step before giving final answer. Often improves accuracy.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Insights into LLM Behavior</h2>
+
+    <h3>Scaling Laws</h3>
+    <p>A crucial discovery: LLM performance follows predictable scaling laws. More parameters and more training data = better performance, but with diminishing returns.</p>
+
+    <div class="formula-box">
+    <div class="label">Chinchilla Scaling Law</div>
+    L(N, D) = E + (A/N^α) + (B/D^β)<br><br>Where:<br>  L = Loss (lower is better)<br>  N = Number of parameters<br>  D = Number of training tokens<br>  A, B, E, α, β = empirically determined constants<br><br>Optimal ratio: D ≈ 20 × N<br><br>Example: 7B parameter model should train on ~140B tokens
+</div>
+
+    <p>This means the best models aren't just bigger — they're also trained on more diverse, higher-quality data.</p>
+
+    <h3>Emergent Abilities</h3>
+    <p>LLMs exhibit surprising phenomena at scale:</p>
+
+    <ul>
+        <li><strong>Few-shot learning:</strong> After scale, models can solve tasks with just a few examples in the prompt.</li>
+        <li><strong>Chain-of-thought reasoning:</strong> Asking models to "explain step by step" dramatically improves their reasoning.</li>
+        <li><strong>In-context learning:</strong> Models learn from patterns in the prompt context without any parameter updates.</li>
+        <li><strong>Inverse scaling:</strong> Some behaviors get worse with scale (e.g., reading comprehension of very long contexts).</li>
+    </ul>
+
+    <h3>Mechanistic Interpretability</h3>
+    <p>We still don't fully understand how LLMs work internally. But progress is being made:</p>
+
+    <ul>
+        <li><strong>Attention visualization:</strong> Attention matrices show which tokens a model focuses on. Sometimes interpretable.</li>
+        <li><strong>Neuron probing:</strong> Individual neurons correlate with specific concepts (e.g., a neuron fires for names).</li>
+        <li><strong>Causal tracing:</strong> Which components contribute to a specific output?</li>
+        <li><strong>Feature extraction:</strong> Deep layers extract high-level concepts; shallow layers handle surface patterns.</li>
+    </ul>
+
+    <h3>Why LLMs Are Good at Things They Weren't Explicitly Trained For</h3>
+
+    <p>LLMs trained on next-token prediction somehow learn:</p>
+    <ul>
+        <li>Basic arithmetic (with errors)</li>
+        <li>Step-by-step reasoning</li>
+        <li>Code generation and execution (understanding code semantics)</li>
+        <li>Multiple languages</li>
+        <li>Factual knowledge about the world</li>
+    </ul>
+
+    <p>This is possible because pre-training on diverse text includes examples of all these tasks. The model implicitly learns to pattern-match and generalize.</p>
+
+    <h3>The Role of Instruction Tuning</h3>
+
+    <p>Raw pre-trained models are "aligned" to predict the next token, not to follow instructions. Fine-tuning on instruction data (input: instruction, output: response) teaches them to behave like assistants.</p>
+
+    <p>This is why ChatGPT feels so different from GPT-3.5 base model — it's the same architecture, but fine-tuned on instruction data.</p>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Hands-On Code Examples</h2>
+
+    <h3>Example 1: Causal Attention Mask</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Creating a Causal Attention Mask</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+
+<span class="keyword">def</span> <span class="function">create_causal_mask</span>(seq_len, device):
+    <span class="string">'''
+    Creates a lower-triangular mask for causal attention.
+    Prevents a position from attending to future positions.
+    '''</span>
+    <span class="comment"># Create a 2D matrix of all ones</span>
+    ones = torch.<span class="function">ones</span>(seq_len, seq_len, device=device)
+    
+    <span class="comment"># Create lower triangular (1 for past, 0 for future)</span>
+    mask = torch.<span class="function">tril</span>(ones)
+    
+    <span class="comment"># Convert: 1 -&amp;gt; 0, 0 -&amp;gt; -inf (so softmax ignores future)</span>
+    mask = mask.<span class="function">masked_fill</span>(mask == <span class="number">0</span>, <span class="function">float</span>(<span class="string">'-inf'</span>))
+    
+    <span class="keyword">return</span> mask
+
+<span class="comment"># Usage</span>
+seq_len = <span class="number">4</span>
+causal_mask = <span class="function">create_causal_mask</span>(seq_len, device=<span class="string">'cuda'</span>)
+<span class="function">print</span>(<span class="string">f"Mask shape: {causal_mask.shape}"</span>)
+<span class="comment"># Mask for position 2 will be:</span>
+<span class="comment"># [0.0, -inf, -inf, -inf]  (can't attend to 1,2,3)</span>
+
+<span class="comment"># Apply to attention scores (before softmax)</span>
+<span class="comment"># attn_scores: [batch, num_heads, seq_len, seq_len]</span>
+attn_scores_masked = attn_scores + causal_mask.<span class="function">unsqueeze</span>(<span class="number">0</span>).<span class="function">unsqueeze</span>(<span class="number">0</span>)
+attn_probs = F.<span class="function">softmax</span>(attn_scores_masked, dim=-<span class="number">1</span>)
+</div>
+</div>
+
+    <h3>Example 2: Multi-Head Attention Implementation</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Multi-Head Self-Attention</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> math
+
+<span class="keyword">class</span> <span class="function">MultiHeadAttention</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, num_heads):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="keyword">assert</span> d_model % num_heads == <span class="number">0</span>
+        
+        <span class="function">self</span>.d_model = d_model
+        <span class="function">self</span>.num_heads = num_heads
+        <span class="function">self</span>.head_dim = d_model // num_heads
+        
+        <span class="comment"># Linear projections</span>
+        <span class="function">self</span>.W_q = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_k = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_v = nn.<span class="function">Linear</span>(d_model, d_model)
+        <span class="function">self</span>.W_o = nn.<span class="function">Linear</span>(d_model, d_model)
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, Q, K, V, mask=<span class="keyword">None</span>):
+        batch_size = Q.shape[<span class="number">0</span>]
+        
+        <span class="comment"># Project and reshape</span>
+        Q = <span class="function">self</span>.<span class="function">W_q</span>(Q).<span class="function">reshape</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.head_dim)
+        K = <span class="function">self</span>.<span class="function">W_k</span>(K).<span class="function">reshape</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.head_dim)
+        V = <span class="function">self</span>.<span class="function">W_v</span>(V).<span class="function">reshape</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.num_heads, <span class="function">self</span>.head_dim)
+        
+        <span class="comment"># Transpose for multi-head attention</span>
+        Q = Q.<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)  <span class="comment"># [batch, num_heads, seq_len, head_dim]</span>
+        K = K.<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)
+        V = V.<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>)
+        
+        <span class="comment"># Scaled dot-product attention</span>
+        scores = torch.<span class="function">matmul</span>(Q, K.<span class="function">transpose</span>(-<span class="number">2</span>, -<span class="number">1</span>)) / math.<span class="function">sqrt</span>(<span class="function">self</span>.head_dim)
+        
+        <span class="keyword">if</span> mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+            scores = scores + mask.<span class="function">unsqueeze</span>(<span class="number">0</span>).<span class="function">unsqueeze</span>(<span class="number">0</span>)
+        
+        attn_weights = torch.<span class="function">softmax</span>(scores, dim=-<span class="number">1</span>)
+        output = torch.<span class="function">matmul</span>(attn_weights, V)
+        
+        <span class="comment"># Concatenate heads</span>
+        output = output.<span class="function">transpose</span>(<span class="number">1</span>, <span class="number">2</span>).<span class="function">contiguous</span>()
+        output = output.<span class="function">reshape</span>(batch_size, -<span class="number">1</span>, <span class="function">self</span>.d_model)
+        output = <span class="function">self</span>.<span class="function">W_o</span>(output)
+        
+        <span class="keyword">return</span> output
+</div>
+</div>
+
+    <h3>Example 3: KV Cache for Efficient Generation</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — KV Cache Implementation</div>
+    <div class="code-content">
+<span class="keyword">class</span> KVCache:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, max_seq_len, batch_size, num_heads, head_dim, device):
+        <span class="function">self</span>.max_seq_len = max_seq_len
+        <span class="function">self</span>.batch_size = batch_size
+        <span class="function">self</span>.num_heads = num_heads
+        <span class="function">self</span>.head_dim = head_dim
+        <span class="function">self</span>.device = device
+        
+        <span class="comment"># Preallocate cache tensors</span>
+        <span class="function">self</span>.k_cache = torch.<span class="function">zeros</span>(
+            batch_size, num_heads, max_seq_len, head_dim, device=device
+        )
+        <span class="function">self</span>.v_cache = torch.<span class="function">zeros</span>(
+            batch_size, num_heads, max_seq_len, head_dim, device=device
+        )
+        <span class="function">self</span>.pos = <span class="number">0</span>
+    
+    <span class="keyword">def</span> <span class="function">update</span>(<span class="function">self</span>, k, v):
+        <span class="string">'''Store new keys and values, returns concatenated cache.'''</span>
+        seq_len = k.shape[-<span class="number">2</span>]
+        
+        <span class="comment"># Store in cache</span>
+        <span class="function">self</span>.k_cache[:, :, <span class="function">self</span>.pos:<span class="function">self</span>.pos + seq_len] = k
+        <span class="function">self</span>.v_cache[:, :, <span class="function">self</span>.pos:<span class="function">self</span>.pos + seq_len] = v
+        
+        <span class="function">self</span>.pos += seq_len
+        
+        <span class="comment"># Return all cached K and V up to current position</span>
+        <span class="keyword">return</span> (
+            <span class="function">self</span>.k_cache[:, :, :<span class="function">self</span>.pos],
+            <span class="function">self</span>.v_cache[:, :, :<span class="function">self</span>.pos]
+        )
+    
+    <span class="keyword">def</span> <span class="function">reset</span>(<span class="function">self</span>):
+        <span class="function">self</span>.pos = <span class="number">0</span>
+
+<span class="comment"># Usage during generation</span>
+cache = <span class="function">KVCache</span>(max_seq_len=<span class="number">1024</span>, batch_size=<span class="number">1</span>, 
+                num_heads=<span class="number">32</span>, head_dim=<span class="number">128</span>, device=<span class="string">'cuda'</span>)
+
+<span class="comment"># At each generation step:</span>
+<span class="comment"># new_k, new_v = attention_layer(new_token, ...)</span>
+<span class="comment"># cached_k, cached_v = cache.update(new_k, new_v)</span>
+<span class="comment"># attn_out = attention(Q, cached_k, cached_v)  # Only compute from cache</span>
+</div>
+</div>
+
+    <h3>Example 4: Temperature and Top-P Sampling</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Sampling Strategies</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+
+<span class="keyword">def</span> <span class="function">temperature_sampling</span>(logits, temperature=<span class="number">1.0</span>):
+    <span class="string">'''Lower temperature = more confident, deterministic.'''</span>
+    <span class="keyword">if</span> temperature == <span class="number">0</span>:
+        <span class="keyword">return</span> torch.<span class="function">argmax</span>(logits, dim=-<span class="number">1</span>)
+    
+    scaled_logits = logits / temperature
+    probs = F.<span class="function">softmax</span>(scaled_logits, dim=-<span class="number">1</span>)
+    <span class="keyword">return</span> torch.<span class="function">multinomial</span>(probs, num_samples=<span class="number">1</span>).<span class="function">squeeze</span>(-<span class="number">1</span>)
+
+<span class="keyword">def</span> <span class="function">top_k_sampling</span>(logits, k=<span class="number">50</span>):
+    <span class="string">'''Only sample from top-k most likely tokens.'''</span>
+    top_k_logits, top_k_indices = torch.<span class="function">topk</span>(logits, k)
+    
+    <span class="comment"># Set all other logits to -inf</span>
+    logits_filtered = torch.<span class="function">full_like</span>(logits, <span class="function">float</span>(<span class="string">'-inf'</span>))
+    logits_filtered.<span class="function">scatter_</span>(-<span class="number">1</span>, top_k_indices, top_k_logits)
+    
+    probs = F.<span class="function">softmax</span>(logits_filtered, dim=-<span class="number">1</span>)
+    <span class="keyword">return</span> torch.<span class="function">multinomial</span>(probs, num_samples=<span class="number">1</span>).<span class="function">squeeze</span>(-<span class="number">1</span>)
+
+<span class="keyword">def</span> <span class="function">top_p_sampling</span>(logits, p=<span class="number">0.9</span>):
+    <span class="string">'''Nucleus sampling: sample from tokens until cumulative prob &amp;gt; p.'''</span>
+    sorted_logits, sorted_indices = torch.<span class="function">sort</span>(logits, descending=<span class="keyword">True</span>)
+    sorted_probs = F.<span class="function">softmax</span>(sorted_logits, dim=-<span class="number">1</span>)
+    
+    <span class="comment"># Compute cumulative probabilities</span>
+    cum_probs = torch.<span class="function">cumsum</span>(sorted_probs, dim=-<span class="number">1</span>)
+    
+    <span class="comment"># Find cutoff index</span>
+    sorted_indices_to_remove = cum_probs &gt; p
+    sorted_indices_to_remove[..., <span class="number">0</span>] = <span class="keyword">False</span>  <span class="comment"># Keep at least top token</span>
+    
+    logits_filtered = torch.<span class="function">full_like</span>(logits, <span class="function">float</span>(<span class="string">'-inf'</span>))
+    logits_filtered.<span class="function">scatter_</span>(-<span class="number">1</span>, sorted_indices[~sorted_indices_to_remove], 
+                            sorted_logits[~sorted_indices_to_remove])
+    
+    probs = F.<span class="function">softmax</span>(logits_filtered, dim=-<span class="number">1</span>)
+    <span class="keyword">return</span> torch.<span class="function">multinomial</span>(probs, num_samples=<span class="number">1</span>).<span class="function">squeeze</span>(-<span class="number">1</span>)
+
+<span class="comment"># Usage</span>
+logits = <span class="function">model</span>(input_ids)  <span class="comment"># [batch, vocab_size]</span>
+
+<span class="comment"># Deterministic (greedy)</span>
+next_token = torch.<span class="function">argmax</span>(logits, dim=-<span class="number">1</span>)
+
+<span class="comment"># Creative generation</span>
+next_token = <span class="function">top_p_sampling</span>(logits, p=<span class="number">0.95</span>)
+
+<span class="comment"># Balanced</span>
+next_token = <span class="function">temperature_sampling</span>(logits, temperature=<span class="number">0.7</span>)
+</div>
+</div>
+
+    <h3>Example 5: Loading and Using HuggingFace Models</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — HuggingFace Model Loading</div>
+    <div class="code-content">
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer
+<span class="keyword">import</span> torch
+
+<span class="comment"># Load LLaMA 7B</span>
+model_name = <span class="string">"meta-llama/Llama-2-7b-hf"</span>
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    device_map=<span class="string">"auto"</span>,  <span class="comment"># Automatically place on GPU if available</span>
+    torch_dtype=torch.float16  <span class="comment"># Use FP16 for memory efficiency</span>
+)
+
+<span class="comment"># Generate text</span>
+prompt = <span class="string">"The future of AI is"</span>
+inputs = <span class="function">tokenizer</span>(prompt, return_tensors=<span class="string">"pt"</span>)
+outputs = model.<span class="function">generate</span>(
+    **inputs,
+    max_new_tokens=<span class="number">100</span>,
+    temperature=<span class="number">0.7</span>,
+    top_p=<span class="number">0.95</span>,
+    do_sample=<span class="keyword">True</span>
+)
+
+response = tokenizer.<span class="function">decode</span>(outputs[<span class="number">0</span>], skip_special_tokens=<span class="keyword">True</span>)
+<span class="function">print</span>(response)
+
+<span class="comment"># With quantization (4-bit, using bitsandbytes)</span>
+<span class="keyword">from</span> transformers <span class="keyword">import</span> BitsAndBytesConfig
+
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_use_double_quant=<span class="keyword">True</span>,
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>
+)
+</div>
+</div>
+
+    <h3>Example 6: Model Quantization with bitsandbytes</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — 8-bit and 4-bit Quantization</div>
+    <div class="code-content">
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, BitsAndBytesConfig
+<span class="keyword">import</span> torch
+
+model_name = <span class="string">"meta-llama/Llama-2-70b-hf"</span>
+
+<span class="comment"># 8-bit quantization</span>
+bnb_config_8bit = <span class="function">BitsAndBytesConfig</span>(load_in_8bit=<span class="keyword">True</span>)
+model_8bit = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    quantization_config=bnb_config_8bit,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># 4-bit quantization (more aggressive)</span>
+bnb_config_4bit = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_quant_type=<span class="string">"nf4"</span>,  <span class="comment"># Normal float 4-bit</span>
+    bnb_4bit_use_double_quant=<span class="keyword">True</span>,  <span class="comment"># Quantize quantization constants</span>
+    bnb_4bit_compute_dtype=torch.bfloat16  <span class="comment"># Use BF16 for computation</span>
+)
+model_4bit = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    quantization_config=bnb_config_4bit,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># Memory comparison (70B model):</span>
+<span class="comment"># Full precision (FP32): 280 GB</span>
+<span class="comment"># FP16: 140 GB</span>
+<span class="comment"># 8-bit: 70 GB</span>
+<span class="comment"># 4-bit: 35 GB</span>
+<span class="comment"># 4-bit with double quant: ~25-30 GB</span>
+
+<span class="function">print</span>(<span class="string">f"Model memory: {model_4bit.get_memory_footprint() / 1e9:.1f} GB"</span>)
+</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Try It Yourself: Exercises</h2>
+
+    <h3>Exercise 1: Build a Simple Attention Head</h3>
+
+    <div class="try-it-box">
+    <h4>Implement Scaled Dot-Product Attention</h4>
+    <p>Build a single attention head from scratch. This will deepen your understanding of how attention works.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> math
+
+<span class="keyword">class</span> <span class="function">AttentionHead</span>(nn.Module):
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, d_model, head_dim):
+        <span class="function">super</span>().<span class="function">__init__</span>()
+        <span class="function">self</span>.d_model = d_model
+        <span class="function">self</span>.head_dim = head_dim
+        
+        <span class="comment"># TODO: Create three linear layers for Q, K, V projections</span>
+        <span class="comment"># self.W_q = ...</span>
+        <span class="comment"># self.W_k = ...</span>
+        <span class="comment"># self.W_v = ...</span>
+    
+    <span class="keyword">def</span> <span class="function">forward</span>(<span class="function">self</span>, x, mask=<span class="keyword">None</span>):
+        <span class="comment"># TODO: </span>
+        <span class="comment"># 1. Project x to Q, K, V</span>
+        <span class="comment"># 2. Compute scores = Q @ K^T / sqrt(d_k)</span>
+        <span class="comment"># 3. Apply mask if provided</span>
+        <span class="comment"># 4. Apply softmax to get attention weights</span>
+        <span class="comment"># 5. Return weights @ V</span>
+        <span class="keyword">pass</span>
+        </div>
+</div>
+</div>
+
+    <h3>Exercise 2: Implement KV Caching</h3>
+
+    <div class="try-it-box">
+    <h4>Optimize Generation with KV Cache</h4>
+    <p>Implement a simple KV cache to speed up token generation. Measure the speedup!</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">import</span> time
+
+<span class="keyword">class</span> GenerationWithCache:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model, max_new_tokens=<span class="number">100</span>):
+        <span class="function">self</span>.model = model
+        <span class="function">self</span>.max_new_tokens = max_new_tokens
+    
+    <span class="keyword">def</span> <span class="function">generate_with_cache</span>(<span class="function">self</span>, input_ids):
+        <span class="string">'''Generate tokens efficiently using KV cache.'''</span>
+        <span class="comment"># TODO:</span>
+        <span class="comment"># 1. Initialize KV cache</span>
+        <span class="comment"># 2. For each new token:</span>
+        <span class="comment">#    a. Compute attention using cached K, V for previous tokens</span>
+        <span class="comment">#    b. Store new K, V in cache</span>
+        <span class="comment">#    c. Sample next token</span>
+        <span class="comment"># 3. Return generated sequence</span>
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function">generate_without_cache</span>(<span class="function">self</span>, input_ids):
+        <span class="string">'''Generate tokens WITHOUT cache (for comparison).'''</span>
+        <span class="comment"># Recompute attention from scratch each time</span>
+        <span class="keyword">pass</span>
+
+<span class="comment"># Benchmark</span>
+<span class="comment"># tokens_without = generate_without_cache(input_ids)</span>
+<span class="comment"># time_without = measure_time()</span>
+<span class="comment">#</span>
+<span class="comment"># tokens_with = generate_with_cache(input_ids)</span>
+<span class="comment"># time_with = measure_time()</span>
+<span class="comment">#</span>
+<span class="comment"># speedup = time_without / time_with</span>
+        </div>
+</div>
+</div>
+
+    <h3>Exercise 3: Prompt Engineering Challenge</h3>
+
+    <div class="try-it-box">
+    <h4>Improve Output Quality Through Prompting</h4>
+    <p>Write increasingly better prompts to get high-quality outputs from an LLM without fine-tuning.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, AutoTokenizer
+
+model_name = <span class="string">"meta-llama/Llama-2-7b-hf"</span>
+model = AutoModelForCausalLM.<span class="function">from_pretrained</span>(model_name)
+tokenizer = AutoTokenizer.<span class="function">from_pretrained</span>(model_name)
+
+<span class="comment"># Task: Generate Python code for a binary search</span>
+
+<span class="comment"># Attempt 1: Simple prompt (likely to fail)</span>
+prompt_1 = <span class="string">"Write binary search code"</span>
+
+<span class="comment"># Attempt 2: More specific</span>
+prompt_2 = <span class="string">"Write a Python function for binary search"</span>
+
+<span class="comment"># Attempt 3: With examples (few-shot)</span>
+prompt_3 = <span class="string">'''Write a Python function for binary search.
+
+Example:
+def linear_search(arr, target):
+    for i, val in enumerate(arr):
+        if val == target:
+            return i
+    return -1
+
+Now write binary search:'''</span>
+
+<span class="comment"># Attempt 4: With constraints and output format</span>
+prompt_4 = <span class="string">'''Write a Python function for binary search.
+- Take a sorted array and target value as inputs
+- Return the index if found, -1 if not found
+- Include type hints
+- Add a docstring
+
+def binary_search(arr: list[int], target: int) -&amp;gt; int:'''</span>
+
+<span class="comment"># TODO:</span>
+<span class="comment"># 1. Run each prompt</span>
+<span class="comment"># 2. Compare output quality</span>
+<span class="comment"># 3. Which performed best?</span>
+<span class="comment"># 4. Why do you think certain prompts worked better?</span>
+        </div>
+</div>
+</div>
+
+    <h3>Exercise 4: Quantization Trade-offs</h3>
+
+    <div class="try-it-box">
+    <h4>Compare Quantized vs Full-Precision Models</h4>
+    <p>Load the same model in different precisions. Compare memory, speed, and output quality.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">import</span> torch
+<span class="keyword">from</span> transformers <span class="keyword">import</span> AutoModelForCausalLM, BitsAndBytesConfig
+<span class="keyword">import</span> time
+
+model_name = <span class="string">"meta-llama/Llama-2-7b-hf"</span>
+test_prompt = <span class="string">"Explain machine learning in one sentence: "</span>
+
+<span class="comment"># Load FP16 version</span>
+model_fp16 = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    torch_dtype=torch.float16,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># Load 4-bit quantized version</span>
+bnb_config = <span class="function">BitsAndBytesConfig</span>(
+    load_in_4bit=<span class="keyword">True</span>,
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+model_4bit = AutoModelForCausalLM.<span class="function">from_pretrained</span>(
+    model_name,
+    quantization_config=bnb_config,
+    device_map=<span class="string">"auto"</span>
+)
+
+<span class="comment"># TODO:</span>
+<span class="comment"># 1. Measure memory usage for both</span>
+<span class="comment"># 2. Generate output from both models</span>
+<span class="comment"># 3. Measure inference time</span>
+<span class="comment"># 4. Compare output quality (subjective)</span>
+<span class="comment"># 5. Compute memory-speed-quality tradeoff</span>
+
+<span class="comment"># Memory</span>
+mem_fp16 = model_fp16.<span class="function">get_memory_footprint</span>() / <span class="number">1e9</span>
+mem_4bit = model_4bit.<span class="function">get_memory_footprint</span>() / <span class="number">1e9</span>
+
+<span class="function">print</span>(<span class="string">f"FP16 memory: {mem_fp16:.1f} GB"</span>)
+<span class="function">print</span>(<span class="string">f"4-bit memory: {mem_4bit:.1f} GB"</span>)
+<span class="function">print</span>(<span class="string">f"Savings: {(1 - mem_4bit/mem_fp16)*100:.1f}%"</span>)
+        </div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions</h2>
+
+    <p>Expect these types of questions when interviewing for LLM-focused roles:</p>
+
+    <div class="faq-item">
+    <div class="faq-question">1. Explain how self-attention works and why it's better than RNNs. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Self-attention lets every token attend to every other token in parallel, unlike RNNs which process sequentially. Key advantages:
+        <ul>
+        <li><strong>Parallelization:</strong> RNNs must process tokens one-by-one, creating a bottleneck. Transformers process all tokens in parallel.</li>
+        <li><strong>Long-range dependencies:</strong> Self-attention can directly connect distant tokens without degradation (no vanishing gradient problem).</li>
+        <li><strong>Efficiency:</strong> A transformer layer has O(n²) complexity per sequence but trains much faster due to parallelization.</li>
+        <li><strong>Interpretability:</strong> Attention weights directly show which tokens the model focused on.</li>
+        </ul>
+        <strong>Mathematical insight:</strong> Query vectors ask "what am I looking for?", keys offer "here's what I have", values provide "here's my information". Softmax over dot products creates a weighted average.
+        </div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">2. Why do we use KV caching in LLM inference? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">KV caching is essential for efficient generation. Without it: at each step t, we recompute attention over all positions 0...t, resulting in O(n²) total computation. With KV caching, we store previous K and V matrices and only compute attention for the new token against cached values, reducing this to O(n). This gives 100-500x speedups for long sequences. Tradeoff: requires memory proportional to sequence length × model size. That's why quantization and GQA (grouped query attention) help.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">3. What's the difference between causal and non-causal attention? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>Causal attention:</strong> Used in LLMs (decoder-only). A token can only attend to itself and previous tokens, not future ones. This enforces autoregressive generation: each token is predicted from prior tokens only. Implemented via a lower-triangular mask. <strong>Non-causal (bidirectional) attention:</strong> Used in BERT and encoders. Tokens can attend to all other tokens. Suitable for understanding but not generation. In practice: causal masking is essential for language models to prevent information leakage during training.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">4. Explain the trade-off between model size and inference latency. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Larger models have higher latency due to:
+        <ul>
+        <li><strong>More parameters:</strong> 7B model vs 70B model: ~10x more computation.</li>
+        <li><strong>KV cache size:</strong> Larger d_model → larger cache → more memory bandwidth.</li>
+        <li><strong>Batch size constraints:</strong> Only fit fewer sequences in GPU memory.</li>
+        </ul>
+        However, larger models produce better outputs. Solutions:
+        <ul>
+        <li><strong>Quantization:</strong> 4-bit reduces compute and memory.</li>
+        <li><strong>Distillation:</strong> Train smaller models to mimic larger ones.</li>
+        <li><strong>Speculative decoding:</strong> Use small draft model, verify with large model.</li>
+        <li><strong>Mixture of Experts:</strong> Route tokens to subset of experts.</li>
+        </ul></div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">5. How does positional encoding in transformers work, and why is RoPE better than sinusoidal encoding? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>Sinusoidal encoding:</strong> PE(pos, 2i) = sin(pos / 10000^(2i/d_model)). Encodes position as a fixed pattern added to embeddings. <strong>RoPE (Rotary Position Embeddings):</strong> Rotates Q and K vectors in 2D subspaces by angles proportional to position. Advantages of RoPE:
+        <ul>
+        <li><strong>Relative position encoding:</strong> Attention computation naturally encodes relative distances.</li>
+        <li><strong>Better extrapolation:</strong> Works better on sequences longer than training length.</li>
+        <li><strong>Simpler:</strong> No need to set d_model-dependent constants.</li>
+        </ul>
+        Modern LLMs (LLaMA, Mistral) use RoPE.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">6. What are the main differences between GPT-style and BERT-style architectures? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>GPT (decoder-only):</strong> Causal self-attention. Trained on next-token prediction. Can generate unlimited sequences. Used for open-ended generation, few-shot learning. <strong>BERT (encoder-only):</strong> Non-causal attention. Trained on masked language modeling (predict masked tokens). Great for understanding/classification but not generation. <strong>Encoder-Decoder (T5):</strong> Both. Encoder processes input, decoder generates output autoregressively with cross-attention to encoder. Best for seq2seq tasks but more complex. Modern trend: decoder-only (GPT-style) dominates because it's simpler and more flexible.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">7. Describe the process of fine-tuning an LLM for a specific task. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content"><strong>Full fine-tuning:</strong> Update all parameters on task-specific data. Best quality but expensive (GPU required, slow). <strong>Parameter-efficient (LoRA):</strong> Freeze most weights, train only low-rank adapters. 10-100x faster/cheaper. Good for domain adaptation. <strong>Instruction tuning:</strong> Fine-tune on (input, output) instruction pairs to teach the model to follow instructions. <strong>RLHF (Reinforcement Learning from Human Feedback):</strong> Have humans rate outputs, then train a reward model, then use RL to optimize the LLM against this reward. This is how ChatGPT becomes helpful/harmless. <strong>Best practice:</strong> Start with few-shot prompting. Only fine-tune if prompting doesn't work and you have good task-specific data.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">8. How would you optimize an LLM deployment for high-throughput batch processing? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Strategies:
+        <ul>
+        <li><strong>Dynamic batching:</strong> Batch requests as they arrive up to a latency limit.</li>
+        <li><strong>Quantization:</strong> 4-bit reduces memory by 8x, enabling larger batches.</li>
+        <li><strong>KV cache optimization:</strong> Allocate cache pools to avoid reallocation.</li>
+        <li><strong>Operator fusion:</strong> Combine operations to reduce memory bandwidth (Flash Attention).</li>
+        <li><strong>Tensor parallelism:</strong> Split model across GPUs (for very large models).</li>
+        <li><strong>Pipeline parallelism:</strong> Different devices process different layers in parallel.</li>
+        <li><strong>Serving framework:</strong> Use vLLM or NVIDIA Triton for efficient batching.</li>
+        <li><strong>Caching:</strong> Cache identical requests. Use semantic caching for similar requests.</li>
+        </ul>
+        Measure: latency percentiles (p50, p99) and throughput (tokens/sec).</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: Why do LLMs sometimes produce incorrect information confidently? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">LLMs are trained to predict the next token based on patterns in text. They don't have internal knowledge verification. They might generate false information if it 'fits the pattern' of the prompt. This is called hallucination. Mitigations: use RAG (Retrieval-Augmented Generation) for fact-grounded responses, ask the model to cite sources, use prompt engineering to ask for reasoning.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: Can LLMs truly understand language or are they just pattern matchers? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">This is genuinely unclear. LLMs clearly pattern-match at a deep level, learning to capture semantics, syntax, and world knowledge. But 'understanding' is a philosophical question. What we know: LLMs solve problems they weren't explicitly trained for (code generation, chain-of-thought reasoning), suggesting they learn abstract concepts. But they also fail on tasks that require genuine understanding.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: How does temperature affect LLM generation? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Temperature scales logits before softmax. Temperature = 0 → greedy (always pick highest probability). Temperature = 1 → standard softmax probabilities. Temperature > 1 → flatter distribution, more random. In practice: use 0.7-0.8 for balanced generation, lower for factual tasks, higher for creative writing.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: What's the relationship between model size and intelligence? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Empirically: larger models perform better on benchmarks. But it's not linear. Scaling laws suggest L ∝ N^(-0.07), meaning you need 10x more parameters for small improvements. Beyond pure size: training data quality, diversity, alignment (RLHF) matter tremendously. A well-trained 7B model can outperform a poorly-trained 70B model.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: Why can't LLMs handle very long contexts well? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Multiple factors: (1) Attention is O(n²), so long contexts create massive compute/memory. (2) Position encoding might not generalize to unseen positions. (3) Training data has limited sequence lengths, so models see few examples of long reasoning. (4) Attention patterns might degrade (middle tokens get ignored). Solutions: use long-context models trained on long sequences, apply retrieval (RAG), use sparse attention patterns.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: What's the difference between prompt engineering and fine-tuning? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Prompt engineering: craft the input text to get good outputs from a pre-trained model. No parameter updates. Fast, free, flexible. Works when the model has the right capabilities but needs the right context. Fine-tuning: update model parameters on task-specific data. Slower, expensive, requires GPU. Better for domain adaptation or when prompting doesn't work. Use prompting first; only fine-tune if necessary.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: How much does inference cost scale with sequence length? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">With KV cache: compute is O(n) in sequence length (n = input + output tokens). Memory is also O(n). So 2x longer input/output = roughly 2x cost (2x latency, 2x memory). This is why RAG (retrieve only relevant context) is important for long-document tasks.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: Can you use an LLM for real-time applications (low latency)? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Challenging. LLMs generate tokens sequentially, each generation step is ~10-100ms. For 100 tokens, that's 1-10 seconds. Not suitable for sub-100ms latency. Solutions: (1) Use smaller models (7B vs 70B). (2) Quantize to 4-bit. (3) Use speculative decoding. (4) Pre-generate common responses. (5) Use text classification models instead of LLMs for latency-critical tasks.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: Why are open-source models (LLaMA, Mistral) nearly as good as proprietary ones? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Main factors: (1) Architecture is public. Modern LLMs all use similar decoder-only transformers. (2) Scaling laws are well-understood. (3) Training data from the web is accessible. (4) Alignment (RLHF) can be done with open feedback models. Proprietary models have advantages: better training data curation, more compute for fine-tuning, safety alignment. But for raw capability, open-source is competitive.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q: What's next for LLM architecture after transformers? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Active areas: (1) Linear attention (Mamba, xLSTM) for better long-sequence handling. (2) Mixture of Experts for efficient scaling. (3) Vision-language models and multimodality. (4) Retrieval-augmented models. (5) Diffusion models for generation. (6) Hybrid approaches. Transformers have been incredibly effective, so changes are incremental, not revolutionary.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary: LLM Architecture Essentials</h2>
+
+    <h3>Core Takeaways</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Decoder-Only Architecture</h4>
+    <p>Modern LLMs are stacks of transformer decoder blocks. Each block has self-attention and a feed-forward network with residual connections.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Self-Attention is Key</h4>
+    <p>Every token computes weighted attention over all other tokens. This parallel processing enables massive scale compared to RNNs.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Scale Matters</h4>
+    <p>Performance follows predictable scaling laws. More parameters AND more diverse training data = better performance, but with diminishing returns.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Causal Masking is Essential</h4>
+    <p>During generation, tokens can only attend to previous tokens, enforced by causal masks. This makes generation autoregressive.</p>
+</div>
+    </div>
+
+    <h3>The Pipeline (Text → Generation)</h3>
+    <ol>
+        <li><strong>Tokenization:</strong> Raw text → token IDs via BPE tokenizer.</li>
+        <li><strong>Embedding:</strong> Token IDs → dense vectors via lookup table.</li>
+        <li><strong>Position Encoding:</strong> Add positional information (RoPE).</li>
+        <li><strong>Transformer Blocks:</strong> Stack of attention + FFN blocks process embeddings.</li>
+        <li><strong>Output Layer:</strong> Final linear layer projects to vocabulary logits.</li>
+        <li><strong>Sampling:</strong> Convert logits → probabilities → sample next token.</li>
+        <li><strong>Repeat:</strong> Feed generated token back as input for next generation step.</li>
+    </ol>
+
+    <h3>Why Architecture Understanding Matters</h3>
+    <ul>
+        <li><strong>Deployment:</strong> Understand KV cache, quantization, batching to optimize inference.</li>
+        <li><strong>Fine-tuning:</strong> Know which layers to adapt, what learning rates work.</li>
+        <li><strong>Problem-solving:</strong> When models fail, architectural knowledge helps diagnose why.</li>
+        <li><strong>Research:</strong> All innovations build on understanding transformer fundamentals.</li>
+    </ul>
+
+    <h3>Key Architectural Components</h3>
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Purpose</th>
+                <th>Modern Implementation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Multi-Head Attention</strong></td>
+                <td>Parallel attention with different projections</td>
+                <td>8-100+ heads, often with GQA for efficiency</td>
+            </tr>
+            <tr>
+                <td><strong>Feed-Forward Network</strong></td>
+                <td>Non-linear transformations, ~66% of params</td>
+                <td>SwiGLU, 4x expansion, with gating</td>
+            </tr>
+            <tr>
+                <td><strong>Positional Encoding</strong></td>
+                <td>Inject position information</td>
+                <td>RoPE (better extrapolation than sinusoidal)</td>
+            </tr>
+            <tr>
+                <td><strong>Normalization</strong></td>
+                <td>Stabilize training in deep networks</td>
+                <td>Pre-norm RMSNorm (simpler than LayerNorm)</td>
+            </tr>
+            <tr>
+                <td><strong>Residual Connections</strong></td>
+                <td>Enable gradient flow through deep stacks</td>
+                <td>Essential for 100+ layer models</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Modern Optimizations</h3>
+    <ul>
+        <li><strong>KV Cache:</strong> Avoid recomputing attention, ~500x speedup for long sequences.</li>
+        <li><strong>Quantization:</strong> 4-bit/8-bit precision, 4-8x memory reduction, 5-10% quality loss.</li>
+        <li><strong>Grouped Query Attention:</strong> Share KV heads, reduce cache by 8-16x.</li>
+        <li><strong>Flash Attention:</strong> Reorder attention computation, 2-3x speedup.</li>
+        <li><strong>Mixture of Experts:</strong> Route tokens to expert subsets, 4x speedup.</li>
+    </ul>
+
+    <h3>What We Still Don't Fully Understand</h3>
+    <ul>
+        <li>Why do LLMs learn to reason when trained only for next-token prediction?</li>
+        <li>How do we align models to be safe and helpful (RLHF helps but isn't foolproof)?</li>
+        <li>What are the fundamental limits of the transformer architecture?</li>
+        <li>Can we achieve AGI by just scaling transformers further?</li>
+    </ul>
+
+    <p><strong>Final thought:</strong> LLM architecture is fundamentally elegant yet surprisingly effective. The core idea (self-attention for parallel token processing) is simple, but combining it with scale, data, and careful training produces systems that exhibit remarkable intelligence. Understanding this architecture is key to building with, deploying, and advancing LLM systems.</p>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources for Further Learning</h2>
+
+    <h3>Must-Read Papers</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Attention Is All You Need (2017)</h4>
+    <p>The original transformer paper. Introduction of multi-head self-attention. Vaswani et al. Start here for foundational understanding.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Language Models are Unsupervised Multitask Learners (2019)</h4>
+    <p>GPT-2 paper. Shows that pre-training on diverse text enables diverse task performance. Demonstrates the power of scale.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>LLaMA: Open and Efficient Foundation Language Models</h4>
+    <p>Meta's 7B-70B models. Details on training, architecture choices (RoPE, SwiGLU, etc.). Accessible and influential.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Mistral 7B</h4>
+    <p>Demonstrates GQA and other optimizations for efficiency. Shows competitive performance with smaller models.</p>
+</div>
+    </div>
+
+    <h3>Books and Courses</h3>
+    <ul>
+        <li><strong><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Attention Is All You Need</a> (<a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">The Illustrated Transformer</a> by <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener">Jay Alammar</a>):</strong> Excellent visual explanation of transformer architecture.</li>
+        <li><strong><a href="https://www.manning.com/books/build-a-large-language-model-from-scratch" target="_blank" rel="noopener">Build a Large Language Model from Scratch</a> (Sebastian Raschka):</strong> Hands-on implementation guide.</li>
+        <li><strong><a href="https://www.fast.ai/posts/2019-07-08-fastai-nlp.html" target="_blank" rel="noopener">Fast.ai NLP course</a>:</strong> Practical deep learning for NLP, includes transformers.</li>
+        <li><strong><a href="https://huggingface.co/learn/nlp-course/" target="_blank" rel="noopener">Hugging Face Course</a>:</strong> Free interactive course on transformers and NLP.</li>
+        <li><strong><a href="https://www.deeplearning.ai/" target="_blank" rel="noopener">DeepLearning.AI</a> courses:</strong> Short videos on RAG, fine-tuning, <a href="https://python.langchain.com/" target="_blank" rel="noopener">LangChain</a>.</li>
+    </ul>
+
+    <h3>Tools and Libraries</h3>
+    <ul>
+        <li><strong><a href="https://huggingface.co/docs/transformers/" target="_blank" rel="noopener">Hugging Face Transformers</a>:</strong> Load and use any public model. Transformers.ipynb for code examples.</li>
+        <li><strong><a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a>:</strong> Framework for implementing models from scratch.</li>
+        <li><strong><a href="https://docs.vllm.ai/" target="_blank" rel="noopener">vLLM</a>:</strong> High-performance LLM serving with optimizations built-in.</li>
+        <li><strong><a href="https://developer.nvidia.com/triton-inference-server" target="_blank" rel="noopener">NVIDIA Triton</a>:</strong> Production serving framework.</li>
+        <li><strong><a href="https://github.com/TimDettmers/bitsandbytes" target="_blank" rel="noopener">bitsandbytes</a>:</strong> Quantization library for reducing model size.</li>
+        <li><strong><a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">LLaMA.cpp</a>:</strong> Run quantized models on CPU.</li>
+        <li><strong><a href="https://ollama.ai/" target="_blank" rel="noopener">Ollama</a>:</strong> Simple local LLM runner.</li>
+    </ul>
+
+    <h3>Recommended Experiments</h3>
+    <ol>
+        <li><strong>Fine-tune a small model:</strong> Use LLaMA-7B or Mistral-7B with LoRA on your own data.</li>
+        <li><strong>Build KV caching:</strong> Implement and measure speedup in token generation.</li>
+        <li><strong>Prompt engineering:</strong> Try different prompting techniques on a real task. Measure accuracy.</li>
+        <li><strong>Quantization comparison:</strong> Compare FP16 vs 4-bit quantization on memory, speed, and output quality.</li>
+        <li><strong>RAG system:</strong> Build a simple Q&A system using vector embeddings + LLM generation.</li>
+    </ol>
+
+    <h3>Communities and Discussions</h3>
+    <ul>
+        <li><strong><a href="https://discuss.huggingface.co/" target="_blank" rel="noopener">Hugging Face Forums</a>:</strong> Active community, model hub, datasets.</li>
+        <li><strong>OpenAI Community:</strong> For GPT API questions.</li>
+        <li><strong>Anthropic Claude Docs:</strong> API documentation and examples.</li>
+        <li><strong>r/MachineLearning and r/LanguageModels:</strong> Reddit communities with weekly discussions.</li>
+        <li><strong>Papers with Code:</strong> See implementations of papers alongside published code.</li>
+    </ul>
+
+    <h3>Key Websites</h3>
+    <ul>
+        <li><a href="https://huggingface.co" target="_blank">Hugging Face Model Hub</a> — Browse and download pre-trained models.</li>
+        <li><a href="https://arxiv.org" target="_blank">arXiv</a> — Latest AI research papers.</li>
+        <li><a href="https://github.com/karpathy/llm.c" target="_blank">LLM.c</a> — <a href="https://www.youtube.com/@andrejkarpathy" target="_blank" rel="noopener">Andrej Karpathy</a>'s minimal LLM in C.</li>
+        <li><a href="https://openai.com/research" target="_blank">OpenAI Research</a> — Latest research and models.</li>
+        <li><a href="https://www.anthropic.com" target="_blank">Anthropic</a> — Claude development, safety research.</li>
+    </ul>
+
+    <h3>Next Steps</h3>
+    <p>Now that you understand LLM architecture, what's next?</p>
+    <ul>
+        <li><strong>Build something:</strong> Fine-tune a model on your own data. Deploy it. Measure performance.</li>
+        <li><strong>Go deeper:</strong> Understand RLHF, multimodality, long-context models.</li>
+        <li><strong>Optimize:</strong> Learn production serving, quantization, batching strategies.</li>
+        <li><strong>Research:</strong> Read recent papers. Contribute to open-source LLM projects.</li>
+        <li><strong>Teach others:</strong> Writing about LLM architecture deepens your understanding.</li>
+    </ul>
+</section>
+
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Sidebar link activation
+        document.querySelectorAll('.ml-sidebar a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.ml-sidebar a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Set active link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('.ml-section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            document.querySelectorAll('.ml-sidebar a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const icon = this.querySelector('.faq-icon');
+                
+                this.classList.toggle('active');
+                answer.classList.toggle('active');
+            });
+        });
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                this.classList.toggle('active');
+                content.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

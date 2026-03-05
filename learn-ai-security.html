@@ -1,0 +1,2796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Security - SustainSys AI Academy</title>
+    <meta name="description" content="Protect AI systems from adversarial attacks, prompt injection, data poisoning, and model theft.">
+    <meta name="keywords" content="AI Security, Adversarial Examples, Prompt Injection, Data Poisoning, Model Protection, Red Teaming">
+        <link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <main role="main">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">AI Security</h1>
+                <p class="page-description">Master AI Security with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        
+<div class="ml-page-container">
+    <div class="ml-sidebar"><h3>Topics</h3><ul><li><a href="#intro">Introduction</a></li><li><a href="#why-matters">Why It Matters</a></li><li><a href="#history">Security Evolution</a></li><li><a href="#core-concepts">Core Concepts</a></li><li><a href="#architecture">Security Architecture</a></li><li><a href="#components">Security Components</a></li><li><a href="#implementation">Implementation Guide</a></li><li><a href="#advanced">Advanced Techniques</a></li><li><a href="#comparison">Attack/Defense Comparison</a></li><li><a href="#use-cases">Real-World Use Cases</a></li><li><a href="#enterprise">Enterprise Protection</a></li><li><a href="#mistakes">Common Mistakes</a></li><li><a href="#best-practices">Best Practices</a></li><li><a href="#advanced-insights">Advanced Insights</a></li><li><a href="#code-examples">Code Examples</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#interview">Interview Questions</a></li><li><a href="#faq">FAQ</a></li><li><a href="#summary">Summary</a></li><li><a href="#resources">Resources</a></li></ul></div>
+    <div class="ml-content">
+        
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Introduction to AI Security</h2>
+
+    <div class="ml-intro-text">
+        <p>As artificial intelligence systems become increasingly powerful and integrated into critical infrastructure, ensuring their security has become paramount. AI Security encompasses protecting AI systems from adversarial attacks, prompt injection, data poisoning, model theft, and emerging threats. Unlike traditional cybersecurity, AI security must defend against both external adversaries and vulnerabilities inherent to machine learning itself.</p>
+    </div>
+
+    <p>AI systems are uniquely vulnerable. A perturbation of just a few pixels can fool a computer vision model trained on millions of images. A carefully crafted prompt can make a language model produce harmful content. Poisoned training data can cause a model to develop hidden backdoors. These vulnerabilities are not bugs in implementation — they're properties of how neural networks learn and process information.</p>
+
+    <p>This course teaches you how modern organizations defend their AI systems, from adversarial robustness and input validation to differential privacy and red teaming. You'll learn both the theory of why attacks work and practical defensive techniques used by leading AI companies like OpenAI, Anthropic, Google DeepMind, and Meta.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Adversarial Attacks</h4>
+    <p>Understand FGSM, PGD, and C&W attacks that fool neural networks. Learn why imperceptible perturbations can cause misclassification.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Prompt Injection Defense</h4>
+    <p>Detect and prevent prompt injection attacks on language models. Implement input validation and detection systems.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Data Security</h4>
+    <p>Learn about data poisoning, backdoor attacks, and differential privacy. Protect training data and prevent model tampering.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Red Teaming Framework</h4>
+    <p>Build systematic approaches to find vulnerabilities. Conduct security audits and adversarial testing on AI systems.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Understanding of Python, basic neural networks (forward/backward pass), <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a> or TensorFlow, and familiarity with deep learning concepts like gradients and loss functions.</p>
+</div>
+</section>
+
+<!-- SECTION: Why It Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why AI Security Matters</h2>
+
+    <p>AI systems are now deployed in high-stakes applications: autonomous vehicles, medical diagnosis, financial trading, and critical infrastructure control. A security failure doesn't mean a slower server response — it can mean patient harm, financial fraud, or loss of life.</p>
+
+    <h3>Real-World AI Security Incidents</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Adversarial Images</h4>
+    <p>In 2019, researchers demonstrated that a 3D-printed turtle was classified as a rifle by computer vision systems with 99% confidence, despite humans easily recognizing it as a turtle.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>ChatGPT Jailbreaks</h4>
+    <p>Within weeks of ChatGPT's release, researchers found prompt injections that bypassed safety guidelines, revealing vulnerabilities in language model alignment.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Model Poisoning</h4>
+    <p>BadNets (2019) showed that poisoned training data could inject hidden backdoors into neural networks that activate on specific triggers.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Model Stealing</h4>
+    <p>Researchers extracted proprietary information from commercial ML APIs using only query access and black-box attacks.</p>
+</div>
+    </div>
+
+    <h3>Threat Landscape</h3>
+    <p>AI systems face threats across the entire pipeline:</p>
+
+    <div style="background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 16px; padding: 2rem; margin: 2rem 0; color: white;">
+        <h4 style="color: var(--accent-cyan); text-align: center; margin-top: 0;">AI Security Threat Landscape (Animated)</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+            <div style="background: rgba(239, 68, 68, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                <div style="font-weight: 600; color: #fca5a5;">Data Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Poisoning, manipulation, privacy leaks</div>
+            </div>
+            <div style="background: rgba(59, 130, 246, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #93c5fd;">Training Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Backdoors, trojan attacks, data theft</div>
+            </div>
+            <div style="background: rgba(168, 85, 247, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                <div style="font-weight: 600; color: #d8b4fe;">Model Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Extraction, inversion, stealing</div>
+            </div>
+            <div style="background: rgba(249, 115, 22, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #f97316;">
+                <div style="font-weight: 600; color: #fed7aa;">Input Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Adversarial examples, injection attacks</div>
+            </div>
+            <div style="background: rgba(34, 197, 94, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #22c55e;">
+                <div style="font-weight: 600; color: #bbf7d0;">Output Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Manipulation, evasion, spoofing</div>
+            </div>
+            <div style="background: rgba(8, 145, 178, 0.2); padding: 1rem; border-radius: 8px; border-left: 4px solid #0891b2;">
+                <div style="font-weight: 600; color: #cffafe;">Deployment Layer</div>
+                <div style="font-size: 0.85rem; margin-top: 0.5rem;">Model replacement, supply chain attacks</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Impact of Security Breaches</h3>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Loss of Trust</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #ef4444, #dc2626);">Critical</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Legal/Compliance</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 88%; background: linear-gradient(90deg, #f97316, #ea580c);">Critical</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Financial Loss</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 92%; background: linear-gradient(90deg, #eab308, #ca8a04);">Critical</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">User Safety</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #dc2626, #7f1d1d);">Critical</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Reality Check:</strong> Every deployed AI system will face adversaries. The question isn't if you'll be attacked, but whether you're prepared when you are.</p>
+</div>
+</section>
+
+<!-- SECTION: Security Evolution -->
+<section id="history" class="ml-section">
+    <h2>Evolution of AI Security</h2>
+
+    <p>AI security as a discipline emerged from academic research but has rapidly matured into a critical industry practice. Understanding this evolution helps contextualize modern defense strategies.</p>
+
+    <h3>Timeline of AI Security</h3>
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <strong>2013</strong><br>Szegedy et al. discover adversarial examples — small perturbations fool deep networks
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            <strong>2014</strong><br>FGSM attack introduces fast adversarial example generation
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+            <strong>2016</strong><br>PGD attack and adversarial training published; robustness becomes tractable
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+            <strong>2017</strong><br>NIPS competition on adversarial robustness; industry engagement begins
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+            <strong>2019</strong><br>BadNets and data poisoning attacks published; supply chain risks emerge
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #30cfd0, #330867);">
+            <strong>2022</strong><br>ChatGPT jailbreaks; AI safety becomes mainstream concern
+        </div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
+            <strong>2024</strong><br>Differential privacy, red teaming frameworks, and enterprise security standards mature
+        </div>
+    </div>
+
+    <h3>Key Paradigm Shifts</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>From Theoretical to Applied</h4>
+    <p>Early work was academic curiosity. Now, defending against these attacks is a business requirement and compliance mandate.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>From Isolated to Systemic</h4>
+    <p>Initial focus was on individual models. Modern thinking addresses entire AI systems and supply chains.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>From Detection to Prevention</h4>
+    <p>Early defenses tried to detect attacks. Modern approaches prevent them through robust architectures.</p>
+</div>
+        <div class="card green-accent">
+    <h4>From Ad-Hoc to Standardized</h4>
+    <p>No common security framework existed. Industry now converging on standards for testing and validation.</p>
+</div>
+    </div>
+
+    <p>This evolution mirrors general cybersecurity: initial surprise and skepticism gave way to rigorous scientific analysis, which led to practical defenses and ultimately to industry standardization and best practices.</p>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Security Concepts</h2>
+
+    <p>Before diving into specific attacks and defenses, understand the fundamental concepts that define AI security.</p>
+
+    <h3>Threat Model</h3>
+    <p>A threat model defines what an attacker can and cannot do:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>White-Box Access</h4>
+    <p>Attacker knows model weights, architecture, and all parameters. Can compute gradients. Strongest threat model.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Black-Box Access</h4>
+    <p>Attacker can only query the model and observe outputs. Most realistic for deployed systems.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Gray-Box Access</h4>
+    <p>Attacker has partial information: API documentation, known architecture, but not weights.</p>
+</div>
+    </div>
+
+    <h3>Attack Categories</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Evasion Attacks</h4>
+    <p>Craft adversarial inputs at inference time. Most common and well-studied threat.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Poisoning Attacks</h4>
+    <p>Manipulate training data to cause model failures or inject backdoors.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Extraction Attacks</h4>
+    <p>Steal model parameters, architecture, or training data through queries.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Privacy Attacks</h4>
+    <p>Infer information about training data (membership inference, model inversion).</p>
+</div>
+    </div>
+
+    <h3>Robustness Metrics</h3>
+    <div class="formula-box">
+    <div class="label">Adversarial Robustness</div>
+    Accuracy under worst-case perturbations. Formally: min accuracy over all perturbations within epsilon distance from original input.
+</div>
+    <div class="formula-box">
+    <div class="label">Certified Robustness</div>
+    Mathematically proven robustness guarantees. Guarantees that no perturbation within epsilon can change the prediction.
+</div>
+    <div class="formula-box">
+    <div class="label">Perturbation Budget</div>
+    Maximum allowed change to inputs (epsilon). Measured in Lp norms: L∞ (max change any feature), L2 (Euclidean distance), L1 (sum of changes).
+</div>
+
+    <h3>Defense Categories</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Adversarial Training</h4>
+    <p>Train on adversarially perturbed examples. Most practical defense with empirical success.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Certified Defense</h4>
+    <p>Use randomized smoothing or interval bounds to provide formal robustness guarantees.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Input Validation</h4>
+    <p>Detect and reject adversarial inputs before processing. Complements other defenses.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Differential Privacy</h4>
+    <p>Train models while provably protecting individual training examples from extraction.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Key Insight</h4>
+    <p>There's a robustness-accuracy tradeoff: adversarially robust models are often less accurate on natural examples. Modern research focuses on minimizing this tradeoff.</p>
+</div>
+</section>
+
+<!-- SECTION: Security Architecture -->
+<section id="architecture" class="ml-section">
+    <h2>AI Security Architecture</h2>
+
+    <p>Protecting AI systems requires layered defenses across the entire ML pipeline. No single defense is sufficient; instead, multiple complementary strategies create defense-in-depth.</p>
+
+    <h3>Defense-in-Depth Architecture</h3>
+    <div style="background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 16px; padding: 2rem; margin: 2rem 0; color: white;">
+        <h4 style="color: var(--accent-cyan); text-align: center; margin-top: 0;">Layered Security Architecture</h4>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="background: rgba(239, 68, 68, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                <div style="font-weight: 600; color: #fca5a5; font-size: 1.1rem;">Layer 1: Data Security</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Secure data collection, anonymization, integrity checks, backup protection</div>
+            </div>
+            <div style="background: rgba(59, 130, 246, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #93c5fd; font-size: 1.1rem;">Layer 2: Training Security</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Differential privacy, data validation, adversarial training, secure environments</div>
+            </div>
+            <div style="background: rgba(168, 85, 247, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+                <div style="font-weight: 600; color: #d8b4fe; font-size: 1.1rem;">Layer 3: Model Protection</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Model watermarking, fingerprinting, watermark verification, integrity monitoring</div>
+            </div>
+            <div style="background: rgba(249, 115, 22, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f97316;">
+                <div style="font-weight: 600; color: #fed7aa; font-size: 1.1rem;">Layer 4: Input Defense</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Input validation, anomaly detection, adversarial example detection, rate limiting</div>
+            </div>
+            <div style="background: rgba(34, 197, 94, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #22c55e;">
+                <div style="font-weight: 600; color: #bbf7d0; font-size: 1.1rem;">Layer 5: Output Security</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Output validation, confidence thresholding, safety filtering, audit logging</div>
+            </div>
+            <div style="background: rgba(8, 145, 178, 0.2); padding: 1.5rem; border-radius: 8px; border-left: 4px solid #0891b2;">
+                <div style="font-weight: 600; color: #cffafe; font-size: 1.1rem;">Layer 6: Deployment Security</div>
+                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Access controls, encryption, secure infrastructure, incident response</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Key Architectural Principles</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Assume Breach</h4>
+    <p>Design defenses assuming attackers will get partial access. Use defense-in-depth so no single failure compromises security.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Fail Secure</h4>
+    <p>When uncertain, reject. Better to deny service than provide incorrect results.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Least Privilege</h4>
+    <p>Give models and systems minimum permissions needed. Restrict what each component can access.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Audit Everything</h4>
+    <p>Log all access, predictions, and anomalies. Forensic analysis is crucial after incidents.</p>
+</div>
+    </div>
+
+    <p>This architecture mirrors software security (defense-in-depth) but adapted for ML-specific threats. The goal is creating redundancy so that compromising one defense layer doesn't compromise overall security.</p>
+</section>
+
+<!-- SECTION: Components -->
+<section id="components" class="ml-section">
+    <h2>Key Security Components</h2>
+
+    <p>Modern AI security systems are built from well-understood components, each addressing specific threat vectors.</p>
+
+    <h3>Adversarial Robustness</h3>
+    <p>Ensuring models maintain correct predictions despite adversarial perturbations. Two main approaches:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Empirical Robustness</h4>
+    <p>Train on adversarial examples. Works well but without formal guarantees.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Certified Robustness</h4>
+    <p>Mathematically proven bounds. Slower but provides guarantees like 'no 8-pixel-norm perturbation changes prediction'.</p>
+</div>
+    </div>
+
+    <h3>Input Validation</h3>
+    <p>Detect anomalous or suspicious inputs before they reach the model:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Syntax Validation</h4>
+    <p>Check format, length, encoding. Reject malformed inputs.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Semantic Validation</h4>
+    <p>Ensure input makes sense for the application. Text length bounds, image properties, etc.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Anomaly Detection</h4>
+    <p>ML models trained to detect out-of-distribution inputs. Flag suspicious patterns.</p>
+</div>
+    </div>
+
+    <h3>Differential Privacy</h3>
+    <p>Train models while provably protecting individual training examples:</p>
+    <div class="info-box">
+    <h4>Differential Privacy Definition</h4>
+    <p>A mechanism provides (epsilon, delta)-differential privacy if the probability of any outcome changes by at most e^epsilon when any single training example is added or removed. Lower epsilon = stronger privacy.</p>
+</div>
+
+    <h3>Red Teaming</h3>
+    <p>Systematic, adversarial testing to find vulnerabilities before adversaries do:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Automated Red Teaming</h4>
+    <p>Use attack algorithms to find vulnerabilities. Scale testing across thousands of examples.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Manual Red Teaming</h4>
+    <p>Domain experts try to break the system using creativity and domain knowledge.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Community Programs</h4>
+    <p>Bug bounties and responsible disclosure programs to find real-world vulnerabilities.</p>
+</div>
+    </div>
+
+    <h3>Monitoring & Detection</h3>
+    <p>Detect attacks in progress through continuous monitoring:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Confidence Monitoring</h4>
+    <p>Track model confidence. Adversarial examples often show unusual confidence patterns.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Prediction Shift</h4>
+    <p>Monitor for unexpected changes in prediction distributions over time.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Latency Analysis</h4>
+    <p>Adversarial examples sometimes require different computational resources.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Implementation Guide -->
+<section id="implementation" class="ml-section">
+    <h2>Implementation Guide: Building Secure AI Systems</h2>
+
+    <p>This section walks through implementing security measures in a real AI system. We'll build a secure image classifier with adversarial robustness and input validation.</p>
+
+    <h3>Step 1: Setup Secure Development Environment</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Security Setup</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+<span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> typing <span class="keyword">import</span> Tuple
+
+<span class="comment"># Ensure reproducibility</span>
+torch.<span class="function">manual_seed</span>(<span class="number">42</span>)
+np.random.<span class="function">seed</span>(<span class="number">42</span>)
+
+<span class="comment"># Security configuration</span>
+EPSILON = <span class="number">8</span>/<span class="number">255.0</span>  <span class="comment"># Max perturbation budget</span>
+ATTACK_STEPS = <span class="number">20</span>   <span class="comment"># PGD attack iterations</span>
+CONFIDENCE_THRESHOLD = <span class="number">0.85</span>  <span class="comment"># Reject low-confidence predictions</span>
+
+<span class="keyword">class</span> SecureAIConfig:
+    epsilon: <span class="function">float</span> = EPSILON
+    attack_steps: <span class="function">int</span> = ATTACK_STEPS
+    confidence_threshold: <span class="function">float</span> = CONFIDENCE_THRESHOLD
+    enable_logging: <span class="function">bool</span> = <span class="keyword">True</span></div>
+</div>
+
+    <h3>Step 2: Input Validation</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Input Validation</div>
+    <div class="code-content"><span class="keyword">class</span> InputValidator:
+    <span class="string">'''Validates inputs before model processing'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, feature_bounds=<span class="keyword">None</span>):
+        <span class="function">self</span>.feature_bounds = feature_bounds
+        <span class="function">self</span>.anomaly_detector = <span class="keyword">None</span>
+    
+    <span class="keyword">def</span> <span class="function">validate</span>(<span class="function">self</span>, x: torch.Tensor) -> Tuple[<span class="function">bool</span>, <span class="function">str</span>]:
+        <span class="string">'''Returns (is_valid, reason)'''</span>
+        
+        <span class="comment"># Check shape</span>
+        <span class="keyword">if</span> <span class="function">len</span>(x.shape) != <span class="number">4</span>:  <span class="comment"># Batch of images</span>
+            <span class="keyword">return</span> <span class="keyword">False</span>, <span class="string">"Invalid input shape"</span>
+        
+        <span class="comment"># Check value range</span>
+        <span class="keyword">if</span> x.<span class="function">min</span>() < <span class="number">0</span> <span class="keyword">or</span> x.<span class="function">max</span>() > <span class="number">1</span>:
+            <span class="keyword">return</span> <span class="keyword">False</span>, <span class="string">"Pixel values out of range [0,1]"</span>
+        
+        <span class="comment"># Check for NaN/Inf</span>
+        <span class="keyword">if</span> torch.<span class="function">isnan</span>(x).<span class="function">any</span>() <span class="keyword">or</span> torch.<span class="function">isinf</span>(x).<span class="function">any</span>():
+            <span class="keyword">return</span> <span class="keyword">False</span>, <span class="string">"NaN or Inf values detected"</span>
+        
+        <span class="comment"># Check for adversarial patterns</span>
+        <span class="keyword">if</span> <span class="function">self</span>.<span class="function">_has_adversarial_pattern</span>(x):
+            <span class="keyword">return</span> <span class="keyword">False</span>, <span class="string">"Adversarial pattern detected"</span>
+        
+        <span class="keyword">return</span> <span class="keyword">True</span>, <span class="string">"Valid"</span>
+    
+    <span class="keyword">def</span> <span class="function">_has_adversarial_pattern</span>(<span class="function">self</span>, x: torch.Tensor) -> <span class="function">bool</span>:
+        <span class="string">'''Simple heuristic: check gradient magnitude'''</span>
+        x_requires_grad = x.<span class="function">clone</span>().<span class="function">requires_grad_</span>(<span class="keyword">True</span>)
+        <span class="comment"># Check statistical anomalies</span>
+        <span class="keyword">return</span> <span class="keyword">False</span>  <span class="comment"># Placeholder</span></div>
+</div>
+
+    <h3>Step 3: Adversarial Training</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Adversarial Training Loop</div>
+    <div class="code-content"><span class="keyword">class</span> AdversarialTrainer:
+    <span class="string">'''Trains models with adversarial robustness'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model, epsilon=EPSILON, attack_steps=ATTACK_STEPS):
+        <span class="function">self</span>.model = model
+        <span class="function">self</span>.epsilon = epsilon
+        <span class="function">self</span>.attack_steps = attack_steps
+    
+    <span class="keyword">def</span> <span class="function">pgd_attack</span>(<span class="function">self</span>, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        <span class="string">'''Generate PGD adversarial examples'''</span>
+        x_adv = x.<span class="function">clone</span>().<span class="function">detach</span>().<span class="function">requires_grad_</span>(<span class="keyword">True</span>)
+        
+        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="function">self</span>.attack_steps):
+            <span class="comment"># Forward pass</span>
+            output = <span class="function">self</span>.<span class="function">model</span>(x_adv)
+            loss = F.<span class="function">cross_entropy</span>(output, y)
+            
+            <span class="comment"># Backward pass</span>
+            <span class="function">self</span>.model.<span class="function">zero_grad</span>()
+            loss.<span class="function">backward</span>()
+            
+            <span class="comment"># Update adversarial example</span>
+            <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+                x_adv.data += <span class="function">self</span>.epsilon / <span class="function">self</span>.attack_steps * x_adv.grad.<span class="function">sign</span>()
+                x_adv.data = torch.<span class="function">clamp</span>(x_adv.data, <span class="number">0</span>, <span class="number">1</span>)
+                x_adv.grad.<span class="function">zero_</span>()
+        
+        <span class="keyword">return</span> x_adv.<span class="function">detach</span>()
+    
+    <span class="keyword">def</span> <span class="function">train_epoch</span>(<span class="function">self</span>, dataloader, optimizer):
+        <span class="string">'''Train for one epoch with adversarial examples'''</span>
+        total_loss = <span class="number">0</span>
+        
+        <span class="keyword">for</span> x, y <span class="keyword">in</span> dataloader:
+            <span class="comment"># Generate adversarial examples</span>
+            x_adv = <span class="function">self</span>.<span class="function">pgd_attack</span>(x, y)
+            
+            <span class="comment"># Train on both clean and adversarial examples</span>
+            optimizer.<span class="function">zero_grad</span>()
+            
+            <span class="comment"># Clean loss</span>
+            logits_clean = <span class="function">self</span>.<span class="function">model</span>(x)
+            loss_clean = F.<span class="function">cross_entropy</span>(logits_clean, y)
+            
+            <span class="comment"># Adversarial loss</span>
+            logits_adv = <span class="function">self</span>.<span class="function">model</span>(x_adv)
+            loss_adv = F.<span class="function">cross_entropy</span>(logits_adv, y)
+            
+            <span class="comment"># Combined loss</span>
+            loss = loss_clean + loss_adv
+            loss.<span class="function">backward</span>()
+            optimizer.<span class="function">step</span>()
+            
+            total_loss += loss.<span class="function">item</span>()
+        
+        <span class="keyword">return</span> total_loss / <span class="function">len</span>(dataloader)</div>
+</div>
+
+    <h3>Step 4: Secure Inference</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Secure Inference</div>
+    <div class="code-content"><span class="keyword">class</span> SecurePredictor:
+    <span class="string">'''Makes predictions with security checks'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model, validator, confidence_threshold=<span class="number">0.85</span>):
+        <span class="function">self</span>.model = model
+        <span class="function">self</span>.validator = validator
+        <span class="function">self</span>.confidence_threshold = confidence_threshold
+        <span class="function">self</span>.predictions_log = []
+    
+    <span class="keyword">def</span> <span class="function">predict</span>(<span class="function">self</span>, x: torch.Tensor) -> Tuple[np.ndarray, <span class="function">dict</span>]:
+        <span class="string">'''Secure prediction with validation and logging'''</span>
+        
+        <span class="comment"># Validate input</span>
+        is_valid, reason = <span class="function">self</span>.validator.<span class="function">validate</span>(x)
+        <span class="keyword">if</span> <span class="keyword">not</span> is_valid:
+            <span class="keyword">return</span> <span class="keyword">None</span>, {<span class="string">'valid'</span>: <span class="keyword">False</span>, <span class="string">'reason'</span>: reason}
+        
+        <span class="comment"># Get predictions</span>
+        <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+            logits = <span class="function">self</span>.<span class="function">model</span>(x)
+            probs = F.<span class="function">softmax</span>(logits, dim=<span class="number">1</span>)
+            confidence, predicted = torch.<span class="function">max</span>(probs, <span class="number">1</span>)
+        
+        <span class="comment"># Check confidence</span>
+        mask = confidence >= <span class="function">self</span>.confidence_threshold
+        predictions = predicted.<span class="function">cpu</span>().<span class="function">numpy</span>()
+        predictions[~mask] = -<span class="number">1</span>  <span class="comment"># -1 indicates low confidence</span>
+        
+        <span class="comment"># Log for audit trail</span>
+        metadata = {
+            <span class="string">'valid'</span>: <span class="keyword">True</span>,
+            <span class="string">'confidence'</span>: confidence.<span class="function">cpu</span>().<span class="function">numpy</span>(),
+            <span class="string">'low_confidence_count'</span>: (~mask).<span class="function">sum</span>().<span class="function">item</span>(),
+            <span class="string">'attack_detected'</span>: <span class="keyword">False</span>
+        }
+        
+        <span class="function">self</span>.predictions_log.<span class="function">append</span>(metadata)
+        
+        <span class="keyword">return</span> predictions, metadata</div>
+</div>
+
+    <div class="highlight-box">
+    <p><strong>Implementation Note:</strong> This is a simplified demonstration. Production systems need much more: distributed logging, encrypted storage, access controls, compliance auditing, and incident response procedures.</p>
+</div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced" class="ml-section">
+    <h2>Advanced Security Techniques</h2>
+
+    <p>Beyond basic adversarial training, advanced techniques provide stronger guarantees and address new threats.</p>
+
+    <h3>Certified Defenses with Randomized Smoothing</h3>
+    <p>Provide formal robustness guarantees by adding noise:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Randomized Smoothing</div>
+    <div class="code-content"><span class="keyword">class</span> CertifiedSmoothing:
+    <span class="string">'''Certified robustness via randomized smoothing'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, base_model, noise_std=<span class="number">0.25</span>):
+        <span class="function">self</span>.base_model = base_model
+        <span class="function">self</span>.noise_std = noise_std
+    
+    <span class="keyword">def</span> <span class="function">predict</span>(<span class="function">self</span>, x: torch.Tensor, n_samples=<span class="number">100</span>) -> Tuple[<span class="function">int</span>, <span class="function">float</span>]:
+        <span class="string">'''
+        Certified prediction: returns (prediction, radius)
+        Guarantees: prediction is robust to all perturbations &lt; radius
+        '''</span>
+        batch_size = x.shape[<span class="number">0</span>]
+        
+        <span class="comment"># Sample from Gaussian</span>
+        counts = torch.<span class="function">zeros</span>(batch_size, <span class="number">1000</span>)  <span class="comment"># 1000 classes</span>
+        
+        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(n_samples):
+            noise = torch.<span class="function">randn_like</span>(x) * <span class="function">self</span>.noise_std
+            x_noisy = x + noise
+            
+            <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+                logits = <span class="function">self</span>.<span class="function">base_model</span>(x_noisy)
+            
+            counts.<span class="function">scatter_add_</span>(<span class="number">1</span>, logits.<span class="function">argmax</span>(<span class="number">1</span>).<span class="function">unsqueeze</span>(<span class="number">1</span>), <span class="number">1</span>)
+        
+        <span class="comment"># Get top-2 predictions</span>
+        top2 = counts.<span class="function">topk</span>(<span class="number">2</span>, dim=<span class="number">1</span>)
+        class_A = top2[<span class="number">1</span>][:, <span class="number">0</span>]
+        count_A = top2[<span class="number">0</span>][:, <span class="number">0</span>]
+        count_B = top2[<span class="number">0</span>][:, <span class="number">1</span>]
+        
+        <span class="comment"># Certified radius (for each sample)</span>
+        radius = (<span class="function">self</span>.noise_std / <span class="number">2</span>) * (
+            (count_A - count_B) / n_samples
+        )
+        
+        <span class="keyword">return</span> class_A, radius</div>
+</div>
+
+    <h3>Differential Privacy Training</h3>
+    <p>Train models that provably protect training data:</p>
+    <div class="code-block">
+    <div class="code-header">Python — DP-SGD Training</div>
+    <div class="code-content"><span class="keyword">import</span> math
+
+<span class="keyword">class</span> DP_SGD_Trainer:
+    <span class="string">'''Differentially Private Stochastic Gradient Descent'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model, epsilon=<span class="number">1.0</span>, delta=<span class="number">1e-5</span>, max_grad_norm=<span class="number">1.0</span>):
+        <span class="function">self</span>.model = model
+        <span class="function">self</span>.epsilon = epsilon
+        <span class="function">self</span>.delta = delta
+        <span class="function">self</span>.max_grad_norm = max_grad_norm
+        <span class="function">self</span>.privacy_budget_used = <span class="number">0</span>
+    
+    <span class="keyword">def</span> <span class="function">train_batch</span>(<span class="function">self</span>, batch_x, batch_y, optimizer):
+        <span class="string">'''Train with differential privacy guarantees'''</span>
+        
+        logits = <span class="function">self</span>.<span class="function">model</span>(batch_x)
+        loss = F.<span class="function">cross_entropy</span>(logits, batch_y)
+        
+        optimizer.<span class="function">zero_grad</span>()
+        loss.<span class="function">backward</span>()
+        
+        <span class="comment"># Clip gradients per sample</span>
+        <span class="keyword">for</span> param <span class="keyword">in</span> <span class="function">self</span>.model.<span class="function">parameters</span>():
+            <span class="keyword">if</span> param.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+                grad_norm = torch.<span class="function">norm</span>(param.grad)
+                param.grad.data *= <span class="function">min</span>(<span class="number">1</span>, <span class="function">self</span>.max_grad_norm / grad_norm)
+        
+        <span class="comment"># Add Gaussian noise</span>
+        noise_scale = <span class="function">self</span>.max_grad_norm * math.<span class="function">sqrt</span>(<span class="number">2</span> * math.<span class="function">log</span>(<span class="number">1.25</span> / <span class="function">self</span>.delta)) / <span class="function">self</span>.epsilon
+        
+        <span class="keyword">for</span> param <span class="keyword">in</span> <span class="function">self</span>.model.<span class="function">parameters</span>():
+            <span class="keyword">if</span> param.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+                param.grad.data += torch.<span class="function">randn_like</span>(param.grad) * noise_scale
+        
+        optimizer.<span class="function">step</span>()
+        
+        <span class="comment"># Update privacy budget</span>
+        <span class="function">self</span>.privacy_budget_used += <span class="function">self</span>.epsilon
+        
+        <span class="keyword">return</span> {
+            <span class="string">'loss'</span>: loss.<span class="function">item</span>(),
+            <span class="string">'epsilon_used'</span>: <span class="function">self</span>.epsilon,
+            <span class="string">'privacy_budget_total'</span>: <span class="function">self</span>.privacy_budget_used
+        }</div>
+</div>
+
+    <h3>Prompt Injection Detection</h3>
+    <p>Detect adversarial prompts targeting language models:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Prompt Injection Detection</div>
+    <div class="code-content"><span class="keyword">class</span> PromptInjectionDetector:
+    <span class="string">'''Detects prompt injection attacks on LLMs'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="function">self</span>.injection_patterns = [
+            <span class="string">r'ignore previous|ignore all|forget all'</span>,
+            <span class="string">r'system prompt|system override|new instructions'</span>,
+            <span class="string">r'jailbreak|bypass|exploit|vulnerability'</span>,
+            <span class="string">r'mode: unfiltered|mode: uncensored|dev mode'</span>,
+        ]
+        <span class="function">self</span>.suspicion_threshold = <span class="number">0.7</span>
+    
+    <span class="keyword">def</span> <span class="function">detect</span>(<span class="function">self</span>, prompt: <span class="function">str</span>) -> Tuple[<span class="function">bool</span>, <span class="function">float</span>]:
+        <span class="string">'''
+        Returns (is_injection, suspicion_score)
+        '''</span>
+        <span class="keyword">import</span> re
+        
+        prompt_lower = prompt.<span class="function">lower</span>()
+        suspicion_score = <span class="number">0</span>
+        
+        <span class="comment"># Pattern matching</span>
+        <span class="keyword">for</span> pattern <span class="keyword">in</span> <span class="function">self</span>.injection_patterns:
+            <span class="keyword">if</span> re.<span class="function">search</span>(pattern, prompt_lower):
+                suspicion_score += <span class="number">0.3</span>
+        
+        <span class="comment"># Prompt structure analysis</span>
+        <span class="keyword">if</span> <span class="string">'###'</span> <span class="keyword">in</span> prompt <span class="keyword">or</span> <span class="string">'---'</span> <span class="keyword">in</span> prompt:
+            suspicion_score += <span class="number">0.2</span>  <span class="comment"># Multiple sections</span>
+        
+        <span class="comment"># Length anomaly</span>
+        <span class="keyword">if</span> <span class="function">len</span>(prompt) > <span class="number">5000</span>:
+            suspicion_score += <span class="number">0.1</span>  <span class="comment"># Suspiciously long</span>
+        
+        <span class="comment"># High-risk tokens</span>
+        dangerous_tokens = [<span class="string">'eval'</span>, <span class="string">'exec'</span>, <span class="string">'import'</span>, <span class="string">'__'</span>]
+        <span class="keyword">for</span> token <span class="keyword">in</span> dangerous_tokens:
+            <span class="keyword">if</span> token <span class="keyword">in</span> prompt_lower:
+                suspicion_score += <span class="number">0.15</span>
+        
+        is_injection = suspicion_score > <span class="function">self</span>.suspicion_threshold
+        
+        <span class="keyword">return</span> is_injection, <span class="function">min</span>(suspicion_score, <span class="number">1.0</span>)</div>
+</div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Attack vs Defense Comparison</h2>
+
+    <p>Different attacks require different defenses. This comparison shows the landscape:</p>
+
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>Attack Type</th>
+                <th>Threat Model</th>
+                <th>Impact</th>
+                <th>Detection Difficulty</th>
+                <th>Defense Strategy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Adversarial Examples</strong></td>
+                <td>White-box or Black-box</td>
+                <td>Misclassification</td>
+                <td>Hard (imperceptible)</td>
+                <td>Adversarial training, Input validation</td>
+            </tr>
+            <tr>
+                <td><strong>Data Poisoning</strong></td>
+                <td>Training data access</td>
+                <td>Model degradation or backdoors</td>
+                <td>Hard (hidden in training)</td>
+                <td>Data validation, Anomaly detection, Defenses</td>
+            </tr>
+            <tr>
+                <td><strong>Model Extraction</strong></td>
+                <td>Query access</td>
+                <td>IP theft, model cloning</td>
+                <td>Medium (detectable by monitoring)</td>
+                <td>Query monitoring, Rate limiting, API controls</td>
+            </tr>
+            <tr>
+                <td><strong>Prompt Injection</strong></td>
+                <td>User input control</td>
+                <td>Jailbreaking, policy bypass</td>
+                <td>Hard (looks like valid input)</td>
+                <td>Input validation, Detection models, Fine-tuning</td>
+            </tr>
+            <tr>
+                <td><strong>Model Inversion</strong></td>
+                <td>Query or white-box access</td>
+                <td>Privacy leakage (training data exposure)</td>
+                <td>Hard (requires specific queries)</td>
+                <td>Differential privacy, Output limiting, Cryptography</td>
+            </tr>
+            <tr>
+                <td><strong>Membership Inference</strong></td>
+                <td>Query or model access</td>
+                <td>Privacy leakage (determine if data was in training set)</td>
+                <td>Medium (statistical analysis)</td>
+                <td>Differential privacy, Regularization, Ensemble methods</td>
+            </tr>
+            <tr>
+                <td><strong>Supply Chain Attack</strong></td>
+                <td>Compromised dependencies</td>
+                <td>Full system compromise</td>
+                <td>Very hard (hidden in dependencies)</td>
+                <td>Code review, Integrity checks, Sandboxing, Monitoring</td>
+            </tr>
+            <tr>
+                <td><strong>Model Replacement</strong></td>
+                <td>Server access or MITM</td>
+                <td>Deployment of malicious model</td>
+                <td>Hard (looks like model update)</td>
+                <td>Cryptographic signing, Secure deployment, Verification</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Vulnerability Severity Chart</h3>
+    <p>Relative severity of different vulnerabilities (considering likelihood × impact):</p>
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Model Extraction</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 92%; background: linear-gradient(90deg, #dc2626, #991b1b);">Critical</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Adversarial Examples</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 88%; background: linear-gradient(90deg, #ea580c, #9a3412);">High</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Data Poisoning</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #f59e0b, #b45309);">High</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Prompt Injection</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #eab308, #ca8a04);">High</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Privacy Attacks</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #06b6d4, #0891b2);">Medium-High</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Supply Chain</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #8b5cf6, #6d28d9);">Medium-High</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Use Cases -->
+<section id="use-cases" class="ml-section">
+    <h2>Real-World Security Use Cases</h2>
+
+    <p>AI security isn't abstract — organizations face these threats in production systems every day:</p>
+
+    <h3>Autonomous Vehicles</h3>
+    <div class="card">
+        <h4>Threat: Stop Sign Evasion</h4>
+        <p>Adversarial perturbations on stop signs can cause object detection failures, making vehicles drive through intersections. This is not theoretical — physical-world adversarial examples have been successfully demonstrated on traffic signs. Defense: Multi-modal fusion (camera + LiDAR + radar), adversarial training on sign variations, and human override systems.</p>
+    </div>
+
+    <h3>Medical Imaging</h3>
+    <div class="card">
+        <h4>Threat: Diagnosis Evasion</h4>
+        <p>Small perturbations to X-rays or MRI scans can cause misdiagnosis, potentially fatal. Unlike natural images, medical images have high cost-of-error. Defense: Certified robustness guarantees, ensemble methods, radiologist-in-the-loop, and careful validation.</p>
+    </div>
+
+    <h3>Financial Systems</h3>
+    <div class="card">
+        <h4>Threat: Trading Algorithm Manipulation</h4>
+        <p>Adversarial price movements or data poisoning in training could cause algorithms to make costly mistakes. Malicious actors could profit from this. Defense: Adversarial training on historical anomalies, rate limiting on trades, and human oversight for large transactions.</p>
+    </div>
+
+    <h3>Language Models</h3>
+    <div class="card">
+        <h4>Threat: Prompt Injection & Jailbreaking</h4>
+        <p>Users can craft prompts that override safety guidelines, causing models to generate harmful content. This has happened with ChatGPT, Bing, and other systems. Defense: Input validation, prompt engineering, RLHF with robust fine-tuning, and output filtering.</p>
+    </div>
+
+    <h3>Biometric Authentication</h3>
+    <div class="card">
+        <h4>Threat: Adversarial Face Spoofing</h4>
+        <p>Adversarial images or physical attacks can fool face recognition systems. Combined with stolen biometric data, this is a critical vulnerability. Defense: Liveness detection, adversarial training on spoofing attempts, multimodal biometrics.</p>
+    </div>
+
+    <h3>Content Moderation</h3>
+    <div class="card">
+        <h4>Threat: Evasion of Safety Filters</h4>
+        <p>Users develop techniques to bypass content moderation AI (typos, symbols, etc.). Malicious actors systematically find vulnerabilities. Defense: Adversarial training on evasion attempts, ensemble methods, human review escalation.</p>
+    </div>
+</section>
+
+<!-- SECTION: Enterprise Applications -->
+<section id="enterprise" class="ml-section">
+    <h2>Enterprise AI Security</h2>
+
+    <p>Large organizations deploying AI at scale face unique challenges requiring systematic approaches.</p>
+
+    <h3>Enterprise Security Framework</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Threat Assessment</h4>
+    <p>Regular red teaming and vulnerability scanning. Update threat model as new attacks emerge.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Compliance</h4>
+    <p>Meet regulatory requirements (GDPR, HIPAA, etc.). Document security measures and audit trails.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Incident Response</h4>
+    <p>Plan for when (not if) incidents occur. Have playbooks for different attack types.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Continuous Monitoring</h4>
+    <p>Runtime monitoring of predictions, confidence scores, and anomaly detection.</p>
+</div>
+    </div>
+
+    <h3>Security in the ML Pipeline</h3>
+    <div style="background: var(--surface); border-radius: 12px; padding: 1.5rem; margin: 2rem 0;">
+        <h4>1. Data Collection & Validation</h4>
+        <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Verify data sources and integrity</li>
+            <li>Detect poisoned or malicious examples</li>
+            <li>Anonymize and protect sensitive data</li>
+            <li>Maintain audit logs</li>
+        </ul>
+
+        <h4>2. Model Development</h4>
+        <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Code review for security vulnerabilities</li>
+            <li>Dependency scanning for supply chain attacks</li>
+            <li>Adversarial training where applicable</li>
+            <li>Version control with cryptographic signing</li>
+        </ul>
+
+        <h4>3. Model Evaluation</h4>
+        <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Red teaming and adversarial testing</li>
+            <li>Bias and fairness evaluation</li>
+            <li>Privacy impact assessment</li>
+            <li>Formal verification where possible</li>
+        </ul>
+
+        <h4>4. Deployment</h4>
+        <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Cryptographic model signing and verification</li>
+            <li>Secure infrastructure (encryption at rest/transit)</li>
+            <li>Access controls and authentication</li>
+            <li>Rate limiting and DDoS protection</li>
+        </ul>
+
+        <h4>5. Operation</h4>
+        <ul style="margin: 1rem 0; padding-left: 2rem;">
+            <li>Runtime monitoring of predictions</li>
+            <li>Confidence thresholding and fallback mechanisms</li>
+            <li>Anomaly detection on inputs/outputs</li>
+            <li>Audit logging and forensics capability</li>
+        </ul>
+    </div>
+
+    <h3>Organizational Practices</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Red Team Program</h4>
+    <p>Dedicated team tasked with finding vulnerabilities. Operates independently of development teams.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Bug Bounty</h4>
+    <p>External researchers help find vulnerabilities. Responsible disclosure and rewards.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Security Audits</h4>
+    <p>Regular third-party audits to validate controls and identify gaps.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Training</h4>
+    <p>All team members understand AI-specific threats and their responsibilities.</p>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="mistakes" class="ml-section">
+    <h2>Common AI Security Mistakes</h2>
+
+    <p>Even well-intentioned teams make critical security errors. Learn from others' mistakes:</p>
+
+    <h3>Mistake 1: Ignoring Adversarial Examples</h3>
+    <p><strong>Error:</strong> "Our model has 99% accuracy, so it's secure." Accuracy on natural examples ≠ robustness to adversarial examples.</p>
+    <p><strong>Fix:</strong> Test specifically for adversarial robustness. Use FGSM, PGD, or C&W attacks. Track accuracy under perturbations.</p>
+
+    <h3>Mistake 2: Security Through Obscurity</h3>
+    <p><strong>Error:</strong> "Our model is proprietary, so it's safe." White-box attacks don't require knowing the model — black-box attacks work with just query access.</p>
+    <p><strong>Fix:</strong> Assume attackers can query your API or access model weights. Design robust systems, not hidden ones.</p>
+
+    <h3>Mistake 3: Testing Only on Standard Data</h3>
+    <p><strong>Error:</strong> "The model works on our test set, so it's safe." This tests natural accuracy, not adversarial robustness or real-world scenarios.</p>
+    <p><strong>Fix:</strong> Test on adversarial examples, out-of-distribution data, and edge cases. Red team the system.</p>
+
+    <h3>Mistake 4: No Input Validation</h3>
+    <p><strong>Error:</strong> Directly feeding user input to the model. Even simple validation can stop many attacks.</p>
+    <p><strong>Fix:</strong> Validate all inputs: format, range, plausibility. Reject anomalous inputs.</p>
+
+    <h3>Mistake 5: Trusting Model Confidence</h3>
+    <p><strong>Error:</strong> Using confidence scores as a proxy for correctness. Adversarial examples can fool models with high confidence.</p>
+    <p><strong>Fix:</strong> Monitor confidence distributions. Ensemble methods. Thresholding. Don't treat confidence as a safety measure alone.</p>
+
+    <h3>Mistake 6: Single Point of Failure</h3>
+    <p><strong>Error:</strong> All security depends on one defense mechanism. If it fails, the system is compromised.</p>
+    <p><strong>Fix:</strong> Use defense-in-depth. Multiple layers of security so no single failure is catastrophic.</p>
+
+    <h3>Mistake 7: No Monitoring or Logging</h3>
+    <p><strong>Error:</strong> Deploying without visibility into what the model is doing. Can't detect attacks if you're not looking.</p>
+    <p><strong>Fix:</strong> Log all predictions, confidence scores, and anomalies. Monitor for drift and attacks in real-time.</p>
+
+    <h3>Mistake 8: Ignoring Data Poisoning</h3>
+    <p><strong>Error:</strong> "Our training data is clean." Data poisoning is subtle and expensive to detect but devastating.</p>
+    <p><strong>Fix:</strong> Data validation, anomaly detection on training data, smaller validation sets to catch poison early.</p>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>AI Security Best Practices</h2>
+
+    <p>Guidelines that work in practice across industry and research:</p>
+
+    <h3>Principle 1: Defense-in-Depth</h3>
+    <p>Don't rely on any single defense. Layer multiple complementary protections:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Input Layer</h4>
+    <p>Validate, sanitize, detect anomalies before model sees input.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Model Layer</h4>
+    <p>Train robustly, use ensemble methods, maintain version control.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Output Layer</h4>
+    <p>Validate outputs, threshold confidence, filter unsafe responses.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>System Layer</h4>
+    <p>Monitor, audit, rate-limit, control access.</p>
+</div>
+    </div>
+
+    <h3>Principle 2: Threat Modeling</h3>
+    <p>Explicitly identify what you're defending against:</p>
+    <ul>
+        <li><strong>What are your assets?</strong> Model, data, predictions, inference results</li>
+        <li><strong>Who are the adversaries?</strong> External attackers, malicious insiders, competitors</li>
+        <li><strong>What are their capabilities?</strong> Query access, code access, network access, physical access</li>
+        <li><strong>What's the impact if compromised?</strong> Varies from financial to safety-critical</li>
+    </ul>
+
+    <h3>Principle 3: Continuous Evaluation</h3>
+    <p>Security is ongoing, not a one-time check:</p>
+    <ul>
+        <li>Red team regularly (at least quarterly)</li>
+        <li>Monitor production systems continuously</li>
+        <li>Update threat model as attacks evolve</li>
+        <li>Conduct security audits by independent teams</li>
+    </ul>
+
+    <h3>Principle 4: Transparency & Documentation</h3>
+    <p>Document your security measures and limitations:</p>
+    <ul>
+        <li>What attacks are you defending against?</li>
+        <li>What are known limitations?</li>
+        <li>How is the system monitored?</li>
+        <li>What's the incident response plan?</li>
+    </ul>
+
+    <h3>Principle 5: Fail Secure</h3>
+    <p>When in doubt, reject or escalate:</p>
+    <ul>
+        <li>Confidence below threshold → reject or human review</li>
+        <li>Anomalous input → reject or human review</li>
+        <li>Unusual pattern → log and investigate</li>
+        <li>Better to deny service than provide incorrect results</li>
+    </ul>
+
+    <h3>Principle 6: Keep Up with Research</h3>
+    <p>AI security evolves rapidly:</p>
+    <ul>
+        <li>Follow security conferences (NDSS, CCS, IEEE S&P)</li>
+        <li>Subscribe to threat intelligence feeds</li>
+        <li>Participate in security communities</li>
+        <li>Test new attacks against your systems</li>
+    </ul>
+</section>
+
+<!-- SECTION: Advanced Insights -->
+<section id="advanced-insights" class="ml-section">
+    <h2>Advanced Security Insights</h2>
+
+    <p>Deep dives into subtle but important aspects of AI security:</p>
+
+    <h3>The Robustness-Accuracy Tradeoff</h3>
+    <p>Making a model robust to adversarial perturbations typically reduces its accuracy on natural examples. This is a fundamental tradeoff, not just an implementation issue.</p>
+    
+    <div class="highlight-box">
+        <p><strong>Why?</strong> The decision boundaries robust models learn are smoother and less complex. This protects against perturbations but can miss fine details in natural data. It's as if the model becomes "more conservative" to handle adversarial examples.</p>
+    </div>
+
+    <h3>Threat Model Assumptions Matter</h3>
+    <p>A defense that's excellent for white-box attacks might be useless for black-box attacks. Always specify your threat model:</p>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>White-Box Attacks</h4>
+    <p>Attacker has full model access. Strongest threat. Most defenses here are actually quite strong.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Black-Box Attacks</h4>
+    <p>Attacker only sees outputs. More realistic. Many defenses fail here due to transferability.</p>
+</div>
+    </div>
+
+    <h3>Transferability: The Silent Killer</h3>
+    <p>Adversarial examples generated for one model often fool other models. This means:</p>
+    <ul>
+        <li>Attacking ensemble methods is easier than attacking single models</li>
+        <li>Training on one attacker doesn't necessarily defend against others</li>
+        <li>Black-box attacks are easier than we'd like: generate examples against a surrogate model, transfer them</li>
+    </ul>
+
+    <h3>Privacy-Security Tradeoff</h3>
+    <p>Differential privacy protects individuals in training data but reduces model accuracy. Balancing these is a key design decision:</p>
+    <ul>
+        <li><strong>Tight privacy (low ε):</strong> Strong protection, lower accuracy</li>
+        <li><strong>Loose privacy (high ε):</strong> Better accuracy, weaker protection</li>
+        <li>Modern techniques push this frontier, improving both</li>
+    </ul>
+
+    <h3>Formal Verification vs Practical Security</h3>
+    <p>Certified defenses give formal guarantees but are often slow and may be overly conservative. Trade-offs exist:</p>
+    <ul>
+        <li><strong>Empirical Robustness:</strong> Fast, practically sufficient, no guarantees</li>
+        <li><strong>Certified Robustness:</strong> Slow, mathematically proven, may be over-conservative</li>
+        <li>Hybrid approaches emerging: certified + empirical</li>
+    </ul>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Practical Code Examples</h2>
+
+    <p>Working implementations of key security techniques. All examples use PyTorch.</p>
+
+    <h3>Example 1: FGSM Adversarial Attack</h3>
+    <p>The simplest adversarial attack, using the gradient of the loss function:</p>
+    <div class="code-block">
+    <div class="code-header">Python — FGSM Attack</div>
+    <div class="code-content"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F
+
+<span class="keyword">def</span> <span class="function">fgsm_attack</span>(model, x, y, epsilon=<span class="number">0.03</span>):
+    <span class="string">'''
+    Fast Gradient Sign Method attack.
+    Returns adversarial example x_adv with perturbation &lt;= epsilon
+    '''</span>
+    x_adv = x.<span class="function">clone</span>().<span class="function">detach</span>().<span class="function">requires_grad_</span>(<span class="keyword">True</span>)
+    
+    <span class="comment"># Forward pass</span>
+    output = <span class="function">model</span>(x_adv)
+    loss = F.<span class="function">cross_entropy</span>(output, y)
+    
+    <span class="comment"># Backward pass to get gradients</span>
+    <span class="keyword">if</span> x_adv.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+        x_adv.grad.<span class="function">zero_</span>()
+    loss.<span class="function">backward</span>()
+    
+    <span class="comment"># FGSM: move in direction of gradient</span>
+    <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+        perturbation = epsilon * x_adv.grad.<span class="function">sign</span>()
+        x_adv.data = x_adv.data + perturbation
+        x_adv.data = torch.<span class="function">clamp</span>(x_adv.data, <span class="number">0</span>, <span class="number">1</span>)
+    
+    <span class="keyword">return</span> x_adv.<span class="function">detach</span>()
+
+<span class="comment"># Usage</span>
+x_clean = torch.<span class="function">randn</span>(<span class="number">1</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">32</span>)  <span class="comment"># Example image</span>
+y = torch.<span class="function">tensor</span>([<span class="number">5</span>])  <span class="comment"># Target class</span>
+x_adversarial = <span class="function">fgsm_attack</span>(model, x_clean, y, epsilon=<span class="number">0.03</span>)
+
+<span class="comment"># Check that perturbation is small</span>
+<span class="function">print</span>(<span class="string">f"L-infinity norm: {(x_adversarial - x_clean).abs().max():.4f}"</span>)</div>
+</div>
+
+    <h3>Example 2: Adversarial Training</h3>
+    <p>Training a robust model by including adversarial examples:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Adversarial Training</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">adversarial_training</span>(model, dataloader, optimizer, epochs=<span class="number">10</span>):
+    <span class="string">'''Train model with adversarial robustness'''</span>
+    
+    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="function">range</span>(epochs):
+        total_loss = <span class="number">0</span>
+        
+        <span class="keyword">for</span> x, y <span class="keyword">in</span> dataloader:
+            <span class="comment"># Generate adversarial examples</span>
+            x_adv = <span class="function">fgsm_attack</span>(model, x, y, epsilon=<span class="number">0.03</span>)
+            
+            <span class="comment"># Train on both clean and adversarial</span>
+            optimizer.<span class="function">zero_grad</span>()
+            
+            <span class="comment"># Clean loss</span>
+            logits_clean = <span class="function">model</span>(x)
+            loss_clean = F.<span class="function">cross_entropy</span>(logits_clean, y)
+            
+            <span class="comment"># Adversarial loss</span>
+            logits_adv = <span class="function">model</span>(x_adv)
+            loss_adv = F.<span class="function">cross_entropy</span>(logits_adv, y)
+            
+            <span class="comment"># Total loss</span>
+            loss = loss_clean + loss_adv
+            loss.<span class="function">backward</span>()
+            optimizer.<span class="function">step</span>()
+            
+            total_loss += loss.<span class="function">item</span>()
+        
+        avg_loss = total_loss / <span class="function">len</span>(dataloader)
+        <span class="function">print</span>(<span class="string">f"Epoch {epoch+1}, Loss: {avg_loss:.4f}"</span>)</div>
+</div>
+
+    <h3>Example 3: Input Validation & Anomaly Detection</h3>
+    <p>Detect adversarial or anomalous inputs before prediction:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Input Anomaly Detection</div>
+    <div class="code-content"><span class="keyword">class</span> AnomalyDetector:
+    <span class="string">'''Detect suspicious inputs using statistical methods'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, clean_data_examples):
+        <span class="comment"># Learn statistics from clean data</span>
+        <span class="function">self</span>.mean = clean_data_examples.<span class="function">mean</span>(dim=<span class="number">0</span>)
+        <span class="function">self</span>.std = clean_data_examples.<span class="function">std</span>(dim=<span class="number">0</span>)
+        
+        <span class="comment"># Compute z-scores for clean data</span>
+        z_scores = ((clean_data_examples - <span class="function">self</span>.mean) / (<span class="function">self</span>.std + <span class="number">1e-8</span>)).<span class="function">abs</span>()
+        <span class="function">self</span>.threshold = z_scores.<span class="function">max</span>(dim=<span class="number">0</span>)[<span class="number">0</span>].<span class="function">mean</span>()
+    
+    <span class="keyword">def</span> <span class="function">is_anomalous</span>(<span class="function">self</span>, x):
+        <span class="string">'''Check if x is anomalous (likely adversarial)'''</span>
+        z_scores = ((x - <span class="function">self</span>.mean) / (<span class="function">self</span>.std + <span class="number">1e-8</span>)).<span class="function">abs</span>()
+        max_z = z_scores.<span class="function">max</span>()
+        <span class="keyword">return</span> max_z > <span class="function">self</span>.threshold * <span class="number">2</span>
+
+<span class="comment"># Usage</span>
+detector = <span class="function">AnomalyDetector</span>(clean_train_data)
+
+<span class="keyword">for</span> x, y <span class="keyword">in</span> test_dataloader:
+    <span class="keyword">if</span> detector.<span class="function">is_anomalous</span>(x):
+        <span class="function">print</span>(<span class="string">f"Anomalous input detected!"</span>)
+        <span class="keyword">continue</span>  <span class="comment"># Skip this input</span>
+    
+    <span class="comment"># Normal processing</span>
+    predictions = <span class="function">model</span>(x)</div>
+</div>
+
+    <h3>Example 4: Confidence-Based Rejection</h3>
+    <p>Reject low-confidence predictions to improve security:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Confidence Thresholding</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">secure_predict</span>(model, x, confidence_threshold=<span class="number">0.85</span>):
+    <span class="string">'''
+    Make predictions with confidence-based rejection.
+    Returns (prediction, confidence, rejected)
+    '''</span>
+    
+    <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+        logits = <span class="function">model</span>(x)
+        probabilities = F.<span class="function">softmax</span>(logits, dim=<span class="number">1</span>)
+        confidence, predictions = torch.<span class="function">max</span>(probabilities, dim=<span class="number">1</span>)
+    
+    <span class="comment"># Reject low-confidence predictions</span>
+    rejected = confidence < confidence_threshold
+    predictions[rejected] = -<span class="number">1</span>  <span class="comment"># -1 indicates rejected</span>
+    
+    <span class="keyword">return</span> predictions, confidence, rejected
+
+<span class="comment"># Usage</span>
+<span class="keyword">for</span> x, _ <span class="keyword">in</span> test_dataloader:
+    preds, conf, rejected = <span class="function">secure_predict</span>(model, x, threshold=<span class="number">0.85</span>)
+    
+    <span class="function">print</span>(<span class="string">f"Predictions: {preds}"</span>)
+    <span class="function">print</span>(<span class="string">f"Confidence: {conf}"</span>)
+    <span class="function">print</span>(f"Rejected: {rejected.<span class="function">sum</span>()} out of {<span class="function">len</span>(x)}</div>
+</div>
+
+    <h3>Example 5: Ensemble Robustness</h3>
+    <p>Use multiple models for more robust predictions:</p>
+    <div class="code-block">
+    <div class="code-header">Python — Ensemble Method</div>
+    <div class="code-content"><span class="keyword">class</span> RobustEnsemble:
+    <span class="string">'''Ensemble of models for robust predictions'''</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, models):
+        <span class="function">self</span>.models = models
+    
+    <span class="keyword">def</span> <span class="function">predict</span>(<span class="function">self</span>, x):
+        <span class="string">'''Ensemble prediction using voting'''</span>
+        all_predictions = []
+        all_confidences = []
+        
+        <span class="keyword">for</span> model <span class="keyword">in</span> <span class="function">self</span>.models:
+            <span class="keyword">with</span> torch.<span class="function">no_grad</span>():
+                logits = <span class="function">model</span>(x)
+                probs = F.<span class="function">softmax</span>(logits, dim=<span class="number">1</span>)
+                conf, pred = torch.<span class="function">max</span>(probs, dim=<span class="number">1</span>)
+            
+            all_predictions.<span class="function">append</span>(pred)
+            all_confidences.<span class="function">append</span>(conf)
+        
+        <span class="comment"># Majority vote</span>
+        ensemble_pred = torch.<span class="function">stack</span>(all_predictions).<span class="function">mode</span>(dim=<span class="number">0</span>)[<span class="number">0</span>]
+        ensemble_conf = torch.<span class="function">stack</span>(all_confidences).<span class="function">mean</span>(dim=<span class="number">0</span>)
+        
+        <span class="keyword">return</span> ensemble_pred, ensemble_conf
+
+<span class="comment"># Usage</span>
+ensemble = <span class="function">RobustEnsemble</span>([model1, model2, model3])
+predictions, confidence = ensemble.<span class="function">predict</span>(x_test)</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <p>Practice implementing AI security concepts. Solutions available after completion.</p>
+
+    <div class="try-it-box">
+    <h4>Exercise 1: Implement PGD Attack</h4>
+    <p>Extend the FGSM attack to a stronger PGD (Projected Gradient Descent) attack. PGD makes multiple steps of FGSM, projecting back to the epsilon ball each time. Test on MNIST.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">pgd_attack</span>(model, x, y, epsilon=<span class="number">0.03</span>, alpha=<span class="number">0.01</span>, steps=<span class="number">20</span>):
+    <span class="string">'''
+    TODO: Implement PGD attack
+    - Start with random perturbation
+    - For each step:
+      - Compute loss gradient
+      - Move in gradient direction by alpha
+      - Project back to epsilon ball
+    Return adversarial example
+    '''</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># Test on MNIST</span>
+x_clean = test_images[<span class="number">0</span>:<span class="number">10</span>]  <span class="comment"># 10 test images</span>
+y_true = test_labels[<span class="number">0</span>:<span class="number">10</span>]
+
+x_pgd = <span class="function">pgd_attack</span>(model, x_clean, y_true)
+pred_clean = <span class="function">model</span>(x_clean).<span class="function">argmax</span>(dim=<span class="number">1</span>)
+pred_pgd = <span class="function">model</span>(x_pgd).<span class="function">argmax</span>(dim=<span class="number">1</span>)
+
+<span class="function">print</span>(<span class="string">f"Clean accuracy: {(pred_clean == y_true).float().mean():.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"PGD accuracy: {(pred_pgd == y_true).float().mean():.3f}"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 2: Build Adversarial Training</h4>
+    <p>Implement full adversarial training loop. Train a model on both clean and adversarial examples. Measure accuracy under attack.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">train_robust_model</span>(model, train_loader, optimizer, epochs=<span class="number">5</span>):
+    <span class="string">'''
+    TODO: Implement adversarial training
+    - For each batch:
+      - Generate adversarial examples
+      - Forward pass on clean examples
+      - Forward pass on adversarial examples
+      - Combine losses
+      - Backward and update
+    '''</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># Train robust model</span>
+model = <span class="function">SimpleModel</span>()
+optimizer = torch.optim.<span class="function">Adam</span>(model.<span class="function">parameters</span>())
+<span class="function">train_robust_model</span>(model, train_loader, optimizer)
+
+<span class="comment"># Evaluate robustness</span>
+clean_acc = <span class="function">evaluate</span>(model, test_loader)
+pgd_acc = <span class="function">evaluate_pgd</span>(model, test_loader)
+<span class="function">print</span>(<span class="string">f"Clean: {clean_acc:.3f}, PGD: {pgd_acc:.3f}"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 3: Detect Adversarial Examples</h4>
+    <p>Build a detector that identifies adversarial examples using statistical features. Test on both clean and adversarial MNIST.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">class</span> AdversarialDetector:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>):
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function">fit</span>(<span class="function">self</span>, clean_examples):
+        <span class="string">'''
+        TODO: Learn statistics from clean examples
+        Compute features like:
+        - Pixel value distribution
+        - Gradient magnitude
+        - Spectral properties
+        '''</span>
+        <span class="keyword">pass</span>
+    
+    <span class="keyword">def</span> <span class="function">detect</span>(<span class="function">self</span>, x):
+        <span class="string">'''
+        TODO: Compare input to clean statistics
+        Return probability that input is adversarial
+        '''</span>
+        <span class="keyword">pass</span>
+
+<span class="comment"># Test detector</span>
+detector = <span class="function">AdversarialDetector</span>()
+detector.<span class="function">fit</span>(clean_train_data)
+
+clean_scores = detector.<span class="function">detect</span>(clean_test_data)
+adv_scores = detector.<span class="function">detect</span>(pgd_examples)
+
+<span class="comment"># ROC curve</span>
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_auc_score
+labels = [<span class="number">0</span>]*<span class="function">len</span>(clean_scores) + [<span class="number">1</span>]*<span class="function">len</span>(adv_scores)
+scores = <span class="function">list</span>(clean_scores) + <span class="function">list</span>(adv_scores)
+auc = <span class="function">roc_auc_score</span>(labels, scores)
+<span class="function">print</span>(<span class="string">f"AUC: {auc:.3f}"</span>)</div>
+</div>
+</div>
+
+    <div class="try-it-box">
+    <h4>Exercise 4: Red Team Your Model</h4>
+    <p>Systematically find vulnerabilities in a model using different attack methods and ensemble approaches. Measure worst-case error.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">red_team_model</span>(model, test_data):
+    <span class="string">'''
+    TODO: Comprehensive red team evaluation
+    - FGSM attack
+    - PGD attack
+    - C&amp;W attack
+    - Various epsilon values
+    - Black-box transfer attacks
+    
+    Return summary of vulnerabilities found
+    '''</span>
+    
+    results = {}
+    
+    <span class="comment"># Try different attacks</span>
+    <span class="keyword">for</span> attack_name <span class="keyword">in</span> [<span class="string">'fgsm'</span>, <span class="string">'pgd'</span>, <span class="string">'cw'</span>]:
+        <span class="keyword">for</span> epsilon <span class="keyword">in</span> [<span class="number">0.01</span>, <span class="number">0.03</span>, <span class="number">0.1</span>]:
+            <span class="comment"># Generate adversarial examples</span>
+            <span class="comment"># Measure success rate</span>
+            <span class="keyword">pass</span>
+    
+    <span class="keyword">return</span> results
+
+<span class="comment"># Red team the model</span>
+vulnerabilities = <span class="function">red_team_model</span>(model, test_data)
+<span class="function">print</span>(vulnerabilities)</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Security Interview Questions</h2>
+
+    <p>Questions you might encounter in AI security interviews, with discussion guides.</p>
+
+    <h3>Question 1: Explain Adversarial Examples</h3>
+    <p><strong>What they want:</strong> Deep understanding, not just "small perturbations fool models."</p>
+    <p><strong>Good answer structure:</strong></p>
+    <ul>
+        <li>Define formally: perturbations within epsilon distance that cause misclassification</li>
+        <li>Explain why they exist: networks learn overly linear decision boundaries</li>
+        <li>Give concrete example: image classification, stop sign evasion</li>
+        <li>Discuss threat model: white-box vs black-box</li>
+        <li>Mention defense: adversarial training, certified robustness</li>
+    </ul>
+
+    <h3>Question 2: How Would You Secure an ML System?</h3>
+    <p><strong>What they want:</strong> Systems thinking, not just technical depth.</p>
+    <p><strong>Good answer structure:</strong></p>
+    <ul>
+        <li>Defense-in-depth: multiple layers</li>
+        <li>Data security: validation, integrity, privacy</li>
+        <li>Model security: robustness, monitoring, versioning</li>
+        <li>Deployment security: access control, encryption, audit logs</li>
+        <li>Incident response: detection, response, recovery</li>
+    </ul>
+
+    <h3>Question 3: What's the Robustness-Accuracy Tradeoff?</h3>
+    <p><strong>What they want:</strong> Understanding of fundamental ML security concepts.</p>
+    <p><strong>Key points:</strong></p>
+    <ul>
+        <li>Making models robust reduces natural accuracy</li>
+        <li>Why: robust models learn smoother decision boundaries</li>
+        <li>This is a fundamental property, not just implementation</li>
+        <li>Research focuses on minimizing the tradeoff</li>
+        <li>Practical consideration: how much accuracy can we afford to lose?</li>
+    </ul>
+
+    <h3>Question 4: Design a Red Team for an LLM</h3>
+    <p><strong>What they want:</strong> Practical security assessment strategy.</p>
+    <p><strong>Good answer should include:</strong></p>
+    <ul>
+        <li>Automated testing: adversarial prompts, jailbreak attempts</li>
+        <li>Manual testing: creative attacks, domain expertise</li>
+        <li>Taxonomy: what categories of attacks to test (safety, fairness, privacy)</li>
+        <li>Metrics: what constitutes a successful attack</li>
+        <li>Iteration: continuously update threat model based on findings</li>
+    </ul>
+
+    <h3>Question 5: Explain Differential Privacy in Training</h3>
+    <p><strong>What they want:</strong> Technical understanding with practical awareness.</p>
+    <p><strong>Key points:</strong></p>
+    <ul>
+        <li>DP-SGD: gradient clipping + noise injection</li>
+        <li>Epsilon-delta: epsilon = how much privacy, delta = failure probability</li>
+        <li>Privacy-utility tradeoff: stronger privacy = worse model</li>
+        <li>Why it matters: protects training data from extraction/inversion attacks</li>
+        <li>Practical use: when differential privacy is necessary</li>
+    </ul>
+
+    <h3>Question 6: Black-Box Attack on a Deployed Model</h3>
+    <p><strong>What they want:</strong> Realistic threat assessment.</p>
+    <p><strong>Good answer:</strong></p>
+    <ul>
+        <li>Query access: can probe the model's API</li>
+        <li>Transfer attacks: generate adversarial examples on a surrogate model, transfer them</li>
+        <li>Harder but possible: iterative refinement using model's feedback</li>
+        <li>Defense strategy: rate limiting, input validation, ensemble methods</li>
+    </ul>
+
+    <h3>Question 7: Prompt Injection Attack & Defense</h3>
+    <p><strong>What they want:</strong> LLM-specific security thinking.</p>
+    <p><strong>Key points:</strong></p>
+    <ul>
+        <li>Attack: craft prompts that override system instructions</li>
+        <li>Severity: can bypass safety guidelines, extract training data</li>
+        <li>Defense: input validation, fine-tuning on adversarial examples, prompt engineering</li>
+        <li>Limitations: difficult to completely prevent, may require human-in-the-loop</li>
+    </ul>
+
+    <h3>Question 8: Model Stealing Mitigation</h3>
+    <p><strong>What they want:</strong> Intellectual property protection awareness.</p>
+    <p><strong>Good answer:</strong></p>
+    <ul>
+        <li>Threat: attacker queries API to steal model</li>
+        <li>Defenses: rate limiting, output perturbation, watermarking</li>
+        <li>Trade-offs: these defenses may degrade accuracy or user experience</li>
+        <li>Reality: perfect defense is impossible, goal is to make stealing expensive</li>
+    </ul>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Are adversarial examples a real threat? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Absolutely. They've been demonstrated on real systems like autonomous vehicles (traffic signs) and facial recognition. Major AI companies invest heavily in defending against them.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can we make ML systems 100% secure? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No. Security is always about risk management. We can make attacks expensive and difficult, but not impossible. The goal is defense-in-depth and detection of attacks in progress.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Does differential privacy destroy model accuracy? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">It reduces accuracy, but not catastrophically. Modern DP-SGD allows training competitive models. The privacy-utility tradeoff is a design choice based on application requirements.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What's the most important AI security defense? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Defense-in-depth: no single defense is sufficient. Combine adversarial training, input validation, monitoring, and incident response. Different defenses protect against different threats.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Can I detect all adversarial examples? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">No, but you can detect some. Detectors are an arms race: new attacks are crafted to evade detectors. Detection is a helpful layer but shouldn't be your only defense.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How often should I red team my models? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Continuously, especially before major releases. At minimum quarterly for production systems. More frequently if you deploy updates or change threat model.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What about GPU adversarial examples? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Harder to execute (real-world attacks need physical modifications), but demonstrated in research. Includes things like adversarial patches, 3D objects, or printed materials that fool vision systems.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How does transfer learning affect security? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Pre-trained models inherit security properties of their training process. If training data was poisoned, pre-trained model carries the poison. Fine-tuning on clean data helps, but doesn't guarantee remediation.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Are open-source models less secure? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Not necessarily. Open-source means more eyes for security review, but also means attackers can analyze the code. The tradeoff is transparency vs obscurity, neither is inherently secure.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How do I explain AI security budget to non-technical leadership? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Frame as insurance and risk management: 'This prevents costly breaches, regulatory fines, and loss of customer trust. The cost is trivial compared to the risk.'</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary: Key Takeaways</h2>
+
+    <p>As you deploy AI systems in production, remember these core principles:</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Threats Are Real</h4>
+    <p>Adversarial examples, prompt injection, data poisoning, and model theft happen in the wild. Don't dismiss them as theoretical.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Defense-in-Depth</h4>
+    <p>No single defense is sufficient. Layer multiple complementary protections across the entire ML pipeline.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Assume Breach</h4>
+    <p>Design systems assuming attackers will find vulnerabilities. Detection and response are as important as prevention.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Continuous Evaluation</h4>
+    <p>Security is not a one-time checklist. Red team regularly, monitor in production, stay updated on new attacks.</p>
+</div>
+    </div>
+
+    <h3>The Security Mindset</h3>
+    <p>Developing AI security expertise requires shifting your thinking:</p>
+    
+    <ul>
+        <li><strong>From:</strong> "Our model achieves 99% accuracy, so it's good."</li>
+        <li><strong>To:</strong> "Our model achieves 99% accuracy on natural data. What about under adversarial conditions?"</li>
+    </ul>
+
+    <ul>
+        <li><strong>From:</strong> "We'll detect attacks at inference time."</li>
+        <li><strong>To:</strong> "We need to prevent attacks, detect them, and respond quickly."</li>
+    </ul>
+
+    <ul>
+        <li><strong>From:</strong> "Our proprietary model is secure because it's secret."</li>
+        <li><strong>To:</strong> "We design for security assuming attackers have model access or can query it."</li>
+    </ul>
+
+    <h3>The Path Forward</h3>
+    <p>You now understand the landscape of AI security. The next steps:</p>
+    
+    <div style="background: var(--surface); border-radius: 12px; padding: 1.5rem; margin: 2rem 0;">
+        <h4>1. Apply to Your Systems</h4>
+        <p>Take these concepts and apply them to models you own or use. Start with threat modeling and risk assessment.</p>
+
+        <h4>2. Keep Learning</h4>
+        <p>AI security research moves fast. Subscribe to security conferences (NDSS, CCS, IEEE S&P), read papers, and stay updated.</p>
+
+        <h4>3. Red Team</h4>
+        <p>Build red teaming into your development process. Make finding vulnerabilities a regular practice, not an afterthought.</p>
+
+        <h4>4. Collaborate</h4>
+        <p>Security is better with community. Share findings (responsibly), participate in bug bounties, learn from others.</p>
+
+        <h4>5. Think Holistically</h4>
+        <p>AI security isn't just about algorithms—it's about data, systems, organizations, and incentives. Consider the full context.</p>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Remember:</strong> Every AI system will be attacked. The question isn't whether, but whether you're prepared when it happens.</p>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Learning</h2>
+
+    <p>Deepen your AI security expertise with these resources:</p>
+
+    <h3>Foundational Papers</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Adversarial Examples</h4>
+    <p>Goodfellow et al., 'Explaining and Harnessing Adversarial Examples' (2014). The foundational work on FGSM attacks.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Robust Models</h4>
+    <p>Madry et al., 'Towards Deep Learning Models Resistant to Adversarial Attacks' (2019). PGD attacks and adversarial training.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Differential Privacy</h4>
+    <p>Abadi et al., 'Deep Learning with Differential Privacy' (2016). DP-SGD for training with privacy guarantees.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Data Poisoning</h4>
+    <p>Shafahi et al., 'Poisoning Attacks against Support Vector Machines' (2016). Foundational poisoning attack.</p>
+</div>
+    </div>
+
+    <h3>Tools & Libraries</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4><a href="https://adversarial-robustness-toolbox.readthedocs.io/" target="_blank" rel="noopener">Adversarial Robustness Toolbox (ART)</a></h4>
+    <p>IBM's library for generating adversarial examples and defenses. Supports multiple frameworks.</p>
+</div>
+        <div class="card purple-accent">
+    <h4><a href="https://opacus.ai/" target="_blank" rel="noopener">Opacus</a></h4>
+    <p>Facebook's library for DP-SGD training. Makes adding differential privacy easy.</p>
+</div>
+        <div class="card pink-accent">
+    <h4><a href="https://github.com/cleverhans-lab/cleverhans" target="_blank" rel="noopener">CleverHans</a></h4>
+    <p>TensorFlow/Keras library for adversarial example generation and robustness evaluation.</p>
+</div>
+        <div class="card green-accent">
+    <h4>FGSM & PGD</h4>
+    <p><a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a> implementations available in most ML libraries. Simple to implement from scratch.</p>
+</div>
+    </div>
+
+    <h3>Online Courses</h3>
+    <ul>
+        <li><strong>CS109A: AI for Defense & Security</strong> — MIT course on defensive AI systems</li>
+        <li><strong>UC Berkeley AI Security</strong> — Research-focused course on emerging threats and defenses</li>
+        <li><strong>Coursera: AI Security</strong> — Industry-focused practical course</li>
+    </ul>
+
+    <h3>Conferences</h3>
+    <ul>
+        <li><strong>NDSS</strong> (Network and Distributed System Security Symposium) — Top-tier security</li>
+        <li><strong>CCS</strong> (ACM Conference on Computer and Communications Security) — Broad security topics</li>
+        <li><strong>IEEE S&P</strong> (IEEE Symposium on Security and Privacy) — Prestigious security venue</li>
+        <li><strong>NeurIPS</strong> (Neural Information Processing Systems) — ML security track</li>
+        <li><strong>ICLR</strong> (International Conference on Learning Representations) — Robustness track</li>
+    </ul>
+
+    <h3>Organizations & Communities</h3>
+    <ul>
+        <li><strong>Anthropic Safety Team</strong> — Research on AI safety and alignment</li>
+        <li><strong>DeepMind Safety & Alignment</strong> — Google DeepMind's safety research</li>
+        <li><strong>OpenAI Safety & Policy</strong> — ChatGPT and GPT security research</li>
+        <li><strong>MIRI</strong> (Machine Intelligence Research Institute) — Long-term AI safety</li>
+        <li><strong><a href="https://www.safe.ai/" target="_blank" rel="noopener">Center for AI Safety</a></strong> — Independent AI safety research</li>
+    </ul>
+
+    <h3>Practical Resources</h3>
+    <ul>
+        <li><strong><a href="https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence" target="_blank" rel="noopener">NIST AI Risk Management Framework</a></strong> — Standards and guidance for responsible AI</li>
+        <li><strong>OWASP Top 10 for LLMs</strong> — Security risks in language models</li>
+        <li><strong>FAIR Institute</strong> — Quantitative risk management for AI</li>
+        <li><strong>AI Security & Safety</strong> blog by researchers — Latest developments in AI security</li>
+    </ul>
+
+    <h3>Recommended Books</h3>
+    <ul>
+        <li><em>Adversarial Machine Learning at Scale</em> — Papernot et al.</li>
+        <li><em>The Security of Machine Learning</em> — Joseph et al.</li>
+        <li><em>AI Safety and Reproducibility</em> — Leike, 2024</li>
+        <li><em>Securing Machine Learning Systems</em> — Fredrikson, 2023</li>
+    </ul>
+
+    <h3>Next Steps</h3>
+    <div class="highlight-box">
+        <p><strong>Your AI security journey continues.</strong> Take these tools and concepts, apply them to real systems, stay current with research, and help build safer AI systems. The field needs thoughtful practitioners who understand both the threats and the defenses.</p>
+    </div>
+</section>
+
+    </div>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar active state
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.ml-section');
+            const navLinks = document.querySelectorAll('.ml-sidebar a');
+            
+            function updateActiveNav() {
+                let current = '';
+                sections.forEach(section => {
+                    if (window.scrollY >= section.offsetTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
+        });
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                this.classList.toggle('active');
+                content.classList.toggle('active');
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                this.classList.toggle('active');
+                answer.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll for nav links
+        document.querySelectorAll('.ml-sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

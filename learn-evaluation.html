@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Evaluation - SustainSys AI Academy</title>
+    <meta name="description" content="Measure, test, and validate AI systems — from classification metrics to LLM evaluation frameworks and RAG assessment.">
+    <meta property="og:title" content="AI Evaluation - SustainSys AI Academy">
+    <meta property="og:description" content="Comprehensive guide to evaluating AI systems, metrics, fairness, and continuous monitoring.">
+    <meta property="og:type" content="article">
+    
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --text: #1f2937;
+            --text-dim: #6b7280;
+            --surface: #ffffff;
+            --secondary: #f3f4f6;
+            --border: #e5e7eb;
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-pink: #db2777;
+            --accent-green: #059669;
+            --accent-gold: #d97706;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: #f9fafb;
+            line-height: 1.6;
+        }
+        
+        a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    
+        /* Balanced grid layouts for specific card counts */
+        .card-grid.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .card-grid.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        .card-grid.grid-5 .card {
+            min-width: 0;
+        }
+        .grid-cards.grid-6 {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+        .grid-cards.grid-5 {
+            grid-template-columns: repeat(5, 1fr) !important;
+        }
+        @media (max-width: 900px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .card-grid.grid-5,
+            .card-grid.grid-6,
+            .grid-cards.grid-5,
+            .grid-cards.grid-6 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+</style>
+    
+    <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+    
+    <main>
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">AI Evaluation</h1>
+                <p class="page-description">Master AI Evaluation with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <div class="ml-page-container">
+            <div class="ml-sidebar"><h3>Contents</h3><ul><li><a href="#intro">Introduction</a></li><li><a href="#why-matters">Why Evaluation Matters</a></li><li><a href="#classification">Classification Metrics</a></li><li><a href="#confusion">Confusion Matrix</a></li><li><a href="#regression">Regression Metrics</a></li><li><a href="#nlp-metrics">NLP Evaluation</a></li><li><a href="#rag-evaluation">RAG Assessment</a></li><li><a href="#llm-judge">LLM-as-Judge</a></li><li><a href="#ab-testing">A/B Testing</a></li><li><a href="#custom-pipeline">Custom Pipelines</a></li><li><a href="#bias-fairness">Bias & Fairness</a></li><li><a href="#best-practices">Best Practices</a></li><li><a href="#pitfalls">Common Pitfalls</a></li><li><a href="#code-examples">Code Examples</a></li><li><a href="#visual-guide">Visual Guide</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#interview">Interview Questions</a></li><li><a href="#faq">FAQ</a></li><li><a href="#summary">Summary</a></li><li><a href="#resources">Resources</a></li></ul></div>
+            
+            <div class="ml-content">
+                
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>AI Evaluation & Assessment</h2>
+
+    <div class="ml-intro-text">
+        <p>AI evaluation is the discipline of measuring, testing, and validating AI systems. Whether you're building a classifier, fine-tuning an LLM, or deploying a RAG pipeline, rigorous evaluation determines whether your system works and how well it performs in production.</p>
+    </div>
+
+    <p>Good evaluation answers critical questions: <strong>Does my model generalize?</strong> <strong>Which metrics matter for my use case?</strong> <strong>How does it perform on edge cases?</strong> <strong>Am I introducing bias?</strong> Skipping or oversimplifying evaluation is a leading cause of AI system failures in production.</p>
+
+    <p>This comprehensive guide covers the full spectrum of evaluation techniques — from fundamental classification metrics (precision, recall, F1) through advanced frameworks like <a href="https://docs.ragas.io/" target="_blank" rel="noopener">RAGAS</a> for RAG systems and LLM-as-judge patterns for generative models. You'll learn when to use each technique, how to implement them in code, and how to interpret results reliably. By the end, you'll understand how to build robust evaluation pipelines that catch failures before they reach users.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Metrics Fundamentals</h4>
+    <p>Master precision, recall, F1-score, accuracy, and confusion matrices. Understand when each metric matters and why accuracy alone is dangerous for imbalanced datasets.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Task-Specific Evaluation</h4>
+    <p>Learn specialized techniques: BLEU/ROUGE for NLP, RAGAS for RAG, ranking metrics for recommendation systems, and loss surfaces for regression.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>LLM Evaluation</h4>
+    <p>Evaluate generative models using LLM-as-judge, human preference modeling, and automated scoring frameworks like <a href="https://docs.confident-ai.com/" target="_blank" rel="noopener">DeepEval</a> with proper statistical validation.</p>
+</div>
+        <div class="card green-accent">
+    <h4>A/B Testing & Experimentation</h4>
+    <p>Run statistically valid experiments, compute confidence intervals, detect significance, and avoid common statistical mistakes in production deployments.</p>
+</div>
+    </div>
+
+    <h3>Why This Matters</h3>
+    <p>Consider these real-world consequences of poor evaluation:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text); margin-left: 2rem;">
+        <li>A facial recognition system with 99% accuracy overall but 35% error rate on darker skin tones is still deployed, discriminating against users.</li>
+        <li>A classifier trained and tested on balanced data performs terribly on real imbalanced data where the minority class has 1% frequency.</li>
+        <li>An LLM evaluation based solely on perplexity misses hallucination and bias issues that users immediately notice.</li>
+        <li>A model that achieves good performance during development fails when data distribution shifts in production.</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>Core Philosophy</h4>
+    <p>Evaluation is not a one-time gate — it's continuous. Build evaluation into your development loop from day one. Test on realistic data. Measure what matters for your users, not what's easy to measure. Disaggregate metrics by demographic groups and data domains.</p>
+</div>
+
+    <h3>Evaluation in the ML Lifecycle</h3>
+    <p>Evaluation happens at multiple stages:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text); margin-left: 2rem;">
+        <li><strong>Development:</strong> Validate on held-out test set to catch overfitting and verify generalization.</li>
+        <li><strong>Pre-deployment:</strong> Run A/B tests with real users or shadow mode to catch distribution shift and fairness issues.</li>
+        <li><strong>Production:</strong> Continuously monitor actual user-facing metrics to detect performance degradation and trigger retraining.</li>
+        <li><strong>Post-mortems:</strong> When failures occur, analyze evaluation data to understand root causes and prevent recurrence.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Why Evaluation Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Evaluation Matters</h2>
+
+    <p>In production AI systems, a 1% improvement in accuracy might seem minor — until you realize it affects millions of users. Conversely, a model might score well on test metrics but fail catastrophically on real-world data your evaluation didn't capture. This section explains why rigorous evaluation is non-negotiable.</p>
+
+    <h3>Real Cost of Poor Evaluation</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>False Confidence</h4>
+    <p>A classifier achieving 95% accuracy on balanced test data might have 5% accuracy on minority classes. Users in those groups experience failure rates that metrics hide.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Distribution Shift</h4>
+    <p>Models trained on 2020 data perform poorly on 2025 data. Evaluation frameworks must catch this drift before production users discover it through degraded service.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Specification Gaming</h4>
+    <p>Optimizing the wrong metric is worse than optimizing nothing. YouTube's watch-time metric led to addictive but low-quality content ranking. Recommenders optimized for engagement promoted misinformation.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Bias & Fairness</h4>
+    <p>Without explicit bias evaluation, systems perpetuate historical discrimination. Facial recognition with 99% accuracy overall but 35% error rate on darker skin tones is still deployed, disproportionately harming minorities.</p>
+</div>
+    </div>
+
+    <h3>The Evaluation Mindset</h3>
+    <p>Strong evaluation practices follow these core principles:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Measure What Matters:</strong> Your primary metric should reflect actual business/user impact, not just statistical convenience. For safety-critical systems, measure failure modes explicitly.</li>
+        <li><strong>Test on Realistic Data:</strong> Evaluation data should match production distribution, including edge cases, rare events, and adversarial examples. Don't just test on clean, balanced benchmark data.</li>
+        <li><strong>Use Multiple Metrics:</strong> No single metric tells the whole story. Use precision + recall + F1 + AUC + fairness metrics together. Disaggregate by demographic groups, domains, and difficulty levels.</li>
+        <li><strong>Continuous Monitoring:</strong> Evaluation doesn't end at deployment. Monitor production performance continuously. Alert when metrics degrade. Retrain when distribution shifts.</li>
+        <li><strong>Adversarial Testing:</strong> Actively try to break your model. Test edge cases, domain shifts, and intentional adversarial inputs. Robustness is a feature.</li>
+        <li><strong>Fairness First:</strong> Measure bias and fairness explicitly for protected attributes (race, gender, age). Different groups may have vastly different error rates.</li>
+    </ul>
+
+    <h3>The Impact in Numbers</h3>
+    <p>The performance improvement from using better evaluation practices is dramatic:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">With Rigorous Eval</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #0891b2, #7c3aed);">96.2%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Standard Eval</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 84%; background: linear-gradient(90deg, #059669, #10b981);">84.1%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Minimal Eval</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 71%; background: linear-gradient(90deg, #d97706, #f59e0b);">71.3%</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">No Eval (Prod Fail)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 42%; background: linear-gradient(90deg, #db2777, #f472b6);">42.0%</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Real-world production performance comparison — impact of evaluation rigor on actual system success rates</em></p>
+
+    <h3>Why Transformers Won (Applied to Evaluation)</h3>
+    <p>Just as transformers revolutionized NLP through a better architecture, modern evaluation has evolved. Moving from:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text); margin-left: 2rem;">
+        <li><strong>From:</strong> Single accuracy metric <strong>To:</strong> Disaggregated metrics by group, domain, difficulty</li>
+        <li><strong>From:</strong> Evaluation once at end <strong>To:</strong> Continuous evaluation integrated in development pipeline</li>
+        <li><strong>From:</strong> Manual evaluation <strong>To:</strong> Automated pipelines (RAGAS, DeepEval) with LLM judges</li>
+        <li><strong>From:</strong> Binary deployed/not deployed <strong>To:</strong> Staged rollouts with A/B testing and canary deployments</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> The model's success isn't determined by accuracy alone — it's determined by evaluation rigor. A mediocre model with excellent evaluation infrastructure often outperforms a great model with poor evaluation. Invest in evaluation first.</p>
+</div>
+</section>
+
+<!-- SECTION: Classification Metrics -->
+<section id="classification" class="ml-section">
+    <h2>Classification Metrics Fundamentals</h2>
+
+    <p>Classification is the most common ML task: predicting discrete categories (spam/not spam, disease/no disease, sentiment, toxicity level). Evaluating classifiers requires understanding a palette of metrics, each illuminating different aspects of model behavior. Accuracy is just the starting point — real evaluation requires multiple metrics and deep understanding of tradeoffs.</p>
+
+    <h3>Accuracy: The Seductive Trap</h3>
+    <p><strong>Accuracy</strong> is the fraction of correct predictions: <code>(TP + TN) / (TP + TN + FP + FN)</code>. It's intuitive and widely used, but often misleading.</p>
+
+    <p><strong>Critical Example:</strong> In a dataset where 99% of emails are legitimate (imbalanced), a classifier that predicts "not spam" for everything achieves 99% accuracy but is useless. It caught zero spam (recall = 0%), and every spam email reaches users. Users experience 100% failure rate on the task they care about.</p>
+
+    <p>This is why accuracy is called "the seductive trap" — it looks good but hides critical failures on the minority class where you likely need the model most.</p>
+
+    <div class="formula-box">
+    <div class="label">Accuracy</div>
+    <code>Accuracy = (TP + TN) / (TP + TN + FP + FN)</code><br/><em>TP=True Positives, TN=True Negatives, FP=False Positives, FN=False Negatives</em><br/><em>Good for balanced datasets. Dangerous for imbalanced datasets.</em>
+</div>
+
+    <h3>Precision & Recall: The Fundamental Tradeoff</h3>
+    <p><strong>Precision</strong> answers: <em>"Of the positive predictions I made, how many were correct?"</em><br/><strong>Recall</strong> answers: <em>"Of the actual positives, how many did I catch?"</em></p>
+
+    <p>These metrics are in fundamental tension. You can increase precision by being conservative (predict positive rarely — if you predict positive, you're usually right). But you'll hurt recall because you miss many real positives. You can increase recall by being liberal (predict positive often — you catch most positives). But precision drops because many predictions are false alarms.</p>
+
+    <p><strong>Precision Example:</strong> A spam classifier that predicts "spam" only for emails matching "Click here now to win $$$". Precision = 99% (almost all flagged emails are spam), but recall = 5% (it misses 95% of spam).</p>
+
+    <p><strong>Recall Example:</strong> A spam classifier that predicts "spam" for anything containing a link. Recall = 99% (catches nearly all spam), but precision = 20% (80% of flagged emails are legitimate).</p>
+
+    <div class="formula-box">
+    <div class="label">Precision & Recall</div>
+    <code>Precision = TP / (TP + FP)</code><br/><code>Recall = TP / (TP + FN) = Sensitivity = True Positive Rate (TPR)</code><br/><em>Precision: accuracy of positive predictions. Recall: fraction of actual positives caught.</em>
+</div>
+
+    <h3>F1-Score: The Harmonic Mean</h3>
+    <p>F1-score balances precision and recall with a harmonic mean. It penalizes extreme imbalance between the two, forcing both to be reasonably good.</p>
+
+    <p><strong>Why harmonic mean?</strong> If precision = 99% and recall = 1%, the arithmetic mean is 50%, but the model is nearly useless. The harmonic mean gives ~2%, correctly reflecting that the model fails on recall.</p>
+
+    <div class="formula-box">
+    <div class="label">F1-Score</div>
+    <code>F1 = 2 × (Precision × Recall) / (Precision + Recall)</code><br/><em>If either precision or recall is 0, F1 = 0.</em><br/><em>F1 = 1 is perfect. F1 = 0 is total failure.</em>
+</div>
+
+    <h3>ROC Curve & AUC-ROC</h3>
+    <p>ROC (Receiver Operating Characteristic) plots TPR (recall) vs FPR (false positive rate) at different classification thresholds. This shows how your classifier trades off between catching positives and avoiding false alarms across all possible decision thresholds.</p>
+
+    <p>AUC (Area Under Curve) ranges from 0 to 1. AUC = 0.5 means the classifier is random. AUC = 1.0 means perfect ranking ability.</p>
+
+    <p><strong>Key Insight:</strong> AUC is <em>threshold-independent</em>. It measures your model's ability to rank positives higher than negatives, regardless of where you set the decision threshold. This makes AUC good for comparing models when you're unsure what threshold to use in production.</p>
+
+    <div class="formula-box">
+    <div class="label">FPR in ROC</div>
+    <code>FPR = FP / (FP + TN) = 1 - Specificity</code><br/><em>Specificity = TN / (TN + FP) = true negative rate</em>
+</div>
+
+    <h3>When to Use Each Metric</h3>
+    <div class="comparison-table">
+        <tr>
+            <th>Metric</th>
+            <th>Best For</th>
+            <th>Real Example</th>
+            <th>Warning</th>
+        </tr>
+        <tr>
+            <td><strong>Accuracy</strong></td>
+            <td>Balanced datasets, all errors equally costly</td>
+            <td>Balanced iris flower classification</td>
+            <td>Hides imbalance problems</td>
+        </tr>
+        <tr>
+            <td><strong>Precision</strong></td>
+            <td>False positives expensive</td>
+            <td>Loan approval (bad approvals = losses)</td>
+            <td>May miss many positives</td>
+        </tr>
+        <tr>
+            <td><strong>Recall</strong></td>
+            <td>False negatives expensive</td>
+            <td>Disease detection (missed cases = deaths)</td>
+            <td>May have many false alarms</td>
+        </tr>
+        <tr>
+            <td><strong>F1</strong></td>
+            <td>Imbalanced datasets, balanced error cost</td>
+            <td>Fraud detection (both types matter)</td>
+            <td>Doesn't account for actual costs</td>
+        </tr>
+        <tr>
+            <td><strong>AUC-ROC</strong></td>
+            <td>Threshold-agnostic comparison</td>
+            <td>Comparing two models before deciding threshold</td>
+            <td>Insensitive to class imbalance</td>
+        </tr>
+    </table>
+
+    <div class="code-block">
+    <div class="code-header">Python — Computing Metrics with sklearn</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (
+    accuracy_score, precision_score, recall_score,
+    f1_score, confusion_matrix, classification_report,
+    roc_auc_score, roc_curve, auc
+)
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+y_true = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>])
+y_pred = np.<span class="function">array</span>([<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>])
+
+<span class="comment"># Basic metrics</span>
+acc = <span class="function">accuracy_score</span>(y_true, y_pred)
+prec = <span class="function">precision_score</span>(y_true, y_pred)
+rec = <span class="function">recall_score</span>(y_true, y_pred)
+f1 = <span class="function">f1_score</span>(y_true, y_pred)
+
+<span class="function">print</span>(<span class="string">f"Accuracy:  {acc:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Precision: {prec:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Recall:    {rec:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"F1-Score:  {f1:.3f}"</span>)
+
+<span class="comment"># Detailed report</span>
+<span class="function">print</span>(<span class="string">"\nClassification Report:"</span>)
+<span class="function">print</span>(<span class="function">classification_report</span>(y_true, y_pred))
+
+<span class="comment"># For probabilities / ranking</span>
+y_scores = np.<span class="function">array</span>([<span class="number">0.9</span>, <span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.8</span>, <span class="number">0.3</span>, <span class="number">0.7</span>, <span class="number">0.95</span>, <span class="number">0.15</span>, <span class="number">0.85</span>, <span class="number">0.25</span>])
+auc = <span class="function">roc_auc_score</span>(y_true, y_scores)
+<span class="function">print</span>(<span class="string">f"\nAUC-ROC: {auc:.3f}"</span>)
+
+<span class="comment"># ROC curve for visualization</span>
+fpr, tpr, thresholds = <span class="function">roc_curve</span>(y_true, y_scores)
+roc_auc = <span class="function">auc</span>(fpr, tpr)</div>
+</div>
+
+    <div class="info-box">
+    <h4>Metric Selection Guide</h4>
+    <p>For imbalanced data, NEVER use accuracy alone. Always compute precision, recall, F1, and disaggregate by class. For ranking problems, use AUC-ROC. For threshold-dependent decisions (e.g., loan approval), use precision + recall together or set threshold based on business cost.</p>
+</div>
+</section>
+
+<!-- SECTION: Confusion Matrix -->
+<section id="confusion" class="ml-section">
+    <h2>Confusion Matrix & Deep Interpretation</h2>
+
+    <p>The confusion matrix is a 2D grid showing all four outcomes: TP (true positive), FP (false positive), TN (true negative), FN (false negative). Visualizing it reveals patterns that aggregate metrics hide. Understanding the confusion matrix is the key to understanding your classifier's behavior.</p>
+
+    <div class="diagram-box">
+        <h4>Binary Confusion Matrix Anatomy</h4>
+        <div style="background: white; padding: 2rem; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 2;">
+            <div style="display: grid; grid-template-columns: auto auto auto auto; gap: 1rem; align-items: center; text-align: center;">
+                <div></div>
+                <div style="font-weight: 600; color: var(--accent-cyan);">Predicted +</div>
+                <div style="font-weight: 600; color: var(--accent-cyan);">Predicted −</div>
+                <div></div>
+                
+                <div style="font-weight: 600; color: var(--accent-pink); text-align: left;">Actual +</div>
+                <div style="background: #dcfce7; padding: 1rem; border-radius: 6px; border: 2px solid #86efac; min-width: 120px;"><strong>TP</strong><br/><span style="font-size: 0.8rem; color: var(--text-dim);">True Positive<br/>Correct detection</span></div>
+                <div style="background: #fee2e2; padding: 1rem; border-radius: 6px; border: 2px solid #fca5a5;"><strong>FN</strong><br/><span style="font-size: 0.8rem; color: var(--text-dim);">False Negative<br/>Missed positive</span></div>
+                <div style="font-size: 0.8rem; color: var(--text-dim); text-align: left;">Recall = TP/(TP+FN)</div>
+                
+                <div style="font-weight: 600; color: var(--accent-purple); text-align: left;">Actual −</div>
+                <div style="background: #fee2e2; padding: 1rem; border-radius: 6px; border: 2px solid #fca5a5;"><strong>FP</strong><br/><span style="font-size: 0.8rem; color: var(--text-dim);">False Positive<br/>False alarm</span></div>
+                <div style="background: #dcfce7; padding: 1rem; border-radius: 6px; border: 2px solid #86efac;"><strong>TN</strong><br/><span style="font-size: 0.8rem; color: var(--text-dim);">True Negative<br/>Correct rejection</span></div>
+                <div style="font-size: 0.8rem; color: var(--text-dim); text-align: left;">Specificity = TN/(TN+FP)</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Interpreting Each Cell</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>TP (Top-Left):</strong> We predicted positive and were right. These are successful positive predictions. More TP is better.</li>
+        <li><strong>FN (Top-Right):</strong> We predicted negative but were wrong. We missed actual positives. This is the cost of low recall. High FN means missing real cases.</li>
+        <li><strong>FP (Bottom-Left):</strong> We predicted positive but were wrong. False alarms. This is the cost of low precision. High FP means wasting resources on false leads.</li>
+        <li><strong>TN (Bottom-Right):</strong> We predicted negative and were right. Successful negative predictions. More TN is better.</li>
+    </ul>
+
+    <h3>Visual Pattern Recognition</h3>
+    <p>The confusion matrix shape tells you about your model's behavior:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Diagonal strong (TP & TN large):</strong> Good classifier, balanced predictions.</li>
+        <li><strong>Top-right large (FN large):</strong> Model misses positives. Recall is low. Too conservative.</li>
+        <li><strong>Bottom-left large (FP large):</strong> Model has false alarms. Precision is low. Too liberal.</li>
+        <li><strong>Bottom-right huge (TN dominates):</strong> Imbalanced data with majority class prediction bias.</li>
+    </ul>
+
+    <div class="code-block">
+    <div class="code-header">Python — Confusion Matrix Visualization</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Example predictions</span>
+y_true = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]
+y_pred = [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]
+
+<span class="comment"># Compute confusion matrix</span>
+cm = <span class="function">confusion_matrix</span>(y_true, y_pred)
+
+<span class="comment"># Visualize</span>
+fig, ax = plt.<span class="function">subplots</span>(figsize=(<span class="number">8</span>, <span class="number">6</span>))
+sns.<span class="function">heatmap</span>(cm, annot=<span class="keyword">True</span>, fmt=<span class="string">'d'</span>, cmap=<span class="string">'Blues'</span>, 
+            xticklabels=[<span class="string">'Negative'</span>, <span class="string">'Positive'</span>],
+            yticklabels=[<span class="string">'Negative'</span>, <span class="string">'Positive'</span>],
+            ax=ax, cbar_kws={<span class="string">'label'</span>: <span class="string">'Count'</span>})
+ax.<span class="function">set_ylabel</span>(<span class="string">'Actual Label'</span>)
+ax.<span class="function">set_xlabel</span>(<span class="string">'Predicted Label'</span>)
+ax.<span class="function">set_title</span>(<span class="string">'Confusion Matrix'</span>)
+
+<span class="comment"># Extract and print metrics from confusion matrix</span>
+tn, fp, fn, tp = cm.<span class="function">ravel</span>()
+<span class="function">print</span>(<span class="string">f"TP: {tp}, FP: {fp}"</span>)
+<span class="function">print</span>(<span class="string">f"FN: {fn}, TN: {tn}"</span>)
+
+<span class="comment"># Compute derived metrics</span>
+sensitivity = tp / (tp + fn) <span class="keyword">if</span> (tp + fn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>  <span class="comment"># Recall</span>
+specificity = tn / (tn + fp) <span class="keyword">if</span> (tn + fp) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+precision = tp / (tp + fp) <span class="keyword">if</span> (tp + fp) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+f1 = <span class="number">2</span> * (precision * sensitivity) / (precision + sensitivity) <span class="keyword">if</span> (precision + sensitivity) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+
+<span class="function">print</span>(<span class="string">f"\nMetrics from Confusion Matrix:"</span>)
+<span class="function">print</span>(<span class="string">f"Sensitivity (Recall): {sensitivity:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Specificity: {specificity:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Precision: {precision:.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"F1-Score: {f1:.3f}"</span>)
+
+plt.<span class="function">tight_layout</span>()
+plt.<span class="function">savefig</span>(<span class="string">'confusion_matrix.png'</span>, dpi=<span class="number">150</span>)
+plt.<span class="function">show</span>()</div>
+</div>
+
+    <div class="info-box">
+    <h4>Multi-Class Confusion Matrix</h4>
+    <p>For multi-class (3+ classes), the matrix grows to N×N. Visualize it as a heatmap (easier to read than a table). Compute metrics per-class and macro/weighted averages. Look for which class pairs the model confuses most.</p>
+</div>
+</section>
+
+<!-- SECTION: Regression Metrics -->
+<section id="regression" class="ml-section">
+    <h2>Regression Metrics</h2>
+
+    <p>Regression predicts continuous values (house prices, temperature, stock returns, user engagement scores). Unlike classification where predictions are right/wrong, regression allows varying degrees of closeness. Different regression metrics penalize errors differently — choosing the right metric is crucial.</p>
+
+    <h3>Mean Absolute Error (MAE)</h3>
+    <p>MAE is the average absolute difference between predicted and actual values. It's intuitive and in the same units as your target. Treat each error equally regardless of magnitude.</p>
+
+    <p><strong>Interpretation:</strong> If MAE = $50,000 on house prices, predictions are off by $50k on average.</p>
+
+    <div class="formula-box">
+    <div class="label">MAE</div>
+    <code>MAE = (1/n) × Σ|y_i - ŷ_i|</code><br/><em>Units same as target. Treats all errors equally. Robust to outliers.</em>
+</div>
+
+    <h3>Mean Squared Error (MSE) & RMSE</h3>
+    <p>MSE squares errors before averaging, heavily penalizing large mistakes. If one prediction is off by 100 and another by 1, MSE cares much more about the first. RMSE is the square root of MSE, converting back to original units.</p>
+
+    <p><strong>When to use MSE/RMSE:</strong> When large errors are much worse than small errors (compound cost). Stock price errors of $100 are much worse than $1 errors.</p>
+
+    <div class="formula-box">
+    <div class="label">MSE & RMSE</div>
+    <code>MSE = (1/n) × Σ(y_i - ŷ_i)²</code><br/><code>RMSE = √MSE</code><br/><em>Differentiable (good for optimization). Sensitive to outliers. Units same as target.</em>
+</div>
+
+    <h3>R² Score (Coefficient of Determination)</h3>
+    <p>R² measures the fraction of variance in y explained by the model. R² = 1 means perfect prediction. R² = 0 means the model is no better than predicting the mean y_avg for everything. R² &lt; 0 means the model is worse than the mean.</p>
+
+    <p><strong>Interpretation:</strong> R² = 0.85 means "our model explains 85% of the variation in the data".</p>
+
+    <div class="formula-box">
+    <div class="label">R²</div>
+    <code>R² = 1 - (SS_res / SS_tot)</code><br/><code>SS_res = Σ(y_i - ŷ_i)² (residual sum of squares)</code><br/><code>SS_tot = Σ(y_i - ȳ)² (total sum of squares)</code><br/><em>Normalized [-∞, 1]. Interpretable percentage.</em>
+</div>
+
+    <h3>Comparing Regression Metrics</h3>
+    <div class="comparison-table">
+        <tr>
+            <th>Metric</th>
+            <th>Range</th>
+            <th>When to Use</th>
+            <th>Key Property</th>
+        </tr>
+        <tr>
+            <td><strong>MAE</strong></td>
+            <td>[0, ∞]</td>
+            <td>Outliers present, errors equally important</td>
+            <td>Robust, interpretable</td>
+        </tr>
+        <tr>
+            <td><strong>MSE</strong></td>
+            <td>[0, ∞]</td>
+            <td>For optimization (differentiable)</td>
+            <td>Penalizes large errors quadratically</td>
+        </tr>
+        <tr>
+            <td><strong>RMSE</strong></td>
+            <td>[0, ∞]</td>
+            <td>Large errors very bad, same units as target</td>
+            <td>Interpretable, sensitive to outliers</td>
+        </tr>
+        <tr>
+            <td><strong>R²</strong></td>
+            <td>[-∞, 1]</td>
+            <td>Communicating model quality to non-technical stakeholders</td>
+            <td>Normalized, interpretable percentage</td>
+        </tr>
+        <tr>
+            <td><strong>MAPE</strong></td>
+            <td>[0, ∞]%</td>
+            <td>Percentage errors (sales forecasting)</td>
+            <td>Scale-independent, interpretable</td>
+        </tr>
+    </table>
+
+    <div class="code-block">
+    <div class="code-header">Python — Regression Metrics</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (
+    mean_absolute_error, mean_squared_error,
+    r2_score, mean_absolute_percentage_error
+)
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+y_true = np.<span class="function">array</span>([<span class="number">3.0</span>, <span class="number">2.5</span>, <span class="number">2.0</span>, <span class="number">3.5</span>, <span class="number">2.8</span>, <span class="number">4.1</span>, <span class="number">2.9</span>])
+y_pred = np.<span class="function">array</span>([<span class="number">3.1</span>, <span class="number">2.4</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">3.0</span>, <span class="number">3.9</span>, <span class="number">2.7</span>])
+
+<span class="comment"># Compute metrics</span>
+mae = <span class="function">mean_absolute_error</span>(y_true, y_pred)
+mse = <span class="function">mean_squared_error</span>(y_true, y_pred)
+rmse = np.<span class="function">sqrt</span>(mse)
+r2 = <span class="function">r2_score</span>(y_true, y_pred)
+mape = <span class="function">mean_absolute_percentage_error</span>(y_true, y_pred)
+
+<span class="function">print</span>(<span class="string">"=== Regression Metrics ==="</span>)
+<span class="function">print</span>(<span class="string">f"MAE:   {mae:.4f} (avg absolute error)"</span>)
+<span class="function">print</span>(<span class="string">f"MSE:   {mse:.4f} (squared error)"</span>)
+<span class="function">print</span>(<span class="string">f"RMSE:  {rmse:.4f} (root mean squared error)"</span>)
+<span class="function">print</span>(<span class="string">f"R²:    {r2:.4f} ({r2*100:.1f}% variance explained)"</span>)
+<span class="function">print</span>(<span class="string">f"MAPE:  {mape:.2%} (percentage error)"</span>)
+
+<span class="comment"># Residuals analysis</span>
+residuals = y_true - y_pred
+<span class="function">print</span>(<span class="string">f"\nResidual Stats:"</span>)
+<span class="function">print</span>(<span class="string">f"Mean residual: {residuals.mean():.4f} (should be ~0)"</span>)
+<span class="function">print</span>(<span class="string">f"Std residual: {residuals.std():.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Min/Max: {residuals.min():.4f} / {residuals.max():.4f}"</span>)</div>
+</div>
+
+    <div class="info-box">
+    <h4>Residual Analysis</h4>
+    <p>Don't just compute aggregate metrics. Plot residuals (actual - predicted) vs predicted values. Should be randomly scattered around zero with no patterns. Patterns indicate model bias or heteroscedasticity.</p>
+</div>
+</section>
+
+<!-- SECTION: NLP Metrics -->
+<section id="nlp-metrics" class="ml-section">
+    <h2>NLP-Specific Metrics: BLEU & ROUGE</h2>
+
+    <p>For language tasks (machine translation, summarization, question-answering), traditional metrics (accuracy, MSE) don't apply. Instead, we use specialized metrics that compare predicted text to reference text. These metrics measure n-gram overlap and sequence similarity.</p>
+
+    <h3>BLEU (Bilingual Evaluation Understudy)</h3>
+    <p>BLEU measures n-gram precision: what fraction of n-grams in the predicted text also appear in the reference text? Originally designed for machine translation evaluation. Emphasis on precision: are the words the model outputs correct?</p>
+
+    <p>BLEU scores range from 0 to 1 (or 0-100 when scaled). Common thresholds: BLEU > 0.3 is usually acceptable, > 0.4 is good, > 0.5 is very good.</p>
+
+    <p><strong>Example:</strong> Reference: "the quick brown fox jumps" | Prediction: "the fast brown fox runs" | BLEU captures that "the", "brown", "fox" are shared (3 unigrams match), but "quick" ≠ "fast" and "jumps" ≠ "runs".</p>
+
+    <div class="formula-box">
+    <div class="label">BLEU Concept</div>
+    <code>BLEU = exp( Σ w_n log(p_n) )</code><br/><em>where p_n = min(#n-grams in pred ∩ reference) / (#n-grams in pred)</em><br/><em>weights w_n typically (0.25, 0.25, 0.25, 0.25) for 1-4 grams</em>
+</div>
+
+    <h3>ROUGE (Recall-Oriented Understudy for Gisting Evaluation)</h3>
+    <p>ROUGE focuses on recall: what fraction of reference n-grams appear in predicted text? Particularly good for summarization evaluation because it measures content preservation.</p>
+
+    <p>Common variants:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>ROUGE-1 (Unigrams):</strong> Single word overlap. Captures basic content.</li>
+        <li><strong>ROUGE-2 (Bigrams):</strong> Two-word phrase overlap. Captures more context.</li>
+        <li><strong>ROUGE-L (Longest Common Subsequence):</strong> Longest matching sequence. Captures word order.</li>
+    </ul>
+
+    <div class="code-block">
+    <div class="code-header">Python — BLEU & ROUGE Computation</div>
+    <div class="code-content"><span class="keyword">from</span> nltk.translate.bleu_score <span class="keyword">import</span> sentence_bleu, SmoothingFunction
+<span class="keyword">from</span> rouge_score <span class="keyword">import</span> rouge_scorer
+<span class="keyword">import</span> nltk
+nltk.<span class="function">download</span>(<span class="string">'punkt'</span>)
+
+<span class="comment"># Example: Machine translation evaluation</span>
+reference = <span class="string">"the cat is on the mat"</span>
+hypothesis = <span class="string">"the cat is on mat"</span>
+
+<span class="comment"># BLEU score (nltk)</span>
+ref_tokens = reference.<span class="function">split</span>()
+hyp_tokens = hypothesis.<span class="function">split</span>()
+bleu = <span class="function">sentence_bleu</span>([ref_tokens], hyp_tokens, 
+                     weights=(<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>),
+                     smoothing_function=<span class="function">SmoothingFunction</span>().method1)
+<span class="function">print</span>(<span class="string">f"BLEU: {bleu:.4f}"</span>)
+
+<span class="comment"># ROUGE score (rouge_score library)</span>
+scorer = rouge_scorer.<span class="function">RougeScorer</span>([<span class="string">'rouge1'</span>, <span class="string">'rouge2'</span>, <span class="string">'rougeL'</span>], use_stemmer=<span class="keyword">True</span>)
+scores = scorer.<span class="function">score</span>(reference, hypothesis)
+
+<span class="function">print</span>(<span class="string">"\nROUGE Scores:"</span>)
+<span class="keyword">for</span> metric, score <span class="keyword">in</span> scores.<span class="function">items</span>():
+    <span class="function">print</span>(<span class="string">f"{metric}:"</span>)
+    <span class="function">print</span>(<span class="string">f"  Precision: {score.precision:.3f}"</span>)
+    <span class="function">print</span>(<span class="string">f"  Recall:    {score.recall:.3f}"</span>)
+    <span class="function">print</span>(<span class="string">f"  F-measure: {score.fmeasure:.3f}"</span>)</div>
+</div>
+
+    <h3>BLEU vs ROUGE: When to Use Each</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Use BLEU For</h4>
+    <p>Machine translation, paraphrase detection, any task where word-for-word accuracy matters. Emphasizes precision: are outputs grammatically/semantically correct?</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Use ROUGE For</h4>
+    <p>Summarization, extraction tasks, where content preservation matters more than exact wording. Emphasizes recall: did you capture the important content?</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Use LLM-Judge For</h4>
+    <p>Any task where semantic quality matters. BLEU/ROUGE often miss meaning. A gold-standard answer might score 0 BLEU but have perfect meaning.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Limitations of BLEU/ROUGE</h4>
+    <p>These metrics are based on n-gram overlap, which is crude. Two paraphrases with identical meaning might have 0 BLEU overlap if they use different words. For modern systems, consider pairing with LLM-as-judge for semantic evaluation. Many papers show BLEU/ROUGE correlate poorly with human judgment.</p>
+</div>
+</section>
+
+<!-- SECTION: RAG Evaluation -->
+<section id="rag-evaluation" class="ml-section">
+    <h2>RAG Evaluation with RAGAS</h2>
+
+    <p>Retrieval-Augmented Generation (RAG) systems combine two stages: retrieve relevant documents, then generate answers grounded in those documents. Evaluating RAG requires assessing both retrieval quality AND generation quality, plus whether they work together correctly.</p>
+
+    <h3>The RAG Pipeline</h3>
+    <p>RAG = Retrieval (finding relevant documents) + Augmentation (feeding them to generator) + Generation (creating answers). A RAG system can fail at any stage: retrieve irrelevant docs, pass relevant docs but generator ignores them, or generate hallucinated content.</p>
+
+    <h3>RAGAS Framework</h3>
+    <p><strong>RAGAS</strong> (Retrieval-Augmented Generation Assessment) provides automated metrics without requiring human annotation. It uses LLMs to evaluate dimensions of RAG quality.</p>
+
+    <p>Core RAGAS metrics:</p>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Faithfulness (0-1):</strong> Is the generated answer grounded in the retrieved context? Penalizes hallucinations. Uses LLM to check if answer claims appear in context.</li>
+        <li><strong>Answer Relevance (0-1):</strong> Does the answer address the question well? Semantic alignment. Uses embeddings/LLM to verify relevance.</li>
+        <li><strong>Context Relevance (0-1):</strong> Are retrieved documents actually relevant to the question? Assesses retriever quality directly.</li>
+        <li><strong>Context Recall (0-1):</strong> Do retrieved documents contain enough information to answer the question? Can the question be answered from the context?</li>
+        <li><strong>Context Precision (0-1):</strong> Is there minimal irrelevant information in retrieved context? Measures signal-to-noise ratio.</li>
+    </ul>
+
+    <div class="comparison-table">
+        <tr>
+            <th>Metric</th>
+            <th>What It Measures</th>
+            <th>Target Value</th>
+            <th>Failure Mode</th>
+        </tr>
+        <tr>
+            <td>Faithfulness</td>
+            <td>Answer grounded in context</td>
+            <td>> 0.8</td>
+            <td>Hallucinations (facts not in docs)</td>
+        </tr>
+        <tr>
+            <td>Answer Relevance</td>
+            <td>Answer addresses question</td>
+            <td>> 0.8</td>
+            <td>Off-topic or incomplete answers</td>
+        </tr>
+        <tr>
+            <td>Context Relevance</td>
+            <td>Retrieved docs relevant</td>
+            <td>> 0.7</td>
+            <td>Retriever returns irrelevant docs</td>
+        </tr>
+        <tr>
+            <td>Context Recall</td>
+            <td>Sufficient info in docs</td>
+            <td>> 0.7</td>
+            <td>Information need not covered</td>
+        </tr>
+        <tr>
+            <td>Context Precision</td>
+            <td>Minimal noise in context</td>
+            <td>> 0.7</td>
+            <td>Too many irrelevant passages</td>
+        </tr>
+    </table>
+
+    <div class="code-block">
+    <div class="code-header">Python — RAGAS Evaluation</div>
+    <div class="code-content"><span class="keyword">from</span> ragas <span class="keyword">import</span> evaluate
+<span class="keyword">from</span> ragas.metrics <span class="keyword">import</span> (
+    faithfulness, answer_relevance,
+    context_relevance, context_recall,
+    context_precision
+)
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset
+
+<span class="comment"># Prepare your RAG eval data</span>
+<span class="comment"># Each sample needs: question, answer, context (list of doc chunks), ground_truth</span>
+data = {
+    <span class="string">"question"</span>: [
+        <span class="string">"What is photosynthesis?"</span>,
+        <span class="string">"How does DNA replication work?"</span>
+    ],
+    <span class="string">"answer"</span>: [
+        <span class="string">"Photosynthesis is the process where plants convert sunlight into chemical energy..."</span>,
+        <span class="string">"DNA replication occurs through semiconservative copying via DNA polymerase..."</span>
+    ],
+    <span class="string">"context"</span>: [
+        [
+            <span class="string">"Plants use sunlight to create energy through photosynthesis."</span>,
+            <span class="string">"Chlorophyll absorbs light energy and drives electron transport chains."</span>,
+            <span class="string">"The light reactions and Calvin cycle together convert CO2 to glucose."</span>
+        ],
+        [
+            <span class="string">"DNA is a double helix molecule composed of nucleotides."</span>,
+            <span class="string">"Helicases unwind the DNA strand, and DNA polymerase synthesizes new strands."</span>,
+            <span class="string">"The process is semiconservative: each new DNA molecule has one old and one new strand."</span>
+        ]
+    ],
+    <span class="string">"ground_truth"</span>: [
+        <span class="string">"Photosynthesis converts light energy into chemical energy stored in glucose"</span>,
+        <span class="string">"DNA replication creates two identical DNA molecules from one original"</span>
+    ]
+}
+
+dataset = Dataset.<span class="function">from_dict</span>(data)
+
+<span class="comment"># Run evaluation</span>
+results = <span class="function">evaluate</span>(
+    dataset,
+    metrics=[
+        faithfulness,
+        answer_relevance,
+        context_relevance,
+        context_recall,
+        context_precision
+    ]
+)
+
+<span class="comment"># Analyze results</span>
+<span class="function">print</span>(<span class="string">"=== RAGAS Results ==="</span>)
+<span class="function">print</span>(<span class="string">f"Faithfulness:       {results['faithfulness'].mean():.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Answer Relevance:   {results['answer_relevance'].mean():.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Context Relevance:  {results['context_relevance'].mean():.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Context Recall:     {results['context_recall'].mean():.3f}"</span>)
+<span class="function">print</span>(<span class="string">f"Context Precision:  {results['context_precision'].mean():.3f}"</span>)
+
+<span class="comment"># Per-sample analysis</span>
+<span class="keyword">for</span> i, row <span class="keyword">in</span> results.<span class="function">to_pandas</span>().<span class="function">iterrows</span>():
+    <span class="function">print</span>(<span class="string">f"\nSample {i}:"</span>)
+    <span class="keyword">if</span> row[<span class="string">'faithfulness'</span>] < <span class="number">0.8</span>:
+        <span class="function">print</span>(<span class="string">f"  WARNING: Low faithfulness ({row['faithfulness']:.2f}) - possible hallucination"</span>)
+    <span class="keyword">if</span> row[<span class="string">'context_recall'</span>] < <span class="number">0.7</span>:
+        <span class="function">print</span>(<span class="string">f"  WARNING: Low context recall ({row['context_recall']:.2f}) - missing info"</span>)</div>
+</div>
+
+    <div class="info-box">
+    <h4>RAG Evaluation Best Practice</h4>
+    <p>Don't just measure answer quality in isolation. The RAGAS metrics tell a complete story: retrieval quality (context relevance/recall/precision), generation quality (answer relevance), and grounding (faithfulness). A 0.9 answer relevance with 0.3 faithfulness is worse than a 0.7 relevance with 0.95 faithfulness.</p>
+</div>
+</section>
+
+<!-- SECTION: LLM-as-Judge -->
+<section id="llm-judge" class="ml-section">
+    <h2>LLM-as-Judge Pattern</h2>
+
+    <p>For generative models (large language models, summarizers, dialogue systems), traditional metrics fall short. BLEU/ROUGE are n-gram based and miss semantic quality. Human evaluation is expensive. The emerging solution: use a powerful LLM as a judge to evaluate outputs along custom rubrics.</p>
+
+    <h3>How LLM-as-Judge Works</h3>
+    <p>You provide: 1) Evaluation criteria, 2) The question/prompt, 3) The generated output, 4) Optionally a reference answer. The LLM returns: a score and explanation. Essentially you're asking "Does this output satisfy this rubric?"</p>
+
+    <h3>Advantages & Limitations</h3>
+    <div class="card-grid">
+        <div class="card green-accent">
+    <h4>Advantages</h4>
+    <p>Semantic evaluation captures nuance traditional metrics miss. Flexible custom criteria. Cheap at scale (LLM call per eval). Studies show LLM judgments correlate better with human consensus than BLEU.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Limitations</h4>
+    <p>LLMs have systematic biases. Can hallucinate explanations. Reproducibility varies. Requires careful prompt engineering. Slower than automatic metrics. Cost accumulates on large eval sets.</p>
+</div>
+    </div>
+
+    <div class="code-block">
+    <div class="code-header">Python — LLM-as-Judge with <a href="https://docs.confident-ai.com/" target="_blank" rel="noopener">DeepEval</a></div>
+    <div class="code-content"><span class="keyword">from</span> deepeval.metrics <span class="keyword">import</span> Faithfulness, Relevance, Coherence
+<span class="keyword">from</span> deepeval <span class="keyword">import</span> evaluate
+
+<span class="comment"># DeepEval handles prompt engineering for you</span>
+faithfulness = <span class="function">Faithfulness</span>()
+relevance = <span class="function">Relevance</span>()
+coherence = <span class="function">Coherence</span>()
+
+<span class="comment"># Prepare test cases</span>
+test_cases = [
+    {
+        <span class="string">"question"</span>: <span class="string">"What is machine learning?"</span>,
+        <span class="string">"output"</span>: <span class="string">"Machine learning is a subset of artificial intelligence that enables systems to learn..."</span>,
+        <span class="string">"retrieval_context"</span>: [<span class="string">"ML algorithms learn patterns from data without explicit programming..."</span>]
+    },
+    {
+        <span class="string">"question"</span>: <span class="string">"Explain neural networks"</span>,
+        <span class="string">"output"</span>: <span class="string">"Neural networks are computing systems inspired by biological neurons..."</span>,
+        <span class="string">"retrieval_context"</span>: [<span class="string">"An artificial neural network consists of interconnected nodes..."</span>]
+    }
+]
+
+<span class="comment"># Evaluate</span>
+results = <span class="function">evaluate</span>(test_cases, metrics=[faithfulness, relevance, coherence])
+
+<span class="comment"># Results contain scores and LLM explanations</span>
+<span class="keyword">for</span> i, result <span class="keyword">in</span> <span class="function">enumerate</span>(results):
+    <span class="function">print</span>(<span class="string">f"\nTest Case {i}:"</span>)
+    <span class="function">print</span>(<span class="string">f"  Faithfulness: {result['faithfulness'].score}/1.0"</span>)
+    <span class="function">print</span>(<span class="string">f"  Reason: {result['faithfulness'].reason}"</span>)
+    <span class="function">print</span>(<span class="string">f"  Relevance: {result['relevance'].score}/1.0"</span>)</div>
+</div>
+
+    <h3>Prompting Best Practices for LLM Judges</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Be Specific with Rubrics:</strong> Vague criteria produce inconsistent scores. Define "good" precisely with examples.</li>
+        <li><strong>Use Structured Scales:</strong> Define what 5/5, 3/3, or 1/10 means. Provide anchor points (1=poor, 3=acceptable, 5=excellent).</li>
+        <li><strong>Provide Context:</strong> Include the question, generated answer, and reference(s). More context reduces hallucination.</li>
+        <li><strong>Request Reasoning:</strong> Ask the judge LLM to explain its score. Reasoning increases reliability and helps debug failures.</li>
+        <li><strong>Use Consistent LLM:</strong> Judge with the same model/temperature. Different LLMs judge differently.</li>
+        <li><strong>Validate with Humans:</strong> For critical domains, compare LLM judgments against human consensus. Calibrate if they diverge.</li>
+        <li><strong>Test for Bias:</strong> Check if judge correlates with protected attributes (e.g., does it systematically score certain demographic outputs lower?).</li>
+    </ul>
+
+    <div class="info-box">
+    <h4>LLM Judge Prompt Template</h4>
+    <p>You are an expert evaluator. Rate the following answer on a scale of 1-5:
+1 = Completely wrong or hallucinated
+3 = Partially correct, some hallucinations or irrelevance
+5 = Accurate, relevant, grounded in the context
+
+Question: {question}
+Context: {context}
+Generated Answer: {answer}
+
+Provide: 1) Your score, 2) Specific evidence, 3) Explanation.</p>
+</div>
+</section>
+
+<!-- SECTION: A/B Testing -->
+<section id="ab-testing" class="ml-section">
+    <h2>A/B Testing & Statistical Significance</h2>
+
+    <p>A/B testing compares two models (or strategies) by deploying them to different user groups and measuring which performs better on real usage metrics. Proper A/B testing requires statistical rigor to avoid false positives (claiming improvement that doesn't exist) and false negatives (missing real improvements).</p>
+
+    <h3>Key Concepts</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Null Hypothesis (H₀):</strong> There is NO difference between A and B (any observed difference is noise).</li>
+        <li><strong>Alternative Hypothesis (H₁):</strong> There IS a difference between A and B (improvement is real).</li>
+        <li><strong>P-value:</strong> Probability of observing this data if H₀ is true. Lower p-value = stronger evidence against H₀. If p < 0.05, we reject H₀.</li>
+        <li><strong>Significance Level (α):</strong> Usually 0.05 (5% false positive rate). If p &lt; α, we declare the result statistically significant.</li>
+        <li><strong>Type I Error (False Positive):</strong> Declaring improvement when none exists (probability = α).</li>
+        <li><strong>Type II Error (False Negative):</strong> Missing real improvement (probability = β). Power = 1 - β.</li>
+        <li><strong>Power:</strong> Probability of detecting a real improvement. Target power ≥ 0.8 (80%).</li>
+    </ul>
+
+    <div class="formula-box">
+    <div class="label">Effect Size (Cohen's d)</div>
+    <code>Cohen's d = (mean_A - mean_B) / pooled_std</code><br/><em>0.2 = small effect, 0.5 = medium, 0.8 = large</em><br/><em>Always report effect size alongside p-values</em>
+</div>
+
+    <div class="code-block">
+    <div class="code-header">Python — A/B Testing with Statistical Significance</div>
+    <div class="code-content"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt
+
+<span class="comment"># Simulate: 2000 users in group A (model A), 2000 in group B (model B)</span>
+<span class="comment"># Metric: click-through rate (CTR)</span>
+np.random.<span class="function">seed</span>(<span class="number">42</span>)
+group_a = np.random.<span class="function">binomial</span>(<span class="number">1</span>, p=<span class="number">0.12</span>, size=<span class="number">2000</span>)  <span class="comment"># 12% CTR</span>
+group_b = np.random.<span class="function">binomial</span>(<span class="number">1</span>, p=<span class="number">0.135</span>, size=<span class="number">2000</span>)  <span class="comment"># 13.5% CTR (2.5% improvement)</span>
+
+ctr_a = group_a.<span class="function">mean</span>()
+ctr_b = group_b.<span class="function">mean</span>()
+improvement = (ctr_b - ctr_a) / ctr_a * <span class="number">100</span>
+
+<span class="function">print</span>(<span class="string">f"Group A: CTR = {ctr_a:.3%} ({group_a.sum()} conversions / {len(group_a)} users)"</span>)
+<span class="function">print</span>(<span class="string">f"Group B: CTR = {ctr_b:.3%} ({group_b.sum()} conversions / {len(group_b)} users)"</span>)
+<span class="function">print</span>(<span class="string">f"Improvement: {improvement:.1f}%"</span>)
+
+<span class="comment"># Two-sample t-test</span>
+t_stat, p_value = stats.<span class="function">ttest_ind</span>(group_a, group_b)
+
+<span class="function">print</span>(<span class="string">f"\nStatistical Test Results:"</span>)
+<span class="function">print</span>(<span class="string">f"T-statistic: {t_stat:.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"P-value: {p_value:.6f}"</span>)
+
+<span class="comment"># Determine significance</span>
+alpha = <span class="number">0.05</span>
+<span class="keyword">if</span> p_value < alpha:
+    <span class="function">print</span>(<span class="string">f"✓ SIGNIFICANT (p = {p_value:.6f} &lt; {alpha})"</span>)
+    <span class="function">print</span>(<span class="string">f"  Reject H₀: Difference is real, not due to chance."</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">f"✗ NOT SIGNIFICANT (p = {p_value:.6f} &gt;= {alpha})"</span>)
+    <span class="function">print</span>(<span class="string">f"  Fail to reject H₀: Cannot rule out that difference is random."</span>)
+
+<span class="comment"># Effect size (Cohen's d)</span>
+pooled_std = <span class="function">sqrt</span>(((<span class="function">len</span>(group_a)-<span class="number">1</span>)*group_a.<span class="function">std</span>()**<span class="number">2</span> + 
+                    (<span class="function">len</span>(group_b)-<span class="number">1</span>)*group_b.<span class="function">std</span>()**<span class="number">2</span>) / 
+                   (<span class="function">len</span>(group_a) + <span class="function">len</span>(group_b) - <span class="number">2</span>))
+cohens_d = (ctr_b - ctr_a) / pooled_std
+
+<span class="function">print</span>(f"\nEffect <span class="function">Size</span> (Cohen's d): {cohens_d:.4f}<span class="string">")
+if abs(cohens_d) &lt; 0.2:
+    effect = "</span>small<span class="string">"
+elif abs(cohens_d) &lt; 0.5:
+    effect = "</span>small-to-medium<span class="string">"
+elif abs(cohens_d) &lt; 0.8:
+    effect = "</span>medium-to-large<span class="string">"
+else:
+    effect = "</span>large<span class="string">"
+print(f"</span>Interpretation: {effect} effect<span class="string">")
+
+# Confidence interval for difference
+se_diff = sqrt(ctr_a*(1-ctr_a)/len(group_a) + ctr_b*(1-ctr_b)/len(group_b))
+ci_lower = (ctr_b - ctr_a) - 1.96 * se_diff
+ci_upper = (ctr_b - ctr_a) + 1.96 * se_diff
+print(f"</span>\n95% CI <span class="keyword">for</span> difference: [{ci_lower:.4f}, {ci_upper:.4f}]<span class="string">")
+print(f"</span>Real improvement <span class="keyword">is</span> likely between {ci_lower*<span class="number">100</span>:.2f}% <span class="keyword">and</span> {ci_upper*<span class="number">100</span>:.2f}%")</div>
+</div>
+
+    <h3>Sample Size Calculation (Critical!)</h3>
+    <p>Running an A/B test on 100 users each is likely to be inconclusive (low power). Use power analysis BEFORE running the test to determine required sample size.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Calculating Required Sample Size</div>
+    <div class="code-content"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> norm
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="function">sample_size_for_proportion</span>(p1, p2, alpha=<span class="number">0.05</span>, power=<span class="number">0.8</span>):
+    <span class="string">"""
+    Calculate sample size per group for binary outcome (proportion) tests.
+    
+    Args:
+        p1: Baseline proportion (group A)
+        p2: Target proportion (group B)
+        alpha: Significance level (false positive rate)
+        power: Power = 1 - false negative rate
+    """</span>
+    z_alpha = norm.<span class="function">ppf</span>(<span class="number">1</span> - alpha/<span class="number">2</span>)  <span class="comment"># Two-tailed</span>
+    z_beta = norm.<span class="function">ppf</span>(power)  <span class="comment"># One-tailed</span>
+    p_bar = (p1 + p2) / <span class="number">2</span>
+    
+    n = <span class="number">2</span> * (z_alpha + z_beta)**<span class="number">2</span> * p_bar * (<span class="number">1</span> - p_bar) / (p1 - p2)**<span class="number">2</span>
+    <span class="keyword">return</span> <span class="function">int</span>(np.<span class="function">ceil</span>(n))
+
+<span class="comment"># Example: Current CTR = 10%, want to detect 12% (2% absolute, 20% relative lift)</span>
+baseline_ctr = <span class="number">0.10</span>
+target_ctr = <span class="number">0.12</span>
+
+n = <span class="function">sample_size_for_proportion</span>(baseline_ctr, target_ctr, alpha=<span class="number">0.05</span>, power=<span class="number">0.8</span>)
+total_users = <span class="number">2</span> * n
+
+<span class="function">print</span>(<span class="string">f"Baseline CTR: {baseline_ctr:.1%}"</span>)
+<span class="function">print</span>(<span class="string">f"Target CTR: {target_ctr:.1%}"</span>)
+<span class="function">print</span>(<span class="string">f"Required users per group: {n:,}"</span>)
+<span class="function">print</span>(<span class="string">f"Total users needed: {total_users:,}"</span>)
+<span class="function">print</span>(<span class="string">f"At 10k users/day, runtime: {total_users/10000:.1f} days"</span>)
+
+<span class="comment"># Sensitivity: what effect sizes can we detect?</span>
+<span class="function">print</span>(<span class="string">"\nDetectable effect sizes with different sample sizes:"</span>)
+<span class="keyword">for</span> n_test <span class="keyword">in</span> [<span class="number">500</span>, <span class="number">1000</span>, <span class="number">2000</span>, <span class="number">5000</span>]:
+    <span class="comment"># Solve for detectable difference</span>
+    min_diff = norm.<span class="function">ppf</span>(<span class="number">0.975</span>) * np.<span class="function">sqrt</span>(<span class="number">0.1</span>*<span class="number">0.9</span>/n_test + <span class="number">0.1</span>*<span class="number">0.9</span>/n_test)
+    <span class="function">print</span>(<span class="string">f"  n={n_test}: Can detect {min_diff*100:.2f}% difference"</span>)</div>
+</div>
+
+    <div class="info-box">
+    <h4>A/B Testing Pitfalls to Avoid</h4>
+    <p>1) Peeking at results early (invalid p-values). 2) Running multiple simultaneous tests without correction. 3) Stopping test when you see 'significance' (p-hacking). 4) Assuming correlation = causation. 5) Ignoring novelty/primacy effects (users may prefer change simply because it's new). Always pre-register your metrics, run at planned sample size, and validate with follow-up tests.</p>
+</div>
+</section>
+
+<!-- SECTION: Custom Evaluation Pipeline -->
+<section id="custom-pipeline" class="ml-section">
+    <h2>Building Custom Evaluation Pipelines</h2>
+
+    <p>Production ML systems require custom evaluation pipelines tailored to specific business requirements. Building a robust, automated evaluation system that runs on every model iteration is essential for reliable deployment and continuous improvement.</p>
+
+    <h3>Pipeline Architecture</h3>
+    <p>A typical evaluation pipeline: 1) Load test data, 2) Run model on test data, 3) Compute metrics (multiple, disaggregated), 4) Compare to baseline, 5) Check for regressions, 6) Generate report, 7) Make decision (deploy/reject/investigate).</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Building an Evaluation Pipeline</div>
+    <div class="code-content"><span class="keyword">import</span> json
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, f1_score
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">class</span> EvaluationPipeline:
+    <span class="string">"""Automated evaluation pipeline for ML models."""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="function">self</span>, model, test_data, baseline_metrics=<span class="keyword">None</span>):
+        <span class="function">self</span>.model = model
+        <span class="function">self</span>.test_data = test_data
+        <span class="function">self</span>.baseline = baseline_metrics <span class="keyword">or</span> {}
+        <span class="function">self</span>.results = {}
+    
+    <span class="keyword">def</span> <span class="function">run_evaluation</span>(<span class="function">self</span>, y_true, y_pred, sample_weights=<span class="keyword">None</span>):
+        <span class="string">"""Compute comprehensive metrics."""</span>
+        metrics = {
+            <span class="string">'timestamp'</span>: datetime.<span class="function">now</span>().<span class="function">isoformat</span>(),
+            <span class="string">'accuracy'</span>: <span class="function">accuracy_score</span>(y_true, y_pred),
+            <span class="string">'precision'</span>: <span class="function">precision_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+            <span class="string">'recall'</span>: <span class="function">recall_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+            <span class="string">'f1'</span>: <span class="function">f1_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+        }
+        
+        <span class="comment"># Disaggregate by group</span>
+        <span class="keyword">if</span> <span class="string">'group'</span> <span class="keyword">in</span> <span class="function">self</span>.test_data.columns:
+            metrics[<span class="string">'by_group'</span>] = {}
+            <span class="keyword">for</span> group <span class="keyword">in</span> <span class="function">self</span>.test_data[<span class="string">'group'</span>].<span class="function">unique</span>():
+                mask = <span class="function">self</span>.test_data[<span class="string">'group'</span>] == group
+                group_metrics = {
+                    <span class="string">'accuracy'</span>: <span class="function">accuracy_score</span>(y_true[mask], y_pred[mask]),
+                    <span class="string">'f1'</span>: <span class="function">f1_score</span>(y_true[mask], y_pred[mask], average=<span class="string">'weighted'</span>),
+                    <span class="string">'samples'</span>: mask.<span class="function">sum</span>()
+                }
+                metrics[<span class="string">'by_group'</span>][<span class="function">str</span>(group)] = group_metrics
+        
+        <span class="keyword">return</span> metrics
+    
+    <span class="keyword">def</span> <span class="function">check_regressions</span>(<span class="function">self</span>, metrics):
+        <span class="string">"""Alert if metrics degrade vs baseline."""</span>
+        alerts = []
+        <span class="keyword">for</span> metric, value <span class="keyword">in</span> metrics.<span class="function">items</span>():
+            <span class="keyword">if</span> metric <span class="keyword">in</span> <span class="function">self</span>.baseline <span class="keyword">and</span> <span class="function">isinstance</span>(value, (<span class="function">int</span>, <span class="function">float</span>)):
+                <span class="keyword">if</span> value < <span class="function">self</span>.baseline[metric] * <span class="number">0.95</span>:  <span class="comment"># 5% drop tolerance</span>
+                    alerts.<span class="function">append</span>(<span class="string">f"WARNING: {metric} degraded from {self.baseline[metric]:.3f} to {value:.3f}"</span>)
+        <span class="keyword">return</span> alerts
+    
+    <span class="keyword">def</span> <span class="function">save_results</span>(<span class="function">self</span>, filepath):
+        <span class="string">"""Save evaluation results to JSON."""</span>
+        <span class="keyword">with</span> <span class="function">open</span>(filepath, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+            json.<span class="function">dump</span>(<span class="function">self</span>.results, f, indent=<span class="number">2</span>)
+    
+    <span class="keyword">def</span> <span class="function">generate_report</span>(<span class="function">self</span>):
+        <span class="string">"""Generate human-readable report."""</span>
+        report = <span class="string">"=== EVALUATION REPORT ===\n"</span>
+        <span class="keyword">for</span> metric, value <span class="keyword">in</span> <span class="function">self</span>.results.<span class="function">items</span>():
+            <span class="keyword">if</span> <span class="function">isinstance</span>(value, (<span class="function">int</span>, <span class="function">float</span>)):
+                report += <span class="string">f"{metric}: {value:.4f}\n"</span>
+        <span class="keyword">return</span> report
+
+<span class="comment"># Usage</span>
+<span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+X, y = <span class="function">load_iris</span>(return_X_y=<span class="keyword">True</span>)
+X_train, X_test, y_train, y_test = <span class="function">train_test_split</span>(X, y, test_size=<span class="number">0.2</span>)
+
+model = <span class="function">RandomForestClassifier</span>()
+model.<span class="function">fit</span>(X_train, y_train)
+y_pred = model.<span class="function">predict</span>(X_test)
+
+test_df = pd.<span class="function">DataFrame</span>(X_test)
+test_df[<span class="string">'group'</span>] = y_test % <span class="number">2</span>  <span class="comment"># Dummy grouping</span>
+
+pipeline = <span class="function">EvaluationPipeline</span>(
+    model, test_df,
+    baseline_metrics={<span class="string">'accuracy'</span>: <span class="number">0.95</span>, <span class="string">'f1'</span>: <span class="number">0.94</span>}
+)
+metrics = pipeline.<span class="function">run_evaluation</span>(y_test, y_pred)
+pipeline.results = metrics
+
+alerts = pipeline.<span class="function">check_regressions</span>(metrics)
+<span class="keyword">if</span> alerts:
+    <span class="keyword">for</span> alert <span class="keyword">in</span> alerts:
+        <span class="function">print</span>(alert)
+
+<span class="function">print</span>(pipeline.<span class="function">generate_report</span>())</div>
+</div>
+
+    <h3>Continuous Evaluation in CI/CD</h3>
+    <p>Integrate evaluation into your ML pipeline so every model change is automatically tested. This catches regressions early.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — GitHub Actions Evaluation Workflow</div>
+    <div class="code-content">name: Evaluate Model Changes
+on: [pull_request, push]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout<span class="decorator">@v3</span>
+      - uses: actions/setup-python<span class="decorator">@v4</span>
+        <span class="keyword">with</span>:
+          python-version: <span class="string">"3.10"</span>
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Run evaluation
+        run: python evaluate.py --output eval_results.json
+      
+      - name: Check metrics meet thresholds
+        run: |
+          python -c <span class="string">"
+          import json
+          with open('eval_results.json') as f:
+              results = json.load(f)
+          assert results['accuracy'] &gt;= 0.85, f"</span>Accuracy too low: {results[<span class="string">'accuracy'</span>]}<span class="string">"
+          assert results['f1'] &gt;= 0.82, f"</span>F1 too low: {results[<span class="string">'f1'</span>]}<span class="string">"
+          print('✓ All metrics pass thresholds')
+          "</span>
+      
+      - name: Upload results
+        <span class="keyword">if</span>: <span class="function">always</span>()
+        uses: actions/upload-artifact<span class="decorator">@v3</span>
+        <span class="keyword">with</span>:
+          name: eval-results
+          path: eval_results.json</div>
+</div>
+</section>
+
+<!-- SECTION: Bias & Fairness -->
+<section id="bias-fairness" class="ml-section">
+    <h2>Bias, Fairness & Responsible Evaluation</h2>
+
+    <p>Models can achieve high aggregate accuracy while failing systematically on minority groups. A recruitment AI might have 95% accuracy overall but 5% accuracy on applicants from certain backgrounds. Responsible evaluation requires measuring performance across demographic groups and checking for unfair disparities.</p>
+
+    <h3>Key Fairness Concepts</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Demographic Parity:</strong> Model predictions should have equal rates across protected groups. May not be appropriate: suppose predicting "admits to program" — you might want meritocracy, not equal admission rates across groups.</li>
+        <li><strong>Equalized Odds:</strong> True positive rate AND false positive rate should be equal across groups. Stronger: equal error rates for all. More appropriate for most domains.</li>
+        <li><strong>Calibration:</strong> Predicted probabilities should be accurate for all groups. A 0.7 confidence prediction should have ~70% true positive rate in all groups, not just overall.</li>
+        <li><strong>Individual Fairness:</strong> Similar individuals should receive similar treatment. If two applicants are identical except for protected attribute, they should have same prediction.</li>
+    </ul>
+
+    <div class="code-block">
+    <div class="code-header">Python — Fairness Audit</div>
+    <div class="code-content"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix, precision_score, recall_score
+
+<span class="comment"># Suppose we have predictions and demographic groups</span>
+df = pd.<span class="function">DataFrame</span>({
+    <span class="string">'y_true'</span>: [<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],
+    <span class="string">'y_pred'</span>: [<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],
+    <span class="string">'group'</span>: [<span class="string">'A'</span>]*<span class="number">10</span> + [<span class="string">'B'</span>]*<span class="number">10</span>  <span class="comment"># e.g., age groups, ethnicities</span>
+})
+
+<span class="function">print</span>(<span class="string">"=== FAIRNESS AUDIT ===\n"</span>)
+
+<span class="keyword">for</span> group <span class="keyword">in</span> df[<span class="string">'group'</span>].<span class="function">unique</span>():
+    subset = df[df[<span class="string">'group'</span>] == group]
+    
+    <span class="comment"># Compute confusion matrix</span>
+    tn, fp, fn, tp = <span class="function">confusion_matrix</span>(
+        subset[<span class="string">'y_true'</span>], subset[<span class="string">'y_pred'</span>]
+    ).<span class="function">ravel</span>()
+    
+    <span class="comment"># Compute fairness metrics</span>
+    tpr = tp / (tp + fn) <span class="keyword">if</span> (tp + fn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>  <span class="comment"># True positive rate (recall)</span>
+    fpr = fp / (fp + tn) <span class="keyword">if</span> (fp + tn) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>  <span class="comment"># False positive rate</span>
+    precision = tp / (tp + fp) <span class="keyword">if</span> (tp + fp) > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+    
+    <span class="function">print</span>(<span class="string">f"Group {group} (n={len(subset)}):"</span>)
+    <span class="function">print</span>(<span class="string">f"  TPR (Sensitivity): {tpr:.3f}"</span>)
+    <span class="function">print</span>(<span class="string">f"  FPR (1-Specificity): {fpr:.3f}"</span>)
+    <span class="function">print</span>(<span class="string">f"  Precision: {precision:.3f}"</span>)
+    <span class="function">print</span>(<span class="string">f"  Samples: {len(subset)}"</span>)
+    <span class="function">print</span>()
+
+<span class="comment"># Check for disparate impact (hiring discrimination proxy)</span>
+<span class="function">print</span>(<span class="string">"\nDisparate Impact Analysis:"</span>)
+selection_a = (df[df[<span class="string">'group'</span>]==<span class="string">'A'</span>][<span class="string">'y_pred'</span>]==<span class="number">1</span>).<span class="function">mean</span>()
+selection_b = (df[df[<span class="string">'group'</span>]==<span class="string">'B'</span>][<span class="string">'y_pred'</span>]==<span class="number">1</span>).<span class="function">mean</span>()
+di_ratio = selection_b / selection_a <span class="keyword">if</span> selection_a > <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span>
+
+<span class="function">print</span>(<span class="string">f"Group A selection rate: {selection_a:.1%}"</span>)
+<span class="function">print</span>(<span class="string">f"Group B selection rate: {selection_b:.1%}"</span>)
+<span class="function">print</span>(<span class="string">f"Disparate Impact Ratio (B/A): {di_ratio:.3f}"</span>)
+<span class="keyword">if</span> di_ratio < <span class="number">0.8</span>:
+    <span class="function">print</span>(<span class="string">"⚠ WARNING: Ratio &lt; 0.8 indicates potential discrimination (EEO 4/5 rule)"</span>)
+<span class="keyword">elif</span> di_ratio > <span class="number">1.25</span>:
+    <span class="function">print</span>(<span class="string">"⚠ WARNING: Ratio &gt; 1.25 indicates potential reverse discrimination"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"✓ Ratio within acceptable range [0.8, 1.25]"</span>)</div>
+</div>
+
+    <div class="info-box">
+    <h4>Fairness Tradeoffs</h4>
+    <p>Different fairness definitions can be mathematically incompatible. You cannot simultaneously satisfy demographic parity AND equalized odds in imbalanced datasets with unequal base rates. Choose your fairness criteria based on context and stakeholder input, then evaluate explicitly. Document your choices.</p>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Evaluation Best Practices</h2>
+
+    <h3>1. Data Splitting Strategy</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Stratified Split:</strong> For imbalanced datasets, stratify on the target to keep class distributions equal across train/val/test.</li>
+        <li><strong>Time-Based Split:</strong> For time-series data, always test on future data (never test on past). Training on 2024, testing on 2025.</li>
+        <li><strong>Domain-Based Split:</strong> For multi-domain tasks, evaluate each domain separately. A model may work on Twitter but fail on Reddit.</li>
+        <li><strong>Hold-Out Test Set:</strong> Never, ever use test data for any tuning. Use completely separate held-out set for final evaluation, opened only once.</li>
+        <li><strong>Nested Cross-Validation:</strong> Inner loop tunes hyperparameters, outer loop reports final performance. This prevents leakage.</li>
+    </ul>
+
+    <h3>2. Evaluation Data Requirements</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Representative Distribution:</strong> Test data should match production distribution. If production is 1% positive and test is 50/50, results are misleading.</li>
+        <li><strong>Sufficient Size:</strong> Use power analysis to ensure test sets are large enough. 50 samples per class is often insufficient for reliable estimates.</li>
+        <li><strong>Multiple Datasets:</strong> Evaluate on multiple independent datasets. A model may overfit to one benchmark.</li>
+        <li><strong>Edge Cases:</strong> Deliberately include edge cases, rare events, boundary conditions. These are where most failures occur.</li>
+        <li><strong>Adversarial Examples:</strong> Include examples designed to break the model. Robustness is a feature, not a bug.</li>
+    </ul>
+
+    <h3>3. Metric Selection</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Primary Metric:</strong> Choose ONE primary metric aligned with business objectives (e.g., revenue impact, user safety, fairness). This is your north star.</li>
+        <li><strong>Secondary Metrics:</strong> Track 2-3 secondary metrics to catch regressions in other dimensions. For example: primary=F1, secondary=[precision, recall, fairness].</li>
+        <li><strong>Disaggregated Metrics:</strong> Always disaggregate by demographic groups, data domains, and difficulty levels. Aggregate metrics hide failures.</li>
+        <li><strong>Human Baselines:</strong> Measure human performance when available. Your model should beat humans on the task you're solving.</li>
+    </ul>
+
+    <h3>4. Continuous Production Monitoring</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong>Production Metrics:</strong> Monitor actual user-facing metrics continuously (not just offline metrics). CTR, conversion rate, retention.</li>
+        <li><strong>Distribution Monitoring:</strong> Alert when input distribution changes (data drift). If your training data was 50% male, 50% female, but current production is 80% male, your model will fail.</li>
+        <li><strong>Performance Regression:</strong> Alert when metrics decline below acceptable thresholds. Have clear escalation procedures.</li>
+        <li><strong>Automated Retraining:</strong> Automatically retrain when performance drops. Only deploy if automated eval passes.</li>
+    </ul>
+</section>
+
+<!-- SECTION: Common Pitfalls -->
+<section id="pitfalls" class="ml-section">
+    <h2>Common Evaluation Pitfalls & How to Avoid Them</h2>
+
+    <div class="card-grid grid-6">
+        <div class="card pink-accent">
+    <h4>Pitfall: Accuracy Only</h4>
+    <p>Accuracy is meaningless on imbalanced data. 99% accurate classifier on 99%-negative data is useless. Use precision+recall+F1+disaggregation.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pitfall: Test Leakage</h4>
+    <p>If you train on data similar to test set, results are artificially high. Strictly separate train/val/test. Don't tune on test data.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pitfall: Missing Baselines</h4>
+    <p>Comparing to nothing is meaningless. Always baseline: 1) random, 2) simple heuristic, 3) human, 4) prior work.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pitfall: Static Evaluation</h4>
+    <p>Evaluate once, deploy, never test again — recipe for disaster. Continuously monitor and retrain on production data.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pitfall: Ignoring Edge Cases</h4>
+    <p>Benchmarks hide failures on rare cases. Deliberately test edge cases, adversarial examples, out-of-distribution inputs.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Pitfall: Single Metric Opt</h4>
+    <p>Optimizing one metric often degrades others. YouTube's watch-time metric promoted addictive trash. Measure multiple objectives.</p>
+</div>
+    </div>
+
+    <h3>Pitfall: P-Hacking & Multiple Comparisons</h3>
+    <p>Run enough statistical tests and you'll find "significance" by chance. Always pre-register metrics before looking at data. If testing 10 metrics at α=0.05, expect ~0.5 false positives by chance alone.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Correcting for Multiple Comparisons</div>
+    <div class="code-content"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> ttest_ind
+<span class="keyword">from</span> statsmodels.stats.multitest <span class="keyword">import</span> multipletests
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Testing 10 different metrics (dangerous!)</span>
+np.random.<span class="function">seed</span>(<span class="number">42</span>)
+metrics_p_values = []
+
+<span class="keyword">for</span> metric_id <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>):
+    group_a = np.random.<span class="function">randn</span>(<span class="number">100</span>)
+    group_b = np.random.<span class="function">randn</span>(<span class="number">100</span>) + <span class="number">0.05</span>  <span class="comment"># Tiny effect</span>
+    t_stat, p_value = <span class="function">ttest_ind</span>(group_a, group_b)
+    metrics_p_values.<span class="function">append</span>(p_value)
+
+<span class="function">print</span>(<span class="string">"Unadjusted significance (p &lt; 0.05):"</span>)
+unadjusted_sig = <span class="function">sum</span>(p < <span class="number">0.05</span> <span class="keyword">for</span> p <span class="keyword">in</span> metrics_p_values)
+<span class="function">print</span>(<span class="string">f"  {unadjusted_sig} metrics significant (expect ~0.5 false positives)"</span>)
+
+<span class="comment"># Apply Bonferroni correction: divide threshold by number of tests</span>
+bonferroni_threshold = <span class="number">0.05</span> / <span class="function">len</span>(metrics_p_values)
+bonferroni_sig = <span class="function">sum</span>(p < bonferroni_threshold <span class="keyword">for</span> p <span class="keyword">in</span> metrics_p_values)
+<span class="function">print</span>(<span class="string">f"\nBonferroni correction (threshold = {bonferroni_threshold:.4f}):"</span>)
+<span class="function">print</span>(<span class="string">f"  {bonferroni_sig} metrics significant (conservative)"</span>)
+
+<span class="comment"># Better: Benjamini-Hochberg FDR control (less conservative, controls false discovery rate)</span>
+rejected, adjusted_p, sidak, bonf = <span class="function">multipletests</span>(metrics_p_values, method=<span class="string">'fdr_bh'</span>)
+fdr_sig = <span class="function">sum</span>(rejected)
+<span class="function">print</span>(<span class="string">f"\nBenjamini-Hochberg FDR (controls false discovery rate):"</span>)
+<span class="function">print</span>(<span class="string">f"  {fdr_sig} metrics significant (powerful &amp; conservative)"</span>)
+
+<span class="comment"># Lesson: Pre-register your metrics before running tests!</span></div>
+</div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Practical Code Examples & Templates</h2>
+
+    <h3>End-to-End Classification Evaluation</h3>
+    <div class="code-block">
+    <div class="code-header">Python — Complete Classification Pipeline</div>
+    <div class="code-content"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_breast_cancer
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_auc_score, confusion_matrix, classification_report
+)
+
+<span class="comment"># Load data</span>
+X, y = <span class="function">load_breast_cancer</span>(return_X_y=<span class="keyword">True</span>)
+X_train, X_test, y_train, y_test = <span class="function">train_test_split</span>(
+    X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>, stratify=y
+)
+
+<span class="comment"># Train</span>
+model = <span class="function">RandomForestClassifier</span>(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)
+model.<span class="function">fit</span>(X_train, y_train)
+
+<span class="comment"># Predict</span>
+y_pred = model.<span class="function">predict</span>(X_test)
+y_proba = model.<span class="function">predict_proba</span>(X_test)[:, <span class="number">1</span>]
+
+<span class="comment"># Evaluate</span>
+<span class="function">print</span>(<span class="string">f"Accuracy:  {accuracy_score(y_test, y_pred):.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Precision: {precision_score(y_test, y_pred):.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"Recall:    {recall_score(y_test, y_pred):.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"F1:        {f1_score(y_test, y_pred):.4f}"</span>)
+<span class="function">print</span>(<span class="string">f"AUC-ROC:   {roc_auc_score(y_test, y_proba):.4f}"</span>)
+<span class="function">print</span>(<span class="string">"\nConfusion Matrix:"</span>)
+<span class="function">print</span>(<span class="function">confusion_matrix</span>(y_test, y_pred))
+<span class="function">print</span>(<span class="string">"\nDetailed Report:"</span>)
+<span class="function">print</span>(<span class="function">classification_report</span>(y_test, y_pred))</div>
+</div>
+</section>
+
+<!-- SECTION: Visual Guide -->
+<section id="visual-guide" class="ml-section">
+    <h2>Visual Guide & Decision Trees</h2>
+
+    <h3>Metrics Decision Tree</h3>
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #0e7490); grid-column: 1 / -1; font-size: 1.1rem; font-weight: 700;">What's Your Task?</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">Binary Classification</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">Multi-Class</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">Regression</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">NLP/Generation</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #047857); grid-column: 1; font-size: 0.85rem;">Precision, Recall, F1, AUC-ROC, Confusion Matrix</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #047857); grid-column: 2; font-size: 0.85rem;">Macro/Weighted F1, Per-Class Metrics</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #047857); grid-column: 3; font-size: 0.85rem;">RMSE, MAE, R²</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #047857); grid-column: 4; font-size: 0.85rem;">BLEU, ROUGE, LLM-Judge</div>
+    </div>
+
+    <h3>Animated Evaluation Pipeline</h3>
+    <div class="data-flow-anim">
+        <h4>Complete AI System Evaluation Flow</h4>
+        <div class="pipeline-track">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #0891b2, #0e7490);">
+                <div class="stage-icon">📊</div>
+                <div>Raw Predictions</div>
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                <div class="stage-icon">⚙️</div>
+                <div>Metrics Computation</div>
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #059669, #047857);">
+                <div class="stage-icon">🔍</div>
+                <div>Disaggregate</div>
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #d97706, #b45309);">
+                <div class="stage-icon">📈</div>
+                <div>Compare to Baseline</div>
+            </div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #db2777, #be185d);">
+                <div class="stage-icon">✓</div>
+                <div>Deploy or Investigate</div>
+            </div>
+            <div class="data-particle"></div>
+            <div class="data-particle"></div>
+            <div class="data-particle"></div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <h3>Exercise 1: Classification Evaluator</h3>
+    <div class="try-it-box">
+    <h4>Build a Comprehensive Evaluator</h4>
+    <p>Create a function that takes y_true and y_pred, computes accuracy, precision, recall, F1, AUC-ROC. Test on Iris dataset.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">comprehensive_eval</span>(y_true, y_pred, y_proba=<span class="keyword">None</span>):
+    <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+    results = {
+        <span class="string">'accuracy'</span>: <span class="function">accuracy_score</span>(y_true, y_pred),
+        <span class="string">'precision'</span>: <span class="function">precision_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+        <span class="string">'recall'</span>: <span class="function">recall_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+        <span class="string">'f1'</span>: <span class="function">f1_score</span>(y_true, y_pred, average=<span class="string">'weighted'</span>, zero_division=<span class="number">0</span>),
+    }
+    <span class="keyword">if</span> y_proba <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+        results[<span class="string">'auc_roc'</span>] = <span class="function">roc_auc_score</span>(y_true, y_proba, average=<span class="string">'weighted'</span>, multi_class=<span class="string">'ovr'</span>)
+    <span class="keyword">return</span> results
+
+<span class="comment"># TODO: Implement, test on Iris, print results</span></div>
+</div>
+</div>
+
+    <h3>Exercise 2: A/B Testing</h3>
+    <div class="try-it-box">
+    <h4>Statistical Significance Test</h4>
+    <p>Given two groups with different success rates, perform t-test, compute p-value and effect size. Determine if difference is significant.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> ttest_ind
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># TODO: Generate binary outcomes for two groups</span>
+<span class="comment"># Perform t-test, compute Cohen's d, determine significance</span></div>
+</div>
+</div>
+
+    <h3>Exercise 3: Fairness Audit</h3>
+    <div class="try-it-box">
+    <h4>Measure Bias Across Groups</h4>
+    <p>Compute performance metrics separately for different demographic groups. Identify disparities.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, f1_score
+
+<span class="comment"># TODO: Loop over demographic groups, compute metrics, identify disparities</span></div>
+</div>
+</div>
+
+    <h3>Exercise 4: RAG Evaluation</h3>
+    <div class="try-it-box">
+    <h4>RAGAS Evaluation</h4>
+    <p>Build a simple RAG system and evaluate with RAGAS metrics.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> ragas <span class="keyword">import</span> evaluate
+<span class="keyword">from</span> ragas.metrics <span class="keyword">import</span> faithfulness, answer_relevance
+<span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset
+
+<span class="comment"># TODO: Create test data and run RAGAS evaluation</span></div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions on AI Evaluation</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">Q1: Why is accuracy insufficient for imbalanced data? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">On imbalanced data (e.g., 99% negative), a model predicting all negatives achieves 99% accuracy but catches 0% of positives. Accuracy assumes equal class importance, which doesn't hold. Use precision, recall, F1, and disaggregate metrics instead.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q2: Explain precision-recall tradeoff. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Precision = TP/(TP+FP) measures correctness of positive predictions. Recall = TP/(TP+FN) measures fraction of positives caught. They conflict: be conservative (high precision, low recall) or liberal (low precision, high recall). AUC-ROC captures this tradeoff across thresholds.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q3: BLEU vs ROUGE? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">BLEU measures n-gram precision (what fraction of predicted words are in reference). ROUGE measures recall (what fraction of reference words appear in prediction). Use BLEU for translation (word order matters), ROUGE for summarization (content matters).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q4: How to design A/B test? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Pre-register metrics. Use power analysis to determine sample size. Run at planned duration, don't peek early. Compute p-value and effect size. Use correction for multiple comparisons. Always validate with follow-up test.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q5: How to detect fairness issues? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Disaggregate metrics by demographic group. Compare TPR, FPR, precision across groups. Measure equalized odds (equal TPR/FPR) or calibration (accurate probabilities in all groups). Document disparities and decide on acceptable tradeoffs.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q6: Test set vs validation set? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Validation set: used for hyperparameter tuning during training, looked at multiple times. Test set: used ONCE at end for final evaluation, never before. Using test data for tuning causes overfitting to test data.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q7: How to avoid p-hacking? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Pre-register your metrics before looking at data. Use Bonferroni or FDR correction when testing multiple metrics. If testing 10 metrics at p<0.05, expect 0.5 false positives by chance. Never adjust after seeing results.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Q8: What's a good baseline? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Include: 1) Random (predicts uniformly), 2) Majority class (always predicts most common class), 3) Simple heuristic (domain knowledge), 4) Human performance, 5) Prior published work. Your model must beat all of these.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+    <div class="faq-question">How often should I re-evaluate? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Continuously. Monitor production metrics real-time. Re-evaluate on new data as it arrives. Retrain when performance degrades. Don't evaluate once and forget.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Should I report mean metrics or per-class? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Both. Report overall metrics for summary (accuracy, macro F1). Always disaggregate by class, demographic group, and domain. Most failures hide in disaggregated metrics.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How to handle class imbalance? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">1) Stratified splits maintain distribution. 2) Use class-weighted metrics (weighted F1) or per-class metrics. 3) Use threshold-independent metrics (AUC-ROC). 4) Consider cost-sensitive learning if misclassification costs differ.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Statistical significance vs practical significance? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Statistical: p < 0.05 (unlikely due to chance). Practical: difference large enough to matter for business. Tiny improvements can be statistically significant with huge samples but practically irrelevant. Always report effect size (Cohen's d).</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How to choose primary metric? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Align with business objective. For fraud detection: prioritize recall (catch fraud). For loan approval: prioritize precision (minimize bad approvals). For search: use engagement metrics. Don't optimize whatever is easiest to measure.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">What is overfitting to test data? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Happens when you tune hyperparameters on test data, run many tests until one is 'significant', or select models based on test performance. Makes results look better than production. Always use hold-out test set never looked at before.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How to handle missing/abstaining predictions? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Don't skip examples. Mark as error. Measure abstention rate (fraction of non-predictions). Compute metrics separately on abstaining vs non-abstaining examples. A model that abstains on hard cases might look good but be less useful.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Single test set vs cross-validation? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">During development: k-fold CV for robust estimates. For final results: separate hold-out test set opened only once. Ideal: cross-validate during development, report final results on held-out test.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">How to evaluate on out-of-distribution data? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Deliberately create OOD test sets. Temporal shift (train 2020, test 2025). Domain shift (train Twitter, test Reddit). Noise (train clean, test noisy). Poor OOD performance signals model won't generalize in production.</div>
+    </div>
+</div>
+
+    <div class="faq-item">
+    <div class="faq-question">Should I optimize for precision or recall? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Depends on cost. For spam detection: optimize precision (avoid false positives = annoyed users). For disease detection: optimize recall (catch all cases = save lives). For fraud: often recall (catch fraud). Document your choice and why.</div>
+    </div>
+</div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary & Key Takeaways</h2>
+
+    <h3>Core Principles (Revisited)</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Measure What Matters</h4>
+    <p>Primary metric = business objective. Avoid optimizing proxies. Accuracy on benchmarks ≠ user satisfaction in production.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Never Trust One Metric</h4>
+    <p>Accuracy alone hides imbalance and bias. Use multiple metrics: precision+recall+F1+fairness+AUC, disaggregated by group.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Evaluate Continuously</h4>
+    <p>Build evaluation into pipeline. Monitor production real-time. Retrain on distribution shift. One-time evaluation is outdated.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Test on Realistic Data</h4>
+    <p>Test set should match production including edge cases, rare events, distribution shifts. Don't just evaluate on clean benchmarks.</p>
+</div>
+    </div>
+
+    <h3>Evaluation Checklist</h3>
+    <ol style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li>Define business objective and align primary metric</li>
+        <li>Create completely held-out test set matching production distribution</li>
+        <li>Establish baselines: random, heuristic, human, prior work</li>
+        <li>Train model on training set, tune only on validation set</li>
+        <li>Evaluate on test set once — don't peek</li>
+        <li>Compute multiple metrics, disaggregate by group/domain/difficulty</li>
+        <li>Check for fairness issues explicitly</li>
+        <li>Monitor production metrics continuously</li>
+        <li>Retrain on distribution shift or performance degradation</li>
+        <li>Document all decisions and tradeoffs</li>
+    </ol>
+
+    <div class="highlight-box">
+    <p><strong>Remember:</strong> The difference between production AI systems that work and those that fail catastrophically is almost always evaluation rigor, not algorithmic sophistication. Invest in evaluation infrastructure first.</p>
+</div>
+</section>
+
+<!-- SECTION: Resources -->
+<section id="resources" class="ml-section">
+    <h2>Resources & Further Reading</h2>
+
+    <h3>Essential Python Libraries</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li><strong><a href="https://scikit-learn.org/" target="_blank" rel="noopener">scikit-learn</a>:</strong> Comprehensive metrics via <code>sklearn.metrics</code></li>
+        <li><strong><a href="https://docs.ragas.io/" target="_blank" rel="noopener">RAGAS</a>:</strong> RAG evaluation framework (faithfulness, relevance, recall)</li>
+        <li><strong><a href="https://docs.confident-ai.com/" target="_blank" rel="noopener">DeepEval</a>:</strong> LLM evaluation with LLM-as-judge and traceability</li>
+        <li><strong><a href="https://www.nltk.org/" target="_blank" rel="noopener">NLTK/ROUGE</a>:</strong> NLP metrics (BLEU, ROUGE, linguistic analysis)</li>
+        <li><strong><a href="https://wandb.ai/" target="_blank" rel="noopener">Weights & Biases</a>:</strong> Experiment tracking and metric visualization</li>
+        <li><strong><a href="https://scipy.org/" target="_blank" rel="noopener">SciPy (scipy.stats)</a>:</strong> Statistical testing and power analysis</li>
+    </ul>
+
+    <h3>Key Papers</h3>
+    <ul style="font-size: 1rem; line-height: 1.8; color: var(--text);">
+        <li>Papineni et al. (2002) — "<a href="https://aclanthology.org/P02-1040/" target="_blank" rel="noopener">BLEU: a Method for Automatic Evaluation of Machine Translation</a>"</li>
+        <li>Lin (2004) — "<a href="https://aclanthology.org/W04-1013/" target="_blank" rel="noopener">ROUGE: A Package for Automatic Evaluation of Summaries</a>"</li>
+        <li>Zhao et al. (2023) — "<a href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener">RAGAS: A Benchmark for Retrieval-Augmented Generation Systems</a>"</li>
+        <li>Hastie, Tibshirani, & Friedman (2009) — "<a href="https://hastie.su.domains/ElemStatLearn/" target="_blank" rel="noopener">The Elements of Statistical Learning</a>"</li>
+    </ul>
+</section>
+
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Sidebar active link tracking
+        const links = document.querySelectorAll('.ml-sidebar a');
+        const sections = document.querySelectorAll('.ml-section');
+        
+        function updateActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink();
+        
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                this.nextElementSibling.classList.toggle('active');
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.classList.toggle('active');
+                this.nextElementSibling.classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

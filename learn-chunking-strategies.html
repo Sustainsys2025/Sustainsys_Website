@@ -1,0 +1,3681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunking Strategies - SustainSys AI Academy</title>
+    <meta name="description" content="Split documents intelligently for RAG — fixed-size, recursive, semantic, and agentic chunking strategies.">
+    <meta property="og:title" content="Chunking Strategies - SustainSys AI Academy">
+    <meta property="og:description" content="Master chunking strategies for RAG systems with complete implementations and optimization techniques.">
+    <meta name="theme-color" content="#0891b2">
+
+        <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-dim: #64748b;
+            --border: #e2e8f0;
+            --accent-cyan: #0891b2;
+            --accent-purple: #7c3aed;
+            --accent-pink: #db2777;
+            --accent-green: #10b981;
+            --accent-gold: #d97706;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        <style>
+        /* ML Fundamentals Page Specific Styles */
+
+        .ml-page-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .ml-sidebar {
+            position: sticky;
+            top: 100px;
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .ml-sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .ml-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ml-sidebar li {
+            margin-bottom: 0.5rem;
+        }
+
+        .ml-sidebar a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .ml-sidebar a:hover {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            padding-left: 1rem;
+        }
+
+        .ml-sidebar a.active {
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+            padding-left: 1rem;
+        }
+
+        .ml-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ml-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 120px;
+        }
+
+        .ml-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .ml-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+
+        .ml-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-pink);
+        }
+
+        .ml-section p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .ml-intro-text {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .ml-intro-text p {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .code-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--accent-cyan);
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-header::before {
+            content: '';
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .code-header::after {
+            content: '●  ●  ●';
+            margin-left: auto;
+            font-size: 0.6rem;
+            color: #475569;
+            letter-spacing: 0;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            white-space: pre;
+            overflow-x: auto;
+            display: block;
+            tab-size: 4;
+        }
+
+        .code-block-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Syntax Highlighting Classes */
+        .keyword { color: #f472b6; font-weight: 600; }
+        .string { color: #86efac; }
+        .comment { color: #64748b; font-style: italic; }
+        .function { color: #60a5fa; }
+        .number { color: #fbbf24; }
+        .operator { color: #f472b6; }
+        .variable { color: #e2e8f0; }
+        .decorator { color: #c084fc; }
+
+        /* Card Grid Styles */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-cyan);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(8, 145, 178, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+        }
+
+        .card.cyan-accent {
+            border-top-color: var(--accent-cyan);
+        }
+
+        .card.purple-accent {
+            border-top-color: var(--accent-purple);
+        }
+
+        .card.pink-accent {
+            border-top-color: var(--accent-pink);
+        }
+
+        .card.green-accent {
+            border-top-color: var(--accent-green);
+        }
+
+        .card.gold-accent {
+            border-top-color: var(--accent-gold);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        /* Collapsible Section Styles */
+        .collapsible-section {
+            margin: 1.5rem 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .collapsible-header:hover {
+            background: linear-gradient(135deg, #cce7ff 0%, #e6d9ff 100%);
+        }
+
+        .collapsible-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .collapsible-body {
+            padding: 1.5rem;
+        }
+
+        /* Try It Yourself Styles */
+        .try-yourself {
+            background: linear-gradient(135deg, #dcfce7 0%, #dcfce7 100%);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .try-yourself h4 {
+            color: var(--accent-green);
+            margin-top: 0;
+        }
+
+        .try-yourself-starter {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Flow Diagram Styles */
+        .flow-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #0891b2 0%, #7c3aed 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            flex: 0 0 auto;
+        }
+
+        /* Diagram Box (for visual sections like confusion matrix) */
+        .diagram-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagram-box h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Formula Box Styles */
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .formula-box .label {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: #f8fafc;
+            border-color: var(--accent-cyan);
+        }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .faq-answer.active {
+            max-height: 1500px;
+        }
+
+        .faq-answer-content {
+            padding: 1.5rem;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef3c7 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-gold);
+        }
+
+        /* Info Box Styles */
+        .info-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .info-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Grid Cards Layout */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* Try It Yourself Box */
+        .try-it-box {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .try-it-box::before {
+            content: '🧪';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #f0fdf4;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .try-it-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: #059669;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        /* ===== ANIMATED VISUAL DIAGRAMS ===== */
+
+        /* Animated pulsing arrow for flow diagrams */
+        @keyframes pulseArrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(4px); }
+        }
+
+        /* Neural network animated diagram */
+        .nn-animated {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .nn-animated h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .nn-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nn-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            animation: nodeGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes nodeGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(8, 145, 178, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(8, 145, 178, 0.7); transform: scale(1.08); }
+        }
+
+        /* Data flow animation */
+        .data-flow-anim {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .data-flow-anim h4 {
+            color: var(--accent-cyan);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 600;
+            position: relative;
+            border-radius: 8px;
+            margin: 0 4px;
+            min-width: 90px;
+        }
+
+        .pipeline-stage .stage-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Animated data particle */
+        .data-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: flowParticle 4s linear infinite;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .data-particle:nth-child(2) { animation-delay: 1.3s; background: var(--accent-purple); box-shadow: 0 0 12px var(--accent-purple); }
+        .data-particle:nth-child(3) { animation-delay: 2.6s; background: var(--accent-pink); box-shadow: 0 0 12px var(--accent-pink); }
+
+        @keyframes flowParticle {
+            0% { left: -10px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* Gradient descent animation */
+        .gd-visual {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .gd-visual h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .gd-curve {
+            position: relative;
+            height: 200px;
+            margin: 1rem auto;
+            max-width: 500px;
+        }
+
+        .gd-ball {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 16px var(--accent-pink);
+            position: absolute;
+            animation: gradientDescent 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientDescent {
+            0% { top: 20px; left: 10%; }
+            25% { top: 60px; left: 30%; }
+            50% { top: 100px; left: 45%; }
+            75% { top: 140px; left: 48%; }
+            100% { top: 160px; left: 50%; }
+        }
+
+        /* Pulsating model comparison bars */
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .model-bar-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 140px;
+            text-align: right;
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 28px;
+            background: var(--secondary);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            animation: barGrow 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+
+        @keyframes barGrow {
+            from { width: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .ml-page-container {
+                gap: 1.5rem;
+            }
+
+            .ml-sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .card-grid, .grid-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.6rem;
+                white-space: nowrap;
+            }
+
+            .flow-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .pipeline-track {
+                flex-wrap: wrap;
+            }
+
+            .pipeline-stage {
+                min-width: 80px;
+                font-size: 0.7rem;
+                padding: 0.6rem 0.3rem;
+            }
+
+            .nn-animated {
+                padding: 1rem;
+            }
+
+            .nn-animated > div {
+                gap: 0.5rem !important;
+            }
+
+            .nn-node {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 0.55rem !important;
+            }
+
+            .model-bar-label {
+                min-width: 100px;
+                font-size: 0.7rem;
+            }
+
+            .gd-visual {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ml-page-container {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .ml-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .ml-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+        .model-bars {
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .model-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .model-bar-label {
+            width: 140px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .model-bar-track {
+            flex: 1;
+            height: 32px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 100px;
+        }
+
+        .model-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            align-items: center;
+        }
+
+        .flow-step {
+            padding: 1.5rem;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #7c3aed;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 0.95rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-left: 4px solid #eab308;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            font-size: 0.95rem;
+            color: #78350f;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+        }
+
+        .card h4 {
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .card.cyan-accent h4 { color: var(--accent-cyan); }
+        .card.purple-accent h4 { color: var(--accent-purple); }
+        .card.pink-accent h4 { color: var(--accent-pink); }
+        .card.green-accent h4 { color: var(--accent-green); }
+        .card.gold-accent h4 { color: var(--accent-gold); }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            background: #f8fafc;
+            color: var(--accent-cyan);
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f1f5f9;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 1rem;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .try-it-box {
+            background: linear-gradient(135deg, #f0fdf4, #dbeafe);
+            border-left: 4px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .try-it-box h4 {
+            color: var(--accent-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .try-it-box p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .formula-box {
+            background: #f0f9ff;
+            border: 2px solid var(--accent-cyan);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .formula-box .label {
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 0.75rem;
+        }
+
+        .ml-intro-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--accent-cyan);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .ml-page-container {
+                flex-direction: column;
+            }
+
+            .ml-sidebar {
+                position: static;
+                width: 100%;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .model-bar-label {
+                width: 100px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* JavaScript-controlled FAQ styles */
+        .faq-item.open .faq-answer {
+            max-height: 1000px;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
+            </a>
+            <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html">Projects<span class="nav-badge-star">&#9733;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer">HealthCare (Cancer Research)</a></li>
+        </ul>
+    </li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+</ul>
+        </div>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+    <main class="ml-page-container">
+        <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
+            <div style="text-align: center;">
+                <p class="page-subtitle">[ AI Academy ]</p>
+                <h1 class="page-title">Chunking Strategies</h1>
+                <p class="page-description">Master Chunking Strategies with comprehensive tutorials, Python code examples, and interactive exercises</p>
+                <a href="ai-learning-hub.html" style="display: inline-block; margin-top: 1rem; color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600;">&larr; Back to Learning Hub</a>
+            </div>
+        </header>
+
+        <div class="ml-sidebar">
+    <h3>Contents</h3>
+    <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#why-matters">Why Chunking Matters</a></li>
+        <li><a href="#core-concepts">Core Concepts</a></li>
+        <li><a href="#fixed-size">Fixed-Size Chunking</a></li>
+        <li><a href="#recursive">Recursive Chunking</a></li>
+        <li><a href="#semantic">Semantic Chunking</a></li>
+        <li><a href="#document-aware">Document-Aware Chunking</a></li>
+        <li><a href="#agentic">Agentic Chunking</a></li>
+        <li><a href="#comparison">Strategy Comparison</a></li>
+        <li><a href="#chunk-optimization">Chunk Size Optimization</a></li>
+        <li><a href="#retrieval-quality">Retrieval Quality</a></li>
+        <li><a href="#advanced-techniques">Advanced Techniques</a></li>
+        <li><a href="#node-parsers">Node Parsers & LlamaIndex</a></li>
+        <li><a href="#best-practices">Best Practices</a></li>
+        <li><a href="#common-mistakes">Common Mistakes</a></li>
+        <li><a href="#code-examples">Code Examples</a></li>
+        <li><a href="#exercises">Exercises</a></li>
+        <li><a href="#interview">Interview Questions</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#summary">Summary</a></li>
+    </ul>
+</div>
+        <div class="ml-content">
+            
+<!-- SECTION: Introduction -->
+<section id="intro" class="ml-section">
+    <h2>Chunking Strategies for RAG Systems</h2>
+
+    <div class="ml-intro-text">
+        <p>Chunking is the foundational step in building effective Retrieval-Augmented Generation (RAG) systems. It's the process of intelligently splitting large documents into smaller, semantically coherent pieces that can be embedded, indexed, and retrieved to answer user queries. Done well, chunking dramatically improves retrieval accuracy and answer quality. Done poorly, it degrades both dramatically.</p>
+    </div>
+
+    <p>The naive approach — splitting documents on arbitrary word or character boundaries — often breaks semantic units, leading to retrievals that lack context or contain partial information. Sophisticated chunking strategies preserve meaning, maintain overlap for context, and adapt to document structure (HTML, PDF, code, markdown, etc.).</p>
+
+    <p>This guide covers the full spectrum of chunking techniques: from simple fixed-size chunks with overlap, to recursive splitting that respects document hierarchy, to cutting-edge semantic chunking that groups semantically similar sentences, to agentic chunking that uses LLMs to intelligently parse documents. You'll learn when to use each strategy, how to implement them, and how to optimize chunk sizes for your specific use case.</p>
+
+    <h3>What You'll Learn</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Core Concepts</h4>
+    <p>Understand the relationship between chunk size, overlap, and retrieval quality. Learn why arbitrary splits fail and what makes a good chunk.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>5 Chunking Strategies</h4>
+    <p>Master fixed-size, recursive, semantic, document-aware, and agentic chunking with complete implementations in Python.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Optimization & Tuning</h4>
+    <p>Learn how to measure chunking quality, run A/B experiments, and find the optimal chunk size and strategy for your documents.</p>
+</div>
+        <div class="card green-accent">
+    <h4>Production-Ready Code</h4>
+    <p>Build complete RAG pipelines using LangChain, LlamaIndex, and custom implementations with best practices for scaling.</p>
+</div>
+    </div>
+
+    <div class="info-box">
+    <h4>Prerequisites</h4>
+    <p>Familiarity with Python, embeddings/vector databases, basic NLP concepts, and RAG system architecture. Experience with LangChain or LlamaIndex is helpful but not required.</p>
+</div>
+</section>
+
+<!-- SECTION: Why Chunking Matters -->
+<section id="why-matters" class="ml-section">
+    <h2>Why Chunking Matters</h2>
+
+    <p>Chunking is the first critical decision point in a RAG pipeline. Everything downstream — embedding quality, retrieval relevance, answer generation — depends on chunking decisions. Yet it's often treated as a trivial detail rather than a core engineering challenge.</p>
+
+    <h3>The Impact: A Real Example</h3>
+    <p>Consider indexing a 100-page technical manual with 50,000 tokens. Three different chunking approaches:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Fixed-Size (512 tokens)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #d97706, #f59e0b);">62% Retrieval Quality</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Recursive (document-aware)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #059669, #10b981);">78% Retrieval Quality</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Semantic (optimal params)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #0891b2, #7c3aed);">91% Retrieval Quality</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Retrieval accuracy on domain-specific Q&A benchmark</em></p>
+
+    <h3>Why This Matters</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Context Preservation</h4>
+    <p>Semantic coherence must be preserved. A chunk breaking mid-sentence loses context and confuses embeddings. Good chunking keeps related information together.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Retrieval Precision</h4>
+    <p>A 512-token chunk retrieved at position 200-712 may contain irrelevant content before position 300. Semantic boundaries ensure retrieved context is relevant.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Embedding Quality</h4>
+    <p>Embeddings encode semantic meaning best when chunks are semantically coherent. Arbitrary splits degrade embedding signal and retrieval accuracy.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Cost & Latency</h4>
+    <p>Smaller chunks = more total chunks = more embeddings to store/query. Larger chunks = fewer chunks but lower retrieval precision. Finding the sweet spot saves money.</p>
+</div>
+    </div>
+
+    <h3>The Chunking Decision Tree</h3>
+    <p>Your choice of chunking strategy depends on your document type and use case:</p>
+
+    <div class="flow-diagram">
+        <div class="flow-step" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+            <strong>Document Type?</strong><br><small>Decide based on structure</small>
+        </div>
+        <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">Plain text ↙ Code ↓ HTML/Markdown ↘ PDF</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <strong>Semantics Important?</strong><br><small>Is topic coherence critical?</small>
+        </div>
+        <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">No → Fixed-Size | Yes → Semantic/Recursive</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <strong>Latency/Cost?</strong><br><small>Can you afford embeddings?</small>
+        </div>
+        <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">Speed Critical → Recursive | High Budget → Semantic</div>
+        <div class="flow-step" style="background: linear-gradient(135deg, #0891b2, #22d3ee);">
+            <strong>Final Strategy</strong><br><small>Implement & optimize</small>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>Key Insight:</strong> There is no universal &ldquo;best&rdquo; chunking strategy. The optimal approach depends on your documents, your queries, your LLM, and your retrieval model. The solution is: <em>measure, experiment, iterate</em>.</p>
+</div>
+</section>
+
+<!-- SECTION: Core Concepts -->
+<section id="core-concepts" class="ml-section">
+    <h2>Core Concepts and Terminology</h2>
+
+    <p>Before diving into specific strategies, understand the key concepts that define chunking behavior.</p>
+
+    <h3>1. Chunk Size</h3>
+    <p>The number of tokens (or characters) in each chunk. Typical range: 128-2048 tokens.</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Small Chunks (128-256 tokens)</h4>
+    <p>Pros: High retrieval precision, less irrelevant context. Cons: May lack context, requires more embeddings, higher query latency.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Medium Chunks (512 tokens)</h4>
+    <p>Pros: Balance of context and precision, industry standard. Cons: May miss long-range dependencies.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Large Chunks (1024+ tokens)</h4>
+    <p>Pros: Rich context, fewer embeddings. Cons: Lower precision, may include irrelevant content, slower retrieval.</p>
+</div>
+    </div>
+
+    <h3>2. Chunk Overlap</h3>
+    <p>The number of tokens repeated at the boundary between consecutive chunks. Preserves context and maintains continuity.</p>
+
+    <div class="formula-box">
+    <div class="label">Overlap Calculation</div>
+    overlap_tokens = chunk_size * overlap_percent
+
+Example: 512-token chunks with 25% overlap = 128 tokens of overlap
+
+Chunk 1: tokens 0-511
+Chunk 2: tokens 384-895  (overlap from 384-511)
+Chunk 3: tokens 768-1279 (overlap from 768-895)
+</div>
+
+    <div class="info-box">
+    <h4>Why Overlap Matters</h4>
+    <p>Overlap ensures that important information split across chunk boundaries doesn't get lost. Without overlap, a sentence split between chunk N and chunk N+1 might only appear in one chunk's embedding. With overlap, it appears in both, improving retrieval probability.</p>
+</div>
+
+    <h3>3. Semantic Coherence</h3>
+    <p>A good chunk contains related, cohesive information. A bad chunk arbitrarily splits meaning.</p>
+
+    <p><strong>Bad Split Example:</strong></p>
+    <div class="code-block" style="background: #fee2e2;">
+        <div class="code-header">What NOT to do</div>
+        <div class="code-content">Chunk <span class="number">1</span>: <span class="string">"The transformer architecture introduced in 2017 has become the foundation of modern... [cuts at 512 tokens]"</span>
+Chunk <span class="number">2</span>: <span class="string">"...NLP systems. Self-attention enables parallel processing. Unlike RNNs which process sequentially, transformers can process entire..."</span> [continues]</div>
+    </div>
+
+    <p><strong>Good Split Example:</strong></p>
+    <div class="code-block" style="background: #dcfce7;">
+        <div class="code-header">What to do</div>
+        <div class="code-content">Chunk <span class="number">1</span>: <span class="string">"The transformer architecture, introduced in 2017 by Vaswani et al., replaced RNNs as the dominant sequence model. Self-attention enables parallel processing, making transformers dramatically faster to train."</span>
+Chunk <span class="number">2</span>: <span class="string">"Unlike RNNs which process tokens sequentially, transformers process entire sequences simultaneously. This parallelization, combined with layer normalization and residual connections, enables training on massive datasets..."</span></div>
+    </div>
+
+    <h3>4. Metadata Preservation</h3>
+    <p>Preserving source document metadata (title, section, URL, author) enables:</p>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li>Better answer attribution ("According to Section 4.2...")</li>
+        <li>Filtering retrieved chunks by document source</li>
+        <li>Tracing retrieval decisions back to source</li>
+        <li>Evaluating which documents are most helpful</li>
+    </ul>
+
+    <h3>5. The Retrieval Quality Spectrum</h3>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Irrelevant (0-20%)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 20%; background: #ef4444;">Retrieved content doesn't answer the query</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Partially Relevant (20-60%)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 60%; background: #f97316;">Contains some useful info but mixed with irrelevant content</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Relevant (60-85%)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: #eab308;">Mostly relevant with some tangential content</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Highly Relevant (85-100%)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 100%; background: #22c55e;">Directly answers the query with minimal noise</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+    <p><strong>The Chunking Challenge:</strong> You're optimizing for <em>retrieval quality</em> — finding chunks that are relevant to a query — but you won't know query intent until runtime. This is why choosing the right chunking strategy upfront is so important.</p>
+</div>
+</section>
+
+<!-- SECTION: Fixed-Size Chunking -->
+<section id="fixed-size" class="ml-section">
+    <h2>Fixed-Size Chunking with Overlap</h2>
+
+    <p>The simplest chunking strategy: split documents into chunks of fixed size (e.g., 512 tokens) with optional overlap (e.g., 20% overlap = 102 tokens).</p>
+
+    <h3>How It Works</h3>
+    <p>Iterate through the document, creating chunks at regular intervals. When using overlap, the end of one chunk repeats at the start of the next.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Fixed-Size Chunking Implementation</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">fixed_size_chunking</span>(text, chunk_size=<span class="number">512</span>, overlap=<span class="number">0.2</span>):
+    <span class="string">"""
+    Split text into fixed-size chunks with overlap.
+    
+    Args:
+        text: Input document text
+        chunk_size: Size of each chunk in tokens (approximate)
+        overlap: Overlap ratio (0.0 to 1.0)
+    
+    Returns:
+        List of chunk strings
+    """</span>
+    <span class="comment"># Split into words (approximation of tokens)</span>
+    words = text.<span class="function">split</span>()
+    overlap_size = <span class="function">int</span>(chunk_size * overlap)
+    step_size = chunk_size - overlap_size
+    
+    chunks = []
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(words), step_size):
+        chunk = words[i:i + chunk_size]
+        chunks.<span class="function">append</span>(<span class="string">" "</span>.<span class="function">join</span>(chunk))
+        
+        <span class="keyword">if</span> i + chunk_size >= <span class="function">len</span>(words):
+            <span class="keyword">break</span>
+    
+    <span class="keyword">return</span> chunks
+
+<span class="comment"># Example usage</span>
+document = <span class="string">"""
+The transformer architecture revolutionized NLP. 
+Self-attention mechanisms enable parallel processing...
+[... more text ...]
+"""</span>
+
+chunks = <span class="function">fixed_size_chunking</span>(document, chunk_size=<span class="number">128</span>, overlap=<span class="number">0.2</span>)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Chunk {i}: {len(chunk.split())} words"</span>)
+    <span class="function">print</span>(<span class="string">f"  {chunk[:80]}...\n"</span>)
+</div>
+</div>
+
+    <h3>Advantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Simplicity:</strong> Easy to implement and understand</li>
+        <li><strong>Speed:</strong> No computation overhead, runs instantly</li>
+        <li><strong>Predictability:</strong> Chunk count is predictable (useful for cost estimation)</li>
+        <li><strong>Flexibility:</strong> Works with any document type</li>
+    </ul>
+
+    <h3>Disadvantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Semantic Ignorance:</strong> Doesn't respect paragraph/section boundaries</li>
+        <li><strong>Context Loss:</strong> May split sentences or ideas mid-way</li>
+        <li><strong>One-Size-Fits-All:</strong> Same strategy regardless of document structure</li>
+        <li><strong>Lower Retrieval Quality:</strong> Typically 60-70% retrieval accuracy</li>
+    </ul>
+
+    <h3>When to Use</h3>
+    <p>Fixed-size chunking is appropriate when:</p>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li>You're prototyping quickly and don't need optimal quality</li>
+        <li>Documents are highly homogeneous plain text</li>
+        <li>You need to be language-agnostic (no tokenizer dependencies)</li>
+        <li>You're optimizing purely for speed over quality</li>
+    </ul>
+
+    <div class="try-it-box">
+    <h4>Exercise: Fixed-Size with Different Overlap</h4>
+    <p>Implement fixed-size chunking with 0%, 20%, and 50% overlap on a sample document. Compare the number of chunks and overlap between consecutive chunks.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">document = <span class="string">"Your text here..."</span>
+<span class="keyword">for</span> overlap_pct <span class="keyword">in</span> [<span class="number">0</span>, <span class="number">0.2</span>, <span class="number">0.5</span>]:
+    chunks = <span class="function">fixed_size_chunking</span>(document, <span class="number">256</span>, overlap_pct)
+    <span class="function">print</span>(<span class="string">f"Overlap {overlap_pct*100}%: {len(chunks)} chunks"</span>)
+</div>
+</div>
+</div>
+
+    <div class="info-box">
+    <h4>Token Counting</h4>
+    <p>The example uses word count as an approximation of token count. In production, use a proper tokenizer (tiktoken for GPT, sentencepiece for others) to match your embedding model's tokenization.</p>
+</div>
+</section>
+
+<!-- SECTION: Recursive Chunking -->
+<section id="recursive" class="ml-section">
+    <h2>Recursive Chunking</h2>
+
+    <p>Recursive chunking respects document structure by attempting to split on progressively more granular separators (paragraph → sentence → word → character) until chunks fit the target size.</p>
+
+    <h3>How It Works</h3>
+    <p>The algorithm maintains a list of separator patterns (hierarchical). It tries the first separator; if chunks are still too large, it tries the next separator within those chunks, recursively, until all chunks fit the target size.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Recursive Chunking with LangChain</div>
+    <div class="code-content">
+<span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
+
+<span class="comment"># Create a recursive splitter</span>
+splitter = <span class="function">RecursiveCharacterTextSplitter</span>(
+    chunk_size=<span class="number">512</span>,
+    chunk_overlap=<span class="number">102</span>,  <span class="comment"># ~20% overlap</span>
+    separators=[
+        <span class="string">"\n\n"</span>,      <span class="comment"># Paragraph</span>
+        <span class="string">"\n"</span>,         <span class="comment"># Line break</span>
+        <span class="string">". "</span>,          <span class="comment"># Sentence</span>
+        <span class="string">" "</span>,           <span class="comment"># Word</span>
+        <span class="string">""</span>             <span class="comment"># Character</span>
+    ]
+)
+
+document = <span class="string">"""
+Chapter 1: Introduction
+Paragraph 1 about transformers...
+
+Paragraph 2 about attention...
+"""</span>
+
+chunks = splitter.<span class="function">split_text</span>(document)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Chunk {i} ({len(chunk)} chars): {chunk[:60]}..."</span>)
+</div>
+</div>
+
+    <h3>Why Recursive Splitting?</h3>
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Semantic Preservation</h4>
+    <p>By preferring paragraph splits over sentence splits, recursive splitting keeps related paragraphs together when possible.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Hierarchy Awareness</h4>
+    <p>The separator list encodes document structure: chapters > paragraphs > sentences > words. Respects this hierarchy when possible.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Flexibility</h4>
+    <p>Automatically adapts. If paragraphs are too large, it splits sentences. If sentences are still too large, it splits words.</p>
+</div>
+    </div>
+
+    <h3>Separator Strategies for Different Document Types</h3>
+
+    <div class="code-block">
+        <div class="code-header">Separators by Document Type</div>
+        <div class="code-content">
+<span class="comment"># Markdown &amp; Documentation</span>
+markdown_seps = [<span class="string">"\n\n"</span>, <span class="string">"\n"</span>, <span class="string">"# "</span>, <span class="string">"## "</span>, <span class="string">"### "</span>, <span class="string">". "</span>, <span class="string">" "</span>, <span class="string">""</span>]
+
+<span class="comment"># Code Files</span>
+code_seps = [<span class="string">"\n\n"</span>, <span class="string">"\nclass "</span>, <span class="string">"\ndef "</span>, <span class="string">"\n\n"</span>, <span class="string">"\n"</span>, <span class="string">" "</span>, <span class="string">""</span>]
+
+<span class="comment"># HTML/XML</span>
+html_seps = [<span class="string">"\n\n"</span>, <span class="string">"\n"</span>, "</div>", "</p>", "</section>", ". ", " ", ""]
+
+# Plain Text (Default)
+text_seps = ["\n\n", "\n", ". ", " ", ""]
+        </div>
+    </div>
+
+    <h3>Advantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Structure-Aware:</strong> Respects document hierarchy</li>
+        <li><strong>Better Semantics:</strong> Keeps paragraphs together when possible</li>
+        <li><strong>Flexible:</strong> Handles many document types with custom separators</li>
+        <li><strong>Good Retrieval Quality:</strong> 75-85% accuracy typical</li>
+        <li><strong>Fast:</strong> Still very fast, no embeddings needed</li>
+    </ul>
+
+    <h3>Disadvantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Separator Dependent:</strong> Quality depends on separator choice</li>
+        <li><strong>Document Type Specific:</strong> May need different separator lists for different content</li>
+        <li><strong>Still Not Semantic:</strong> Doesn't understand meaning, only structure</li>
+        <li><strong>Edge Cases:</strong> May struggle with irregular document formatting</li>
+    </ul>
+
+    <div class="try-it-box">
+    <h4>Exercise: Recursive Chunking</h4>
+    <p>Use RecursiveCharacterTextSplitter with a markdown document. Try different separator lists and observe how chunk boundaries change.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">from</span> langchain.text_splitter <span class="keyword">import</span> RecursiveCharacterTextSplitter
+markdown_text = <span class="string">'''
+# Chapter 1
+## Section 1.1
+Content here...
+'''</span>
+splitter = <span class="function">RecursiveCharacterTextSplitter</span>(chunk_size=<span class="number">200</span>)
+chunks = splitter.<span class="function">split_text</span>(markdown_text)
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Semantic Chunking -->
+<section id="semantic" class="ml-section">
+    <h2>Semantic Chunking with Embeddings</h2>
+
+    <p>Semantic chunking uses embeddings to measure semantic similarity between sentences. Chunks are boundaries where semantic similarity drops below a threshold, preserving semantic coherence.</p>
+
+    <h3>How It Works</h3>
+    <ol style="margin: 1rem 0 1rem 2rem;">
+        <li>Split document into sentences</li>
+        <li>Generate embeddings for each sentence</li>
+        <li>Compute cosine similarity between consecutive sentences</li>
+        <li>Identify breakpoints where similarity drops below threshold</li>
+        <li>Group sentences into chunks based on these breakpoints</li>
+    </ol>
+
+    <div class="code-block">
+    <div class="code-header">Python — Semantic Chunking Implementation</div>
+    <div class="code-content">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity
+<span class="keyword">import</span> re
+
+<span class="keyword">def</span> <span class="function">semantic_chunking</span>(text, embedding_func, threshold=<span class="number">0.5</span>, max_size=<span class="number">512</span>):
+    <span class="string">"""
+    Chunk text using semantic similarity.
+    
+    Args:
+        text: Input document
+        embedding_func: Function that returns embeddings (e.g., from OpenAI)
+        threshold: Similarity threshold for chunk boundaries (0-1)
+        max_size: Maximum tokens per chunk
+    
+    Returns:
+        List of chunks
+    """</span>
+    <span class="comment"># Split into sentences</span>
+    sentences = re.<span class="function">split</span>(<span class="string">r'(?&lt;=[.!?])\s+'</span>, text)
+    sentences = [s.<span class="function">strip</span>() <span class="keyword">for</span> s <span class="keyword">in</span> sentences <span class="keyword">if</span> s.<span class="function">strip</span>()]
+    
+    <span class="keyword">if</span> <span class="function">len</span>(sentences) == <span class="number">0</span>:
+        <span class="keyword">return</span> []
+    
+    <span class="comment"># Get embeddings for each sentence</span>
+    embeddings = []
+    <span class="keyword">for</span> sentence <span class="keyword">in</span> sentences:
+        emb = <span class="function">embedding_func</span>(sentence)
+        embeddings.<span class="function">append</span>(emb)
+    
+    <span class="comment"># Compute similarities between consecutive sentences</span>
+    similarities = []
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(embeddings) - <span class="number">1</span>):
+        sim = <span class="function">cosine_similarity</span>(
+            [embeddings[i]], 
+            [embeddings[i+<span class="number">1</span>]]
+        )[<span class="number">0</span>][<span class="number">0</span>]
+        similarities.<span class="function">append</span>(sim)
+    
+    <span class="comment"># Identify chunk boundaries where similarity drops</span>
+    breakpoints = [<span class="number">0</span>]
+    <span class="keyword">for</span> i, sim <span class="keyword">in</span> <span class="function">enumerate</span>(similarities):
+        <span class="keyword">if</span> sim < threshold:
+            breakpoints.<span class="function">append</span>(i + <span class="number">1</span>)
+    breakpoints.<span class="function">append</span>(<span class="function">len</span>(sentences))
+    
+    <span class="comment"># Create chunks from sentences between breakpoints</span>
+    chunks = []
+    <span class="keyword">for</span> start, end <span class="keyword">in</span> <span class="function">zip</span>(breakpoints[:-<span class="number">1</span>], breakpoints[<span class="number">1</span>:]):
+        chunk = <span class="string">" "</span>.<span class="function">join</span>(sentences[start:end])
+        <span class="keyword">if</span> <span class="function">len</span>(chunk) > max_size:
+            <span class="comment"># If still too large, split recursively</span>
+            chunks.<span class="function">extend</span>(<span class="function">semantic_chunking</span>(
+                chunk, embedding_func, threshold, max_size
+            ))
+        <span class="keyword">else</span>:
+            chunks.<span class="function">append</span>(chunk)
+    
+    <span class="keyword">return</span> chunks
+</div>
+</div>
+
+    <h3>Example with OpenAI Embeddings</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Semantic Chunking with OpenAI</div>
+    <div class="code-content">
+<span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI
+
+client = <span class="function">OpenAI</span>()
+
+<span class="keyword">def</span> <span class="function">get_embedding</span>(text):
+    response = client.embeddings.<span class="function">create</span>(
+        <span class="function">input</span>=text,
+        model=<span class="string">"text-embedding-3-small"</span>
+    )
+    <span class="keyword">return</span> response.data[<span class="number">0</span>].embedding
+
+document = <span class="string">"""
+The transformer architecture has revolutionized AI. 
+It introduced self-attention mechanisms that enable 
+parallel processing. Unlike RNNs, transformers process 
+entire sequences at once. This architectural choice, 
+combined with scale, unlocked the modern AI era.
+"""</span>
+
+chunks = <span class="function">semantic_chunking</span>(document, get_embedding, threshold=<span class="number">0.6</span>)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Chunk {i}: {chunk[:70]}..."</span>)
+</div>
+</div>
+
+    <h3>Advantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Semantic Coherence:</strong> Each chunk is semantically cohesive</li>
+        <li><strong>Optimal Boundaries:</strong> Chunks break where topics naturally change</li>
+        <li><strong>High Retrieval Quality:</strong> 85-95% accuracy typical</li>
+        <li><strong>Universal:</strong> Works on any document type and language</li>
+        <li><strong>Principled:</strong> Grounded in meaningful similarity metrics</li>
+    </ul>
+
+    <h3>Disadvantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Computational Cost:</strong> Requires embeddings for every sentence (expensive)</li>
+        <li><strong>Latency:</strong> Much slower than fixed-size or recursive (seconds vs milliseconds)</li>
+        <li><strong>Threshold Tuning:</strong> Requires careful threshold selection (0.5 vs 0.7 yields very different results)</li>
+        <li><strong>Language Dependent:</strong> Quality depends on embedding model quality</li>
+    </ul>
+
+    <h3>Threshold Tuning</h3>
+    <p>The similarity threshold dramatically affects chunk boundaries:</p>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Threshold = 0.3</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #0891b2, #22d3ee);">Many small chunks, low latency</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Threshold = 0.5</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #6366f1, #818cf8);">Balanced chunks, balanced latency</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Threshold = 0.8</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #7c3aed, #a855f7);">Few large chunks, high latency</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="try-it-box">
+    <h4>Exercise: Semantic Chunking</h4>
+    <p>Implement semantic chunking with different thresholds (0.3, 0.5, 0.8). Compare the number of chunks and their sizes.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="comment"># Use mock embeddings for testing</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">def</span> <span class="function">mock_embedding</span>(text):
+    np.random.<span class="function">seed</span>(<span class="function">hash</span>(text) % <span class="number">2</span>**<span class="number">32</span>)
+    <span class="keyword">return</span> np.random.<span class="function">randn</span>(<span class="number">384</span>)
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Document-Aware Chunking -->
+<section id="document-aware" class="ml-section">
+    <h2>Document-Aware Chunking</h2>
+
+    <p>Different document types (HTML, PDF, code, markdown) have distinct structure. Document-aware chunking preserves this structure, respecting hierarchy, formatting, and semantic units specific to each type.</p>
+
+    <h3>HTML Document Chunking</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — HTML-Aware Chunking</div>
+    <div class="code-content">
+<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup
+<span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> UnstructuredHTMLLoader
+
+html_content = <span class="string">"""
+&lt;article&gt;
+    &lt;h1&gt;Machine Learning Fundamentals&lt;/h1&gt;
+    &lt;section id="intro-2"&gt;
+        &lt;h2&gt;Introduction&lt;/h2&gt;
+        &lt;p&gt;Machine learning is...&lt;/p&gt;
+        &lt;p&gt;There are three main types...&lt;/p&gt;
+    &lt;/section&gt;
+    &lt;section id="supervised"&gt;
+        &lt;h2&gt;Supervised Learning&lt;/h2&gt;
+        &lt;p&gt;In supervised learning...&lt;/p&gt;
+    &lt;/section&gt;
+&lt;/article&gt;
+"""</span>
+
+<span class="keyword">def</span> <span class="function">chunk_html</span>(html_text, chunk_size=<span class="number">512</span>):
+    soup = <span class="function">BeautifulSoup</span>(html_text, <span class="string">'html.parser'</span>)
+    chunks = []
+    
+    <span class="comment"># Extract sections preserving hierarchy</span>
+    <span class="keyword">for</span> section <span class="keyword">in</span> soup.<span class="function">find_all</span>([<span class="string">'section'</span>, <span class="string">'article'</span>]):
+        heading = section.<span class="function">find</span>([<span class="string">'h1'</span>, <span class="string">'h2'</span>, <span class="string">'h3'</span>])
+        heading_text = heading.text <span class="keyword">if</span> heading <span class="keyword">else</span> <span class="string">""</span>
+        
+        paragraphs = section.<span class="function">find_all</span>(<span class="string">'p'</span>)
+        content = heading_text + <span class="string">"\n"</span> + <span class="string">"\n"</span>.<span class="function">join</span>(p.text <span class="keyword">for</span> p <span class="keyword">in</span> paragraphs)
+        
+        <span class="comment"># Further chunk if too large</span>
+        <span class="keyword">if</span> <span class="function">len</span>(content) > chunk_size:
+            words = content.<span class="function">split</span>()
+            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(words), chunk_size//<span class="number">10</span>):
+                chunks.<span class="function">append</span>(<span class="string">" "</span>.<span class="function">join</span>(words[i:i+chunk_size//<span class="number">10</span>]))
+        <span class="keyword">else</span>:
+            chunks.<span class="function">append</span>(content)
+    
+    <span class="keyword">return</span> chunks
+
+chunks = <span class="function">chunk_html</span>(html_content)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Chunk {i}: {chunk[:80]}..."</span>)
+</div>
+</div>
+
+    <h3>Code Document Chunking</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Code-Aware Chunking</div>
+    <div class="code-content">
+<span class="keyword">import</span> re
+
+<span class="keyword">def</span> <span class="function">chunk_code</span>(code_text, chunk_size=<span class="number">512</span>):
+    <span class="string">"""
+    Chunk code while preserving class and function boundaries.
+    """</span>
+    chunks = []
+    current_chunk = <span class="string">""</span>
+    
+    <span class="comment"># Split on class/function definitions</span>
+    blocks = re.<span class="function">split</span>(<span class="string">r'^(class |def )'</span>, code_text, flags=re.MULTILINE)
+    
+    <span class="keyword">for</span> block <span class="keyword">in</span> blocks:
+        <span class="keyword">if</span> <span class="function">len</span>(current_chunk) + <span class="function">len</span>(block) <= chunk_size:
+            current_chunk += block
+        <span class="keyword">else</span>:
+            <span class="keyword">if</span> current_chunk:
+                chunks.<span class="function">append</span>(current_chunk)
+            current_chunk = block
+    
+    <span class="keyword">if</span> current_chunk:
+        chunks.<span class="function">append</span>(current_chunk)
+    
+    <span class="keyword">return</span> chunks
+
+code = <span class="string">"""
+class DataProcessor:
+    def __init__(self):
+        self.data = []
+    
+    def process(self, item):
+        return item.upper()
+
+def helper_function():
+    return "result"
+"""</span>
+
+chunks = <span class="function">chunk_code</span>(code, chunk_size=<span class="number">100</span>)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Code Chunk {i}:\n{chunk}\n---"</span>)
+</div>
+</div>
+
+    <h3>PDF Document Chunking</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — PDF-Aware Chunking</div>
+    <div class="code-content">
+<span class="keyword">from</span> PyPDF2 <span class="keyword">import</span> PdfReader
+<span class="keyword">from</span> langchain.document_loaders <span class="keyword">import</span> PyPDFLoader
+
+<span class="keyword">def</span> <span class="function">chunk_pdf</span>(pdf_path, chunk_size=<span class="number">512</span>):
+    <span class="string">"""
+    Extract text from PDF preserving page and section structure.
+    """</span>
+    loader = <span class="function">PyPDFLoader</span>(pdf_path)
+    documents = loader.<span class="function">load</span>()
+    
+    chunks = []
+    <span class="keyword">for</span> doc <span class="keyword">in</span> documents:
+        text = doc.page_content
+        metadata = doc.metadata  <span class="comment"># Includes page number</span>
+        
+        <span class="comment"># Chunk while preserving metadata</span>
+        words = text.<span class="function">split</span>()
+        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(words), chunk_size):
+            chunk_text = <span class="string">" "</span>.<span class="function">join</span>(words[i:i+chunk_size])
+            chunks.<span class="function">append</span>({
+                <span class="string">"text"</span>: chunk_text,
+                <span class="string">"page"</span>: metadata.<span class="function">get</span>(<span class="string">"page"</span>, <span class="number">0</span>),
+                <span class="string">"source"</span>: metadata.<span class="function">get</span>(<span class="string">"source"</span>, <span class="string">""</span>)
+            })
+    
+    <span class="keyword">return</span> chunks
+
+<span class="comment"># Usage:</span>
+<span class="comment"># chunks = chunk_pdf("document.pdf", chunk_size=512)</span>
+</div>
+</div>
+
+    <h3>Metadata Enrichment</h3>
+    <p>Document-aware chunking enables metadata enrichment, improving attribution and filtering:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Chunk with Rich Metadata</div>
+    <div class="code-content">
+chunk_with_metadata = {
+    <span class="string">"text"</span>: <span class="string">"The transformer architecture..."</span>,
+    <span class="string">"chunk_id"</span>: <span class="string">"doc_001_chunk_005"</span>,
+    <span class="string">"document"</span>: <span class="string">"learn-transformers.html"</span>,
+    <span class="string">"section"</span>: <span class="string">"Core Concepts"</span>,
+    <span class="string">"subsection"</span>: <span class="string">"Self-Attention"</span>,
+    <span class="string">"page"</span>: <span class="number">3</span>,
+    <span class="string">"start_char"</span>: <span class="number">1250</span>,
+    <span class="string">"end_char"</span>: <span class="number">1762</span>,
+    <span class="string">"language"</span>: <span class="string">"en"</span>,
+    <span class="string">"document_type"</span>: <span class="string">"html"</span>
+}
+</div>
+</div>
+
+    <h3>Advantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Structure Preservation:</strong> Maintains document hierarchy and formatting</li>
+        <li><strong>Better Attribution:</strong> Rich metadata enables precise source citation</li>
+        <li><strong>Specialized Handling:</strong> Code, HTML, PDF each get optimal treatment</li>
+        <li><strong>Filtering Capability:</strong> Can filter by section, page, document type, etc.</li>
+    </ul>
+
+    <h3>Disadvantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Implementation Complexity:</strong> Different logic for each document type</li>
+        <li><strong>Dependency Overhead:</strong> Requires specialized libraries (BeautifulSoup, PyPDF2, etc.)</li>
+        <li><strong>Error Prone:</strong> Parsing is brittle; formatting issues break chunking</li>
+    </ul>
+
+    <div class="try-it-box">
+    <h4>Exercise: Multi-Format Chunking</h4>
+    <p>Implement a chunking pipeline that handles markdown, HTML, and plain text, preserving structure for each format.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content"><span class="keyword">def</span> <span class="function">universal_chunk</span>(text, format_type, chunk_size=<span class="number">512</span>):
+    <span class="keyword">if</span> format_type == <span class="string">'html'</span>:
+        <span class="keyword">return</span> <span class="function">chunk_html</span>(text, chunk_size)
+    <span class="keyword">elif</span> format_type == <span class="string">'markdown'</span>:
+        <span class="keyword">return</span> <span class="function">chunk_markdown</span>(text, chunk_size)
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="function">fixed_size_chunking</span>(text, chunk_size)
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Agentic Chunking -->
+<section id="agentic" class="ml-section">
+    <h2>Agentic Chunking</h2>
+
+    <p>Agentic chunking uses an LLM as an agent to intelligently parse documents, deciding how to chunk based on semantic meaning rather than mechanical rules.</p>
+
+    <h3>How It Works</h3>
+    <p>The LLM reads a document and decides:</p>
+    <ol style="margin: 1rem 0 1rem 2rem;">
+        <li>Which content belongs together</li>
+        <li>Where natural boundaries exist</li>
+        <li>Which details are important vs contextual</li>
+        <li>How to create chunks with necessary context</li>
+    </ol>
+
+    <div class="code-block">
+    <div class="code-header">Python — Agentic Chunking with Claude</div>
+    <div class="code-content">
+<span class="keyword">from</span> anthropic <span class="keyword">import</span> Anthropic
+
+client = <span class="function">Anthropic</span>()
+
+<span class="keyword">def</span> <span class="function">agentic_chunking</span>(document_text, model=<span class="string">"claude-3-5-sonnet-20241022"</span>):
+    <span class="string">"""
+    Use Claude to intelligently chunk a document.
+    """</span>
+    response = client.messages.<span class="function">create</span>(
+        model=model,
+        max_tokens=<span class="number">4096</span>,
+        messages=[
+            {
+                <span class="string">"role"</span>: <span class="string">"user"</span>,
+                <span class="string">"content"</span>: <span class="string">f"""Analyze this document and identify natural semantic chunks.
+For each chunk:
+1. Define clear boundaries
+2. Identify the main topic
+3. List key concepts
+4. Note any required context
+
+Document:
+{document_text}
+
+Provide your response as structured JSON with chunks array."""</span>
+            }
+        ]
+    )
+    
+    <span class="comment"># Parse LLM response to extract chunks</span>
+    response_text = response.content[<span class="number">0</span>].text
+    
+    <span class="comment"># Extract JSON from response</span>
+    <span class="keyword">import</span> json
+    <span class="keyword">import</span> re
+    
+    json_match = re.<span class="function">search</span>(<span class="string">r'\{.*\}'</span>, response_text, re.DOTALL)
+    <span class="keyword">if</span> json_match:
+        chunks_data = json.<span class="function">loads</span>(json_match.<span class="function">group</span>())
+        <span class="keyword">return</span> chunks_data[<span class="string">"chunks"</span>]
+    
+    <span class="keyword">return</span> []
+
+document = <span class="string">"""
+Chapter 1: Neural Networks
+A neural network is a computational model...
+Neurons process information...
+
+Chapter 2: Training
+To train a neural network, we use gradient descent...
+Backpropagation computes gradients...
+"""</span>
+
+chunks = <span class="function">agentic_chunking</span>(document)
+<span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+    <span class="function">print</span>(<span class="string">f"Chunk {i}: {chunk.get('topic', 'Unknown')}"</span>)
+    <span class="function">print</span>(<span class="string">f"  Content: {chunk.get('text', '')[:100]}..."</span>)
+</div>
+</div>
+
+    <h3>Advanced: Multi-Pass Agentic Chunking</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Multi-Pass Analysis</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">multi_pass_agentic_chunking</span>(document, max_passes=<span class="number">3</span>):
+    <span class="string">"""
+    Iteratively refine chunking through multiple LLM passes.
+    
+    Pass 1: Identify high-level structure
+    Pass 2: Refine boundaries based on semantic analysis
+    Pass 3: Verify chunk quality and optimize
+    """</span>
+    chunks = []
+    
+    <span class="keyword">for</span> pass_num <span class="keyword">in</span> <span class="function">range</span>(max_passes):
+        <span class="keyword">if</span> pass_num == <span class="number">0</span>:
+            prompt = <span class="string">f"""Identify the main topics and high-level structure.
+Document: {document}"""</span>
+        <span class="keyword">elif</span> pass_num == <span class="number">1</span>:
+            prompt = <span class="string">f"""Refine chunk boundaries to be semantically coherent.
+Previous analysis: {chunks}"""</span>
+        <span class="keyword">else</span>:
+            prompt = <span class="string">f"""Verify chunk quality. Are chunks:
+1. Semantically coherent?
+2. Self-contained?
+3. Complete (not mid-sentence)?
+Current chunks: {chunks}"""</span>
+        
+        response = client.messages.<span class="function">create</span>(
+            model=<span class="string">"claude-3-5-sonnet-20241022"</span>,
+            max_tokens=<span class="number">2048</span>,
+            messages=[{<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt}]
+        )
+        
+        <span class="comment"># Update chunks based on LLM feedback</span>
+        <span class="comment"># (simplified; real implementation would parse structured output)</span>
+    
+    <span class="keyword">return</span> chunks
+</div>
+</div>
+
+    <h3>Advantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Intelligent Parsing:</strong> Uses semantic understanding, not rules</li>
+        <li><strong>Highest Quality:</strong> Often 95%+ retrieval accuracy</li>
+        <li><strong>Context-Aware:</strong> Creates chunks with all needed context</li>
+        <li><strong>Flexible:</strong> Can follow any custom chunking criteria you specify</li>
+        <li><strong>Explainable:</strong> LLM can explain why chunks are structured that way</li>
+    </ul>
+
+    <h3>Disadvantages</h3>
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Cost:</strong> LLM API calls are expensive (significant budget impact at scale)</li>
+        <li><strong>Latency:</strong> Seconds to minutes for large documents</li>
+        <li><strong>Non-Deterministic:</strong> Results vary across runs (temperature dependency)</li>
+        <li><strong>Token Limits:</strong> Can't handle extremely large documents in one pass</li>
+        <li><strong>Context Window:</strong> Limited by model context window size</li>
+    </ul>
+
+    <h3>Cost Analysis</h3>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Fixed-Size</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 5%; background: #22c55e;">$0.00 (free)</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Semantic (embeddings)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 20%; background: #eab308;">$0.02-0.05 per 100K tokens</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Agentic (Claude)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 75%; background: #ef4444;">$0.30-1.00 per 100K tokens</div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Approximate cost for processing 100K tokens</em></p>
+
+    <div class="highlight-box">
+    <p><strong>When to use Agentic Chunking:</strong> When document quality is critical (legal documents, medical records), or when documents are complex and standard strategies fail. Not suitable for high-volume processing with tight budgets.</p>
+</div>
+</section>
+
+<!-- SECTION: Comparison -->
+<section id="comparison" class="ml-section">
+    <h2>Chunking Strategy Comparison</h2>
+
+    <p>Here's a comprehensive comparison of all five strategies across key dimensions:</p>
+
+    <div style="overflow-x: auto; margin: 2rem 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+        <thead>
+            <tr style="background: linear-gradient(90deg, #0891b2, #7c3aed); color: white;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Dimension</th>
+                <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Fixed-Size</th>
+                <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Recursive</th>
+                <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Semantic</th>
+                <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Doc-Aware</th>
+                <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Agentic</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background: #f8fafc;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Retrieval Accuracy</strong></td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #0891b2;">62%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #0891b2;">78%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #10b981;">91%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #10b981;">85%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">96%</td>
+            </tr>
+            <tr style="background: white;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Speed</strong></td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Instant (ms)</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Fast (ms)</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate (secs)</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate (secs)</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #ef4444;">Slow (mins)</td>
+            </tr>
+            <tr style="background: #f8fafc;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Cost</strong></td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Free</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Free</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">$0.02/100K</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">$0.02/100K</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #ef4444;">$0.50/100K</td>
+            </tr>
+            <tr style="background: white;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Implementation Complexity</strong></td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Very Easy</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #10b981;">Easy</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #ef4444;">Complex</td>
+            </tr>
+            <tr style="background: #f8fafc;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Deterministic</strong></td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Yes</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Yes</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Yes</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Yes</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #ef4444;">No (LLM variance)</td>
+            </tr>
+            <tr style="background: white;">
+                <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Best For</strong></td>
+                <td style="padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">Prototyping, simple documents</td>
+                <td style="padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">Structured text, markdown</td>
+                <td style="padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">Mixed documents, high quality</td>
+                <td style="padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">Specific formats (HTML, PDF)</td>
+                <td style="padding: 12px; border: 1px solid #e2e8f0; font-size: 0.85rem;">Critical documents, best quality</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Decision Matrix</h3>
+    <p>Use this matrix to choose the right strategy for your use case:</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+        <div style="padding: 1rem; background: #f0f9ff; border-left: 4px solid #0891b2; border-radius: 4px;">
+            <strong>Choose Fixed-Size if:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                <li>Building a rapid prototype</li>
+                <li>Need zero overhead</li>
+                <li>Documents are homogeneous</li>
+            </ul>
+        </div>
+        <div style="padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
+            <strong>Choose Recursive if:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                <li>Documents are structured (markdown, code)</li>
+                <li>Need decent quality without cost</li>
+                <li>Want simple implementation</li>
+            </ul>
+        </div>
+        <div style="padding: 1rem; background: #fffbeb; border-left: 4px solid #eab308; border-radius: 4px;">
+            <strong>Choose Semantic if:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                <li>High retrieval quality needed</li>
+                <li>Have embedding budget</li>
+                <li>Mixed document types</li>
+            </ul>
+        </div>
+        <div style="padding: 1rem; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 4px;">
+            <strong>Choose Agentic if:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
+                <li>Critical documents (legal, medical)</li>
+                <li>Quality > cost/latency</li>
+                <li>Complex domain knowledge needed</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Chunk Size Optimization -->
+<section id="chunk-optimization" class="ml-section">
+    <h2>Chunk Size Optimization Experiment</h2>
+
+    <p>The optimal chunk size is not universal — it depends on your documents, queries, retrieval model, and LLM. The best approach is empirical: test different sizes and measure actual retrieval quality.</p>
+
+    <h3>Experiment Setup</h3>
+    <p>Here's a complete framework for optimizing chunk size:</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Chunk Size Optimization Framework</div>
+    <div class="code-content">
+<span class="keyword">import</span> json
+<span class="keyword">import</span> time
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> ndcg_score
+<span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm
+
+<span class="keyword">def</span> <span class="function">run_chunk_optimization</span>(documents, queries, chunk_sizes, embedding_func):
+    <span class="string">"""
+    Test different chunk sizes and measure retrieval quality.
+    
+    Returns:
+        Dictionary of results by chunk size
+    """</span>
+    results = {}
+    
+    <span class="keyword">for</span> chunk_size <span class="keyword">in</span> chunk_sizes:
+        <span class="function">print</span>(<span class="string">f"\nTesting chunk_size={chunk_size}"</span>)
+        start_time = time.<span class="function">time</span>()
+        
+        <span class="comment"># Create chunks</span>
+        all_chunks = []
+        <span class="keyword">for</span> doc <span class="keyword">in</span> documents:
+            chunks = <span class="function">semantic_chunking</span>(doc, embedding_func, max_size=chunk_size)
+            all_chunks.<span class="function">extend</span>(chunks)
+        
+        chunking_time = time.<span class="function">time</span>() - start_time
+        
+        <span class="comment"># Embed all chunks</span>
+        embeddings = []
+        <span class="keyword">for</span> chunk <span class="keyword">in</span> all_chunks:
+            emb = <span class="function">embedding_func</span>(chunk)
+            embeddings.<span class="function">append</span>(emb)
+        
+        <span class="comment"># Evaluate on queries</span>
+        ndcg_scores = []
+        <span class="keyword">for</span> query <span class="keyword">in</span> <span class="function">tqdm</span>(queries, desc=<span class="string">f"Evaluating {len(queries)} queries"</span>):
+            query_emb = <span class="function">embedding_func</span>(query[<span class="string">"text"</span>])
+            
+            <span class="comment"># Find top-k retrieved chunks</span>
+            similarities = [<span class="function">cosine_similarity</span>([query_emb], [emb])[<span class="number">0</span>][<span class="number">0</span>] 
+                          <span class="keyword">for</span> emb <span class="keyword">in</span> embeddings]
+            ranked_indices = <span class="function">sorted</span>(<span class="function">range</span>(<span class="function">len</span>(similarities)), 
+                                   key=<span class="keyword">lambda</span> i: similarities[i], 
+                                   reverse=<span class="keyword">True</span>)[:<span class="number">5</span>]
+            
+            <span class="comment"># Compute NDCG</span>
+            relevances = [<span class="number">1</span> <span class="keyword">if</span> idx <span class="keyword">in</span> query[<span class="string">"relevant_chunk_ids"</span>] <span class="keyword">else</span> <span class="number">0</span> 
+                         <span class="keyword">for</span> idx <span class="keyword">in</span> ranked_indices]
+            ndcg = <span class="function">ndcg_score</span>([query[<span class="string">"relevances"</span>]], [relevances])
+            ndcg_scores.<span class="function">append</span>(ndcg)
+        
+        results[chunk_size] = {
+            <span class="string">"avg_ndcg"</span>: <span class="function">sum</span>(ndcg_scores) / <span class="function">len</span>(ndcg_scores),
+            <span class="string">"num_chunks"</span>: <span class="function">len</span>(all_chunks),
+            <span class="string">"chunking_time"</span>: chunking_time,
+            <span class="string">"chunks_per_query"</span>: <span class="function">len</span>(all_chunks) / <span class="function">len</span>(queries)
+        }
+    
+    <span class="keyword">return</span> results
+
+<span class="comment"># Run optimization</span>
+chunk_sizes = [<span class="number">128</span>, <span class="number">256</span>, <span class="number">512</span>, <span class="number">1024</span>, <span class="number">2048</span>]
+results = <span class="function">run_chunk_optimization</span>(documents, test_queries, chunk_sizes, get_embedding)
+
+<span class="comment"># Print results</span>
+<span class="function">print</span>(<span class="string">"\n=== Optimization Results ==="</span>)
+<span class="keyword">for</span> size <span class="keyword">in</span> chunk_sizes:
+    r = results[size]
+    <span class="function">print</span>(<span class="string">f"Size {size:4d}: NDCG={r['avg_ndcg']:.3f}, "</span>
+          <span class="string">f"Chunks={r['num_chunks']:4d}, "</span>
+          <span class="string">f"Time={r['chunking_time']:.2f}s"</span>)
+</div>
+</div>
+
+    <h3>Key Metrics to Track</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>NDCG@k Score</h4>
+    <p>Normalized Discounted Cumulative Gain measures ranking quality. Score from 0-1, higher is better. Standard in IR evaluation.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>MRR (Mean Reciprocal Rank)</h4>
+    <p>Average position of the first relevant chunk. Measures how quickly you find relevant results.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Recall@k</h4>
+    <p>Percentage of relevant chunks in top-k results. Critical for RAG (need relevant info to generate good answers).</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Latency</h4>
+    <p>Time to chunk documents and query the index. Includes embedding time and database queries.</p>
+</div>
+    </div>
+
+    <h3>Typical Results from Optimization</h3>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">128 tokens</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #0891b2, #22d3ee);">NDCG: 0.82</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">256 tokens</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 89%; background: linear-gradient(90deg, #0891b2, #22d3ee);">NDCG: 0.87</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">512 tokens</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #0891b2, #22d3ee);">NDCG: 0.89</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">1024 tokens</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 88%; background: linear-gradient(90deg, #0891b2, #22d3ee);">NDCG: 0.86</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">2048 tokens</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #0891b2, #22d3ee);">NDCG: 0.78</div>
+            </div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;"><em>Typical NDCG@5 scores by chunk size (results vary by domain)</em></p>
+
+    <h3>Optimization Insights</h3>
+
+    <div class="info-box">
+    <h4>Sweet Spot</h4>
+    <p>In most cases, 256-512 tokens yields the best NDCG scores. Smaller chunks miss context; larger chunks include noise. Your optimization should confirm this for your specific data.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Domain Sensitivity</h4>
+    <p>Technical documents benefit from larger chunks (512+) to maintain context. News articles and short documents benefit from smaller chunks (128-256). Always test on representative data from your domain.</p>
+</div>
+
+    <div class="info-box">
+    <h4>Overlap Impact</h4>
+    <p>Overlap improves recall at the cost of more total chunks. 20-25% overlap typically provides good balance. Too much overlap (>50%) creates excessive redundancy without quality gains.</p>
+</div>
+</section>
+
+<!-- SECTION: Retrieval Quality -->
+<section id="retrieval-quality" class="ml-section">
+    <h2>Retrieval Quality by Chunk Size</h2>
+
+    <p>This section visualizes how chunk size affects the three critical dimensions of retrieval quality:</p>
+
+    <h3>1. Precision vs Recall Tradeoff</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <div>
+            <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Precision by Chunk Size</h4>
+            <div class="model-bars">
+                <div class="model-bar">
+                    <div class="model-bar-label">128 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 92%; background: #0891b2;">92% Precision@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">256 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 88%; background: #0891b2;">88% Precision@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">512 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 84%; background: #0891b2;">84% Precision@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">1024 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 76%; background: #0891b2;">76% Precision@5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 style="color: var(--accent-purple); margin-bottom: 1rem;">Recall by Chunk Size</h4>
+            <div class="model-bars">
+                <div class="model-bar">
+                    <div class="model-bar-label">128 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 65%; background: #7c3aed;">65% Recall@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">256 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 78%; background: #7c3aed;">78% Recall@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">512 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 86%; background: #7c3aed;">86% Recall@5</div>
+                    </div>
+                </div>
+                <div class="model-bar">
+                    <div class="model-bar-label">1024 tokens</div>
+                    <div class="model-bar-track">
+                        <div class="model-bar-fill" style="width: 91%; background: #7c3aed;">91% Recall@5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>2. Latency by Chunk Size and Strategy</h3>
+
+    <div class="model-bars">
+        <div class="model-bar">
+            <div class="model-bar-label">Fixed-Size (512 tokens)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 3%; background: #22c55e;">2ms</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Recursive (512 tokens)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 3%; background: #22c55e;">5ms</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Semantic (512 tokens)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 25%; background: #eab308;">18ms (embeddings)</div>
+            </div>
+        </div>
+        <div class="model-bar">
+            <div class="model-bar-label">Agentic (512 tokens)</div>
+            <div class="model-bar-track">
+                <div class="model-bar-fill" style="width: 80%; background: #f97316;">60s+ (LLM latency)</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>3. Cost Analysis: Chunking + Embedding + Storage</h3>
+
+    <p><strong>Scenario:</strong> Process 1 million documents (100 tokens each) and serve 1000 queries/day</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 2rem 0;">
+        <div style="padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+            <h4 style="color: #0891b2; margin: 0 0 0.5rem 0;">Fixed-Size</h4>
+            <div style="font-size: 0.85rem;">
+                <p><strong>Chunking:</strong> Free</p>
+                <p><strong>Embedding:</strong> N/A</p>
+                <p><strong>Storage:</strong> 1M chunks</p>
+                <p style="margin-top: 1rem; color: #059669;"><strong>Total: $0</strong></p>
+            </div>
+        </div>
+        <div style="padding: 1rem; background: #f0fdf4; border-radius: 8px;">
+            <h4 style="color: #10b981; margin: 0 0 0.5rem 0;">Semantic</h4>
+            <div style="font-size: 0.85rem;">
+                <p><strong>Chunking:</strong> Free</p>
+                <p><strong>Embedding:</strong> 100M tokens → $20</p>
+                <p><strong>Storage:</strong> 1M vectors</p>
+                <p style="margin-top: 1rem; color: #059669;"><strong>Total: $20 (+$5/mo)</strong></p>
+            </div>
+        </div>
+        <div style="padding: 1rem; background: #fef2f2; border-radius: 8px;">
+            <h4 style="color: #ef4444; margin: 0 0 0.5rem 0;">Agentic</h4>
+            <div style="font-size: 0.85rem;">
+                <p><strong>Chunking:</strong> 100M tokens → $300</p>
+                <p><strong>Embedding:</strong> 1M chunks → $20</p>
+                <p><strong>Storage:</strong> 1M vectors</p>
+                <p style="margin-top: 1rem; color: #ef4444;"><strong>Total: $320</strong></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Advanced Techniques -->
+<section id="advanced-techniques" class="ml-section">
+    <h2>Advanced Chunking Techniques</h2>
+
+    <h3>1. Sliding Window Chunking</h3>
+    <p>Maximize context by overlapping chunks more intelligently. Instead of uniform overlap, use sliding windows with variable step sizes.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Sliding Window Chunking</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">sliding_window_chunking</span>(text, window_size=<span class="number">512</span>, step_size=<span class="number">256</span>):
+    <span class="string">"""
+    Create overlapping chunks using sliding window approach.
+    
+    Args:
+        text: Input document
+        window_size: Size of each window
+        step_size: How far to move between windows
+    
+    Returns:
+        List of chunks with indices
+    """</span>
+    words = text.<span class="function">split</span>()
+    chunks_with_info = []
+    
+    <span class="keyword">for</span> start <span class="keyword">in</span> <span class="function">range</span>(<span class="number">0</span>, <span class="function">len</span>(words) - window_size, step_size):
+        chunk = <span class="string">" "</span>.<span class="function">join</span>(words[start:start + window_size])
+        chunks_with_info.<span class="function">append</span>({
+            <span class="string">"text"</span>: chunk,
+            <span class="string">"start_idx"</span>: start,
+            <span class="string">"end_idx"</span>: start + window_size,
+            <span class="string">"overlap_with_next"</span>: window_size - step_size
+        })
+    
+    <span class="keyword">return</span> chunks_with_info
+</div>
+</div>
+
+    <h3>2. Hierarchical Chunking</h3>
+    <p>Create a hierarchy of chunks: summary chunks, section chunks, paragraph chunks. At query time, start with summary chunks to narrow scope, then retrieve detailed chunks.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Hierarchical Chunking</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">hierarchical_chunking</span>(document):
+    <span class="string">"""
+    Create multi-level chunk hierarchy.
+    """</span>
+    hierarchy = {
+        <span class="string">"document_summary"</span>: <span class="function">summarize</span>(document),
+        <span class="string">"sections"</span>: [],
+    }
+    
+    <span class="keyword">for</span> section <span class="keyword">in</span> document.sections:
+        section_data = {
+            <span class="string">"title"</span>: section.title,
+            <span class="string">"summary"</span>: <span class="function">summarize</span>(section.text),
+            <span class="string">"paragraphs"</span>: []
+        }
+        
+        <span class="keyword">for</span> paragraph <span class="keyword">in</span> section.paragraphs:
+            section_data[<span class="string">"paragraphs"</span>].<span class="function">append</span>({
+                <span class="string">"text"</span>: paragraph,
+                <span class="string">"summary"</span>: <span class="function">summarize</span>(paragraph)
+            })
+        
+        hierarchy[<span class="string">"sections"</span>].<span class="function">append</span>(section_data)
+    
+    <span class="keyword">return</span> hierarchy
+
+<span class="comment"># Usage at retrieval time:</span>
+<span class="comment"># 1. Search document summaries</span>
+<span class="comment"># 2. Search matching section summaries</span>
+<span class="comment"># 3. Search paragraph chunks</span>
+</div>
+</div>
+
+    <h3>3. Colbert Chunking (Contextual Dense Embedding)</h3>
+    <p>ColBERT uses late interaction for dense retrieval. Instead of embedding entire chunks, embed individual tokens and compute interaction at query time. Enables finer-grained chunking without quality loss.</p>
+
+    <h3>4. Graph-Based Chunking</h3>
+    <p>Represent documents as knowledge graphs and chunk based on semantic graph structure rather than linear text order.</p>
+</section>
+
+<!-- SECTION: Node Parsers -->
+<section id="node-parsers" class="ml-section">
+    <h2>Node Parsers and LlamaIndex Integration</h2>
+
+    <p>LlamaIndex provides production-grade node parsers that abstract chunking complexity. Nodes are the LlamaIndex term for chunks — they include the text, metadata, and embedding vectors.</p>
+
+    <h3>Simple Node Parser</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — LlamaIndex SimpleNodeParser</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SimpleNodeParser
+
+<span class="comment"># Create a simple parser (fixed-size chunking)</span>
+parser = SimpleNodeParser.<span class="function">from_defaults</span>(
+    chunk_size=<span class="number">512</span>,
+    chunk_overlap=<span class="number">102</span>
+)
+
+<span class="comment"># Parse documents into nodes</span>
+<span class="keyword">from</span> llama_index.core <span class="keyword">import</span> Document
+
+docs = [
+    <span class="function">Document</span>(text=<span class="string">"Your document text here..."</span>),
+    <span class="function">Document</span>(text=<span class="string">"Another document..."</span>)
+]
+
+nodes = parser.<span class="function">get_nodes_from_documents</span>(docs)
+
+<span class="keyword">for</span> node <span class="keyword">in</span> nodes:
+    <span class="function">print</span>(<span class="string">f"Node: {node.node_id}"</span>)
+    <span class="function">print</span>(<span class="string">f"Text: {node.text[:100]}..."</span>)
+    <span class="function">print</span>(<span class="string">f"Metadata: {node.metadata}"</span>)
+    <span class="function">print</span>()
+</div>
+</div>
+
+    <h3>Semantic Chunking with LlamaIndex</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — SemanticSplitterNodeParser</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SemanticSplitterNodeParser
+<span class="keyword">from</span> llama_index.embeddings.openai <span class="keyword">import</span> OpenAIEmbedding
+
+<span class="comment"># Create semantic splitter</span>
+embed_model = <span class="function">OpenAIEmbedding</span>(model=<span class="string">"text-embedding-3-small"</span>)
+
+parser = <span class="function">SemanticSplitterNodeParser</span>(
+    buffer_size=<span class="number">1</span>,
+    breakpoint_percentile_threshold=<span class="number">95</span>,
+    embed_model=embed_model,
+)
+
+nodes = parser.<span class="function">get_nodes_from_documents</span>(docs)
+
+<span class="comment"># Each node has:</span>
+<span class="comment"># - node_id: Unique identifier</span>
+<span class="comment"># - text: The chunk content</span>
+<span class="comment"># - metadata: Including source document, page, etc.</span>
+<span class="comment"># - embedding: The vector embedding</span>
+</div>
+</div>
+
+    <h3>Hierarchical Node Parser</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — HierarchicalNodeParser</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> HierarchicalNodeParser
+
+<span class="comment"># Create hierarchical parser</span>
+<span class="comment"># Creates summary nodes at different levels</span>
+parser = HierarchicalNodeParser.<span class="function">from_defaults</span>(
+    chunk_size=<span class="number">512</span>,
+    chunk_overlap=<span class="number">102</span>,
+)
+
+nodes = parser.<span class="function">get_nodes_from_documents</span>(docs)
+
+<span class="comment"># Includes both leaf nodes (actual text) and parent nodes (summaries)</span>
+<span class="keyword">for</span> node <span class="keyword">in</span> nodes:
+    <span class="keyword">if</span> <span class="function">hasattr</span>(node, <span class="string">'is_parent'</span>) <span class="keyword">and</span> node.is_parent:
+        <span class="function">print</span>(<span class="string">f"Summary Node: {node.text[:80]}..."</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">f"Leaf Node: {node.text[:80]}..."</span>)
+</div>
+</div>
+
+    <h3>Integration with RAG Pipeline</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Complete RAG with Proper Chunking</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex
+
+<span class="comment"># Parse documents</span>
+parser = <span class="function">SemanticSplitterNodeParser</span>(
+    buffer_size=<span class="number">1</span>,
+    breakpoint_percentile_threshold=<span class="number">95</span>,
+    embed_model=embed_model,
+)
+
+nodes = parser.<span class="function">get_nodes_from_documents</span>(docs)
+
+<span class="comment"># Create index from parsed nodes</span>
+index = <span class="function">VectorStoreIndex</span>(nodes)
+
+<span class="comment"># Query</span>
+query_engine = index.<span class="function">as_query_engine</span>()
+response = query_engine.<span class="function">query</span>(<span class="string">"How do transformers work?"</span>)
+
+<span class="function">print</span>(response)
+</div>
+</div>
+
+    <h3>Node Properties and Metadata</h3>
+
+    <div class="code-block">
+        <div class="code-header">Node Structure</div>
+        <div class="code-content">
+{
+    <span class="string">"node_id"</span>: <span class="string">"abc123"</span>,
+    <span class="string">"text"</span>: <span class="string">"The chunk content..."</span>,
+    <span class="string">"metadata"</span>: {
+        <span class="string">"page_label"</span>: <span class="string">"1"</span>,
+        <span class="string">"file_name"</span>: <span class="string">"document.pdf"</span>,
+        <span class="string">"doc_id"</span>: <span class="string">"doc_001"</span>,
+        <span class="string">"section"</span>: <span class="string">"Introduction"</span>,
+        <span class="string">"start_char_idx"</span>: <span class="number">0</span>,
+        <span class="string">"end_char_idx"</span>: <span class="number">512</span>
+    },
+    <span class="string">"relationships"</span>: {
+        <span class="string">"parent"</span>: <span class="string">"parent_node_id"</span>,
+        <span class="string">"next"</span>: <span class="string">"next_node_id"</span>,
+        <span class="string">"prev"</span>: <span class="string">"prev_node_id"</span>
+    },
+    <span class="string">"embedding"</span>: [<span class="number">0.1</span>, <span class="number">0.2</span>, ..., <span class="number">0.9</span>]
+}
+        </div>
+    </div>
+
+    <h3>Custom Node Parser</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Creating Custom Parsers</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> NodeParser
+<span class="keyword">from</span> llama_index.core.schema <span class="keyword">import</span> BaseNode
+
+<span class="keyword">class</span> <span class="function">CustomNodeParser</span>(NodeParser):
+    <span class="keyword">def</span> <span class="function">_parse_nodes</span>(<span class="function">self</span>, docs, **kwargs):
+        <span class="string">"""Implement your custom chunking logic."""</span>
+        nodes = []
+        
+        <span class="keyword">for</span> doc <span class="keyword">in</span> docs:
+            <span class="comment"># Your custom chunking here</span>
+            chunks = <span class="function">your_chunking_function</span>(doc.text)
+            
+            <span class="keyword">for</span> i, chunk_text <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+                node = <span class="function">BaseNode</span>(
+                    text=chunk_text,
+                    metadata={
+                        <span class="string">"chunk_idx"</span>: i,
+                        <span class="string">"doc_id"</span>: doc.doc_id,
+                        **doc.metadata
+                    }
+                )
+                nodes.<span class="function">append</span>(node)
+        
+        <span class="keyword">return</span> nodes
+
+<span class="comment"># Use your parser</span>
+parser = <span class="function">CustomNodeParser</span>()
+nodes = parser.<span class="function">get_nodes_from_documents</span>(docs)
+</div>
+</div>
+</section>
+
+<!-- SECTION: Best Practices -->
+<section id="best-practices" class="ml-section">
+    <h2>Best Practices for Production Chunking</h2>
+
+    <h3>1. Always Test on Representative Data</h3>
+    <p>Create a test set of documents and queries that reflect your actual use case. Chunking decisions must be validated on real data, not synthetic examples.</p>
+
+    <div class="info-box">
+    <h4>Best Practice</h4>
+    <p>Use your production queries to evaluate chunking quality. Run A/B tests with different chunk sizes and strategies. Track NDCG, MRR, and Recall@5. Choose the strategy with best overall quality/cost tradeoff.</p>
+</div>
+
+    <h3>2. Preserve Document Structure and Metadata</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Chunk with Rich Metadata</div>
+    <div class="code-content">
+chunk = {
+    <span class="string">"text"</span>: <span class="string">"The chunk content..."</span>,
+    <span class="string">"source_doc"</span>: <span class="string">"technical_guide.pdf"</span>,
+    <span class="string">"page"</span>: <span class="number">5</span>,
+    <span class="string">"section"</span>: <span class="string">"3.2 Architecture"</span>,
+    <span class="string">"timestamp"</span>: <span class="string">"2024-02-27"</span>,
+    <span class="string">"language"</span>: <span class="string">"en"</span>,
+    <span class="string">"quality_score"</span>: <span class="number">0.92</span>
+}
+</div>
+</div>
+
+    <h3>3. Implement Versioning for Chunks</h3>
+    <p>When you update chunking strategy, version your chunks. This allows rolling back if a new strategy performs worse.</p>
+
+    <div class="code-block">
+    <div class="code-header">Python — Chunk Versioning</div>
+    <div class="code-content">
+chunk = {
+    <span class="string">"chunk_id"</span>: <span class="string">"v2_doc_001_chunk_005"</span>,
+    <span class="string">"version"</span>: <span class="number">2</span>,  <span class="comment"># Incremented when strategy changes</span>
+    <span class="string">"strategy"</span>: <span class="string">"semantic-0.6-threshold"</span>,
+    <span class="string">"text"</span>: <span class="string">"..."</span>,
+    <span class="string">"created_at"</span>: <span class="string">"2024-02-27T10:30:00Z"</span>
+}
+
+<span class="comment"># At query time, can select specific versions:</span>
+<span class="comment"># SELECT * FROM chunks WHERE version = 2</span>
+</div>
+</div>
+
+    <h3>4. Monitor Chunk Quality Metrics</h3>
+    <p>Track these metrics continuously in production:</p>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Retrieval Quality</h4>
+    <p>NDCG@5, MRR, Recall@5. Should remain consistent over time.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>Chunk Size Distribution</h4>
+    <p>Mean, median, p95 chunk sizes. Should match your target.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Answer Quality</h4>
+    <p>BLEU, ROUGE scores of final LLM answers vs gold answers.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Latency</h4>
+    <p>End-to-end latency from query to retrieved chunks. Should be <100ms.</p>
+</div>
+    </div>
+
+    <h3>5. Handle Edge Cases</h3>
+
+    <div class="code-block">
+        <div class="code-header">Common Edge Cases</div>
+        <div class="code-content">
+<span class="comment"># Very long documents (&gt;10K tokens)</span>
+- Implement hierarchical chunking
+- Or split into subdocuments first
+
+<span class="comment"># Very short documents (&lt;128 tokens)</span>
+- Don<span class="string">'t chunk, use entire document as one chunk
+- Or add padding/context from related documents
+
+# Tables and structured data
+- Parse tables separately, include col headers in chunks
+- Don'</span>t split rows arbitrarily
+
+<span class="comment"># Code with complex nesting</span>
+- Respect bracket/indentation structure
+- Include full function/<span class="keyword">class</span> definitions, <span class="keyword">not</span> partial
+
+<span class="comment"># Multiple languages</span>
+- Use language-specific tokenizers
+- May need different chunk sizes per language
+        </div>
+    </div>
+
+    <h3>6. Optimize for Your Retrieval Model</h3>
+    <p>The best chunk size depends on your retrieval model:</p>
+
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>BM25 (lexical search):</strong> 256-512 tokens. Respects word frequency patterns.</li>
+        <li><strong>Dense embeddings (semantic):</strong> 256-512 tokens. Optimal for sentence transformers.</li>
+        <li><strong>ColBERT (late interaction):</strong> 128-256 tokens. Can work with shorter chunks.</li>
+        <li><strong>Hybrid (BM25 + semantic):</strong> 512 tokens. Larger chunks benefit both methods.</li>
+    </ul>
+
+    <h3>7. Implement Chunk Quality Filtering</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Filter Low-Quality Chunks</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">should_keep_chunk</span>(chunk_text, min_words=<span class="number">5</span>, max_redundancy=<span class="number">0.3</span>):
+    <span class="string">"""Filter out chunks that don't meet quality thresholds."""</span>
+    
+    <span class="comment"># Too short</span>
+    <span class="keyword">if</span> <span class="function">len</span>(chunk_text.<span class="function">split</span>()) < min_words:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    
+    <span class="comment"># Too much whitespace</span>
+    <span class="keyword">if</span> <span class="function">len</span>(chunk_text.<span class="function">strip</span>()) < <span class="function">len</span>(chunk_text) * <span class="number">0.5</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    
+    <span class="comment"># Mostly punctuation/numbers</span>
+    alphanumeric = <span class="function">sum</span>(<span class="number">1</span> <span class="keyword">for</span> c <span class="keyword">in</span> chunk_text <span class="keyword">if</span> c.<span class="function">isalnum</span>())
+    <span class="keyword">if</span> alphanumeric < <span class="function">len</span>(chunk_text) * <span class="number">0.3</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+    
+    <span class="comment"># Check for repeated sentences (redundancy)</span>
+    sentences = chunk_text.<span class="function">split</span>(<span class="string">". "</span>)
+    <span class="keyword">if</span> <span class="function">len</span>(sentences) > <span class="number">0</span>:
+        unique_ratio = <span class="function">len</span>(<span class="function">set</span>(sentences)) / <span class="function">len</span>(sentences)
+        <span class="keyword">if</span> unique_ratio < (<span class="number">1</span> - max_redundancy):
+            <span class="keyword">return</span> <span class="keyword">False</span>
+    
+    <span class="keyword">return</span> <span class="keyword">True</span>
+
+<span class="comment"># Filter chunks before indexing</span>
+quality_chunks = [c <span class="keyword">for</span> c <span class="keyword">in</span> chunks <span class="keyword">if</span> <span class="function">should_keep_chunk</span>(c)]
+</div>
+</div>
+</section>
+
+<!-- SECTION: Common Mistakes -->
+<section id="common-mistakes" class="ml-section">
+    <h2>Common Mistakes and How to Avoid Them</h2>
+
+    <div style="margin: 2rem 0;">
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 1: Using Fixed-Size Chunking for Everything</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> Fixed-size ignores document structure. A 512-token chunk may cut paragraphs and concepts mid-way.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Use recursive or semantic chunking for heterogeneous documents. Fixed-size only for homogeneous plain text.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 2: No Overlap Between Chunks</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> Information split between chunks may be missed. Queries aligned with chunk boundaries may lose relevant context.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Always use 20-25% overlap. The ~2x cost in total chunks is worth the retrieval quality improvement.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 3: Choosing Chunk Size Without Testing</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> Arbitrary choices (e.g., "use 1024 tokens") ignore your specific data and use case.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Run optimization experiments as shown in Section 10. Test 128, 256, 512, 1024 on representative data.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 4: Losing Source Attribution</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> If chunks don't preserve document/page metadata, you can't cite sources in answers.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Always include source_doc, page, section, and character offsets in chunk metadata. Pass this through to final answers.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 5: Not Handling Document-Specific Formats</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> Using generic chunking on HTML, PDF, or code loses structure. HTML tags get included in embeddings. PDF page breaks aren't preserved.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Use document-aware parsers. Use LangChain loaders and LlamaIndex node parsers that handle format-specific structure.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 6: Using Inconsistent Tokenization</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> Word count ≠ token count. If you chunk by word count but your embedding model uses byte-pair encoding (BPE), actual token count may be 1.3x higher.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Use the same tokenizer as your embedding model. Use tiktoken for OpenAI models, use HF transformers tokenizers for others.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px; margin-bottom: 1.5rem;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 7: Semantic Chunking Without Threshold Tuning</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> The default threshold (0.5) may not be optimal for your documents. Using it without tuning wastes the semantic approach's potential.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Analyze similarity distributions in your documents. Test thresholds from 0.3 to 0.8. Pick the one with best NDCG on test queries.</p>
+        </div>
+
+        <div style="padding: 1.5rem; background: #fee2e2; border-left: 4px solid #ef4444; border-radius: 4px;">
+            <h4 style="color: #dc2626; margin: 0 0 0.5rem 0;">Mistake 8: Forgetting to Re-Chunk When Documents Update</h4>
+            <p style="margin: 0.5rem 0;"><strong>Problem:</strong> If a document is updated but chunks aren't regenerated, your index becomes stale and questions about updated content get wrong answers.</p>
+            <p style="margin: 0;"><strong>Solution:</strong> Implement document versioning and incremental chunking. Detect updated documents and re-chunk only those. Invalidate old embeddings.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION: Code Examples -->
+<section id="code-examples" class="ml-section">
+    <h2>Complete Code Examples and Recipes</h2>
+
+    <h3>Recipe 1: End-to-End RAG with Optimal Chunking</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Production RAG Pipeline</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex, Document
+<span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SemanticSplitterNodeParser
+<span class="keyword">from</span> llama_index.embeddings.openai <span class="keyword">import</span> OpenAIEmbedding
+<span class="keyword">from</span> llama_index.llms.openai <span class="keyword">import</span> OpenAI
+<span class="keyword">import</span> os
+
+<span class="comment"># Initialize models</span>
+embed_model = <span class="function">OpenAIEmbedding</span>(model=<span class="string">"text-embedding-3-small"</span>)
+llm = <span class="function">OpenAI</span>(model=<span class="string">"gpt-4-turbo"</span>, temperature=<span class="number">0.7</span>)
+
+<span class="comment"># Load documents</span>
+documents = [
+    <span class="function">Document</span>(text=<span class="string">"Your document content..."</span>, 
+             metadata={<span class="string">"source"</span>: <span class="string">"file1.pdf"</span>, <span class="string">"page"</span>: <span class="number">1</span>}),
+    <span class="function">Document</span>(text=<span class="string">"Another document..."</span>, 
+             metadata={<span class="string">"source"</span>: <span class="string">"file2.pdf"</span>, <span class="string">"page"</span>: <span class="number">1</span>}),
+]
+
+<span class="comment"># Create semantic chunking parser</span>
+parser = <span class="function">SemanticSplitterNodeParser</span>(
+    buffer_size=<span class="number">1</span>,
+    breakpoint_percentile_threshold=<span class="number">95</span>,
+    embed_model=embed_model,
+)
+
+<span class="comment"># Parse documents into nodes</span>
+nodes = parser.<span class="function">get_nodes_from_documents</span>(documents)
+
+<span class="comment"># Create vector index</span>
+index = <span class="function">VectorStoreIndex</span>(nodes)
+
+<span class="comment"># Query</span>
+query_engine = index.<span class="function">as_query_engine</span>(
+    llm=llm,
+    similarity_top_k=<span class="number">5</span>,
+)
+
+response = query_engine.<span class="function">query</span>(<span class="string">"What is semantic chunking?"</span>)
+<span class="function">print</span>(response)
+</div>
+</div>
+
+    <h3>Recipe 2: Chunking with Quality Filtering</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Quality-Aware Chunking</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">chunk_with_quality_filter</span>(text, chunk_size=<span class="number">512</span>, overlap=<span class="number">0.2</span>, min_quality=<span class="number">0.7</span>):
+    <span class="string">"""Chunk text and filter by quality."""</span>
+    
+    <span class="comment"># Initial chunking</span>
+    chunks = <span class="function">semantic_chunking</span>(text, chunk_size=chunk_size, overlap=overlap)
+    
+    <span class="comment"># Compute quality scores</span>
+    quality_chunks = []
+    <span class="keyword">for</span> chunk <span class="keyword">in</span> chunks:
+        score = <span class="function">compute_quality_score</span>(chunk)
+        
+        <span class="keyword">if</span> score >= min_quality:
+            quality_chunks.<span class="function">append</span>({
+                <span class="string">"text"</span>: chunk,
+                <span class="string">"quality_score"</span>: score,
+                <span class="string">"length"</span>: <span class="function">len</span>(chunk.<span class="function">split</span>())
+            })
+    
+    <span class="keyword">return</span> quality_chunks
+
+<span class="keyword">def</span> <span class="function">compute_quality_score</span>(chunk):
+    <span class="string">"""Estimate chunk quality (0-1)."""</span>
+    score = <span class="number">0</span>
+    
+    <span class="comment"># Reward completeness</span>
+    <span class="keyword">if</span> chunk.<span class="function">endswith</span>((<span class="string">"."</span>,<span class="string">"!"</span>,<span class="string">"?"</span>)):
+        score += <span class="number">0.2</span>
+    
+    <span class="comment"># Reward coherence (sentence count)</span>
+    sentences = <span class="function">len</span>(chunk.<span class="function">split</span>(<span class="string">"."</span>))
+    <span class="keyword">if</span> <span class="number">2</span> <= sentences <= <span class="number">5</span>:
+        score += <span class="number">0.3</span>
+    
+    <span class="comment"># Reward information density</span>
+    unique_words = <span class="function">len</span>(<span class="function">set</span>(chunk.<span class="function">lower</span>().<span class="function">split</span>()))
+    total_words = <span class="function">len</span>(chunk.<span class="function">split</span>())
+    <span class="keyword">if</span> unique_words / total_words > <span class="number">0.6</span>:
+        score += <span class="number">0.5</span>
+    
+    <span class="keyword">return</span> <span class="function">min</span>(score, <span class="number">1.0</span>)
+</div>
+</div>
+
+    <h3>Recipe 3: Multi-Format Document Processing</h3>
+
+    <div class="code-block">
+    <div class="code-header">Python — Universal Document Chunker</div>
+    <div class="code-content">
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+<span class="keyword">from</span> PyPDF2 <span class="keyword">import</span> PdfReader
+<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup
+
+<span class="keyword">def</span> <span class="function">chunk_any_document</span>(file_path, chunk_size=<span class="number">512</span>):
+    <span class="string">"""Intelligently chunk any document type."""</span>
+    
+    path = <span class="function">Path</span>(file_path)
+    
+    <span class="keyword">if</span> path.suffix == <span class="string">".pdf"</span>:
+        text = <span class="function">extract_text_from_pdf</span>(file_path)
+    <span class="keyword">elif</span> path.suffix == <span class="string">".html"</span>:
+        text = <span class="function">extract_text_from_html</span>(file_path)
+    <span class="keyword">elif</span> path.suffix == <span class="string">".md"</span>:
+        text = <span class="function">extract_text_from_markdown</span>(file_path)
+    <span class="keyword">else</span>:
+        text = path.<span class="function">read_text</span>()
+    
+    <span class="comment"># Use semantic chunking for all</span>
+    chunks = <span class="function">semantic_chunking</span>(text, chunk_size=chunk_size)
+    
+    <span class="comment"># Preserve source metadata</span>
+    <span class="keyword">return</span> [
+        {<span class="string">"text"</span>: chunk, <span class="string">"source"</span>: <span class="function">str</span>(file_path), <span class="string">"format"</span>: path.suffix}
+        <span class="keyword">for</span> chunk <span class="keyword">in</span> chunks
+    ]
+
+<span class="keyword">def</span> <span class="function">extract_text_from_pdf</span>(pdf_path):
+    reader = <span class="function">PdfReader</span>(pdf_path)
+    text = <span class="string">""</span>
+    <span class="keyword">for</span> page <span class="keyword">in</span> reader.pages:
+        text += page.<span class="function">extract_text</span>()
+    <span class="keyword">return</span> text
+
+<span class="keyword">def</span> <span class="function">extract_text_from_html</span>(html_path):
+    soup = <span class="function">BeautifulSoup</span>(<span class="function">open</span>(html_path).<span class="function">read</span>(), <span class="string">"html.parser"</span>)
+    <span class="comment"># Remove script/style tags</span>
+    <span class="keyword">for</span> tag <span class="keyword">in</span> <span class="function">soup</span>([<span class="string">"script"</span>, <span class="string">"style"</span>]):
+        tag.<span class="function">decompose</span>()
+    <span class="keyword">return</span> soup.<span class="function">get_text</span>()
+
+<span class="keyword">def</span> <span class="function">extract_text_from_markdown</span>(md_path):
+    <span class="comment"># Simple approach: just read text</span>
+    <span class="comment"># More robust: use markdown parser to preserve structure</span>
+    <span class="keyword">return</span> <span class="function">open</span>(md_path).<span class="function">read</span>()
+</div>
+</div>
+</section>
+
+<!-- SECTION: Exercises -->
+<section id="exercises" class="ml-section">
+    <h2>Hands-On Exercises</h2>
+
+    <h3>Exercise 1: Implement Fixed-Size Chunking</h3>
+    <p><strong>Goal:</strong> Build a fixed-size chunker with overlap from scratch.</p>
+
+    <div class="try-it-box">
+    <h4>Fixed-Size Implementation</h4>
+    <p>Implement fixed_size_chunking() with parameters for chunk_size and overlap. Test with different overlap values (0%, 20%, 50%) and verify the overlapping content.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">fixed_size_chunking</span>(text, chunk_size=<span class="number">512</span>, overlap=<span class="number">0.2</span>):
+    words = text.<span class="function">split</span>()
+    overlap_size = <span class="function">int</span>(chunk_size * overlap)
+    step_size = chunk_size - overlap_size
+    
+    chunks = []
+    <span class="comment"># TODO: Implement your logic here</span>
+    
+    <span class="keyword">return</span> chunks
+
+<span class="comment"># Test</span>
+doc = <span class="string">"The transformer architecture...\n[100+ words]"</span>
+chunks = <span class="function">fixed_size_chunking</span>(doc, <span class="number">256</span>, <span class="number">0.2</span>)
+<span class="function">print</span>(<span class="string">f"Created {len(chunks)} chunks"</span>)
+
+<span class="comment"># Verify overlap</span>
+<span class="keyword">if</span> <span class="function">len</span>(chunks) > <span class="number">1</span>:
+    <span class="comment"># Check that chunk[0] ends with content from chunk[1]</span>
+    <span class="keyword">pass</span>
+</div>
+</div>
+</div>
+
+    <h3>Exercise 2: Semantic Chunking with Threshold Tuning</h3>
+    <p><strong>Goal:</strong> Implement semantic chunking and find optimal threshold for a document.</p>
+
+    <div class="try-it-box">
+    <h4>Semantic Threshold Optimization</h4>
+    <p>Implement semantic_chunking() with variable threshold. Test thresholds 0.3, 0.5, 0.7, 0.9 and plot: number of chunks vs. threshold.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity
+
+<span class="keyword">def</span> <span class="function">semantic_chunking</span>(text, embedding_func, threshold=<span class="number">0.5</span>):
+    <span class="comment"># TODO: Implement semantic chunking</span>
+    <span class="comment"># 1. Split into sentences</span>
+    <span class="comment"># 2. Get embeddings</span>
+    <span class="comment"># 3. Compute similarities</span>
+    <span class="comment"># 4. Break where similarity &lt; threshold</span>
+    <span class="keyword">pass</span>
+
+<span class="comment"># Experiment</span>
+thresholds = [<span class="number">0.3</span>, <span class="number">0.5</span>, <span class="number">0.7</span>, <span class="number">0.9</span>]
+chunk_counts = []
+
+<span class="keyword">for</span> threshold <span class="keyword">in</span> thresholds:
+    chunks = <span class="function">semantic_chunking</span>(document, get_embedding, threshold)
+    chunk_counts.<span class="function">append</span>(<span class="function">len</span>(chunks))
+    <span class="function">print</span>(<span class="string">f"Threshold {threshold}: {len(chunks)} chunks"</span>)
+
+<span class="comment"># Plot: threshold vs chunk_count</span>
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+plt.<span class="function">plot</span>(thresholds, chunk_counts)
+plt.<span class="function">xlabel</span>(<span class="string">"Similarity Threshold"</span>)
+plt.<span class="function">ylabel</span>(<span class="string">"Number of Chunks"</span>)
+plt.<span class="function">show</span>()
+</div>
+</div>
+</div>
+
+    <h3>Exercise 3: Compare Chunking Strategies</h3>
+    <p><strong>Goal:</strong> Implement all 5 strategies and compare on a real document.</p>
+
+    <div class="try-it-box">
+    <h4>Strategy Comparison</h4>
+    <p>Implement fixed_size_chunking, recursive_chunking, semantic_chunking, document_aware_chunking, and agentic_chunking. For each, measure: number of chunks, average chunk size, time to chunk.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">import</span> time
+
+strategies = {
+    <span class="string">"fixed"</span>: (fixed_size_chunking, {}),
+    <span class="string">"recursive"</span>: (recursive_chunking, {}),
+    <span class="string">"semantic"</span>: (semantic_chunking, {<span class="string">"embedding_func"</span>: get_embedding}),
+    <span class="string">"doc_aware"</span>: (document_aware_chunking, {<span class="string">"doc_type"</span>: <span class="string">"html"</span>}),
+}
+
+results = {}
+<span class="keyword">for</span> name, (func, kwargs) <span class="keyword">in</span> strategies.<span class="function">items</span>():
+    start = time.<span class="function">time</span>()
+    chunks = <span class="function">func</span>(document, **kwargs)
+    elapsed = time.<span class="function">time</span>() - start
+    
+    results[name] = {
+        <span class="string">"num_chunks"</span>: <span class="function">len</span>(chunks),
+        <span class="string">"avg_size"</span>: <span class="function">sum</span>(<span class="function">len</span>(c.<span class="function">split</span>()) <span class="keyword">for</span> c <span class="keyword">in</span> chunks) / <span class="function">len</span>(chunks),
+        <span class="string">"time_sec"</span>: elapsed
+    }
+    <span class="function">print</span>(<span class="string">f"{name:12}: {len(chunks):3} chunks, "</span>
+          <span class="string">f"avg {results[name]['avg_size']:6.1f} words, "</span>
+          <span class="string">f"time {elapsed:.3f}s"</span>)
+
+<span class="comment"># Which strategy is fastest? Most balanced?</span>
+</div>
+</div>
+</div>
+
+    <h3>Exercise 4: Chunk Quality Analysis</h3>
+    <p><strong>Goal:</strong> Develop metrics to measure chunk quality.</p>
+
+    <div class="try-it-box">
+    <h4>Quality Metrics</h4>
+    <p>Compute for each chunk: coherence (do sentences relate to each other?), completeness (do sentences end properly?), length distribution. Identify low-quality chunks.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">def</span> <span class="function">analyze_chunk_quality</span>(chunks):
+    metrics = {}
+    
+    <span class="keyword">for</span> i, chunk <span class="keyword">in</span> <span class="function">enumerate</span>(chunks):
+        <span class="comment"># Completeness: does it end with period/question mark?</span>
+        is_complete = chunk.<span class="function">strip</span>().<span class="function">endswith</span>((<span class="string">'.'</span>, <span class="string">'!'</span>, <span class="string">'?'</span>))
+        
+        <span class="comment"># Coherence: analyze sentence transitions</span>
+        sentences = chunk.<span class="function">split</span>(<span class="string">'.'</span>)
+        <span class="comment"># TODO: Compute coherence score</span>
+        
+        <span class="comment"># Length: is it reasonable?</span>
+        words = <span class="function">len</span>(chunk.<span class="function">split</span>())
+        is_reasonable = <span class="number">50</span> < words < <span class="number">1000</span>
+        
+        metrics[i] = {
+            <span class="string">"complete"</span>: is_complete,
+            <span class="string">"coherence"</span>: <span class="number">0.8</span>,  <span class="comment"># TODO: compute</span>
+            <span class="string">"reasonable"</span>: is_reasonable,
+            <span class="string">"quality"</span>: <span class="number">0.9</span>  <span class="comment"># TODO: combine scores</span>
+        }
+    
+    <span class="keyword">return</span> metrics
+
+<span class="comment"># Analyze</span>
+quality = <span class="function">analyze_chunk_quality</span>(chunks)
+low_quality = [i <span class="keyword">for</span> i, m <span class="keyword">in</span> quality.<span class="function">items</span>() <span class="keyword">if</span> m[<span class="string">"quality"</span>] < <span class="number">0.7</span>]
+<span class="function">print</span>(<span class="string">f"Low quality chunks: {len(low_quality)} out of {len(chunks)}"</span>)
+</div>
+</div>
+</div>
+
+    <h3>Exercise 5: Production RAG Pipeline</h3>
+    <p><strong>Goal:</strong> Build a complete RAG system with optimized chunking and measure end-to-end quality.</p>
+
+    <div class="try-it-box">
+    <h4>Production RAG Setup</h4>
+    <p>Build complete pipeline: load PDFs → chunk with your best strategy → embed → create vector index → evaluate on test queries using NDCG@5 and MRR metrics.</p>
+<div class="code-block">
+    <div class="code-header">Python — Starter Code</div>
+    <div class="code-content">
+<span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex, Document
+
+<span class="comment"># Load documents</span>
+documents = <span class="function">load_pdf_directory</span>(<span class="string">"./documents/"</span>)
+
+<span class="comment"># Chunk with optimal strategy</span>
+parser = <span class="function">SemanticSplitterNodeParser</span>(...)
+nodes = parser.<span class="function">get_nodes_from_documents</span>(documents)
+
+<span class="comment"># Create index</span>
+index = <span class="function">VectorStoreIndex</span>(nodes)
+
+<span class="comment"># Evaluate</span>
+test_queries = [
+    {<span class="string">"text"</span>: <span class="string">"What is X?"</span>, <span class="string">"relevant_doc_ids"</span>: [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]},
+    {<span class="string">"text"</span>: <span class="string">"How does Y work?"</span>, <span class="string">"relevant_doc_ids"</span>: [<span class="number">2</span>, <span class="number">4</span>]},
+]
+
+ndcg_scores = []
+<span class="keyword">for</span> query <span class="keyword">in</span> test_queries:
+    results = index.<span class="function">retrieve</span>(query[<span class="string">"text"</span>], top_k=<span class="number">5</span>)
+    <span class="comment"># TODO: Compute NDCG</span>
+    ndcg_scores.<span class="function">append</span>(ndcg)
+
+<span class="function">print</span>(<span class="string">f"Average NDCG@5: {sum(ndcg_scores)/len(ndcg_scores):.3f}"</span>)
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION: Interview Questions -->
+<section id="interview" class="ml-section">
+    <h2>Interview Questions on Chunking</h2>
+
+    <div style="margin: 2rem 0;">
+        <div class="faq-item">
+    <div class="faq-question">Q1: Explain the tradeoff between chunk size and retrieval quality. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Small chunks (128 tokens) have higher precision — fewer irrelevant words per chunk. But they may lose context and require more embedding computations. Large chunks (1024+ tokens) preserve context but include noise. The sweet spot is usually 256-512 tokens, but this depends on your embedding model and query patterns. The only way to know is to test on your data.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q2: Why is overlap important in chunking? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Overlap ensures that information split across chunk boundaries appears in multiple chunks. Without overlap, a question aligned with a chunk boundary might miss relevant information. With 20% overlap, important facts are represented in both the boundary chunk and the previous chunk, improving retrieval probability. The cost is ~2x more total chunks, but retrieval quality improvement justifies it.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q3: Compare fixed-size vs. recursive chunking. When would you use each? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Fixed-size is simplest and fastest, good for prototyping. Recursive respects document structure (paragraphs > sentences > words), better for heterogeneous documents. Use fixed-size for homogeneous plain text or rapid prototyping. Use recursive for documentation, code, markdown — anything with natural hierarchy. Recursive adds negligible latency overhead.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q4: What are the advantages and costs of semantic chunking? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Semantic chunking uses embeddings to find natural topic boundaries, yielding 85-95% retrieval accuracy vs 75-85% for recursive. Cost: must embed every sentence (expensive at scale, adds latency). Best for mixed documents where structure isn't reliable. Worth it if retrieval quality is critical. Not worth it for simple documents with clear structure.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q5: How would you handle chunking for different document types (PDF, HTML, code)? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Different document types have different structure: PDF has pages, HTML has DOM hierarchy, code has classes/functions. Use format-specific parsers (PyPDF2 for PDF, BeautifulSoup for HTML) to extract text while preserving structure. Then apply chunking that respects that structure. LangChain and LlamaIndex provide document loaders that handle this. Always preserve metadata (page, section, line number) in chunks.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q6: What is agentic chunking and when would you use it? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Agentic chunking uses an LLM to read documents and decide how to chunk them based on semantic meaning. Highest quality (95%+ retrieval accuracy) but expensive ($0.30-1.00 per 100K tokens) and slow (seconds to minutes). Use only when document quality is critical (legal, medical, financial) and cost/latency are acceptable. Not for high-volume processing with tight budgets.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q7: You're building a RAG system and notice retrieval quality is 65%. How would you debug and improve it? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">First: measure chunking quality independently. Retrieve chunks for a test query and manually score relevance. If chunks are relevant but LLM answer is poor, problem is LLM, not chunking. If chunks are irrelevant: (1) test different chunk sizes via NDCG experiments, (2) switch to semantic chunking if using fixed-size, (3) ensure metadata is preserved so filtering works. Run A/B tests with different strategies and pick the winner.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Q8: Explain how you would optimize chunk size for a specific use case. <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Run experiments: test chunk sizes 128, 256, 512, 1024, 2048. For each: create chunks, embed all chunks, evaluate on 50-100 representative test queries. Measure NDCG@5, MRR, Recall@5. Also measure latency and cost (num chunks * embedding cost). Plot NDCG vs chunk size and pick the size with best NDCG, or best quality/cost tradeoff. Typical sweet spot: 256-512 tokens.</div>
+    </div>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: FAQ -->
+<section id="faq" class="ml-section">
+    <h2>Frequently Asked Questions</h2>
+
+    <div style="margin: 2rem 0;">
+        <div class="faq-item">
+    <div class="faq-question">What's the difference between chunking and tokenization? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Tokenization breaks text into tokens (subword units), usually for LLMs. A token might be a word like 'transformer' or a subword like 're', 'form', 'ing'. Chunking creates semantically coherent units (sentences, paragraphs, sections) that may contain hundreds of tokens. Chunking happens before indexing; tokenization happens inside the embedding/LLM model.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Does chunk size affect embedding quality? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes. Embedding models (sentence transformers, OpenAI embeddings) are optimized for certain input lengths. text-embedding-3-small works best with 256-512 tokens. If you send much shorter text, it may pad and be less discriminative. If you send much longer text (>2000 tokens), it may lose semantic coherence. Always test your embedding model's optimal input length.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How much should chunks overlap? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">20-25% overlap is standard. This means a 512-token chunk overlaps 102-128 tokens with the previous chunk. This ensures context continuity at boundaries. Too little overlap (<10%) loses context. Too much overlap (>50%) creates excessive redundancy without quality gains. The right amount depends on your data — test and measure.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Should I chunk before or after extracting metadata? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Extract and attach metadata first, then chunk. This ensures each chunk knows its source document, page, section, etc. If you chunk first, you lose track of structure. Process: parse document → extract metadata (title, sections, page numbers) → chunk while preserving metadata → embed chunks → index.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How do I handle documents that are 100K tokens long? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Don't try to process in one pass. Split into smaller subdocuments first (e.g., by chapter or section). Chunk each subdocument independently. Preserve the hierarchy in metadata. Alternatively, use hierarchical chunking: create summary chunks at document level, then detailed chunks at paragraph level. At query time, use multi-stage retrieval: search summaries first, then detailed chunks.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Can I chunk documents in different languages differently? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Yes, and you should. Languages have different average word lengths (Chinese characters vs English words), different punctuation conventions, different grammar. For multilingual documents: detect language per document, use language-specific tokenizers, potentially use different chunk sizes per language. LangChain and LlamaIndex support this with language-aware splitters.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How often should I re-chunk documents? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">When documents are updated, re-chunk them. When you change chunking strategy, re-chunk everything (versioning important). If using semantic chunking with embeddings, re-chunking also means re-embedding (cost!). Common approach: chunk documents once when ingested, version the chunks. When strategy changes, create v2, v3, etc. At query time, you can A/B test different versions.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">What's the relationship between chunk size and context window for the LLM? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">If your LLM has a 4K token context window and you retrieve 5 chunks of 512 tokens, that's 2560 tokens of context plus prompt overhead. Chunks leave room for prompt instructions and the user question. Don't make chunks so large that retrieved chunks consume most of the context window. Leave at least 25% of context window for LLM to reason.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">Should I include chunk overlap in the embedding, or just in the index? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Include overlap in the index. When you embed chunks, embed the full chunk including the overlap. This is correct because overlapping sentences should be represented in both embeddings. The overlap isn't a separate embedding — it's part of both chunks' embeddings.</div>
+    </div>
+</div>
+
+        <div class="faq-item">
+    <div class="faq-question">How do I test if my chunking is good? <span class="faq-icon">&#9660;</span></div>
+    <div class="faq-answer">
+        <div class="faq-answer-content">Measure retrieval quality: run test queries, retrieve top-5 chunks, score relevance (1 = relevant, 0 = irrelevant), compute NDCG@5. Target >0.85 NDCG. Also track: MRR (how fast you find first relevant), Recall@5 (what fraction of relevant chunks appear), latency, cost. Collect human judgments on a small sample to calibrate automated metrics.</div>
+    </div>
+</div>
+    </div>
+</section>
+
+<!-- SECTION: Summary -->
+<section id="summary" class="ml-section">
+    <h2>Summary and Next Steps</h2>
+
+    <h3>Key Takeaways</h3>
+
+    <div class="card-grid">
+        <div class="card cyan-accent">
+    <h4>Chunking is Foundational</h4>
+    <p>It's the first step in RAG. Small chunking mistakes compound through embedding, retrieval, and generation. Get it right.</p>
+</div>
+        <div class="card purple-accent">
+    <h4>5 Main Strategies</h4>
+    <p>Fixed-size (simple), Recursive (structured), Semantic (high-quality), Document-Aware (format-specific), Agentic (best quality). Choose based on your use case.</p>
+</div>
+        <div class="card pink-accent">
+    <h4>Test Your Assumptions</h4>
+    <p>The 'best' chunk size isn't universal. Test 128, 256, 512, 1024 on your data. Measure NDCG@5 and MRR. Use winners.</p>
+</div>
+        <div class="card gold-accent">
+    <h4>Preserve Everything</h4>
+    <p>Keep metadata: source document, page, section, character offsets. This enables proper attribution and filtering.</p>
+</div>
+    </div>
+
+    <h3>Decision Framework: Which Strategy?</h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; font-size: 0.9rem;">
+        <div style="padding: 1rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-left: 4px solid #0891b2; border-radius: 8px;">
+            <strong style="color: #0891b2;">Fast Prototyping?</strong>
+            <p style="margin: 0.5rem 0 0 0;">Use <strong>Fixed-Size</strong>. Zero overhead, instant results. Good enough for MVP.</p>
+        </div>
+        <div style="padding: 1rem; background: linear-gradient(135deg, #f0fdf4, #dbeafe); border-left: 4px solid #10b981; border-radius: 8px;">
+            <strong style="color: #10b981;">Structured Documents?</strong>
+            <p style="margin: 0.5rem 0 0 0;">Use <strong>Recursive</strong>. Respects hierarchy. Fast and effective.</p>
+        </div>
+        <div style="padding: 1rem; background: linear-gradient(135deg, #fffbeb, #fef3c7); border-left: 4px solid #eab308; border-radius: 8px;">
+            <strong style="color: #d97706;">High Quality Needed?</strong>
+            <p style="margin: 0.5rem 0 0 0;">Use <strong>Semantic</strong>. Embedding cost worth retrieval gains.</p>
+        </div>
+        <div style="padding: 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-left: 4px solid #ef4444; border-radius: 8px;">
+            <strong style="color: #dc2626;">Critical Documents?</strong>
+            <p style="margin: 0.5rem 0 0 0;">Use <strong>Agentic</strong>. LLM understands complex semantics.</p>
+        </div>
+    </div>
+
+    <h3>Next Steps</h3>
+
+    <ol style="margin: 1rem 0 1rem 2rem; font-size: 0.95rem;">
+        <li><strong>Start with Recursive:</strong> Good default for most use cases. Structure-aware, fast, free.</li>
+        <li><strong>Benchmark Your Data:</strong> Run optimization experiments. Test chunk sizes 128-2048. Pick winner by NDCG.</li>
+        <li><strong>Implement Evaluation:</strong> Create test query set with human-judged relevance. Measure NDCG@5, MRR continuously.</li>
+        <li><strong>Consider Semantic:</strong> If recursive NDCG < 0.80, upgrade to semantic chunking with threshold tuning.</li>
+        <li><strong>Production Ready:</strong> Implement versioning, monitoring, re-chunking for updates. Track retrieval quality in production.</li>
+        <li><strong>Optimize Iteratively:</strong> As you gather production data, re-run optimization. Chunk size needs may change.</li>
+    </ol>
+
+    <h3>Further Resources</h3>
+
+    <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong><a href="https://python.langchain.com/docs/how_to/#text-splitters" target="_blank" rel="noopener">LangChain Text Splitters</a>:</strong> RecursiveCharacterTextSplitter, SemanticSplitter, and more</li>
+        <li><strong><a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/" target="_blank" rel="noopener">LlamaIndex Node Parsers</a>:</strong> SimpleNodeParser, SemanticSplitterNodeParser, HierarchicalNodeParser</li>
+        <li><strong>Research Papers:</strong> "<a href="https://arxiv.org/abs/2004.04906" target="_blank" rel="noopener">Dense Passage Retrieval</a>" (DPR), "<a href="https://arxiv.org/abs/2004.12832" target="_blank" rel="noopener">ColBERT</a>", "<a href="https://arxiv.org/abs/2112.04426" target="_blank" rel="noopener">RETRO</a>"</li>
+        <li><strong>Benchmarks:</strong> <a href="https://trec.nist.gov/data/deep2020.html" target="_blank" rel="noopener">TREC-DL</a>, <a href="https://microsoft.github.io/msmarco/" target="_blank" rel="noopener">MS MARCO</a>, <a href="https://ai.google.com/research/NaturalQuestions" target="_blank" rel="noopener">Natural Questions</a> for evaluating retrieval quality</li>
+        <li><strong>Production Systems:</strong> <a href="https://docs.anthropic.com/" target="_blank" rel="noopener">Anthropic Docs</a> use semantic chunking; <a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" rel="noopener">OpenAI embeddings</a> recommend 256-512 tokens</li>
+    </ul>
+
+    <div class="highlight-box">
+    <p><strong>Final Insight:</strong> Chunking isn't a solved problem. It's domain-specific, data-specific, and model-specific. The teams building the best RAG systems invest heavily in chunking optimization because it's one of the highest-ROI improvements available. Even small NDCG gains (0.80 → 0.85) significantly improve answer quality and user satisfaction.</p>
+</div>
+</section>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar active link tracking
+        const links = document.querySelectorAll('.ml-sidebar a');
+        const sections = document.querySelectorAll('.ml-section');
+
+        function setActiveLink() {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', setActiveLink);
+        setActiveLink();
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                item.classList.toggle('open');
+            });
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.ml-sidebar a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
