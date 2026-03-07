@@ -16,9 +16,255 @@
         /* Full-width layout */
         .container { max-width: 100%; padding: 0 4rem; }
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
+
+        /* ── Publications Dropdown ──────────────────────── */
+        .pub-dropdown-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .pub-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #1e293b;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .pub-btn:hover {
+            background: #f1f5f9;
+            color: #0891b2;
+        }
+        .pub-btn svg {
+            width: 16px; height: 16px;
+            transition: transform 0.2s ease;
+        }
+        .pub-dropdown-wrap:hover .pub-btn svg {
+            transform: rotate(180deg);
+        }
+        .pub-arrow {
+            width: 16px; height: 16px;
+            opacity: 0.5;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .pub-dropdown-wrap:hover .pub-arrow {
+            transform: rotate(180deg);
+            opacity: 1;
+        }
+        .pub-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 320px;
+            padding: 0.5rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06);
+            z-index: 1000;
+            margin-top: 4px;
+        }
+        .pub-dropdown::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 12px; height: 12px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-left: 1px solid #e2e8f0;
+        }
+        .pub-dropdown-wrap:hover .pub-dropdown {
+            display: block;
+            animation: pubFadeIn 0.25s ease forwards;
+        }
+        @keyframes pubFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .pub-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+        .pub-card:hover {
+            background: #f1f5f9;
+        }
+        .pub-card-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0891b2, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .pub-card-icon svg {
+            width: 20px; height: 20px;
+            color: #fff;
+        }
+        .pub-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .pub-card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pub-card-badge {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(8,145,178,0.1);
+            color: #0891b2;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pub-card-desc {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .pub-card-arrow {
+            margin-left: auto;
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+        .pub-card:hover .pub-card-arrow {
+            color: #0891b2;
+        }
+
+        /* Dark mode support */
+        .dark .pub-btn { color: #e2e8f0; }
+        .dark .pub-btn:hover { background: #1e293b; color: #22d3ee; }
+        .dark .pub-dropdown { background: #0f172a; border-color: #1e293b; }
+        .dark .pub-dropdown::before { background: #0f172a; border-color: #1e293b; }
+        .dark .pub-card:hover { background: #1e293b; }
+        .dark .pub-card-title { color: #f1f5f9; }
+        .dark .pub-card-desc { color: #94a3b8; }
+        .dark .pub-card-arrow { color: #334155; }
+        .dark .pub-card:hover .pub-card-arrow { color: #22d3ee; }
+
+        /* Mobile Publications link */
+        .pub-mobile-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .pub-mobile-link:hover {
+            background: #f1f5f9;
+            color: #0891b2;
+        }
+        .dark .pub-mobile-link { color: #94a3b8; }
+        .dark .pub-mobile-link:hover { background: #1e293b; color: #22d3ee; }
     </style>
   </head>
   <body class="min-h-screen bg-[#f8fafc] text-dark-900 dark:bg-dark-950 dark:text-dark-50 antialiased">
     <div id="root"></div>
+
+    <!-- ── Inject Publications dropdown into React nav ──────── -->
+    <script>
+    (function injectPublications() {
+        const MAX_TRIES = 50;
+        let tries = 0;
+
+        function inject() {
+            tries++;
+
+            // Find the desktop nav links container
+            const desktopNav = document.querySelector('nav .hidden.md\\:flex.items-center.gap-1');
+            if (!desktopNav) {
+                if (tries < MAX_TRIES) { setTimeout(inject, 150); }
+                return;
+            }
+
+            // Don't inject twice
+            if (document.querySelector('.pub-dropdown-wrap')) return;
+
+            // ── Desktop: Publications dropdown ──
+            const pubWrap = document.createElement('div');
+            pubWrap.className = 'pub-dropdown-wrap';
+            pubWrap.style.paddingBottom = '0.5rem';
+            pubWrap.style.marginBottom = '-0.5rem';
+            pubWrap.innerHTML = `
+                <button class="pub-btn" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    Publications
+                    <svg class="pub-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="pub-dropdown">
+                    <a href="ai-agent-guide-v2.html" class="pub-card">
+                        <span class="pub-card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V2H8"/><path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M2 12h2"/><path d="M9 11v2"/><path d="M15 11v2"/><path d="M12 15a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2Z"/></svg>
+                        </span>
+                        <span class="pub-card-text">
+                            <span class="pub-card-title">Local AI Agent Build Guide <span class="pub-card-badge">New</span></span>
+                            <span class="pub-card-desc">Hands-on guide to building AI agents with MCP, ReAct & tools</span>
+                        </span>
+                        <span class="pub-card-arrow">&rsaquo;</span>
+                    </a>
+                </div>
+            `;
+
+            desktopNav.appendChild(pubWrap);
+
+            // ── Mobile: Add Publications link to mobile menu ──
+            const observer = new MutationObserver(function() {
+                const mobileMenu = document.querySelector('nav .md\\:hidden.border-t .px-4.py-3.space-y-1');
+                if (mobileMenu && !mobileMenu.querySelector('.pub-mobile-link')) {
+                    const mobileLink = document.createElement('a');
+                    mobileLink.href = 'ai-agent-guide-v2.html';
+                    mobileLink.className = 'pub-mobile-link';
+                    mobileLink.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                        Publications
+                    `;
+                    // Insert before the auth buttons section
+                    const authSection = mobileMenu.querySelector('.flex.flex-col.gap-2.pt-2');
+                    if (authSection) {
+                        mobileMenu.insertBefore(mobileLink, authSection);
+                    } else {
+                        mobileMenu.appendChild(mobileLink);
+                    }
+                }
+            });
+            observer.observe(document.querySelector('nav'), { childList: true, subtree: true });
+        }
+
+        // Start injection after DOM + React render
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => setTimeout(inject, 200));
+        } else {
+            setTimeout(inject, 200);
+        }
+    })();
+    </script>
   </body>
 </html>
