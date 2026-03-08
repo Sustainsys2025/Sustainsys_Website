@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyTorch from Scratch — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  /* ── SustainSys Brand Palette (Light Theme) ── */
+  :root {
+    --bg:          #f8fafc;
+    --bg2:         #f1f5f9;
+    --surface:     #ffffff;
+    --surface2:    #f8fafc;
+    --surface3:    #f1f5f9;
+    --border:      #e2e8f0;
+    --border2:     #cbd5e1;
+    --teal:        #0891b2;
+    --teal-light:  #06b6d4;
+    --teal-dim:    rgba(8,145,178,0.10);
+    --teal-glow:   rgba(8,145,178,0.05);
+    --blue:        #7c3aed;
+    --blue-light:  #8b5cf6;
+    --blue-dim:    rgba(124,58,237,0.10);
+    --amber:       #d97706;
+    --amber-dim:   rgba(217,119,6,0.10);
+    --text:        #1e293b;
+    --text-muted:  #64748b;
+    --text-dim:    #94a3b8;
+    --heading:     #0f172a;
+    --code-bg:     #f1f5f9;
+    --sidebar-w:   260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(8,145,178,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 70% at 85% 90%, rgba(124,58,237,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(8,145,178,0.02) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── Top Nav ── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200; height: 58px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+  }
+  .topnav-inner {
+    width: 100%; padding: 0 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-logo-img { height: 34px; width: auto; display: block; object-fit: contain; }
+  .nav-logo-text {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700; font-size: 0.92rem;
+    color: var(--heading); letter-spacing: -0.01em;
+  }
+  .nav-logo-text span { color: var(--teal); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
+  .nav-title {
+    font-size: 0.8rem; color: var(--text-muted); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+  }
+  .nav-badge {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    background: var(--teal-dim); color: var(--teal);
+    border: 1px solid rgba(8,145,178,0.25);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ── Circular Progress ── */
+  .progress-circle-wrap {
+    position: fixed; top: 12px; right: 1.4rem;
+    z-index: 300; width: 36px; height: 36px;
+  }
+  .progress-circle-wrap svg { transform: rotate(-90deg); width: 36px; height: 36px; }
+  .progress-circle-track { fill: none; stroke: var(--border2); stroke-width: 3; }
+  .progress-circle-fill {
+    fill: none; stroke: var(--teal); stroke-width: 3;
+    stroke-linecap: round; stroke-dasharray: 94.25;
+    stroke-dashoffset: 94.25; transition: stroke-dashoffset 0.15s ease;
+  }
+  .progress-circle-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem; font-weight: 500; color: var(--teal); line-height: 1;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed; top: 58px; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: var(--bg2); border-right: 1px solid var(--border);
+    overflow-y: auto; z-index: 150;
+    padding: 1.5rem 0 2rem; transition: transform 0.3s ease;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .sidebar-section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block;
+  }
+  .sidebar-nav { list-style: none; padding: 0; }
+  .sidebar-nav li { position: relative; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.55rem 1.4rem; text-decoration: none;
+    font-size: 0.82rem; color: var(--text-muted); font-weight: 500;
+    transition: color 0.2s, background 0.2s;
+    border-left: 2px solid transparent; line-height: 1.3;
+  }
+  .sidebar-nav a:hover { color: var(--teal); background: rgba(8,145,178,0.05); }
+  .sidebar-nav a.active { color: var(--teal); background: var(--teal-glow); border-left-color: var(--teal); }
+  .sidebar-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right;
+  }
+  .sidebar-nav a.active .sidebar-num { color: var(--teal); opacity: 0.6; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 0.8rem 1.4rem; }
+  .sidebar-toggle {
+    display: none; position: fixed; bottom: 1.5rem; left: 1.5rem;
+    z-index: 400; width: 44px; height: 44px;
+    background: var(--teal); border: none; border-radius: 50%;
+    color: var(--bg); font-size: 1.1rem; cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(8,145,178,0.3);
+  }
+
+  /* ── Main ── */
+  .main { margin-left: var(--sidebar-w); margin-top: 58px; min-height: calc(100vh - 58px); position: relative; z-index: 1; }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── Hero ── */
+  .hero { padding: 5rem 0 4rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::after {
+    content: ''; position: absolute; top: -40px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    color: var(--teal); background: var(--teal-dim);
+    border: 1px solid rgba(8,145,178,0.25);
+    padding: 0.3rem 0.8rem; border-radius: 3px;
+    margin-bottom: 1.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800; color: var(--heading); line-height: 1.12;
+    margin-bottom: 1.4rem; letter-spacing: -0.03em;
+  }
+  .hero h1 .accent { color: var(--teal); }
+  .hero-sub { font-size: 1.05rem; color: var(--text-muted); max-width: 580px; line-height: 1.75; margin-bottom: 2.5rem; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    padding: 0.3rem 0.75rem; border-radius: 3px;
+    border: 1px solid var(--border2); color: var(--text-muted); background: var(--surface);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-top: 2px solid var(--blue); padding: 2rem; margin: 3rem 0;
+  }
+  .toc-heading {
+    font-family: 'Sora', sans-serif; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--blue-light); margin-bottom: 1.2rem; font-weight: 700;
+  }
+  .toc ol {
+    padding-left: 1.2rem; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 0.35rem 2rem;
+  }
+  @media (max-width: 560px) { .toc ol { grid-template-columns: 1fr; } }
+  .toc a {
+    color: var(--text-muted); text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--teal); }
+
+  /* ── Sections ── */
+  .section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--teal); margin-bottom: 0.8rem;
+  }
+  .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--teal); }
+  h2 {
+    font-family: 'Sora', sans-serif; font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800; color: var(--heading); line-height: 1.2;
+    margin-bottom: 1.5rem; letter-spacing: -0.025em;
+  }
+  h3 { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--heading); margin: 2.5rem 0 0.9rem; letter-spacing: -0.015em; }
+  h4 { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.07em; margin: 2rem 0 0.7rem; }
+  p { margin-bottom: 1.1rem; }
+  strong { color: var(--heading); font-weight: 600; }
+  em { color: var(--teal); font-style: normal; font-weight: 500; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+  li { margin-bottom: 0.35rem; font-size: 0.96rem; }
+
+  /* ── Code ── */
+  code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.81em;
+    background: var(--teal-dim); color: var(--teal-light);
+    padding: 0.1em 0.4em; border-radius: 3px;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-left: 2px solid var(--teal);
+    padding: 1.4rem 1.5rem; overflow-x: auto; margin: 1.4rem 0;
+    border-radius: 0 3px 3px 0;
+  }
+  pre code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    line-height: 1.75; color: #334155; background: none; padding: 0;
+  }
+  .code-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--teal); opacity: 0.7; display: block; margin-bottom: 0.3rem;
+  }
+  .kw  { color: #7c3aed; }
+  .fn  { color: #0891b2; }
+  .st  { color: #d97706; }
+  .cm  { color: #94a3b8; font-style: italic; }
+  .nm  { color: #1e293b; }
+  .dt  { color: #db2777; }
+
+  /* ── Callouts ── */
+  .callout { padding: 1.2rem 1.4rem; margin: 1.8rem 0; border-left: 2px solid; border-radius: 0 4px 4px 0; }
+  .callout.tip     { background: rgba(8,145,178,0.06);  border-color: var(--teal); }
+  .callout.info    { background: rgba(124,58,237,0.06); border-color: var(--blue); }
+  .callout.warning { background: rgba(217,119,6,0.06); border-color: var(--amber); }
+  .callout-title { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem; }
+  .callout.tip     .callout-title { color: var(--teal); }
+  .callout.info    .callout-title { color: var(--blue-light); }
+  .callout.warning .callout-title { color: var(--amber); }
+  .callout p { margin: 0; font-size: 0.92rem; }
+
+  /* ── Diagram ── */
+  .diagram { background: var(--code-bg); border: 1px solid var(--border); padding: 1.5rem 2rem; margin: 1.8rem 0; overflow-x: auto; }
+  .diagram pre { background: none; border: none; padding: 0; margin: 0; }
+  .diagram pre code { color: #475569; font-size: 0.78rem; }
+
+  /* ── Compare grid ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 1.8rem 0; background: var(--border); border: 1px solid var(--border); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+  .compare-col { background: var(--surface); padding: 1.4rem; }
+  .compare-col h5 { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .compare-col.before h5 { color: var(--text-dim); }
+  .compare-col.after  h5 { color: var(--teal); }
+  .compare-col ul { list-style: none; padding: 0; }
+  .compare-col li { font-size: 0.85rem; color: var(--text-muted); padding: 0.3rem 0 0.3rem 1.3rem; position: relative; }
+  .compare-col.before li::before { content: '✕'; color: #ef4444; position: absolute; left: 0; font-size: 0.7rem; top: 0.38rem; }
+  .compare-col.after  li::before { content: '✓'; color: var(--teal); position: absolute; left: 0; font-size: 0.7rem; top: 0.38rem; }
+
+  /* ── Flow steps ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 1.8rem 0; }
+  .flow-step { display: flex; gap: 1.2rem; align-items: flex-start; position: relative; }
+  .flow-step:not(:last-child)::after { content: ''; position: absolute; left: 1rem; top: 2.6rem; bottom: -1rem; width: 1px; background: var(--border2); }
+  .flow-icon { width: 2rem; height: 2rem; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--teal); flex-shrink: 0; margin-top: 0.15rem; }
+  .flow-content { padding-bottom: 1.8rem; flex: 1; }
+  .flow-content strong { display: block; font-family: 'Sora', sans-serif; font-size: 0.9rem; color: var(--heading); margin-bottom: 0.25rem; }
+  .flow-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+
+  /* ── Term grid ── */
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+  .term-card { background: var(--surface); padding: 1.3rem; transition: background 0.2s; }
+  .term-card:hover { background: var(--surface2); }
+  .term-card .term-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .term-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+  /* ── Stage cards ── */
+  .stages { display: flex; flex-direction: column; gap: 1px; margin: 1.8rem 0; background: var(--border); }
+  .stage-card { display: flex; gap: 1.4rem; background: var(--surface); padding: 1.4rem; align-items: flex-start; transition: background 0.2s; }
+  .stage-card:hover { background: var(--surface2); }
+  .stage-num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 400; color: var(--border2); line-height: 1; flex-shrink: 0; width: 2.2rem; text-align: right; padding-top: 0.15rem; }
+  .stage-content h4 { margin: 0 0 0.35rem; font-size: 0.95rem; color: var(--heading); text-transform: none; letter-spacing: 0; }
+  .stage-content p { margin: 0; font-size: 0.86rem; color: var(--text-muted); }
+
+  /* ── Tech table ── */
+  .tech-table { width: 100%; border-collapse: collapse; margin: 1.8rem 0; font-size: 0.88rem; }
+  .tech-table th { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border2); font-weight: 600; background: var(--surface); }
+  .tech-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .tech-table tr:hover td { background: rgba(8,145,178,0.04); }
+  .tech-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--amber); white-space: nowrap; }
+
+  /* ── Footer ── */
+  footer { padding: 3.5rem 0; border-top: 1px solid var(--border); text-align: center; }
+  .footer-logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+  .footer-logo-img { height: 30px; width: auto; display: block; object-fit: contain; }
+  .footer-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--heading); }
+  .footer-logo-text span { color: var(--teal); }
+  footer p { font-size: 0.82rem; color: var(--text-dim); margin: 0.3rem 0; }
+  footer a { color: var(--teal); text-decoration: none; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    .sidebar { transform: translateX(-260px); width: 260px; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .sidebar-toggle { display: flex; }
+    .progress-circle-wrap { right: 1rem; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Circular Progress -->
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36">
+    <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+    <circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/>
+  </svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<!-- Top Nav -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <span class="nav-logo-text">Sustain<span>Sys</span></span>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">AI Academy · PyTorch from Scratch</span>
+    <span style="flex-shrink:0;font-family:'Inter',sans-serif;font-size:0.75rem;white-space:nowrap;background:linear-gradient(135deg,rgba(8,145,178,0.12),rgba(124,58,237,0.12));border:1px solid rgba(8,145,178,0.35);border-radius:4px;padding:0.25rem 0.75rem;color:var(--heading);">Reviewed by: <strong style="color:var(--teal);font-weight:700;">Satyawan S.</strong></span>
+    <span class="nav-badge">Student Guide</span>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <span class="sidebar-section-label">Contents</span>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li><a href="#hero" class="active"><span class="sidebar-num">00</span>Introduction</a></li>
+    <li><a href="#what-is-pytorch"><span class="sidebar-num">01</span>What is PyTorch?</a></li>
+    <li><a href="#tensors"><span class="sidebar-num">02</span>Tensors</a></li>
+    <li><a href="#tensor-ops"><span class="sidebar-num">03</span>Tensor Operations</a></li>
+    <li><a href="#device"><span class="sidebar-num">04</span>CPU vs GPU</a></li>
+    <li><a href="#autograd"><span class="sidebar-num">05</span>Autograd & Gradients</a></li>
+    <li><a href="#neural-networks"><span class="sidebar-num">06</span>Neural Networks</a></li>
+    <li><a href="#training-loop"><span class="sidebar-num">07</span>The Training Loop</a></li>
+    <li><a href="#dataloader"><span class="sidebar-num">08</span>Dataset & DataLoader</a></li>
+    <li><a href="#save-load"><span class="sidebar-num">09</span>Saving & Loading</a></li>
+    <div class="sidebar-divider"></div>
+    <li><a href="#key-functions"><span class="sidebar-num">10</span>Key Functions Reference</a></li>
+    <li><a href="#projects"><span class="sidebar-num">11</span>Projects — Built Step by Step</a></li>
+    <li><a href="#next"><span class="sidebar-num">12</span>Where to Go Next</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+
+<main class="main">
+
+<!-- Hero -->
+<div class="hero" id="hero">
+  <div class="container">
+    <div class="hero-eyebrow">SustainSys AI Academy · Student Guide</div>
+    <h1>PyTorch <span class="accent">from Scratch</span><br>A Complete Beginner's Guide</h1>
+    <p class="hero-sub">A fully systematic, beginner-friendly guide to understanding and using PyTorch — from your very first tensor to a complete trained neural network. No assumed knowledge. No rushed explanations. Every concept explained before it's used.</p>
+    <div class="hero-pills">
+      <span class="pill">Python 3.10+</span>
+      <span class="pill">PyTorch 2.x</span>
+      <span class="pill">Tensors</span>
+      <span class="pill">Autograd</span>
+      <span class="pill">nn.Module</span>
+      <span class="pill">DataLoader</span>
+      <span class="pill">12 Lessons</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="toc reveal">
+    <div class="toc-heading">Table of Contents</div>
+    <ol>
+      <li><a href="#what-is-pytorch">What is PyTorch?</a></li>
+      <li><a href="#tensors">Tensors — The Core Data Structure</a></li>
+      <li><a href="#tensor-ops">Tensor Operations & Reshaping</a></li>
+      <li><a href="#device">CPU vs GPU — Device Management</a></li>
+      <li><a href="#autograd">Autograd & Gradients</a></li>
+      <li><a href="#neural-networks">Building Neural Networks</a></li>
+      <li><a href="#training-loop">The Training Loop</a></li>
+      <li><a href="#dataloader">Dataset & DataLoader</a></li>
+      <li><a href="#save-load">Saving & Loading Models</a></li>
+      <li><a href="#key-functions">Key Functions Reference</a></li>
+      <li><a href="#projects">Projects — Built Step by Step</a></li>
+      <li><a href="#next">Where to Go Next</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ── Section 1: What is PyTorch ── -->
+<div class="section" id="what-is-pytorch">
+  <div class="container reveal">
+    <span class="section-label">Section 01</span>
+    <h2>What is PyTorch?</h2>
+
+    <p>PyTorch is a <strong>Python library for building AI systems</strong>. Specifically, it makes it easy to build and train <em>neural networks</em> — mathematical models that learn patterns from data.</p>
+
+    <p>Think of it this way: teaching a computer to recognise cats means showing it thousands of photos, letting it make guesses, telling it how wrong it was, and letting it adjust. PyTorch is the toolkit that makes this entire process efficient and manageable.</p>
+
+    <div class="compare">
+      <div class="compare-col before">
+        <h5>Without PyTorch</h5>
+        <ul>
+          <li>Write complex maths by hand</li>
+          <li>Training takes weeks or longer</li>
+          <li>Gradients calculated manually</li>
+          <li>No GPU support built in</li>
+          <li>Thousands of lines of boilerplate</li>
+        </ul>
+      </div>
+      <div class="compare-col after">
+        <h5>With PyTorch</h5>
+        <ul>
+          <li>Maths handled automatically</li>
+          <li>GPU acceleration with one line</li>
+          <li>Gradients computed automatically</li>
+          <li>Clean, readable Python code</li>
+          <li>Used by OpenAI, Meta, Tesla, Google</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Four Things People Confuse</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">Python</div><p>The programming language. PyTorch is written in Python — it's a library that runs inside it.</p></div>
+      <div class="term-card"><div class="term-name">Machine Learning</div><p>The broad idea — teaching computers to learn from data. PyTorch is a tool to implement this idea.</p></div>
+      <div class="term-card"><div class="term-name">Neural Network</div><p>A specific ML technique inspired by the brain. PyTorch is especially good at building these.</p></div>
+      <div class="term-card"><div class="term-name">PyTorch</div><p>A software library — pre-written code you use to build and train neural networks efficiently.</p></div>
+    </div>
+
+    <h3>Where PyTorch Fits in the AI Workflow</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-icon">1</div><div class="flow-content"><strong>Collect Data</strong><p>Photos, text, numbers — whatever your problem requires.</p></div></div>
+      <div class="flow-step"><div class="flow-icon">2</div><div class="flow-content"><strong>Prepare Data</strong><p>Clean it, format it, split into train/test sets.</p></div></div>
+      <div class="flow-step"><div class="flow-icon">3</div><div class="flow-content"><strong>Build a Model ← PyTorch lives here</strong><p>Define the neural network architecture using <code>nn.Module</code>.</p></div></div>
+      <div class="flow-step"><div class="flow-icon">4</div><div class="flow-content"><strong>Train the Model ← Also PyTorch</strong><p>Feed data, compute loss, backpropagate, update weights. Repeat.</p></div></div>
+      <div class="flow-step"><div class="flow-icon">5</div><div class="flow-content"><strong>Deploy</strong><p>Save the trained model, load it in an application, run inference.</p></div></div>
+    </div>
+
+    <h3>Real-World Applications</h3>
+    <table class="tech-table">
+      <tr><th>Application</th><th>What It Does</th><th>Example</th></tr>
+      <tr><td>Image Recognition</td><td>Identifies objects in photos</td><td>Self-driving car vision systems</td></tr>
+      <tr><td>Natural Language</td><td>Understands and generates text</td><td>ChatGPT-style models</td></tr>
+      <tr><td>Medical Imaging</td><td>Detects anomalies in scans</td><td>Tumour detection in MRI</td></tr>
+      <tr><td>Recommendations</td><td>Predicts what you'll like</td><td>Netflix, Spotify suggestions</td></tr>
+      <tr><td>Speech Recognition</td><td>Converts audio to text</td><td>Siri, voice assistants</td></tr>
+      <tr><td>Generative AI</td><td>Creates images and text</td><td>DALL-E, Stable Diffusion</td></tr>
+    </table>
+
+    <div class="callout tip">
+      <div class="callout-title">💡 Installing PyTorch</div>
+      <p>Run in your terminal: <code>pip install torch torchvision torchaudio</code> — then verify with <code>import torch; print(torch.__version__)</code>. If it prints a version number, you're ready.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 2: Tensors ── -->
+<div class="section" id="tensors">
+  <div class="container reveal">
+    <span class="section-label">Section 02</span>
+    <h2>Tensors — The Core Data Structure</h2>
+
+    <p>Everything in PyTorch is built on <strong>tensors</strong>. A tensor is like a Python list — but supercharged. It can hold millions of numbers, do maths on all of them simultaneously, and run on a GPU.</p>
+
+    <div class="diagram">
+      <pre><code>
+  Scalar (0D):    7
+
+  Vector (1D):    [1, 2, 3]
+
+  Matrix (2D):    [[1, 2, 3],
+                   [4, 5, 6]]
+
+  3D Tensor:      [[[1, 2], [3, 4]],
+                    [[5, 6], [7, 8]]]
+
+  4D Tensor:      Used for batches of images → (batch, channels, height, width)
+      </code></pre>
+    </div>
+
+    <h3>Why Tensors Instead of Lists?</h3>
+    <div class="compare">
+      <div class="compare-col before">
+        <h5>Python Lists</h5>
+        <ul>
+          <li>Slow — processes one number at a time</li>
+          <li>No GPU support</li>
+          <li>No automatic gradient tracking</li>
+          <li>Clunky multi-dimensional handling</li>
+        </ul>
+      </div>
+      <div class="compare-col after">
+        <h5>PyTorch Tensors</h5>
+        <ul>
+          <li>Fast — all numbers processed in parallel</li>
+          <li>GPU-accelerated with one line</li>
+          <li>Tracks gradients automatically</li>
+          <li>Natural multi-dimensional operations</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Creating Tensors</h3>
+    <span class="code-label">python</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+
+<span class="cm"># From data you provide</span>
+<span class="nm">scalar</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>(<span class="nm">7</span>)
+<span class="nm">vector</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">1.0</span>, <span class="nm">2.0</span>, <span class="nm">3.0</span>])
+<span class="nm">matrix</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([[<span class="nm">1.0</span>, <span class="nm">2.0</span>], [<span class="nm">3.0</span>, <span class="nm">4.0</span>]])
+
+<span class="cm"># Useful creation functions</span>
+<span class="nm">zeros</span>  = <span class="nm">torch</span>.<span class="fn">zeros</span>(<span class="nm">3</span>, <span class="nm">4</span>)       <span class="cm"># all zeros, shape (3,4)</span>
+<span class="nm">ones</span>   = <span class="nm">torch</span>.<span class="fn">ones</span>(<span class="nm">2</span>, <span class="nm">3</span>)        <span class="cm"># all ones, shape (2,3)</span>
+<span class="nm">rng</span>    = <span class="nm">torch</span>.<span class="fn">arange</span>(<span class="nm">0</span>, <span class="nm">10</span>, <span class="nm">2</span>) <span class="cm"># [0, 2, 4, 6, 8]</span>
+<span class="nm">rand</span>   = <span class="nm">torch</span>.<span class="fn">rand</span>(<span class="nm">3</span>, <span class="nm">3</span>)       <span class="cm"># random 0-1, uniform</span>
+<span class="nm">randn</span>  = <span class="nm">torch</span>.<span class="fn">randn</span>(<span class="nm">3</span>, <span class="nm">3</span>)      <span class="cm"># random, normal distribution</span>
+
+<span class="cm"># Inspect a tensor</span>
+<span class="fn">print</span>(<span class="nm">matrix</span>.<span class="nm">shape</span>)   <span class="cm"># torch.Size([2, 2])</span>
+<span class="fn">print</span>(<span class="nm">matrix</span>.<span class="nm">ndim</span>)    <span class="cm"># 2</span>
+<span class="fn">print</span>(<span class="nm">matrix</span>.<span class="nm">dtype</span>)   <span class="cm"># torch.float32</span></code></pre>
+
+    <h3>Data Types — Why dtype Matters</h3>
+    <p>Neural networks almost always use <strong>float32</strong> (decimal numbers). Feeding integer tensors where float32 is expected is one of the most common beginner errors.</p>
+
+    <table class="tech-table">
+      <tr><th>dtype</th><th>Meaning</th><th>When to use</th></tr>
+      <tr><td>torch.float32</td><td>32-bit decimal</td><td>Model weights, inputs — use this by default</td></tr>
+      <tr><td>torch.float64</td><td>64-bit decimal</td><td>High-precision scientific computing</td></tr>
+      <tr><td>torch.int64</td><td>64-bit integer</td><td>Labels in classification, indices</td></tr>
+      <tr><td>torch.bool</td><td>True / False</td><td>Masks and conditions</td></tr>
+    </table>
+
+    <div class="callout warning">
+      <div class="callout-title">⚠️ Common Mistake</div>
+      <p><code>torch.tensor([1, 2, 3])</code> creates <strong>int64</strong>. For AI work, always use decimals: <code>torch.tensor([1.0, 2.0, 3.0])</code> to get <strong>float32</strong>. Mixing types causes errors in operations.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 3: Tensor Operations ── -->
+<div class="section" id="tensor-ops">
+  <div class="container reveal">
+    <span class="section-label">Section 03</span>
+    <h2>Tensor Operations, Reshaping & Indexing</h2>
+
+    <h3>Basic Arithmetic</h3>
+    <p>Operations happen <em>element-wise</em> — PyTorch applies the operation to every number simultaneously, with no loops needed.</p>
+
+    <span class="code-label">python</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+
+<span class="nm">a</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">1.0</span>, <span class="nm">2.0</span>, <span class="nm">3.0</span>])
+<span class="nm">b</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">4.0</span>, <span class="nm">5.0</span>, <span class="nm">6.0</span>])
+
+<span class="fn">print</span>(<span class="nm">a</span> + <span class="nm">b</span>)   <span class="cm"># tensor([5., 7., 9.])</span>
+<span class="fn">print</span>(<span class="nm">a</span> * <span class="nm">b</span>)   <span class="cm"># tensor([ 4., 10., 18.]) — element-wise</span>
+<span class="fn">print</span>(<span class="nm">a</span> ** <span class="nm">2</span>)  <span class="cm"># tensor([1., 4., 9.])</span>
+<span class="fn">print</span>(<span class="nm">a</span> * <span class="nm">10</span>)  <span class="cm"># tensor([10., 20., 30.]) — broadcasting</span></code></pre>
+
+    <h3>Matrix Multiplication — The Engine of Deep Learning</h3>
+    <p>Every single layer in every neural network uses matrix multiplication. This is the most important operation in all of AI.</p>
+
+    <span class="code-label">python</span>
+    <pre><code><span class="nm">A</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([[<span class="nm">1.0</span>, <span class="nm">2.0</span>, <span class="nm">3.0</span>],
+                   [<span class="nm">4.0</span>, <span class="nm">5.0</span>, <span class="nm">6.0</span>]])  <span class="cm"># shape (2, 3)</span>
+
+<span class="nm">B</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([[<span class="nm">7.0</span>, <span class="nm">8.0</span>],
+                   [<span class="nm">9.0</span>, <span class="nm">10.0</span>],
+                   [<span class="nm">11.0</span>, <span class="nm">12.0</span>]])  <span class="cm"># shape (3, 2)</span>
+
+<span class="nm">result</span> = <span class="nm">torch</span>.<span class="fn">matmul</span>(<span class="nm">A</span>, <span class="nm">B</span>)
+<span class="fn">print</span>(<span class="nm">result</span>.<span class="nm">shape</span>)   <span class="cm"># torch.Size([2, 2])</span>
+<span class="cm"># Rule: (2,3) × (3,2) → inner dims must match → result is (2,2)</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">💡 The Shape Rule</div>
+      <p>For <code>torch.matmul(A, B)</code> the inner dimensions must match. <code>(2,3) × (3,2)</code> works — result is <code>(2,2)</code>. <code>(2,3) × (2,3)</code> will error. Always check shapes before multiplying.</p>
+    </div>
+
+    <h3>Reshaping</h3>
+    <p>Same numbers, different arrangement. Like rearranging 12 eggs from one row of 12 into 3 rows of 4.</p>
+
+    <span class="code-label">python</span>
+    <pre><code><span class="nm">x</span> = <span class="nm">torch</span>.<span class="fn">arange</span>(<span class="nm">12</span>, <span class="nm">dtype</span>=<span class="nm">torch</span>.<span class="nm">float32</span>)
+<span class="fn">print</span>(<span class="nm">x</span>.<span class="nm">shape</span>)           <span class="cm"># torch.Size([12])</span>
+
+<span class="nm">a</span> = <span class="nm">x</span>.<span class="fn">reshape</span>(<span class="nm">3</span>, <span class="nm">4</span>)     <span class="cm"># 3 rows, 4 columns</span>
+<span class="nm">b</span> = <span class="nm">x</span>.<span class="fn">reshape</span>(<span class="nm">4</span>, <span class="nm">-1</span>)    <span class="cm"># -1 means "figure it out" → (4, 3)</span>
+<span class="nm">c</span> = <span class="nm">x</span>.<span class="fn">reshape</span>(<span class="nm">-1</span>)       <span class="cm"># flatten to 1D</span>
+
+<span class="cm"># Add a dimension (needed for batch processing)</span>
+<span class="nm">v</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">1.0</span>, <span class="nm">2.0</span>, <span class="nm">3.0</span>])   <span class="cm"># shape (3,)</span>
+<span class="fn">print</span>(<span class="nm">v</span>.<span class="fn">unsqueeze</span>(<span class="nm">0</span>).<span class="nm">shape</span>)          <span class="cm"># torch.Size([1, 3])</span>
+<span class="fn">print</span>(<span class="nm">v</span>.<span class="fn">unsqueeze</span>(<span class="nm">1</span>).<span class="nm">shape</span>)          <span class="cm"># torch.Size([3, 1])</span></code></pre>
+
+    <h3>Indexing & Slicing</h3>
+    <span class="code-label">python</span>
+    <pre><code><span class="nm">t</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([[<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>],
+                   [<span class="nm">4</span>, <span class="nm">5</span>, <span class="nm">6</span>],
+                   [<span class="nm">7</span>, <span class="nm">8</span>, <span class="nm">9</span>]])
+
+<span class="fn">print</span>(<span class="nm">t</span>[<span class="nm">0</span>, <span class="nm">1</span>])     <span class="cm"># tensor(2)       — row 0, col 1</span>
+<span class="fn">print</span>(<span class="nm">t</span>[<span class="nm">0</span>])        <span class="cm"># tensor([1,2,3]) — entire first row</span>
+<span class="fn">print</span>(<span class="nm">t</span>[:, <span class="nm">0</span>])     <span class="cm"># tensor([1,4,7]) — entire first column</span>
+<span class="fn">print</span>(<span class="nm">t</span>[<span class="nm">0</span>:<span class="nm">2</span>, <span class="nm">1</span>:<span class="nm">3</span>]) <span class="cm"># rows 0-1, cols 1-2</span></code></pre>
+  </div>
+</div>
+
+<!-- ── Section 4: Device ── -->
+<div class="section" id="device">
+  <div class="container reveal">
+    <span class="section-label">Section 04</span>
+    <h2>CPU vs GPU — Device Management</h2>
+
+    <p>Your computer has two processors that can do maths. The <strong>CPU</strong> is your main brain — powerful but sequential. The <strong>GPU</strong> was built for video games but turns out its parallel processing is perfect for AI.</p>
+
+    <div class="compare">
+      <div class="compare-col before">
+        <h5>CPU</h5>
+        <ul>
+          <li>~8 to 16 powerful cores</li>
+          <li>Good at complex sequential tasks</li>
+          <li>Default for all PyTorch code</li>
+          <li>Fine for learning and small projects</li>
+        </ul>
+      </div>
+      <div class="compare-col after">
+        <h5>GPU</h5>
+        <ul>
+          <li>Thousands of tiny parallel cores</li>
+          <li>Processes many numbers at once</li>
+          <li>Training can be 10–100× faster</li>
+          <li>Essential for real AI projects</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>The Standard Device Pattern</h3>
+    <p>Write this at the top of every PyTorch file. It automatically uses a GPU if available, falls back to CPU if not — without changing any other code.</p>
+
+    <span class="code-label">python — always start your files this way</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+
+<span class="cm"># Set device once — use everywhere</span>
+<span class="nm">device</span> = <span class="st">"cuda"</span> <span class="kw">if</span> <span class="nm">torch</span>.<span class="nm">cuda</span>.<span class="fn">is_available</span>() <span class="kw">else</span> <span class="st">"cpu"</span>
+<span class="fn">print</span>(<span class="st">f"Using: {device}"</span>)
+
+<span class="cm"># Create tensor directly on device</span>
+<span class="nm">t</span> = <span class="nm">torch</span>.<span class="fn">rand</span>(<span class="nm">3</span>, <span class="nm">3</span>).<span class="fn">to</span>(<span class="nm">device</span>)
+
+<span class="cm"># Move existing tensor to device</span>
+<span class="nm">a</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">1.0</span>, <span class="nm">2.0</span>])
+<span class="nm">a</span> = <span class="nm">a</span>.<span class="fn">to</span>(<span class="nm">device</span>)
+
+<span class="cm"># Move back to CPU (required before .numpy())</span>
+<span class="nm">a_cpu</span> = <span class="nm">a</span>.<span class="fn">cpu</span>().<span class="fn">numpy</span>()</code></pre>
+
+    <div class="callout warning">
+      <div class="callout-title">⚠️ The Critical Device Rule</div>
+      <p>Every tensor involved in an operation must be on the <strong>same device</strong>. Mixing CPU and GPU tensors causes a <code>RuntimeError</code>. Move everything to <code>device</code> before operating on it together.</p>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">🌐 No GPU? Use Google Colab</div>
+      <p>Go to <strong>colab.research.google.com</strong>, create a notebook, then <strong>Runtime → Change runtime type → GPU</strong>. You get a free NVIDIA GPU in your browser. <code>torch.cuda.is_available()</code> will return <code>True</code>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 5: Autograd ── -->
+<div class="section" id="autograd">
+  <div class="container reveal">
+    <span class="section-label">Section 05</span>
+    <h2>Autograd — How PyTorch Learns Automatically</h2>
+
+    <p>This is where PyTorch becomes truly magical. The question every beginner skips: <strong>how does the model know which way to adjust?</strong></p>
+
+    <p>The answer is <em>gradients</em> — and PyTorch computes them automatically through a system called <strong>autograd</strong>.</p>
+
+    <h3>The Blindfolded Hiker Analogy</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-icon">🏔</div><div class="flow-content"><strong>The Landscape</strong><p>Imagine hilly terrain. Your goal is to find the lowest valley. This landscape represents the model's error (loss).</p></div></div>
+      <div class="flow-step"><div class="flow-icon">👣</div><div class="flow-content"><strong>The Slope</strong><p>Blindfolded, you can feel the slope under your feet. Slope downward left → step left. This slope is the <em>gradient</em>.</p></div></div>
+      <div class="flow-step"><div class="flow-icon">✅</div><div class="flow-content"><strong>The Valley</strong><p>Keep stepping downhill and you reach the valley — minimum loss, best possible model. PyTorch calculates the slope automatically.</p></div></div>
+    </div>
+
+    <h3>requires_grad, backward(), and Gradients</h3>
+    <span class="code-label">python</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+
+<span class="cm"># Tell PyTorch to track this tensor (weights need this, not inputs)</span>
+<span class="nm">w</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([<span class="nm">3.0</span>], <span class="nm">requires_grad</span>=<span class="kw">True</span>)
+
+<span class="cm"># Forward pass — PyTorch secretly builds a "receipt" of every operation</span>
+<span class="nm">y</span> = <span class="nm">w</span> ** <span class="nm">2</span>   <span class="cm"># y = w²</span>
+
+<span class="cm"># Backward pass — walk back through the receipt, compute gradients</span>
+<span class="nm">y</span>.<span class="fn">backward</span>()
+
+<span class="cm"># The gradient: dy/dw = 2w = 2×3 = 6</span>
+<span class="fn">print</span>(<span class="nm">w</span>.<span class="nm">grad</span>)   <span class="cm"># tensor([6.])</span></code></pre>
+
+    <h3>The Three Sacred Lines — Always In This Order</h3>
+    <span class="code-label">python — the core of every training step</span>
+    <pre><code><span class="cm"># 1. Zero out old gradients (they accumulate if you don't!)</span>
+<span class="nm">optimizer</span>.<span class="fn">zero_grad</span>()
+
+<span class="cm"># 2. Compute gradients by walking backwards through the graph</span>
+<span class="nm">loss</span>.<span class="fn">backward</span>()
+
+<span class="cm"># 3. Update weights in the direction that reduces loss</span>
+<span class="nm">optimizer</span>.<span class="fn">step</span>()</code></pre>
+
+    <h3>torch.no_grad() — For Evaluation</h3>
+    <p>During evaluation you don't need gradients — tracking them wastes memory and time. Disable them with:</p>
+
+    <span class="code-label">python</span>
+    <pre><code><span class="nm">model</span>.<span class="fn">eval</span>()                          <span class="cm"># switch to evaluation mode</span>
+<span class="kw">with</span> <span class="nm">torch</span>.<span class="fn">no_grad</span>():              <span class="cm"># disable gradient tracking</span>
+    <span class="nm">predictions</span> = <span class="nm">model</span>(<span class="nm">X_test</span>)   <span class="cm"># safe, efficient inference</span></code></pre>
+
+    <div class="callout warning">
+      <div class="callout-title">⚠️ The Accumulation Trap</div>
+      <p>PyTorch <strong>adds</strong> gradients to whatever was there before. If you forget <code>optimizer.zero_grad()</code> before each step, gradients pile up and your model learns incorrectly. This is the most common training bug.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 6: Neural Networks ── -->
+<div class="section" id="neural-networks">
+  <div class="container reveal">
+    <span class="section-label">Section 06</span>
+    <h2>Building Neural Networks with torch.nn</h2>
+
+    <p>Strip away all complexity and a neural network is just: <strong>a function that takes numbers in, does a series of mathematical transformations, and produces numbers out</strong>.</p>
+
+    <h3>The Building Blocks</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">Input</div><p>Numbers fed into the network. Images, text, measurements — everything is converted to numbers.</p></div>
+      <div class="term-card"><div class="term-name">Weights</div><p>Learnable numbers that scale inputs. These start random and are adjusted during training.</p></div>
+      <div class="term-card"><div class="term-name">Bias</div><p>An extra learnable number added after weights. Gives the network more flexibility.</p></div>
+      <div class="term-card"><div class="term-name">Layer</div><p>One round of: multiply by weights, add bias. Networks stack multiple layers.</p></div>
+      <div class="term-card"><div class="term-name">Activation</div><p>Applied after each layer. Adds non-linearity — without it, stacking layers does nothing useful.</p></div>
+      <div class="term-card"><div class="term-name">Output</div><p>Final result. A number (regression), a probability (classification), or more complex structure.</p></div>
+    </div>
+
+    <h3>nn.Module — The Base Class</h3>
+    <p>Every PyTorch model inherits from <code>nn.Module</code>. It handles storing weights, tracking parameters, and switching between train/eval mode automatically.</p>
+
+    <span class="code-label">python — the standard model pattern</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+<span class="kw">import</span> <span class="nm">torch</span>.<span class="nm">nn</span> <span class="kw">as</span> <span class="nm">nn</span>
+
+<span class="kw">class</span> <span class="fn">SimpleNetwork</span>(<span class="nm">nn</span>.<span class="nm">Module</span>):
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()          <span class="cm"># always required — activates nn.Module machinery</span>
+
+        <span class="nm">self</span>.<span class="nm">layer1</span> = <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">3</span>, <span class="nm">8</span>)   <span class="cm"># 3 inputs → 8 neurons</span>
+        <span class="nm">self</span>.<span class="nm">layer2</span> = <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">8</span>, <span class="nm">1</span>)   <span class="cm"># 8 → 1 output</span>
+        <span class="nm">self</span>.<span class="nm">relu</span>   = <span class="nm">nn</span>.<span class="fn">ReLU</span>()         <span class="cm"># activation: max(0, x)</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(<span class="nm">self</span>, <span class="nm">x</span>):            <span class="cm"># defines how data flows through</span>
+        <span class="nm">x</span> = <span class="nm">self</span>.<span class="nm">layer1</span>(<span class="nm">x</span>)
+        <span class="nm">x</span> = <span class="nm">self</span>.<span class="nm">relu</span>(<span class="nm">x</span>)
+        <span class="nm">x</span> = <span class="nm">self</span>.<span class="nm">layer2</span>(<span class="nm">x</span>)
+        <span class="kw">return</span> <span class="nm">x</span>
+
+<span class="nm">model</span> = <span class="fn">SimpleNetwork</span>()
+
+<span class="cm"># Pass data through</span>
+<span class="nm">x</span> = <span class="nm">torch</span>.<span class="fn">tensor</span>([[<span class="nm">1.0</span>, <span class="nm">2.0</span>, <span class="nm">3.0</span>]])   <span class="cm"># shape (1, 3) — 1 sample, 3 features</span>
+<span class="fn">print</span>(<span class="nm">model</span>(<span class="nm">x</span>).<span class="nm">shape</span>)                   <span class="cm"># torch.Size([1, 1])</span></code></pre>
+
+    <h3>nn.Sequential — The Shortcut</h3>
+    <span class="code-label">python — for straight-line networks</span>
+    <pre><code><span class="nm">model</span> = <span class="nm">nn</span>.<span class="fn">Sequential</span>(
+    <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">3</span>, <span class="nm">8</span>),
+    <span class="nm">nn</span>.<span class="fn">ReLU</span>(),
+    <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">8</span>, <span class="nm">1</span>)
+)
+<span class="cm"># Identical result to the class above — less code for simple networks</span></code></pre>
+
+    <h3>Common Activation Functions</h3>
+    <table class="tech-table">
+      <tr><th>Activation</th><th>Formula</th><th>When to use</th></tr>
+      <tr><td>nn.ReLU()</td><td>max(0, x)</td><td>Default choice for hidden layers — almost always works</td></tr>
+      <tr><td>nn.Sigmoid()</td><td>1 / (1 + e⁻ˣ)</td><td>Binary classification output — squashes to 0–1</td></tr>
+      <tr><td>nn.Softmax()</td><td>eˣ / Σeˣ</td><td>Multi-class output — probabilities that sum to 1</td></tr>
+      <tr><td>nn.Tanh()</td><td>(eˣ - e⁻ˣ) / (eˣ + e⁻ˣ)</td><td>Squashes to -1 to 1, used in some RNNs</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ── Section 7: Training Loop ── -->
+<div class="section" id="training-loop">
+  <div class="container reveal">
+    <span class="section-label">Section 07</span>
+    <h2>The Training Loop</h2>
+
+    <p>The training loop is the heart of every PyTorch project. You will write this pattern in <strong>every single model you ever train</strong>. Memorise its structure.</p>
+
+    <h3>Loss Functions</h3>
+    <table class="tech-table">
+      <tr><th>Loss Function</th><th>Use Case</th><th>What it measures</th></tr>
+      <tr><td>nn.MSELoss()</td><td>Regression — predict a number</td><td>Mean squared difference between prediction and target</td></tr>
+      <tr><td>nn.BCELoss()</td><td>Binary classification — 2 classes</td><td>Binary cross entropy — requires Sigmoid before it</td></tr>
+      <tr><td>nn.CrossEntropyLoss()</td><td>Multi-class classification</td><td>Includes Softmax internally — most flexible choice</td></tr>
+    </table>
+
+    <h3>Optimizers</h3>
+    <table class="tech-table">
+      <tr><th>Optimizer</th><th>Character</th><th>When to use</th></tr>
+      <tr><td>optim.SGD</td><td>Simple, classic gradient descent</td><td>Learning fundamentals, some CV tasks</td></tr>
+      <tr><td>optim.Adam</td><td>Adaptive, usually faster to converge</td><td>Default choice for beginners — almost always works</td></tr>
+      <tr><td>optim.AdamW</td><td>Adam with weight decay regularisation</td><td>Transformers and large language models</td></tr>
+    </table>
+
+    <h3>The Complete Training Loop</h3>
+    <span class="code-label">python — this pattern repeats in every project</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+<span class="kw">import</span> <span class="nm">torch</span>.<span class="nm">nn</span> <span class="kw">as</span> <span class="nm">nn</span>
+<span class="kw">import</span> <span class="nm">torch</span>.<span class="nm">optim</span> <span class="kw">as</span> <span class="nm">optim</span>
+
+<span class="nm">model</span>     = <span class="nm">nn</span>.<span class="fn">Sequential</span>(<span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">3</span>, <span class="nm">8</span>), <span class="nm">nn</span>.<span class="fn">ReLU</span>(), <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">8</span>, <span class="nm">1</span>))
+<span class="nm">loss_fn</span>   = <span class="nm">nn</span>.<span class="fn">MSELoss</span>()
+<span class="nm">optimizer</span> = <span class="nm">optim</span>.<span class="fn">Adam</span>(<span class="nm">model</span>.<span class="fn">parameters</span>(), <span class="nm">lr</span>=<span class="nm">0.001</span>)
+
+<span class="nm">X</span> = <span class="nm">torch</span>.<span class="fn">rand</span>(<span class="nm">100</span>, <span class="nm">3</span>)   <span class="cm"># 100 samples, 3 features</span>
+<span class="nm">y</span> = <span class="nm">torch</span>.<span class="fn">rand</span>(<span class="nm">100</span>, <span class="nm">1</span>)   <span class="cm"># 100 targets</span>
+
+<span class="kw">for</span> <span class="nm">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">100</span>):
+
+    <span class="cm"># ── Training phase ──────────────────────</span>
+    <span class="nm">model</span>.<span class="fn">train</span>()                  <span class="cm"># enable training mode</span>
+
+    <span class="nm">predictions</span> = <span class="nm">model</span>(<span class="nm">X</span>)        <span class="cm"># forward pass</span>
+    <span class="nm">loss</span>        = <span class="nm">loss_fn</span>(<span class="nm">predictions</span>, <span class="nm">y</span>)   <span class="cm"># measure error</span>
+
+    <span class="nm">optimizer</span>.<span class="fn">zero_grad</span>()          <span class="cm"># clear old gradients ← NEVER SKIP</span>
+    <span class="nm">loss</span>.<span class="fn">backward</span>()                <span class="cm"># compute gradients</span>
+    <span class="nm">optimizer</span>.<span class="fn">step</span>()               <span class="cm"># update weights</span>
+
+    <span class="cm"># ── Evaluation phase ─────────────────────</span>
+    <span class="nm">model</span>.<span class="fn">eval</span>()
+    <span class="kw">with</span> <span class="nm">torch</span>.<span class="fn">no_grad</span>():
+        <span class="nm">test_preds</span> = <span class="nm">model</span>(<span class="nm">X</span>)
+
+    <span class="kw">if</span> (<span class="nm">epoch</span> + <span class="nm">1</span>) % <span class="nm">20</span> == <span class="nm">0</span>:
+        <span class="fn">print</span>(<span class="st">f"Epoch {epoch+1}: Loss = {loss.item():.4f}"</span>)</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">💡 model.train() vs model.eval()</div>
+      <p><code>model.train()</code> enables dropout and batch normalisation during training. <code>model.eval()</code> disables them for consistent predictions. Always set the mode explicitly — even if your current model has no dropout, it's a critical habit for when you add it later.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 8: DataLoader ── -->
+<div class="section" id="dataloader">
+  <div class="container reveal">
+    <span class="section-label">Section 08</span>
+    <h2>Dataset & DataLoader</h2>
+
+    <p>In real AI, datasets have millions of samples — you can't load them all into memory at once. PyTorch solves this with <strong>batching</strong>: feed the model small chunks at a time.</p>
+
+    <div class="compare">
+      <div class="compare-col before">
+        <h5>All Data at Once</h5>
+        <ul>
+          <li>Memory crash on large datasets</li>
+          <li>One weight update per epoch</li>
+          <li>Slow convergence</li>
+          <li>Only works for tiny datasets</li>
+        </ul>
+      </div>
+      <div class="compare-col after">
+        <h5>Mini Batches</h5>
+        <ul>
+          <li>Memory efficient — any dataset size</li>
+          <li>Many updates per epoch</li>
+          <li>Faster, more stable convergence</li>
+          <li>Standard in all real projects</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Custom Dataset Class</h3>
+    <p>Every custom Dataset must implement exactly three methods:</p>
+
+    <span class="code-label">python</span>
+    <pre><code><span class="kw">from</span> <span class="nm">torch</span>.<span class="nm">utils</span>.<span class="nm">data</span> <span class="kw">import</span> <span class="nm">Dataset</span>, <span class="nm">DataLoader</span>
+
+<span class="kw">class</span> <span class="fn">MyDataset</span>(<span class="nm">Dataset</span>):
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, <span class="nm">X</span>, <span class="nm">y</span>):
+        <span class="nm">self</span>.<span class="nm">X</span> = <span class="nm">X</span>
+        <span class="nm">self</span>.<span class="nm">y</span> = <span class="nm">y</span>
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(<span class="nm">self</span>):               <span class="cm"># DataLoader needs total count</span>
+        <span class="kw">return</span> <span class="fn">len</span>(<span class="nm">self</span>.<span class="nm">X</span>)
+
+    <span class="kw">def</span> <span class="fn">__getitem__</span>(<span class="nm">self</span>, <span class="nm">index</span>):   <span class="cm"># DataLoader calls this per sample</span>
+        <span class="kw">return</span> <span class="nm">self</span>.<span class="nm">X</span>[<span class="nm">index</span>], <span class="nm">self</span>.<span class="nm">y</span>[<span class="nm">index</span>]
+
+<span class="cm"># Create dataset and dataloader</span>
+<span class="nm">dataset</span>    = <span class="fn">MyDataset</span>(<span class="nm">X_train</span>, <span class="nm">y_train</span>)
+<span class="nm">dataloader</span> = <span class="fn">DataLoader</span>(<span class="nm">dataset</span>, <span class="nm">batch_size</span>=<span class="nm">32</span>, <span class="nm">shuffle</span>=<span class="kw">True</span>)
+
+<span class="cm"># Loop through batches</span>
+<span class="kw">for</span> <span class="nm">X_batch</span>, <span class="nm">y_batch</span> <span class="kw">in</span> <span class="nm">dataloader</span>:
+    <span class="fn">print</span>(<span class="nm">X_batch</span>.<span class="nm">shape</span>)   <span class="cm"># (32, features) — one batch at a time</span>
+    <span class="kw">break</span></code></pre>
+
+    <h3>TensorDataset — The Quick Version</h3>
+    <span class="code-label">python — when data is already in tensors</span>
+    <pre><code><span class="kw">from</span> <span class="nm">torch</span>.<span class="nm">utils</span>.<span class="nm">data</span> <span class="kw">import</span> <span class="nm">TensorDataset</span>
+
+<span class="nm">train_ds</span> = <span class="fn">TensorDataset</span>(<span class="nm">X_train</span>, <span class="nm">y_train</span>)
+<span class="nm">test_ds</span>  = <span class="fn">TensorDataset</span>(<span class="nm">X_test</span>,  <span class="nm">y_test</span>)
+
+<span class="nm">train_loader</span> = <span class="fn">DataLoader</span>(<span class="nm">train_ds</span>, <span class="nm">batch_size</span>=<span class="nm">32</span>, <span class="nm">shuffle</span>=<span class="kw">True</span>)
+<span class="nm">test_loader</span>  = <span class="fn">DataLoader</span>(<span class="nm">test_ds</span>,  <span class="nm">batch_size</span>=<span class="nm">32</span>, <span class="nm">shuffle</span>=<span class="kw">False</span>)
+<span class="cm"># shuffle=False for test — order doesn't matter, consistency does</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">💡 Choosing Batch Size</div>
+      <p>Start with <code>batch_size=32</code>. Too small (4, 8) = noisy gradients, slow. Too large (512+) = needs more memory, can miss good solutions. 32 or 64 works well for almost everything when learning.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 9: Save & Load ── -->
+<div class="section" id="save-load">
+  <div class="container reveal">
+    <span class="section-label">Section 09</span>
+    <h2>Saving & Loading Models</h2>
+
+    <p>Training a model once and saving it means you never have to retrain. This is essential — deploy it, share it, resume training, or keep the best version found during training.</p>
+
+    <h3>The State Dict Pattern</h3>
+    <p>PyTorch saves the <strong>state dict</strong> — a dictionary of all weights and biases. You save numbers, not structure. Loading requires recreating the architecture first, then filling in the saved numbers.</p>
+
+    <span class="code-label">python — save and load weights</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>
+
+<span class="cm"># ── Save ──────────────────────────────────────────────────────</span>
+<span class="nm">torch</span>.<span class="fn">save</span>(<span class="nm">model</span>.<span class="fn">state_dict</span>(), <span class="st">"model.pth"</span>)
+
+<span class="cm"># ── Load ──────────────────────────────────────────────────────</span>
+<span class="nm">loaded_model</span> = <span class="fn">MyModelClass</span>()   <span class="cm"># recreate same architecture first</span>
+<span class="nm">loaded_model</span>.<span class="fn">load_state_dict</span>(
+    <span class="nm">torch</span>.<span class="fn">load</span>(<span class="st">"model.pth"</span>, <span class="nm">weights_only</span>=<span class="kw">True</span>)
+)
+<span class="nm">loaded_model</span>.<span class="fn">eval</span>()             <span class="cm"># always set eval mode after loading</span></code></pre>
+
+    <h3>Full Checkpoint — For Resuming Training</h3>
+    <span class="code-label">python — save everything needed to resume</span>
+    <pre><code><span class="cm"># Save checkpoint</span>
+<span class="nm">torch</span>.<span class="fn">save</span>({
+    <span class="st">"epoch"</span>:      <span class="nm">current_epoch</span>,
+    <span class="st">"model"</span>:      <span class="nm">model</span>.<span class="fn">state_dict</span>(),
+    <span class="st">"optimizer"</span>:  <span class="nm">optimizer</span>.<span class="fn">state_dict</span>(),  <span class="cm"># Adam has internal memory too</span>
+    <span class="st">"loss"</span>:       <span class="nm">best_loss</span>
+}, <span class="st">"checkpoint.pth"</span>)
+
+<span class="cm"># Load checkpoint</span>
+<span class="nm">ckpt</span> = <span class="nm">torch</span>.<span class="fn">load</span>(<span class="st">"checkpoint.pth"</span>, <span class="nm">weights_only</span>=<span class="kw">False</span>)
+<span class="nm">model</span>.<span class="fn">load_state_dict</span>(<span class="nm">ckpt</span>[<span class="st">"model"</span>])
+<span class="nm">optimizer</span>.<span class="fn">load_state_dict</span>(<span class="nm">ckpt</span>[<span class="st">"optimizer"</span>])
+<span class="nm">start_epoch</span> = <span class="nm">ckpt</span>[<span class="st">"epoch"</span>]</code></pre>
+
+    <h3>Saving the Best Model During Training</h3>
+    <span class="code-label">python — best model pattern</span>
+    <pre><code><span class="nm">best_loss</span> = <span class="fn">float</span>(<span class="st">"inf"</span>)   <span class="cm"># start at infinity so any loss beats it</span>
+
+<span class="kw">for</span> <span class="nm">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">EPOCHS</span>):
+    <span class="cm"># ... training code ...</span>
+
+    <span class="kw">if</span> <span class="nm">avg_loss</span> < <span class="nm">best_loss</span>:
+        <span class="nm">best_loss</span> = <span class="nm">avg_loss</span>
+        <span class="nm">torch</span>.<span class="fn">save</span>(<span class="nm">model</span>.<span class="fn">state_dict</span>(), <span class="st">"best_model.pth"</span>)
+        <span class="fn">print</span>(<span class="st">f"New best model saved (loss={best_loss:.4f})"</span>)</code></pre>
+  </div>
+</div>
+
+<!-- ── Section 10: Key Functions ── -->
+<div class="section" id="key-functions">
+  <div class="container reveal">
+    <span class="section-label">Section 10</span>
+    <h2>Key Functions Reference</h2>
+    <p>Every important PyTorch function you need as a beginner — with purpose and usage at a glance.</p>
+
+    <h3>Tensor Creation</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">torch.tensor(data)</div><p>Create tensor from Python list or number. Always use floats for AI: <code>[1.0, 2.0]</code>.</p></div>
+      <div class="term-card"><div class="term-name">torch.zeros(n, m)</div><p>Tensor of all zeros, shape (n, m). Used to initialise bias values.</p></div>
+      <div class="term-card"><div class="term-name">torch.ones(n, m)</div><p>Tensor of all ones. Used to create masks and test shapes.</p></div>
+      <div class="term-card"><div class="term-name">torch.arange(start, end, step)</div><p>Evenly spaced values. Like Python's <code>range()</code> but returns a tensor.</p></div>
+      <div class="term-card"><div class="term-name">torch.rand(n, m)</div><p>Random values 0–1, uniform distribution. Weight initialisation.</p></div>
+      <div class="term-card"><div class="term-name">torch.randn(n, m)</div><p>Random values, normal distribution centred at 0. More realistic init.</p></div>
+    </div>
+
+    <h3>Tensor Inspection & Manipulation</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">tensor.shape</div><p>Returns <code>torch.Size</code> — dimensions of the tensor. Check this constantly.</p></div>
+      <div class="term-card"><div class="term-name">tensor.dtype</div><p>The data type stored. Use <code>float32</code> for model weights and inputs.</p></div>
+      <div class="term-card"><div class="term-name">tensor.reshape(a, b)</div><p>Change shape without changing data. Use <code>-1</code> to auto-calculate one dimension.</p></div>
+      <div class="term-card"><div class="term-name">tensor.unsqueeze(dim)</div><p>Add a dimension at position <code>dim</code>. Common for adding batch dimension.</p></div>
+      <div class="term-card"><div class="term-name">tensor.to(device)</div><p>Move tensor to CPU or GPU. Must match device of everything it interacts with.</p></div>
+      <div class="term-card"><div class="term-name">torch.matmul(A, B)</div><p>Matrix multiplication — the engine of neural networks. Inner dims must match.</p></div>
+      <div class="term-card"><div class="term-name">torch.cat(list, dim)</div><p>Concatenate tensors. <code>dim=0</code> stacks rows, <code>dim=1</code> stacks columns.</p></div>
+      <div class="term-card"><div class="term-name">tensor.item()</div><p>Extract a single Python number from a scalar tensor. Use when printing losses.</p></div>
+    </div>
+
+    <h3>Autograd</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">requires_grad=True</div><p>Tell PyTorch to track this tensor. Apply to weights and biases, not to input data.</p></div>
+      <div class="term-card"><div class="term-name">loss.backward()</div><p>Compute gradients for all tracked tensors by walking back through the computation graph.</p></div>
+      <div class="term-card"><div class="term-name">tensor.grad</div><p>The computed gradient after <code>.backward()</code>. Used by optimizer to update weights.</p></div>
+      <div class="term-card"><div class="term-name">torch.no_grad()</div><p>Context manager — disables gradient tracking. Use during evaluation and inference.</p></div>
+    </div>
+
+    <h3>Neural Network Modules</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">nn.Module</div><p>Base class for all models. Inherit from it. Provides parameter tracking and device management.</p></div>
+      <div class="term-card"><div class="term-name">nn.Linear(in, out)</div><p>Fully connected layer. Performs: output = input × weight + bias. Core building block.</p></div>
+      <div class="term-card"><div class="term-name">nn.ReLU()</div><p>Activation function: <code>max(0, x)</code>. Default choice between hidden layers.</p></div>
+      <div class="term-card"><div class="term-name">nn.Sigmoid()</div><p>Squashes to 0–1. Use as final layer for binary classification problems.</p></div>
+      <div class="term-card"><div class="term-name">nn.Sequential</div><p>Chains layers in order. Clean shortcut when data flows in a straight line.</p></div>
+      <div class="term-card"><div class="term-name">nn.MSELoss()</div><p>Mean squared error. Loss function for regression — predicting a number.</p></div>
+      <div class="term-card"><div class="term-name">nn.BCELoss()</div><p>Binary cross entropy. Loss for binary classification. Requires Sigmoid before it.</p></div>
+      <div class="term-card"><div class="term-name">nn.CrossEntropyLoss()</div><p>Multi-class classification loss. Includes Softmax internally. Most flexible.</p></div>
+    </div>
+
+    <h3>Training Utilities</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">optim.Adam(params, lr)</div><p>Adaptive optimizer. Default choice — almost always works well. Start with <code>lr=0.001</code>.</p></div>
+      <div class="term-card"><div class="term-name">optim.SGD(params, lr)</div><p>Classic gradient descent. Simple and transparent. Good for learning fundamentals.</p></div>
+      <div class="term-card"><div class="term-name">optimizer.zero_grad()</div><p>Clear accumulated gradients. Call before every <code>.backward()</code>. Never skip this.</p></div>
+      <div class="term-card"><div class="term-name">optimizer.step()</div><p>Update all weights using their computed gradients. Call after <code>.backward()</code>.</p></div>
+      <div class="term-card"><div class="term-name">model.train()</div><p>Enable training mode — activates dropout, batch norm. Call before training loop.</p></div>
+      <div class="term-card"><div class="term-name">model.eval()</div><p>Enable evaluation mode — disables dropout. Call before testing and inference.</p></div>
+      <div class="term-card"><div class="term-name">model.parameters()</div><p>Returns all learnable parameters. Pass to optimizer so it knows what to update.</p></div>
+      <div class="term-card"><div class="term-name">model.state_dict()</div><p>Returns dictionary of all weights and biases. Pass to <code>torch.save()</code>.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 11: Projects ── -->
+<div class="section" id="projects">
+  <div class="container reveal">
+    <span class="section-label">Section 11</span>
+    <h2>Projects — Built Step by Step</h2>
+
+    <h3>Project 1: Linear Regression</h3>
+    <p>The model learns to discover a hidden formula from data alone — without being told what it is.</p>
+
+    <span class="code-label">python — complete linear regression project</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>, <span class="nm">torch</span>.<span class="nm">nn</span> <span class="kw">as</span> <span class="nm">nn</span>, <span class="nm">torch</span>.<span class="nm">optim</span> <span class="kw">as</span> <span class="nm">optim</span>
+
+<span class="nm">torch</span>.<span class="fn">manual_seed</span>(<span class="nm">42</span>)
+
+<span class="cm"># Data — model doesn't know the formula, must discover it</span>
+<span class="nm">TRUE_WEIGHT</span>, <span class="nm">TRUE_BIAS</span> = <span class="nm">3.0</span>, <span class="nm">1.0</span>
+<span class="nm">X</span>     = <span class="nm">torch</span>.<span class="fn">rand</span>(<span class="nm">100</span>, <span class="nm">1</span>)
+<span class="nm">y</span>     = <span class="nm">TRUE_WEIGHT</span> * <span class="nm">X</span> + <span class="nm">TRUE_BIAS</span> + <span class="nm">torch</span>.<span class="fn">randn</span>(<span class="nm">100</span>, <span class="nm">1</span>) * <span class="nm">0.1</span>
+<span class="nm">split</span> = <span class="nm">80</span>
+<span class="nm">X_train</span>, <span class="nm">y_train</span> = <span class="nm">X</span>[:<span class="nm">split</span>], <span class="nm">y</span>[:<span class="nm">split</span>]
+<span class="nm">X_test</span>,  <span class="nm">y_test</span>  = <span class="nm">X</span>[<span class="nm">split</span>:], <span class="nm">y</span>[<span class="nm">split</span>:]
+
+<span class="cm"># Model</span>
+<span class="kw">class</span> <span class="fn">LinearModel</span>(<span class="nm">nn</span>.<span class="nm">Module</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>): <span class="fn">super</span>().<span class="fn">__init__</span>(); <span class="nm">self</span>.<span class="nm">linear</span> = <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">1</span>, <span class="nm">1</span>)
+    <span class="kw">def</span> <span class="fn">forward</span>(<span class="nm">self</span>, <span class="nm">x</span>): <span class="kw">return</span> <span class="nm">self</span>.<span class="nm">linear</span>(<span class="nm">x</span>)
+
+<span class="nm">model</span>     = <span class="fn">LinearModel</span>()
+<span class="nm">loss_fn</span>   = <span class="nm">nn</span>.<span class="fn">MSELoss</span>()
+<span class="nm">optimizer</span> = <span class="nm">optim</span>.<span class="fn">Adam</span>(<span class="nm">model</span>.<span class="fn">parameters</span>(), <span class="nm">lr</span>=<span class="nm">0.01</span>)
+
+<span class="cm"># Train</span>
+<span class="kw">for</span> <span class="nm">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">200</span>):
+    <span class="nm">model</span>.<span class="fn">train</span>()
+    <span class="nm">loss</span> = <span class="nm">loss_fn</span>(<span class="nm">model</span>(<span class="nm">X_train</span>), <span class="nm">y_train</span>)
+    <span class="nm">optimizer</span>.<span class="fn">zero_grad</span>(); <span class="nm">loss</span>.<span class="fn">backward</span>(); <span class="nm">optimizer</span>.<span class="fn">step</span>()
+
+<span class="cm"># Results — model discovers weight≈3.0, bias≈1.0</span>
+<span class="kw">for</span> <span class="nm">name</span>, <span class="nm">param</span> <span class="kw">in</span> <span class="nm">model</span>.<span class="fn">named_parameters</span>():
+    <span class="fn">print</span>(<span class="st">f"{name}: {param.data.item():.4f}"</span>)
+<span class="cm"># linear.weight: 2.9876  — true was 3.0</span>
+<span class="cm"># linear.bias:   1.0043  — true was 1.0</span></code></pre>
+
+    <h3>Project 2: Binary Classification</h3>
+    <p>Two clusters of points. The model learns to tell them apart.</p>
+
+    <span class="code-label">python — complete binary classification project</span>
+    <pre><code><span class="kw">import</span> <span class="nm">torch</span>, <span class="nm">torch</span>.<span class="nm">nn</span> <span class="kw">as</span> <span class="nm">nn</span>, <span class="nm">torch</span>.<span class="nm">optim</span> <span class="kw">as</span> <span class="nm">optim</span>
+
+<span class="nm">torch</span>.<span class="fn">manual_seed</span>(<span class="nm">42</span>)
+
+<span class="cm"># Two clusters: class 0 near (1,1), class 1 near (3,3)</span>
+<span class="nm">X</span> = <span class="nm">torch</span>.<span class="fn">cat</span>([<span class="nm">torch</span>.<span class="fn">randn</span>(<span class="nm">100</span>,<span class="nm">2</span>)+<span class="nm">1</span>, <span class="nm">torch</span>.<span class="fn">randn</span>(<span class="nm">100</span>,<span class="nm">2</span>)+<span class="nm">3</span>])
+<span class="nm">y</span> = <span class="nm">torch</span>.<span class="fn">cat</span>([<span class="nm">torch</span>.<span class="fn">zeros</span>(<span class="nm">100</span>,<span class="nm">1</span>), <span class="nm">torch</span>.<span class="fn">ones</span>(<span class="nm">100</span>,<span class="nm">1</span>)])
+<span class="nm">idx</span> = <span class="nm">torch</span>.<span class="fn">randperm</span>(<span class="nm">200</span>)
+<span class="nm">X</span>, <span class="nm">y</span> = <span class="nm">X</span>[<span class="nm">idx</span>], <span class="nm">y</span>[<span class="nm">idx</span>]
+<span class="nm">X_train</span>, <span class="nm">y_train</span> = <span class="nm">X</span>[:<span class="nm">160</span>], <span class="nm">y</span>[:<span class="nm">160</span>]
+<span class="nm">X_test</span>,  <span class="nm">y_test</span>  = <span class="nm">X</span>[<span class="nm">160</span>:], <span class="nm">y</span>[<span class="nm">160</span>:]
+
+<span class="nm">model</span> = <span class="nm">nn</span>.<span class="fn">Sequential</span>(
+    <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">2</span>, <span class="nm">8</span>), <span class="nm">nn</span>.<span class="fn">ReLU</span>(),
+    <span class="nm">nn</span>.<span class="fn">Linear</span>(<span class="nm">8</span>, <span class="nm">1</span>), <span class="nm">nn</span>.<span class="fn">Sigmoid</span>()   <span class="cm"># outputs probability 0-1</span>
+)
+<span class="nm">loss_fn</span>   = <span class="nm">nn</span>.<span class="fn">BCELoss</span>()             <span class="cm"># binary cross entropy</span>
+<span class="nm">optimizer</span> = <span class="nm">optim</span>.<span class="fn">Adam</span>(<span class="nm">model</span>.<span class="fn">parameters</span>(), <span class="nm">lr</span>=<span class="nm">0.01</span>)
+
+<span class="kw">for</span> <span class="nm">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">200</span>):
+    <span class="nm">model</span>.<span class="fn">train</span>()
+    <span class="nm">preds</span> = <span class="nm">model</span>(<span class="nm">X_train</span>)
+    <span class="nm">loss</span>  = <span class="nm">loss_fn</span>(<span class="nm">preds</span>, <span class="nm">y_train</span>)
+    <span class="nm">optimizer</span>.<span class="fn">zero_grad</span>(); <span class="nm">loss</span>.<span class="fn">backward</span>(); <span class="nm">optimizer</span>.<span class="fn">step</span>()
+
+<span class="nm">model</span>.<span class="fn">eval</span>()
+<span class="kw">with</span> <span class="nm">torch</span>.<span class="fn">no_grad</span>():
+    <span class="nm">test_preds</span> = <span class="nm">model</span>(<span class="nm">X_test</span>)
+    <span class="nm">accuracy</span>   = ((<span class="nm">test_preds</span> >= <span class="nm">0.5</span>).<span class="fn">float</span>() == <span class="nm">y_test</span>).<span class="fn">float</span>().<span class="fn">mean</span>()
+    <span class="fn">print</span>(<span class="st">f"Test Accuracy: {accuracy.item()*100:.1f}%"</span>)   <span class="cm"># ~97-99%</span></code></pre>
+
+    <h3>Project 3: End-to-End with DataLoader — Student Pass/Fail</h3>
+    <p>The complete, production-grade pipeline. Every best practice applied. This is the template for all real projects.</p>
+
+    <div class="stages">
+      <div class="stage-card"><div class="stage-num">01</div><div class="stage-content"><h4>Data Creation with Noise</h4><p>Generate 1000 students with hours studied and hours slept. Add 5% label noise to simulate real-world messiness.</p></div></div>
+      <div class="stage-card"><div class="stage-num">02</div><div class="stage-content"><h4>Shuffle & Split</h4><p>Randomly shuffle with <code>torch.randperm</code>, then split 80% train / 20% test. Never skip shuffling.</p></div></div>
+      <div class="stage-card"><div class="stage-num">03</div><div class="stage-content"><h4>Custom Dataset & DataLoader</h4><p>Wrap data in <code>StudentDataset(Dataset)</code>. Create train and test <code>DataLoader</code>s with <code>batch_size=32</code>.</p></div></div>
+      <div class="stage-card"><div class="stage-num">04</div><div class="stage-content"><h4>Model with nn.Module</h4><p>3-layer classifier: Linear(2,16) → ReLU → Linear(16,16) → ReLU → Linear(16,1) → Sigmoid.</p></div></div>
+      <div class="stage-card"><div class="stage-num">05</div><div class="stage-content"><h4>Training Loop with Metrics</h4><p>Track loss and accuracy per epoch across all batches. Save best model whenever test loss improves.</p></div></div>
+      <div class="stage-card"><div class="stage-num">06</div><div class="stage-content"><h4>Load Best & Run Inference</h4><p>Load saved weights, set eval mode, predict on new students. Probability → PASS or FAIL.</p></div></div>
+    </div>
+
+    <span class="code-label">python — the complete skeleton (all projects follow this structure)</span>
+    <pre><code><span class="cm"># ── Setup ─────────────────────────────────────────────────────</span>
+<span class="nm">device</span> = <span class="st">"cuda"</span> <span class="kw">if</span> <span class="nm">torch</span>.<span class="nm">cuda</span>.<span class="fn">is_available</span>() <span class="kw">else</span> <span class="st">"cpu"</span>
+<span class="nm">torch</span>.<span class="fn">manual_seed</span>(<span class="nm">42</span>)
+
+<span class="cm"># ── Data → Dataset → DataLoader ───────────────────────────────</span>
+<span class="nm">train_loader</span> = <span class="fn">DataLoader</span>(<span class="fn">StudentDataset</span>(<span class="nm">X_train</span>, <span class="nm">y_train</span>), <span class="nm">batch_size</span>=<span class="nm">32</span>, <span class="nm">shuffle</span>=<span class="kw">True</span>)
+<span class="nm">test_loader</span>  = <span class="fn">DataLoader</span>(<span class="fn">StudentDataset</span>(<span class="nm">X_test</span>,  <span class="nm">y_test</span>),  <span class="nm">batch_size</span>=<span class="nm">32</span>, <span class="nm">shuffle</span>=<span class="kw">False</span>)
+
+<span class="cm"># ── Model + Loss + Optimizer ──────────────────────────────────</span>
+<span class="nm">model</span>     = <span class="fn">StudentClassifier</span>().<span class="fn">to</span>(<span class="nm">device</span>)
+<span class="nm">loss_fn</span>   = <span class="nm">nn</span>.<span class="fn">BCELoss</span>()
+<span class="nm">optimizer</span> = <span class="nm">optim</span>.<span class="fn">Adam</span>(<span class="nm">model</span>.<span class="fn">parameters</span>(), <span class="nm">lr</span>=<span class="nm">0.001</span>)
+<span class="nm">best_loss</span> = <span class="fn">float</span>(<span class="st">"inf"</span>)
+
+<span class="cm"># ── Training Loop ─────────────────────────────────────────────</span>
+<span class="kw">for</span> <span class="nm">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">30</span>):
+    <span class="nm">model</span>.<span class="fn">train</span>()
+    <span class="kw">for</span> <span class="nm">xb</span>, <span class="nm">yb</span> <span class="kw">in</span> <span class="nm">train_loader</span>:
+        <span class="nm">pred</span> = <span class="nm">model</span>(<span class="nm">xb</span>); <span class="nm">loss</span> = <span class="nm">loss_fn</span>(<span class="nm">pred</span>, <span class="nm">yb</span>)
+        <span class="nm">optimizer</span>.<span class="fn">zero_grad</span>(); <span class="nm">loss</span>.<span class="fn">backward</span>(); <span class="nm">optimizer</span>.<span class="fn">step</span>()
+
+    <span class="nm">model</span>.<span class="fn">eval</span>()
+    <span class="kw">with</span> <span class="nm">torch</span>.<span class="fn">no_grad</span>():
+        <span class="nm">test_loss</span> = <span class="fn">sum</span>(<span class="nm">loss_fn</span>(<span class="nm">model</span>(<span class="nm">xb</span>), <span class="nm">yb</span>) <span class="kw">for</span> <span class="nm">xb</span>,<span class="nm">yb</span> <span class="kw">in</span> <span class="nm">test_loader</span>) / <span class="fn">len</span>(<span class="nm">test_loader</span>)
+
+    <span class="kw">if</span> <span class="nm">test_loss</span> < <span class="nm">best_loss</span>:
+        <span class="nm">best_loss</span> = <span class="nm">test_loss</span>
+        <span class="nm">torch</span>.<span class="fn">save</span>(<span class="nm">model</span>.<span class="fn">state_dict</span>(), <span class="st">"best_model.pth"</span>)
+
+<span class="cm"># ── Inference ─────────────────────────────────────────────────</span>
+<span class="nm">model</span>.<span class="fn">load_state_dict</span>(<span class="nm">torch</span>.<span class="fn">load</span>(<span class="st">"best_model.pth"</span>, <span class="nm">weights_only</span>=<span class="kw">True</span>))
+<span class="nm">model</span>.<span class="fn">eval</span>()
+<span class="kw">with</span> <span class="nm">torch</span>.<span class="fn">no_grad</span>():
+    <span class="nm">prob</span> = <span class="nm">model</span>(<span class="nm">new_student_data</span>)
+    <span class="fn">print</span>(<span class="st">"PASS"</span> <span class="kw">if</span> <span class="nm">prob</span>.<span class="fn">item</span>() >= <span class="nm">0.5</span> <span class="kw">else</span> <span class="st">"FAIL"</span>)</code></pre>
+  </div>
+</div>
+
+<!-- ── Section 12: Next Steps ── -->
+<div class="section" id="next">
+  <div class="container reveal">
+    <span class="section-label">Section 12</span>
+    <h2>Where to Go Next</h2>
+
+    <h3>Immediate Next Topics in PyTorch</h3>
+    <ul>
+      <li><strong>Multi-class classification</strong> — predicting from more than 2 categories with <code>CrossEntropyLoss</code> and <code>Softmax</code></li>
+      <li><strong>Batch Normalisation</strong> — <code>nn.BatchNorm1d</code> — stabilises training of deeper networks</li>
+      <li><strong>Dropout</strong> — <code>nn.Dropout(p=0.2)</code> — prevents overfitting by randomly disabling neurons during training</li>
+      <li><strong>Learning rate scheduling</strong> — automatically reduce learning rate when improvement stalls</li>
+    </ul>
+
+    <h3>Computer Vision</h3>
+    <ul>
+      <li><strong>Convolutional Neural Networks (CNNs)</strong> — <code>nn.Conv2d</code> — the standard architecture for image tasks</li>
+      <li><strong>torchvision</strong> — built-in datasets (MNIST, CIFAR-10) and pretrained models</li>
+      <li><strong>Transfer learning</strong> — fine-tune ResNet, VGG, EfficientNet on your own data in minutes</li>
+    </ul>
+
+    <h3>Natural Language Processing</h3>
+    <ul>
+      <li><strong>Embeddings</strong> — <code>nn.Embedding</code> — turning words into dense numerical vectors</li>
+      <li><strong>Transformers</strong> — the architecture behind GPT, BERT, and all modern LLMs</li>
+      <li><strong>Hugging Face</strong> — fine-tune pretrained language models on custom tasks</li>
+    </ul>
+
+    <h3>Professional Skills</h3>
+    <ul>
+      <li><strong>Weights & Biases (wandb)</strong> — track experiments, visualise training curves</li>
+      <li><strong>Mixed precision training</strong> — <code>torch.cuda.amp</code> — faster training with less GPU memory</li>
+      <li><strong>Model deployment</strong> — TorchScript, ONNX, or FastAPI for serving predictions</li>
+    </ul>
+
+    <h3>What You Now Understand</h3>
+    <div class="term-grid">
+      <div class="term-card"><div class="term-name">✓ Tensors</div><p>Created, shaped, indexed, moved between devices. The foundation of everything.</p></div>
+      <div class="term-card"><div class="term-name">✓ Autograd</div><p>Gradients computed automatically. requires_grad, backward(), zero_grad().</p></div>
+      <div class="term-card"><div class="term-name">✓ Neural Networks</div><p>Built with nn.Module and nn.Sequential. Layers, activations, forward pass.</p></div>
+      <div class="term-card"><div class="term-name">✓ Training Loop</div><p>Forward → loss → zero_grad → backward → step. The heartbeat of all AI training.</p></div>
+      <div class="term-card"><div class="term-name">✓ DataLoader</div><p>Batched training on any dataset size. Custom Dataset and TensorDataset.</p></div>
+      <div class="term-card"><div class="term-name">✓ Save & Load</div><p>State dict, checkpoints, best model pattern. Deploy or resume any model.</p></div>
+      <div class="term-card"><div class="term-name">✓ Device Management</div><p>CPU/GPU handling with the standard device pattern. One line to run anywhere.</p></div>
+      <div class="term-card"><div class="term-name">✓ Real Projects</div><p>Regression, classification, end-to-end pipeline. The template for every real model.</p></div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🎓 You Are Now a Builder</div>
+      <p>Most people who talk about AI have never trained a model from scratch. You've built the core patterns that power every neural network in production — tensors, autograd, the training loop, data pipelines. That knowledge doesn't go out of date when frameworks change, because you understand the fundamentals.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <span class="footer-logo-text">Sustain<span>Sys</span></span>
+    </div>
+    <p>AI Academy · PyTorch from Scratch · Student Guide</p>
+    <p>Tensors · Autograd · nn.Module · DataLoader · Training Loop · Projects</p>
+    <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+      <a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK · Share freely with students.
+    </p>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  const CIRCUMFERENCE = 2 * Math.PI * 15;
+  const ring  = document.getElementById('progressCircle');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct       = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+    ring.style.strokeDashoffset = CIRCUMFERENCE - (pct / 100) * CIRCUMFERENCE;
+    label.textContent = pct + '%';
+  }
+
+  const sections  = document.querySelectorAll('[id]');
+  const sideLinks = document.querySelectorAll('#sidebarNav a');
+
+  function updateSidebar() {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    sideLinks.forEach(a => {
+      const href = a.getAttribute('href').slice(1);
+      a.classList.toggle('active', href === current);
+    });
+  }
+
+  const revealEls = document.querySelectorAll('.reveal, .section, .term-card, .stage-card, .flow-step');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  revealEls.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    revealObserver.observe(el);
+  });
+
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    updateSidebar();
+  }, { passive: true });
+
+  updateProgress();
+  updateSidebar();
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  sideLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
