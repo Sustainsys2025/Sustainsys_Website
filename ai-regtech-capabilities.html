@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Regulatory Intelligence — SustainsysAI</title>
+    <meta name="description" content="How SustainsysAI helps global banks solve regulatory reporting complexity using GenAI, RAG, and intelligent regulatory knowledge systems.">
+    <meta name="author" content="SustainSys Consulting Ltd">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           SustainsysAI — AI RegTech Capabilities Page
+           Theme: Indigo #4f46e5 · Cyan #0891b2 · Emerald #059669
+           Fonts: Inter, Orbitron, JetBrains Mono
+           ============================================================ */
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --indigo:   #4f46e5;
+            --cyan:     #0891b2;
+            --emerald:  #059669;
+            --slate-50: #f8fafc;
+            --slate-100:#f1f5f9;
+            --slate-200:#e2e8f0;
+            --slate-300:#cbd5e1;
+            --slate-400:#94a3b8;
+            --slate-500:#64748b;
+            --slate-600:#475569;
+            --slate-700:#334155;
+            --slate-800:#1e293b;
+            --slate-900:#0f172a;
+            --amber:    #f59e0b;
+            --rose:     #e11d48;
+            --gradient-brand: linear-gradient(135deg, var(--indigo), var(--cyan), var(--emerald));
+            --gradient-hero:  linear-gradient(135deg, #312e81, #155e75, #064e3b);
+            --radius: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--slate-50);
+            color: var(--slate-800);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+        .container-full {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ===== Typography ===== */
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; line-height: 1.25; }
+        h1 { font-size: 2.8rem; font-weight: 900; }
+        h2 { font-size: 1.6rem; font-weight: 700; color: var(--slate-900); margin-bottom: 1rem; }
+        h3 { font-size: 1.05rem; font-weight: 700; color: var(--slate-900); margin-bottom: 0.5rem; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--indigo);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-label::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            border-radius: 2px;
+            background: var(--gradient-brand);
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--slate-600);
+            max-width: 740px;
+            line-height: 1.75;
+            margin-bottom: 2rem;
+        }
+
+        section {
+            padding: 4rem 0;
+            scroll-margin-top: 70px;
+        }
+
+        .main-content > section:nth-child(even):not(.cta-section):not(.screenshot-section):not([style*="background"]) {
+            background: #fff;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            background: linear-gradient(135deg, #1e3a5f, #1a5276, #155e75, #164e63);
+            padding: 5rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 60%;
+            background: url('RegAI_Image1.png') center center / contain no-repeat;
+            opacity: 0.85;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(30,58,95,1) 0%, rgba(30,58,95,0.95) 35%, rgba(30,58,95,0.45) 60%, rgba(30,58,95,0.1) 80%, rgba(30,58,95,0) 100%);
+        }
+        .hero-inner { position: relative; z-index: 2; }
+        .hero .section-label { color: rgba(255,255,255,0.6); }
+        .hero .section-label::before { background: rgba(255,255,255,0.3); }
+        .hero h1 { color: #fff; margin-bottom: 1.25rem; text-shadow: 0 2px 20px rgba(0,0,0,0.5); max-width: 600px; }
+        .hero .lead {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.75);
+            max-width: 540px;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+        .hero-kpis {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            max-width: 620px;
+        }
+        .hero-kpi {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+        .hero-kpi .val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .hero-kpi .label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.55);
+            margin-top: 0.25rem;
+        }
+
+        /* ===== Cards ===== */
+        .card {
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-brand);
+        }
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        /* ===== Grid Layouts ===== */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+        /* ===== Pain Point Callout ===== */
+        .pain-callout {
+            background: linear-gradient(135deg, #fef2f2, #fff1f2);
+            border: 1px solid #fecdd3;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--rose);
+        }
+        .pain-callout h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #9f1239;
+            margin-bottom: 0.4rem;
+        }
+        .pain-callout p {
+            font-size: 0.88rem;
+            color: #881337;
+            line-height: 1.65;
+        }
+
+        /* ===== Solution Callout ===== */
+        .solution-callout {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 1px solid #a7f3d0;
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--emerald);
+        }
+        .solution-callout h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 0.4rem;
+        }
+        .solution-callout p {
+            font-size: 0.88rem;
+            color: #064e3b;
+            line-height: 1.65;
+        }
+
+        /* ===== Architecture Diagram ===== */
+        .arch-diagram {
+            background: var(--slate-900);
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            overflow-x: auto;
+        }
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .arch-num {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .arch-bar {
+            flex: 1;
+            border-radius: 8px;
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .arch-bar .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .arch-bar .detail {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .arch-connector {
+            width: 2px;
+            height: 18px;
+            margin-left: 15px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* ===== Agent Cards ===== */
+        .agent-card {
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.25s;
+        }
+        .agent-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .agent-card .regime-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .agent-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .agent-card li {
+            font-size: 0.85rem;
+            color: var(--slate-600);
+            padding: 0.3rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+        .agent-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        /* ===== Timeline ===== */
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--slate-100);
+        }
+        .timeline-item:last-child { border-bottom: none; }
+        .timeline-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--indigo);
+            min-width: 100px;
+            padding-top: 2px;
+        }
+        .timeline-content h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.2rem;
+        }
+        .timeline-content p {
+            font-size: 0.85rem;
+            color: var(--slate-500);
+        }
+
+        /* ===== Flow Diagram ===== */
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .flow-box {
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--slate-700);
+            text-align: center;
+            min-width: 140px;
+        }
+        .flow-box.highlight {
+            background: var(--gradient-brand);
+            color: #fff;
+            border-color: transparent;
+        }
+        .flow-arrow {
+            font-size: 1.2rem;
+            color: var(--slate-300);
+        }
+
+        /* ===== Stat Strip ===== */
+        .stat-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #fff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius);
+        }
+        .stat-item .num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+        .stat-item .lbl {
+            font-size: 0.82rem;
+            color: var(--slate-500);
+            margin-top: 0.25rem;
+        }
+
+        /* ===== Badge ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .badge-indigo { background: #eef2ff; color: #4338ca; }
+        .badge-cyan { background: #ecfeff; color: #0e7490; }
+        .badge-emerald { background: #ecfdf5; color: #047857; }
+        .badge-amber { background: #fffbeb; color: #b45309; }
+        .badge-rose { background: #fff1f2; color: #be123c; }
+        .badge-slate { background: var(--slate-100); color: var(--slate-600); }
+
+        /* ===== CTA Section ===== */
+        .cta-section {
+            background: var(--gradient-hero) !important;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='g' width='60' height='60' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 60L60 0' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23g)' width='100%25' height='100%25'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .cta-section * { position: relative; z-index: 1; }
+        .cta-section h2 { color: #fff; margin-bottom: 1rem; }
+        .cta-section p { color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto 2rem; }
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--amber);
+            color: var(--slate-900);
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245,158,11,0.3);
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(245,158,11,0.45);
+        }
+
+        /* ===== Knowledge Graph Visual ===== */
+        .kg-visual {
+            background: var(--slate-900);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            position: relative;
+        }
+        .kg-node {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        .kg-center {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        .kg-center .kg-node {
+            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+        }
+        .kg-edges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* ===== Navbar ===== */
+        .page-nav {
+            background: var(--slate-900);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .page-nav .nav-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .page-nav img.nav-logo {
+            height: 36px;
+            width: auto;
+        }
+        .page-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+        .page-nav .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .page-nav .nav-links a:hover { color: #fff; }
+        .page-nav .nav-links li a.nav-highlight {
+            background: linear-gradient(135deg, #0d9488, #0891b2) !important;
+            border: none !important;
+            padding: 0.45rem 0.55rem 0.45rem 1.1rem !important;
+            border-radius: 999px !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            font-size: 0.82rem !important;
+            letter-spacing: 0.04em;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 0.55rem;
+            text-transform: uppercase;
+            text-decoration: none !important;
+        }
+        .page-nav .nav-links li a.nav-highlight .learn-badge {
+            background: rgba(255,255,255,0.25);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 0.22rem 0.6rem;
+            border-radius: 999px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .page-nav .nav-links li a.nav-highlight:hover {
+            background: linear-gradient(135deg, #0f766e, #0e7490) !important;
+            color: #fff !important;
+        }
+        .page-nav .nav-cta {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: var(--amber);
+            color: var(--slate-900);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.25s;
+        }
+        .page-nav .nav-cta:hover { background: #fbbf24; transform: translateY(-1px); }
+
+        /* ===== App Screenshot ===== */
+        .screenshot-section {
+            background: linear-gradient(180deg, var(--slate-900) 0%, #1a1a3e 50%, var(--slate-900) 100%) !important;
+            padding: 4rem 0 3rem;
+            overflow: hidden;
+        }
+        .screenshot-frame {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+            position: relative;
+        }
+        .screenshot-frame .browser-bar {
+            background: #1e1e2e;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .screenshot-frame .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+        }
+        .screenshot-frame .dot-r { background: #ff5f57; }
+        .screenshot-frame .dot-y { background: #febc2e; }
+        .screenshot-frame .dot-g { background: #28c840; }
+        .screenshot-frame .url-bar {
+            flex: 1;
+            margin-left: 0.75rem;
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+            padding: 0.3rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--slate-400);
+        }
+        .screenshot-frame .app-preview {
+            width: 100%;
+            display: block;
+        }
+
+        /* ===== Site Footer ===== */
+        .site-footer {
+            background: var(--slate-900);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 2.5rem 0;
+        }
+        .footer-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .footer-brand img { height: 44px; width: auto; }
+        .footer-brand h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin: 0;
+        }
+        .footer-brand p {
+            font-size: 0.82rem;
+            color: var(--slate-400);
+            margin: 0.15rem 0 0;
+        }
+        .footer-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .footer-location .city {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--slate-300);
+        }
+        .footer-location .sub {
+            font-size: 0.78rem;
+            color: var(--slate-500);
+        }
+        .footer-bottom {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+        }
+        .footer-bottom p {
+            color: var(--slate-500);
+            font-size: 0.82rem;
+        }
+        .footer-bottom a {
+            color: var(--cyan);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .footer-bottom a:hover { opacity: 0.75; }
+
+        /* ===== Side Navigation ===== */
+        .page-body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .side-nav {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 220px;
+            height: calc(100vh - 60px);
+            background: #fff;
+            border-right: 1px solid var(--slate-200);
+            overflow-y: auto;
+            z-index: 90;
+            padding: 1.5rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--slate-300) transparent;
+        }
+        .side-nav::-webkit-scrollbar { width: 4px; }
+        .side-nav::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 4px; }
+        .side-nav-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--slate-400);
+            padding: 0 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .side-nav a {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.45rem 1.25rem;
+            font-size: 0.76rem;
+            font-weight: 500;
+            color: var(--slate-500);
+            text-decoration: none;
+            line-height: 1.4;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
+        }
+        .side-nav a:hover {
+            color: var(--indigo);
+            background: rgba(79,70,229,0.04);
+        }
+        .side-nav a.active {
+            color: var(--indigo);
+            font-weight: 700;
+            border-left-color: var(--indigo);
+            background: rgba(79,70,229,0.06);
+        }
+        .side-nav a .nav-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--slate-400);
+            flex-shrink: 0;
+            min-width: 1.2rem;
+        }
+        .side-nav a.active .nav-num {
+            color: var(--cyan);
+        }
+        .main-content {
+            margin-left: 220px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            h1 { font-size: 2rem; }
+            .hero-kpis { grid-template-columns: repeat(3, 1fr); }
+            .grid-3 { grid-template-columns: 1fr 1fr; }
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+            .stat-strip { grid-template-columns: 1fr 1fr; }
+            .side-nav { display: none; }
+            .main-content { margin-left: 0; }
+            .site-footer { margin-left: 0 !important; }
+        }
+        @media (max-width: 600px) {
+            .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .stat-strip { grid-template-columns: 1fr; }
+            .container { padding: 0 1rem; }
+            .footer-inner { padding: 0 1rem; }
+            .page-nav .nav-inner { padding: 0 1rem; }
+            section { padding: 2.5rem 0; }
+            .footer-top { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-nav .nav-links { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="page-nav">
+    <div class="nav-inner">
+        <img src="proper_logo.png" alt="SustainSys — AI-Powered Engineering" class="nav-logo">
+        <ul class="nav-links">
+            <li><a href="https://sustainsys.co.uk">Home</a></li>
+            <li><a href="https://sustainsys.co.uk/services.html">Services</a></li>
+            <li><a href="https://sustainsys.co.uk/projects.html">Projects</a></li>
+            <li><a href="https://sustainsys.co.uk/ai-learn.html" class="nav-highlight">AI Academy <span class="learn-badge">Learn</span></a></li>
+            <li><a href="https://sustainsys.co.uk/contact.html" class="nav-cta">Contact for Demo</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== SIDE NAVIGATION ===== -->
+<nav class="side-nav" id="sideNav">
+    <div class="side-nav-title">On this page</div>
+    <a href="#hero"><span class="nav-num">01</span> Overview</a>
+    <a href="#pain-points"><span class="nav-num">02</span> The Problem</a>
+    <a href="#approach"><span class="nav-num">03</span> Our Approach</a>
+    <a href="#intelligence-stack"><span class="nav-num">04</span> Intelligence Stack</a>
+    <a href="#dashboard-preview"><span class="nav-num">05</span> Platform Preview</a>
+    <a href="#knowledge-graph"><span class="nav-num">06</span> Knowledge Graph</a>
+    <a href="#rag-cag"><span class="nav-num">07</span> RAG / CAG</a>
+    <a href="#regime-agents"><span class="nav-num">08</span> Regime Agents</a>
+    <a href="#field-intelligence"><span class="nav-num">09</span> Field Intelligence</a>
+    <a href="#change-monitoring"><span class="nav-num">10</span> Change Monitoring</a>
+    <a href="#architecture"><span class="nav-num">11</span> Architecture</a>
+    <a href="#bank-integration"><span class="nav-num">12</span> Bank Integration</a>
+    <a href="#why-now"><span class="nav-num">13</span> Why Now</a>
+    <a href="#get-started"><span class="nav-num">14</span> Get Started</a>
+</nav>
+
+<div class="main-content">
+
+<!-- ============================================================
+     SECTION 1: HERO — AI-DRIVEN REGULATORY INTELLIGENCE
+     ============================================================ -->
+<header class="hero" id="hero">
+    <div class="container hero-inner">
+        <div class="section-label">SustainsysAI Platform</div>
+        <h1>AI-Driven Regulatory<br>Reporting Intelligence</h1>
+        <p class="lead">
+            A purpose-built regulatory intelligence layer that uses frontier language models,
+            retrieval-augmented generation, and regulatory knowledge graphs to help global banks
+            navigate reporting complexity across 11 jurisdictions and 200+ regulatory fields.
+        </p>
+        <div class="hero-kpis">
+            <div class="hero-kpi">
+                <div class="val">11</div>
+                <div class="label">Global Regimes</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="val">203+</div>
+                <div class="label">Regulatory Fields</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="val">40</div>
+                <div class="label">Monitored Sources</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="val">58</div>
+                <div class="label">Canonical Fields</div>
+            </div>
+            <div class="hero-kpi">
+                <div class="val">6</div>
+                <div class="label">ISO Standards</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ============================================================
+     SECTION 2: WHY REGULATORY REPORTING IS BREAKING BANKS
+     ============================================================ -->
+<section id="pain-points">
+    <div class="container">
+        <div class="section-label">The Problem</div>
+        <h2>Why Regulatory Reporting Is Breaking Banks</h2>
+        <p class="section-desc">
+            Global banks face an unprecedented convergence of reporting demands. Multiple regimes,
+            evolving schemas, conflicting data definitions, and accelerating regulatory timelines
+            have pushed manual compliance processes beyond their limits.
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 2rem;">
+            <div class="pain-callout">
+                <h4>Regulatory Fragmentation</h4>
+                <p>
+                    A single derivatives desk may need to report under EU EMIR, UK EMIR, CFTC Parts 43/45,
+                    MiFIR RTS 22, and MAS regulations simultaneously — each with different field definitions,
+                    validation rules, XML schemas, and submission formats. EU EMIR alone mandates 203 reportable fields;
+                    UK EMIR requires 204. Reconciling overlapping but non-identical requirements across regimes
+                    consumes thousands of analyst hours annually.
+                </p>
+            </div>
+            <div class="pain-callout">
+                <h4>Constant Regulatory Change</h4>
+                <p>
+                    EMIR Refit went live April 2024. UK EMIR Refit followed in September 2024.
+                    CFTC rewrote its tech specifications in January 2024 with 49 further fields proposed.
+                    MiFIR RTS 22 revisions are expected in 2026. Basel III.1 implementation began January 2025.
+                    CSRD mandates sustainability reporting in waves through 2028. Tracking these changes
+                    manually across regulatory portals is operationally unsustainable.
+                </p>
+            </div>
+            <div class="pain-callout">
+                <h4>Data Quality and Lineage Pressure</h4>
+                <p>
+                    BCBS 239 principles on risk data aggregation demand that banks demonstrate complete data lineage
+                    from source system to regulatory report. Yet most institutions still operate with inconsistent
+                    identifiers (LEI, UTI, UPI), fragmented source systems, and manual reconciliation processes
+                    that introduce latency and error. Regulators are increasingly auditing data quality at the
+                    field level.
+                </p>
+            </div>
+            <div class="pain-callout">
+                <h4>Manual Interpretation of Regulations</h4>
+                <p>
+                    Regulatory technical standards (RTS/ITS), validation tables, XML/XSD schemas, reporting
+                    instructions, and regulator Q&A documents can run to thousands of pages per regime.
+                    ESMA&rsquo;s EMIR validation table alone contains 200+ rules across multiple worksheets.
+                    Interpreting these documents, identifying changes between versions, and translating
+                    requirements into system specifications is a bottleneck in every regulatory programme.
+                </p>
+            </div>
+        </div>
+
+        <div class="stat-strip">
+            <div class="stat-item">
+                <div class="num">11</div>
+                <div class="lbl">Active Reporting Regimes</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">200+</div>
+                <div class="lbl">Fields per Major Regime</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">1000s</div>
+                <div class="lbl">Pages of RTS/ITS Docs</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">12+</div>
+                <div class="lbl">Regulatory Events per Year</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3: THE SUSTAINSYS AI APPROACH
+     ============================================================ -->
+<section id="approach">
+    <div class="container">
+        <div class="section-label">Our Approach</div>
+        <h2>The SustainsysAI Approach</h2>
+        <p class="section-desc">
+            Rather than replacing existing reporting infrastructure, SustainsysAI provides an
+            intelligent regulatory knowledge layer that sits alongside bank systems — parsing
+            regulatory source material, building structured knowledge representations, and
+            delivering precise, citation-backed regulatory insights to reporting teams.
+        </p>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon" style="background: var(--indigo);">&#x1F9E0;</div>
+                <h3>Frontier LLM Models</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    The platform leverages frontier language models to interpret regulatory
+                    documentation, extract structured requirements from unstructured text,
+                    and generate implementation guidance grounded in source material.
+                    Multi-model architecture routes queries to specialised models based on task type.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--cyan);">&#x1F50D;</div>
+                <h3>RAG + CAG Pipeline</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Retrieval-Augmented Generation (RAG) and Context-Augmented Generation (CAG)
+                    ensure that every response is grounded in actual regulatory source documents.
+                    Vector embeddings of regulatory text enable semantic search across regimes,
+                    while context augmentation provides the model with precise, relevant passages.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--emerald);">&#x1F310;</div>
+                <h3>Regulatory Knowledge Graph</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Structured relationships between regimes, fields, validation rules, ISO standards,
+                    and reporting entities are maintained in a purpose-built knowledge graph. This enables
+                    cross-regime comparison, impact propagation analysis, and automated dependency mapping
+                    that would be impossible with flat document stores.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     REG AI INTELLIGENCE STACK — VISUAL
+     ============================================================ -->
+<section id="intelligence-stack" style="background: linear-gradient(180deg, #080c16 0%, #0f172a 50%, #080c16 100%); padding: 4rem 0;">
+    <div class="container" style="display: flex; align-items: center; gap: 3rem; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+            <div class="section-label" style="color: rgba(255,255,255,0.5);">Architecture Visual</div>
+            <h2 style="color: #fff; margin-bottom: 1rem;">The REG AI Intelligence Stack</h2>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                A four-layer architecture purpose-built for regulatory reporting intelligence.
+                From trusted data foundations through knowledge graphs, frontier AI reasoning,
+                to human-readable output — each layer is designed for traceability,
+                auditability, and regulatory credibility.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #064e3b, #059669); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;">L1</span>
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Trusted Data Foundation</div>
+                        <div style="font-size: 0.78rem; color: rgba(255,255,255,0.45);">40 global sources &middot; 203+ fields &middot; 6 ISO standards</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #0e7490, #0891b2); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;">L2</span>
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Regulatory Knowledge Graph</div>
+                        <div style="font-size: 0.78rem; color: rgba(255,255,255,0.45);">Cross-regime comparison &middot; Dependency mapping &middot; 11 regimes</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #4338ca, #4f46e5); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;">L3</span>
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Frontier AI Reasoning Engine</div>
+                        <div style="font-size: 0.78rem; color: rgba(255,255,255,0.45);">Custom LLM &middot; RAG/CAG &middot; Few-Shot/MLS</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #b45309, #f59e0b); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;">L4</span>
+                    <div>
+                        <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Human-Readable Intelligence</div>
+                        <div style="font-size: 0.78rem; color: rgba(255,255,255,0.45);">Traceable alerts &middot; Summaries &middot; Actionable steps</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 0 0 420px; max-width: 420px;">
+            <img src="RegAI_Image2.png" alt="REG AI Intelligence Stack — 4-layer architecture" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);">
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     APP SCREENSHOT / PLATFORM PREVIEW
+     ============================================================ -->
+<section id="dashboard-preview" class="screenshot-section">
+    <div class="container" style="text-align: center;">
+        <div class="section-label" style="justify-content: center; color: rgba(255,255,255,0.45);">Platform Preview</div>
+        <h2 style="color: #fff; margin-bottom: 0.5rem;">The SustainsysAI Dashboard</h2>
+        <p style="color: rgba(255,255,255,0.55); max-width: 700px; margin: 0 auto; font-size: 0.95rem;">
+            A unified command centre for regulatory reporting intelligence — tracking regimes,
+            fields, timelines, and implementation status across all active jurisdictions.
+        </p>
+        <div class="screenshot-frame">
+            <div class="browser-bar">
+                <span class="dot dot-r"></span>
+                <span class="dot dot-y"></span>
+                <span class="dot dot-g"></span>
+                <span class="url-bar">localhost:5173 — SustainsysAI Regulatory Intelligence Platform</span>
+            </div>
+            <!-- SVG representation of the app dashboard -->
+            <svg viewBox="0 0 1400 750" xmlns="http://www.w3.org/2000/svg" class="app-preview" style="background: #f8fafc;">
+                <!-- Sidebar -->
+                <rect x="0" y="0" width="220" height="750" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+                <!-- Logo area -->
+                <rect x="20" y="16" width="180" height="40" rx="4" fill="#f8fafc"/>
+                <text x="30" y="42" font-family="Orbitron, sans-serif" font-size="13" font-weight="900" fill="#0f172a">SUSTAINSYS</text>
+                <text x="132" y="42" font-family="Inter, sans-serif" font-size="7" fill="#94a3b8">AI-POWERED</text>
+                <!-- Nav sections -->
+                <text x="24" y="82" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8" font-weight="700" letter-spacing="1.5">OVERVIEW</text>
+                <rect x="12" y="90" width="196" height="32" rx="8" fill="url(#navGrad)"/>
+                <text x="44" y="110" font-family="Inter, sans-serif" font-size="11" fill="#ffffff" font-weight="600">📊  Dashboard</text>
+                <text x="24" y="144" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8" font-weight="700" letter-spacing="1.5">DATA</text>
+                <text x="44" y="166" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">📚  Field Library</text>
+                <text x="44" y="190" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">🔗  Source Registry</text>
+                <text x="44" y="214" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">🏗️  Canonical Model</text>
+                <text x="24" y="246" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8" font-weight="700" letter-spacing="1.5">OPERATIONS</text>
+                <text x="44" y="268" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">⚡  Impact Analysis</text>
+                <text x="44" y="292" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">📋  Implementation Backlog</text>
+                <text x="24" y="324" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8" font-weight="700" letter-spacing="1.5">MONITORING</text>
+                <text x="44" y="346" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">👁️  Update Monitoring</text>
+                <text x="44" y="370" font-family="Inter, sans-serif" font-size="11" fill="#475569" font-weight="500">⚠️  Risks &amp; Gaps</text>
+                <!-- Footer -->
+                <line x1="12" y1="710" x2="208" y2="710" stroke="#f1f5f9" stroke-width="1"/>
+                <text x="24" y="728" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">Platform v1.0</text>
+                <text x="24" y="740" font-family="Inter, sans-serif" font-size="7" fill="#cbd5e1">Last updated: Mar 10, 2026</text>
+
+                <!-- Main Content Area -->
+                <!-- Hero Gradient Box -->
+                <defs>
+                    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#4f46e5"/>
+                        <stop offset="50%" stop-color="#0891b2"/>
+                        <stop offset="100%" stop-color="#059669"/>
+                    </linearGradient>
+                    <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#4f46e5"/>
+                        <stop offset="100%" stop-color="#0891b2"/>
+                    </linearGradient>
+                    <linearGradient id="cardBar" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#4f46e5"/>
+                        <stop offset="50%" stop-color="#0891b2"/>
+                        <stop offset="100%" stop-color="#059669"/>
+                    </linearGradient>
+                </defs>
+                <rect x="240" y="20" width="1140" height="180" rx="16" fill="url(#heroGrad)"/>
+                <text x="272" y="62" font-family="Orbitron, sans-serif" font-size="28" font-weight="900" fill="#ffffff">SustainsysAI</text>
+                <text x="272" y="82" font-family="Inter, sans-serif" font-size="11" fill="rgba(255,255,255,0.7)">Regulatory Reporting Intelligence Platform</text>
+                <text x="272" y="108" font-family="Inter, sans-serif" font-size="10" fill="rgba(255,255,255,0.55)">Assess regulatory regime changes, map data requirements, track field-level impacts,</text>
+                <text x="272" y="122" font-family="Inter, sans-serif" font-size="10" fill="rgba(255,255,255,0.55)">and monitor industry updates across 11 global jurisdictions.</text>
+                <!-- CTA Button -->
+                <rect x="1160" y="44" width="140" height="32" rx="8" fill="#f59e0b"/>
+                <text x="1186" y="64" font-family="Inter, sans-serif" font-size="10" font-weight="800" fill="#0f172a">Contact for Demo ↗</text>
+                <!-- KPI boxes in hero -->
+                <g transform="translate(272, 144)">
+                    <rect x="0" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="74" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">11</text>
+                    <text x="74" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">Regimes</text>
+                    <rect x="160" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="234" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">203+</text>
+                    <text x="234" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">Fields</text>
+                    <rect x="320" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="394" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">40</text>
+                    <text x="394" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">Sources</text>
+                    <rect x="480" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="554" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">58</text>
+                    <text x="554" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">Canonical</text>
+                    <rect x="640" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="714" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">6</text>
+                    <text x="714" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">ISO Stds</text>
+                    <rect x="800" y="0" width="148" height="44" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    <text x="874" y="20" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#fff">24</text>
+                    <text x="874" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" fill="rgba(255,255,255,0.55)">Backlog</text>
+                </g>
+
+                <!-- Quick Insights Cards -->
+                <g transform="translate(240, 218)">
+                    <rect x="0" y="0" width="273" height="85" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="16" y="12" width="241" height="3" rx="2" fill="url(#navGrad)"/>
+                    <text x="16" y="38" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#0f172a">11</text>
+                    <text x="16" y="54" font-family="Inter, sans-serif" font-size="9" fill="#64748b">Global Regimes Tracked</text>
+                    <text x="16" y="70" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#4f46e5">4 in Phase 1</text>
+
+                    <rect x="289" y="0" width="273" height="85" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="305" y="12" width="241" height="3" rx="2" fill="url(#cardBar)"/>
+                    <text x="305" y="38" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#0f172a">40</text>
+                    <text x="305" y="54" font-family="Inter, sans-serif" font-size="9" fill="#64748b">Regulatory Sources</text>
+                    <text x="305" y="70" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#0891b2">Machine-readable priority</text>
+
+                    <rect x="578" y="0" width="273" height="85" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="594" y="12" width="241" height="3" rx="2" fill="#059669"/>
+                    <text x="594" y="38" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#0f172a">58</text>
+                    <text x="594" y="54" font-family="Inter, sans-serif" font-size="9" fill="#64748b">Canonical Fields</text>
+                    <text x="594" y="70" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#059669">Cross-regime harmonised</text>
+
+                    <rect x="867" y="0" width="273" height="85" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="883" y="12" width="241" height="3" rx="2" fill="#4f46e5"/>
+                    <text x="883" y="38" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#0f172a">203+</text>
+                    <text x="883" y="54" font-family="Inter, sans-serif" font-size="9" fill="#64748b">Total Regime Fields</text>
+                    <text x="883" y="70" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="#4f46e5">ISO 20022 converging</text>
+                </g>
+
+                <!-- Timeline Section Header -->
+                <rect x="240" y="320" width="4" height="16" rx="2" fill="url(#navGrad)"/>
+                <text x="252" y="333" font-family="Orbitron, sans-serif" font-size="11" font-weight="700" fill="#0f172a" letter-spacing="1">REGULATORY TIMELINE</text>
+
+                <!-- Recent Events Card -->
+                <rect x="240" y="346" width="555" height="200" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="260" y="370" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8" font-weight="700" letter-spacing="1">RECENT EVENTS</text>
+                <text x="260" y="395" font-family="JetBrains Mono, monospace" font-size="8" fill="#4f46e5">Jan 1, 2026</text>
+                <text x="360" y="395" font-family="Inter, sans-serif" font-size="9" fill="#334155">FRTB — Fundamental Review of the Trading Book</text>
+                <rect x="360" y="400" width="62" height="16" rx="4" fill="#fff1f2"/><text x="368" y="412" font-family="Inter, sans-serif" font-size="7" fill="#be123c" font-weight="600">Market Risk</text>
+                <text x="260" y="435" font-family="JetBrains Mono, monospace" font-size="8" fill="#4f46e5">Oct 20, 2025</text>
+                <text x="360" y="435" font-family="Inter, sans-serif" font-size="9" fill="#334155">ASIC Rewrite Phase 2</text>
+                <rect x="360" y="440" width="62" height="16" rx="4" fill="#eef2ff"/><text x="368" y="452" font-family="Inter, sans-serif" font-size="7" fill="#4338ca" font-weight="600">Derivatives</text>
+                <text x="260" y="475" font-family="JetBrains Mono, monospace" font-size="8" fill="#4f46e5">Sep 29, 2025</text>
+                <text x="360" y="475" font-family="Inter, sans-serif" font-size="9" fill="#334155">HKMA/SFC CDE Rewrite go-live</text>
+                <rect x="360" y="480" width="62" height="16" rx="4" fill="#eef2ff"/><text x="368" y="492" font-family="Inter, sans-serif" font-size="7" fill="#4338ca" font-weight="600">Derivatives</text>
+
+                <!-- Upcoming Milestones Card -->
+                <rect x="815" y="346" width="565" height="200" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="835" y="370" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8" font-weight="700" letter-spacing="1">UPCOMING MILESTONES</text>
+                <text x="835" y="395" font-family="JetBrains Mono, monospace" font-size="8" fill="#0891b2">Mar 31, 2026</text>
+                <text x="935" y="395" font-family="Inter, sans-serif" font-size="9" fill="#334155">UK PRA Strong &amp; Simple Phase 1</text>
+                <rect x="935" y="400" width="58" height="16" rx="4" fill="#ecfeff"/><text x="942" y="412" font-family="Inter, sans-serif" font-size="7" fill="#0e7490" font-weight="600">Prudential</text>
+                <text x="1004" y="412" font-family="Inter, sans-serif" font-size="7" fill="#e11d48" font-weight="600">21d away</text>
+                <text x="835" y="435" font-family="JetBrains Mono, monospace" font-size="8" fill="#0891b2">Jun 30, 2026</text>
+                <text x="935" y="435" font-family="Inter, sans-serif" font-size="9" fill="#334155">MiFIR RTS 22 revised go-live</text>
+                <rect x="935" y="440" width="98" height="16" rx="4" fill="#f3e8ff"/><text x="942" y="452" font-family="Inter, sans-serif" font-size="7" fill="#7c3aed" font-weight="600">Transaction Reporting</text>
+                <text x="1044" y="452" font-family="Inter, sans-serif" font-size="7" fill="#e11d48" font-weight="600">112d away</text>
+                <text x="835" y="475" font-family="JetBrains Mono, monospace" font-size="8" fill="#0891b2">Sep 1, 2026</text>
+                <text x="935" y="475" font-family="Inter, sans-serif" font-size="9" fill="#334155">EU AMLA operational</text>
+                <rect x="935" y="480" width="50" height="16" rx="4" fill="#fff7ed"/><text x="942" y="492" font-family="Inter, sans-serif" font-size="7" fill="#c2410c" font-weight="600">AML/KYC</text>
+                <text x="996" y="492" font-family="Inter, sans-serif" font-size="7" fill="#e11d48" font-weight="600">175d away</text>
+
+                <!-- Regime Overview Header -->
+                <rect x="240" y="564" width="4" height="16" rx="2" fill="url(#cardBar)"/>
+                <text x="252" y="577" font-family="Orbitron, sans-serif" font-size="11" font-weight="700" fill="#0f172a" letter-spacing="1">REGIME OVERVIEW</text>
+
+                <!-- Regime Cards Row -->
+                <g transform="translate(240, 594)">
+                    <rect x="0" y="0" width="186" height="90" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="0" y="0" width="186" height="3" rx="1" fill="url(#cardBar)"/>
+                    <text x="14" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0f172a">EU EMIR</text>
+                    <text x="14" y="42" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">ESMA</text>
+                    <text x="14" y="62" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">Fields</text>
+                    <text x="46" y="62" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#0f172a">203</text>
+
+                    <rect x="200" y="0" width="186" height="90" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="200" y="0" width="186" height="3" rx="1" fill="url(#cardBar)"/>
+                    <text x="214" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0f172a">UK EMIR</text>
+                    <text x="214" y="42" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">FCA / BoE</text>
+                    <text x="214" y="62" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">Fields</text>
+                    <text x="246" y="62" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#0f172a">204</text>
+
+                    <rect x="400" y="0" width="186" height="90" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="400" y="0" width="186" height="3" rx="1" fill="url(#cardBar)"/>
+                    <text x="414" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0f172a">CFTC</text>
+                    <text x="414" y="42" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">CFTC</text>
+                    <text x="414" y="62" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">Fields</text>
+                    <text x="446" y="62" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#0f172a">128+</text>
+
+                    <rect x="600" y="0" width="186" height="90" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="600" y="0" width="186" height="3" rx="1" fill="url(#cardBar)"/>
+                    <text x="614" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0f172a">MiFIR</text>
+                    <text x="614" y="42" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">ESMA</text>
+                    <text x="614" y="62" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">Fields</text>
+                    <text x="646" y="62" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#0f172a">65</text>
+
+                    <rect x="800" y="0" width="172" height="90" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="800" y="0" width="172" height="3" rx="1" fill="url(#cardBar)"/>
+                    <text x="814" y="26" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Basel III</text>
+                    <text x="814" y="42" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">BIS / EBA</text>
+                    <text x="814" y="62" font-family="Inter, sans-serif" font-size="8" fill="#94a3b8">CRR3</text>
+                    <text x="848" y="62" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700" fill="#0f172a">Active</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4: REGULATORY KNOWLEDGE GRAPH
+     ============================================================ -->
+<section id="knowledge-graph">
+    <div class="container">
+        <div class="section-label">Knowledge Infrastructure</div>
+        <h2>Regulatory Knowledge Graph</h2>
+        <p class="section-desc">
+            The platform ingests, parses, and structures regulatory source material from 40 official
+            sources into a multi-regime knowledge graph — connecting fields, validation rules,
+            schemas, and regulatory guidance into a queryable intelligence layer.
+        </p>
+
+        <!-- Knowledge Graph Visualisation -->
+        <div class="kg-visual">
+            <p style="text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.15em;">
+                Source Material &rarr; Knowledge Graph Structure
+            </p>
+
+            <!-- Source layer -->
+            <p style="font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; font-weight: 600;">INGESTION SOURCES</p>
+            <div class="kg-edges">
+                <span class="kg-node" style="background: #312e81; color: #a5b4fc;">Validation Tables (XLSX)</span>
+                <span class="kg-node" style="background: #312e81; color: #a5b4fc;">XML/XSD Schemas</span>
+                <span class="kg-node" style="background: #312e81; color: #a5b4fc;">RTS/ITS Documents</span>
+                <span class="kg-node" style="background: #312e81; color: #a5b4fc;">Regulator Q&amp;A</span>
+                <span class="kg-node" style="background: #312e81; color: #a5b4fc;">Reporting Instructions</span>
+            </div>
+
+            <!-- Central node -->
+            <div class="kg-center">
+                <div style="height: 30px; width: 2px; background: rgba(255,255,255,0.1); margin: 0 auto;"></div>
+                <span class="kg-node" style="background: linear-gradient(135deg, #4f46e5, #0891b2); color: #fff; font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em;">
+                    REGULATORY KNOWLEDGE GRAPH
+                </span>
+                <div style="height: 30px; width: 2px; background: rgba(255,255,255,0.1); margin: 0 auto;"></div>
+            </div>
+
+            <!-- Output layer -->
+            <p style="font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; font-weight: 600;">GRAPH ENTITIES</p>
+            <div class="kg-edges">
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Regimes</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Fields</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Validation Rules</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">ISO Standards</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Report Types</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Dependencies</span>
+                <span class="kg-node" style="background: #064e3b; color: #6ee7b7;">Source Documents</span>
+            </div>
+        </div>
+
+        <div class="grid-3" style="margin-top: 2rem;">
+            <div class="solution-callout">
+                <h4>Structured Extraction</h4>
+                <p>
+                    Validation tables, field specifications, and schema definitions are parsed into structured
+                    entities with typed relationships — not stored as flat text chunks.
+                </p>
+            </div>
+            <div class="solution-callout">
+                <h4>Cross-Regime Linking</h4>
+                <p>
+                    Fields that appear across regimes (e.g., UTI, LEI, Notional Amount) are linked at the
+                    canonical level, enabling comparison of definitions and validation rules across jurisdictions.
+                </p>
+            </div>
+            <div class="solution-callout">
+                <h4>Version Tracking</h4>
+                <p>
+                    Every document ingested is versioned. When ESMA updates its validation table, the graph
+                    captures what changed — new fields, modified rules, deprecated values — automatically.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5: RAG / CAG ARCHITECTURE
+     ============================================================ -->
+<section id="rag-cag">
+    <div class="container">
+        <div class="section-label">AI Architecture</div>
+        <h2>RAG / CAG Architecture</h2>
+        <p class="section-desc">
+            Every regulatory insight generated by the platform is grounded in source material.
+            The RAG/CAG pipeline ensures factual accuracy, provides citations back to official
+            documents, and prevents model hallucination on regulatory content.
+        </p>
+
+        <!-- RAG Flow Diagram -->
+        <div style="background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 2.5rem; margin-bottom: 2rem;">
+            <p style="text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--slate-400); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.15em;">
+                RAG Pipeline — Query to Cited Response
+            </p>
+            <div class="flow-row">
+                <div class="flow-box">User Query</div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="flow-box">Query Embedding</div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="flow-box highlight">Vector Search</div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="flow-box">Context Assembly</div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="flow-box highlight">LLM Generation</div>
+                <span class="flow-arrow">&rarr;</span>
+                <div class="flow-box">Cited Response</div>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div class="badge badge-indigo" style="margin-bottom: 0.4rem;">RAG</div>
+                    <p style="font-size: 0.78rem; color: var(--slate-500); max-width: 250px;">
+                        Retrieval-Augmented Generation retrieves relevant regulatory passages
+                        from the vector store before generating a response.
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="badge badge-cyan" style="margin-bottom: 0.4rem;">CAG</div>
+                    <p style="font-size: 0.78rem; color: var(--slate-500); max-width: 250px;">
+                        Context-Augmented Generation injects structured knowledge graph
+                        context (field metadata, validation rules, relationships) alongside passages.
+                    </p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="badge badge-emerald" style="margin-bottom: 0.4rem;">CITATION</div>
+                    <p style="font-size: 0.78rem; color: var(--slate-500); max-width: 250px;">
+                        Every response includes traceable citations to source documents,
+                        enabling regulatory audit trail compliance.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3>Document Chunking &amp; Embedding</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Regulatory documents are chunked using structure-aware splitting that respects
+                    section boundaries, table structures, and article numbering. Each chunk is
+                    embedded into a vector space using domain-tuned models, enabling semantic
+                    retrieval that understands regulatory terminology beyond keyword matching.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Multi-Model Routing</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    The architecture employs a multi-model strategy: specialised models handle
+                    schema parsing, validation rule extraction, and field comparison, while frontier
+                    models handle complex reasoning tasks such as cross-regime gap analysis and
+                    regulatory change impact assessment. Routing logic selects the appropriate
+                    model based on query classification.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6: REGULATORY AGENTS
+     ============================================================ -->
+<section id="regime-agents">
+    <div class="container">
+        <div class="section-label">Regime Agents</div>
+        <h2>Regulatory AI Agents for Each Regime</h2>
+        <p class="section-desc">
+            Regime-specific AI agents are pre-loaded with the regulatory knowledge base for their
+            jurisdiction. Each agent understands the fields, validation rules, reporting formats,
+            and regulatory history of its assigned regime — enabling precise, context-aware responses.
+        </p>
+
+        <div class="grid-4">
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #eef2ff; color: #4338ca;">EU EMIR</span>
+                <h3 style="font-size: 0.95rem;">EMIR Agent</h3>
+                <ul>
+                    <li>203 reportable fields</li>
+                    <li>ESMA validation table rules</li>
+                    <li>ISO 20022 XML schema</li>
+                    <li>Refit transition analysis</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #ecfeff; color: #0e7490;">UK EMIR</span>
+                <h3 style="font-size: 0.95rem;">UK EMIR Agent</h3>
+                <ul>
+                    <li>204 reportable fields</li>
+                    <li>FCA validation rules</li>
+                    <li>UK-specific deviations</li>
+                    <li>Transition period tracking</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #fffbeb; color: #b45309;">CFTC</span>
+                <h3 style="font-size: 0.95rem;">CFTC Agent</h3>
+                <ul>
+                    <li>128 core + 49 proposed fields</li>
+                    <li>Parts 43/45 specifications</li>
+                    <li>Tech Spec v3.3 compliance</li>
+                    <li>Proposed rule tracking</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #f0fdf4; color: #047857;">MiFIR</span>
+                <h3 style="font-size: 0.95rem;">MiFID Agent</h3>
+                <ul>
+                    <li>RTS 22 transaction reporting</li>
+                    <li>65 current fields</li>
+                    <li>Revised spec (2026 expected)</li>
+                    <li>ESMA Q&amp;A integration</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #fff1f2; color: #be123c;">SFTR</span>
+                <h3 style="font-size: 0.95rem;">SFTR Agent</h3>
+                <ul>
+                    <li>EU &amp; UK SFTR coverage</li>
+                    <li>SFT lifecycle reporting</li>
+                    <li>Collateral and margin fields</li>
+                    <li>Trade repository integration</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #eef2ff; color: #4338ca;">Basel III</span>
+                <h3 style="font-size: 0.95rem;">Basel Agent</h3>
+                <ul>
+                    <li>CRR3 / Basel III.1 tracking</li>
+                    <li>FRTB market risk reporting</li>
+                    <li>CVA risk framework</li>
+                    <li>PRA implementation mapping</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #ecfdf5; color: #047857;">APAC</span>
+                <h3 style="font-size: 0.95rem;">APAC Agent</h3>
+                <ul>
+                    <li>MAS, HKMA/SFC, ASIC, JFSA</li>
+                    <li>CDE rewrite coverage</li>
+                    <li>Regional deviation mapping</li>
+                    <li>Phase rollout tracking</li>
+                </ul>
+            </div>
+            <div class="agent-card">
+                <span class="regime-badge" style="background: #fffbeb; color: #b45309;">ESG</span>
+                <h3 style="font-size: 0.95rem;">ESG / AML Agent</h3>
+                <ul>
+                    <li>CSRD reporting waves</li>
+                    <li>EU Taxonomy alignment</li>
+                    <li>AMLA requirements</li>
+                    <li>AML/KYC field mapping</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7: FIELD-LEVEL IMPACT INTELLIGENCE
+     ============================================================ -->
+<section id="field-intelligence">
+    <div class="container">
+        <div class="section-label">Field Intelligence</div>
+        <h2>Field-Level Impact Intelligence</h2>
+        <p class="section-desc">
+            The platform operates at the granularity of individual regulatory fields — the atomic
+            unit of regulatory reporting. Every field is mapped, compared, validated, and scored
+            across regimes to provide actionable implementation intelligence.
+        </p>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon" style="background: var(--indigo);">&#x1F5C2;</div>
+                <h3>Canonical Field Mapping</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    58 canonical fields are maintained as a cross-regime harmonised data model.
+                    Each canonical field maps to its regime-specific variants, capturing differences
+                    in naming, data type, format, and validation requirements. This enables a single
+                    source system to serve multiple regulatory outputs.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--cyan);">&#x1F504;</div>
+                <h3>Cross-Regime Comparison</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    For any given field (e.g., Unique Transaction Identifier), the platform compares
+                    the definition, validation logic, mandatoriness (M/C/O), data type, and
+                    ISO standard alignment across all active regimes. This identifies convergence
+                    points and regime-specific deviations that affect implementation.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--emerald);">&#x1F4CA;</div>
+                <h3>Regulatory Impact Scoring</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    When a regulatory change is detected — a new field, modified validation rule,
+                    or schema update — the platform automatically scores the impact based on the
+                    number of affected regimes, downstream system dependencies, and implementation
+                    complexity. This feeds directly into the implementation backlog.
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 2rem; overflow-x: auto;">
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--slate-400); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.15em;">
+                Example — Unique Transaction Identifier (UTI) across regimes
+            </p>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--slate-200);">
+                        <th style="text-align: left; padding: 0.6rem 0.75rem; color: var(--slate-500); font-weight: 700;">Regime</th>
+                        <th style="text-align: left; padding: 0.6rem 0.75rem; color: var(--slate-500); font-weight: 700;">Field Name</th>
+                        <th style="text-align: left; padding: 0.6rem 0.75rem; color: var(--slate-500); font-weight: 700;">Data Type</th>
+                        <th style="text-align: left; padding: 0.6rem 0.75rem; color: var(--slate-500); font-weight: 700;">ISO Standard</th>
+                        <th style="text-align: left; padding: 0.6rem 0.75rem; color: var(--slate-500); font-weight: 700;">MCO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-indigo">EU EMIR</span></td>
+                        <td style="padding: 0.6rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">Unique transaction identifier</td>
+                        <td style="padding: 0.6rem 0.75rem;">AN-52</td>
+                        <td style="padding: 0.6rem 0.75rem;">ISO 23897</td>
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-emerald">M</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-cyan">UK EMIR</span></td>
+                        <td style="padding: 0.6rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">Unique transaction identifier</td>
+                        <td style="padding: 0.6rem 0.75rem;">AN-52</td>
+                        <td style="padding: 0.6rem 0.75rem;">ISO 23897</td>
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-emerald">M</span></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--slate-100);">
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-amber">CFTC</span></td>
+                        <td style="padding: 0.6rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">Unique Swap Identifier (USI)</td>
+                        <td style="padding: 0.6rem 0.75rem;">AN-72</td>
+                        <td style="padding: 0.6rem 0.75rem;">CFTC-specific</td>
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-emerald">M</span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-rose">MAS</span></td>
+                        <td style="padding: 0.6rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">Unique transaction identifier</td>
+                        <td style="padding: 0.6rem 0.75rem;">AN-52</td>
+                        <td style="padding: 0.6rem 0.75rem;">ISO 23897</td>
+                        <td style="padding: 0.6rem 0.75rem;"><span class="badge badge-emerald">M</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 8: REGULATORY CHANGE MONITORING
+     ============================================================ -->
+<section id="change-monitoring">
+    <div class="container">
+        <div class="section-label">Continuous Monitoring</div>
+        <h2>Regulatory Change Monitoring</h2>
+        <p class="section-desc">
+            The platform continuously monitors 40 regulatory sources across 11 jurisdictions,
+            detecting changes to validation tables, schema releases, consultation papers,
+            and regulatory timelines — then automatically generating impact assessments
+            and implementation backlog items.
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 2rem;">
+            <div>
+                <h3 style="margin-bottom: 1rem;">What the Platform Monitors</h3>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span class="badge badge-indigo">Regulator Websites</span>
+                        <span class="badge badge-cyan">Consultation Papers</span>
+                        <span class="badge badge-emerald">Validation Tables</span>
+                        <span class="badge badge-amber">Schema Releases</span>
+                        <span class="badge badge-rose">Regulatory Timelines</span>
+                        <span class="badge badge-slate">Q&amp;A Updates</span>
+                        <span class="badge badge-indigo">Technical Standards</span>
+                        <span class="badge badge-cyan">Industry Guidance</span>
+                    </div>
+                </div>
+                <div class="solution-callout">
+                    <h4>Automated Change Detection</h4>
+                    <p>
+                        When ESMA publishes an updated validation table or the FCA releases revised
+                        reporting instructions, the platform detects the change, parses the differences,
+                        and generates a structured change report — within hours, not weeks.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">What the Platform Generates</h3>
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span class="badge badge-emerald">Change Alerts</span>
+                        <span class="badge badge-indigo">Impact Analysis</span>
+                        <span class="badge badge-amber">Backlog Items</span>
+                        <span class="badge badge-cyan">Field Diffs</span>
+                        <span class="badge badge-rose">Deadline Updates</span>
+                        <span class="badge badge-slate">Source Versioning</span>
+                    </div>
+                </div>
+                <div class="solution-callout">
+                    <h4>Impact Propagation</h4>
+                    <p>
+                        A single field change in one regime is automatically assessed for impact
+                        across the canonical model, downstream systems, and related regimes.
+                        Affected implementation items are flagged and prioritised.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regulatory Timeline -->
+        <div style="background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 2rem;">
+            <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--slate-400); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.15em;">
+                Upcoming Regulatory Milestones
+            </p>
+            <div class="timeline-item">
+                <span class="timeline-date">Mar 2026</span>
+                <div class="timeline-content">
+                    <h4>UK PRA Strong &amp; Simple Framework Phase 1</h4>
+                    <p>PS6/24 implementation deadline for simplified prudential requirements.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">Jun 2026</span>
+                <div class="timeline-content">
+                    <h4>MiFIR RTS 22 Revised Go-Live</h4>
+                    <p>Expected implementation of revised transaction reporting requirements under MiFIR.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">Sep 2026</span>
+                <div class="timeline-content">
+                    <h4>EU AMLA Operational</h4>
+                    <p>Anti-Money Laundering Authority becomes operational under the EU AML Package.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">Jan 2027</span>
+                <div class="timeline-content">
+                    <h4>Basel III.1 Full FRTB &amp; CVA Mandatory (EU)</h4>
+                    <p>Full Fundamental Review of the Trading Book and CVA risk reporting requirements take effect.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">Jan 2028</span>
+                <div class="timeline-content">
+                    <h4>CSRD Third Wave — Non-EU Companies</h4>
+                    <p>Non-EU companies with significant EU operations must report under CSRD.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 9: PLATFORM ARCHITECTURE OVERVIEW
+     ============================================================ -->
+<section id="architecture">
+    <div class="container">
+        <div class="section-label">Technical Architecture</div>
+        <h2>Platform Architecture Overview</h2>
+        <p class="section-desc">
+            The platform is built as a layered architecture, from regulatory data sources at the
+            base through parsing, knowledge representation, AI reasoning, and bank integration
+            at the top. Each layer is independently scalable and auditable.
+        </p>
+
+        <div class="arch-diagram">
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #4f46e5;">7</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #4338ca, #4f46e5);">
+                    <span class="title">User Interface / Platform Tools</span>
+                    <span class="detail">Dashboard &middot; Field Library &middot; Source Registry &middot; Impact Analysis</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #6366f1;">6</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #4f46e5, #6366f1);">
+                    <span class="title">Bank Integration Layer</span>
+                    <span class="detail">APIs &middot; SSO &middot; Internal LLM Routing &middot; MLOps &middot; Governance</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #0891b2;">5</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #6366f1, #0891b2);">
+                    <span class="title">Regulatory AI Agents</span>
+                    <span class="detail">EMIR &middot; UK EMIR &middot; CFTC &middot; MiFIR &middot; SFTR &middot; Basel &middot; APAC &middot; ESG</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #0e7490;">4</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #0891b2, #0e7490);">
+                    <span class="title">RAG / CAG AI Engine</span>
+                    <span class="detail">Vector Search &middot; Context Assembly &middot; Multi-Model Routing &middot; Citation Engine</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #059669;">3</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #0e7490, #059669);">
+                    <span class="title">Regulatory Knowledge Graph</span>
+                    <span class="detail">Entities &middot; Relationships &middot; Versions &middot; Cross-Regime Links &middot; Dependencies</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #047857;">2</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #059669, #047857);">
+                    <span class="title">Parsing &amp; Knowledge Ingestion</span>
+                    <span class="detail">XML/XSD Parser &middot; XLSX Extractor &middot; PDF Parser &middot; Document Chunking &middot; Embedding</span>
+                </div>
+            </div>
+            <div class="arch-connector"></div>
+            <div class="arch-layer">
+                <div class="arch-num" style="background: #064e3b;">1</div>
+                <div class="arch-bar" style="background: linear-gradient(90deg, #047857, #064e3b);">
+                    <span class="title">Regulatory Data Sources</span>
+                    <span class="detail">ESMA &middot; FCA &middot; CFTC &middot; SEC &middot; MAS &middot; HKMA &middot; ASIC &middot; JFSA &middot; BIS &middot; EBA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 10: INTEGRATION WITH BANK AI ECOSYSTEMS
+     ============================================================ -->
+<section id="bank-integration">
+    <div class="container">
+        <div class="section-label">Enterprise Integration</div>
+        <h2>Integration with Bank AI Ecosystems</h2>
+        <p class="section-desc">
+            SustainsysAI is designed to operate within existing bank technology governance
+            frameworks — integrating with internal LLM platforms, model risk management
+            processes, and data governance structures rather than bypassing them.
+        </p>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon" style="background: var(--indigo);">&#x1F512;</div>
+                <h3>Model Risk Management</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    All AI-generated regulatory insights include full provenance: the source
+                    documents consulted, the retrieval scores, and the generation parameters.
+                    This supports SR 11-7 model risk management requirements and internal
+                    validation processes. Models can be swapped or updated without changing
+                    the knowledge layer.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--cyan);">&#x1F517;</div>
+                <h3>Internal LLM Integration</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Banks running internal LLM platforms (Azure OpenAI, AWS Bedrock, on-premise
+                    deployments) can route SustainsysAI queries through their own infrastructure.
+                    The regulatory knowledge graph and RAG pipeline are decoupled from the model
+                    layer, enabling bring-your-own-model deployments.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon" style="background: var(--emerald);">&#x1F4CB;</div>
+                <h3>Governance &amp; Audit</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Every interaction is logged with complete audit trails. Regulatory citations
+                    link directly to official source documents. The platform supports role-based
+                    access control, data residency requirements, and integration with bank SIEM
+                    systems for security monitoring.
+                </p>
+            </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1.5rem;">
+            <div class="solution-callout">
+                <h4>Explainability</h4>
+                <p>
+                    Every regulatory answer includes a citation chain: the question asked, the documents
+                    retrieved, the passages used for generation, and the confidence score. Bank compliance
+                    teams can verify any AI-generated guidance against the underlying regulatory source.
+                </p>
+            </div>
+            <div class="solution-callout">
+                <h4>Supervisory Alignment</h4>
+                <p>
+                    The architecture is designed to align with emerging supervisory expectations for AI
+                    in financial services — including ECB guidance on AI risk, PRA expectations on model
+                    governance, and MAS principles on responsible AI use in regulated activities.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     SECTION 11: WHY BANKS NEED THIS NOW
+     ============================================================ -->
+<section id="why-now">
+    <div class="container">
+        <div class="section-label">The Case for Action</div>
+        <h2>Why Banks Need AI-Driven Regulatory Intelligence Now</h2>
+        <p class="section-desc">
+            The regulatory landscape is not simplifying. The volume of reporting requirements,
+            the pace of regulatory change, and the supervisory expectation for data quality
+            are all accelerating. Manual approaches have reached their operational limit.
+        </p>
+
+        <div class="grid-2" style="margin-bottom: 2rem;">
+            <div class="card">
+                <h3>Regime Convergence Creates Opportunity</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    The global shift to ISO 20022 XML, standardised identifiers (LEI, UTI, UPI),
+                    and harmonised CDE definitions means that for the first time, a single
+                    canonical data model can serve multiple regimes. But exploiting this convergence
+                    requires the ability to map fields across regimes at scale — precisely the
+                    capability that AI-driven knowledge graphs provide.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Regulatory Velocity Exceeds Manual Capacity</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Between 2024 and 2028, banks face simultaneous implementation deadlines for
+                    EMIR Refit, CFTC rewrites, Basel III.1, CSRD, DORA, MiFIR revisions, APAC
+                    rewrites, and the EU AML package. Any institution attempting to track these
+                    changes manually across dozens of regulatory portals is accepting material
+                    operational risk.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Data Quality Is Now a Regulatory Priority</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Regulators are increasingly scrutinising data quality at the field level.
+                    BCBS 239 compliance, DORA operational resilience requirements, and enhanced
+                    transaction reporting validation all demand that banks can demonstrate
+                    end-to-end data lineage from source system to regulatory submission.
+                    AI-driven field mapping provides this traceability.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Competitive Differentiation Through Intelligence</h3>
+                <p style="font-size: 0.88rem; color: var(--slate-600); line-height: 1.7;">
+                    Banks that build regulatory intelligence capabilities now — understanding
+                    not just what to report, but how regulatory changes propagate through their
+                    systems — will have a structural advantage in implementation speed,
+                    compliance quality, and operational cost. Regulatory reporting is no longer
+                    a cost centre to minimise; it is an operational capability to optimise.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     CTA SECTION
+     ============================================================ -->
+<section id="get-started" class="cta-section" style="padding: 5rem 0;">
+    <div class="container">
+        <div class="section-label" style="justify-content: center; color: rgba(255,255,255,0.5);">Get Started</div>
+        <h2 style="font-size: 2rem;">Ready to Transform Regulatory Reporting?</h2>
+        <p style="margin-bottom: 2.5rem;">
+            Discover how SustainsysAI can help your institution build an intelligent
+            regulatory knowledge layer — reducing implementation risk, improving data
+            quality, and accelerating compliance delivery.
+        </p>
+
+        <!-- Key Takeaways Grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; max-width: 1000px; margin: 0 auto 3rem; text-align: center;">
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem 1rem;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: #fff;">11</div>
+                <div style="font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem;">Regimes covered<br>across 3 continents</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem 1rem;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: #fff;">40</div>
+                <div style="font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem;">Regulatory sources<br>continuously monitored</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem 1rem;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: #fff;">100%</div>
+                <div style="font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem;">Cited responses<br>traceable to source</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem 1rem;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; color: #fff;">8</div>
+                <div style="font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem;">Regime-specific<br>AI agents</div>
+            </div>
+        </div>
+
+        <!-- Trust Signals -->
+        <div style="display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55);">
+                <span style="color: #67e8f9;">&#x2713;</span> Explainable AI with full citation chains
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55);">
+                <span style="color: #67e8f9;">&#x2713;</span> SR 11-7 model risk alignment
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55);">
+                <span style="color: #67e8f9;">&#x2713;</span> Bring-your-own-model deployment
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: rgba(255,255,255,0.55);">
+                <span style="color: #67e8f9;">&#x2713;</span> ISO 20022 native support
+            </div>
+        </div>
+
+        <a href="https://sustainsys.co.uk/contact.html" class="cta-btn">Contact for Demo &rarr;</a>
+
+        <p style="font-size: 0.78rem; color: rgba(255,255,255,0.35); margin-top: 1.5rem;">
+            Cambridge, UK &middot; SustainSys Consulting Ltd &middot; AI-Powered Engineering
+        </p>
+    </div>
+</section>
+
+</div><!-- /main-content -->
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" style="margin-left: 220px;">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="logo_only.png" alt="SustainSys Logo">
+                <div>
+                    <h3>SustainSys Consulting Ltd</h3>
+                    <p>AI-Powered Engineering Solutions</p>
+                </div>
+            </div>
+            <div class="footer-location">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#0891b2"/></svg>
+                <div>
+                    <div class="city">Cambridge, UK</div>
+                    <div class="sub">Innovation Hub</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="https://sustainsys.co.uk/privacy.html">Privacy Policy</a> &middot; <a href="https://sustainsys.co.uk/support.html">Support</a> &middot; <a href="https://sustainsys.co.uk/delete-account.html">Unsubscribe</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Side nav active state on scroll
+(function() {
+    const sideLinks = document.querySelectorAll('.side-nav a');
+    const sections = [];
+    sideLinks.forEach(link => {
+        const id = link.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) sections.push({ id, el, link });
+    });
+
+    function updateActive() {
+        let current = sections[0];
+        const scrollY = window.scrollY + 120;
+        for (const s of sections) {
+            if (s.el.offsetTop <= scrollY) current = s;
+        }
+        sideLinks.forEach(l => l.classList.remove('active'));
+        if (current) current.link.classList.add('active');
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    // Smooth scroll with offset for fixed nav
+    sideLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = this.getAttribute('href').slice(1);
+            const target = document.getElementById(id);
+            if (target) {
+                window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+            }
+        });
+    });
+})();
+</script>
+
+</body>
+</html>

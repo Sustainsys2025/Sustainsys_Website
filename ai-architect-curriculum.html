@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Architect Mastery Curriculum — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── SustainSys Brand Palette (Light Theme — matches website) ── */
+  :root {
+    --bg:          #f8fafc;
+    --bg2:         #f1f5f9;
+    --surface:     #ffffff;
+    --surface2:    #f8fafc;
+    --surface3:    #f1f5f9;
+    --border:      #e2e8f0;
+    --border2:     #cbd5e1;
+    --teal:        #0891b2;
+    --teal-light:  #06b6d4;
+    --teal-dim:    rgba(8,145,178,0.10);
+    --teal-glow:   rgba(8,145,178,0.05);
+    --blue:        #7c3aed;
+    --blue-light:  #8b5cf6;
+    --blue-dim:    rgba(124,58,237,0.10);
+    --amber:       #d97706;
+    --amber-dim:   rgba(217,119,6,0.10);
+    --green:       #059669;
+    --green-dim:   rgba(5,150,105,0.10);
+    --text:        #1e293b;
+    --text-muted:  #64748b;
+    --text-dim:    #94a3b8;
+    --heading:     #0f172a;
+    --code-bg:     #f1f5f9;
+    --sidebar-w:   260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(8,145,178,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 70% at 85% 90%, rgba(124,58,237,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(8,145,178,0.02) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200; height: 58px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+  }
+  .topnav-inner {
+    width: 100%; padding: 0 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.7rem;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-logo-img { height: 34px; width: auto; display: block; object-fit: contain; }
+  .nav-logo-text {
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.92rem;
+    color: var(--heading); letter-spacing: -0.01em;
+  }
+  .nav-logo-text span { color: var(--teal); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
+  .nav-title {
+    font-size: 0.8rem; color: var(--text-muted); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+  }
+  .nav-badge {
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    background: var(--teal-dim); color: var(--teal);
+    border: 1px solid rgba(8,145,178,0.25);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-circle-wrap {
+    position: fixed; top: 12px; right: 1.4rem; z-index: 300;
+    width: 36px; height: 36px;
+  }
+  .progress-circle-wrap svg { transform: rotate(-90deg); width: 36px; height: 36px; }
+  .progress-circle-track { fill: none; stroke: var(--border2); stroke-width: 3; }
+  .progress-circle-fill {
+    fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round;
+    stroke-dasharray: 94.25; stroke-dashoffset: 94.25;
+    transition: stroke-dashoffset 0.15s ease;
+  }
+  .progress-circle-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
+    font-weight: 500; color: var(--teal); line-height: 1;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top: 58px; left: 0; bottom: 0;
+    width: var(--sidebar-w); background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto; z-index: 150;
+    padding: 1.5rem 0 2rem; transition: transform 0.3s ease;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .sidebar-section-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block;
+  }
+  .sidebar-nav { list-style: none; padding: 0; }
+  .sidebar-nav li { position: relative; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.55rem 1.4rem; text-decoration: none;
+    font-size: 0.82rem; color: var(--text-muted); font-weight: 500;
+    transition: color 0.2s, background 0.2s;
+    border-left: 2px solid transparent; line-height: 1.3;
+  }
+  .sidebar-nav a:hover { color: var(--teal); background: rgba(8,145,178,0.05); }
+  .sidebar-nav a.active { color: var(--teal); background: var(--teal-glow); border-left-color: var(--teal); }
+  .sidebar-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right;
+  }
+  .sidebar-nav a.active .sidebar-num { color: var(--teal); opacity: 0.6; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 0.8rem 1.4rem; }
+
+  /* ── Completion checkboxes ── */
+  .sidebar-check {
+    flex-shrink: 0; width: 16px; height: 16px; border-radius: 3px;
+    border: 1.5px solid var(--border2); background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s ease; margin-left: auto;
+    position: relative;
+  }
+  .sidebar-check:hover { border-color: var(--green); background: var(--green-dim); }
+  .sidebar-check::after {
+    content: ''; display: block; width: 0; height: 0; opacity: 0;
+    transition: all 0.2s ease;
+  }
+  .sidebar-nav li.done .sidebar-check {
+    border-color: var(--green); background: var(--green);
+  }
+  .sidebar-nav li.done .sidebar-check::after {
+    content: '✓'; color: #fff; font-size: 0.6rem; font-weight: 700;
+    width: auto; height: auto; opacity: 1;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .sidebar-nav li.done a { color: var(--green); }
+  .sidebar-nav li.done .sidebar-num { color: var(--green); opacity: 0.5; text-decoration: line-through; }
+  .sidebar-nav li.done a.active { background: rgba(5,150,105,0.06); border-left-color: var(--green); }
+
+  /* ── Progress bar in sidebar ── */
+  .sidebar-progress {
+    margin: 0.6rem 1.4rem 0.4rem; padding: 0; display: flex;
+    align-items: center; gap: 0.6rem;
+  }
+  .sidebar-progress-bar {
+    flex: 1; height: 4px; background: var(--border);
+    border-radius: 2px; overflow: hidden;
+  }
+  .sidebar-progress-fill {
+    height: 100%; width: 0%; background: var(--green);
+    border-radius: 2px; transition: width 0.4s ease;
+  }
+  .sidebar-progress-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+    color: var(--text-dim); white-space: nowrap; min-width: 3.5rem;
+    text-align: right;
+  }
+
+  .sidebar-toggle {
+    display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 400;
+    width: 44px; height: 44px; background: var(--teal); border: none;
+    border-radius: 50%; color: var(--bg); font-size: 1.1rem; cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(8,145,178,0.3);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar-w); margin-top: 58px;
+    min-height: calc(100vh - 58px); position: relative; z-index: 1;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5rem 0 4rem; border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: -40px; right: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    color: var(--teal); background: var(--teal-dim);
+    border: 1px solid rgba(8,145,178,0.25);
+    padding: 0.3rem 0.8rem; border-radius: 3px;
+    margin-bottom: 1.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800; color: var(--heading); line-height: 1.12;
+    margin-bottom: 1.4rem; letter-spacing: -0.03em;
+  }
+  .hero h1 .accent { color: var(--teal); }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--text-muted); max-width: 580px;
+    line-height: 1.75; margin-bottom: 2.5rem;
+  }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    padding: 0.3rem 0.75rem; border-radius: 3px;
+    border: 1px solid var(--border2); color: var(--text-muted); background: var(--surface);
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface); border: 1px solid var(--border2);
+    border-top: 2px solid var(--blue); padding: 2rem; margin: 3rem 0;
+  }
+  .toc-heading {
+    font-family: 'Sora', sans-serif; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--blue-light); margin-bottom: 1.2rem; font-weight: 700;
+  }
+  .toc ol {
+    padding-left: 1.2rem; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 0.35rem 2rem;
+  }
+  @media (max-width: 560px) { .toc ol { grid-template-columns: 1fr; } }
+  .toc a {
+    color: var(--text-muted); text-decoration: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--teal); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--teal); margin-bottom: 0.8rem;
+  }
+  .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--teal); }
+  h2 {
+    font-family: 'Sora', sans-serif; font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800; color: var(--heading); line-height: 1.2;
+    margin-bottom: 1.5rem; letter-spacing: -0.025em;
+  }
+  h3 {
+    font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700;
+    color: var(--heading); margin: 2.5rem 0 0.9rem; letter-spacing: -0.015em;
+  }
+  h4 {
+    font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700;
+    color: var(--amber); text-transform: uppercase;
+    letter-spacing: 0.07em; margin: 2rem 0 0.7rem;
+  }
+  p { margin-bottom: 1.1rem; }
+  strong { color: var(--heading); font-weight: 600; }
+  em { color: var(--teal); font-style: normal; font-weight: 500; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+  li { margin-bottom: 0.35rem; font-size: 0.96rem; }
+
+  /* ── CODE ── */
+  code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.81em;
+    background: var(--teal-dim); color: var(--teal-light);
+    padding: 0.1em 0.4em; border-radius: 3px;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-left: 2px solid var(--teal); padding: 1.4rem 1.5rem;
+    overflow-x: auto; margin: 1.4rem 0; border-radius: 0 3px 3px 0;
+  }
+  pre code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    line-height: 1.75; color: #334155; background: none; padding: 0;
+  }
+  .code-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--teal); opacity: 0.7; display: block; margin-bottom: 0.3rem;
+  }
+  .kw { color: #7c3aed; }
+  .fn { color: #0891b2; }
+  .st { color: #d97706; }
+  .cm { color: #94a3b8; font-style: italic; }
+  .nm { color: #1e293b; }
+  .dt { color: #db2777; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    padding: 1.2rem 1.4rem; margin: 1.8rem 0;
+    border-left: 2px solid; border-radius: 0 4px 4px 0;
+  }
+  .callout.tip     { background: rgba(8,145,178,0.06);  border-color: var(--teal); }
+  .callout.info    { background: rgba(124,58,237,0.06); border-color: var(--blue); }
+  .callout.warning { background: rgba(217,119,6,0.06); border-color: var(--amber); }
+  .callout.success { background: rgba(5,150,105,0.06); border-color: var(--green); }
+  .callout-title {
+    font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem;
+  }
+  .callout.tip .callout-title     { color: var(--teal); }
+  .callout.info .callout-title    { color: var(--blue-light); }
+  .callout.warning .callout-title { color: var(--amber); }
+  .callout.success .callout-title { color: var(--green); }
+  .callout p { margin: 0; font-size: 0.92rem; }
+
+  /* ── DIAGRAM ── */
+  .diagram {
+    background: var(--code-bg); border: 1px solid var(--border);
+    padding: 1.5rem 2rem; margin: 1.8rem 0; overflow-x: auto;
+  }
+  .diagram pre { background: none; border: none; padding: 0; margin: 0; }
+  .diagram pre code { color: #475569; font-size: 0.78rem; }
+
+  /* ── COMPARE ── */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    margin: 1.8rem 0; background: var(--border); border: 1px solid var(--border);
+  }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+  .compare-col { background: var(--surface); padding: 1.4rem; }
+  .compare-col h5 {
+    font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;
+  }
+  .compare-col.before h5 { color: var(--text-dim); }
+  .compare-col.after  h5 { color: var(--teal); }
+  .compare-col ul { list-style: none; padding: 0; }
+  .compare-col li {
+    font-size: 0.85rem; color: var(--text-muted);
+    padding: 0.3rem 0 0.3rem 1.3rem; position: relative;
+  }
+  .compare-col.before li::before { content: '✕'; color: #ef4444; position: absolute; left: 0; font-size: 0.7rem; top: 0.38rem; }
+  .compare-col.after  li::before { content: '✓'; color: var(--teal); position: absolute; left: 0; font-size: 0.7rem; top: 0.38rem; }
+
+  /* ── FLOW ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 1.8rem 0; }
+  .flow-step { display: flex; gap: 1.2rem; align-items: flex-start; position: relative; }
+  .flow-step:not(:last-child)::after {
+    content: ''; position: absolute; left: 1rem; top: 2.6rem; bottom: -1rem;
+    width: 1px; background: var(--border2);
+  }
+  .flow-icon {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--surface3); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+    color: var(--teal); flex-shrink: 0; margin-top: 0.15rem;
+  }
+  .flow-content { padding-bottom: 1.8rem; flex: 1; }
+  .flow-content strong {
+    display: block; font-family: 'Sora', sans-serif;
+    font-size: 0.9rem; color: var(--heading); margin-bottom: 0.25rem;
+  }
+  .flow-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+
+  /* ── TERM GRID ── */
+  .term-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1px; margin: 1.8rem 0; background: var(--border);
+  }
+  .term-card { background: var(--surface); padding: 1.3rem; transition: background 0.2s; }
+  .term-card:hover { background: var(--surface2); }
+  .term-card .term-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+    color: var(--teal); font-weight: 500; margin-bottom: 0.45rem;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .term-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+  /* ── TECH TABLE ── */
+  .tech-table { width: 100%; border-collapse: collapse; margin: 1.8rem 0; font-size: 0.88rem; }
+  .tech-table th {
+    font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--teal); padding: 0.7rem 1rem;
+    text-align: left; border-bottom: 1px solid var(--border2);
+    font-weight: 600; background: var(--surface);
+  }
+  .tech-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .tech-table tr:hover td { background: rgba(8,145,178,0.04); }
+  .tech-table td:first-child {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    color: var(--amber); white-space: nowrap;
+  }
+
+  /* ── EXERCISE BOX ── */
+  .exercise-box {
+    background: var(--green-dim); border: 1px solid rgba(5,150,105,0.25);
+    border-left: 3px solid var(--green); padding: 1.4rem 1.6rem;
+    margin: 1.8rem 0; border-radius: 0 6px 6px 0;
+  }
+  .exercise-box .exercise-title {
+    font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 700;
+    color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 0.8rem;
+  }
+  .exercise-box ol { margin: 0; padding-left: 1.2rem; }
+  .exercise-box li { font-size: 0.88rem; color: var(--text); margin-bottom: 0.4rem; }
+
+  /* ── MINI-PROJECT BOX ── */
+  .project-box {
+    background: var(--blue-dim); border: 1px solid rgba(124,58,237,0.25);
+    border-left: 3px solid var(--blue); padding: 1.4rem 1.6rem;
+    margin: 1.8rem 0; border-radius: 0 6px 6px 0;
+  }
+  .project-box .project-title {
+    font-family: 'Sora', sans-serif; font-size: 0.8rem; font-weight: 700;
+    color: var(--blue-light); text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 0.6rem;
+  }
+  .project-box p { margin: 0; font-size: 0.9rem; }
+
+  /* ── MODULE HEADER BANNER ── */
+  .module-banner {
+    background: linear-gradient(135deg, rgba(8,145,178,0.08) 0%, rgba(124,58,237,0.08) 100%);
+    border: 1px solid rgba(8,145,178,0.2);
+    padding: 1.8rem 2rem; margin-bottom: 2rem; border-radius: 6px;
+    position: relative; overflow: hidden;
+  }
+  .module-banner::after {
+    content: ''; position: absolute; top: -20px; right: -20px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(8,145,178,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .module-banner .module-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    color: var(--teal); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+  .module-banner h2 { margin-bottom: 0.6rem; }
+  .module-banner .module-duration {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3.5rem 0; border-top: 1px solid var(--border); text-align: center;
+  }
+  .footer-logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+  .footer-logo-img { height: 30px; width: auto; display: block; object-fit: contain; }
+  .footer-logo-text {
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--heading);
+  }
+  .footer-logo-text span { color: var(--teal); }
+  footer p { font-size: 0.82rem; color: var(--text-dim); margin: 0.3rem 0; }
+  footer a { color: var(--teal); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    .sidebar { transform: translateX(-260px); width: 260px; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .sidebar-toggle { display: flex; }
+    .progress-circle-wrap { right: 1rem; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ── Progress Circle ── -->
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36">
+    <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+    <circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/>
+  </svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<!-- ── Top Nav ── -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <span class="nav-logo-text">Sustain<span>Sys</span></span>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">AI Academy · AI Architect Mastery Curriculum</span>
+    <span style="flex-shrink:0;font-family:'Inter',sans-serif;font-size:0.75rem;white-space:nowrap;background:linear-gradient(135deg,rgba(8,145,178,0.12),rgba(124,58,237,0.12));border:1px solid rgba(8,145,178,0.35);border-radius:4px;padding:0.25rem 0.75rem;color:var(--heading);">Reviewed by: <strong style="color:var(--teal);font-weight:700;">Satyawan S.</strong></span>
+    <span class="nav-badge">Student Guide</span>
+  </div>
+</nav>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar" id="sidebar">
+  <span class="sidebar-section-label">Curriculum</span>
+  <div class="sidebar-progress">
+    <div class="sidebar-progress-bar"><div class="sidebar-progress-fill" id="progressFill"></div></div>
+    <span class="sidebar-progress-label" id="progressText">0 / 16</span>
+  </div>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li data-topic="hero"><a href="#hero" class="active"><span class="sidebar-num">00</span>Introduction<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <div class="sidebar-divider"></div>
+    <li data-topic="m1"><a href="#m1"><span class="sidebar-num">M1</span>AI Foundations<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-llms"><a href="#m1-llms"><span class="sidebar-num">1.2</span>What LLMs Are<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-tokens"><a href="#m1-tokens"><span class="sidebar-num">1.3</span>Tokens &amp; Embeddings<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-inference"><a href="#m1-inference"><span class="sidebar-num">1.4</span>Inference vs Training<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-frontier"><a href="#m1-frontier"><span class="sidebar-num">1.5</span>Frontier vs SLMs<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-edge"><a href="#m1-edge"><span class="sidebar-num">1.6</span>Edge vs Cloud<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m1-hybrid"><a href="#m1-hybrid"><span class="sidebar-num">1.7</span>Hybrid Architecture<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <div class="sidebar-divider"></div>
+    <li data-topic="m2"><a href="#m2"><span class="sidebar-num">M2</span>Multi-Agent Systems<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m3"><a href="#m3"><span class="sidebar-num">M3</span>Memory Systems<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m4"><a href="#m4"><span class="sidebar-num">M4</span>RAG Pipelines<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m5"><a href="#m5"><span class="sidebar-num">M5</span>Enterprise AI<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m6"><a href="#m6"><span class="sidebar-num">M6</span>Cross-Cloud AI<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <li data-topic="m7"><a href="#m7"><span class="sidebar-num">M7</span>GenAIOps<span class="sidebar-check" title="Mark as complete"></span></a></li>
+    <div class="sidebar-divider"></div>
+    <li data-topic="capstone"><a href="#capstone"><span class="sidebar-num">★</span>Capstone Project<span class="sidebar-check" title="Mark as complete"></span></a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+
+<!-- ══════════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════════ -->
+<main class="main">
+
+<!-- Hero -->
+<div class="hero" id="hero">
+  <div class="container">
+    <div class="hero-eyebrow">SustainSys AI Academy · Full Curriculum</div>
+    <h1><span class="accent">AI Architect</span><br>Mastery Curriculum</h1>
+    <p class="hero-sub">From Python fundamentals to production AI systems. A structured, hands-on learning path covering LLMs, agents, RAG, enterprise architecture, multi-cloud, and GenAIOps — built for the AI Architect role.</p>
+    <div class="hero-pills">
+      <span class="pill">Python 3.10+</span>
+      <span class="pill">LangChain</span>
+      <span class="pill">LlamaIndex</span>
+      <span class="pill">Ollama</span>
+      <span class="pill">ChromaDB / FAISS</span>
+      <span class="pill">Kubernetes</span>
+      <span class="pill">7 Modules</span>
+      <span class="pill">16–22 weeks</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="toc reveal">
+    <div class="toc-heading">Table of Contents</div>
+    <ol>
+      <li><a href="#m1">Foundations of Modern AI Systems</a></li>
+      <li><a href="#m2">Multi-Agent AI Systems</a></li>
+      <li><a href="#m3">Memory Systems in AI Agents</a></li>
+      <li><a href="#m4">Retrieval Augmented Generation (RAG)</a></li>
+      <li><a href="#m5">Enterprise AI Architecture</a></li>
+      <li><a href="#m6">Cross-Cloud AI Architecture</a></li>
+      <li><a href="#m7">GenAIOps</a></li>
+      <li><a href="#capstone">Capstone: Enterprise AI System</a></li>
+    </ol>
+  </div>
+
+  <!-- Module overview table -->
+  <table class="tech-table">
+    <thead><tr><th>Module</th><th>Topic</th><th>Duration</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Foundations of Modern AI Systems</td><td>2–3 weeks</td></tr>
+      <tr><td>2</td><td>Multi-Agent AI Systems</td><td>3–4 weeks</td></tr>
+      <tr><td>3</td><td>Memory Systems in AI Agents</td><td>2–3 weeks</td></tr>
+      <tr><td>4</td><td>Retrieval Augmented Generation (RAG)</td><td>3–4 weeks</td></tr>
+      <tr><td>5</td><td>Enterprise AI Architecture</td><td>2–3 weeks</td></tr>
+      <tr><td>6</td><td>Cross-Cloud AI Architecture</td><td>2–3 weeks</td></tr>
+      <tr><td>7</td><td>GenAIOps</td><td>2–3 weeks</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODULE 1 — FOUNDATIONS
+═══════════════════════════════════════════ -->
+<section class="section" id="m1">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 01</div>
+    <h2>Foundations of Modern AI Systems</h2>
+    <div class="module-duration">Est. 2–3 weeks · 7 sub-sections · 2 hands-on labs</div>
+  </div>
+
+  <p>This module builds your mental model of how modern AI systems work, from the mathematics of tokens and embeddings through to architecture decisions about where and how to run models. By the end, you will be able to call LLMs, generate embeddings, and reason about model selection trade-offs.</p>
+
+  <h3>1.1 What Modern AI Architecture Looks Like</h3>
+  <p>A modern AI system is not a single model sitting on a server. It is an <strong>orchestrated pipeline</strong> of components: user interfaces, API gateways, prompt management layers, one or more language models, retrieval systems, memory stores, tool connectors, and observability infrastructure. Think of it like a microservices architecture, but where the core compute is a probabilistic language model rather than deterministic business logic.</p>
+
+  <div class="diagram">
+    <pre><code>┌─────────────┐   ┌──────────────┐   ┌─────────────┐
+│  User / UI  │───│  API Gateway  │───│ Orchestrator│
+└─────────────┘   └──────────────┘   └─────┬───────┘
+                                           │
+                     ┌─────────────────┼───────────────┐
+                     │                 │               │
+               ┌─────┴─────┐  ┌─────┴─────┐  ┌────┴──────┐
+               │  LLM(s)    │  │  Retrieval │  │  Tools /  │
+               │ (Cloud/    │  │  (Vector   │  │  APIs     │
+               │  Local)    │  │  DB + RAG) │  │          │
+               └───────────┘  └───────────┘  └───────────┘</code></pre>
+  </div>
+
+  <p>The <strong>Orchestrator</strong> is the brain. It receives a user request, decides which tools or models to use, retrieves relevant context, constructs a prompt, calls the LLM, and returns a response. Frameworks like LangChain, LlamaIndex, and Semantic Kernel provide this orchestration layer.</p>
+</div>
+</section>
+
+<!-- 1.2 LLMs -->
+<section class="section" id="m1-llms">
+<div class="container reveal">
+  <div class="section-label">Section 1.2</div>
+  <h2>What Large Language Models (LLMs) Are</h2>
+
+  <p>A Large Language Model is a neural network trained on vast amounts of text. Its fundamental operation is <strong>next-token prediction</strong>: given a sequence of tokens, it predicts the probability distribution over what comes next. This simple objective, scaled to billions of parameters and trillions of training tokens, produces emergent capabilities like reasoning, coding, and summarisation.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠ Key Insight: LLMs Are Probabilistic</div>
+    <p>An LLM does not "know" facts the way a database does. It has learned statistical patterns from training data. This is why LLMs can hallucinate — they generate text that is statistically plausible but factually wrong. RAG systems (Module 4) exist precisely to ground LLM outputs in verified data.</p>
+  </div>
+
+  <p>The major LLM families you will work with as an AI Architect include <em>frontier models</em> (GPT-4o, Claude, Gemini) that offer maximum capability, and <em>small language models</em> (Phi-3, Llama 3, Mistral) that can run locally or at the edge for lower cost and latency.</p>
+</div>
+</section>
+
+<!-- 1.3 Tokens, Embeddings, Prompts -->
+<section class="section" id="m1-tokens">
+<div class="container reveal">
+  <div class="section-label">Section 1.3</div>
+  <h2>Tokens, Embeddings, and Prompts</h2>
+
+  <h3>Tokens</h3>
+  <p>Tokens are the atomic units of text that LLMs process. A token is roughly 3–4 characters of English text, or about 0.75 words. The sentence "AI architecture is fascinating" is approximately 5 tokens. Tokenisation matters because LLM pricing, context windows, and performance are all measured in tokens.</p>
+  <p>Different models use different tokenisers. OpenAI uses <strong>tiktoken</strong> (BPE-based), while Llama models use <strong>SentencePiece</strong>. The key point: you cannot assume a one-to-one mapping between words and tokens.</p>
+
+  <h3>Embeddings</h3>
+  <p>An embedding is a dense vector representation of text in a high-dimensional space (typically 384 to 4096 dimensions). Texts with similar meanings are placed close together in this vector space. Embeddings are the foundation of semantic search, RAG, and many other AI patterns.</p>
+
+  <div class="diagram">
+    <pre><code>          meaning axis
+              ^
+              |     * "machine learning"
+              |    * "deep learning"
+              |
+              |          * "neural networks"
+              |
+              |                        * "cooking recipes"
+              |                       * "baking bread"
+              +--------------------------------------> topic axis
+
+  Similar concepts cluster together in vector space</code></pre>
+  </div>
+
+  <p>We measure similarity between embeddings using <strong>cosine similarity</strong>, which ranges from -1 (opposite) to 1 (identical). In practice, related texts typically score 0.7–0.95.</p>
+
+  <h3>Prompts</h3>
+  <p>A prompt is the text input you send to an LLM. Effective prompting is a core skill for an AI Architect. The main patterns are:</p>
+  <ul>
+    <li><strong>Zero-shot</strong>: Ask the model directly with no examples.</li>
+    <li><strong>Few-shot</strong>: Provide 2–5 examples of desired input/output format before your actual question.</li>
+    <li><strong>Chain-of-thought</strong>: Ask the model to "think step by step" to improve reasoning accuracy.</li>
+    <li><strong>System prompts</strong>: Instructions that set the model's persona, constraints, and output format.</li>
+  </ul>
+
+  <h4>Hands-On: Exploring Tokens and Embeddings</h4>
+  <p>This script calls a local Ollama model to generate embeddings and measure similarity. Make sure you have Ollama installed and the nomic-embed-text model pulled.</p>
+  <p><strong>Prerequisites</strong>: <code>pip install ollama numpy</code></p>
+
+  <span class="code-label">tokens_and_embeddings.py</span>
+  <pre><code><span class="cm"># Explore how LLMs tokenise text and generate embeddings</span>
+
+<span class="kw">import</span> <span class="nm">ollama</span>
+<span class="kw">import</span> <span class="nm">numpy</span> <span class="kw">as</span> <span class="nm">np</span>
+
+<span class="cm"># --- Part 1: Generate Embeddings ---</span>
+<span class="nm">texts</span> = [
+    <span class="st">"Machine learning is a branch of artificial intelligence"</span>,
+    <span class="st">"Deep learning uses neural networks with many layers"</span>,
+    <span class="st">"I enjoy baking sourdough bread on weekends"</span>,
+]
+
+<span class="nm">embeddings</span> = []
+<span class="kw">for</span> <span class="nm">text</span> <span class="kw">in</span> <span class="nm">texts</span>:
+    <span class="nm">response</span> = <span class="fn">ollama.embed</span>(<span class="nm">model</span>=<span class="st">"nomic-embed-text"</span>, <span class="nm">input</span>=<span class="nm">text</span>)
+    <span class="nm">emb</span> = <span class="nm">response</span>[<span class="st">"embeddings"</span>][<span class="dt">0</span>]
+    <span class="nm">embeddings</span>.<span class="fn">append</span>(<span class="nm">emb</span>)
+    <span class="fn">print</span>(<span class="st">f"Text: {text[:50]}..."</span>)
+    <span class="fn">print</span>(<span class="st">f"  Vector dimensions: {len(emb)}"</span>)
+    <span class="fn">print</span>(<span class="st">f"  First 5 values: {emb[:5]}"</span>)
+
+<span class="cm"># --- Part 2: Measure Similarity ---</span>
+<span class="kw">def</span> <span class="fn">cosine_similarity</span>(<span class="nm">a</span>, <span class="nm">b</span>):
+    <span class="nm">a</span>, <span class="nm">b</span> = <span class="fn">np.array</span>(<span class="nm">a</span>), <span class="fn">np.array</span>(<span class="nm">b</span>)
+    <span class="kw">return</span> <span class="fn">np.dot</span>(<span class="nm">a</span>, <span class="nm">b</span>) / (<span class="fn">np.linalg.norm</span>(<span class="nm">a</span>) * <span class="fn">np.linalg.norm</span>(<span class="nm">b</span>))
+
+<span class="kw">for</span> <span class="nm">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(<span class="nm">texts</span>)):
+    <span class="kw">for</span> <span class="nm">j</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">i</span> + <span class="dt">1</span>, <span class="fn">len</span>(<span class="nm">texts</span>)):
+        <span class="nm">sim</span> = <span class="fn">cosine_similarity</span>(<span class="nm">embeddings</span>[<span class="nm">i</span>], <span class="nm">embeddings</span>[<span class="nm">j</span>])
+        <span class="fn">print</span>(<span class="st">f"Similarity: {sim:.4f}"</span>)</code></pre>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 Expected Output</div>
+    <p>The two AI-related sentences will have high similarity (around 0.7–0.85), while comparing either to the baking sentence will produce low similarity (around 0.2–0.4). This is the foundation of semantic search — and the core mechanism behind RAG.</p>
+  </div>
+</div>
+</section>
+
+<!-- 1.4 Inference vs Training -->
+<section class="section" id="m1-inference">
+<div class="container reveal">
+  <div class="section-label">Section 1.4</div>
+  <h2>LLM Inference vs Training</h2>
+
+  <p><strong>Training</strong> is the process of adjusting a model's billions of parameters by feeding it enormous datasets. Pre-training GPT-4-class models costs tens of millions of dollars and months of compute on thousands of GPUs.</p>
+  <p><strong>Inference</strong> is running a trained model to generate outputs. This is what happens when you call an API or run Ollama locally. Inference is orders of magnitude cheaper than training, but it's still the primary cost driver for production AI systems.</p>
+
+  <table class="tech-table">
+    <thead><tr><th>Aspect</th><th>Training</th><th>Inference</th></tr></thead>
+    <tbody>
+      <tr><td>Purpose</td><td>Learn patterns from data</td><td>Generate predictions/text</td></tr>
+      <tr><td>Cost</td><td>Millions of dollars for frontier models</td><td>Fractions of a penny per request</td></tr>
+      <tr><td>Compute</td><td>Thousands of GPUs for weeks</td><td>Single GPU or CPU per request</td></tr>
+      <tr><td>Frequency</td><td>Once (or periodic fine-tuning)</td><td>Every user interaction</td></tr>
+      <tr><td>Your role</td><td>Choose when/whether to fine-tune</td><td>Optimise latency, cost, throughput</td></tr>
+    </tbody>
+  </table>
+
+  <p>As an AI Architect, you will spend 95% of your time on inference-side architecture: how to route requests, cache responses, manage context windows, and optimise cost.</p>
+</div>
+</section>
+
+<!-- 1.5 Frontier vs SLMs -->
+<section class="section" id="m1-frontier">
+<div class="container reveal">
+  <div class="section-label">Section 1.5</div>
+  <h2>Frontier Models vs Small Language Models</h2>
+
+  <p>This is one of the most important architectural decisions you will make. <strong>Frontier models</strong> (Claude Opus, GPT-4o, Gemini Ultra) have the highest capability but highest cost and latency. <strong>Small Language Models</strong> (Phi-3, Llama 3 8B, Mistral 7B) are 10–100x cheaper, can run locally, but have lower reasoning capability.</p>
+
+  <p>The key insight: <strong>most production tasks don't need frontier models</strong>. Classification, extraction, summarisation, and simple Q&amp;A can often be handled by SLMs. Reserve frontier models for complex reasoning, multi-step planning, and creative generation.</p>
+
+  <table class="tech-table">
+    <thead><tr><th>Factor</th><th>Frontier Models</th><th>Small Language Models</th></tr></thead>
+    <tbody>
+      <tr><td>Parameters</td><td>100B – 1T+</td><td>1B – 13B</td></tr>
+      <tr><td>Reasoning</td><td>Excellent</td><td>Good for focused tasks</td></tr>
+      <tr><td>Cost / 1M tokens</td><td>$2 – $60</td><td>$0.05 – $0.50 (or free locally)</td></tr>
+      <tr><td>Latency</td><td>1 – 5 seconds</td><td>0.1 – 1 second locally</td></tr>
+      <tr><td>Privacy</td><td>Data sent to provider</td><td>Runs entirely on-premise</td></tr>
+      <tr><td>Use cases</td><td>Complex analysis, coding, planning</td><td>Classification, extraction, chat</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ Architecture Pattern: Model Routing</div>
+    <p>A production system often uses BOTH frontier and small models. A lightweight classifier analyses the incoming request and routes simple queries to an SLM while sending complex queries to a frontier model. This can cut costs by 60–80% while maintaining quality.</p>
+  </div>
+</div>
+</section>
+
+<!-- 1.6 Edge vs Cloud -->
+<section class="section" id="m1-edge">
+<div class="container reveal">
+  <div class="section-label">Section 1.6</div>
+  <h2>Edge Inference vs Cloud Inference</h2>
+
+  <p><strong>Cloud inference</strong> means your model runs on a provider's servers (OpenAI, Anthropic, Azure, AWS). Benefits: no GPU management, easy scaling, access to frontier models. Drawbacks: latency, data privacy concerns, ongoing costs, vendor dependency.</p>
+  <p><strong>Edge inference</strong> means running models directly on user devices or local servers. Ollama on your Mac M4 is edge inference. Benefits: zero latency to network, complete data privacy, no per-request costs. Drawbacks: limited model size, device resource constraints.</p>
+
+  <div class="diagram">
+    <pre><code>                 Need frontier-level reasoning?
+                      /             \
+                   YES               NO
+                    |                 |
+              Use CLOUD           Data sensitive?
+              (GPT-4o,            /          \
+               Claude,         YES            NO
+               Gemini)          |              |
+                          Use EDGE         Use CLOUD SLM
+                          (Ollama,         (cheaper endpoint)
+                           llama.cpp)</code></pre>
+  </div>
+</div>
+</section>
+
+<!-- 1.7 Hybrid Architecture -->
+<section class="section" id="m1-hybrid">
+<div class="container reveal">
+  <div class="section-label">Section 1.7</div>
+  <h2>Hybrid AI Architecture</h2>
+
+  <p>In enterprise settings, you almost always build a <strong>hybrid architecture</strong> that combines cloud and edge, frontier and small models. The orchestration layer decides at runtime which model to use based on the task requirements, data sensitivity, cost constraints, and latency needs.</p>
+
+  <div class="diagram">
+    <pre><code>┌─────────────────────────────────────────────┐
+│            ORCHESTRATION LAYER              │
+│  (LangChain / LlamaIndex / Custom)          │
+└─────────┬───────────┬───────────┬───────────┘
+          │           │           │
+    ┌─────┴───┐  ┌────┴─────┐  ┌───┴───────┐
+    │ CLOUD    │  │ EDGE     │  │ RETRIEVAL │
+    │ (Claude  │  │ (Ollama  │  │ (ChromaDB │
+    │  GPT-4o) │  │  llama3) │  │  FAISS)   │
+    └──────────┘  └──────────┘  └───────────┘
+    Complex         Simple        Knowledge
+    reasoning       tasks         grounding</code></pre>
+  </div>
+
+  <h4>Hands-On: Calling LLMs Locally and Comparing Models</h4>
+  <p><strong>Prerequisites</strong>: <code>ollama pull llama3.1:8b &amp;&amp; ollama pull phi3:mini</code></p>
+
+  <span class="code-label">compare_models.py</span>
+  <pre><code><span class="kw">import</span> <span class="nm">ollama</span>
+<span class="kw">import</span> <span class="nm">time</span>
+
+<span class="nm">PROMPT</span> = <span class="st">"""You are a senior AI architect. Explain in 3 sentences
+why RAG is preferred over fine-tuning for enterprise knowledge bases."""</span>
+
+<span class="nm">models</span> = [<span class="st">"llama3.1:8b"</span>, <span class="st">"phi3:mini"</span>]
+
+<span class="kw">for</span> <span class="nm">model</span> <span class="kw">in</span> <span class="nm">models</span>:
+    <span class="fn">print</span>(<span class="st">f"\nModel: {model}"</span>)
+    <span class="nm">start</span> = <span class="fn">time.time</span>()
+    <span class="nm">response</span> = <span class="fn">ollama.chat</span>(
+        <span class="nm">model</span>=<span class="nm">model</span>,
+        <span class="nm">messages</span>=[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="nm">PROMPT</span>}]
+    )
+    <span class="nm">elapsed</span> = <span class="fn">time.time</span>() - <span class="nm">start</span>
+    <span class="fn">print</span>(<span class="st">f"Response ({elapsed:.1f}s):"</span>)
+    <span class="fn">print</span>(<span class="nm">response</span>[<span class="st">"message"</span>][<span class="st">"content"</span>])
+    <span class="nm">eval_count</span> = <span class="nm">response</span>.<span class="fn">get</span>(<span class="st">"eval_count"</span>, <span class="dt">0</span>)
+    <span class="kw">if</span> <span class="nm">elapsed</span> > <span class="dt">0</span> <span class="kw">and</span> <span class="nm">eval_count</span> > <span class="dt">0</span>:
+        <span class="fn">print</span>(<span class="st">f"Speed: {eval_count/elapsed:.1f} tokens/sec"</span>)</code></pre>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 What to Observe</div>
+    <p>llama3.1:8b will likely give more nuanced answers. phi3:mini may be faster. Both are running entirely on your Mac M4 with zero API costs. This is the foundation of edge inference.</p>
+  </div>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 1 Exercises</div>
+    <ol>
+      <li>Modify the embeddings script to add 5 more sentences and find which pairs are most/least similar</li>
+      <li>Write a script that counts tokens for different inputs using tiktoken (<code>pip install tiktoken</code>)</li>
+      <li>Create a cost calculator: given token counts and model pricing, estimate monthly API costs</li>
+      <li>Build a model router: classify user queries as 'simple' or 'complex' and route to different models</li>
+    </ol>
+  </div>
+
+  <div class="project-box">
+    <div class="project-title">🚀 Mini-Project: Model Comparison Dashboard</div>
+    <p>Build a Python script that sends 10 different prompts (classification, summarisation, code generation, reasoning, etc.) to both llama3.1:8b and phi3:mini. Record response time, token count, and manually rate quality 1–5. Output a comparison table. This teaches you the evaluation mindset every AI Architect needs.</p>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 2 — MULTI-AGENT SYSTEMS
+═══════════════════════════════════════════ -->
+<section class="section" id="m2">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 02</div>
+    <h2>Multi-Agent AI Systems</h2>
+    <div class="module-duration">Est. 3–4 weeks · Agents, ReAct, Orchestration · 3 hands-on labs</div>
+  </div>
+
+  <p>Agents are LLMs that can <strong>take actions</strong>. Instead of just generating text, an agent can call tools, search the web, write code, query databases, and make decisions about what to do next. Multi-agent systems coordinate multiple specialised agents to solve complex problems.</p>
+
+  <h3>2.1 What AI Agents Are</h3>
+  <p>An AI agent has three core capabilities: <strong>perception</strong> (understanding the current state), <strong>reasoning</strong> (deciding what to do), and <strong>action</strong> (executing tools or generating outputs). The LLM provides the reasoning; the framework provides the perception and action layers.</p>
+
+  <div class="diagram">
+    <pre><code>  ┌─────────────────────────────────────┐
+  │              AI AGENT                │
+  │                                      │
+  │  ┌───────────┐  Input  ┌─────────┐  │
+  │  │ Perceive  │─────────│ Reason  │  │
+  │  │ (context, │         │ (LLM    │  │
+  │  │  memory)  │         │  core)  │  │
+  │  └───────────┘         └────┬────┘  │
+  │                             │       │
+  │                        ┌────┴────┐  │
+  │                        │  Act    │  │
+  │                        │ (tools, │  │
+  │                        │  APIs)  │  │
+  │                        └─────────┘  │
+  └─────────────────────────────────────┘</code></pre>
+  </div>
+
+  <h3>2.2 The ReAct Pattern</h3>
+  <p>ReAct (Reasoning + Acting) is the most important agent pattern. The agent iterates through a loop:</p>
+
+  <div class="flow">
+    <div class="flow-step"><div class="flow-icon">1</div><div class="flow-content"><strong>Thought</strong><p>Reason about what to do — "I need to calculate 15% of 2340"</p></div></div>
+    <div class="flow-step"><div class="flow-icon">2</div><div class="flow-content"><strong>Action</strong><p>Call a tool — <code>calculate("2340 * 0.15")</code></p></div></div>
+    <div class="flow-step"><div class="flow-icon">3</div><div class="flow-content"><strong>Observation</strong><p>Process the result — "Result: 351.0"</p></div></div>
+    <div class="flow-step"><div class="flow-icon">4</div><div class="flow-content"><strong>Repeat or Answer</strong><p>If done, return final answer. Otherwise, loop back to Thought.</p></div></div>
+  </div>
+
+  <span class="code-label">react_agent.py</span>
+  <pre><code><span class="cm"># A simple ReAct agent using LangChain with Ollama</span>
+<span class="cm"># pip install langchain langchain-community langchain-ollama</span>
+
+<span class="kw">from</span> <span class="nm">langchain_ollama</span> <span class="kw">import</span> <span class="fn">ChatOllama</span>
+<span class="kw">from</span> <span class="nm">langchain.agents</span> <span class="kw">import</span> <span class="fn">AgentExecutor</span>, <span class="fn">create_react_agent</span>
+<span class="kw">from</span> <span class="nm">langchain.tools</span> <span class="kw">import</span> <span class="fn">tool</span>
+<span class="kw">from</span> <span class="nm">langchain</span> <span class="kw">import</span> <span class="nm">hub</span>
+
+<span class="fn">@tool</span>
+<span class="kw">def</span> <span class="fn">calculate</span>(<span class="nm">expression</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Evaluate a mathematical expression."""</span>
+    <span class="kw">try</span>:
+        <span class="kw">return</span> <span class="fn">str</span>(<span class="fn">eval</span>(<span class="nm">expression</span>))
+    <span class="kw">except</span> <span class="nm">Exception</span> <span class="kw">as</span> <span class="nm">e</span>:
+        <span class="kw">return</span> <span class="st">f"Error: {e}"</span>
+
+<span class="fn">@tool</span>
+<span class="kw">def</span> <span class="fn">get_word_count</span>(<span class="nm">text</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Count the number of words in a text string."""</span>
+    <span class="kw">return</span> <span class="fn">str</span>(<span class="fn">len</span>(<span class="nm">text</span>.<span class="fn">split</span>()))
+
+<span class="nm">llm</span> = <span class="fn">ChatOllama</span>(<span class="nm">model</span>=<span class="st">"llama3.1:8b"</span>, <span class="nm">temperature</span>=<span class="dt">0</span>)
+<span class="nm">prompt</span> = <span class="fn">hub.pull</span>(<span class="st">"hwchase17/react"</span>)
+<span class="nm">tools</span> = [<span class="nm">calculate</span>, <span class="nm">get_word_count</span>]
+<span class="nm">agent</span> = <span class="fn">create_react_agent</span>(<span class="nm">llm</span>, <span class="nm">tools</span>, <span class="nm">prompt</span>)
+<span class="nm">executor</span> = <span class="fn">AgentExecutor</span>(<span class="nm">agent</span>=<span class="nm">agent</span>, <span class="nm">tools</span>=<span class="nm">tools</span>, <span class="nm">verbose</span>=<span class="dt">True</span>)
+
+<span class="nm">result</span> = <span class="nm">executor</span>.<span class="fn">invoke</span>({
+    <span class="st">"input"</span>: <span class="st">"What is 15% of 2340?"</span>
+})
+<span class="fn">print</span>(<span class="st">f"Final Answer: {result['output']}"</span>)</code></pre>
+
+  <h3>2.3 Multi-Agent Architecture Patterns</h3>
+  <ul>
+    <li><strong>Hierarchical</strong>: A manager agent delegates tasks to worker agents. Best for well-defined workflows.</li>
+    <li><strong>Peer-to-Peer</strong>: Agents communicate directly. Best for collaborative problem-solving.</li>
+    <li><strong>Sequential (Pipeline)</strong>: Agent A's output feeds into Agent B, then Agent C. Best for staged processing.</li>
+    <li><strong>Task Decomposition</strong>: A planner breaks a complex task into subtasks, each handled by a specialist agent.</li>
+  </ul>
+
+  <div class="diagram">
+    <pre><code>                ┌─────────────┐
+                │  MANAGER    │
+                │  AGENT      │
+                └───┬───┬─────┘
+                    │   │
+           ┌───────┘   └───────┐
+     ┌────┴─────┐        ┌────┴─────┐
+     │ Research  │        │ Writing   │
+     │ Agent     │        │ Agent     │
+     └──────────┘        └──────────┘
+     Tools: search        Tools: format,
+     retrieve, analyse    write, edit</code></pre>
+  </div>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 2 Exercises</div>
+    <ol>
+      <li>Add a third agent (Editor) to a pipeline that checks the summary for factual consistency against the research</li>
+      <li>Convert a sequential pipeline to hierarchical: create a Manager agent that decides which specialist to call</li>
+      <li>Build a tool-using agent that can search files on your local machine (use Python's os module as a tool)</li>
+      <li>Implement error handling: what happens when an agent produces invalid output? Build a retry mechanism</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 3 — MEMORY SYSTEMS
+═══════════════════════════════════════════ -->
+<section class="section" id="m3">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 03</div>
+    <h2>Memory Systems in AI Agents</h2>
+    <div class="module-duration">Est. 2–3 weeks · Short-term, Long-term, Episodic, Audit · 2 hands-on labs</div>
+  </div>
+
+  <p>LLMs are stateless by default — they have no memory of previous conversations. Every interaction starts from scratch unless you explicitly provide context. Memory systems solve this by storing and retrieving relevant information from past interactions, documents, and structured knowledge.</p>
+
+  <h3>3.1 Types of Memory</h3>
+  <table class="tech-table">
+    <thead><tr><th>Memory Type</th><th>What It Stores</th><th>Lifespan</th><th>Implementation</th></tr></thead>
+    <tbody>
+      <tr><td>Short-term (Buffer)</td><td>Current conversation turns</td><td>Single session</td><td>In-memory list of messages</td></tr>
+      <tr><td>Long-term (Semantic)</td><td>Facts, preferences, knowledge</td><td>Persistent</td><td>Vector database (Chroma, FAISS)</td></tr>
+      <tr><td>Episodic</td><td>Specific past interactions</td><td>Persistent</td><td>Timestamped vector entries</td></tr>
+      <tr><td>Audit / Compliance</td><td>All interactions for review</td><td>Permanent</td><td>Append-only log / database</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 Long-Term Memory with Vector Databases</h3>
+  <div class="diagram">
+    <pre><code>  User says something    ┌────────────┐    Query top-k
+  worth remembering  ───>│  Embedding  │───>┌───────────┐
+                         │  Model      │    │  Vector   │
+  Agent needs context    └────────────┘    │  Database  │
+  about user         ───> embed query ─────>│ (Chroma/  │
+                                            │  FAISS)   │
+                                            └───────────┘</code></pre>
+  </div>
+
+  <h4>Hands-On: Agent with Persistent Memory</h4>
+  <p><strong>Prerequisites</strong>: <code>pip install chromadb</code></p>
+
+  <span class="code-label">persistent_memory_agent.py</span>
+  <pre><code><span class="kw">import</span> <span class="nm">chromadb</span>, <span class="nm">ollama</span>
+<span class="kw">from</span> <span class="nm">datetime</span> <span class="kw">import</span> <span class="nm">datetime</span>
+
+<span class="nm">client</span> = <span class="fn">chromadb.PersistentClient</span>(<span class="nm">path</span>=<span class="st">"./agent_memory"</span>)
+<span class="nm">collection</span> = <span class="nm">client</span>.<span class="fn">get_or_create_collection</span>(
+    <span class="nm">name</span>=<span class="st">"user_memories"</span>,
+    <span class="nm">metadata</span>={<span class="st">"hnsw:space"</span>: <span class="st">"cosine"</span>}
+)
+
+<span class="kw">def</span> <span class="fn">store_memory</span>(<span class="nm">text</span>):
+    <span class="nm">emb</span> = <span class="fn">ollama.embed</span>(<span class="nm">model</span>=<span class="st">"nomic-embed-text"</span>, <span class="nm">input</span>=<span class="nm">text</span>)[<span class="st">"embeddings"</span>][<span class="dt">0</span>]
+    <span class="nm">mem_id</span> = <span class="st">f"mem_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"</span>
+    <span class="nm">collection</span>.<span class="fn">add</span>(<span class="nm">ids</span>=[<span class="nm">mem_id</span>], <span class="nm">embeddings</span>=[<span class="nm">emb</span>], <span class="nm">documents</span>=[<span class="nm">text</span>])
+
+<span class="kw">def</span> <span class="fn">recall_memories</span>(<span class="nm">query</span>, <span class="nm">n</span>=<span class="dt">3</span>):
+    <span class="nm">emb</span> = <span class="fn">ollama.embed</span>(<span class="nm">model</span>=<span class="st">"nomic-embed-text"</span>, <span class="nm">input</span>=<span class="nm">query</span>)[<span class="st">"embeddings"</span>][<span class="dt">0</span>]
+    <span class="nm">results</span> = <span class="nm">collection</span>.<span class="fn">query</span>(<span class="nm">query_embeddings</span>=[<span class="nm">emb</span>], <span class="nm">n_results</span>=<span class="nm">n</span>)
+    <span class="kw">return</span> <span class="nm">results</span>[<span class="st">"documents"</span>][<span class="dt">0</span>] <span class="kw">if</span> <span class="nm">results</span>[<span class="st">"documents"</span>] <span class="kw">else</span> []
+
+<span class="kw">def</span> <span class="fn">chat_with_memory</span>(<span class="nm">user_input</span>):
+    <span class="nm">memories</span> = <span class="fn">recall_memories</span>(<span class="nm">user_input</span>)
+    <span class="nm">ctx</span> = <span class="st">"\n"</span>.<span class="fn">join</span>(<span class="st">f"- {m}"</span> <span class="kw">for</span> <span class="nm">m</span> <span class="kw">in</span> <span class="nm">memories</span>) <span class="kw">or</span> <span class="st">"No memories yet."</span>
+    <span class="nm">prompt</span> = <span class="st">f"Memories:\n{ctx}\n\nUser: {user_input}\nRespond helpfully:"</span>
+    <span class="nm">resp</span> = <span class="fn">ollama.chat</span>(<span class="nm">model</span>=<span class="st">"llama3.1:8b"</span>, <span class="nm">messages</span>=[{<span class="st">"role"</span>:<span class="st">"user"</span>, <span class="st">"content"</span>:<span class="nm">prompt</span>}])
+    <span class="fn">store_memory</span>(<span class="st">f"User said: {user_input}"</span>)
+    <span class="kw">return</span> <span class="nm">resp</span>[<span class="st">"message"</span>][<span class="st">"content"</span>]
+
+<span class="fn">print</span>(<span class="fn">chat_with_memory</span>(<span class="st">"I am building a RAG system for a bank in London"</span>))
+<span class="fn">print</span>(<span class="fn">chat_with_memory</span>(<span class="st">"What project am I working on?"</span>))</code></pre>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 Key Insight</div>
+    <p>The second query retrieves the memory from the first exchange. Even if you restart the script, ChromaDB persists to disk, so the memories survive. This is how production agents maintain context across sessions.</p>
+  </div>
+
+  <h3>3.4 Knowledge Graphs for Structured Memory</h3>
+  <p>Vector databases store unstructured semantic memory. <strong>Knowledge graphs</strong> store structured relationships: "Satya WORKS_AT Sustainsys", "Sustainsys SERVES financial_services". Combining both gives agents the richest possible memory. In production, tools like Neo4j or Amazon Neptune provide the graph database.</p>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 3 Exercises</div>
+    <ol>
+      <li>Extend the persistent memory agent to categorise memories (personal, project, preference) using metadata</li>
+      <li>Implement a memory decay function: older memories get lower retrieval scores</li>
+      <li>Build an audit memory layer: log every interaction to a separate append-only collection</li>
+      <li>Create a memory management UI: list all memories, delete specific ones, search by date range</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 4 — RAG
+═══════════════════════════════════════════ -->
+<section class="section" id="m4">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 04</div>
+    <h2>Retrieval Augmented Generation (RAG)</h2>
+    <div class="module-duration">Est. 3–4 weeks · Chunking, Embeddings, Retrieval, RAGAS · 3 hands-on labs</div>
+  </div>
+
+  <p>RAG is the most important pattern in enterprise AI. It solves the core problem of LLMs: they only know what was in their training data. RAG lets you <strong>ground LLM responses in your own documents</strong> — company policies, financial reports, medical records, product manuals — without retraining the model.</p>
+
+  <h3>4.1 Why RAG Exists</h3>
+  <ul>
+    <li><strong>No retraining needed</strong>: Update documents instantly without expensive fine-tuning.</li>
+    <li><strong>Verifiable sources</strong>: Every answer can cite the specific document it came from.</li>
+    <li><strong>Access control</strong>: You can restrict which documents different users can access.</li>
+    <li><strong>Cost-effective</strong>: Works with any LLM, including free local models.</li>
+  </ul>
+
+  <h3>4.2 The RAG Pipeline</h3>
+  <div class="diagram">
+    <pre><code>  INGESTION (offline)                 QUERY (realtime)
+  ─────────────────                 ──────────────────
+
+  ┌────────┐                        ┌─────────┐
+  │ Docs   │  Load                  │  User   │
+  │ (PDF,  │────┐                   │  Query  │
+  │  CSV)  │    v                   └────┬────┘
+  └────────┘  ┌────────┐                v
+              │ Chunk  │          ┌─────────┐
+              │ Text   │          │ Embed   │
+              └───┬────┘          │ Query   │
+                  v               └────┬────┘
+              ┌────────┐              v
+              │ Embed  │   ┌─────────────────┐
+              │ Chunks │   │  VECTOR DATABASE │
+              └───┬────┘   │  (similarity     │
+                  └──────> │   search)        │
+                           └────────┬────────┘
+                                    v
+                             ┌──────────┐
+                             │ Reranker │  (optional)
+                             └───┬──────┘
+                                 v
+                           ┌────────┐   ┌────────┐
+                           │  LLM   │──>│ Answer │
+                           └────────┘   │ + cite │
+                                        └────────┘</code></pre>
+  </div>
+
+  <h3>4.3 Document Ingestion and Chunking</h3>
+  <p><strong>Chunking</strong> is the most impactful design decision in RAG. The main strategies are:</p>
+  <ul>
+    <li><strong>Fixed-size chunking</strong>: Split every N characters/tokens with overlap. Simple but can break mid-sentence.</li>
+    <li><strong>Recursive character splitting</strong>: Split by paragraph, then sentence, then character. Preserves structure.</li>
+    <li><strong>Semantic chunking</strong>: Use embeddings to find natural topic boundaries. Best quality but slower.</li>
+    <li><strong>Hierarchical chunking</strong>: Create parent (large) and child (small) chunks. Search children, retrieve parents for context.</li>
+  </ul>
+
+  <h4>Hands-On: Complete RAG Pipeline</h4>
+  <p><strong>Prerequisites</strong>: <code>pip install langchain langchain-community langchain-ollama chromadb</code></p>
+
+  <span class="code-label">rag_pipeline.py</span>
+  <pre><code><span class="kw">from</span> <span class="nm">langchain_community.document_loaders</span> <span class="kw">import</span> <span class="fn">TextLoader</span>
+<span class="kw">from</span> <span class="nm">langchain.text_splitter</span> <span class="kw">import</span> <span class="fn">RecursiveCharacterTextSplitter</span>
+<span class="kw">from</span> <span class="nm">langchain_community.vectorstores</span> <span class="kw">import</span> <span class="fn">Chroma</span>
+<span class="kw">from</span> <span class="nm">langchain_ollama</span> <span class="kw">import</span> <span class="fn">OllamaEmbeddings</span>, <span class="fn">ChatOllama</span>
+<span class="kw">from</span> <span class="nm">langchain.chains</span> <span class="kw">import</span> <span class="fn">RetrievalQA</span>
+<span class="kw">from</span> <span class="nm">langchain.prompts</span> <span class="kw">import</span> <span class="fn">PromptTemplate</span>
+
+<span class="cm"># Step 1: Load &amp; Chunk Documents</span>
+<span class="nm">loader</span> = <span class="fn">TextLoader</span>(<span class="st">"sample_doc.txt"</span>)
+<span class="nm">splitter</span> = <span class="fn">RecursiveCharacterTextSplitter</span>(
+    <span class="nm">chunk_size</span>=<span class="dt">200</span>, <span class="nm">chunk_overlap</span>=<span class="dt">50</span>,
+    <span class="nm">separators</span>=[<span class="st">"\n\n"</span>, <span class="st">"\n"</span>, <span class="st">". "</span>, <span class="st">" "</span>]
+)
+<span class="nm">chunks</span> = <span class="nm">splitter</span>.<span class="fn">split_documents</span>(<span class="nm">loader</span>.<span class="fn">load</span>())
+
+<span class="cm"># Step 2: Create Vector Store</span>
+<span class="nm">embeddings</span> = <span class="fn">OllamaEmbeddings</span>(<span class="nm">model</span>=<span class="st">"nomic-embed-text"</span>)
+<span class="nm">vectorstore</span> = <span class="fn">Chroma.from_documents</span>(<span class="nm">chunks</span>, <span class="nm">embeddings</span>,
+    <span class="nm">persist_directory</span>=<span class="st">"./rag_chroma_db"</span>)
+
+<span class="cm"># Step 3: RAG Chain</span>
+<span class="nm">retriever</span> = <span class="nm">vectorstore</span>.<span class="fn">as_retriever</span>(<span class="nm">search_kwargs</span>={<span class="st">"k"</span>: <span class="dt">3</span>})
+<span class="nm">llm</span> = <span class="fn">ChatOllama</span>(<span class="nm">model</span>=<span class="st">"llama3.1:8b"</span>, <span class="nm">temperature</span>=<span class="dt">0</span>)
+
+<span class="nm">prompt</span> = <span class="fn">PromptTemplate</span>(
+    <span class="nm">template</span>=<span class="st">"""Use ONLY the context below to answer.
+Context: {context}
+Question: {question}
+Answer:"""</span>,
+    <span class="nm">input_variables</span>=[<span class="st">"context"</span>, <span class="st">"question"</span>]
+)
+
+<span class="nm">qa</span> = <span class="fn">RetrievalQA.from_chain_type</span>(
+    <span class="nm">llm</span>=<span class="nm">llm</span>, <span class="nm">retriever</span>=<span class="nm">retriever</span>,
+    <span class="nm">chain_type_kwargs</span>={<span class="st">"prompt"</span>: <span class="nm">prompt</span>},
+    <span class="nm">return_source_documents</span>=<span class="dt">True</span>
+)
+
+<span class="nm">result</span> = <span class="nm">qa</span>.<span class="fn">invoke</span>({<span class="st">"query"</span>: <span class="st">"What retrieval approach does Sustainsys use?"</span>})
+<span class="fn">print</span>(<span class="st">f"Answer: {result['result']}"</span>)</code></pre>
+
+  <h3>4.4 RAG Evaluation with RAGAS</h3>
+  <p><strong>RAGAS</strong> measures four key metrics:</p>
+  <ul>
+    <li><strong>Faithfulness</strong>: Does the answer only contain information from the retrieved context?</li>
+    <li><strong>Answer Relevancy</strong>: Is the answer actually relevant to the question asked?</li>
+    <li><strong>Context Precision</strong>: Are the retrieved documents actually relevant?</li>
+    <li><strong>Context Recall</strong>: Did retrieval find all the relevant information?</li>
+  </ul>
+
+  <h3>4.5 Cache Augmented Generation (CAG)</h3>
+  <p>CAG is an optimisation where frequently-asked questions and their RAG-generated answers are cached. This reduces latency from seconds to milliseconds and cuts compute costs dramatically for repetitive queries. Implement using Redis or a simple dictionary with TTL expiry.</p>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 4 Exercises</div>
+    <ol>
+      <li>Extend the RAG pipeline to ingest PDF files using PyPDFLoader</li>
+      <li>Implement hybrid retrieval: combine Chroma vector search with BM25 keyword search</li>
+      <li>Add a reranking step using a cross-encoder model to reorder retrieved chunks</li>
+      <li>Build a RAG evaluation harness: create 10 question-answer pairs and measure retrieval precision</li>
+      <li>Implement a simple CAG layer using a Python dictionary with timestamp-based expiry</li>
+    </ol>
+  </div>
+
+  <div class="project-box">
+    <div class="project-title">🚀 Mini-Project: Multi-Document RAG for Financial Services</div>
+    <p>Build a RAG system that ingests 5+ documents (mix of PDF, CSV, and text), uses hybrid retrieval (vector + BM25), includes metadata filtering (document type, date), and returns answers with source citations. Add a simple Flask API endpoint so it can be called from other systems.</p>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 5 — ENTERPRISE AI
+═══════════════════════════════════════════ -->
+<section class="section" id="m5">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 05</div>
+    <h2>Enterprise AI Architecture</h2>
+    <div class="module-duration">Est. 2–3 weeks · Auth, Integration, Kubernetes · Architecture patterns</div>
+  </div>
+
+  <p>Enterprise AI is not just about making a model work — it's about making it work <strong>securely, at scale, with auditability, within existing IT ecosystems</strong>.</p>
+
+  <h3>5.1 Authentication and Identity</h3>
+  <p><strong>Microsoft Entra ID</strong> (formerly Azure AD) is the dominant identity provider. Your AI system must authenticate users via OAuth 2.0 / OpenID Connect, map user identity to document access permissions, and log all interactions for audit.</p>
+
+  <div class="diagram">
+    <pre><code>User ──> Entra ID ──> Token ──> API Gateway ──> AI Orchestrator
+                                   |                    |
+                                   v                    v
+                               Validate             Filter docs
+                               token +              by user's
+                               extract              permissions
+                               roles                (RBAC)</code></pre>
+  </div>
+
+  <h3>5.2 Enterprise Integration Patterns</h3>
+  <ul>
+    <li><strong>Microsoft Teams / Slack</strong>: Chatbot interfaces — users ask questions in chat, AI retrieves from RAG and responds.</li>
+    <li><strong>Salesforce / CRM</strong>: AI analyses customer data, generates summaries, predicts churn.</li>
+    <li><strong>ERP Systems (SAP, Oracle)</strong>: AI assists with procurement, inventory forecasting.</li>
+    <li><strong>Email (Exchange / Gmail)</strong>: AI drafts responses, categorises incoming mail, extracts action items.</li>
+  </ul>
+
+  <h3>5.3 Containerisation and Kubernetes</h3>
+  <div class="diagram">
+    <pre><code>  ┌──────────── KUBERNETES CLUSTER ────────────┐
+  │                                              │
+  │  ┌──────────┐  ┌──────────┐  ┌────────┐    │
+  │  │ API      │  │ RAG      │  │ Vector │    │
+  │  │ Gateway  │  │ Service  │  │ DB     │    │
+  │  │ (3 pods) │  │ (5 pods) │  │(3 pods)│    │
+  │  └──────────┘  └──────────┘  └────────┘    │
+  │                                              │
+  │  ┌──────────┐  ┌──────────┐  ┌────────┐    │
+  │  │ LLM      │  │ Agent    │  │ Cache  │    │
+  │  │ Proxy    │  │ Workers  │  │ (Redis)│    │
+  │  │ (2 pods) │  │ (auto)   │  │(2 pods)│    │
+  │  └──────────┘  └──────────┘  └────────┘    │
+  └──────────────────────────────────────────────┘</code></pre>
+  </div>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 5 Exercises</div>
+    <ol>
+      <li>Create a Flask API wrapper for your RAG pipeline with /query and /health endpoints</li>
+      <li>Implement role-based document filtering: admin users see all docs, regular users see only their department's</li>
+      <li>Write a Kubernetes deployment YAML for the RAG service with 3 replicas and resource limits</li>
+      <li>Design a complete enterprise AI architecture for a bank including all security and integration points</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 6 — CROSS-CLOUD
+═══════════════════════════════════════════ -->
+<section class="section" id="m6">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 06</div>
+    <h2>Cross-Cloud AI Architecture</h2>
+    <div class="module-duration">Est. 2–3 weeks · Azure AI, Vertex AI, AWS Bedrock · Multi-cloud patterns</div>
+  </div>
+
+  <h3>6.1 Cloud AI Platform Comparison</h3>
+  <table class="tech-table">
+    <thead><tr><th>Capability</th><th>Azure AI</th><th>Google Vertex AI</th><th>AWS Bedrock</th></tr></thead>
+    <tbody>
+      <tr><td>LLM Access</td><td>OpenAI (exclusive), Llama, Mistral</td><td>Gemini, Claude, Llama</td><td>Claude, Llama, Titan, Mistral</td></tr>
+      <tr><td>Vector DB</td><td>Azure AI Search</td><td>Vertex AI Vector Search</td><td>OpenSearch, pgvector on RDS</td></tr>
+      <tr><td>RAG Support</td><td>Azure AI Studio with grounding</td><td>Vertex AI RAG Engine</td><td>Knowledge Bases for Bedrock</td></tr>
+      <tr><td>Agent Framework</td><td>Semantic Kernel / AutoGen</td><td>Vertex AI Agent Builder</td><td>Bedrock Agents</td></tr>
+      <tr><td>Identity</td><td>Entra ID (native)</td><td>Cloud IAM + Workforce Identity</td><td>IAM + Cognito</td></tr>
+      <tr><td>Strengths</td><td>Enterprise Microsoft ecosystem</td><td>ML/data science tooling</td><td>Broadest model selection</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.2 Avoiding Vendor Lock-In</h3>
+  <div class="callout info">
+    <div class="callout-title">ℹ Architecture Pattern: Cloud-Agnostic AI Layer</div>
+    <p>Build your AI logic in LangChain/LlamaIndex. Use environment variables to switch between providers. Store vector data in pgvector (PostgreSQL extension) which runs identically on all clouds. This lets you move between clouds or run multi-cloud without rewriting application code.</p>
+  </div>
+
+  <h3>6.3 Multi-Cloud Decision Framework</h3>
+  <ul>
+    <li><strong>Existing ecosystem</strong>: If the client runs Microsoft 365, Azure is the path of least resistance.</li>
+    <li><strong>Model requirements</strong>: If you need GPT-4o, you need Azure. If you need Claude with native tooling, AWS Bedrock.</li>
+    <li><strong>Data residency</strong>: Check which cloud has regions in the required jurisdictions.</li>
+    <li><strong>Cost</strong>: Compare compute costs AND data transfer fees, which can be substantial in multi-cloud setups.</li>
+  </ul>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 6 Exercises</div>
+    <ol>
+      <li>Create a LangChain script that switches between Ollama, OpenAI, and Anthropic using only environment variables</li>
+      <li>Design a multi-cloud architecture for healthcare: patient data on-premise, LLM on Azure, analytics on GCP</li>
+      <li>Compare pricing: monthly cost of 100,000 RAG queries/day on Azure AI vs AWS Bedrock vs local Ollama</li>
+      <li>Build a provider abstraction class wrapping embedding generation for Ollama, OpenAI, and Google</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     MODULE 7 — GENAIOPS
+═══════════════════════════════════════════ -->
+<section class="section" id="m7">
+<div class="container reveal">
+  <div class="module-banner">
+    <div class="module-num">Module 07</div>
+    <h2>GenAIOps</h2>
+    <div class="module-duration">Est. 2–3 weeks · CI/CD for AI, IaC, Monitoring, Deployment · 2 hands-on labs</div>
+  </div>
+
+  <p>GenAIOps is MLOps evolved for the generative AI era. It covers the full lifecycle of AI systems: development, testing, deployment, monitoring, and continuous improvement.</p>
+
+  <h3>7.1 The GenAI Lifecycle</h3>
+  <div class="diagram">
+    <pre><code>  ┌──────────┐     ┌──────────┐     ┌──────────┐
+  │  DEVELOP  │────>│   TEST    │────>│  DEPLOY   │
+  │ Prompts   │     │ Evals     │     │ CI/CD     │
+  │ RAG pipe  │     │ RAGAS     │     │ IaC       │
+  │ Agents    │     │ A/B test  │     │ Canary    │
+  └──────────┘     └──────────┘     └─────┬─────┘
+       ^                                   │
+       │          ┌──────────┐             │
+       └──────────│  MONITOR  │<────────────┘
+                  │ Latency   │
+                  │ Quality   │
+                  │ Cost      │
+                  │ Drift     │
+                  └──────────┘</code></pre>
+  </div>
+
+  <h3>7.2 CI/CD for AI Systems</h3>
+  <ul>
+    <li><strong>Code tests</strong>: Standard unit/integration tests for application logic.</li>
+    <li><strong>Prompt regression tests</strong>: Run a fixed set of prompts and compare outputs to baselines.</li>
+    <li><strong>RAG evaluation</strong>: Run RAGAS metrics. Fail the build if faithfulness drops below thresholds.</li>
+    <li><strong>Cost estimation</strong>: Calculate projected costs. Alert if a prompt change increases token usage.</li>
+  </ul>
+
+  <h3>7.3 Infrastructure as Code</h3>
+  <span class="code-label">terraform/main.tf — simplified example</span>
+  <pre><code><span class="nm">resource</span> <span class="st">"azurerm_cognitive_account"</span> <span class="st">"openai"</span> {
+  <span class="nm">name</span>                = <span class="st">"sustainsys-openai"</span>
+  <span class="nm">location</span>            = <span class="st">"uksouth"</span>
+  <span class="nm">resource_group_name</span> = <span class="nm">azurerm_resource_group.ai.name</span>
+  <span class="nm">kind</span>                = <span class="st">"OpenAI"</span>
+  <span class="nm">sku_name</span>            = <span class="st">"S0"</span>
+}
+
+<span class="nm">resource</span> <span class="st">"azurerm_postgresql_flexible_server"</span> <span class="st">"pgvector"</span> {
+  <span class="nm">name</span>                = <span class="st">"sustainsys-pgvector"</span>
+  <span class="nm">location</span>            = <span class="st">"uksouth"</span>
+  <span class="nm">resource_group_name</span> = <span class="nm">azurerm_resource_group.ai.name</span>
+  <span class="nm">sku_name</span>            = <span class="st">"GP_Standard_D2s_v3"</span>
+  <span class="nm">storage_mb</span>          = <span class="dt">65536</span>
+}</code></pre>
+
+  <h3>7.4 Monitoring and Observability</h3>
+  <table class="tech-table">
+    <thead><tr><th>Metric</th><th>What It Measures</th><th>Target</th><th>Alert Threshold</th></tr></thead>
+    <tbody>
+      <tr><td>Latency (P50/P95)</td><td>Response time</td><td>&lt; 2s P50</td><td>&gt; 5s P95</td></tr>
+      <tr><td>Token usage/query</td><td>Cost efficiency</td><td>&lt; 2000 tokens avg</td><td>&gt; 5000 tokens</td></tr>
+      <tr><td>Retrieval precision</td><td>RAG quality</td><td>&gt; 0.85</td><td>&lt; 0.70</td></tr>
+      <tr><td>Hallucination rate</td><td>Answer accuracy</td><td>&lt; 5%</td><td>&gt; 15%</td></tr>
+      <tr><td>Error rate</td><td>System reliability</td><td>&lt; 0.1%</td><td>&gt; 1%</td></tr>
+      <tr><td>User satisfaction</td><td>Thumbs up/down ratio</td><td>&gt; 80% positive</td><td>&lt; 60%</td></tr>
+    </tbody>
+  </table>
+
+  <p>Tools like <strong>LangSmith</strong>, <strong>Weights &amp; Biases</strong>, and <strong>Azure AI Studio</strong> provide dashboards and tracing specifically designed for GenAI systems.</p>
+
+  <h3>7.5 Model Deployment Strategies</h3>
+  <ul>
+    <li><strong>Canary deployment</strong>: Route 5% of traffic to the new version. Monitor for quality regressions.</li>
+    <li><strong>Blue/Green deployment</strong>: Run old and new versions simultaneously. Instant rollback if needed.</li>
+    <li><strong>A/B testing</strong>: Run two prompt variants with different user groups. Measure which performs better.</li>
+  </ul>
+
+  <div class="exercise-box">
+    <div class="exercise-title">🧪 Module 7 Exercises</div>
+    <ol>
+      <li>Extend the logger to generate daily summary reports: avg latency, total tokens, error count</li>
+      <li>Build a prompt regression test suite: 10 questions with expected answers, run nightly, flag quality drops</li>
+      <li>Create a Dockerfile + docker-compose.yml that runs your RAG system + Redis cache + monitoring logger</li>
+      <li>Design a complete GenAIOps pipeline diagram: from git push to production deployment with all quality gates</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     CAPSTONE PROJECT
+═══════════════════════════════════════════ -->
+<section class="section" id="capstone">
+<div class="container reveal">
+  <div class="module-banner" style="background: linear-gradient(135deg, rgba(124,58,237,0.10) 0%, rgba(8,145,178,0.10) 100%); border-color: rgba(124,58,237,0.3);">
+    <div class="module-num" style="color: var(--blue-light);">Capstone Project</div>
+    <h2>AI-Powered Financial Advisory Platform</h2>
+    <div class="module-duration">Integrates all 7 modules into a production-grade system</div>
+  </div>
+
+  <p>Build an AI system for a financial services client that:</p>
+  <ul>
+    <li>Ingests regulatory documents, company policies, and market reports <em>(Module 4: RAG)</em></li>
+    <li>Uses a multi-agent architecture: Router Agent, Compliance Agent, Research Agent, Response Agent <em>(Module 2: Agents)</em></li>
+    <li>Maintains conversation history and user preferences across sessions <em>(Module 3: Memory)</em></li>
+    <li>Runs locally via Ollama for sensitive queries, routes complex analysis to cloud LLMs <em>(Module 1: Hybrid)</em></li>
+    <li>Exposes a REST API with JWT authentication <em>(Module 5: Enterprise)</em></li>
+    <li>Uses pgvector for cloud-agnostic vector storage <em>(Module 6: Cross-Cloud)</em></li>
+    <li>Includes monitoring dashboard, evaluation suite, and Dockerised deployment <em>(Module 7: GenAIOps)</em></li>
+  </ul>
+
+  <h3>Deliverables</h3>
+  <ul>
+    <li>Python application with all components integrated</li>
+    <li>Architecture diagram showing all components and data flows</li>
+    <li>Docker Compose file for local deployment</li>
+    <li>Evaluation report: RAGAS scores, latency benchmarks, cost projections</li>
+    <li>README documenting design decisions and trade-offs</li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="callout-title">💡 Learning Path Recommendation</div>
+    <p>Work through the modules sequentially. Each module's hands-on exercises build on the previous modules. Budget 2–3 weeks per module. Run all code examples locally on your Mac M4 using Ollama. When you reach the capstone, you'll have all the components ready to integrate. Total estimated time: 16–22 weeks.</p>
+  </div>
+
+  <p>This curriculum was designed to take you from Python fundamentals to AI Architect capability. Every concept connects directly to the skills demanded in the job description. The hands-on exercises use the exact tools and frameworks — LangChain, LlamaIndex, Ollama, ChromaDB, FAISS — that you will use in production. Build each project, extend each exercise, and by the end you will be designing AI systems with confidence.</p>
+</div>
+</section>
+
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <span class="footer-logo-text">Sustain<span>Sys</span></span>
+    </div>
+    <p>SustainSys AI Academy · Educational Guide</p>
+    <p>AI Architect Mastery Curriculum · 7 Modules · 16–22 Weeks</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK</p>
+  </div>
+</footer>
+
+</main>
+
+<script>
+// Scroll progress
+function updateProgress() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+  const pct = Math.round(progress * 100);
+  const circumference = 94.25;
+  document.getElementById("progressCircle").style.strokeDashoffset = circumference - (progress * circumference);
+  document.getElementById("progressLabel").textContent = pct + "%";
+}
+window.addEventListener("scroll", updateProgress, { passive: true });
+updateProgress();
+
+// Sidebar active state
+const sections = document.querySelectorAll("section[id], .hero[id]");
+const navLinks = document.querySelectorAll(".sidebar-nav a");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove("active"));
+      const link = document.querySelector(`.sidebar-nav a[href="#${e.target.id}"]`);
+      if (link) link.classList.add("active");
+    }
+  });
+}, { rootMargin: "-20% 0px -60% 0px" });
+sections.forEach(s => observer.observe(s));
+
+// Reveal on scroll
+const reveals = document.querySelectorAll(".reveal");
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+}, { threshold: 0.07 });
+reveals.forEach(r => revObs.observe(r));
+
+// Mobile sidebar
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+// ── Topic Completion Tracking ──
+(function() {
+  const STORAGE_KEY = 'sustainsys_curriculum_done';
+  const allTopics = document.querySelectorAll('.sidebar-nav li[data-topic]');
+  const totalTopics = allTopics.length;
+
+  // Load saved state from sessionStorage
+  function loadState() {
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : {};
+    } catch(e) { return {}; }
+  }
+
+  // Save state to sessionStorage
+  function saveState(state) {
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch(e) { /* silent */ }
+  }
+
+  // Update the progress bar and counter
+  function updateCompletionProgress() {
+    const doneCount = document.querySelectorAll('.sidebar-nav li.done').length;
+    const pct = totalTopics > 0 ? (doneCount / totalTopics) * 100 : 0;
+    const fill = document.getElementById('progressFill');
+    const label = document.getElementById('progressText');
+    if (fill) fill.style.width = pct + '%';
+    if (label) label.textContent = doneCount + ' / ' + totalTopics;
+  }
+
+  // Apply saved state on load
+  const state = loadState();
+  allTopics.forEach(li => {
+    const topic = li.getAttribute('data-topic');
+    if (state[topic]) li.classList.add('done');
+  });
+  updateCompletionProgress();
+
+  // Handle checkbox clicks
+  document.querySelectorAll('.sidebar-check').forEach(check => {
+    check.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();  // Don't navigate when clicking the checkbox
+
+      const li = this.closest('li[data-topic]');
+      if (!li) return;
+
+      const topic = li.getAttribute('data-topic');
+      const state = loadState();
+
+      // Toggle
+      if (li.classList.contains('done')) {
+        li.classList.remove('done');
+        delete state[topic];
+        this.title = 'Mark as complete';
+      } else {
+        li.classList.add('done');
+        state[topic] = true;
+        this.title = 'Mark as incomplete';
+      }
+
+      saveState(state);
+      updateCompletionProgress();
+    });
+
+    // Update initial title text
+    const li = check.closest('li[data-topic]');
+    if (li && li.classList.contains('done')) {
+      check.title = 'Mark as incomplete';
+    }
+  });
+})();
+</script>
+</body>
+</html>
