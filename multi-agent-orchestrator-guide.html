@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Agent Orchestration with LangChain — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  /* ── SustainSys Brand Palette (Light Theme) ── */
+  :root {
+    --bg:          #f8fafc;
+    --bg2:         #f1f5f9;
+    --surface:     #ffffff;
+    --surface2:    #f8fafc;
+    --surface3:    #f1f5f9;
+    --border:      #e2e8f0;
+    --border2:     #cbd5e1;
+    --teal:        #0891b2;
+    --teal-light:  #06b6d4;
+    --teal-dim:    rgba(8,145,178,0.10);
+    --teal-glow:   rgba(8,145,178,0.05);
+    --blue:        #7c3aed;
+    --blue-light:  #8b5cf6;
+    --blue-dim:    rgba(124,58,237,0.10);
+    --amber:       #d97706;
+    --amber-dim:   rgba(217,119,6,0.10);
+    --text:        #1e293b;
+    --text-muted:  #64748b;
+    --text-dim:    #94a3b8;
+    --heading:     #0f172a;
+    --code-bg:     #f1f5f9;
+    --sidebar-w:   260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(8,145,178,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 70% at 85% 90%, rgba(124,58,237,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(8,145,178,0.02) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200; height: 58px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+  }
+  .topnav-inner {
+    width: 100%; padding: 0 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; flex-shrink: 0; }
+  .nav-logo-img { height: 34px; width: auto; display: block; object-fit: contain; }
+  .nav-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.92rem; color: var(--heading); letter-spacing: -0.01em; }
+  .nav-logo-text span { color: var(--teal); }
+  .nav-divider { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
+  .nav-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  .nav-badge {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    background: var(--teal-dim); color: var(--teal);
+    border: 1px solid rgba(8,145,178,0.25);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ── PROGRESS RING ── */
+  .progress-circle-wrap { position: fixed; top: 12px; right: 1.4rem; z-index: 300; width: 36px; height: 36px; }
+  .progress-circle-wrap svg { transform: rotate(-90deg); width: 36px; height: 36px; }
+  .progress-circle-track { fill: none; stroke: var(--border2); stroke-width: 3; }
+  .progress-circle-fill { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 94.25; stroke-dashoffset: 94.25; transition: stroke-dashoffset 0.15s ease; }
+  .progress-circle-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 500; color: var(--teal); line-height: 1; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top: 58px; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: var(--bg2); border-right: 1px solid var(--border);
+    overflow-y: auto; z-index: 150;
+    padding: 1.5rem 0 2rem; transition: transform 0.3s ease;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .sidebar-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block; }
+  .sidebar-nav { list-style: none; padding: 0; }
+  .sidebar-nav li { position: relative; }
+  .sidebar-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1.4rem; text-decoration: none; font-size: 0.82rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s, background 0.2s; border-left: 2px solid transparent; line-height: 1.3; }
+  .sidebar-nav a:hover { color: var(--teal); background: rgba(8,145,178,0.05); }
+  .sidebar-nav a.active { color: var(--teal); background: var(--teal-glow); border-left-color: var(--teal); }
+  .sidebar-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right; }
+  .sidebar-nav a.active .sidebar-num { color: var(--teal); opacity: 0.6; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 0.8rem 1.4rem; }
+  .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 400; width: 44px; height: 44px; background: var(--teal); border: none; border-radius: 50%; color: #fff; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(8,145,178,0.3); }
+
+  /* ── MAIN CONTENT ── */
+  .main { margin-left: var(--sidebar-w); margin-top: 58px; min-height: calc(100vh - 58px); position: relative; z-index: 1; }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ── HERO ── */
+  .hero { padding: 5rem 0 4rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; top: -40px; right: -60px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 65%); pointer-events: none; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--teal); background: var(--teal-dim); border: 1px solid rgba(8,145,178,0.25); padding: 0.3rem 0.8rem; border-radius: 3px; margin-bottom: 1.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--heading); line-height: 1.12; margin-bottom: 1.4rem; letter-spacing: -0.03em; }
+  .hero h1 .accent { color: var(--teal); }
+  .hero-sub { font-size: 1.05rem; color: var(--text-muted); max-width: 580px; line-height: 1.75; margin-bottom: 2.5rem; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .pill { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 3px; border: 1px solid var(--border2); color: var(--text-muted); background: var(--surface); }
+
+  /* ── TOC ── */
+  .toc { background: var(--surface); border: 1px solid var(--border2); border-top: 2px solid var(--blue); padding: 2rem; margin: 3rem 0; }
+  .toc-heading { font-family: 'Sora', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue-light); margin-bottom: 1.2rem; font-weight: 700; }
+  .toc ol { padding-left: 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 2rem; }
+  @media (max-width: 560px) { .toc ol { grid-template-columns: 1fr; } }
+  .toc a { color: var(--text-muted); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; transition: color 0.2s; }
+  .toc a:hover { color: var(--teal); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+  .section-label { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
+  .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--teal); }
+  h2 { font-family: 'Sora', sans-serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--heading); line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -0.025em; }
+  h3 { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--heading); margin: 2.5rem 0 0.9rem; letter-spacing: -0.015em; }
+  h4 { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.07em; margin: 2rem 0 0.7rem; }
+  p { margin-bottom: 1.1rem; }
+  strong { color: var(--heading); font-weight: 600; }
+  em { color: var(--teal); font-style: normal; font-weight: 500; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+  li { margin-bottom: 0.35rem; font-size: 0.96rem; }
+
+  /* ── CODE ── */
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.81em; background: var(--teal-dim); color: var(--teal-light); padding: 0.1em 0.4em; border-radius: 3px; }
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-left: 2px solid var(--teal); padding: 1.4rem 1.5rem; overflow-x: auto; margin: 1.4rem 0; border-radius: 0 3px 3px 0; }
+  pre code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.75; color: #334155; background: none; padding: 0; }
+  .code-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); opacity: 0.7; display: block; margin-bottom: 0.3rem; }
+  .kw  { color: #7c3aed; }
+  .fn  { color: #0891b2; }
+  .st  { color: #d97706; }
+  .cm  { color: #94a3b8; font-style: italic; }
+  .nm  { color: #1e293b; }
+  .dt  { color: #db2777; }
+
+  /* ── CALLOUTS ── */
+  .callout { padding: 1.2rem 1.4rem; margin: 1.8rem 0; border-left: 2px solid; border-radius: 0 4px 4px 0; }
+  .callout.tip     { background: rgba(8,145,178,0.06);  border-color: var(--teal); }
+  .callout.info    { background: rgba(124,58,237,0.06); border-color: var(--blue); }
+  .callout.warning { background: rgba(217,119,6,0.06);  border-color: var(--amber); }
+  .callout-title { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem; }
+  .callout.tip     .callout-title { color: var(--teal); }
+  .callout.info    .callout-title { color: var(--blue-light); }
+  .callout.warning .callout-title { color: var(--amber); }
+  .callout p { margin: 0; font-size: 0.92rem; }
+
+  /* ── DIAGRAM ── */
+  .diagram { background: var(--code-bg); border: 1px solid var(--border); padding: 1.5rem 2rem; margin: 1.8rem 0; overflow-x: auto; }
+  .diagram pre { background: none; border: none; padding: 0; margin: 0; }
+  .diagram pre code { color: #475569; font-size: 0.78rem; }
+
+  /* ── FLOW STEPS ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 1.8rem 0; }
+  .flow-step { display: flex; gap: 1.2rem; align-items: flex-start; position: relative; }
+  .flow-step:not(:last-child)::after { content: ''; position: absolute; left: 1rem; top: 2.6rem; bottom: -1rem; width: 1px; background: var(--border2); }
+  .flow-icon { width: 2rem; height: 2rem; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--teal); flex-shrink: 0; margin-top: 0.15rem; }
+  .flow-content { padding-bottom: 1.8rem; flex: 1; }
+  .flow-content strong { display: block; font-family: 'Sora', sans-serif; font-size: 0.9rem; color: var(--heading); margin-bottom: 0.25rem; }
+  .flow-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+
+  /* ── TERM GRID ── */
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+  .term-card { background: var(--surface); padding: 1.3rem; transition: background 0.2s; }
+  .term-card:hover { background: var(--surface2); }
+  .term-card .term-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .term-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+  /* ── STAGE CARDS ── */
+  .stages { display: flex; flex-direction: column; gap: 1px; margin: 1.8rem 0; background: var(--border); }
+  .stage-card { display: flex; gap: 1.4rem; background: var(--surface); padding: 1.4rem; align-items: flex-start; transition: background 0.2s; }
+  .stage-card:hover { background: var(--surface2); }
+  .stage-num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 400; color: var(--border2); line-height: 1; flex-shrink: 0; width: 2.2rem; text-align: right; padding-top: 0.15rem; }
+  .stage-content h4 { margin: 0 0 0.35rem; font-size: 0.95rem; color: var(--heading); text-transform: none; letter-spacing: 0; }
+  .stage-content p { margin: 0; font-size: 0.86rem; color: var(--text-muted); }
+
+  /* ── TECH TABLE ── */
+  .tech-table { width: 100%; border-collapse: collapse; margin: 1.8rem 0; font-size: 0.88rem; }
+  .tech-table th { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border2); font-weight: 600; background: var(--surface); }
+  .tech-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .tech-table tr:hover td { background: rgba(8,145,178,0.04); }
+  .tech-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--amber); white-space: nowrap; }
+
+  /* ── FILE TREE ── */
+  .file-tree { background: var(--code-bg); border: 1px solid var(--border); padding: 1.4rem 1.6rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 1.9; margin: 1.4rem 0; }
+  .file-tree .dir     { color: #7c3aed; }
+  .file-tree .file    { color: var(--text); }
+  .file-tree .comment { color: var(--text-dim); font-style: italic; }
+  .file-tree .new-f   { color: var(--teal); }
+
+  /* ── AGENT CARD ── */
+  .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+  .agent-card { background: var(--surface); padding: 1.4rem; transition: background 0.2s; }
+  .agent-card:hover { background: var(--surface2); }
+  .agent-card .agent-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+  .agent-card .agent-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+  .agent-card p { font-size: 0.84rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer { padding: 3.5rem 0; border-top: 1px solid var(--border); text-align: center; }
+  .footer-logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+  .footer-logo-img { height: 30px; width: auto; display: block; object-fit: contain; }
+  .footer-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--heading); }
+  .footer-logo-text span { color: var(--teal); }
+  footer p { font-size: 0.82rem; color: var(--text-dim); margin: 0.3rem 0; }
+  footer a { color: var(--teal); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    .sidebar { transform: translateX(-260px); width: 260px; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .sidebar-toggle { display: flex; }
+    .progress-circle-wrap { right: 4rem; }
+  }
+  @media (max-width: 600px) {
+    .container { padding: 0 1.2rem; }
+    .hero { padding: 3.5rem 0 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Top Nav ── -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="nav-logo" href="https://sustainsys.co.uk">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <span class="nav-logo-text">Sustain<span>Sys</span></span>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">Multi-Agent Orchestration with LangChain &amp; MCP</span>
+    <span class="nav-badge">AI Academy</span>
+  </div>
+</nav>
+
+<!-- ── Progress Ring ── -->
+<div class="progress-circle-wrap">
+  <svg viewBox="0 0 36 36">
+    <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+    <circle class="progress-circle-fill" id="progressCircle" cx="18" cy="18" r="15"/>
+  </svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar" id="sidebar">
+  <span class="sidebar-section-label">Contents</span>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li><a href="#intro"><span class="sidebar-num">01</span> Introduction</a></li>
+    <li><a href="#concepts"><span class="sidebar-num">02</span> Core Concepts</a></li>
+    <li><a href="#structure"><span class="sidebar-num">03</span> Project Structure</a></li>
+    <li><a href="#skills"><span class="sidebar-num">04</span> Building Skills</a></li>
+    <li><a href="#agents"><span class="sidebar-num">05</span> Building Agents</a></li>
+    <li><a href="#orchestrator"><span class="sidebar-num">06</span> Orchestrator</a></li>
+    <li><a href="#main"><span class="sidebar-num">07</span> main.py &amp; Testing</a></li>
+    <li><a href="#mcp"><span class="sidebar-num">08</span> MCP Pattern</a></li>
+    <li><a href="#recap"><span class="sidebar-num">09</span> What You Built</a></li>
+    <li><a href="#next"><span class="sidebar-num">10</span> Next Steps</a></li>
+  </ul>
+  <div class="sidebar-divider"></div>
+  <span class="sidebar-section-label">Stack</span>
+  <ul class="sidebar-nav">
+    <li><a href="#skills">LangChain @tool</a></li>
+    <li><a href="#agents">LangGraph ReAct</a></li>
+    <li><a href="#orchestrator">MCP Orchestration</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+<main class="main">
+
+<!-- ── Hero ── -->
+<div class="hero" id="intro">
+  <div class="container reveal">
+    <div class="hero-eyebrow">⚡ SustainSys AI Academy · Module 2</div>
+    <h1>Multi-Agent <span class="accent">Orchestration</span><br>with LangChain &amp; MCP</h1>
+    <p class="hero-sub">
+      Learn how to build specialist AI agents, give them tools (skills), and wire them together
+      using an orchestrator that routes tasks intelligently — all in Python, step by step.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">Python 3.11</span>
+      <span class="pill">LangChain</span>
+      <span class="pill">LangGraph</span>
+      <span class="pill">OpenAI GPT-4o-mini</span>
+      <span class="pill">Gmail API</span>
+      <span class="pill">OpenWeatherMap</span>
+      <span class="pill">MCP Pattern</span>
+      <span class="pill">OAuth 2.0</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOC ── -->
+<div class="section" style="padding-top:3rem;padding-bottom:2rem;border-bottom:none;">
+  <div class="container reveal">
+    <div class="toc">
+      <div class="toc-heading">Table of Contents</div>
+      <ol>
+        <li><a href="#intro">Introduction &amp; Goals</a></li>
+        <li><a href="#concepts">Core Concepts Explained</a></li>
+        <li><a href="#structure">Project Structure</a></li>
+        <li><a href="#skills">Building Skills (@tool)</a></li>
+        <li><a href="#agents">Building the 3 Agents</a></li>
+        <li><a href="#orchestrator">The Orchestrator Agent</a></li>
+        <li><a href="#main">main.py &amp; Test Queries</a></li>
+        <li><a href="#mcp">MCP Pattern Deep Dive</a></li>
+        <li><a href="#recap">What You Built</a></li>
+        <li><a href="#next">Next Steps</a></li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 1: Introduction ── -->
+<div class="section" id="intro" style="padding-top:2rem;">
+  <div class="container reveal">
+    <span class="section-label">Section 01</span>
+    <h2>What Are We Building?</h2>
+    <p>
+      In this guide you will build a <strong>multi-agent system</strong> — three specialist AI agents,
+      each with their own skills, coordinated by a single master orchestrator. By the end you will
+      understand how real-world AI products like AutoGPT, Devin, and enterprise AI assistants work under the hood.
+    </p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <span class="agent-icon">🌤️</span>
+        <div class="agent-name">Weather Agent</div>
+        <p>Calls OpenWeatherMap API to report live temperature, humidity, and conditions for any city.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">📧</span>
+        <div class="agent-name">Gmail Agent</div>
+        <p>Authenticates with Gmail via OAuth and reads your unread inbox, summarising emails naturally.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🔢</span>
+        <div class="agent-name">Arithmetic Agent</div>
+        <p>Performs multi-step calculations — add, subtract, multiply, divide — using dedicated tool functions.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🎛️</span>
+        <div class="agent-name">Orchestrator</div>
+        <p>The master agent. Reads your query, decides which specialist(s) to call, and unifies results.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🎯 Learning Goals</div>
+      <p>After this guide you will understand: what a Skill is, what an Agent is, how the ReAct reasoning loop works, how to wrap agents as tools for orchestration, and what MCP means in practice.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 2: Core Concepts ── -->
+<div class="section" id="concepts">
+  <div class="container reveal">
+    <span class="section-label">Section 02</span>
+    <h2>Core Concepts — Three Things to Understand First</h2>
+
+    <h3>1. What is a Skill?</h3>
+    <p>
+      A Skill is a plain Python function decorated with <code>@tool</code> from LangChain.
+      That decorator registers the function so an LLM Agent can discover and call it automatically.
+    </p>
+    <div class="diagram">
+      <pre><code>Normal function   →   only YOU can call it in code
+@tool function    →   the LLM Agent can call it too
+
+def add(a, b):          ← only callable by your code
+    return a + b
+
+@tool
+def add(a: float, b: float) -> float:    ← agent can call this!
+    """Add two numbers."""
+    return a + b</code></pre>
+    </div>
+    <p>
+      The <strong>docstring</strong> is critical — the LLM reads it to decide <em>when</em> to use the tool.
+      Clear docstrings = smart tool selection. Vague docstrings = confused agent.
+    </p>
+
+    <h3>2. What is an Agent?</h3>
+    <p>
+      An Agent is an LLM brain connected to a set of tools, running in a reasoning loop.
+      The loop is called <strong>ReAct</strong> (Reason + Act):
+    </p>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">01</div>
+        <div class="flow-content">
+          <strong>Think</strong>
+          <p>LLM reads your query and decides: "which tool do I need?"</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">02</div>
+        <div class="flow-content">
+          <strong>Act</strong>
+          <p>LLM calls the chosen tool with the right arguments.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">03</div>
+        <div class="flow-content">
+          <strong>Observe</strong>
+          <p>Tool returns a result. LLM reads the output.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">04</div>
+        <div class="flow-content">
+          <strong>Repeat or Answer</strong>
+          <p>LLM decides: "do I need another tool, or can I answer now?" Loop continues until done.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>3. What is the Orchestrator / MCP?</h3>
+    <p>
+      The orchestrator is itself an agent — but instead of calling weather or maths tools, its tools
+      <em>are the other agents</em>. MCP (Model Context Protocol) is the pattern/standard for exposing
+      these agent-as-tool endpoints so any LLM client can discover and call them.
+    </p>
+    <div class="diagram">
+      <pre><code>User query
+    ↓
+Orchestrator Agent
+    ↓ (reads query, decides which specialists needed)
+    ├── weather_agent_tool("What's the weather in Tokyo?")
+    │       ↓ calls Weather Agent → get_weather skill → API → result
+    ├── arithmetic_agent_tool("What is 42 × 7?")
+    │       ↓ calls Arithmetic Agent → multiply skill → result
+    └── Combines both results → single unified response to user</code></pre>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">💡 Key Insight</div>
+      <p>The orchestrator treats each specialist agent as just another <code>@tool</code>. This is the same pattern all the way up — you could even have an orchestrator of orchestrators. This is how large AI systems scale.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 3: Project Structure ── -->
+<div class="section" id="structure">
+  <div class="container reveal">
+    <span class="section-label">Section 03</span>
+    <h2>Project Structure</h2>
+    <p>Before writing any code, create this folder layout. Understanding <em>why</em> it's structured this way is as important as the code itself.</p>
+
+    <div class="file-tree">
+      <span class="dir">multi_agent_project/</span><br>
+      ├── <span class="dir">skills/</span>             <span class="comment"># Reusable @tool functions (the building blocks)</span><br>
+      │   ├── <span class="file">__init__.py</span><br>
+      │   ├── <span class="new-f">arithmetic_skill.py</span>   <span class="comment"># add, subtract, multiply, divide</span><br>
+      │   ├── <span class="new-f">weather_skill.py</span>      <span class="comment"># get_weather via OpenWeatherMap API</span><br>
+      │   └── <span class="new-f">gmail_skill.py</span>        <span class="comment"># check_new_emails via Gmail OAuth</span><br>
+      ├── <span class="dir">agents/</span>             <span class="comment"># One agent per domain, each uses its skills</span><br>
+      │   ├── <span class="file">__init__.py</span><br>
+      │   ├── <span class="new-f">arithmetic_agent.py</span><br>
+      │   ├── <span class="new-f">weather_agent.py</span><br>
+      │   └── <span class="new-f">gmail_agent.py</span><br>
+      ├── <span class="dir">orchestrator/</span>       <span class="comment"># Master router — uses agents as tools</span><br>
+      │   ├── <span class="file">__init__.py</span><br>
+      │   └── <span class="new-f">mcp_orchestrator.py</span><br>
+      ├── <span class="file">.env</span>                <span class="comment"># API keys (never commit this!)</span><br>
+      ├── <span class="file">credentials.json</span>    <span class="comment"># Gmail OAuth credentials from Google Cloud</span><br>
+      ├── <span class="file">token.json</span>          <span class="comment"># Auto-generated after first Gmail login</span><br>
+      ├── <span class="new-f">main.py</span>             <span class="comment"># Entry point — runs all test queries</span><br>
+      └── <span class="file">requirements.txt</span>
+    </div>
+
+    <h3>Create the structure</h3>
+    <span class="code-label">Terminal — run from your project root</span>
+    <pre><code>mkdir multi_agent_project && cd multi_agent_project
+mkdir agents skills orchestrator
+touch agents/__init__.py skills/__init__.py orchestrator/__init__.py
+touch main.py requirements.txt .env</code></pre>
+
+    <h3>requirements.txt</h3>
+    <span class="code-label">requirements.txt</span>
+    <pre><code>langchain
+langchain-community
+langchain-openai
+langgraph
+openai
+requests
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+python-dotenv</code></pre>
+
+    <span class="code-label">Install</span>
+    <pre><code>pip install -r requirements.txt</code></pre>
+
+    <h3>.env file</h3>
+    <span class="code-label">.env</span>
+    <pre><code>OPENAI_API_KEY=your_openai_key_here
+OPENWEATHER_API_KEY=your_openweathermap_key_here</code></pre>
+
+    <div class="callout warning">
+      <div class="callout-title">⚠️ Never Commit .env</div>
+      <p>Add <code>.env</code> and <code>token.json</code> to your <code>.gitignore</code>. These files contain private API keys and OAuth tokens.</p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🐍 Python Version</div>
+      <p>Use Python 3.11. LangChain's Pydantic V1 dependency breaks on Python 3.14+. Create your venv with: <code>~/.pyenv/versions/3.11.9/bin/python -m venv .venv311</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 4: Skills ── -->
+<div class="section" id="skills">
+  <div class="container reveal">
+    <span class="section-label">Section 04</span>
+    <h2>Building Skills — The @tool Decorator</h2>
+    <p>Skills are the atomic building blocks. Each skill is a focused Python function that does one job well. We decorate them with <code>@tool</code> so LangChain agents can discover and call them.</p>
+
+    <h3>Skill 1 — Arithmetic</h3>
+    <p>No API needed — perfect for learning the <code>@tool</code> pattern. Notice each operation is a <em>separate</em> tool so the agent can choose the right one.</p>
+    <span class="code-label">skills/arithmetic_skill.py</span>
+    <pre><code><span class="kw">from</span> langchain_core.tools <span class="kw">import</span> tool
+
+<span class="cm"># Each operation is its own @tool</span>
+<span class="cm"># Why? The agent needs to choose WHICH operation to use.</span>
+<span class="cm"># One big function would confuse the agent.</span>
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">add</span>(<span class="nm">a</span>: <span class="nm">float</span>, <span class="nm">b</span>: <span class="nm">float</span>) -> <span class="nm">float</span>:
+    <span class="st">"""Add two numbers together. Use this for addition or sum calculations."""</span>
+    <span class="kw">return</span> <span class="nm">a</span> + <span class="nm">b</span>
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">subtract</span>(<span class="nm">a</span>: <span class="nm">float</span>, <span class="nm">b</span>: <span class="nm">float</span>) -> <span class="nm">float</span>:
+    <span class="st">"""Subtract b from a. Use this for subtraction or difference calculations."""</span>
+    <span class="kw">return</span> <span class="nm">a</span> - <span class="nm">b</span>
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">multiply</span>(<span class="nm">a</span>: <span class="nm">float</span>, <span class="nm">b</span>: <span class="nm">float</span>) -> <span class="nm">float</span>:
+    <span class="st">"""Multiply two numbers. Use this for multiplication or product calculations."""</span>
+    <span class="kw">return</span> <span class="nm">a</span> * <span class="nm">b</span>
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">divide</span>(<span class="nm">a</span>: <span class="nm">float</span>, <span class="nm">b</span>: <span class="nm">float</span>) -> <span class="nm">float</span>:
+    <span class="st">"""Divide a by b. Use this for division calculations."""</span>
+    <span class="kw">if</span> <span class="nm">b</span> == <span class="nm">0</span>:
+        <span class="kw">return</span> <span class="st">"Error: cannot divide by zero"</span>
+    <span class="kw">return</span> <span class="nm">a</span> / <span class="nm">b</span>
+
+<span class="kw">if</span> <span class="nm">__name__</span> == <span class="st">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">add</span>.invoke({<span class="st">"a"</span>: <span class="nm">10</span>, <span class="st">"b"</span>: <span class="nm">5</span>}))       <span class="cm"># 15.0</span>
+    <span class="fn">print</span>(<span class="fn">multiply</span>.invoke({<span class="st">"a"</span>: <span class="nm">4</span>, <span class="st">"b"</span>: <span class="nm">6</span>}))   <span class="cm"># 24.0</span></code></pre>
+
+    <h3>Skill 2 — Weather</h3>
+    <p>Calls the free OpenWeatherMap REST API and returns a human-readable weather string.</p>
+    <span class="code-label">skills/weather_skill.py</span>
+    <pre><code><span class="kw">import</span> requests
+<span class="kw">import</span> os
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_core.tools <span class="kw">import</span> tool
+
+<span class="fn">load_dotenv</span>()
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">get_weather</span>(<span class="nm">city</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Get the current weather for a given city.
+    Returns temperature, humidity, and weather conditions."""</span>
+
+    <span class="nm">api_key</span> = <span class="nm">os</span>.<span class="fn">getenv</span>(<span class="st">"OPENWEATHER_API_KEY"</span>)
+    <span class="nm">url</span> = <span class="nm">f</span><span class="st">"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"</span>
+    <span class="nm">response</span> = <span class="nm">requests</span>.<span class="fn">get</span>(<span class="nm">url</span>)
+
+    <span class="kw">if</span> <span class="nm">response</span>.<span class="nm">status_code</span> != <span class="nm">200</span>:
+        <span class="kw">return</span> <span class="nm">f</span><span class="st">"Could not fetch weather for {city}."</span>
+
+    <span class="nm">data</span> = <span class="nm">response</span>.<span class="fn">json</span>()
+    <span class="nm">temp</span>        = <span class="nm">data</span>[<span class="st">"main"</span>][<span class="st">"temp"</span>]
+    <span class="nm">description</span> = <span class="nm">data</span>[<span class="st">"weather"</span>][<span class="nm">0</span>][<span class="st">"description"</span>]
+    <span class="nm">humidity</span>    = <span class="nm">data</span>[<span class="st">"main"</span>][<span class="st">"humidity"</span>]
+    <span class="nm">city_name</span>   = <span class="nm">data</span>[<span class="st">"name"</span>]
+
+    <span class="kw">return</span> <span class="nm">f</span><span class="st">"Weather in {city_name}: {description}, Temp: {temp}°C, Humidity: {humidity}%"</span></code></pre>
+
+    <h3>Skill 3 — Gmail</h3>
+    <p>Uses Google's OAuth 2.0 flow. First run opens a browser for login; after that <code>token.json</code> is reused silently.</p>
+    <span class="code-label">skills/gmail_skill.py</span>
+    <pre><code><span class="kw">import</span> os
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_core.tools <span class="kw">import</span> tool
+<span class="kw">from</span> google.auth.transport.requests <span class="kw">import</span> Request
+<span class="kw">from</span> google.oauth2.credentials <span class="kw">import</span> Credentials
+<span class="kw">from</span> google_auth_oauthlib.flow <span class="kw">import</span> InstalledAppFlow
+<span class="kw">from</span> googleapiclient.discovery <span class="kw">import</span> build
+
+<span class="fn">load_dotenv</span>()
+<span class="nm">SCOPES</span> = [<span class="st">"https://www.googleapis.com/auth/gmail.readonly"</span>]
+
+<span class="kw">def</span> <span class="fn">get_gmail_service</span>():
+    <span class="st">"""OAuth helper — handles first-run browser login and token refresh."""</span>
+    <span class="nm">creds</span> = <span class="kw">None</span>
+    <span class="kw">if</span> <span class="nm">os</span>.<span class="fn">path.exists</span>(<span class="st">"token.json"</span>):
+        <span class="nm">creds</span> = <span class="nm">Credentials</span>.<span class="fn">from_authorized_user_file</span>(<span class="st">"token.json"</span>, <span class="nm">SCOPES</span>)
+    <span class="kw">if not</span> <span class="nm">creds</span> <span class="kw">or not</span> <span class="nm">creds</span>.<span class="nm">valid</span>:
+        <span class="kw">if</span> <span class="nm">creds</span> <span class="kw">and</span> <span class="nm">creds</span>.<span class="nm">expired</span> <span class="kw">and</span> <span class="nm">creds</span>.<span class="nm">refresh_token</span>:
+            <span class="nm">creds</span>.<span class="fn">refresh</span>(<span class="fn">Request</span>())
+        <span class="kw">else</span>:
+            <span class="nm">flow</span> = <span class="nm">InstalledAppFlow</span>.<span class="fn">from_client_secrets_file</span>(<span class="st">"credentials.json"</span>, <span class="nm">SCOPES</span>)
+            <span class="nm">creds</span> = <span class="nm">flow</span>.<span class="fn">run_local_server</span>(<span class="nm">port</span>=<span class="nm">0</span>)
+        <span class="kw">with</span> <span class="fn">open</span>(<span class="st">"token.json"</span>, <span class="st">"w"</span>) <span class="kw">as</span> <span class="nm">token</span>:
+            <span class="nm">token</span>.<span class="fn">write</span>(<span class="nm">creds</span>.<span class="fn">to_json</span>())
+    <span class="kw">return</span> <span class="fn">build</span>(<span class="st">"gmail"</span>, <span class="st">"v1"</span>, <span class="nm">credentials</span>=<span class="nm">creds</span>)
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">check_new_emails</span>(<span class="nm">max_results</span>: <span class="nm">int</span> = <span class="nm">5</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Check Gmail inbox for the most recent unread emails.
+    Returns sender, subject, and a short snippet for each email."""</span>
+    <span class="nm">service</span> = <span class="fn">get_gmail_service</span>()
+    <span class="nm">results</span> = <span class="nm">service</span>.<span class="fn">users</span>().<span class="fn">messages</span>().<span class="fn">list</span>(
+        <span class="nm">userId</span>=<span class="st">"me"</span>, <span class="nm">labelIds</span>=[<span class="st">"INBOX"</span>, <span class="st">"UNREAD"</span>], <span class="nm">maxResults</span>=<span class="nm">max_results</span>
+    ).<span class="fn">execute</span>()
+    <span class="nm">messages</span> = <span class="nm">results</span>.<span class="fn">get</span>(<span class="st">"messages"</span>, [])
+    <span class="kw">if not</span> <span class="nm">messages</span>:
+        <span class="kw">return</span> <span class="st">"No new unread emails found."</span>
+    <span class="nm">summaries</span> = []
+    <span class="kw">for</span> <span class="nm">msg</span> <span class="kw">in</span> <span class="nm">messages</span>:
+        <span class="nm">detail</span> = <span class="nm">service</span>.<span class="fn">users</span>().<span class="fn">messages</span>().<span class="fn">get</span>(
+            <span class="nm">userId</span>=<span class="st">"me"</span>, <span class="nm">id</span>=<span class="nm">msg</span>[<span class="st">"id"</span>], <span class="nm">format</span>=<span class="st">"metadata"</span>,
+            <span class="nm">metadataHeaders</span>=[<span class="st">"From"</span>, <span class="st">"Subject"</span>]
+        ).<span class="fn">execute</span>()
+        <span class="nm">headers</span> = <span class="nm">detail</span>[<span class="st">"payload"</span>][<span class="st">"headers"</span>]
+        <span class="nm">snippet</span> = <span class="nm">detail</span>.<span class="fn">get</span>(<span class="st">"snippet"</span>, <span class="st">""</span>)
+        <span class="nm">sender</span>  = <span class="fn">next</span>((<span class="nm">h</span>[<span class="st">"value"</span>] <span class="kw">for</span> <span class="nm">h</span> <span class="kw">in</span> <span class="nm">headers</span> <span class="kw">if</span> <span class="nm">h</span>[<span class="st">"name"</span>] == <span class="st">"From"</span>), <span class="st">"Unknown"</span>)
+        <span class="nm">subject</span> = <span class="fn">next</span>((<span class="nm">h</span>[<span class="st">"value"</span>] <span class="kw">for</span> <span class="nm">h</span> <span class="kw">in</span> <span class="nm">headers</span> <span class="kw">if</span> <span class="nm">h</span>[<span class="st">"name"</span>] == <span class="st">"Subject"</span>), <span class="st">"No Subject"</span>)
+        <span class="nm">summaries</span>.<span class="fn">append</span>(<span class="nm">f</span><span class="st">"From: {sender}\nSubject: {subject}\nPreview: {snippet[:100]}"</span>)
+    <span class="kw">return</span> <span class="st">"\n\n---\n\n"</span>.<span class="fn">join</span>(<span class="nm">summaries</span>)</code></pre>
+
+    <div class="callout warning">
+      <div class="callout-title">📋 Gmail Setup — Google Cloud Console</div>
+      <p>Before running gmail_skill.py: (1) Create a project at console.cloud.google.com, (2) Enable Gmail API, (3) Create OAuth 2.0 Desktop credentials → download as <code>credentials.json</code>, (4) Add your Gmail address as a Test User under APIs &amp; Services → OAuth consent screen → Audience.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 5: Agents ── -->
+<div class="section" id="agents">
+  <div class="container reveal">
+    <span class="section-label">Section 05</span>
+    <h2>Building the Three Agents</h2>
+    <p>
+      Now we wire skills into agents. Every agent follows the same 4-step pattern:
+      <strong>tools list → LLM → create_react_agent → public run function</strong>.
+      Learn this pattern once and you can build any agent.
+    </p>
+
+    <div class="callout info">
+      <div class="callout-title">💡 The Universal Agent Pattern</div>
+      <p>Import skills → <code>tools = [skill1, skill2]</code> → <code>llm = ChatOpenAI(...)</code> → <code>agent = create_react_agent(model, tools, prompt)</code> → <code>def run_agent(query)</code>. Every agent in this project follows this exact structure.</p>
+    </div>
+
+    <h3>Agent 1 — Arithmetic Agent</h3>
+    <span class="code-label">agents/arithmetic_agent.py</span>
+    <pre><code><span class="kw">import</span> sys, os, warnings
+<span class="nm">warnings</span>.<span class="fn">filterwarnings</span>(<span class="st">"ignore"</span>)
+<span class="cm"># Add project root to Python path so 'skills' module is findable</span>
+<span class="nm">sys</span>.<span class="nm">path</span>.<span class="fn">insert</span>(<span class="nm">0</span>, <span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">abspath</span>(<span class="nm">__file__</span>))))
+
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
+<span class="kw">from</span> langgraph.prebuilt <span class="kw">import</span> create_react_agent
+<span class="kw">from</span> skills.arithmetic_skill <span class="kw">import</span> add, subtract, multiply, divide
+
+<span class="fn">load_dotenv</span>()
+
+<span class="cm"># Step 1: tools — the skills this agent can use</span>
+<span class="nm">tools</span> = [<span class="nm">add</span>, <span class="nm">subtract</span>, <span class="nm">multiply</span>, <span class="nm">divide</span>]
+
+<span class="cm"># Step 2: LLM brain</span>
+<span class="nm">llm</span> = <span class="fn">ChatOpenAI</span>(<span class="nm">model</span>=<span class="st">"gpt-4o-mini"</span>)
+
+<span class="cm"># Step 3: create_react_agent wires LLM + tools + reasoning loop</span>
+<span class="nm">agent</span> = <span class="fn">create_react_agent</span>(
+    <span class="nm">model</span>=<span class="nm">llm</span>,
+    <span class="nm">tools</span>=<span class="nm">tools</span>,
+    <span class="nm">prompt</span>=<span class="st">"You are a helpful maths assistant. Use your tools to perform arithmetic calculations."</span>
+)
+
+<span class="cm"># Step 4: public function — other files call this</span>
+<span class="kw">def</span> <span class="fn">run_arithmetic_agent</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="nm">result</span> = <span class="nm">agent</span>.<span class="fn">invoke</span>({<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="nm">query</span>}]})
+    <span class="kw">return</span> <span class="nm">result</span>[<span class="st">"messages"</span>][<span class="nm">-1</span>].<span class="nm">content</span>
+
+<span class="kw">if</span> <span class="nm">__name__</span> == <span class="st">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">run_arithmetic_agent</span>(<span class="st">"What is 42 multiplied by 7, then subtract 100?"</span>))
+    <span class="cm"># → 42 × 7 = 294, 294 − 100 = 194</span></code></pre>
+
+    <h3>Agent 2 — Weather Agent</h3>
+    <p>Same pattern — only the imported skill and prompt change.</p>
+    <span class="code-label">agents/weather_agent.py</span>
+    <pre><code><span class="kw">import</span> sys, os, warnings
+<span class="nm">warnings</span>.<span class="fn">filterwarnings</span>(<span class="st">"ignore"</span>)
+<span class="nm">sys</span>.<span class="nm">path</span>.<span class="fn">insert</span>(<span class="nm">0</span>, <span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">abspath</span>(<span class="nm">__file__</span>))))
+
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
+<span class="kw">from</span> langgraph.prebuilt <span class="kw">import</span> create_react_agent
+<span class="kw">from</span> skills.weather_skill <span class="kw">import</span> get_weather
+
+<span class="fn">load_dotenv</span>()
+
+<span class="nm">tools</span> = [<span class="nm">get_weather</span>]
+<span class="nm">llm</span> = <span class="fn">ChatOpenAI</span>(<span class="nm">model</span>=<span class="st">"gpt-4o-mini"</span>)
+<span class="nm">agent</span> = <span class="fn">create_react_agent</span>(
+    <span class="nm">model</span>=<span class="nm">llm</span>, <span class="nm">tools</span>=<span class="nm">tools</span>,
+    <span class="nm">prompt</span>=<span class="st">"""You are a helpful weather assistant.
+    Use get_weather to fetch real data. Always mention temperature and conditions."""</span>
+)
+
+<span class="kw">def</span> <span class="fn">run_weather_agent</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="nm">result</span> = <span class="nm">agent</span>.<span class="fn">invoke</span>({<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="nm">query</span>}]})
+    <span class="kw">return</span> <span class="nm">result</span>[<span class="st">"messages"</span>][<span class="nm">-1</span>].<span class="nm">content</span>
+
+<span class="kw">if</span> <span class="nm">__name__</span> == <span class="st">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">run_weather_agent</span>(<span class="st">"What is the weather like in Tokyo?"</span>))</code></pre>
+
+    <h3>Agent 3 — Gmail Agent</h3>
+    <span class="code-label">agents/gmail_agent.py</span>
+    <pre><code><span class="kw">import</span> sys, os, warnings
+<span class="nm">warnings</span>.<span class="fn">filterwarnings</span>(<span class="st">"ignore"</span>)
+<span class="nm">sys</span>.<span class="nm">path</span>.<span class="fn">insert</span>(<span class="nm">0</span>, <span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">abspath</span>(<span class="nm">__file__</span>))))
+
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
+<span class="kw">from</span> langgraph.prebuilt <span class="kw">import</span> create_react_agent
+<span class="kw">from</span> skills.gmail_skill <span class="kw">import</span> check_new_emails
+
+<span class="fn">load_dotenv</span>()
+
+<span class="nm">tools</span> = [<span class="nm">check_new_emails</span>]
+<span class="nm">llm</span> = <span class="fn">ChatOpenAI</span>(<span class="nm">model</span>=<span class="st">"gpt-4o-mini"</span>)
+<span class="nm">agent</span> = <span class="fn">create_react_agent</span>(
+    <span class="nm">model</span>=<span class="nm">llm</span>, <span class="nm">tools</span>=<span class="nm">tools</span>,
+    <span class="nm">prompt</span>=<span class="st">"""You are a helpful email assistant.
+    Use check_new_emails to fetch emails. Summarise clearly — who sent it and what it's about."""</span>
+)
+
+<span class="kw">def</span> <span class="fn">run_gmail_agent</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="nm">result</span> = <span class="nm">agent</span>.<span class="fn">invoke</span>({<span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="nm">query</span>}]})
+    <span class="kw">return</span> <span class="nm">result</span>[<span class="st">"messages"</span>][<span class="nm">-1</span>].<span class="nm">content</span>
+
+<span class="kw">if</span> <span class="nm">__name__</span> == <span class="st">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">run_gmail_agent</span>(<span class="st">"Do I have any new emails? Give me a summary."</span>))</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">🔑 Always Run from Project Root</div>
+      <p>Run <code>python agents/arithmetic_agent.py</code> from <code>multi_agent_project/</code>, not from inside <code>agents/</code>. Python resolves imports relative to where you run from. The <code>sys.path.insert</code> lines handle this automatically too.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 6: Orchestrator ── -->
+<div class="section" id="orchestrator">
+  <div class="container reveal">
+    <span class="section-label">Section 06</span>
+    <h2>The Orchestrator — Agents as Tools</h2>
+    <p>
+      This is the most powerful concept in this guide. The orchestrator is an agent whose <em>tools are other agents</em>.
+      Each specialist agent is wrapped in a <code>@tool</code> decorator so the master LLM can route tasks to the right specialist automatically.
+    </p>
+
+    <div class="diagram">
+      <pre><code>                    ┌─────────────────────────────────┐
+                    │       ORCHESTRATOR AGENT         │
+                    │   LLM reads query and decides    │
+                    │   which agent-tools to call      │
+                    └────────┬──────────┬──────────────┘
+                             │          │
+              ┌──────────────┘          └──────────────┐
+              ▼                                        ▼
+  ┌───────────────────┐                    ┌───────────────────┐
+  │  weather_agent    │                    │ arithmetic_agent  │
+  │  _tool(@tool)     │                    │  _tool(@tool)     │
+  └────────┬──────────┘                    └────────┬──────────┘
+           │                                        │
+           ▼                                        ▼
+  ┌───────────────────┐                    ┌───────────────────┐
+  │  run_weather_     │                    │ run_arithmetic_   │
+  │  agent(query)     │                    │ agent(query)      │
+  └────────┬──────────┘                    └────────┬──────────┘
+           │                                        │
+           ▼                                        ▼
+  ┌───────────────────┐                    ┌───────────────────┐
+  │  get_weather      │                    │ add/subtract/     │
+  │  @tool skill      │                    │ multiply/divide   │
+  └───────────────────┘                    └───────────────────┘</code></pre>
+    </div>
+
+    <span class="code-label">orchestrator/mcp_orchestrator.py</span>
+    <pre><code><span class="kw">import</span> sys, os, warnings
+<span class="nm">warnings</span>.<span class="fn">filterwarnings</span>(<span class="st">"ignore"</span>)
+<span class="nm">sys</span>.<span class="nm">path</span>.<span class="fn">insert</span>(<span class="nm">0</span>, <span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">dirname</span>(<span class="nm">os</span>.<span class="nm">path</span>.<span class="fn">abspath</span>(<span class="nm">__file__</span>))))
+
+<span class="kw">from</span> dotenv <span class="kw">import</span> load_dotenv
+<span class="kw">from</span> langchain_openai <span class="kw">import</span> ChatOpenAI
+<span class="kw">from</span> langchain_core.tools <span class="kw">import</span> tool
+<span class="kw">from</span> langgraph.prebuilt <span class="kw">import</span> create_react_agent
+
+<span class="cm"># Import each specialist agent's run function</span>
+<span class="kw">from</span> agents.weather_agent <span class="kw">import</span> run_weather_agent
+<span class="kw">from</span> agents.arithmetic_agent <span class="kw">import</span> run_arithmetic_agent
+<span class="kw">from</span> agents.gmail_agent <span class="kw">import</span> run_gmail_agent
+
+<span class="fn">load_dotenv</span>()
+
+<span class="cm"># ── KEY CONCEPT: wrap each agent as a @tool ───────────────────────</span>
+<span class="cm"># The orchestrator's LLM reads these docstrings to decide</span>
+<span class="cm"># which specialist to call — same as how agents choose skills!</span>
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">weather_agent_tool</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Use this for ANY question about weather, temperature,
+    or climate conditions in any city or location."""</span>
+    <span class="kw">return</span> <span class="fn">run_weather_agent</span>(<span class="nm">query</span>)
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">arithmetic_agent_tool</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Use this for ANY mathematical calculations including
+    addition, subtraction, multiplication, division, or
+    multi-step arithmetic problems."""</span>
+    <span class="kw">return</span> <span class="fn">run_arithmetic_agent</span>(<span class="nm">query</span>)
+
+<span class="dt">@tool</span>
+<span class="kw">def</span> <span class="fn">gmail_agent_tool</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="st">"""Use this to check Gmail inbox, read new emails,
+    or summarise recent email messages."""</span>
+    <span class="kw">return</span> <span class="fn">run_gmail_agent</span>(<span class="nm">query</span>)
+
+<span class="cm"># ── Build the orchestrator agent ─────────────────────────────────</span>
+<span class="nm">llm</span> = <span class="fn">ChatOpenAI</span>(<span class="nm">model</span>=<span class="st">"gpt-4o-mini"</span>)
+<span class="nm">tools</span> = [<span class="nm">weather_agent_tool</span>, <span class="nm">arithmetic_agent_tool</span>, <span class="nm">gmail_agent_tool</span>]
+
+<span class="nm">orchestrator</span> = <span class="fn">create_react_agent</span>(
+    <span class="nm">model</span>=<span class="nm">llm</span>,
+    <span class="nm">tools</span>=<span class="nm">tools</span>,
+    <span class="nm">prompt</span>=<span class="st">"""You are a master orchestrator with 3 specialist agents:
+    1. weather_agent_tool    — for weather queries
+    2. arithmetic_agent_tool — for maths calculations
+    3. gmail_agent_tool      — for email checking
+    Route each query to the right agent(s). If a query needs
+    multiple agents, call all of them and combine the results."""</span>
+)
+
+<span class="kw">def</span> <span class="fn">run_orchestrator</span>(<span class="nm">query</span>: <span class="nm">str</span>) -> <span class="nm">str</span>:
+    <span class="nm">result</span> = <span class="nm">orchestrator</span>.<span class="fn">invoke</span>({
+        <span class="st">"messages"</span>: [{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="nm">query</span>}]
+    })
+    <span class="kw">return</span> <span class="nm">result</span>[<span class="st">"messages"</span>][<span class="nm">-1</span>].<span class="nm">content</span></code></pre>
+  </div>
+</div>
+
+<!-- ── Section 7: main.py ── -->
+<div class="section" id="main">
+  <div class="container reveal">
+    <span class="section-label">Section 07</span>
+    <h2>main.py — Wiring Everything Together</h2>
+    <p>The entry point runs four test queries — single-agent, single-agent, single-agent, and finally a <strong>multi-agent query</strong> that calls two specialists in one shot.</p>
+
+    <span class="code-label">main.py</span>
+    <pre><code><span class="kw">import</span> warnings
+<span class="nm">warnings</span>.<span class="fn">filterwarnings</span>(<span class="st">"ignore"</span>)
+
+<span class="kw">from</span> orchestrator.mcp_orchestrator <span class="kw">import</span> run_orchestrator
+
+<span class="fn">print</span>(<span class="st">"=" * 50</span>)
+<span class="fn">print</span>(<span class="st">"  Multi-Agent Orchestrator Ready!"</span>)
+<span class="fn">print</span>(<span class="st">"=" * 50</span>)
+
+<span class="cm"># Test 1 — single agent: weather</span>
+<span class="fn">print</span>(<span class="st">"\n🌤️  Test 1: Weather query"</span>)
+<span class="fn">print</span>(<span class="fn">run_orchestrator</span>(<span class="st">"What is the weather in Paris?"</span>))
+
+<span class="cm"># Test 2 — single agent: maths</span>
+<span class="fn">print</span>(<span class="st">"\n🔢  Test 2: Maths query"</span>)
+<span class="fn">print</span>(<span class="fn">run_orchestrator</span>(<span class="st">"What is 156 divided by 12, then multiply by 5?"</span>))
+
+<span class="cm"># Test 3 — single agent: email</span>
+<span class="fn">print</span>(<span class="st">"\n📧  Test 3: Email query"</span>)
+<span class="fn">print</span>(<span class="fn">run_orchestrator</span>(<span class="st">"Check my emails and give me a brief summary"</span>))
+
+<span class="cm"># Test 4 — MULTI-AGENT: orchestrator calls weather + arithmetic</span>
+<span class="fn">print</span>(<span class="st">"\n🚀  Test 4: Multi-agent query"</span>)
+<span class="fn">print</span>(<span class="fn">run_orchestrator</span>(<span class="st">"What's the weather in London AND what is 99 multiplied by 99?"</span>))</code></pre>
+
+    <span class="code-label">Run it</span>
+    <pre><code>cd multi_agent_project
+python main.py</code></pre>
+
+    <h3>Expected Output</h3>
+    <span class="code-label">Terminal output</span>
+    <pre><code>==================================================
+  Multi-Agent Orchestrator Ready!
+==================================================
+
+🌤️  Test 1: Weather query
+The current weather in Paris is partly cloudy with a temperature of 10.87°C and humidity of 66%.
+
+🔢  Test 2: Maths query
+The result of 156 divided by 12 is 13, and 13 multiplied by 5 is 65.
+
+📧  Test 3: Email query
+Here is a summary of your recent emails:
+1. AI Engineering — Day 13: AI Model Abstraction Layer guide
+2. ServiceNow — Community event on March 24
+3. The New Stack — Kubernetes webinar invitation
+
+🚀  Test 4: Multi-agent query (TWO agents called!)
+The current weather in London is 10.28°C with few clouds.
+Additionally, 99 multiplied by 99 equals 9801.</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">🎯 Watch Test 4 Carefully</div>
+      <p>Test 4 is the magic moment — one query triggers two separate agents running sequentially. The orchestrator called <code>weather_agent_tool</code> AND <code>arithmetic_agent_tool</code>, got both results, and combined them into one clean response. That is multi-agent orchestration.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 8: MCP ── -->
+<div class="section" id="mcp">
+  <div class="container reveal">
+    <span class="section-label">Section 08</span>
+    <h2>The MCP Pattern — What It Really Means</h2>
+    <p>
+      MCP stands for <strong>Model Context Protocol</strong>. It's a standard developed by Anthropic
+      for how AI models discover and call external tools and agents. Understanding it conceptually
+      is as important as the code.
+    </p>
+
+    <h3>Three Layers of the Pattern</h3>
+    <div class="stages">
+      <div class="stage-card">
+        <div class="stage-num">1</div>
+        <div class="stage-content">
+          <h4>Skills Layer — @tool functions</h4>
+          <p>Raw Python functions decorated with <code>@tool</code>. Each does one atomic job. This is where real work happens — API calls, calculations, file reads.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">2</div>
+        <div class="stage-content">
+          <h4>Agent Layer — LLM + skills + ReAct loop</h4>
+          <p>A specialist LLM that owns a set of skills and reasons about which to call. Each agent is an expert in its domain.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">3</div>
+        <div class="stage-content">
+          <h4>Orchestrator Layer — agents as tools</h4>
+          <p>A master LLM that treats each agent as a tool. Routes queries to specialists and assembles unified responses. This is the MCP layer.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Why This Architecture Scales</h3>
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Principle</th>
+          <th>What it means in practice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Separation of concerns</td>
+          <td>Each agent only knows its own domain. Adding a new agent doesn't touch existing ones.</td>
+        </tr>
+        <tr>
+          <td>Composability</td>
+          <td>Orchestrator can call 1, 2, or all 3 agents per query. Combinations are unlimited.</td>
+        </tr>
+        <tr>
+          <td>Replaceability</td>
+          <td>Swap <code>gpt-4o-mini</code> for Claude or Llama in any single agent without touching others.</td>
+        </tr>
+        <tr>
+          <td>Testability</td>
+          <td>Each skill and agent can be tested in isolation with <code>if __name__ == "__main__"</code>.</td>
+        </tr>
+        <tr>
+          <td>Extensibility</td>
+          <td>Add a Calendar Agent or Search Agent by repeating the same 4-step pattern.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <div class="callout-title">🔌 Production MCP</div>
+      <p>In production, the orchestrator runs as an HTTP server (using Anthropic's <code>mcp</code> Python SDK or FastAPI). Agents are exposed as endpoints. Any MCP-compatible client — Claude Desktop, VS Code extensions, custom apps — can then discover and call your agents automatically over the network.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 9: Recap ── -->
+<div class="section" id="recap">
+  <div class="container reveal">
+    <span class="section-label">Section 09</span>
+    <h2>What You Built</h2>
+
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">✓ @tool Skill</div>
+        <p>A decorated Python function the LLM can call. Docstring = when to use it. Type hints = what to pass in.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ ReAct Agent</div>
+        <p>LLM + tools + reasoning loop. Think → Act → Observe → Repeat until answer is ready.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ create_react_agent</div>
+        <p>LangGraph's modern function that wires model, tools, and prompt into a runnable agent.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ Orchestrator</div>
+        <p>An agent whose tools are other agents. Routes tasks to specialists and combines results.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ OAuth 2.0</div>
+        <p>Secure Google login flow. First run opens browser → token.json saved → reused silently.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ MCP Pattern</div>
+        <p>Skill → Agent → Orchestrator. Three layers. Each wraps the one below as a callable tool.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ sys.path trick</div>
+        <p><code>sys.path.insert(0, parent_dir)</code> makes Python find your modules regardless of where you run from.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">✓ venv + pyenv</div>
+        <p>Always isolate dependencies. Python 3.11 is the sweet spot for LangChain stability today.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">🎓 You Are Now a Builder</div>
+      <p>Most people who use AI assistants have no idea what's underneath. You've built the architecture that powers every multi-agent AI product — skills, specialist agents, orchestration, and the MCP routing pattern. This knowledge doesn't go out of date when frameworks change, because you understand the fundamentals.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 10: Next Steps ── -->
+<div class="section" id="next">
+  <div class="container reveal">
+    <span class="section-label">Section 10</span>
+    <h2>Where to Go Next</h2>
+
+    <h3>Immediate Upgrades to This Project</h3>
+    <ul>
+      <li>Add a <strong>web search agent</strong> using the free DuckDuckGo API or SerpAPI</li>
+      <li>Add a <strong>calendar agent</strong> using the Google Calendar API (same OAuth pattern as Gmail)</li>
+      <li>Add <strong>memory</strong> so the orchestrator remembers context across queries using LangGraph's checkpointing</li>
+      <li>Build a <strong>Flask or FastAPI HTTP server</strong> around the orchestrator to expose it as a real MCP endpoint</li>
+      <li>Add a <strong>simple chat UI</strong> in Streamlit or plain HTML so non-developers can use it</li>
+    </ul>
+
+    <h3>Natural Next Steps in Learning</h3>
+    <ul>
+      <li><strong>LangGraph deep dive</strong> — state machines, conditional edges, parallel agent execution</li>
+      <li><strong>RAG (Retrieval Augmented Generation)</strong> — give your agents access to your own documents</li>
+      <li><strong>Anthropic's MCP SDK</strong> — the official Python library for production MCP servers</li>
+      <li><strong>LlamaIndex</strong> — connecting agents to large document collections with semantic search</li>
+      <li><strong>ChromaDB or Qdrant</strong> — vector databases for agent long-term memory at scale</li>
+      <li><strong>Multi-agent debate patterns</strong> — two agents that argue and synthesise better answers</li>
+    </ul>
+
+    <h3>Common Questions at This Stage</h3>
+    <div class="stages">
+      <div class="stage-card">
+        <div class="stage-num">Q</div>
+        <div class="stage-content">
+          <h4>Can I use a local LLM instead of OpenAI?</h4>
+          <p>Yes. Replace <code>ChatOpenAI(model="gpt-4o-mini")</code> with <code>ChatOllama(model="llama3.1:8b")</code> from <code>langchain_community.chat_models</code>. Only the LLM line changes — skills and agents stay identical.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">Q</div>
+        <div class="stage-content">
+          <h4>How do I add a new agent?</h4>
+          <p>1. Create <code>skills/new_skill.py</code> with <code>@tool</code> functions. 2. Create <code>agents/new_agent.py</code> with the 4-step pattern. 3. Import and wrap it as a <code>@tool</code> in the orchestrator. Done.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">Q</div>
+        <div class="stage-content">
+          <h4>What's the difference between LangChain and LangGraph?</h4>
+          <p>LangChain provides the building blocks (<code>@tool</code>, <code>ChatOpenAI</code>, prompts). LangGraph is a layer on top that adds stateful agent graphs, loops, and the <code>create_react_agent</code> we used.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <span class="footer-logo-text">Sustain<span>Sys</span></span>
+    </div>
+    <p>AI Academy · Multi-Agent Orchestration with LangChain · Student Guide</p>
+    <p>Python · LangChain · LangGraph · OpenAI · Gmail API · OpenWeatherMap · MCP</p>
+    <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+      <a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK · Share freely with students.
+    </p>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  const CIRCUMFERENCE = 2 * Math.PI * 15;
+  const ring  = document.getElementById('progressCircle');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const scrollTop  = window.scrollY;
+    const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+    const pct        = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+    const offset     = CIRCUMFERENCE - (pct / 100) * CIRCUMFERENCE;
+    ring.style.strokeDashoffset = offset;
+    label.textContent = pct + '%';
+  }
+
+  const sections  = document.querySelectorAll('[id]');
+  const sideLinks = document.querySelectorAll('#sidebarNav a');
+
+  function updateSidebar() {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    sideLinks.forEach(a => {
+      const href = a.getAttribute('href').slice(1);
+      a.classList.toggle('active', href === current);
+    });
+  }
+
+  const revealEls = document.querySelectorAll('.reveal, .section, .term-card, .stage-card, .flow-step, .agent-card');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  revealEls.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    revealObserver.observe(el);
+  });
+
+  window.addEventListener('scroll', () => {
+    updateProgress();
+    updateSidebar();
+  }, { passive: true });
+
+  updateProgress();
+  updateSidebar();
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  sideLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 900)
+        document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
