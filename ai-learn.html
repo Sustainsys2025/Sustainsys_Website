@@ -165,7 +165,19 @@
         .dark .pub-card-arrow { color: #334155; }
         .dark .pub-card:hover .pub-card-arrow { color: #22d3ee; }
 
-        /* Mobile Publications link */
+        /* Mobile Publications section */
+        .pub-mobile-section {
+            margin: 0.25rem 0;
+        }
+        .pub-mobile-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
         .pub-mobile-link {
             display: flex;
             align-items: center;
@@ -182,8 +194,33 @@
             background: #f1f5f9;
             color: #0891b2;
         }
+        .pub-mobile-sub {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem 0.5rem 2.25rem;
+            font-size: 0.82rem;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+        .pub-mobile-sub:hover {
+            background: #f1f5f9;
+            color: #0891b2;
+        }
+        .pub-mobile-sub .pub-mobile-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            background: rgba(8, 145, 178, 0.1);
+            color: #0891b2;
+        }
         .dark .pub-mobile-link { color: #94a3b8; }
         .dark .pub-mobile-link:hover { background: #1e293b; color: #22d3ee; }
+        .dark .pub-mobile-sub { color: #64748b; }
+        .dark .pub-mobile-sub:hover { background: #1e293b; color: #22d3ee; }
     </style>
   </head>
   <body class="min-h-screen bg-[#f8fafc] text-dark-900 dark:bg-dark-950 dark:text-dark-50 antialiased">
@@ -275,23 +312,34 @@
 
             desktopNav.appendChild(pubWrap);
 
-            // ── Mobile: Add Publications link to mobile menu ──
+            // ── Mobile: Add Publications with all links to mobile menu ──
             const observer = new MutationObserver(function() {
-                const mobileMenu = document.querySelector('nav .md\\:hidden.border-t .px-4.py-3.space-y-1');
-                if (mobileMenu && !mobileMenu.querySelector('.pub-mobile-link')) {
-                    const mobileLink = document.createElement('a');
-                    mobileLink.href = 'publications/ai-agent-guide-v2.html';
-                    mobileLink.className = 'pub-mobile-link';
-                    mobileLink.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-                        Publications
+                // Try multiple selectors to find the mobile menu
+                const mobileMenu = document.querySelector('nav .md\\:hidden.border-t .px-4.py-3.space-y-1')
+                    || document.querySelector('nav [class*="md:hidden"] [class*="space-y"]')
+                    || document.querySelector('nav [class*="mobile"]');
+                if (mobileMenu && !mobileMenu.querySelector('.pub-mobile-section')) {
+                    const section = document.createElement('div');
+                    section.className = 'pub-mobile-section';
+                    section.innerHTML = `
+                        <a href="#" class="pub-mobile-link" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';return false;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            Publications &#9662;
+                        </a>
+                        <div style="display:none;">
+                            <a href="publications/multi-agent-orchestrator-guide.html" class="pub-mobile-sub">Multi-Agent Orchestration <span class="pub-mobile-badge">New</span></a>
+                            <a href="publications/ai-agent-guide-v2.html" class="pub-mobile-sub">Local AI Agent Build Guide</a>
+                            <a href="publications/pytorch-guide.html" class="pub-mobile-sub">PyTorch from Scratch <span class="pub-mobile-badge">New</span></a>
+                            <a href="publications/rag-pipeline-guide.html" class="pub-mobile-sub">Building a Local RAG Pipeline <span class="pub-mobile-badge">New</span></a>
+                            <a href="publications/ai-architect-curriculum.html" class="pub-mobile-sub">AI Architect Curriculum <span class="pub-mobile-badge">New</span></a>
+                        </div>
                     `;
-                    // Insert before the auth buttons section
-                    const authSection = mobileMenu.querySelector('.flex.flex-col.gap-2.pt-2');
+                    const authSection = mobileMenu.querySelector('.flex.flex-col.gap-2.pt-2')
+                        || mobileMenu.querySelector('[class*="flex"][class*="col"][class*="gap"]');
                     if (authSection) {
-                        mobileMenu.insertBefore(mobileLink, authSection);
+                        mobileMenu.insertBefore(section, authSection);
                     } else {
-                        mobileMenu.appendChild(mobileLink);
+                        mobileMenu.appendChild(section);
                     }
                 }
             });
