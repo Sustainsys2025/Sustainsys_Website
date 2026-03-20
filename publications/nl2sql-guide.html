@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2SQL: Natural Language to SQL Analytics Pipeline | SustainSys AI Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8fafc;
+            --bg2: #f1f5f9;
+            --surface: #ffffff;
+            --surface2: #f8fafc;
+            --surface3: #f1f5f9;
+            --border: #e2e8f0;
+            --border2: #cbd5e1;
+            --teal: #0891b2;
+            --teal-light: #06b6d4;
+            --teal-dim: rgba(8, 145, 178, 0.10);
+            --teal-glow: rgba(8, 145, 178, 0.05);
+            --blue: #7c3aed;
+            --blue-light: #8b5cf6;
+            --blue-dim: rgba(124, 58, 237, 0.10);
+            --amber: #d97706;
+            --amber-dim: rgba(217, 119, 6, 0.10);
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-dim: #94a3b8;
+            --heading: #0f172a;
+            --code-bg: #f1f5f9;
+            --sidebar-w: 260px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* TOPNAV */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            height: 58px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--heading);
+        }
+
+        .nav-logo-img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .nav-logo-text span {
+            color: var(--teal);
+        }
+
+        .nav-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: var(--blue-dim);
+            color: var(--blue);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 58px;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            z-index: 150;
+            padding: 1.5rem 0 2rem;
+            transition: transform 0.3s ease;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+        .sidebar-section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-dim);
+            padding: 0.5rem 1.4rem 0.4rem;
+            display: block;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            position: relative;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.55rem 1.4rem;
+            text-decoration: none;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s, background 0.2s;
+            border-left: 2px solid transparent;
+            line-height: 1.3;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--teal);
+            background: rgba(8,145,178,0.05);
+        }
+
+        .sidebar-nav a.active {
+            color: var(--teal);
+            background: var(--teal-glow);
+            border-left-color: var(--teal);
+        }
+
+        .sidebar-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            flex-shrink: 0;
+            width: 1.4rem;
+            text-align: right;
+        }
+
+        .sidebar-nav a.active .sidebar-num {
+            color: var(--teal);
+            opacity: 0.6;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0.8rem 1.4rem;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            z-index: 400;
+            width: 44px;
+            height: 44px;
+            background: var(--teal);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(8,145,178,0.3);
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: var(--sidebar-w);
+            margin-top: 58px;
+            min-height: calc(100vh - 58px);
+            position: relative;
+            z-index: 1;
+        }
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-eyebrow {
+            font-size: 0.9rem;
+            color: var(--teal);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--heading);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--teal);
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* PROGRESS CIRCLE */
+        .progress-circle-wrap {
+            position: fixed;
+            top: 12px;
+            right: 1.4rem;
+            z-index: 300;
+            width: 36px;
+            height: 36px;
+        }
+        .progress-circle-wrap svg {
+            transform: rotate(-90deg);
+            width: 36px;
+            height: 36px;
+        }
+        .progress-circle-track {
+            fill: none;
+            stroke: var(--border2);
+            stroke-width: 3;
+        }
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--teal);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 94.25;
+            stroke-dashoffset: 94.25;
+            transition: stroke-dashoffset 0.15s ease;
+        }
+        .progress-circle-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            font-weight: 500;
+            color: var(--teal);
+            line-height: 1;
+        }
+
+        /* legacy classes kept for compat */
+        .progress-ring-circle {
+            stroke: var(--border);
+            stroke-dasharray: 113;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .progress-ring-fill {
+            stroke: var(--teal);
+            stroke-dasharray: 113;
+            stroke-dashoffset: 113;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--surface2);
+            padding: 2rem;
+            margin: 3rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .toc-heading {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 1.5rem;
+        }
+
+        .toc ol {
+            list-style-position: inside;
+            color: var(--text-muted);
+        }
+
+        .toc li {
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* SECTION */
+        .section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            scroll-margin-top: 80px;
+        }
+
+        .section-label {
+            font-size: 0.9rem;
+            color: var(--teal);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .section h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--heading);
+            margin-bottom: 0.5rem;
+        }
+
+        .section h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .section p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .section > h2 {
+            margin-bottom: 2rem;
+        }
+
+        /* CALLOUT */
+        .callout {
+            padding: 1.5rem;
+            border-left: 4px solid var(--border);
+            background: var(--surface2);
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .callout.tip {
+            border-left-color: var(--teal);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        .callout.tip::before {
+            content: "💡 Tip";
+            display: block;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .callout.info {
+            border-left-color: var(--blue);
+            background: var(--blue-dim);
+        }
+
+        .callout.info::before {
+            content: "ℹ️ Info";
+            display: block;
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .callout.warning {
+            border-left-color: var(--amber);
+            background: var(--amber-dim);
+        }
+
+        .callout.warning::before {
+            content: "⚠️ Warning";
+            display: block;
+            font-weight: 700;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .callout p {
+            margin: 0;
+        }
+
+        /* DIAGRAM */
+        .diagram {
+            background: var(--code-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .diagram pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .code-label {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: var(--teal-dim);
+            color: var(--teal);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FLOW */
+        .flow {
+            margin: 3rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .flow-step:last-child {
+            border-bottom: none;
+        }
+
+        .flow-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--teal-dim);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--teal);
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .flow-content h4 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-content p {
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* TERM GRID */
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .term-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .term-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1);
+        }
+
+        .term-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.75rem;
+        }
+
+        .term-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* STAGES */
+        .stages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stage-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .stage-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .stage-num {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: var(--teal-dim);
+            color: var(--teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stage-content h4 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 0.75rem;
+        }
+
+        .stage-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* TECH TABLE */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tech-table th {
+            background: var(--surface2);
+            padding: 1rem;
+            text-align: left;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            color: var(--heading);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tech-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table tr:nth-child(even) {
+            background: var(--surface2);
+        }
+
+        /* AGENT GRID */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .agent-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .agent-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .agent-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--heading);
+            margin-bottom: 1rem;
+            margin-top: 0;
+        }
+
+        .agent-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* FILE TREE */
+        .file-tree {
+            background: var(--code-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text);
+            overflow-x: auto;
+        }
+
+        .dir {
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        .file {
+            color: var(--text);
+        }
+
+        .comment {
+            color: var(--text-dim);
+            margin-left: 1rem;
+        }
+
+        .new-f {
+            background: var(--amber-dim);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: var(--amber);
+            font-weight: 600;
+        }
+
+        /* CODE BLOCKS */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .kw {
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        .fn {
+            color: var(--teal);
+            font-weight: 600;
+        }
+
+        .st {
+            color: var(--amber);
+        }
+
+        .cm {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .nm {
+            color: var(--heading);
+            font-weight: 600;
+        }
+
+        .dt {
+            color: #ec4899;
+            font-weight: 600;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 3.5rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        .footer-logo-img {
+            height: 30px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+        .footer-logo-text {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--heading);
+        }
+        .footer-logo-text span {
+            color: var(--teal);
+        }
+        footer p {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin: 0.3rem 0;
+        }
+        footer a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-sub {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .section h2 {
+                font-size: 1.6rem;
+            }
+
+            .topnav {
+                padding: 1rem;
+            }
+
+            .sidebar { transform: translateX(-260px); width: 260px; }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .sidebar-toggle { display: flex; }
+            .progress-circle-wrap { right: 4rem; }
+
+            .agent-grid,
+            .term-grid,
+            .stages {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-pills {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pill {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* REVEAL ANIMATION */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 0 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOPNAV -->
+    <nav class="topnav">
+        <div style="display:flex;align-items:center;gap:1.5rem;width:100%;">
+            <a href="#" class="nav-logo">
+                <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="nav-logo-img">
+                <span class="nav-logo-text">Sustain<span>Sys</span></span>
+            </a>
+            <div style="width:1px;height:20px;background:var(--border2);flex-shrink:0;"></div>
+            <span style="font-size:0.8rem;color:var(--text-muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">NL2SQL: Natural Language to SQL Analytics Pipeline</span>
+            <span class="nav-badge">AI Academy</span>
+        </div>
+    </nav>
+
+    <!-- PROGRESS RING -->
+    <div class="progress-circle-wrap">
+        <svg viewBox="0 0 36 36">
+            <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+            <circle class="progress-circle-fill" id="progressCircle" cx="18" cy="18" r="15"/>
+        </svg>
+        <div class="progress-circle-label" id="progressLabel">0%</div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <span class="sidebar-section-label">Contents</span>
+        <ul class="sidebar-nav" id="sidebarNav">
+            <li><a href="#intro"><span class="sidebar-num">01</span> What Are We Building?</a></li>
+            <li><a href="#architecture"><span class="sidebar-num">02</span> Architecture & Flow</a></li>
+            <li><a href="#stack"><span class="sidebar-num">03</span> Technology Stack</a></li>
+            <li><a href="#rag"><span class="sidebar-num">04</span> RAG Knowledge Engine</a></li>
+            <li><a href="#prompting"><span class="sidebar-num">05</span> The CRISP Prompt</a></li>
+            <li><a href="#guardrails"><span class="sidebar-num">06</span> Guardrails</a></li>
+            <li><a href="#retry"><span class="sidebar-num">07</span> The Retry Loop</a></li>
+            <li><a href="#migration"><span class="sidebar-num">08</span> SQLite → PostgreSQL</a></li>
+            <li><a href="#structure"><span class="sidebar-num">09</span> Project Structure</a></li>
+            <li><a href="#lessons"><span class="sidebar-num">10</span> Lessons & Next Steps</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <span class="sidebar-section-label">Stack</span>
+        <ul class="sidebar-nav">
+            <li><a href="#stack">Ollama + Mistral 7B</a></li>
+            <li><a href="#rag">FAISS + MiniLM</a></li>
+            <li><a href="#migration">PostgreSQL + Docker</a></li>
+        </ul>
+    </aside>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+    <main class="main">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-eyebrow">SustainSys AI Academy · PoC Deep Dive</div>
+            <h1>Natural Language → <span>SQL</span> Analytics Pipeline</h1>
+            <p class="hero-sub">A step-by-step guide to building an enterprise-grade system that converts business questions into SQL queries using RAG, local LLMs, and guardrails — all running locally with open-source tools, no paid APIs.</p>
+            <div class="hero-pills">
+                <span class="pill">Python 3.11</span>
+                <span class="pill">Ollama</span>
+                <span class="pill">Mistral 7B</span>
+                <span class="pill">FAISS</span>
+                <span class="pill">PostgreSQL</span>
+                <span class="pill">sentence-transformers</span>
+                <span class="pill">Docker</span>
+                <span class="pill">RAG Pipeline</span>
+            </div>
+        </section>
+
+        <!-- SECTION 1: INTRO -->
+        <section id="intro" class="section reveal">
+            <div class="section-label">Section 1 of 10</div>
+            <h2>What Are We Building?</h2>
+            <p>
+                Imagine a business analyst asking their database: <strong>"Show me the top 5 trades by value from our risk-taker clients in the last quarter"</strong>.
+                In a traditional system, they'd have to write or request custom SQL. With our NL2SQL system, they ask in plain English,
+                and the system automatically generates, validates, and executes the SQL — all without a single line of hand-written code.
+            </p>
+            <p>
+                This is the power of combining RAG (Retrieval Augmented Generation), local LLMs (Ollama + Mistral), and strict validation guardrails.
+                The system is:
+            </p>
+            <ul style="list-style-position: inside; color: var(--text-muted); margin-bottom: 2rem;">
+                <li>✅ <strong>Fast</strong> — No API calls, everything runs locally</li>
+                <li>✅ <strong>Safe</strong> — 12-point guardrail validation before execution</li>
+                <li>✅ <strong>Explainable</strong> — Audit trails of what SQL was generated and why</li>
+                <li>✅ <strong>Educational</strong> — Every component is transparent and teachable</li>
+            </ul>
+
+            <h3>The 5 Core Components</h3>
+            <div class="agent-grid">
+                <div class="agent-card reveal">
+                    <h3>1. RAG Retriever</h3>
+                    <p>Searches a knowledge base of schema definitions, business glossaries, and policy rules. Finds the most relevant context for the user's question.</p>
+                </div>
+                <div class="agent-card reveal">
+                    <h3>2. SQL Generator</h3>
+                    <p>Takes the question + retrieved context and uses Mistral 7B (via Ollama) to generate a SELECT query using the CRISP prompt template.</p>
+                </div>
+                <div class="agent-card reveal">
+                    <h3>3. SQL Validator</h3>
+                    <p>Runs 12 guardrail checks on the generated SQL: SELECT-only, schema whitelist, dangerous patterns, alias resolution, and more.</p>
+                </div>
+                <div class="agent-card reveal">
+                    <h3>4. Query Executor</h3>
+                    <p>Executes validated SQL against PostgreSQL (or SQLite in PoC mode). Handles connection pooling, transactions, and error logging.</p>
+                </div>
+                <div class="agent-card reveal">
+                    <h3>5. Response Formatter</h3>
+                    <p>Converts raw query results into formatted outputs: ASCII table, CSV, JSON, or HTML reports for dashboards.</p>
+                </div>
+            </div>
+
+            <div class="callout tip">
+                <p><strong>Learning Goals:</strong> By the end of this guide, you will understand how to build an LLM-powered database interface from scratch. You'll learn what RAG is, why prompt structure matters, how guardrails work, and why you should never trust LLM output for database access.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ARCHITECTURE -->
+        <section id="architecture" class="section reveal">
+            <div class="section-label">Section 2 of 10</div>
+            <h2>Architecture & Pipeline Flow</h2>
+            <p>
+                The NL2SQL system is a 9-step pipeline. A user asks a question in plain English, and it flows through several stages of processing
+                before returning formatted results. Here's what happens behind the scenes:
+            </p>
+
+            <h3>The Complete Pipeline</h3>
+            <div class="flow">
+                <div class="flow-step reveal">
+                    <div class="flow-icon">1</div>
+                    <div class="flow-content">
+                        <h4>User asks a question</h4>
+                        <p><code>"Show me the top 5 trades by value"</code></p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">2</div>
+                    <div class="flow-content">
+                        <h4>Convert question to embedding</h4>
+                        <p>sentence-transformers (all-MiniLM-L6-v2) converts the text into a 384-dimensional vector for similarity search.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">3</div>
+                    <div class="flow-content">
+                        <h4>FAISS retrieval (4 category indexes)</h4>
+                        <p>Top 2 SCHEMA matches, Top 1 RELATIONSHIP match, Top 2 GLOSSARY matches (if similarity &gt; 0.40), All POLICY documents.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">4</div>
+                    <div class="flow-content">
+                        <h4>Send question + context to LLM</h4>
+                        <p>Mistral 7B (via Ollama) receives the question and retrieved context via the CRISP prompt template.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">5</div>
+                    <div class="flow-content">
+                        <h4>LLM generates SQL</h4>
+                        <p>Mistral outputs a PostgreSQL SELECT query based on the schema and glossary context.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">6</div>
+                    <div class="flow-content">
+                        <h4>SQL Validator checks 12 guardrails</h4>
+                        <p>Regex patterns, schema whitelist, alias resolution, complexity limits, and LIMIT clause warnings.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">7</div>
+                    <div class="flow-content">
+                        <h4>If blocked → Retry with feedback</h4>
+                        <p>Validator returns an error message (e.g., "Column 'trade_value' doesn't exist"). LLM self-corrects and regenerates SQL.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">8</div>
+                    <div class="flow-content">
+                        <h4>Execute against PostgreSQL</h4>
+                        <p>Validated SQL runs against the database. Results are logged with the user's question, LLM reasoning, and execution time.</p>
+                    </div>
+                </div>
+                <div class="flow-step reveal">
+                    <div class="flow-icon">9</div>
+                    <div class="flow-content">
+                        <h4>Format and return results</h4>
+                        <p>Results are converted to a table, CSV, JSON, or HTML report and returned to the user.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>System Architecture Diagram</h3>
+            <div class="diagram reveal">
+                <pre>User Question
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│   Embedding (sentence-transformers)    │
+│              ↓                           │
+│   "Show me top 5 trades by value"      │
+│   → [0.12, 0.45, -0.23, ...]          │
+└──────────────┬──────────────────────────┘
+               │ 384-dim vector
+               ▼
+    ┌──────────────────────────┐
+    │   FAISS Retriever        │
+    │   4 Category Indexes:    │
+    │   - SCHEMA               │
+    │   - GLOSSARY             │
+    │   - RELATIONSHIP         │
+    │   - POLICY               │
+    └──────────────┬───────────┘
+                   │ context docs
+                   ▼
+    ┌──────────────────────────┐
+    │  CRISP Prompt Template   │
+    │  + Retrieved Context     │
+    │  + User Question         │
+    └──────────────┬───────────┘
+                   │
+                   ▼
+    ┌──────────────────────────┐
+    │   Ollama (Mistral 7B)    │
+    │   SQL Generation         │
+    └──────────────┬───────────┘
+                   │ generated SQL
+                   ▼
+    ┌──────────────────────────┐      ┌─────────────┐
+    │   SQL Validator          │─────▶│  Retry Loop?│
+    │   12 Guardrails          │◀─────│  Feedback   │
+    └──────────────┬───────────┘      └─────────────┘
+                   │ valid SQL
+                   ▼
+    ┌──────────────────────────┐
+    │   PostgreSQL Executor    │
+    │   Run Query              │
+    └──────────────┬───────────┘
+                   │ results
+                   ▼
+    ┌──────────────────────────┐
+    │   Response Formatter     │
+    │   (Table/CSV/JSON/HTML)  │
+    └──────────────────────────┘</pre>
+            </div>
+
+            <div class="callout info">
+                <p><strong>Key Insight:</strong> The pipeline is designed as separate, testable stages. Each component has a single responsibility: retrieve context, generate SQL, validate it, execute it, or format it. This makes it easy to debug, test, and teach.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: STACK -->
+        <section id="stack" class="section reveal">
+            <div class="section-label">Section 3 of 10</div>
+            <h2>Technology Stack</h2>
+            <p>
+                Every tool in our stack was chosen for a specific reason: fast iteration, educational value, and production readiness.
+                Here's what we use and why:
+            </p>
+
+            <table class="tech-table reveal">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Technology</th>
+                        <th>Why We Chose It</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>LLM</strong></td>
+                        <td>Ollama + Mistral 7B</td>
+                        <td>Runs on 16GB RAM. Excellent instruction following and fast generation. Open-source and free.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Embeddings</strong></td>
+                        <td>all-MiniLM-L6-v2 (via sentence-transformers)</td>
+                        <td>Only 80MB. 384-dim vectors sufficient for PoC. No API calls. Runs locally in 1-2ms per vector.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vector Store (PoC)</strong></td>
+                        <td>FAISS</td>
+                        <td>Zero setup, in-memory search, extremely fast similarity matching. Good for learning.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vector Store (Prod)</strong></td>
+                        <td>pgvector (PostgreSQL extension)</td>
+                        <td>Embeddings live in database. No separate index. Scales with data.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database (PoC)</strong></td>
+                        <td>SQLite</td>
+                        <td>File-based, zero setup. Perfect for initial development and testing.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database (Prod)</strong></td>
+                        <td>PostgreSQL 16</td>
+                        <td>DECIMAL type for exact financial math. ACID guarantees. Docker-ready.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prompt Framework</strong></td>
+                        <td>Custom CRISP Template (XML-based)</td>
+                        <td>No external dependency. Full control. Easy to version and test.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Containerization</strong></td>
+                        <td>Docker</td>
+                        <td>Clean isolation. PostgreSQL + Ollama + app all run in one docker-compose.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Framework</strong></td>
+                        <td>FastAPI (optional for Phase 6)</td>
+                        <td>Modern Python async framework. Auto-generated OpenAPI docs. Great for REST endpoints.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Why Not LangChain or LlamaIndex?</h3>
+            <div class="callout info">
+                <p>
+                    For this PoC, we deliberately avoided heavy frameworks. LangChain and LlamaIndex are excellent tools, but for teaching purposes,
+                    every component in our system is a plain Python class with clear inputs and outputs. This makes the system easier to debug, test,
+                    and understand. You'll have a complete mental model of how NL2SQL works. In production, you might layer these frameworks on top
+                    of our foundation — but you'll understand what's underneath.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 4: RAG -->
+        <section id="rag" class="section reveal">
+            <div class="section-label">Section 4 of 10</div>
+            <h2>Phase 1-2: RAG — The Knowledge Engine</h2>
+            <p>
+                RAG stands for "Retrieval Augmented Generation." Instead of asking the LLM to generate SQL from scratch,
+                we first retrieve relevant context (schema definitions, business glossaries, SQL patterns, safety rules)
+                and feed that context to the LLM. This dramatically improves accuracy without retraining or fine-tuning.
+            </p>
+
+            <h3>Why RAG Matters</h3>
+            <p>
+                Without RAG, if we ask Mistral 7B "Show me the top 5 trades by value," it might hallucinate column names
+                (e.g., <code>trade_value</code> doesn't exist — the column is actually <code>quantity * price</code>).
+                With RAG, we retrieve the schema document that lists all valid columns, and Mistral generates correct SQL.
+            </p>
+
+            <h3>The 4 Knowledge Categories</h3>
+            <p>
+                We organize our knowledge base into 4 FAISS indexes, each serving a different purpose:
+            </p>
+
+            <div class="term-grid reveal">
+                <div class="term-card">
+                    <div class="term-name">SCHEMA (3 docs)</div>
+                    <p>Table definitions with column names, data types, example values, primary keys, and foreign key relationships.</p>
+                </div>
+                <div class="term-card">
+                    <div class="term-name">GLOSSARY (4 docs)</div>
+                    <p>Business term definitions with SQL patterns. E.g., "Net Exposure" = CASE WHEN statement with specific logic.</p>
+                </div>
+                <div class="term-card">
+                    <div class="term-name">RELATIONSHIP (2 docs)</div>
+                    <p>JOIN conditions and example SQL queries showing how tables connect. E.g., "trades JOIN clients ON trades.client_id = clients.id"</p>
+                </div>
+                <div class="term-card">
+                    <div class="term-name">POLICY (4 docs)</div>
+                    <p>Safety rules: SELECT-only queries, LIMIT required, single statement, no dynamic SQL. Non-negotiable for production.</p>
+                </div>
+            </div>
+
+            <h3>How Retrieval Works</h3>
+            <p>
+                When a user asks a question, the system:
+            </p>
+            <ol style="list-style-position: inside; color: var(--text-muted); margin: 1.5rem 0;">
+                <li>Converts the question to a 384-dim embedding using all-MiniLM-L6-v2</li>
+                <li>Searches the FAISS index for similar vectors</li>
+                <li>Retrieves context with <strong>category-aware thresholds</strong>:</li>
+            </ol>
+
+            <div class="diagram reveal">
+                <pre><code><span class="cm"># Every query retrieval uses this strategy:</span>
+<span class="kw">SCHEMA</span>:       Top 2 matches       <span class="cm">(always included)</span>
+<span class="kw">RELATIONSHIP</span>: Top 1 match         <span class="cm">(always included)</span>
+<span class="kw">GLOSSARY</span>:     Top 2 matches       <span class="cm">(only if similarity &gt; 0.40)</span>
+<span class="kw">POLICY</span>:       All documents       <span class="cm">(always included)</span></code></pre>
+            </div>
+
+            <h3>Knowledge Base Structure</h3>
+            <div class="diagram reveal">
+                <pre><code><span class="nm">KNOWLEDGE_BASE</span> = [
+    {
+        <span class="st">"text"</span>: <span class="st">"Table: trades\nColumns:\n  - trade_id (INTEGER, PRIMARY KEY)\n  - client_id (INTEGER, FOREIGN KEY)\n  - symbol (TEXT)\n  - side (TEXT: BUY or SELL)\n  - quantity (INTEGER)\n  - price (DECIMAL)\n  - trade_date (DATE)"</span>,
+        <span class="st">"category"</span>: <span class="st">"SCHEMA"</span>,
+        <span class="st">"metadata"</span>: {<span class="st">"table"</span>: <span class="st">"trades"</span>},
+    },
+    {
+        <span class="st">"text"</span>: <span class="st">"Business term: Net Exposure\nDefinition: Sum of absolute notional value per counterparty\nSQL pattern: SUM(CASE WHEN side='BUY' THEN quantity*price ELSE -quantity*price END)"</span>,
+        <span class="st">"category"</span>: <span class="st">"GLOSSARY"</span>,
+        <span class="st">"metadata"</span>: {<span class="st">"term"</span>: <span class="st">"net_exposure"</span>},
+    },
+    <span class="cm"># ... more documents ...</span>
+]</code></pre>
+            </div>
+
+            <h3>The Context Contamination Problem</h3>
+            <div class="callout warning">
+                <p>
+                    <strong>Real Bug #1:</strong> In early testing, a glossary term <code>"Active client"</code> was being retrieved for <strong>every</strong> query,
+                    even unrelated ones. The definition included "AND trade_date >= date('now', '-30 days')" to filter only recent trades.
+                    This poisoned all queries, adding unwanted date filters that business users didn't ask for.
+                    <br><br>
+                    <strong>Solution:</strong> We implemented category-aware retrieval with a similarity threshold (0.40) for GLOSSARY documents.
+                    Now, "Active client" only appears if the question is actually asking about active clients, not every single query.
+                </p>
+            </div>
+
+            <div class="callout tip">
+                <p><strong>Key Insight:</strong> RAG quality directly impacts LLM quality. A small model (Mistral 7B) with excellent context beats a large model (GPT-4) with poor context. Spend time curating your knowledge base.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CRISP PROMPT -->
+        <section id="prompting" class="section reveal">
+            <div class="section-label">Section 5 of 10</div>
+            <h2>Phase 3: The CRISP Prompt — Taming the LLM</h2>
+            <p>
+                LLMs are powerful but unpredictable. The difference between a hallucinating LLM and a precise SQL generator
+                is often just the prompt. The CRISP framework — Context, Role, Instructions, Separator, Precision — is our weapon.
+            </p>
+
+            <h3>What CRISP Stands For</h3>
+            <div class="stages reveal">
+                <div class="stage-card">
+                    <div class="stage-num">C</div>
+                    <div class="stage-content">
+                        <h4>Context</h4>
+                        <p>Schema, relationships, glossary, and policies. Everything the LLM needs to know.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">R</div>
+                    <div class="stage-content">
+                        <h4>Role</h4>
+                        <p>Tell the LLM what job it has. "You are a precise SQL translator, NOT a helpful assistant."</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">I</div>
+                    <div class="stage-content">
+                        <h4>Instructions</h4>
+                        <p>Explicit rules: Output ONLY a SELECT statement. Use ONLY tables in the schema. No WHERE unless asked.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">S</div>
+                    <div class="stage-content">
+                        <h4>Separator</h4>
+                        <p>Use XML tags or clear delimiters to separate sections. Prevents prompt injection and confusion.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">P</div>
+                    <div class="stage-content">
+                        <h4>Precision</h4>
+                        <p>Temperature = 0.1 (deterministic). num_predict = 256 (caps output). Short SQL = better SQL.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The CRISP Prompt Template</h3>
+            <div class="diagram reveal">
+                <pre><code><span class="kw">&lt;ROLE&gt;</span>
+You are a precise SQL translator. Your ONLY job is to convert the user's
+question into a single PostgreSQL-compatible SELECT query.
+
+You are NOT a helpful assistant. Do NOT add anything the user didn't ask for.
+Do NOT explain your reasoning. Output ONLY the SQL query.
+<span class="kw">&lt;/ROLE&gt;</span>
+
+<span class="kw">&lt;SCHEMA&gt;</span>
+Table: trades
+Columns: trade_id, client_id, symbol, side, quantity, price, trade_date
+Table: clients
+Columns: client_id, client_name, risk_tier
+<span class="kw">&lt;/SCHEMA&gt;</span>
+
+<span class="kw">&lt;RELATIONSHIPS&gt;</span>
+trades JOIN clients ON trades.client_id = clients.id
+<span class="kw">&lt;/RELATIONSHIPS&gt;</span>
+
+<span class="kw">&lt;GLOSSARY&gt;</span>
+"Net Exposure" = SUM(CASE WHEN side='BUY' THEN quantity*price ...)
+"Active Client" = clients with trades in last 30 days
+<span class="kw">&lt;/GLOSSARY&gt;</span>
+
+<span class="kw">&lt;RULES&gt;</span>
+1. Output ONLY a single SELECT statement. No explanation.
+2. Use ONLY tables and columns listed in SCHEMA.
+3. Do NOT add WHERE clauses unless the user explicitly asks.
+4. Do NOT use subqueries unless necessary for the question.
+5. Always include a LIMIT clause (max 1000 rows).
+6. Use table aliases (SELECT t.trade_id FROM trades t).
+<span class="kw">&lt;/RULES&gt;</span>
+
+<span class="kw">&lt;QUESTION&gt;</span>
+{user_question}
+<span class="kw">&lt;/QUESTION&gt;</span></code></pre>
+            </div>
+
+            <h3>Before & After: The Power of Structure</h3>
+            <p><strong>Question:</strong> "How many trades per client?"</p>
+
+            <table class="tech-table reveal">
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Generated SQL</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Phase 1 (no prompt)</strong></td>
+                        <td><code>SELECT c.client_name, COUNT(t.trade_id) FROM trades t JOIN clients c ON t.client_id = c.id WHERE t.trade_date >= date('now', '-30 days') GROUP BY c.client_id</code></td>
+                        <td>❌ Added unwanted WHERE filter from glossary contamination</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 2 (basic prompt)</strong></td>
+                        <td><code>SELECT c.client_id, COUNT(t.trade_id) FROM trades t JOIN clients c WHERE t.trade_date >= date('now', '-30 days') GROUP BY c.client_id LIMIT 20</code></td>
+                        <td>⚠️ Still filtering by date (glossary leak)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 3 (CRISP)</strong></td>
+                        <td><code>SELECT c.client_id, COUNT(t.trade_id) FROM trades t JOIN clients c ON t.client_id = c.id GROUP BY c.client_id LIMIT 20</code></td>
+                        <td>✅ Clean, correct, no unwanted filters</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Why Temperature and num_predict Matter</h3>
+            <div class="callout tip">
+                <p>
+                    <strong>Temperature = 0.1:</strong> Makes the LLM deterministic. The model always picks the highest-probability next token,
+                    reducing randomness. For SQL, we want predictability, not creativity.
+                    <br><br>
+                    <strong>num_predict = 256:</strong> Caps the response length. SQL queries should be short. If the model is writing 500 tokens,
+                    something is wrong — it's probably explaining itself or hallucinating. Force it to be concise.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 6: GUARDRAILS -->
+        <section id="guardrails" class="section reveal">
+            <div class="section-label">Section 6 of 10</div>
+            <h2>Phase 4: Guardrails — Trust but Verify</h2>
+            <p>
+                <strong>Golden Rule:</strong> Never trust LLM output for database access. Even a 99% accurate LLM fails 1% of the time.
+                In finance, 1% can mean exposing PII, corrupting data, or destroying a database. Guardrails are non-negotiable.
+            </p>
+
+            <h3>The 7 Validation Checks</h3>
+            <div class="stages reveal">
+                <div class="stage-card">
+                    <div class="stage-num">1</div>
+                    <div class="stage-content">
+                        <h4>SELECT-Only Check</h4>
+                        <p>Regex: <code>^SELECT</code>. No INSERT, UPDATE, DELETE, DROP. Financial system = read-only.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">2</div>
+                    <div class="stage-content">
+                        <h4>Single Statement Check</h4>
+                        <p>No semicolons or multiple statements. Prevents SQL injection via stacking (e.g., <code>SELECT ...; DROP TABLE trades;</code>)</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">3</div>
+                    <div class="stage-content">
+                        <h4>Dangerous Pattern Detection</h4>
+                        <p>12 regex patterns: xp_cmdshell, sys_exec, dynamic SQL, comments (--), wildcards in LIKE, etc.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">4</div>
+                    <div class="stage-content">
+                        <h4>Table Whitelist Validation</h4>
+                        <p>Parse the query. Extract all table names. Check if they're in the approved schema. Reject unknowns.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">5</div>
+                    <div class="stage-content">
+                        <h4>Column Validation + Alias Resolution</h4>
+                        <p>Parse SELECT and WHERE clauses. Resolve aliases (e.g., <code>t.trade_value</code> where <code>t</code> = trades). Reject invalid columns.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">6</div>
+                    <div class="stage-content">
+                        <h4>Complexity Limits</h4>
+                        <p>Max query length, max JOIN count, max subqueries. Prevents runaway queries that lock tables.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">7</div>
+                    <div class="stage-content">
+                        <h4>LIMIT Clause Warning</h4>
+                        <p>If no LIMIT, warn (but allow). If LIMIT &gt; 10000, block. Protects against accidental table scans.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The Hallucination Problem: Alias Resolution</h3>
+            <p>
+                This was our biggest pain point. The LLM constantly invents columns that don't exist. Here's the attack:
+            </p>
+
+            <div class="diagram reveal">
+                <pre><code><span class="cm"># User asks: "What's the average trade value?"</span>
+<span class="cm"># LLM generates:</span>
+<span class="kw">SELECT</span> <span class="fn">AVG</span>(t.trade_value) <span class="kw">FROM</span> trades t
+
+<span class="cm"># Column 'trade_value' doesn't exist. The correct columns are:</span>
+<span class="cm"># - trade_id, client_id, symbol, side, quantity, price, trade_date</span>
+
+<span class="cm"># Validator detects:</span>
+<span class="cm"># - FROM clause: "trades t"</span>
+<span class="cm"># - alias_map = {"t": "trades"}</span>
+<span class="cm"># - SELECT clause: "t.trade_value"</span>
+<span class="cm"># - Resolve: t.trade_value → trades.trade_value</span>
+<span class="cm"># - Check schema: trades.trade_value EXISTS? NO</span>
+<span class="cm"># - Block and return error</span></code></pre>
+            </div>
+
+            <div class="callout warning">
+                <p>
+                    <strong>Why Alias Resolution is Hard:</strong> The LLM learns patterns from training data. It sees "trade_value" in financial datasets
+                    and assumes it's universal. Mistral + small training data doesn't know our specific schema. That's why retrieval-augmented prompting is critical —
+                    we <strong>show</strong> the LLM exactly which columns exist.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 7: RETRY LOOP -->
+        <section id="retry" class="section reveal">
+            <div class="section-label">Section 7 of 10</div>
+            <h2>Phase 5: The Retry Loop — Self-Healing SQL</h2>
+            <p>
+                When the validator blocks a query, instead of giving up, we feed the error back to the LLM and ask it to fix itself.
+                This "self-correction" loop catches most bugs without human intervention.
+            </p>
+
+            <h3>How the Retry Loop Works</h3>
+            <div class="flow reveal">
+                <div class="flow-step">
+                    <div class="flow-icon">1</div>
+                    <div class="flow-content">
+                        <h4>LLM generates SQL</h4>
+                        <p><code>SELECT AVG(t.trade_value) FROM trades t...</code></p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">2</div>
+                    <div class="flow-content">
+                        <h4>Validator blocks it</h4>
+                        <p>Error: <code>"Column 'trade_value' doesn't exist. Allowed columns: trade_id, client_id, symbol, side, quantity, price, trade_date"</code></p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">3</div>
+                    <div class="flow-content">
+                        <h4>Retry prompt with error feedback</h4>
+                        <p>Send error message back to LLM with the list of valid columns.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">4</div>
+                    <div class="flow-content">
+                        <h4>LLM self-corrects</h4>
+                        <p><code>SELECT AVG(t.quantity * t.price) FROM trades t...</code></p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-icon">5</div>
+                    <div class="flow-content">
+                        <h4>Validator approves</h4>
+                        <p>All columns are valid. Execute.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Retry Implementation</h3>
+            <div class="diagram reveal">
+                <pre><code><span class="kw">def</span> <span class="fn">retry_with_feedback</span>(question, context, failed_sql, error_message):
+    <span class="st">"""
+    Retry prompt: Ask LLM to fix ONLY the specific error.
+    """</span>
+    retry_prompt = <span class="st">f"""
+    Your previous SQL was rejected:
+    {failed_sql}
+
+    Error: {error_message}
+
+    Fix ONLY this error. Use ONLY columns in the schema.
+    Output ONLY the corrected SQL query.
+    """</span>
+
+    <span class="cm"># Send to LLM with temperature=0.1</span>
+    corrected_sql = mistral.generate(retry_prompt, temperature=0.1)
+    <span class="kw">return</span> corrected_sql</code></pre>
+            </div>
+
+            <h3>Improvement Across Phases</h3>
+            <table class="tech-table reveal">
+                <thead>
+                    <tr>
+                        <th>Test Query</th>
+                        <th>Phase 1</th>
+                        <th>Phase 2</th>
+                        <th>Phase 3</th>
+                        <th>Phase 5 (Retry)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Top 5 trades</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Trades per client</td>
+                        <td>❌ Wrong filter</td>
+                        <td>❌ Still filtered</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>BUY/SELL AAPL</td>
+                        <td>❌ Multi-statement</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>Avg trade value</td>
+                        <td>❌ Bad column</td>
+                        <td>❌ Bad column</td>
+                        <td>✅ (in prompt)</td>
+                        <td>✅ (retry fixed)</td>
+                    </tr>
+                    <tr>
+                        <td>Top 10 risky</td>
+                        <td>❌ Hallucinated</td>
+                        <td>❌ Hallucinated</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout tip">
+                <p>
+                    <strong>One Retry Attempt is Often Enough:</strong> We typically allow 1-2 retry attempts before giving up.
+                    If the LLM can't fix its own mistake in 2 tries, there's a deeper issue. Better to log it and let a human investigate.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 8: MIGRATION -->
+        <section id="migration" class="section reveal">
+            <div class="section-label">Section 8 of 10</div>
+            <h2>Phase 5: SQLite → PostgreSQL Migration</h2>
+            <p>
+                We started with SQLite (zero setup, file-based) to get fast iteration. Once the logic was solid, we migrated to PostgreSQL
+                for production use. The beauty of our database abstraction layer: the entire pipeline doesn't care which database is behind it.
+            </p>
+
+            <h3>SQLite vs. PostgreSQL</h3>
+            <table class="tech-table reveal">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>SQLite (PoC)</th>
+                        <th>PostgreSQL (Prod)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Setup</strong></td>
+                        <td>Create .db file, done</td>
+                        <td>Docker container or managed service</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Numbers</strong></td>
+                        <td>REAL (float, 8 bytes)</td>
+                        <td>DECIMAL(12,2) (exact, no rounding)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dates</strong></td>
+                        <td>TEXT ("2024-01-15")</td>
+                        <td>DATE type, built-in functions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Concurrency</strong></td>
+                        <td>Limited (file locks)</td>
+                        <td>Full ACID, row-level locking</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scaling</strong></td>
+                        <td>Hundreds of MB max</td>
+                        <td>Terabytes possible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Extensions</strong></td>
+                        <td>None</td>
+                        <td>pgvector, JSON, full-text search, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Financial Math: Why DECIMAL Matters</h3>
+            <div class="callout warning">
+                <p>
+                    <strong>The Danger of REAL/Float:</strong> Floating-point math has rounding errors. For a trade at $100.01, quantity 3:
+                    <br>
+                    SQLite REAL: 100.01 * 3 = 300.02999999999997 (not exactly 300.03)
+                    <br>
+                    PostgreSQL DECIMAL: 100.01 * 3 = 300.03 (exact)
+                    <br><br>
+                    In financial systems, these tiny errors compound. A portfolio with 10,000 trades could be off by thousands of dollars.
+                    Always use DECIMAL for money.
+                </p>
+            </div>
+
+            <h3>Docker Setup</h3>
+            <div class="diagram reveal">
+                <pre><code><span class="cm"># docker-compose.yml for production</span>
+<span class="kw">version:</span> <span class="st">'3.8'</span>
+<span class="kw">services:</span>
+  <span class="nm">postgres</span>:
+    <span class="kw">image:</span> <span class="st">postgres:16</span>
+    <span class="kw">environment:</span>
+      <span class="kw">POSTGRES_USER:</span> <span class="st">nl2sql</span>
+      <span class="kw">POSTGRES_PASSWORD:</span> <span class="st">nl2sql_prod</span>
+      <span class="kw">POSTGRES_DB:</span> <span class="st">financial_db</span>
+    <span class="kw">ports:</span>
+      - <span class="st">"5432:5432"</span>
+    <span class="kw">volumes:</span>
+      - <span class="st">postgres_data:/var/lib/postgresql/data</span>
+
+  <span class="nm">ollama</span>:
+    <span class="kw">image:</span> <span class="st">ollama/ollama:latest</span>
+    <span class="kw">ports:</span>
+      - <span class="st">"11434:11434"</span>
+    <span class="kw">volumes:</span>
+      - <span class="st">ollama_data:/root/.ollama</span>
+
+<span class="kw">volumes:</span>
+  <span class="nm">postgres_data:</span>
+  <span class="nm">ollama_data:</span></code></pre>
+            </div>
+
+            <h3>Database Abstraction Pattern</h3>
+            <div class="diagram reveal">
+                <pre><code><span class="kw">class</span> <span class="nm">DatabaseConnection</span>:
+    <span class="st">"""Works with SQLite or PostgreSQL — pipeline doesn't care which."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="nm">self</span>, db_type=<span class="st">"postgresql"</span>, config=<span class="kw">None</span>):
+        <span class="kw">if</span> db_type == <span class="st">"postgresql"</span>:
+            <span class="nm">self</span>.conn = psycopg2.connect(
+                host=config[<span class="st">"host"</span>],
+                user=config[<span class="st">"user"</span>],
+                password=config[<span class="st">"password"</span>],
+                database=config[<span class="st">"database"</span>]
+            )
+        <span class="kw">elif</span> db_type == <span class="st">"sqlite"</span>:
+            <span class="nm">self</span>.conn = sqlite3.connect(config[<span class="st">"path"</span>])
+
+    <span class="kw">def</span> <span class="fn">execute</span>(<span class="nm">self</span>, sql):
+        <span class="cm">"""Same interface for both. Pipeline doesn't change."""</span>
+        cursor = <span class="nm">self</span>.conn.cursor()
+        cursor.execute(sql)
+        <span class="kw">return</span> cursor.fetchall()</code></pre>
+            </div>
+
+            <div class="callout tip">
+                <p>
+                    <strong>Abstraction Layer Best Practice:</strong> Never hardcode database connections in your business logic.
+                    Create an abstraction that works with multiple databases. This is how real production systems work — they switch
+                    databases by changing one line of config, not refactoring code.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 9: STRUCTURE -->
+        <section id="structure" class="section reveal">
+            <div class="section-label">Section 9 of 10</div>
+            <h2>Project Structure & Files</h2>
+            <p>
+                The NL2SQL project is organized as a clean Python package. Every component is modular and testable.
+            </p>
+
+            <div class="file-tree reveal">
+<pre>nl2sql-poc/
+├── <span class="dir">src/</span>
+│   ├── <span class="dir">nl2sql/</span>
+│   │   ├── __init__.py
+│   │   ├── <span class="file">main.py</span> <span class="comment"># Entry point</span>
+│   │   ├── <span class="file">config.py</span> <span class="comment"># Database, Ollama config</span>
+│   │   ├── <span class="dir">rag/</span>
+│   │   │   ├── <span class="file">knowledge_store.py</span> <span class="comment"># KNOWLEDGE_BASE, embeddings</span>
+│   │   │   ├── <span class="file">faiss_index.py</span> <span class="comment"># FAISS indexes (4 categories)</span>
+│   │   │   └── <span class="file">retriever.py</span> <span class="comment"># Category-aware retrieval logic</span>
+│   │   ├── <span class="dir">llm/</span>
+│   │   │   ├── <span class="file">ollama_client.py</span> <span class="comment"># Ollama connection</span>
+│   │   │   ├── <span class="file">prompts.py</span> <span class="comment"># CRISP prompt templates</span>
+│   │   │   └── <span class="file">generator.py</span> <span class="comment"># SQL generation logic</span>
+│   │   ├── <span class="dir">validator/</span>
+│   │   │   ├── <span class="file">sql_validator.py</span> <span class="comment"># 7 validation checks</span>
+│   │   │   ├── <span class="file">schema_parser.py</span> <span class="comment"># Parse tables/columns</span>
+│   │   │   └── <span class="file">alias_resolver.py</span> <span class="comment"># Resolve t.col → table.col</span>
+│   │   ├── <span class="dir">executor/</span>
+│   │   │   ├── <span class="file">db_connection.py</span> <span class="comment"># Abstract DB layer</span>
+│   │   │   ├── <span class="file">executor.py</span> <span class="comment"># Execute validated SQL</span>
+│   │   │   └── <span class="file">formatter.py</span> <span class="comment"># Format results (table/CSV/JSON)</span>
+│   │   ├── <span class="dir">pipeline/</span>
+│   │   │   ├── <span class="file">nl2sql.py</span> <span class="comment"># Main pipeline orchestration</span>
+│   │   │   └── <span class="file">audit_log.py</span> <span class="comment"># Logging who asked what</span>
+│   │   └── <span class="dir">data/</span>
+│   │       └── <span class="file">sample_trades.sql</span> <span class="comment"># Sample data for testing</span>
+│   └── <span class="dir">tests/</span>
+│       ├── <span class="file">test_rag.py</span> <span class="comment"># Test retrieval quality</span>
+│       ├── <span class="file">test_validator.py</span> <span class="comment"># Test guardrails</span>
+│       ├── <span class="file">test_generator.py</span> <span class="comment"># Test SQL generation</span>
+│       └── <span class="file">test_integration.py</span> <span class="comment"># Full pipeline tests</span>
+├── <span class="file">docker-compose.yml</span> <span class="comment"># PostgreSQL + Ollama</span>
+├── <span class="file">Dockerfile</span> <span class="comment"># Python application image</span>
+├── <span class="file">requirements.txt</span> <span class="comment"># Dependencies</span>
+├── <span class="file">README.md</span> <span class="comment"># Quick start guide</span>
+└── <span class="file">notebook.ipynb</span> <span class="comment">  <span class="new-f">NEW</span> # Interactive walkthrough</span></pre>
+            </div>
+
+            <h3>Key Dependencies</h3>
+            <div class="diagram reveal">
+                <pre><code>faiss-cpu==1.7.4               <span class="cm"># Vector similarity search</span>
+sentence-transformers==2.2.2   <span class="cm"># Embeddings (all-MiniLM)</span>
+psycopg2==2.9.9                <span class="cm"># PostgreSQL driver</span>
+requests==2.31.0               <span class="cm"># Ollama HTTP client</span>
+sqlparse==0.4.4                <span class="cm"># SQL parsing</span>
+pytest==7.4.3                  <span class="cm"># Testing</span></code></pre>
+            </div>
+        </section>
+
+        <!-- SECTION 10: LESSONS & NEXT -->
+        <section id="lessons" class="section reveal">
+            <div class="section-label">Section 10 of 10</div>
+            <h2>Key Lessons & What's Next</h2>
+            <p>
+                We've built an end-to-end NL2SQL system from scratch. Here are the critical lessons we learned:
+            </p>
+
+            <h3>7 Key Lessons</h3>
+            <div class="stages reveal">
+                <div class="stage-card">
+                    <div class="stage-num">1</div>
+                    <div class="stage-content">
+                        <h4>RAG Quality &gt; LLM Quality</h4>
+                        <p>Better context beats a larger model. Mistral 7B with excellent retrieval beats GPT-4 with poor context.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">2</div>
+                    <div class="stage-content">
+                        <h4>Category-Aware Retrieval</h4>
+                        <p>Don't dump everything into one index. Separate SCHEMA, GLOSSARY, RELATIONSHIP, POLICY. Use similarity thresholds.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">3</div>
+                    <div class="stage-content">
+                        <h4>Prompt Structure Matters</h4>
+                        <p>XML tags + precise role definition + explicit rules = huge improvement. Temperature and num_predict are critical.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">4</div>
+                    <div class="stage-content">
+                        <h4>Never Trust LLM Output</h4>
+                        <p>For database access, validation is non-negotiable. 12-point guardrails catch hallucinations before they hit the DB.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">5</div>
+                    <div class="stage-content">
+                        <h4>Retry Loops Are Cheap Insurance</h4>
+                        <p>One retry attempt catches most self-correctable errors. LLM fixes its own column name mistakes 80% of the time.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">6</div>
+                    <div class="stage-content">
+                        <h4>Start Simple, Migrate Later</h4>
+                        <p>SQLite → PostgreSQL, FAISS → pgvector. Build logic first with minimal setup, then optimize for scale.</p>
+                    </div>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-num">7</div>
+                    <div class="stage-content">
+                        <h4>Audit Everything</h4>
+                        <p>In finance, logging who asked what, what SQL was generated, and results is mandatory. Not optional.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>What's Next: Production Features</h3>
+            <p>
+                The PoC is complete, but production deployments would add:
+            </p>
+
+            <div class="agent-grid reveal">
+                <div class="agent-card">
+                    <h3>Multi-Turn Conversations</h3>
+                    <p>Add query memory so follow-ups like "Show me the top 3 of those" reference the previous result set.</p>
+                </div>
+                <div class="agent-card">
+                    <h3>Role-Based Access Control (RBAC)</h3>
+                    <p>Different users see different tables based on their role. Validator enforces table permissions automatically.</p>
+                </div>
+                <div class="agent-card">
+                    <h3>FastAPI Web Interface</h3>
+                    <p>REST API with async request handling, authentication, rate limiting, and WebSocket streaming for long queries.</p>
+                </div>
+                <div class="agent-card">
+                    <h3>pgvector Migration</h3>
+                    <p>Move embeddings into PostgreSQL with pgvector extension. Single database for both data and embeddings.</p>
+                </div>
+                <div class="agent-card">
+                    <h3>Advanced Prompting</h3>
+                    <p>Few-shot examples, chain-of-thought reasoning, or dynamic prompt adaptation based on question complexity.</p>
+                </div>
+                <div class="agent-card">
+                    <h3>Fine-Tuning on Financial Queries</h3>
+                    <p>Collect 100+ high-quality question-SQL pairs. Fine-tune Mistral on this domain-specific data.</p>
+                </div>
+            </div>
+
+            <h3>Final Thoughts</h3>
+            <div class="callout info">
+                <p>
+                    <strong>You've now built an enterprise-grade NL2SQL system from scratch.</strong> You understand:
+                    <br><br>
+                    ✅ How RAG works and why context quality matters
+                    <br>
+                    ✅ How to prompt LLMs for SQL generation
+                    <br>
+                    ✅ How to validate SQL before it touches a database
+                    <br>
+                    ✅ How to handle errors with retry loops
+                    <br>
+                    ✅ How to migrate from PoC (SQLite) to production (PostgreSQL)
+                    <br><br>
+                    This knowledge applies beyond NL2SQL. The same patterns work for code generation, data analysis, and any domain where
+                    you're converting natural language into structured output. Now go build something!
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="footer-logo">
+          <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="footer-logo-img">
+          <span class="footer-logo-text">Sustain<span>Sys</span></span>
+        </div>
+        <p>AI Academy · NL2SQL: Natural Language to SQL Analytics Pipeline · Student Guide</p>
+        <p>Python · Ollama · Mistral 7B · FAISS · PostgreSQL · Docker · sentence-transformers</p>
+        <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+          <a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK · Share freely with students.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+        // Sidebar toggle (mobile only)
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Progress ring (top-right circle)
+        const circumference = 2 * Math.PI * 15; // r=15
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+            const circle = document.getElementById('progressCircle');
+            if (circle) {
+                circle.style.strokeDashoffset = circumference - pct * circumference;
+            }
+            const label = document.getElementById('progressLabel');
+            if (label) {
+                label.textContent = Math.round(pct * 100) + '%';
+            }
+        });
+
+        // Active sidebar link on scroll
+        const sectionObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    document.querySelectorAll('#sidebarNav a').forEach(a => a.classList.remove('active'));
+                    const active = document.querySelector(`#sidebarNav a[href="#${id}"]`);
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-20% 0px -60% 0px' });
+
+        document.querySelectorAll('section[id]').forEach(el => sectionObserver.observe(el));
+
+        // Scroll reveal animation
+        const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>

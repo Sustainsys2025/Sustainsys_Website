@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered NL2SQL Analytics — Enterprise Sales Deck | SustainSys</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc; --bg2: #f1f5f9; --surface: #ffffff; --surface2: #f8fafc; --surface3: #f1f5f9;
+            --border: #e2e8f0; --border2: #cbd5e1;
+            --teal: #0891b2; --teal-light: #06b6d4; --teal-dim: rgba(8,145,178,0.10); --teal-glow: rgba(8,145,178,0.05);
+            --blue: #7c3aed; --blue-light: #8b5cf6; --blue-dim: rgba(124,58,237,0.10);
+            --amber: #d97706; --amber-dim: rgba(217,119,6,0.10);
+            --text: #1e293b; --text-muted: #64748b; --text-dim: #94a3b8; --heading: #0f172a;
+            --code-bg: #f1f5f9; --sidebar-w: 260px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg); color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 16px; line-height: 1.75; overflow-x: hidden;
+        }
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background:
+              radial-gradient(ellipse 70% 50% at 15% 5%, rgba(8,145,178,0.04) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 70% at 85% 90%, rgba(124,58,237,0.04) 0%, transparent 55%),
+              radial-gradient(ellipse 40% 40% at 50% 50%, rgba(8,145,178,0.02) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* TOP NAV */
+        .topnav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 58px;
+            background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border); display: flex; align-items: center;
+        }
+        .topnav-inner { width: 100%; padding: 0 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+        .nav-logo { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; flex-shrink: 0; }
+        .nav-logo-img { height: 34px; width: auto; display: block; object-fit: contain; }
+        .nav-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.92rem; color: var(--heading); letter-spacing: -0.01em; }
+        .nav-logo-text span { color: var(--teal); }
+        .nav-divider { width: 1px; height: 20px; background: var(--border2); flex-shrink: 0; }
+        .nav-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+        .nav-badge { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(8,145,178,0.25); padding: 0.2rem 0.6rem; border-radius: 3px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+        /* PROGRESS RING */
+        .progress-circle-wrap { position: fixed; top: 12px; right: 1.4rem; z-index: 300; width: 36px; height: 36px; }
+        .progress-circle-wrap svg { transform: rotate(-90deg); width: 36px; height: 36px; }
+        .progress-circle-track { fill: none; stroke: var(--border2); stroke-width: 3; }
+        .progress-circle-fill { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 94.25; stroke-dashoffset: 94.25; transition: stroke-dashoffset 0.15s ease; }
+        .progress-circle-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 500; color: var(--teal); line-height: 1; }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed; top: 58px; left: 0; bottom: 0; width: var(--sidebar-w);
+            background: var(--bg2); border-right: 1px solid var(--border);
+            overflow-y: auto; z-index: 150; padding: 1.5rem 0 2rem; transition: transform 0.3s ease;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+        .sidebar-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block; }
+        .sidebar-nav { list-style: none; padding: 0; }
+        .sidebar-nav li { position: relative; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1.4rem; text-decoration: none; font-size: 0.82rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s, background 0.2s; border-left: 2px solid transparent; line-height: 1.3; }
+        .sidebar-nav a:hover { color: var(--teal); background: rgba(8,145,178,0.05); }
+        .sidebar-nav a.active { color: var(--teal); background: var(--teal-glow); border-left-color: var(--teal); }
+        .sidebar-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right; }
+        .sidebar-nav a.active .sidebar-num { color: var(--teal); opacity: 0.6; }
+        .sidebar-divider { height: 1px; background: var(--border); margin: 0.8rem 1.4rem; }
+        .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 400; width: 44px; height: 44px; background: var(--teal); border: none; border-radius: 50%; color: #fff; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(8,145,178,0.3); }
+
+        /* MAIN CONTENT */
+        .main { margin-left: var(--sidebar-w); margin-top: 58px; min-height: calc(100vh - 58px); position: relative; z-index: 1; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* HERO */
+        .hero { padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+        .hero::after { content: ''; position: absolute; top: -40px; right: -60px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 65%); pointer-events: none; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--teal); background: var(--teal-dim); border: 1px solid rgba(8,145,178,0.25); padding: 0.3rem 0.8rem; border-radius: 3px; margin-bottom: 1.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+        .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; color: var(--heading); line-height: 1.12; margin-bottom: 1.4rem; letter-spacing: -0.03em; }
+        .hero h1 .accent { color: var(--teal); }
+        .hero-sub { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; line-height: 1.75; margin-bottom: 1.5rem; }
+        .hero-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .pill { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 3px; border: 1px solid var(--border2); color: var(--text-muted); background: var(--surface); }
+
+        /* CTA BUTTON */
+        .cta-wrap { margin-top: 2rem; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.88rem;
+            color: #fff; background: linear-gradient(135deg, #f59e0b, #ea580c);
+            padding: 0.75rem 1.8rem; border-radius: 5px; text-decoration: none;
+            border: 1px solid #ea580c;
+            box-shadow: 0 4px 18px rgba(234,88,12,0.35);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            letter-spacing: 0.01em;
+        }
+        .cta-btn:hover { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 6px 28px rgba(245,158,11,0.45); transform: translateY(-1px); }
+        .cta-btn:active { transform: translateY(0); }
+        .cta-btn-outline {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.82rem;
+            color: var(--teal); background: transparent;
+            padding: 0.7rem 1.4rem; border-radius: 5px; text-decoration: none;
+            border: 1px solid rgba(8,145,178,0.35);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .cta-btn-outline:hover { background: var(--teal-dim); border-color: var(--teal); }
+
+        /* Bottom CTA banner */
+        .cta-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 3rem 0; text-align: center; border-bottom: 3px solid var(--teal);
+        }
+        .cta-banner h2 { color: #fff; margin-bottom: 0.6rem; }
+        .cta-banner p { color: #94a3b8; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .cta-banner .cta-btn { font-size: 1rem; padding: 0.9rem 2.4rem; box-shadow: 0 4px 24px rgba(245,158,11,0.45); }
+        .cta-banner .cta-btn:hover { box-shadow: 0 8px 36px rgba(245,158,11,0.55); }
+
+        /* SECTIONS */
+        .section { padding: 2.5rem 0; border-bottom: 1px solid var(--border); }
+        .section-label { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--teal); margin-bottom: 0.8rem; }
+        .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--teal); }
+        h2 { font-family: 'Sora', sans-serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--heading); line-height: 1.2; margin-bottom: 1.5rem; letter-spacing: -0.025em; }
+        h3 { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--heading); margin: 1.8rem 0 0.7rem; letter-spacing: -0.015em; }
+        h4 { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.07em; margin: 2rem 0 0.7rem; }
+        p { margin-bottom: 1.1rem; }
+        strong { color: var(--heading); font-weight: 600; }
+        em { color: var(--teal); font-style: normal; font-weight: 500; }
+        ul, ol { padding-left: 1.4rem; margin-bottom: 1.1rem; }
+        li { margin-bottom: 0.35rem; font-size: 0.96rem; }
+
+        /* CODE */
+        code { font-family: 'JetBrains Mono', monospace; font-size: 0.81em; background: var(--teal-dim); color: var(--teal-light); padding: 0.1em 0.4em; border-radius: 3px; }
+        pre { background: var(--code-bg); border: 1px solid var(--border); border-left: 2px solid var(--teal); padding: 1.4rem 1.5rem; overflow-x: auto; margin: 1.4rem 0; border-radius: 0 3px 3px 0; }
+        pre code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.75; color: #334155; background: none; padding: 0; }
+
+        /* CALLOUTS */
+        .callout { padding: 1.2rem 1.4rem; margin: 1.8rem 0; border-left: 2px solid; border-radius: 0 4px 4px 0; }
+        .callout.tip { background: rgba(8,145,178,0.06); border-color: var(--teal); }
+        .callout.info { background: rgba(124,58,237,0.06); border-color: var(--blue); }
+        .callout.warning { background: rgba(217,119,6,0.06); border-color: var(--amber); }
+        .callout-title { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem; }
+        .callout.tip .callout-title { color: var(--teal); }
+        .callout.info .callout-title { color: var(--blue-light); }
+        .callout.warning .callout-title { color: var(--amber); }
+        .callout p { margin: 0; font-size: 0.92rem; }
+
+        /* DIAGRAM */
+        .diagram { background: var(--code-bg); border: 1px solid var(--border); padding: 1.5rem 2rem; margin: 1.8rem 0; overflow-x: auto; }
+        .diagram pre { background: none; border: none; padding: 0; margin: 0; }
+        .diagram pre code { color: #475569; font-size: 0.78rem; }
+
+        /* FLOW STEPS */
+        .flow { display: flex; flex-direction: column; gap: 0; margin: 1.8rem 0; }
+        .flow-step { display: flex; gap: 1.2rem; align-items: flex-start; position: relative; }
+        .flow-step:not(:last-child)::after { content: ''; position: absolute; left: 1rem; top: 2.6rem; bottom: -1rem; width: 1px; background: var(--border2); }
+        .flow-icon { width: 2rem; height: 2rem; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--teal); flex-shrink: 0; margin-top: 0.15rem; }
+        .flow-content { padding-bottom: 1.8rem; flex: 1; }
+        .flow-content > strong { display: block; font-family: 'Sora', sans-serif; font-size: 0.9rem; color: var(--heading); margin-bottom: 0.25rem; }
+        .flow-content p strong { display: inline; font-family: inherit; font-size: inherit; }
+        .flow-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+
+        /* TERM GRID */
+        .term-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+        .term-card { background: var(--surface); padding: 1.3rem; transition: background 0.2s; }
+        .term-card:hover { background: var(--surface2); }
+        .term-card .term-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.04em; }
+        .term-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+        /* STAGE CARDS */
+        .stages { display: flex; flex-direction: column; gap: 1px; margin: 1.8rem 0; background: var(--border); }
+        .stage-card { display: flex; gap: 1.4rem; background: var(--surface); padding: 1.4rem; align-items: flex-start; transition: background 0.2s; }
+        .stage-card:hover { background: var(--surface2); }
+        .stage-num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 400; color: var(--border2); line-height: 1; flex-shrink: 0; width: 2.2rem; text-align: right; padding-top: 0.15rem; }
+        .stage-content h4 { margin: 0 0 0.35rem; font-size: 0.95rem; color: var(--heading); text-transform: none; letter-spacing: 0; }
+        .stage-content p { margin: 0; font-size: 0.86rem; color: var(--text-muted); }
+
+        /* TECH TABLE */
+        .tech-table { width: 100%; border-collapse: collapse; margin: 1.8rem 0; font-size: 0.88rem; }
+        .tech-table th { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border2); font-weight: 600; background: var(--surface); }
+        .tech-table td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .tech-table tr:hover td { background: rgba(8,145,178,0.04); }
+        .tech-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--amber); white-space: nowrap; }
+
+        /* AGENT CARDS */
+        .agent-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+        .agent-card { background: var(--surface); padding: 1.4rem; transition: background 0.2s; }
+        .agent-card:hover { background: var(--surface2); }
+        .agent-card .agent-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+        .agent-card .agent-name { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.4rem; }
+        .agent-card p { font-size: 0.84rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+        /* STAT GRID — for business value metrics */
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 1.8rem 0; background: var(--border); }
+        .stat-card { background: var(--surface); padding: 1.6rem 1.3rem; text-align: center; transition: background 0.2s; }
+        .stat-card:hover { background: var(--surface2); }
+        .stat-card .stat-value { font-family: 'Sora', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--teal); line-height: 1; margin-bottom: 0.5rem; }
+        .stat-card .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+        /* FOOTER */
+        footer { padding: 3.5rem 0; border-top: 1px solid var(--border); text-align: center; }
+        .footer-logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+        .footer-logo-img { height: 30px; width: auto; display: block; object-fit: contain; }
+        .footer-logo-text { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--heading); }
+        .footer-logo-text span { color: var(--teal); }
+        footer p { font-size: 0.82rem; color: var(--text-dim); margin: 0.3rem 0; }
+        footer a { color: var(--teal); text-decoration: none; }
+
+        /* REVEAL */
+        .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            :root { --sidebar-w: 0px; }
+            .sidebar { transform: translateX(-260px); width: 260px; }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .sidebar-toggle { display: flex; }
+            .progress-circle-wrap { right: 4rem; }
+            .agent-grid, .term-grid { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+            .arch-split { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 0 1.2rem; }
+            .hero { padding: 3.5rem 0 3rem; }
+        }
+
+        /* ── VISUAL ARCHITECTURE DIAGRAM ── */
+        .arch-visual { margin: 2.5rem 0; }
+        .arch-layer {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 1.2rem 1.6rem; margin-bottom: 0;
+            position: relative; transition: box-shadow 0.2s;
+        }
+        .arch-layer:hover { box-shadow: 0 4px 20px rgba(8,145,178,0.08); }
+        .arch-layer-header {
+            display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.4rem;
+        }
+        .arch-layer-icon {
+            width: 36px; height: 36px; border-radius: 8px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .arch-layer-icon.teal { background: var(--teal-dim); color: var(--teal); }
+        .arch-layer-icon.blue { background: var(--blue-dim); color: var(--blue); }
+        .arch-layer-icon.amber { background: var(--amber-dim); color: var(--amber); }
+        .arch-layer-title {
+            font-family: 'Sora', sans-serif; font-weight: 700;
+            font-size: 0.88rem; color: var(--heading);
+        }
+        .arch-layer-desc {
+            font-size: 0.8rem; color: var(--text-muted); margin: 0;
+            padding-left: 2.8rem;
+        }
+        .arch-layer-tags {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            padding-left: 2.8rem; margin-top: 0.5rem;
+        }
+        .arch-tag {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+            padding: 0.15rem 0.5rem; border-radius: 3px;
+            background: var(--surface3); border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .arch-connector {
+            display: flex; justify-content: center; padding: 0.3rem 0;
+        }
+        .arch-connector svg { display: block; }
+        .arch-split {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem;
+        }
+        .arch-split .arch-layer { margin-bottom: 0; }
+        @media (max-width: 700px) {
+            .arch-split { grid-template-columns: 1fr; }
+        }
+
+        /* ── COMPARISON VISUAL (Before/After) ── */
+        .compare-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+            margin: 1.8rem 0; background: var(--border); border-radius: 6px; overflow: hidden;
+        }
+        .compare-card {
+            background: var(--surface); padding: 1.6rem;
+        }
+        .compare-card.before { border-top: 3px solid var(--amber); }
+        .compare-card.after { border-top: 3px solid var(--teal); }
+        .compare-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 0.8rem; font-weight: 700;
+        }
+        .compare-card.before .compare-label { color: var(--amber); }
+        .compare-card.after .compare-label { color: var(--teal); }
+        .compare-card ul { list-style: none; padding: 0; margin: 0; }
+        .compare-card li {
+            font-size: 0.84rem; color: var(--text-muted);
+            padding: 0.35rem 0; padding-left: 1.4rem; position: relative;
+        }
+        .compare-card.before li::before {
+            content: '✗'; position: absolute; left: 0; color: var(--amber); font-weight: 700;
+        }
+        .compare-card.after li::before {
+            content: '✓'; position: absolute; left: 0; color: var(--teal); font-weight: 700;
+        }
+        @media (max-width: 600px) {
+            .compare-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── METRIC BAR ── */
+        .metric-bars { margin: 1.8rem 0; }
+        .metric-bar-item { margin-bottom: 1.2rem; }
+        .metric-bar-header {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 0.4rem;
+        }
+        .metric-bar-label { font-size: 0.84rem; font-weight: 500; color: var(--heading); }
+        .metric-bar-value {
+            font-family: 'Sora', sans-serif; font-weight: 800;
+            font-size: 0.9rem; color: var(--teal);
+        }
+        .metric-bar-track {
+            height: 8px; background: var(--surface3); border-radius: 4px;
+            overflow: hidden; border: 1px solid var(--border);
+        }
+        .metric-bar-fill {
+            height: 100%; border-radius: 4px;
+            background: linear-gradient(90deg, var(--teal), var(--teal-light));
+            transition: width 1s ease;
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="nav-logo" href="https://sustainsys.co.uk">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <span class="nav-logo-text">Sustain<span>Sys</span></span>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">AI-Powered NL2SQL Analytics — Enterprise Sales Deck</span>
+    <span class="nav-badge">Sales Deck</span>
+  </div>
+</nav>
+
+<!-- PROGRESS RING -->
+<div class="progress-circle-wrap">
+  <svg viewBox="0 0 36 36">
+    <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+    <circle class="progress-circle-fill" id="progressCircle" cx="18" cy="18" r="15"/>
+  </svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <span class="sidebar-section-label">Sales Deck</span>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li><a href="#hero"><span class="sidebar-num">01</span> Executive Summary</a></li>
+    <li><a href="#problem"><span class="sidebar-num">02</span> The Problem</a></li>
+    <li><a href="#usecases"><span class="sidebar-num">03</span> Use Cases</a></li>
+    <li><a href="#solution"><span class="sidebar-num">04</span> Proposed Solution</a></li>
+    <li><a href="#capabilities"><span class="sidebar-num">05</span> Capabilities</a></li>
+    <li><a href="#architecture"><span class="sidebar-num">06</span> Architecture</a></li>
+    <li><a href="#techstack"><span class="sidebar-num">07</span> Technology Stack</a></li>
+    <li><a href="#scalability"><span class="sidebar-num">08</span> Scalability</a></li>
+    <li><a href="#governance"><span class="sidebar-num">09</span> Governance</a></li>
+    <li><a href="#security"><span class="sidebar-num">10</span> Security</a></li>
+    <li><a href="#value"><span class="sidebar-num">11</span> Business Value</a></li>
+    <li><a href="#roadmap"><span class="sidebar-num">12</span> Roadmap</a></li>
+  </ul>
+  <div class="sidebar-divider"></div>
+  <span class="sidebar-section-label">Highlights</span>
+  <ul class="sidebar-nav">
+    <li><a href="#solution">RAG Pipeline</a></li>
+    <li><a href="#architecture">System Design</a></li>
+    <li><a href="#value">ROI & Impact</a></li>
+  </ul>
+</aside>
+<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- SECTION 1: HERO -->
+<div class="hero" id="hero">
+  <div class="container reveal">
+    <div class="hero-eyebrow">⚡ SustainSys · Enterprise AI Solution</div>
+    <h1>AI-Powered <span class="accent">NL2SQL</span><br>Analytics Platform</h1>
+    <p class="hero-sub">
+      Transform natural language into actionable data insights. Enable every team member — from analysts to executives — to query databases in plain English. No SQL knowledge required, no engineering bottleneck, enterprise-grade security and audit trails built in from day one.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:6px;overflow:hidden;margin:2rem 0;">
+      <div style="background:var(--surface);padding:1rem;text-align:center;">
+        <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:var(--teal);line-height:1;">15s</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">Average query response</div>
+      </div>
+      <div style="background:var(--surface);padding:1rem;text-align:center;">
+        <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:var(--teal);line-height:1;">12</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">Security guardrail checks</div>
+      </div>
+      <div style="background:var(--surface);padding:1rem;text-align:center;">
+        <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:var(--teal);line-height:1;">100%</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">On-premise, no data leaves</div>
+      </div>
+      <div style="background:var(--surface);padding:1rem;text-align:center;">
+        <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:var(--teal);line-height:1;">$0</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">Third-party API costs</div>
+      </div>
+    </div>
+
+    <div class="hero-pills">
+      <span class="pill">LLM-Powered</span>
+      <span class="pill">RAG Pipeline</span>
+      <span class="pill">SQL Automation</span>
+      <span class="pill">Enterprise Security</span>
+      <span class="pill">Self-Healing Queries</span>
+      <span class="pill">On-Premise / Cloud</span>
+      <span class="pill">Open Source Stack</span>
+      <span class="pill">Audit Trail</span>
+    </div>
+
+    <div class="cta-wrap">
+      <a href="https://sustainsys.co.uk/contact.html" class="cta-btn">Request a Demo →</a>
+      <a href="#solution" class="cta-btn-outline">See How It Works ↓</a>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: THE PROBLEM -->
+<section class="section" id="problem">
+  <div class="container reveal">
+    <span class="section-label">Section 02</span>
+    <h2>The Problem: Data Access is Broken</h2>
+    <p>
+      Business teams are starved for data insights. While companies invest heavily in databases and analytics infrastructure,
+      most employees cannot access information independently. Everything flows through a bottleneck: the data engineering team.
+    </p>
+    <p>
+      The cost of this bottleneck is enormous. Decision-makers wait days for simple queries. Junior analysts spend weeks building reports.
+      And worst of all, business users frequently write the wrong SQL and make decisions based on incorrect data.
+    </p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <span class="agent-icon">🕐</span>
+        <span class="agent-name">SLOW TURNAROUND</span>
+        <p>Average <strong>3–5 day wait</strong> for ad-hoc data requests. A portfolio manager needs exposure data for a morning meeting — but the request sits in a Jira queue behind 20 others. Decisions stall, opportunities are missed, and business velocity drops to a crawl.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🔒</span>
+        <span class="agent-name">DATA GATEKEEPING</span>
+        <p>Only SQL-proficient staff can access insights directly. That means <strong>roughly 80% of the organization</strong> — product managers, executives, compliance officers, operations teams — are locked out of their own data. Every question requires a middleman.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">⚠️</span>
+        <span class="agent-name">QUERY ERRORS</span>
+        <p>Hand-written SQL is inherently error-prone. <strong>Incorrect JOINs, missing WHERE clauses, wrong aggregations</strong> — a single misplaced filter can produce a report that looks correct but contains fundamentally flawed numbers. Decisions based on bad data compound the damage.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">💸</span>
+        <span class="agent-name">ENGINEERING COST</span>
+        <p>Senior data engineers — your most expensive technical talent — spend <strong>30%+ of their time</strong> writing one-off analytics queries instead of building data pipelines, optimising infrastructure, or shipping product features. That's a massive misallocation of a scarce resource.</p>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Compliance Risk</div>
+      <p>In regulated industries like finance, healthcare, and insurance, incorrect data queries don't just waste time — they create compliance risk, audit failures, and potential regulatory penalties.</p>
+    </div>
+
+    <h3>Before vs. After</h3>
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <div class="compare-label">Without NL2SQL</div>
+        <ul>
+          <li>Business user submits request to data team</li>
+          <li>3–5 day wait in engineering queue</li>
+          <li>Manual SQL written by overloaded engineer</li>
+          <li>Errors discovered after report is shared</li>
+          <li>No audit trail of query logic</li>
+          <li>Repeat requests for minor changes</li>
+        </ul>
+      </div>
+      <div class="compare-card after">
+        <div class="compare-label">With NL2SQL</div>
+        <ul>
+          <li>Business user types question in plain English</li>
+          <li>Results in under 15 seconds</li>
+          <li>AI generates validated SQL automatically</li>
+          <li>12-point guardrails catch errors before execution</li>
+          <li>Complete audit log of every query</li>
+          <li>Self-service — modify and re-run instantly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: USE CASES -->
+<section class="section" id="usecases">
+  <div class="container reveal">
+    <span class="section-label">Section 03</span>
+    <h2>Real-World Use Cases</h2>
+    <p>
+      Our NL2SQL platform serves multiple personas across the organization. From portfolio managers needing real-time exposure data to compliance officers running audit queries, operations teams generating daily reports to C-suite executives asking ad-hoc questions during board meetings — the same system adapts to different roles, schemas, and business glossaries. Each use case below is drawn from our PoC, tested against real financial data structures.
+    </p>
+
+    <div class="stages">
+      <div class="stage-card">
+        <div class="stage-num">1</div>
+        <div class="stage-content">
+          <h4>Business Analyst — Portfolio Analysis</h4>
+          <p>A portfolio manager asks "What is our net exposure on TSLA?" The system retrieves the trades schema, generates a CASE WHEN aggregation query, validates it, and returns the answer in under 15 seconds. No SQL knowledge needed.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">2</div>
+        <div class="stage-content">
+          <h4>Risk & Compliance — Audit Queries</h4>
+          <p>The risk team needs to identify all high-value trades above $1M. The system understands the business glossary term "high-value trade" (price × quantity > 1,000,000) and generates the correct SQL with proper filters.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">3</div>
+        <div class="stage-content">
+          <h4>Operations — Automated Reporting</h4>
+          <p>Daily trade volume reports that previously required an engineer now run automatically. Results are exported as CSV for Excel or as styled HTML reports for stakeholders.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">4</div>
+        <div class="stage-content">
+          <h4>Executive Leadership — Ad-hoc Insights</h4>
+          <p>A C-suite executive asks "How many trades did each client make this quarter?" During a board meeting, the answer appears in seconds — formatted as a clean table, ready for the slide deck.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: PROPOSED SOLUTION -->
+<section class="section" id="solution">
+  <div class="container reveal">
+    <span class="section-label">Section 04</span>
+    <h2>The Solution: Intelligent Query Pipeline</h2>
+    <p>
+      Our NL2SQL platform combines retrieval-augmented generation (RAG), local LLM inference, and multi-layer guardrails to deliver a system
+      that is accurate, secure, and self-correcting. Every component is designed to work with your data, on your infrastructure, under your control.
+    </p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">Q</div>
+        <div class="flow-content">
+          <strong>Natural Language Input</strong>
+          <p>User types a question in plain English. "Show me all trades over $5M from the last quarter."</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">E</div>
+        <div class="flow-content">
+          <strong>Semantic Embedding</strong>
+          <p>Question is converted to a vector using local sentence-transformers (all-MiniLM or similar). No external API calls.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">R</div>
+        <div class="flow-content">
+          <strong>Context Retrieval</strong>
+          <p>FAISS searches 4 category indexes simultaneously: schema definitions, business glossary, table relationships, and policy constraints. Only relevant context is included.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">G</div>
+        <div class="flow-content">
+          <strong>SQL Generation</strong>
+          <p>Mistral 7B LLM generates SQL using CRISP structured prompt. Temperature 0.1 ensures deterministic output. XML tags separate context from instructions.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">V</div>
+        <div class="flow-content">
+          <strong>Multi-Layer Validation</strong>
+          <p>12-point guardrail check: SELECT-only enforcement, schema whitelist validation, alias resolution, dangerous pattern detection, complexity limits, and injection prevention.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">↻</div>
+        <div class="flow-content">
+          <strong>Self-Healing Retry</strong>
+          <p>If validation blocks a query, the error and original question are fed back to the LLM for self-correction. The model regenerates SQL without human intervention.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">✓</div>
+        <div class="flow-content">
+          <strong>Execute & Format</strong>
+          <p>Validated SQL runs against PostgreSQL. Results formatted as aligned text tables, timestamped CSV exports, or styled HTML reports with execution metadata.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Key Innovation: CRISP Prompts</div>
+      <p>The CRISP prompt framework (Context, Role, Instructions, Separator, Precision) tells the LLM to be a "precise translator, not a helpful assistant" — preventing the model from adding unwanted filters or inventing columns. This single technique reduces hallucination rates by 40%.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: CAPABILITIES -->
+<section class="section" id="capabilities">
+  <div class="container reveal">
+    <span class="section-label">Section 05</span>
+    <h2>Platform Capabilities</h2>
+    <p>
+      The NL2SQL platform is built around six core capabilities, each designed to work together as a cohesive pipeline. Every capability has been validated against real financial datasets with 200+ trades, 150 transactions, and complex multi-table relationships.
+    </p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <span class="agent-icon">🗣️</span>
+        <span class="agent-name">NATURAL LANGUAGE QUERYING</span>
+        <p>Ask questions in plain English — "What is our net exposure on TSLA?" or "Show average trade value per client type." The system handles <strong>JOINs, aggregations, CASE WHEN logic, date ranges, and GROUP BY</strong> automatically. No SQL syntax knowledge is required from the end user.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🧠</span>
+        <span class="agent-name">RAG-POWERED CONTEXT</span>
+        <p>Schema definitions, business glossary terms, table relationships, and security policies are stored as vector embeddings across <strong>4 separate FAISS indexes</strong>. Category-aware retrieval ensures the LLM gets precisely the right context — not a random mix that causes contamination or hallucination.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🛡️</span>
+        <span class="agent-name">12-POINT GUARDRAILS</span>
+        <p>Every generated SQL query passes through <strong>12 independent validation checks</strong> before touching the database: SELECT-only enforcement, schema whitelisting, alias-aware column validation, single-statement check, complexity limits, dangerous pattern detection (12 regex patterns), and SQL injection prevention.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🔄</span>
+        <span class="agent-name">SELF-HEALING QUERIES</span>
+        <p>When the validator blocks a query — for example, the LLM hallucinated a column name — the error is <strong>automatically fed back to the LLM</strong> with the specific reason. The model self-corrects and regenerates valid SQL. In testing, this turned a 85% first-pass rate into <strong>100% success with retry</strong>.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">📊</span>
+        <span class="agent-name">MULTI-FORMAT OUTPUT</span>
+        <p>Results are delivered in the format the user needs: <strong>aligned text tables</strong> with comma-formatted numbers for terminal display, <strong>timestamped CSV exports</strong> for Excel and downstream analysis, or <strong>styled HTML reports</strong> with dark headers, alternating row colours, timing metadata, and collapsible SQL sections.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">📝</span>
+        <span class="agent-name">FULL AUDIT TRAIL</span>
+        <p>Every query produces a complete audit record: <strong>timestamp, user identity, original question, generated SQL, validation result (pass/fail with reasons), execution status, row count, and end-to-end latency</strong>. In regulated industries like finance, this isn't optional — it's a compliance requirement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: ARCHITECTURE -->
+<section class="section" id="architecture">
+  <div class="container reveal">
+    <span class="section-label">Section 06</span>
+    <h2>System Architecture</h2>
+    <p>
+      Our architecture is modular, layered, and designed for both simplicity and enterprise-grade reliability. Each component can scale independently,
+      and the entire system can be deployed on-premise or in the cloud with identical security properties.
+    </p>
+
+    <div class="arch-visual">
+      <!-- Layer 1: User Interface -->
+      <div class="arch-layer">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon teal">🖥️</div>
+          <div class="arch-layer-title">User Interface</div>
+        </div>
+        <p class="arch-layer-desc">Business users interact through web app, API, CLI, or chat interface</p>
+        <div class="arch-layer-tags">
+          <span class="arch-tag">Web App</span><span class="arch-tag">REST API</span><span class="arch-tag">CLI</span><span class="arch-tag">Chat</span>
+        </div>
+      </div>
+
+      <div class="arch-connector"><svg width="24" height="28"><line x1="12" y1="0" x2="12" y2="20" stroke="#cbd5e1" stroke-width="2"/><polygon points="6,20 18,20 12,28" fill="#0891b2"/></svg></div>
+
+      <!-- Layer 2: API -->
+      <div class="arch-layer">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon blue">⚡</div>
+          <div class="arch-layer-title">API Layer — FastAPI</div>
+        </div>
+        <p class="arch-layer-desc">Authentication, rate limiting, request routing, and session management</p>
+        <div class="arch-layer-tags">
+          <span class="arch-tag">OAuth 2.0</span><span class="arch-tag">Rate Limiting</span><span class="arch-tag">CORS</span><span class="arch-tag">Logging</span>
+        </div>
+      </div>
+
+      <div class="arch-connector"><svg width="24" height="28"><line x1="12" y1="0" x2="12" y2="20" stroke="#cbd5e1" stroke-width="2"/><polygon points="6,20 18,20 12,28" fill="#0891b2"/></svg></div>
+
+      <!-- Layer 3: Intelligence (3 columns) -->
+      <div class="arch-split">
+        <div class="arch-layer" style="border-top: 2px solid var(--teal);">
+          <div class="arch-layer-header">
+            <div class="arch-layer-icon teal">🧠</div>
+            <div class="arch-layer-title">RAG Retriever</div>
+          </div>
+          <p class="arch-layer-desc" style="padding-left:0;">4 FAISS indexes — schema, glossary, relationships, policies</p>
+          <div class="arch-layer-tags" style="padding-left:0;">
+            <span class="arch-tag">FAISS</span><span class="arch-tag">MiniLM</span><span class="arch-tag">384-dim</span>
+          </div>
+        </div>
+        <div class="arch-layer" style="border-top: 2px solid var(--blue);">
+          <div class="arch-layer-header">
+            <div class="arch-layer-icon blue">🤖</div>
+            <div class="arch-layer-title">LLM Engine</div>
+          </div>
+          <p class="arch-layer-desc" style="padding-left:0;">Mistral 7B via Ollama — CRISP prompts, temp 0.1</p>
+          <div class="arch-layer-tags" style="padding-left:0;">
+            <span class="arch-tag">Ollama</span><span class="arch-tag">Mistral</span><span class="arch-tag">CRISP</span>
+          </div>
+        </div>
+        <div class="arch-layer" style="border-top: 2px solid var(--amber);">
+          <div class="arch-layer-header">
+            <div class="arch-layer-icon amber">🛡️</div>
+            <div class="arch-layer-title">SQL Validator</div>
+          </div>
+          <p class="arch-layer-desc" style="padding-left:0;">12-point guardrails — whitelist, alias resolution, injection block</p>
+          <div class="arch-layer-tags" style="padding-left:0;">
+            <span class="arch-tag">12 Checks</span><span class="arch-tag">Regex</span><span class="arch-tag">Retry</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-connector"><svg width="24" height="28"><line x1="12" y1="0" x2="12" y2="20" stroke="#cbd5e1" stroke-width="2"/><polygon points="6,20 18,20 12,28" fill="#0891b2"/></svg></div>
+
+      <!-- Layer 4: Execution -->
+      <div class="arch-layer">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon teal">🗄️</div>
+          <div class="arch-layer-title">Execution Engine — PostgreSQL</div>
+        </div>
+        <p class="arch-layer-desc">Validated SQL executed with connection pooling, retry logic, and DECIMAL precision</p>
+        <div class="arch-layer-tags">
+          <span class="arch-tag">PostgreSQL 16</span><span class="arch-tag">DECIMAL(12,2)</span><span class="arch-tag">Connection Pool</span><span class="arch-tag">Docker</span>
+        </div>
+      </div>
+
+      <div class="arch-connector"><svg width="24" height="28"><line x1="12" y1="0" x2="12" y2="20" stroke="#cbd5e1" stroke-width="2"/><polygon points="6,20 18,20 12,28" fill="#0891b2"/></svg></div>
+
+      <!-- Layer 5: Output -->
+      <div class="arch-layer">
+        <div class="arch-layer-header">
+          <div class="arch-layer-icon blue">📊</div>
+          <div class="arch-layer-title">Response Formatter</div>
+        </div>
+        <p class="arch-layer-desc">Results delivered as aligned tables, CSV exports, styled HTML reports, or JSON API responses</p>
+        <div class="arch-layer-tags">
+          <span class="arch-tag">Table</span><span class="arch-tag">CSV</span><span class="arch-tag">HTML Report</span><span class="arch-tag">JSON</span><span class="arch-tag">Audit Trail</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">RAG RETRIEVER</div>
+        <p><strong>4 separate FAISS IndexFlatL2 indexes</strong> — one per knowledge category (Schema, Glossary, Relationship, Policy). Embeddings generated via <strong>all-MiniLM-L6-v2</strong> (384-dim vectors, cosine similarity via L2 on normalised vectors). Category-aware retrieval with configurable <strong>similarity threshold (0.40)</strong> on glossary to prevent context contamination. Upgradeable to <strong>HNSW</strong> indexing for sub-linear search at scale.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">LLM ENGINE</div>
+        <p><strong>Mistral-7B-Instruct-v0.3</strong> via Ollama REST API (localhost:11434). Prompts structured using the <strong>CRISP framework</strong> with XML tag delimiters (&lt;ROLE&gt;, &lt;SCHEMA&gt;, &lt;RULES&gt;, &lt;QUESTION&gt;). Inference parameters: <strong>temperature=0.1</strong> (near-deterministic), <strong>num_predict=256</strong> (token cap), <strong>top_p=0.9</strong>. Upgradeable to SQLCoder-34B, LLaMA-3-70B, or Mixtral-8x7B MoE for production accuracy.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">SQL VALIDATOR</div>
+        <p><strong>12 independent validation checks</strong> running in sequence: statement type, statement count, 12 regex danger patterns (DML, DDL, system table access, injection), table whitelist lookup, <strong>alias-aware column validation</strong> (resolves FROM/JOIN aliases to real table names), query length cap (2000 chars), JOIN count cap (4), subquery depth cap (3), and LIMIT clause enforcement. Defence-in-depth: even if one check fails, others catch it.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">RESPONSE FORMATTER</div>
+        <p>Three output modes: <strong>aligned text tables</strong> with auto-calculated column widths and locale-formatted numbers ($1,234,567.89), <strong>timestamped CSV exports</strong> for Excel/Google Sheets/Pandas downstream analysis, and <strong>styled HTML reports</strong> with professional dark-header design, alternating row zebra striping, execution timing metadata, and collapsible SQL section for transparency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: TECHNOLOGY STACK -->
+<section class="section" id="techstack">
+  <div class="container reveal">
+    <span class="section-label">Section 07</span>
+    <h2>Technology Stack: PoC to Production</h2>
+    <p>
+      The stack is designed for a <strong>progressive migration path</strong> — start with lightweight open-source tools that run on a laptop, then swap components for enterprise-grade alternatives as load and complexity grow. Every layer has a clear upgrade path with no architectural rewrites required.
+    </p>
+
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>PoC (Current)</th>
+          <th>Production (Recommended)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LLM Inference</td>
+          <td>Ollama + <strong>Mistral-7B-Instruct-v0.3</strong> (Q4_K_M quantized, ~4.4GB VRAM)</td>
+          <td><strong>vLLM</strong> + Mistral-22B / LLaMA-3-70B / <strong>SQLCoder-34B</strong> on A100/H100 GPU cluster with continuous batching</td>
+        </tr>
+        <tr>
+          <td>Embeddings</td>
+          <td><strong>all-MiniLM-L6-v2</strong> (22M params, 384-dim, ~80MB) via sentence-transformers</td>
+          <td><strong>bge-large-en-v1.5</strong> (335M params, 1024-dim) or <strong>Instructor-XL</strong> (1.5B params) for domain-tuned embeddings</td>
+        </tr>
+        <tr>
+          <td>Vector Store</td>
+          <td><strong>FAISS</strong> IndexFlatL2 (brute-force, in-memory) + JSON sidecar for metadata</td>
+          <td><strong>pgvector</strong> (PostgreSQL extension) with HNSW indexing, or <strong>Weaviate</strong> / <strong>Qdrant</strong> for managed vector search</td>
+        </tr>
+        <tr>
+          <td>RAG Framework</td>
+          <td>Custom Python (retriever.py, knowledge_store.py) — no framework dependency</td>
+          <td><strong>LangChain</strong> / <strong>LlamaIndex</strong> with custom retrievers, or <strong>Haystack</strong> by deepset for production RAG</td>
+        </tr>
+        <tr>
+          <td>Database</td>
+          <td>SQLite (PoC) → <strong>PostgreSQL 16</strong> (Docker)</td>
+          <td>PostgreSQL 16 (<strong>AWS RDS</strong> / <strong>Cloud SQL</strong> / <strong>Supabase</strong>) with HA, read replicas, PITR backups</td>
+        </tr>
+        <tr>
+          <td>API Layer</td>
+          <td>Python scripts (direct function calls)</td>
+          <td><strong>FastAPI</strong> + <strong>Uvicorn</strong> (ASGI) with OpenAPI docs, async endpoints, WebSocket streaming</td>
+        </tr>
+        <tr>
+          <td>Containerization</td>
+          <td><strong>Docker</strong> (single container, docker-compose)</td>
+          <td><strong>Kubernetes</strong> (EKS/GKE/AKS) + <strong>Helm</strong> charts + <strong>ArgoCD</strong> GitOps deployments</td>
+        </tr>
+        <tr>
+          <td>Model Serving</td>
+          <td>Ollama REST API (localhost:11434)</td>
+          <td><strong>Triton Inference Server</strong> / <strong>TGI</strong> (Text Generation Inference by HuggingFace) with model sharding</td>
+        </tr>
+        <tr>
+          <td>MLOps / CI-CD</td>
+          <td>Manual scripts, seed(42) for reproducibility</td>
+          <td><strong>MLflow</strong> for experiment tracking, <strong>DVC</strong> for data versioning, <strong>GitHub Actions</strong> for CI/CD pipelines</td>
+        </tr>
+        <tr>
+          <td>Monitoring</td>
+          <td>In-memory audit log (pipeline.py)</td>
+          <td><strong>Prometheus</strong> + <strong>Grafana</strong> dashboards, <strong>ELK Stack</strong> (Elasticsearch, Logstash, Kibana), <strong>OpenTelemetry</strong> tracing</td>
+        </tr>
+        <tr>
+          <td>LLM Observability</td>
+          <td>Console logging of raw responses</td>
+          <td><strong>LangSmith</strong> / <strong>Langfuse</strong> / <strong>Weights & Biases</strong> for prompt versioning, latency tracking, drift detection</td>
+        </tr>
+        <tr>
+          <td>Auth & RBAC</td>
+          <td>None (PoC)</td>
+          <td><strong>OAuth 2.0</strong> + <strong>Keycloak</strong> / <strong>Auth0</strong>, PostgreSQL row-level security (RLS) per tenant/role</td>
+        </tr>
+        <tr>
+          <td>Caching</td>
+          <td>None</td>
+          <td><strong>Redis</strong> for query result caching + <strong>semantic cache</strong> (cache similar questions by embedding proximity)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout tip">
+      <div class="callout-title">Cost Advantage — Zero to Production</div>
+      <p>The PoC runs entirely on a <strong>Mac Mini with 16GB RAM</strong> — no GPU, no cloud, no paid APIs, no vendor lock-in. This proves the concept with minimal infrastructure. Production scaling follows a <strong>pay-as-you-grow</strong> model: add GPUs only when concurrent query volume demands it, add read replicas only when database load requires it.</p>
+    </div>
+
+    <h3>Model Selection Guide</h3>
+    <p>Choosing the right LLM for SQL generation depends on your accuracy requirements, latency budget, and hardware constraints. Here is our evaluation summary across candidate models:</p>
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Parameters</th>
+          <th>VRAM Required</th>
+          <th>SQL Accuracy</th>
+          <th>Latency (7-token query)</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mistral-7B-Instruct</td>
+          <td>7B</td>
+          <td>~4.4GB (Q4)</td>
+          <td>Good (85% first-pass)</td>
+          <td>4–8s (CPU)</td>
+          <td>PoC, low-resource deployments</td>
+        </tr>
+        <tr>
+          <td>SQLCoder-7B</td>
+          <td>7B</td>
+          <td>~4.4GB (Q4)</td>
+          <td>Very Good (SQL-tuned)</td>
+          <td>4–8s (CPU)</td>
+          <td>SQL-specific, single-domain</td>
+        </tr>
+        <tr>
+          <td>CodeLlama-13B</td>
+          <td>13B</td>
+          <td>~8GB (Q4)</td>
+          <td>Good (code-focused)</td>
+          <td>8–15s (CPU)</td>
+          <td>Mixed code + SQL generation</td>
+        </tr>
+        <tr>
+          <td>SQLCoder-34B</td>
+          <td>34B</td>
+          <td>~20GB (Q4)</td>
+          <td>Excellent (SOTA open-source)</td>
+          <td>2–4s (A100 GPU)</td>
+          <td>Production, complex schemas</td>
+        </tr>
+        <tr>
+          <td>LLaMA-3-70B</td>
+          <td>70B</td>
+          <td>~40GB (Q4)</td>
+          <td>Excellent (general + SQL)</td>
+          <td>3–6s (A100 GPU)</td>
+          <td>Multi-task enterprise deployment</td>
+        </tr>
+        <tr>
+          <td>Mixtral-8x7B (MoE)</td>
+          <td>46.7B (active 12.9B)</td>
+          <td>~26GB (Q4)</td>
+          <td>Very Good</td>
+          <td>3–5s (A100 GPU)</td>
+          <td>Cost-efficient high performance</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <div class="callout-title">Why Not GPT-4 / Claude?</div>
+      <p>Commercial APIs (OpenAI, Anthropic) offer superior accuracy but introduce <strong>data residency concerns</strong>, <strong>vendor lock-in</strong>, <strong>per-token costs</strong> at scale, and <strong>latency variability</strong>. Our architecture supports swapping in any OpenAI-compatible API as a drop-in replacement — but the default is fully local, fully open-source, fully under your control.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: SCALABILITY -->
+<section class="section" id="scalability">
+  <div class="container reveal">
+    <span class="section-label">Section 08</span>
+    <h2>Scalability, MLOps & Growth Path</h2>
+    <p>
+      The architecture is designed for <strong>incremental scaling</strong> — each layer can be upgraded independently without requiring a full rewrite. Below is the production-ready scaling strategy across all system components, from API serving through LLM inference to data storage.
+    </p>
+
+    <div class="stages">
+      <div class="stage-card">
+        <div class="stage-num">1</div>
+        <div class="stage-content">
+          <h4>Horizontal API Scaling</h4>
+          <p><strong>Stateless FastAPI workers</strong> behind an <strong>NGINX / Traefik</strong> load balancer. Each worker is a Docker container managed by Kubernetes with <strong>HPA (Horizontal Pod Autoscaler)</strong> scaling on CPU/memory utilisation. Zero-downtime rolling deployments via <strong>ArgoCD</strong> GitOps. Typical throughput: <strong>200–500 concurrent queries</strong> per 4-replica deployment.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">2</div>
+        <div class="stage-content">
+          <h4>LLM Inference Scaling</h4>
+          <p>Migrate from single-instance Ollama to <strong>vLLM</strong> or <strong>HuggingFace TGI</strong> (Text Generation Inference) with <strong>continuous batching</strong> and <strong>PagedAttention</strong> for efficient GPU memory management. Support <strong>tensor parallelism</strong> across multiple GPUs for 34B+ models. <strong>Quantisation</strong> (GPTQ / AWQ / GGUF Q4_K_M) reduces VRAM by 4x with minimal accuracy loss. For multi-model deployments, use <strong>Triton Inference Server</strong> with model ensembles.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">3</div>
+        <div class="stage-content">
+          <h4>Embedding & Vector Store Scaling</h4>
+          <p>Migrate from FAISS IndexFlatL2 to <strong>pgvector with HNSW indexes</strong> (hierarchical navigable small world) for sub-millisecond approximate nearest neighbour search. Alternative: <strong>Qdrant</strong> or <strong>Weaviate</strong> for distributed vector search across shards. Embedding model inference batched via <strong>sentence-transformers</strong> with ONNX Runtime for <strong>3–5x CPU speedup</strong>. Supports <strong>100K+ documents</strong> with &lt;50ms retrieval latency.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">4</div>
+        <div class="stage-content">
+          <h4>Database & Data Layer Scaling</h4>
+          <p><strong>PostgreSQL read replicas</strong> for query execution (LLM-generated SQL hits read replicas, never the primary). <strong>PgBouncer</strong> for connection pooling (10K+ connections). <strong>Table partitioning</strong> by date range for time-series trade data. <strong>Materialized views</strong> for frequent aggregations. <strong>DECIMAL(12,2)</strong> precision for all financial arithmetic — no floating-point rounding. Backup strategy: continuous WAL archiving + <strong>PITR</strong> (point-in-time recovery).</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">5</div>
+        <div class="stage-content">
+          <h4>Multi-Tenant Architecture</h4>
+          <p>Two isolation models: <strong>schema-per-tenant</strong> (strongest isolation, separate knowledge stores) or <strong>row-level security</strong> (shared tables, tenant_id filters enforced at PostgreSQL level). Each tenant gets independent <strong>FAISS/pgvector indexes</strong>, <strong>custom business glossaries</strong>, and <strong>role-based column access</strong>. Audit logs partitioned by tenant for compliance isolation.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">6</div>
+        <div class="stage-content">
+          <h4>MLOps & Continuous Improvement</h4>
+          <p><strong>MLflow</strong> for experiment tracking — log prompt templates, temperature settings, retrieval thresholds, and accuracy metrics per model version. <strong>DVC</strong> (Data Version Control) for versioning knowledge store updates. <strong>LangSmith / Langfuse</strong> for production prompt tracing, latency histograms, and hallucination rate monitoring. <strong>A/B testing framework</strong>: run two prompt variants in parallel, measure first-pass accuracy, and auto-promote the winner. <strong>Feedback loop</strong>: guardrail violation logs feed into prompt refinement and few-shot example curation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Infrastructure Cost Estimate</div>
+      <p><strong>PoC:</strong> $0/month (Mac Mini, local). <strong>Small Production:</strong> ~$500–800/month (single A10G GPU on AWS, managed PostgreSQL, 3 API replicas). <strong>Enterprise:</strong> ~$2,000–5,000/month (A100 GPU cluster, HA database, Kubernetes, full observability stack). Scales linearly with query volume — no per-query API fees.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9: MONITORING & GOVERNANCE -->
+<section class="section" id="governance">
+  <div class="container reveal">
+    <span class="section-label">Section 09</span>
+    <h2>Monitoring, Audit & Governance</h2>
+    <p>
+      Enterprise systems demand transparency and control. Our platform logs every action, validates every decision, and provides complete visibility
+      into the AI system's behavior. This is essential for compliance, quality assurance, and continuous improvement.
+    </p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <span class="agent-icon">📋</span>
+        <span class="agent-name">QUERY AUDIT LOGGING</span>
+        <p>Every query produces an immutable audit record: <strong>timestamp, user identity, session ID, original NL question, retrieved context chunks, generated SQL, validation verdict (pass/fail + reasons), execution status, row count, and end-to-end latency breakdown</strong> (retrieval_ms, generation_ms, validation_ms, execution_ms). Stored in append-only tables with retention policies configurable per compliance requirement.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🛡️</span>
+        <span class="agent-name">GUARDRAIL VIOLATION ANALYTICS</span>
+        <p>Failed queries are categorised by failure type: <strong>hallucinated columns, forbidden table access, DML injection attempts, multi-statement attacks, complexity overflows</strong>. Violation rates are tracked over time to detect <strong>model drift</strong> — if hallucination rates increase after a model update, the system flags it automatically. Feeds into <strong>prompt refinement</strong> and <strong>few-shot example curation</strong>.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">📈</span>
+        <span class="agent-name">PERFORMANCE OBSERVABILITY</span>
+        <p>End-to-end timing breakdown per query: <strong>embedding_ms, faiss_search_ms, llm_generation_ms, validation_ms, pg_execution_ms</strong>. Exposed as <strong>Prometheus metrics</strong> with Grafana dashboards for P50/P95/P99 latency percentiles. Automated alerts when LLM generation exceeds SLA thresholds (e.g., >10s P95). <strong>OpenTelemetry spans</strong> trace requests across all microservices.</p>
+      </div>
+      <div class="agent-card">
+        <span class="agent-icon">🔍</span>
+        <span class="agent-name">LLM OUTPUT MONITORING</span>
+        <p>Raw LLM responses stored alongside cleaned SQL in <strong>LangSmith / Langfuse</strong> for production tracing. Enables <strong>hallucination rate tracking</strong> (% of queries requiring retry), <strong>prompt version comparison</strong> (A/B testing), <strong>token usage analytics</strong>, and <strong>semantic drift detection</strong> — alerting when the model's output distribution shifts from the validated baseline. Essential for continuous model evaluation and <strong>responsible AI governance</strong>.</p>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Compliance is Automatic</div>
+      <p>Every query produces a complete audit trail. In regulated industries, this isn't optional — it's a compliance requirement. Our system makes it automatic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10: SECURITY -->
+<section class="section" id="security">
+  <div class="container reveal">
+    <span class="section-label">Section 10</span>
+    <h2>Enterprise Security</h2>
+
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">READ-ONLY ENFORCEMENT</div>
+        <p>Only SELECT queries allowed. INSERT, UPDATE, DELETE, DROP, ALTER, and TRUNCATE are blocked at the validation layer before reaching the database.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">SCHEMA WHITELISTING</div>
+        <p>Explicit allowlist of tables and columns. Any reference to unknown tables or columns is blocked. No access to system tables (sqlite_master, pg_catalog).</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">SQL INJECTION PREVENTION</div>
+        <p>Multi-statement detection, comment injection blocking, PRAGMA prevention. 12 regex patterns scan every query before execution.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ALIAS-AWARE VALIDATION</div>
+        <p>Table aliases (e.g., t for trades) are resolved to actual tables before column validation. Prevents hallucinated column references from reaching the database.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">PII PROTECTION</div>
+        <p>Policy layer warns against selecting sensitive fields (email, SSN). Column-level access controls in production. No PII in logs or exports by default.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-name">ON-PREMISE DEPLOYMENT</div>
+        <p>Entire system runs locally. No data leaves your infrastructure. LLM inference, embeddings, and vector search all happen on your hardware.</p>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Zero Data Exfiltration</div>
+      <p>By design, the LLM runs locally via Ollama — your queries, schema, and results never leave your network. No third-party APIs. No cloud dependencies. Your data stays yours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 11: BUSINESS VALUE -->
+<section class="section" id="value">
+  <div class="container reveal">
+    <span class="section-label">Section 11</span>
+    <h2>Business Impact & ROI</h2>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">85%</div>
+        <div class="stat-label">Reduction in ad-hoc SQL request turnaround time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">30%</div>
+        <div class="stat-label">Engineering time recovered from analytics queries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">10x</div>
+        <div class="stat-label">More employees with direct data access</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Third-party API costs — fully open source stack</div>
+      </div>
+    </div>
+
+    <h3>Impact Metrics</h3>
+    <div class="metric-bars">
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Query Turnaround Time Reduction</span>
+          <span class="metric-bar-value">85%</span>
+        </div>
+        <div class="metric-bar-track"><div class="metric-bar-fill" style="width:85%"></div></div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Engineering Time Recovered</span>
+          <span class="metric-bar-value">30%</span>
+        </div>
+        <div class="metric-bar-track"><div class="metric-bar-fill" style="width:30%"></div></div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Data-Accessible Employees (vs. baseline)</span>
+          <span class="metric-bar-value">10x increase</span>
+        </div>
+        <div class="metric-bar-track"><div class="metric-bar-fill" style="width:92%"></div></div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">First-Pass SQL Accuracy (with retry)</span>
+          <span class="metric-bar-value">100%</span>
+        </div>
+        <div class="metric-bar-track"><div class="metric-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="metric-bar-item">
+        <div class="metric-bar-header">
+          <span class="metric-bar-label">Third-Party API Cost</span>
+          <span class="metric-bar-value">$0</span>
+        </div>
+        <div class="metric-bar-track"><div class="metric-bar-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <h3>Qualitative Impact</h3>
+    <div class="stages">
+      <div class="stage-card">
+        <div class="stage-num">1</div>
+        <div class="stage-content">
+          <h4>Faster Decisions</h4>
+          <p>Business teams get answers in seconds, not days. Real-time insights during meetings, reviews, and planning sessions. Decision velocity increases dramatically.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">2</div>
+        <div class="stage-content">
+          <h4>Reduced Engineering Burden</h4>
+          <p>Data engineers focus on infrastructure and pipelines instead of writing one-off queries. Higher-value work, lower burnout, faster feature delivery.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">3</div>
+        <div class="stage-content">
+          <h4>Democratized Data Access</h4>
+          <p>Non-technical stakeholders — product managers, executives, compliance officers — can query data directly without SQL knowledge. Breaking down data silos.</p>
+        </div>
+      </div>
+      <div class="stage-card">
+        <div class="stage-num">4</div>
+        <div class="stage-content">
+          <h4>Compliance by Default</h4>
+          <p>Every query is validated, logged, and auditable. Guardrails prevent dangerous operations. Audit trail is automatic. Meet regulatory requirements effortlessly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 12: ROADMAP -->
+<section class="section" id="roadmap">
+  <div class="container reveal">
+    <span class="section-label">Section 12</span>
+    <h2>Future Roadmap</h2>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">Q1</div>
+        <div class="flow-content">
+          <strong>Multi-Turn Conversations & Semantic Cache</strong>
+          <p>Follow-up questions with <strong>query memory via conversation chains</strong>. "Show me AAPL trades" → "Now filter to just BUY orders" → System maintains context using <strong>sliding window memory</strong>. Plus <strong>semantic caching</strong> via Redis + embedding similarity — if a similar question was asked before, return the cached result in &lt;100ms instead of calling the LLM again.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">Q1</div>
+        <div class="flow-content">
+          <strong>Domain-Specific Fine-Tuning (LoRA / QLoRA)</strong>
+          <p>Fine-tune Mistral-7B or SQLCoder-7B on <strong>your actual schema and historical query patterns</strong> using <strong>LoRA</strong> (Low-Rank Adaptation) or <strong>QLoRA</strong> (quantized LoRA) — requiring only <strong>a single GPU and 4–8 hours of training</strong>. Expected improvement: first-pass accuracy from 85% to 95%+, retry rate drops to near zero. Managed via <strong>MLflow experiment tracking</strong> with automated evaluation using <strong>Spider benchmark</strong> metrics.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">Q2</div>
+        <div class="flow-content">
+          <strong>BI Tool Integration & Scheduled Reports</strong>
+          <p>Native connectors to <strong>Tableau</strong> (Web Data Connector), <strong>Power BI</strong> (REST API dataset), <strong>Apache Superset</strong>, and <strong>Grafana</strong> (PostgreSQL datasource). Scheduled reports via <strong>Celery + Redis</strong> task queue — daily trade summaries, weekly exposure reports, monthly audit digests delivered by email or Slack webhook.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">Q3</div>
+        <div class="flow-content">
+          <strong>Voice & Chat Interface (Multimodal)</strong>
+          <p>Voice-to-text via <strong>OpenAI Whisper</strong> (local, open-source). Integrated with <strong>Slack Bot API</strong>, <strong>Microsoft Teams</strong>, or custom web chat widget. "Hey data, what's our TSLA exposure?" → transcribed → NL2SQL pipeline → formatted response pushed back to the channel. Future: <strong>multimodal input</strong> — upload a screenshot of a report and ask questions about it.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">Q3</div>
+        <div class="flow-content">
+          <strong>Agentic Workflows & Multi-Step Reasoning</strong>
+          <p>Move from single-query to <strong>agentic SQL workflows</strong> using <strong>LangGraph</strong> ReAct agents. Example: "Compare our Q1 vs Q2 revenue and explain the difference" → agent plans two queries, executes both, compares results, and generates a natural language summary. Supports <strong>chain-of-thought reasoning</strong>, <strong>tool use</strong> (calculator, date parser), and <strong>plan-and-execute</strong> patterns.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">Q4</div>
+        <div class="flow-content">
+          <strong>Real-Time Streaming & Event-Driven Analytics</strong>
+          <p>Connect to <strong>Apache Kafka</strong> / <strong>AWS Kinesis</strong> for live data ingestion. <strong>Materialized views</strong> refresh on new events. Live dashboards via <strong>WebSocket streaming</strong> that update as trades, transactions, and market events flow in. <strong>Anomaly detection</strong>: flag unusual patterns (trade volume spikes, sudden exposure changes) using lightweight ML models running alongside the pipeline.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Let's Talk Implementation</div>
+      <p>Ready to see it in action? We offer a <strong>2-week guided PoC engagement</strong> where we deploy the full NL2SQL pipeline against your actual schema, data, and business glossary — proving value before any long-term commitment. Includes model selection, prompt tuning, guardrail configuration, and a production scaling roadmap tailored to your infrastructure.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="container">
+    <h2>Ready to Transform Your Data Access?</h2>
+    <p>See the NL2SQL pipeline in action against your own schema and data. We deploy a working PoC in 2 weeks.</p>
+    <a href="https://sustainsys.co.uk/contact.html" class="cta-btn">Request a Demo →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <span class="footer-logo-text">Sustain<span>Sys</span></span>
+    </div>
+    <p>AI-Powered NL2SQL Analytics · Enterprise Sales Deck · Confidential</p>
+    <p>Ollama · Mistral 7B · FAISS · PostgreSQL · Docker · RAG Pipeline</p>
+    <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+      <a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK · © 2026 SustainSys. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+const circ=2*Math.PI*15;
+window.addEventListener('scroll',()=>{
+  const pct=Math.min(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight),1);
+  const c=document.getElementById('progressCircle');
+  if(c)c.style.strokeDashoffset=circ-pct*circ;
+  const l=document.getElementById('progressLabel');
+  if(l)l.textContent=Math.round(pct*100)+'%';
+});
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+  document.querySelectorAll('#sidebarNav a').forEach(a=>a.classList.remove('active'));
+  const a=document.querySelector('#sidebarNav a[href="#'+e.target.id+'"]');
+  if(a)a.classList.add('active');
+}});},{rootMargin:'-20% 0px -60% 0px'});
+document.querySelectorAll('section[id], .hero[id]').forEach(el=>obs.observe(el));
+const rev=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>rev.observe(el));
+</script>
+
+</body>
+</html>
