@@ -329,6 +329,117 @@
         letter-spacing: 0.5px;
     }
 
+    /* --- Flagship Projects --- */
+    .projects-showcase {
+        padding: 4rem 0 2rem;
+    }
+    .projects-showcase-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 2.5rem;
+    }
+    .project-card {
+        position: relative;
+        padding: 2rem 1.8rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        transition: var(--transition);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: var(--card-accent, var(--accent-cyan));
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .project-card:hover {
+        border-color: var(--border-hover);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+    .project-card-top {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    .project-card-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        object-fit: contain;
+    }
+    .project-card-badge {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.58rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .project-card h4 {
+        font-size: 1.1rem;
+        color: var(--text-bright);
+        margin-bottom: 0.6rem;
+        font-weight: 800;
+    }
+    .project-card p {
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        line-height: 1.65;
+        margin-bottom: 1rem;
+        flex: 1;
+    }
+    .project-card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.2rem;
+    }
+    .project-card-features li {
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        padding: 0.25rem 0 0.25rem 1rem;
+        position: relative;
+    }
+    .project-card-features li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--card-accent, var(--accent-cyan));
+    }
+    .project-card-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--card-accent, var(--accent-cyan));
+        text-decoration: none;
+        transition: all 0.2s;
+        margin-top: auto;
+    }
+    .project-card-link:hover {
+        transform: translateX(4px);
+    }
+    @media (max-width: 1024px) {
+        .projects-showcase-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+        .projects-showcase-grid { grid-template-columns: 1fr; }
+    }
+
     /* --- Platform features (compact visual) --- */
     .platform-section {
         padding: 4rem 0;
@@ -598,6 +709,7 @@
             </li>
         </ul>
     </li>
+    <li><a href="poc-access.html" class="poc-highlight">PoC Demo</a></li>
     <li><a href="job-openings.html">Careers</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li style="display:flex;align-items:center;gap:8px;">
@@ -621,6 +733,7 @@
     <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer"><img src="Cambiologics_logo.png" alt="CamBiologics" class="mobile-dropdown-logo"> HealthCare (Cancer Research)</a></li>
     <li class="mobile-dropdown-item"><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="mobile-dropdown-logo"> Precision AI</a></li>
     <li class="mobile-dropdown-item"><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="mobile-dropdown-logo"> Community</a></li>
+    <li><a href="poc-access.html" class="poc-highlight">PoC Demo</a></li>
     <li><a href="job-openings.html">Careers</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li>
@@ -788,6 +901,62 @@
                     <div class="service-tags">
                         <span>Courses</span><span>Labs</span><span>Certifications</span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FLAGSHIP PROJECTS ===== -->
+        <section class="projects-showcase">
+            <div class="section-title">Our Flagship Projects</div>
+            <div class="section-subtitle">Enterprise AI solutions built by SustainSys &mdash; from proof-of-concept to production.</div>
+
+            <div class="projects-showcase-grid">
+                <!-- NL2SQL Analytics -->
+                <div class="project-card" style="--card-accent: #d97706;">
+                    <div class="project-card-top">
+                        <img src="nl2sql_logo.svg" alt="NL2SQL" class="project-card-logo">
+                        <span class="project-card-badge" style="background: rgba(217,119,6,0.1); color: #d97706;">Flagship</span>
+                    </div>
+                    <h4>NL2SQL Analytics Platform</h4>
+                    <p>Query databases in plain English. No SQL knowledge required. Built for regulated industries with 12-point security guardrails and full audit trails.</p>
+                    <ul class="project-card-features">
+                        <li>Natural language to SQL with RAG pipeline</li>
+                        <li>Self-healing queries &amp; 12 guardrail checks</li>
+                        <li>100% on-premise, zero data leakage</li>
+                    </ul>
+                    <a href="nl2sql-sales-deck.html" class="project-card-link">Explore NL2SQL &rsaquo;</a>
+                </div>
+
+                <!-- RegTech AI -->
+                <div class="project-card" style="--card-accent: var(--accent-purple);">
+                    <div class="project-card-top">
+                        <img src="logo_only.png" alt="SustainSys" class="project-card-logo">
+                        <span class="project-card-badge" style="background: rgba(124,58,237,0.1); color: #7c3aed;">New</span>
+                    </div>
+                    <h4>RegTech AI Solutions</h4>
+                    <p>AI-driven regulatory intelligence for global banks. Navigate reporting complexity across 11 jurisdictions and 200+ regulatory fields.</p>
+                    <ul class="project-card-features">
+                        <li>Frontier LLMs with RAG + CAG pipeline</li>
+                        <li>Regime-specific AI agents (EMIR, CFTC, MiFIR)</li>
+                        <li>Continuous regulatory change monitoring</li>
+                    </ul>
+                    <a href="ai-regtech-capabilities.html" class="project-card-link">Explore RegTech AI &rsaquo;</a>
+                </div>
+
+                <!-- AccountIQ -->
+                <div class="project-card" style="--card-accent: #009688;">
+                    <div class="project-card-top">
+                        <img src="logo_only.png" alt="SustainSys" class="project-card-logo">
+                        <span class="project-card-badge" style="background: rgba(0,150,136,0.1); color: #009688;">New</span>
+                    </div>
+                    <h4>AccountIQ</h4>
+                    <p>Privacy-first, on-device accounting assistant for UK businesses. VAT filing, reconciliation, and year-end tax &mdash; powered by local LLM inference.</p>
+                    <ul class="project-card-features">
+                        <li>Natural language document search</li>
+                        <li>VAT, month-end &amp; corp tax automation</li>
+                        <li>100% on-device, no cloud APIs</li>
+                    </ul>
+                    <a href="accountiq.html" class="project-card-link">Explore AccountIQ &rsaquo;</a>
                 </div>
             </div>
         </section>
