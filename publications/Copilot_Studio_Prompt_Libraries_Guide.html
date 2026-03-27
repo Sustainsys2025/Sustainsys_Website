@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copilot Studio & Prompt Libraries — Sustainsys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --border: #d8dde6;
+  --text: #2c3345;
+  --text-dim: #6b7489;
+  --accent: #6b2fa0;
+  --accent-light: #8b5fcf;
+  --ms-purple: #6b2fa0;
+  --ms-blue: #0078d4;
+  --ms-green: #107c10;
+  --ms-teal: #008272;
+  --ms-orange: #d47a00;
+  --ms-red: #d83b01;
+  --success: #2ea043;
+  --code-bg: #1e2030;
+  --sidebar-w: 280px;
+  --header-h: 56px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── HEADER ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 100;
+}
+
+.logo-area { display: flex; align-items: center; gap: 12px; }
+
+.logo-mark {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.logo-mark img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logo-text { font-weight: 600; font-size: 14px; color: var(--text); letter-spacing: -0.02em; }
+.logo-text span { color: var(--text-dim); font-weight: 400; margin-left: 8px; padding-left: 8px; border-left: 1px solid var(--border); }
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+.progress-ring { position: relative; width: 36px; height: 36px; }
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring circle { fill: none; stroke-width: 3; }
+.progress-ring .bg-ring { stroke: var(--border); }
+.progress-ring .fg-ring { stroke: var(--ms-purple); stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.progress-label { position: absolute; inset: 0; display: grid; place-items: center; font-size: 10px; font-weight: 600; color: var(--ms-purple); }
+
+/* ── SIDEBAR ── */
+aside {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 20px 0;
+  z-index: 90;
+}
+
+aside::-webkit-scrollbar { width: 4px; }
+aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.nav-section { padding: 0 16px; margin-bottom: 8px; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); padding: 8px 12px; font-weight: 600; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-radius: 8px; cursor: pointer;
+  transition: all 0.2s; font-size: 13px; color: var(--text-dim); text-decoration: none;
+}
+
+.nav-item:hover { background: var(--surface-2); color: var(--text); }
+.nav-item.active { background: #6b2fa015; color: var(--ms-purple); }
+
+.nav-step {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border); display: grid; place-items: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; transition: all 0.3s;
+}
+
+.nav-item.active .nav-step { border-color: var(--ms-purple); background: var(--ms-purple); color: #fff; }
+.nav-item.completed .nav-step { border-color: var(--success); background: var(--success); color: #fff; }
+.nav-item.completed .nav-step::after { content: "✓"; }
+
+/* ── MAIN ── */
+main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--header-h);
+  padding: 48px 2rem 120px;
+}
+
+.content-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.step-section { display: none; animation: fadeIn 0.4s ease; }
+.step-section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; background: #6b2fa018; color: var(--ms-purple);
+  border-radius: 20px; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+}
+
+h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 36px; font-weight: 400; color: #1a2035;
+  line-height: 1.2; margin-bottom: 8px;
+}
+
+h1 em { font-style: italic; color: var(--ms-purple); }
+
+.step-subtitle { color: var(--text-dim); font-size: 16px; margin-bottom: 36px; line-height: 1.6; }
+
+h2 {
+  font-size: 20px; font-weight: 600; color: #1a2035;
+  margin: 36px 0 16px; display: flex; align-items: center; gap: 10px;
+}
+
+h2 .h2-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: grid; place-items: center; font-size: 14px; flex-shrink: 0;
+}
+
+h3 { font-size: 16px; font-weight: 600; color: #2c3345; margin: 24px 0 12px; }
+
+p { margin-bottom: 16px; }
+
+/* ── CALLOUTS ── */
+.callout { border-radius: 10px; padding: 16px 20px; margin: 20px 0; font-size: 14px; line-height: 1.6; }
+.callout-info { background: #0078d40f; border-left: 3px solid var(--ms-blue); }
+.callout-warning { background: #d47a000f; border-left: 3px solid var(--ms-orange); }
+.callout-success { background: #2ea0430f; border-left: 3px solid var(--success); }
+.callout-purple { background: #6b2fa00f; border-left: 3px solid var(--ms-purple); }
+.callout-title { font-weight: 600; margin-bottom: 4px; color: #1a2035; }
+
+/* ── CODE BLOCKS ── */
+.code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; margin: 16px 0; overflow: hidden; }
+.code-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: #262d3a; border-bottom: 1px solid #3d4450; font-size: 12px; color: #8b949e; }
+.code-header .filename { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #e6edf3; }
+.copy-btn { background: none; border: 1px solid #3d4450; color: #8b949e; padding: 3px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+.copy-btn:hover { border-color: var(--ms-purple); color: var(--accent-light); }
+.code-content { padding: 16px; overflow-x: auto; font-size: 13px; }
+.code-content pre { font-family: 'JetBrains Mono', monospace; line-height: 1.7; white-space: pre; color: #e6edf3; }
+.code-content .comment { color: #6e7681; }
+.code-content .keyword { color: #ff7b72; }
+.code-content .string { color: #a5d6ff; }
+.code-content .func { color: #d2a8ff; }
+.code-content .variable { color: #79c0ff; }
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--surface-2); padding: 2px 7px; border-radius: 4px;
+  font-size: 13px; color: #0550ae;
+}
+
+/* ── INSTRUCTIONS ── */
+.instructions { counter-reset: inst; margin: 16px 0; }
+.inst-item { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+.inst-num { counter-increment: inst; width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--ms-purple); flex-shrink: 0; margin-top: 2px; }
+.inst-num::after { content: counter(inst); }
+.inst-text { flex: 1; }
+
+/* ── FLOW DIAGRAM ── */
+.flow-diagram {
+  display: flex; align-items: center; gap: 0; margin: 24px 0; padding: 24px;
+  background: var(--surface); border-radius: 12px; border: 1px solid var(--border);
+  overflow-x: auto; justify-content: center; flex-wrap: wrap;
+}
+
+.flow-box { padding: 10px 18px; border-radius: 8px; font-size: 12px; font-weight: 600; text-align: center; white-space: nowrap; border: 1px solid; }
+.flow-arrow { font-size: 18px; color: var(--text-dim); margin: 0 8px; }
+.flow-purple { background: #6b2fa015; border-color: #6b2fa040; color: var(--ms-purple); }
+.flow-blue { background: #0078d415; border-color: #0078d440; color: var(--ms-blue); }
+.flow-green { background: #107c1015; border-color: #107c1040; color: var(--ms-green); }
+.flow-teal { background: #00827215; border-color: #00827240; color: var(--ms-teal); }
+
+/* ── TABLE ── */
+.info-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+.info-table th, .info-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.info-table th { background: var(--surface); font-weight: 600; color: var(--text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+.info-table td { color: var(--text-dim); }
+.info-table code { font-size: 12px; }
+
+/* ── CARDS GRID ── */
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.concept-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; transition: all 0.2s;
+}
+.concept-card:hover { border-color: var(--ms-purple); box-shadow: 0 2px 12px #6b2fa010; }
+.concept-card h4 { font-size: 15px; font-weight: 600; color: #1a2035; margin-bottom: 6px; }
+.concept-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 0; line-height: 1.6; }
+.card-icon { font-size: 24px; margin-bottom: 10px; display: block; }
+
+/* ── NAV BUTTONS ── */
+.nav-buttons { display: flex; justify-content: space-between; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+.nav-btn { padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-family: 'DM Sans', sans-serif; }
+.nav-btn-prev { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+.nav-btn-prev:hover { border-color: var(--text-dim); }
+.nav-btn-next { background: var(--ms-purple); color: #fff; }
+.nav-btn-next:hover { filter: brightness(1.15); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── CHECKBOX ── */
+.step-complete-check {
+  display: flex; align-items: center; gap: 10px; margin-top: 32px;
+  padding: 14px 18px; background: var(--surface); border-radius: 10px;
+  border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
+}
+.step-complete-check:hover { border-color: var(--success); }
+.step-complete-check input { width: 18px; height: 18px; accent-color: var(--success); cursor: pointer; }
+.step-complete-check label { font-weight: 600; font-size: 14px; cursor: pointer; }
+
+strong, b { color: #1a2035; }
+a { color: var(--ms-purple); text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin-bottom: 6px; }
+
+/* ── COMPARISON BOX ── */
+.compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.compare-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.compare-box h4 { margin-bottom: 8px; color: #1a2035; }
+.compare-box.lite { border-top: 3px solid var(--ms-blue); }
+.compare-box.full { border-top: 3px solid var(--ms-purple); }
+
+@media (max-width: 900px) {
+  aside { display: none; }
+  main { margin-left: 0; padding: 32px 20px 100px; }
+  .card-grid, .compare-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo-mark"><img src="https://sustainsys.co.uk/logo_only.png" alt="Sustainsys"></div>
+    <div class="logo-text">
+      Sustainsys AI Academy
+      <span>Copilot Studio & Prompt Libraries</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="progress-ring">
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <circle class="bg-ring" cx="18" cy="18" r="15"/>
+        <circle class="fg-ring" id="progressCircle" cx="18" cy="18" r="15"
+          stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
+      </svg>
+      <div class="progress-label" id="progressLabel">0%</div>
+    </div>
+  </div>
+</header>
+
+<aside>
+  <div class="nav-section">
+    <div class="nav-section-title">Copilot Studio</div>
+    <a class="nav-item active" data-step="0" onclick="goToStep(0)"><div class="nav-step">0</div>The Big Picture</a>
+    <a class="nav-item" data-step="1" onclick="goToStep(1)"><div class="nav-step">1</div>Lite vs Full</a>
+    <a class="nav-item" data-step="2" onclick="goToStep(2)"><div class="nav-step">2</div>Build Your First Agent</a>
+    <a class="nav-item" data-step="3" onclick="goToStep(3)"><div class="nav-step">3</div>Knowledge Sources</a>
+    <a class="nav-item" data-step="4" onclick="goToStep(4)"><div class="nav-step">4</div>Topics & Conversation Flow</a>
+    <a class="nav-item" data-step="5" onclick="goToStep(5)"><div class="nav-step">5</div>Actions & Tools</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Prompt Libraries</div>
+    <a class="nav-item" data-step="6" onclick="goToStep(6)"><div class="nav-step">6</div>What Are Prompts?</a>
+    <a class="nav-item" data-step="7" onclick="goToStep(7)"><div class="nav-step">7</div>Build a Prompt Library</a>
+    <a class="nav-item" data-step="8" onclick="goToStep(8)"><div class="nav-step">8</div>Knowledge Packs</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Go Further</div>
+    <a class="nav-item" data-step="9" onclick="goToStep(9)"><div class="nav-step">9</div>Multi-Agent & MCP</a>
+    <a class="nav-item" data-step="10" onclick="goToStep(10)"><div class="nav-step">10</div>What's Next</a>
+  </div>
+</aside>
+
+<main>
+<div class="content-wrap">
+
+<!-- ═══ STEP 0: BIG PICTURE ═══ -->
+<section class="step-section active" data-step="0">
+  <div class="step-badge">Overview</div>
+  <h1>Custom Copilots, Agents & <em>Prompt Libraries</em></h1>
+  <p class="step-subtitle">Learn how to build AI agents with Microsoft Copilot Studio and create reusable prompt libraries that your organisation can share and standardise.</p>
+
+  <h2>What is Copilot Studio?</h2>
+  <p>Copilot Studio is Microsoft's low-code/no-code platform for building custom AI agents. These agents can answer questions from your business data, automate workflows, and integrate directly into Teams, SharePoint, websites, or Microsoft 365 Copilot itself.</p>
+  <p>Think of it as <strong>building your own specialised ChatGPT</strong> — but one that knows your company's data, follows your rules, and can take actions in your systems.</p>
+
+  <h2>The Microsoft Agent Landscape</h2>
+
+  <div class="card-grid">
+    <div class="concept-card">
+      <span class="card-icon">🏗️</span>
+      <h4>Agent Builder (in M365 Copilot)</h4>
+      <p>Quick way to create simple agents right inside Microsoft 365 Copilot using natural language. Great for personal or team productivity agents.</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">🎨</span>
+      <h4>Copilot Studio</h4>
+      <p>Full low-code platform for building sophisticated agents with custom knowledge, topics, actions, and multi-channel deployment.</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">🧑‍💻</span>
+      <h4>Azure AI Foundry</h4>
+      <p>Pro-code platform for developers building complex AI solutions with custom models, fine-tuning, and advanced orchestration.</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">🔌</span>
+      <h4>Agents SDK / Toolkit</h4>
+      <p>Open-source dev kit for building agents in code (TypeScript/Python) with full control over the agent framework.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-purple">
+    <div class="callout-title">🎯 Where We're Focusing</div>
+    This guide covers <strong>Copilot Studio</strong> (the low-code platform) and <strong>Prompt Libraries</strong> (reusable prompts across M365 Copilot and Copilot Studio). These are the most accessible starting points and the fastest way to deliver business value.
+  </div>
+
+  <h2>What You'll Learn</h2>
+  <ul>
+    <li>How to build a custom agent from scratch in Copilot Studio</li>
+    <li>How to connect knowledge sources (SharePoint, websites, Dataverse)</li>
+    <li>How topics and conversation flows work</li>
+    <li>How to add actions (Power Automate, connectors, APIs)</li>
+    <li>How to create and organise a reusable prompt library</li>
+    <li>How to build knowledge packs for consistent AI responses</li>
+    <li>How multi-agent orchestration and MCP integration works</li>
+  </ul>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-0" onchange="toggleComplete(0)">
+    <label for="check-0">I understand the landscape — let's go!</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" disabled>← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(1)">Next: Lite vs Full →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 1: LITE VS FULL ═══ -->
+<section class="step-section" data-step="1">
+  <div class="step-badge">Step 1</div>
+  <h1>Copilot Studio: <em>Lite vs Full</em></h1>
+  <p class="step-subtitle">Since late 2025, Microsoft offers two tiers. Understanding which to use saves licensing headaches.</p>
+
+  <div class="compare-row">
+    <div class="compare-box lite">
+      <h4>🔹 Copilot Studio Lite</h4>
+      <p><strong>Included with</strong> Microsoft 365 Copilot licence</p>
+      <ul>
+        <li>Build simple internal agents</li>
+        <li>Knowledge from SharePoint, websites, files</li>
+        <li>Deploy to Teams and M365 Copilot</li>
+        <li>No usage limits for internal agents</li>
+        <li>No extra cost</li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px"><strong>Best for:</strong> FAQ bots, helpdesks, onboarding assistants, team knowledge agents</p>
+    </div>
+    <div class="compare-box full">
+      <h4>🔸 Copilot Studio Full</h4>
+      <p><strong>Requires</strong> separate licence + Azure subscription</p>
+      <ul>
+        <li>Everything in Lite, plus:</li>
+        <li>Autonomous agents (trigger-based)</li>
+        <li>External channel deployment (websites, apps)</li>
+        <li>1,400+ external connectors</li>
+        <li>Multi-agent orchestration</li>
+        <li>Advanced Power Automate integration</li>
+        <li>Pay-as-you-go with Copilot Credits</li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px"><strong>Best for:</strong> Customer-facing bots, complex workflows, external integrations, autonomous processes</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Starting Out?</div>
+    If your organisation already has Microsoft 365 Copilot licences, start with Lite — it's included and you can build agents immediately. Move to Full when you need external channels or advanced integrations.
+  </div>
+
+  <h2>How to Access Copilot Studio</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Go to <strong><a href="https://copilotstudio.microsoft.com" target="_blank">copilotstudio.microsoft.com</a></strong></div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Sign in with your Microsoft work or school account</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Select your <strong>environment</strong> (or use the default)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">You'll land on the <strong>Home</strong> page — ready to create agents</div></div>
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-1" onchange="toggleComplete(1)">
+    <label for="check-1">I understand the tiers and can access Copilot Studio ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(0)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(2)">Next: Build Your First Agent →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 2: BUILD FIRST AGENT ═══ -->
+<section class="step-section" data-step="2">
+  <div class="step-badge">Step 2</div>
+  <h1>Build Your <em>First Agent</em></h1>
+  <p class="step-subtitle">Create an agent in minutes using natural language — no code required.</p>
+
+  <h2>Creating the Agent</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">On the Copilot Studio home page, click <strong>"New agent"</strong> (or look for "Describe what your agent does")</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">
+      Type a natural language description of what you want. For example:<br>
+      <code>Help employees find answers about company HR policies, including leave, benefits, and onboarding procedures.</code>
+    </div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Copilot Studio auto-generates the <strong>name</strong>, <strong>description</strong>, and <strong>instructions</strong> from your description. You can edit all of these.</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Review the <strong>Overview</strong> page — this is your agent's home base</div></div>
+  </div>
+
+  <h2>The Instructions (System Prompt)</h2>
+  <p>The <strong>Instructions</strong> field is essentially the agent's system prompt — it defines personality, behaviour, and constraints. This can be up to 8,000 characters. Good instructions include:</p>
+  <ul>
+    <li><strong>Role</strong> — "You are a helpful HR assistant for Sustainsys Consulting"</li>
+    <li><strong>Tone</strong> — "Be professional but friendly, use UK English"</li>
+    <li><strong>Boundaries</strong> — "Only answer questions about HR policies. For other topics, redirect to the appropriate team"</li>
+    <li><strong>Format</strong> — "Keep answers concise. Use bullet points for lists. Always cite the source document"</li>
+  </ul>
+
+  <div class="callout callout-purple">
+    <div class="callout-title">🎯 Pro Tip: Instructions = Prompt Engineering</div>
+    This is where your prompt engineering skills pay off. The instructions guide every response the agent generates. Treat them like a detailed system prompt — be specific about what the agent should and shouldn't do, how it should format responses, and what tone to use.
+  </div>
+
+  <h2>Test As You Build</h2>
+  <p>Copilot Studio has a <strong>live test panel</strong> on the right side. After every change, click "Start new test session" and try asking questions. This is the fastest feedback loop — change instructions, test, refine, repeat.</p>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-2" onchange="toggleComplete(2)">
+    <label for="check-2">I've created my first agent and tested it ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(1)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(3)">Next: Knowledge Sources →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 3: KNOWLEDGE SOURCES ═══ -->
+<section class="step-section" data-step="3">
+  <div class="step-badge">Step 3</div>
+  <h1>Connect <em>Knowledge Sources</em></h1>
+  <p class="step-subtitle">Knowledge sources are what make your agent smart about your specific business data. Without them, the agent only has generic AI knowledge.</p>
+
+  <h2>Available Knowledge Types</h2>
+  <table class="info-table">
+    <tr><th>Source</th><th>What It Does</th><th>Best For</th></tr>
+    <tr><td><strong>Public Websites</strong></td><td>Searches URLs via Bing for relevant snippets</td><td>Product docs, public FAQs</td></tr>
+    <tr><td><strong>SharePoint</strong></td><td>Searches SharePoint sites, libraries, lists</td><td>Internal policies, handbooks, wikis</td></tr>
+    <tr><td><strong>OneDrive Files</strong></td><td>Upload specific files/folders</td><td>Specific documents, guides</td></tr>
+    <tr><td><strong>File Uploads</strong></td><td>Upload PDFs, DOCX, PPTX directly</td><td>Quick testing, small doc sets</td></tr>
+    <tr><td><strong>Dataverse</strong></td><td>Structured data tables + file columns</td><td>CRM data, business records, glossaries</td></tr>
+    <tr><td><strong>Graph Connectors</strong></td><td>External systems indexed in M365 Graph</td><td>ServiceNow, Salesforce, Jira, custom</td></tr>
+    <tr><td><strong>Outlook & Teams</strong></td><td>Emails, chats, channel messages</td><td>Context from communications</td></tr>
+  </table>
+
+  <h2>Adding Knowledge</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">In your agent, go to <strong>Knowledge</strong> page (or click "Add knowledge" on Overview)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Click <strong>"Add knowledge"</strong> and choose the source type</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">For SharePoint: enter the site URL or browse to select files/folders</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Give it a <strong>name</strong> and a <strong>detailed description</strong> — the description helps the AI decide when to search this source</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Click <strong>"Add to agent"</strong> and wait for indexing (5–30 minutes first time)</div></div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">⚠️ Descriptions Matter</div>
+    The knowledge source description is critical. When generative orchestration is enabled, the AI reads these descriptions to decide which source to search. Vague descriptions like "company stuff" will be deprioritised. Be specific: "HR policies including annual leave, sick pay, maternity/paternity leave, and flexible working arrangements for Sustainsys Consulting Ltd."
+  </div>
+
+  <h2>How It Works Under the Hood</h2>
+  <p>When you add knowledge, Copilot Studio:</p>
+  <ul>
+    <li><strong>Chunks</strong> uploaded files into smaller pieces for faster processing</li>
+    <li><strong>Creates vector embeddings</strong> for semantic search (stored in Dataverse)</li>
+    <li>When a user asks a question, it finds the <strong>most relevant chunks</strong> that match</li>
+    <li>Feeds those chunks to the LLM as context for generating the response</li>
+    <li>Returns the answer with <strong>citations</strong> back to the source</li>
+  </ul>
+  <p>This is essentially a <strong>managed RAG pipeline</strong> — the same architecture you've been building with ChromaDB and LlamaIndex, but handled by Microsoft's infrastructure.</p>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-3" onchange="toggleComplete(3)">
+    <label for="check-3">Knowledge sources added and working ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(2)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(4)">Next: Topics & Conversation Flow →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 4: TOPICS ═══ -->
+<section class="step-section" data-step="4">
+  <div class="step-badge">Step 4</div>
+  <h1>Topics & <em>Conversation Flow</em></h1>
+  <p class="step-subtitle">Topics are the building blocks of your agent's behaviour — think of them as "intents" with built-in conversation logic.</p>
+
+  <h2>What Are Topics?</h2>
+  <p>A <strong>topic</strong> is a discrete conversation path your agent can follow. It has:</p>
+  <ul>
+    <li><strong>Trigger phrases</strong> — what the user says to activate it (e.g., "book a meeting room", "reset my password")</li>
+    <li><strong>Conversation nodes</strong> — the steps: ask questions, show messages, call actions, branch based on conditions</li>
+    <li><strong>Variables</strong> — store user input and pass data between nodes</li>
+  </ul>
+
+  <h2>Two Orchestration Modes</h2>
+  <div class="compare-row">
+    <div class="compare-box lite">
+      <h4>Classic Orchestration</h4>
+      <p>Topics are matched by trigger phrases. The agent follows a structured conversation tree you design. Predictable and controlled.</p>
+      <p style="font-size:13px;margin-top:8px"><strong>Good for:</strong> Strict workflows, compliance scenarios, guided processes</p>
+    </div>
+    <div class="compare-box full">
+      <h4>Generative Orchestration</h4>
+      <p>The AI dynamically decides which topic/knowledge/action to use based on context. More flexible, more conversational.</p>
+      <p style="font-size:13px;margin-top:8px"><strong>Good for:</strong> Open-ended Q&A, knowledge assistants, natural conversations</p>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Most agents use both</div>
+    Generative orchestration handles open questions using knowledge sources, while specific topics kick in for structured workflows (like "submit a leave request" → collect dates → call Power Automate).
+  </div>
+
+  <h2>Creating a Topic</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Go to <strong>Topics</strong> in the left sidebar</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Click <strong>"+ Add a topic"</strong> → <strong>"From blank"</strong> (or use natural language to describe it)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Add <strong>trigger phrases</strong> — 5–10 variations of how users might start this conversation</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Build the flow using nodes: <strong>Message</strong> (show text), <strong>Question</strong> (ask user), <strong>Condition</strong> (branch), <strong>Action</strong> (call external service)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Test in the live panel and refine</div></div>
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-4" onchange="toggleComplete(4)">
+    <label for="check-4">I understand topics and orchestration modes ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(3)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(5)">Next: Actions & Tools →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 5: ACTIONS & TOOLS ═══ -->
+<section class="step-section" data-step="5">
+  <div class="step-badge">Step 5</div>
+  <h1>Actions, Tools & <em>Integrations</em></h1>
+  <p class="step-subtitle">Actions turn your agent from a Q&A bot into something that can actually do things — send emails, create tickets, update records.</p>
+
+  <h2>What Can Agents Do?</h2>
+  <table class="info-table">
+    <tr><th>Tool Type</th><th>Description</th><th>Example</th></tr>
+    <tr><td><strong>Power Automate Flows</strong></td><td>Run automated workflows</td><td>Submit a leave request, create a Jira ticket</td></tr>
+    <tr><td><strong>Connectors (1,400+)</strong></td><td>Pre-built integrations with external services</td><td>Query Salesforce, post to Slack, read from SAP</td></tr>
+    <tr><td><strong>Custom Connectors</strong></td><td>Connect to your own APIs</td><td>Call your internal REST API</td></tr>
+    <tr><td><strong>MCP Servers</strong></td><td>Model Context Protocol servers</td><td>Connect to any MCP-compatible tool</td></tr>
+    <tr><td><strong>Prompts</strong></td><td>Reusable AI prompt templates</td><td>Summarise, classify, extract data</td></tr>
+    <tr><td><strong>Code Interpreter</strong></td><td>Run Python for data analysis</td><td>Analyse uploaded CSV, create charts</td></tr>
+  </table>
+
+  <h2>Adding an Action</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Go to <strong>Tools</strong> tab (or the Actions section in a topic node)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Click <strong>"Add a tool"</strong> — browse connectors, flows, or create new</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">For pre-built connectors: search for the service (e.g., "Outlook", "SharePoint") and select the action</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Configure inputs (what data the action needs) and outputs (what it returns)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">With generative orchestration enabled, the agent can automatically decide when to use the action based on the user's intent</div></div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Power Automate = The Backbone</div>
+    For anything beyond simple data retrieval, Power Automate flows are the primary way to add capabilities. You can create a flow that does multiple steps (e.g., look up a user → check their leave balance → submit a request → send a confirmation email) and connect it as a single action to your agent.
+  </div>
+
+  <h2>Publishing Your Agent</h2>
+  <p>Once your agent is ready, you can deploy it to multiple channels:</p>
+  <ul>
+    <li><strong>Microsoft Teams</strong> — appears as a chat bot in Teams</li>
+    <li><strong>Microsoft 365 Copilot</strong> — accessible via @mention in Copilot</li>
+    <li><strong>SharePoint</strong> — embedded on intranet pages</li>
+    <li><strong>Websites</strong> — embed via iframe or Web Chat widget (Full tier)</li>
+    <li><strong>WhatsApp</strong> — connect via Twilio or direct (Full tier)</li>
+    <li><strong>Demo website</strong> — quick shareable link for testing</li>
+  </ul>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-5" onchange="toggleComplete(5)">
+    <label for="check-5">I understand actions and publishing ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(4)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(6)">Next: What Are Prompts? →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 6: PROMPTS ═══ -->
+<section class="step-section" data-step="6">
+  <div class="step-badge">Step 6</div>
+  <h1>Understanding <em>Prompts</em> in Microsoft's Ecosystem</h1>
+  <p class="step-subtitle">Microsoft has two related but distinct "prompt" concepts. Let's untangle them.</p>
+
+  <h2>Prompt Gallery (M365 Copilot)</h2>
+  <p>The <strong>Prompt Gallery</strong> lives inside Microsoft 365 Copilot (the chat experience). It's a catalogue of ready-made prompts that help users get more out of Copilot. Think of it as a recipe book for Copilot users.</p>
+  <ul>
+    <li><strong>Microsoft-authored prompts</strong> — pre-built for Word, Excel, PowerPoint, Outlook, Teams</li>
+    <li><strong>User-created prompts</strong> — you can save your own effective prompts</li>
+    <li><strong>Shared prompts</strong> — share with your team or organisation via collections</li>
+    <li>Stored securely in <strong>Microsoft 365 Substrate</strong> data store</li>
+  </ul>
+  <p>Access it at <strong><a href="https://m365.cloud.microsoft/copilot-prompts" target="_blank">m365.cloud.microsoft/copilot-prompts</a></strong> or within M365 Copilot.</p>
+
+  <h2>Prompt Builder (Copilot Studio)</h2>
+  <p>The <strong>Prompt Builder</strong> in Copilot Studio is more powerful — it lets you create <strong>reusable, modular AI prompts</strong> that guide agents to perform specific tasks. These are essentially prompt templates with dynamic inputs.</p>
+  <ul>
+    <li>Create prompts for: summarising, classifying, extracting, translating, sentiment analysis</li>
+    <li>Use <strong>input variables</strong> for dynamic context at runtime</li>
+    <li>Add <strong>knowledge data</strong> to ground responses</li>
+    <li>Use <strong>Power Fx</strong> logic inside prompt inputs for calculations and formatting</li>
+    <li>Share prompts with other makers and reuse across agents and flows</li>
+  </ul>
+
+  <div class="callout callout-purple">
+    <div class="callout-title">🔗 How They Connect</div>
+    <strong>Prompt Gallery</strong> = end-user prompts (employees using Copilot day-to-day).<br>
+    <strong>Prompt Builder</strong> = maker/developer prompts (building agents and automations).<br>
+    A well-organised prompt library strategy covers both audiences.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-6" onchange="toggleComplete(6)">
+    <label for="check-6">I understand both prompt systems ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(5)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(7)">Next: Build a Prompt Library →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 7: BUILD PROMPT LIBRARY ═══ -->
+<section class="step-section" data-step="7">
+  <div class="step-badge">Step 7</div>
+  <h1>Build a <em>Prompt Library</em></h1>
+  <p class="step-subtitle">A structured collection of reusable prompts that your organisation can share, standardise, and continuously improve.</p>
+
+  <h2>Organising Your Library</h2>
+  <p>A good prompt library is organised by <strong>function</strong>, not by tool. Group prompts into categories your teams actually use:</p>
+
+  <div class="card-grid">
+    <div class="concept-card">
+      <span class="card-icon">📊</span>
+      <h4>Reporting & Analysis</h4>
+      <p>"Summarise this quarterly report highlighting risks and opportunities" / "Extract KPIs from this spreadsheet"</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">✍️</span>
+      <h4>Content Creation</h4>
+      <p>"Draft a client proposal based on these requirements" / "Write a LinkedIn post about this achievement"</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">🎯</span>
+      <h4>Decision Support</h4>
+      <p>"Compare these two vendor proposals on cost, features, and risk" / "Assess this CV against the job spec"</p>
+    </div>
+    <div class="concept-card">
+      <span class="card-icon">📧</span>
+      <h4>Communication</h4>
+      <p>"Draft a follow-up email to [client] about [project]" / "Summarise this email thread for my manager"</p>
+    </div>
+  </div>
+
+  <h2>Creating a Prompt in Copilot Studio</h2>
+  <div class="instructions">
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">In Copilot Studio, navigate to <strong>Prompts</strong> (under AI section or via the Prompt Library)</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Click <strong>"Add New Prompt"</strong></div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Write your prompt instruction clearly. For example:
+      <div class="code-block">
+        <div class="code-content"><pre>You are a document summariser for Sustainsys Consulting.
+
+Given the following document content:
+[DocumentContent]
+
+Provide a summary that includes:
+- Key findings (3-5 bullet points)
+- Risks identified
+- Recommended next steps
+
+Keep the summary under 300 words. Use UK English.
+Format as markdown with clear headings.</pre></div>
+      </div>
+    </div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Add <strong>input variables</strong> — replace dynamic parts with variables like <code>[DocumentContent]</code>, <code>[ClientName]</code>, <code>[TimeFrame]</code></div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text">Test the prompt with sample data and refine</div></div>
+    <div class="inst-item"><div class="inst-num"></div><div class="inst-text"><strong>Save</strong> and share with other makers in your environment</div></div>
+  </div>
+
+  <h2>Sharing via M365 Prompt Gallery</h2>
+  <p>For end-user prompts (not agent-builder prompts), use the M365 Prompt Gallery:</p>
+  <ul>
+    <li>Create prompts in Microsoft 365 Copilot and <strong>save</strong> them</li>
+    <li>Click <strong>"Share"</strong> to share with specific teams or security groups</li>
+    <li>Shared prompts appear in colleagues' Prompt Gallery under "Shared with me"</li>
+    <li>Admins can track usage via Copilot analytics</li>
+  </ul>
+
+  <div class="callout callout-success">
+    <div class="callout-title">✅ Best Practices</div>
+    <strong>Be specific</strong> — vague prompts get vague results.<br>
+    <strong>Include format specs</strong> — tell it exactly how you want the output.<br>
+    <strong>Add context</strong> — "for Sustainsys Consulting" gives better results than generic instructions.<br>
+    <strong>Version your prompts</strong> — track what changed and why.<br>
+    <strong>Review regularly</strong> — refine your best prompts based on actual usage.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-7" onchange="toggleComplete(7)">
+    <label for="check-7">I can create and organise prompts ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(6)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(8)">Next: Knowledge Packs →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 8: KNOWLEDGE PACKS ═══ -->
+<section class="step-section" data-step="8">
+  <div class="step-badge">Step 8</div>
+  <h1>Reusable <em>Knowledge Packs</em></h1>
+  <p class="step-subtitle">Combine curated knowledge sources + tested prompts + agent instructions into reusable packages that can be deployed across multiple agents.</p>
+
+  <h2>What is a Knowledge Pack?</h2>
+  <p>A knowledge pack is a <strong>reusable bundle</strong> that packages together everything an agent needs to handle a specific domain:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-box flow-purple">📄 Curated Documents</div>
+    <div class="flow-arrow">+</div>
+    <div class="flow-box flow-blue">📝 Prompt Templates</div>
+    <div class="flow-arrow">+</div>
+    <div class="flow-box flow-green">⚙️ Agent Instructions</div>
+    <div class="flow-arrow">+</div>
+    <div class="flow-box flow-teal">📊 Glossary / Context</div>
+    <div class="flow-arrow">=</div>
+    <div class="flow-box flow-purple" style="font-size:14px">📦 Knowledge Pack</div>
+  </div>
+
+  <h2>Building a Knowledge Pack</h2>
+  <p>Here's a practical pattern for creating a reusable knowledge pack using the tools available today:</p>
+
+  <h3>1. Curate Your Documents</h3>
+  <p>Gather the authoritative documents for your domain into a <strong>dedicated SharePoint folder or document library</strong>. Keep it focused — an HR knowledge pack should only have HR documents, not the entire company wiki.</p>
+
+  <h3>2. Create a Glossary</h3>
+  <p>Build a glossary of domain-specific terms. In Copilot Studio, this can be a CSV file in Dataverse with columns for term, definition, and context. This helps the agent correctly interpret industry jargon — especially important in fields like financial services and healthcare.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="filename">Example: glossary.csv</span></div>
+    <div class="code-content"><pre><span class="variable">Term</span>,<span class="variable">Definition</span>,<span class="variable">Context</span>
+BAU,Business As Usual,Operations and project management
+SLA,Service Level Agreement,Client contracts and service delivery
+RAG,Red Amber Green status,Project reporting (not Retrieval Augmented Generation)
+MoSCoW,Must Should Could Won't,Requirements prioritisation method</pre></div>
+  </div>
+
+  <h3>3. Write Domain-Specific Instructions</h3>
+  <p>Create a set of agent instructions tailored to this domain. These can be saved and reused across multiple agents:</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="filename">Example: HR Agent Instructions</span></div>
+    <div class="code-content"><pre><span class="comment"># HR Policy Assistant Instructions</span>
+
+You are an HR policy assistant for Sustainsys Consulting Ltd.
+
+<span class="comment">## Behaviour Rules</span>
+- Always cite the specific policy document and section
+- If a policy has changed recently, flag that it may have updated
+- For sensitive topics (disciplinary, redundancy), suggest speaking
+  to HR directly rather than relying solely on policy documents
+- Use UK employment law terminology
+
+<span class="comment">## Response Format</span>
+- Lead with a direct answer
+- Follow with the relevant policy details
+- End with "Source: [document name], Section [X]"
+
+<span class="comment">## Glossary Reference</span>
+- Refer to {Global.Glossary} for term definitions
+- When users use acronyms, expand them on first use</pre></div>
+  </div>
+
+  <h3>4. Bundle Prompt Templates</h3>
+  <p>Create prompts specific to this domain and save them in the Prompt Library:</p>
+  <ul>
+    <li>"Summarise this HR policy for a new starter" (with variable for policy document)</li>
+    <li>"Compare two policy versions and highlight what changed"</li>
+    <li>"Draft a response to this employee query about [topic]"</li>
+  </ul>
+
+  <h3>5. Package as a Copilot Studio Solution</h3>
+  <p>In Power Platform, you can export your agent (with all its knowledge, topics, and prompts) as a <strong>solution</strong>. This solution can be imported into other environments — making it a true reusable knowledge pack.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 File Grouping (Preview)</div>
+    Copilot Studio now supports <strong>file grouping</strong> — upload multiple files, group them, name the group, and set instructions per group. This makes it easier to organise knowledge packs with multiple document sets.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-8" onchange="toggleComplete(8)">
+    <label for="check-8">I understand knowledge packs ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(7)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(9)">Next: Multi-Agent & MCP →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 9: MULTI-AGENT & MCP ═══ -->
+<section class="step-section" data-step="9">
+  <div class="step-badge">Step 9</div>
+  <h1>Multi-Agent Orchestration & <em>MCP</em></h1>
+  <p class="step-subtitle">For complex business processes, one agent isn't enough. Copilot Studio supports routing tasks to specialised agents.</p>
+
+  <h2>Multi-Agent Orchestration</h2>
+  <p>With multi-agent orchestration, you can build a system where a <strong>primary agent</strong> routes tasks to <strong>specialised agents</strong> based on the user's intent:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-box flow-blue">👤 User Query</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-purple">🎯 Orchestrator Agent</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-green">📋 HR Agent</div>
+  </div>
+  <div class="flow-diagram" style="margin-top:-12px">
+    <div class="flow-box flow-purple" style="visibility:hidden">🎯 Orchestrator</div>
+    <div class="flow-arrow" style="visibility:hidden">→</div>
+    <div class="flow-box flow-purple">🎯 Orchestrator Agent</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-teal">🔧 IT Support Agent</div>
+  </div>
+  <div class="flow-diagram" style="margin-top:-12px">
+    <div class="flow-box flow-purple" style="visibility:hidden">🎯 Orchestrator</div>
+    <div class="flow-arrow" style="visibility:hidden">→</div>
+    <div class="flow-box flow-purple">🎯 Orchestrator Agent</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-blue">💰 Finance Agent</div>
+  </div>
+
+  <p>Each specialist agent has its own knowledge pack, instructions, and tools. The orchestrator decides which specialist to invoke based on the user's query.</p>
+
+  <h2>MCP in Copilot Studio</h2>
+  <p>Copilot Studio now supports <strong>Model Context Protocol (MCP)</strong> — the same standard you've been working with in your LangGraph projects. This means:</p>
+  <ul>
+    <li>You can connect MCP servers as <strong>tools</strong> for your agents</li>
+    <li>Agents can discover and use MCP-exposed capabilities at runtime</li>
+    <li>Your custom MCP servers (like the ones you built for Gmail/weather) could potentially be connected to Copilot Studio agents</li>
+    <li>This bridges the gap between your Python/LangGraph agent work and Microsoft's low-code platform</li>
+  </ul>
+
+  <div class="callout callout-purple">
+    <div class="callout-title">🔗 The Connection to Your Work</div>
+    This is where your agentic AI architecture knowledge (LangGraph, MCP, CrewAI) directly maps to enterprise patterns. Copilot Studio's multi-agent orchestration is conceptually the same as your LangGraph supervisor pattern, but with a visual low-code builder and enterprise governance built in.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-9" onchange="toggleComplete(9)">
+    <label for="check-9">I understand multi-agent and MCP patterns ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(8)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(10)">Next: What's Next →</button>
+  </div>
+</section>
+
+<!-- ═══ STEP 10: WHAT'S NEXT ═══ -->
+<section class="step-section" data-step="10">
+  <div class="step-badge">Complete</div>
+  <h1>What's <em>Next?</em></h1>
+  <p class="step-subtitle">You now understand the full landscape of Microsoft's agent platform and prompt ecosystem.</p>
+
+  <h2>Hands-On Next Steps</h2>
+  <table class="info-table">
+    <tr><th>Action</th><th>Where</th></tr>
+    <tr><td>Build a simple knowledge agent</td><td><a href="https://copilotstudio.microsoft.com" target="_blank">Copilot Studio</a></td></tr>
+    <tr><td>Explore pre-built prompts</td><td><a href="https://m365.cloud.microsoft/copilot-prompts" target="_blank">M365 Prompt Gallery</a></td></tr>
+    <tr><td>Try the Agent Builder</td><td>Inside Microsoft 365 Copilot → "New agent"</td></tr>
+    <tr><td>Test Graph API calls in browser</td><td><a href="https://developer.microsoft.com/graph/graph-explorer" target="_blank">Graph Explorer</a></td></tr>
+    <tr><td>Read the official learning path</td><td><a href="https://learn.microsoft.com/en-us/training/paths/create-extend-custom-copilots-microsoft-copilot-studio/" target="_blank">MS Learn: Create agents</a></td></tr>
+  </table>
+
+  <h2>Consulting Opportunities</h2>
+  <p>These skills map directly to consulting engagements you could offer through Sustainsys:</p>
+  <ul>
+    <li><strong>Agent Assessment</strong> — audit a client's M365 environment and identify high-value agent use cases</li>
+    <li><strong>Knowledge Pack Development</strong> — build domain-specific knowledge packs for financial services, healthcare, biosciences</li>
+    <li><strong>Prompt Library Strategy</strong> — design and deploy organisation-wide prompt libraries with governance</li>
+    <li><strong>Custom Agent Development</strong> — build sophisticated agents with Power Automate integration</li>
+    <li><strong>Bridge Building</strong> — connect custom Python/LangGraph solutions to Copilot Studio via MCP</li>
+  </ul>
+
+  <h2>Key Resources</h2>
+  <ul>
+    <li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/" target="_blank">Copilot Studio documentation</a></li>
+    <li><a href="https://adoption.microsoft.com/en-us/ai-agents/copilot-studio/" target="_blank">Agent adoption resources</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/kit-overview" target="_blank">Copilot Studio Kit</a> — testing, governance, analytics tools</li>
+    <li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/prompts-overview" target="_blank">Prompts overview</a></li>
+    <li><a href="https://deepwiki.com/microsoft/skills-for-copilot-studio" target="_blank">Skills for Copilot Studio (community)</a></li>
+  </ul>
+
+  <div class="callout callout-success">
+    <div class="callout-title">🎉 Well Done!</div>
+    You now have a solid understanding of Microsoft's agent and prompt ecosystem — from Copilot Studio agents and knowledge sources to reusable prompt libraries and multi-agent orchestration. Combined with your Graph API skills from the previous guide, you're well positioned to build end-to-end Microsoft AI solutions.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-10" onchange="toggleComplete(10)">
+    <label for="check-10">Guide complete — ready to build! ✓</label>
+  </div>
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(9)">← Previous</button>
+    <button class="nav-btn nav-btn-next" disabled>You're All Set! 🎉</button>
+  </div>
+</section>
+
+</div><!-- .content-wrap -->
+</main>
+
+<script>
+let currentStep = 0;
+const totalSteps = 11;
+const completed = new Set();
+
+function goToStep(n) {
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(s => s.classList.remove('active'));
+  document.querySelector(`.step-section[data-step="${n}"]`).classList.add('active');
+  document.querySelector(`.nav-item[data-step="${n}"]`).classList.add('active');
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleComplete(step) {
+  const cb = document.getElementById(`check-${step}`);
+  if (cb.checked) completed.add(step); else completed.delete(step);
+  updateProgress();
+  updateNav();
+}
+
+function updateProgress() {
+  const pct = Math.round((completed.size / totalSteps) * 100);
+  const offset = 94.25 - (pct / 100) * 94.25;
+  document.getElementById('progressCircle').style.strokeDashoffset = offset;
+  document.getElementById('progressLabel').textContent = pct + '%';
+}
+
+function updateNav() {
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const step = parseInt(item.dataset.step);
+    item.classList.toggle('completed', completed.has(step));
+  });
+}
+
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('pre').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+</script>
+
+<!-- FOOTER -->
+<footer style="padding:3rem 0;border-top:1px solid var(--border);text-align:center;margin-top:2rem;">
+  <div style="max-width:800px;margin:0 auto;padding:0 2rem;">
+    <div style="display:inline-flex;align-items:center;gap:0.6rem;margin-bottom:1rem;">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="Sustainsys" style="height:30px;width:auto;border-radius:4px;">
+      <span style="font-weight:700;font-size:0.9rem;color:var(--text);">Sustain<span style="color:var(--accent);">sys</span></span>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-dim);margin:0.3rem 0;">AI Academy · Copilot Studio & Prompt Libraries · Technical Guide</p>
+    <p style="font-size:0.82rem;color:var(--text-dim);margin:0.3rem 0;">Microsoft Copilot Studio · Power Platform · Dataverse · Azure AI</p>
+    <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+      <a href="https://sustainsys.co.uk" style="color:var(--accent);text-decoration:none;">sustainsys.co.uk</a> · UK · AI-Powered Engineering
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Graph API with Python Flask — Sustainsys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-2: #eef1f5;
+    --border: #d8dde6;
+    --text: #2c3345;
+    --text-dim: #6b7489;
+    --accent: #0078d4;
+    --accent-glow: #0078d420;
+    --ms-blue: #0078d4;
+    --ms-green: #107c10;
+    --ms-orange: #d47a00;
+    --ms-red: #d83b01;
+    --python-yellow: #b8960a;
+    --flask-dark: #1a1a2e;
+    --success: #2ea043;
+    --code-bg: #1e2030;
+    --sidebar-w: 280px;
+    --header-h: 56px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .logo-mark img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .logo-text {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .logo-text span {
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border);
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-ring {
+    position: relative;
+    width: 36px; height: 36px;
+  }
+
+  .progress-ring svg {
+    transform: rotate(-90deg);
+  }
+
+  .progress-ring circle {
+    fill: none;
+    stroke-width: 3;
+  }
+
+  .progress-ring .bg { stroke: var(--border); }
+  .progress-ring .fg {
+    stroke: var(--ms-blue);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  .progress-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ms-blue);
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    width: var(--sidebar-w);
+    height: calc(100vh - var(--header-h));
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 20px 0;
+    z-index: 90;
+  }
+
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .nav-section {
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+
+  .nav-section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: #0078d415; color: var(--ms-blue); }
+
+  .nav-step {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .nav-item.active .nav-step {
+    border-color: var(--ms-blue);
+    background: var(--ms-blue);
+    color: #fff;
+  }
+
+  .nav-item.completed .nav-step {
+    border-color: var(--success);
+    background: var(--success);
+    color: #fff;
+  }
+
+  .nav-item.completed .nav-step::after { content: "✓"; }
+
+  /* ── MAIN ── */
+  main {
+    margin-left: var(--sidebar-w);
+    margin-top: var(--header-h);
+    padding: 48px 2rem 120px;
+  }
+
+  .content-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  /* ── SECTIONS ── */
+  .step-section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .step-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: #0078d418;
+    color: var(--ms-blue);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #1a2035;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--ms-blue);
+  }
+
+  .step-subtitle {
+    color: var(--text-dim);
+    font-size: 16px;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a2035;
+    margin: 36px 0 16px;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2 .h2-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3345;
+    margin: 24px 0 12px;
+  }
+
+  p { margin-bottom: 16px; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .callout-info {
+    background: #0078d40f;
+    border-left: 3px solid var(--ms-blue);
+  }
+
+  .callout-warning {
+    background: #d47a000f;
+    border-left: 3px solid var(--ms-orange);
+  }
+
+  .callout-success {
+    background: #2ea0430f;
+    border-left: 3px solid var(--success);
+  }
+
+  .callout-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #1a2035;
+  }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #262d3a;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  .code-header .filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid #3d4450;
+    color: #8b949e;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .copy-btn:hover { border-color: var(--ms-blue); color: var(--ms-blue); }
+
+  .code-content {
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+
+  .code-content pre {
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.7;
+    white-space: pre;
+    color: #e6edf3;
+  }
+
+  .code-content .comment { color: #6e7681; }
+  .code-content .keyword { color: #ff7b72; }
+  .code-content .string { color: #a5d6ff; }
+  .code-content .func { color: #d2a8ff; }
+  .code-content .decorator { color: #ffa657; }
+  .code-content .variable { color: #79c0ff; }
+  .code-content .builtin { color: #ffa657; }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--surface-2);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #0550ae;
+  }
+
+  /* ── NUMBERED INSTRUCTIONS ── */
+  .instructions {
+    counter-reset: inst;
+    margin: 16px 0;
+  }
+
+  .inst-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  .inst-num {
+    counter-increment: inst;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ms-blue);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .inst-num::after { content: counter(inst); }
+
+  .inst-text { flex: 1; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+    padding: 24px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .flow-box {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid;
+  }
+
+  .flow-arrow {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin: 0 8px;
+  }
+
+  .flow-user { background: #0078d415; border-color: #0078d440; color: var(--ms-blue); }
+  .flow-app { background: #b8960a15; border-color: #b8960a40; color: var(--python-yellow); }
+  .flow-ms { background: #107c1015; border-color: #107c1040; color: var(--ms-green); }
+
+  /* ── NAVIGATION BUTTONS ── */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav-btn-prev {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .nav-btn-prev:hover { border-color: var(--text-dim); }
+
+  .nav-btn-next {
+    background: var(--ms-blue);
+    color: #fff;
+  }
+
+  .nav-btn-next:hover { filter: brightness(1.15); }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ── CHECKBOX COMPLETION ── */
+  .step-complete-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .step-complete-check:hover { border-color: var(--success); }
+
+  .step-complete-check input {
+    width: 18px; height: 18px;
+    accent-color: var(--success);
+    cursor: pointer;
+  }
+
+  .step-complete-check label {
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ── TABLE ── */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+
+  .info-table th, .info-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .info-table th {
+    background: var(--surface);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .info-table td { color: var(--text-dim); }
+
+  .info-table code { font-size: 12px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    aside { display: none; }
+    main { margin-left: 0; padding: 32px 20px 100px; }
+  }
+
+  /* ── FOLDER TREE ── */
+  .folder-tree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    color: #8b949e;
+  }
+
+  .folder-tree .folder { color: #58a6ff; }
+  .folder-tree .file { color: #e6edf3; }
+  .folder-tree .env-file { color: #ffa657; }
+
+  strong, b { color: #1a2035; }
+
+  a { color: var(--ms-blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo-area">
+    <div class="logo-mark"><img src="https://sustainsys.co.uk/logo_only.png" alt="Sustainsys"></div>
+    <div class="logo-text">
+      Sustainsys AI Academy
+      <span>MS Graph API — Python Flask</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="progress-ring">
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <circle class="bg" cx="18" cy="18" r="15"/>
+        <circle class="fg" id="progressCircle" cx="18" cy="18" r="15"
+          stroke-dasharray="94.25" stroke-dashoffset="94.25"/>
+      </svg>
+      <div class="progress-label" id="progressLabel">0%</div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside>
+  <div class="nav-section">
+    <div class="nav-section-title">Getting Started</div>
+    <a class="nav-item active" data-step="0" onclick="goToStep(0)">
+      <div class="nav-step">0</div>
+      The Big Picture
+    </a>
+    <a class="nav-item" data-step="1" onclick="goToStep(1)">
+      <div class="nav-step">1</div>
+      Azure Portal Setup
+    </a>
+    <a class="nav-item" data-step="2" onclick="goToStep(2)">
+      <div class="nav-step">2</div>
+      Client Secret
+    </a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Build the App</div>
+    <a class="nav-item" data-step="3" onclick="goToStep(3)">
+      <div class="nav-step">3</div>
+      Project Setup
+    </a>
+    <a class="nav-item" data-step="4" onclick="goToStep(4)">
+      <div class="nav-step">4</div>
+      Flask App Code
+    </a>
+    <a class="nav-item" data-step="5" onclick="goToStep(5)">
+      <div class="nav-step">5</div>
+      HTML Templates
+    </a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Run & Explore</div>
+    <a class="nav-item" data-step="6" onclick="goToStep(6)">
+      <div class="nav-step">6</div>
+      Run & Test
+    </a>
+    <a class="nav-item" data-step="7" onclick="goToStep(7)">
+      <div class="nav-step">7</div>
+      Read Emails
+    </a>
+    <a class="nav-item" data-step="8" onclick="goToStep(8)">
+      <div class="nav-step">8</div>
+      Read Calendar
+    </a>
+    <a class="nav-item" data-step="9" onclick="goToStep(9)">
+      <div class="nav-step">9</div>
+      What's Next
+    </a>
+  </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main>
+<div class="content-wrap">
+
+<!-- ────────── STEP 0: BIG PICTURE ────────── -->
+<section class="step-section active" data-step="0">
+  <div class="step-badge">Overview</div>
+  <h1>MS Graph API with <em>Python Flask</em></h1>
+  <p class="step-subtitle">
+    A hands-on guide to connecting your web app to Microsoft 365 — reading emails, calendars, and more using the Microsoft Graph API.
+  </p>
+
+  <h2>What is Microsoft Graph?</h2>
+  <p>
+    Microsoft Graph is a single REST API that lets your app access data across Microsoft 365 — Outlook emails, calendar events, OneDrive files, Teams messages, and more. Instead of talking to each service separately, everything goes through one endpoint: <code>https://graph.microsoft.com</code>
+  </p>
+
+  <h2>How the Login Flow Works</h2>
+  <p>Before we write any code, understand what happens when a user clicks "Sign in with Microsoft":</p>
+
+  <div class="flow-diagram">
+    <div class="flow-box flow-user">👤 User clicks Login</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-app">🐍 Flask redirects</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-ms">🔐 Microsoft Login Page</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-ms">✅ User grants consent</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-app">🎫 Flask gets auth code</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-app">🔑 Exchanges for token</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-ms">📧 Call Graph API</div>
+  </div>
+
+  <p>This is called the <strong>Authorization Code Flow</strong>. Your app never sees the user's password — it only gets a token that grants access to specific data (like emails) that the user consented to.</p>
+
+  <h2>What We'll Build</h2>
+  <p>By the end of this guide you'll have a working Flask app that:</p>
+  <ul>
+    <li>Lets users sign in with their Microsoft account</li>
+    <li>Reads their recent emails from Outlook</li>
+    <li>Reads their upcoming calendar events</li>
+    <li>Displays everything in a clean web interface</li>
+  </ul>
+
+  <h2>Prerequisites</h2>
+  <table class="info-table">
+    <tr><th>Requirement</th><th>Details</th></tr>
+    <tr><td>Python</td><td><code>3.10+</code> — you have 3.11.9 via pyenv</td></tr>
+    <tr><td>Microsoft Account</td><td>Any M365 / Outlook.com account</td></tr>
+    <tr><td>Azure App Registration</td><td>✅ You've already created this</td></tr>
+    <tr><td>Code Editor</td><td>VS Code or any editor</td></tr>
+  </table>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-0" onchange="toggleComplete(0)">
+    <label for="check-0">I understand the big picture — let's go!</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" disabled>← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(1)">Next: Azure Portal Setup →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 1: AZURE PORTAL ────────── -->
+<section class="step-section" data-step="1">
+  <div class="step-badge">Step 1</div>
+  <h1>Configure <em>Authentication</em> in Azure</h1>
+  <p class="step-subtitle">
+    Set up the redirect URI so Microsoft knows where to send users back after they sign in.
+  </p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">📍 Where You Are</div>
+    You're in <strong>Azure Portal → App Registrations → Sustainsys_Learn → Authentication</strong>. This is exactly the right place.
+  </div>
+
+  <h2>Add a Redirect URI</h2>
+  <div class="instructions">
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Click <strong>"Add a platform"</strong> (or "Add Redirect URI")</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">In the panel that slides out, select <strong>"Web"</strong> (not SPA, not Mobile)</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">
+        In the <strong>Redirect URI</strong> field, enter:
+        <div class="code-block">
+          <div class="code-content"><pre>http://localhost:5000/getAToken</pre></div>
+        </div>
+        This is the URL Flask will listen on to receive the auth code from Microsoft.
+      </div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Leave <strong>Front-channel logout URL</strong> blank</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Under <strong>Implicit grant and hybrid flows</strong>, check <strong>ID tokens</strong> only. Leave Access tokens unchecked.</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Click <strong>"Configure"</strong></div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">⚠️ Why <code>/getAToken</code>?</div>
+    This is the path the MSAL Python library uses by default in its Flask integration. Your Flask app will have a route at this exact path to handle the callback. The URI must match <em>exactly</em> — including the case and no trailing slash.
+  </div>
+
+  <h2>Verify API Permissions</h2>
+  <p>Go to <strong>API Permissions</strong> in the left sidebar and make sure these are listed:</p>
+  <table class="info-table">
+    <tr><th>Permission</th><th>Type</th><th>What It Does</th></tr>
+    <tr><td><code>User.Read</code></td><td>Delegated</td><td>Read user's basic profile</td></tr>
+    <tr><td><code>Mail.Read</code></td><td>Delegated</td><td>Read user's email</td></tr>
+    <tr><td><code>Calendars.Read</code></td><td>Delegated</td><td>Read user's calendar events</td></tr>
+  </table>
+  <p>If <code>Mail.Read</code> and <code>Calendars.Read</code> aren't there yet, click <strong>"Add a permission" → Microsoft Graph → Delegated permissions</strong>, search for each, tick them, and click "Add permissions".</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Delegated vs Application</div>
+    <strong>Delegated</strong> = acts on behalf of a signed-in user (what we're doing). <strong>Application</strong> = acts as the app itself with no user (used for background services/daemons).
+  </div>
+
+  <h2>Note Your IDs</h2>
+  <p>Go to <strong>Overview</strong> and copy these two values — you'll need them in Step 3:</p>
+  <table class="info-table">
+    <tr><th>Field</th><th>Where to Find It</th></tr>
+    <tr><td><strong>Application (client) ID</strong></td><td>Overview page, top section</td></tr>
+    <tr><td><strong>Directory (tenant) ID</strong></td><td>Overview page, top section</td></tr>
+  </table>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-1" onchange="toggleComplete(1)">
+    <label for="check-1">Authentication configured with redirect URI ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(0)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(2)">Next: Client Secret →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 2: CLIENT SECRET ────────── -->
+<section class="step-section" data-step="2">
+  <div class="step-badge">Step 2</div>
+  <h1>Create a <em>Client Secret</em></h1>
+  <p class="step-subtitle">
+    Your app needs a secret password to prove its identity when exchanging the auth code for a token.
+  </p>
+
+  <div class="instructions">
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Go to <strong>Certificates & secrets</strong> in the left sidebar</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Click <strong>"+ New client secret"</strong></div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Description: <code>Flask Dev Secret</code> (or anything descriptive)</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Expires: <strong>6 months</strong> (fine for learning)</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Click <strong>"Add"</strong></div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">🚨 CRITICAL — Copy the Value Immediately!</div>
+    After clicking Add, the <strong>Value</strong> column shows the secret. Copy it <em>right now</em>. Once you leave this page, you'll never see it again. The "Secret ID" is NOT the secret — you need the <strong>Value</strong>.
+  </div>
+
+  <p>You now have three pieces of info. Keep them handy:</p>
+  <table class="info-table">
+    <tr><th>What</th><th>Looks Like</th></tr>
+    <tr><td>Client ID</td><td><code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code></td></tr>
+    <tr><td>Tenant ID</td><td><code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code></td></tr>
+    <tr><td>Client Secret</td><td><code>aBcDeFg~xYz123456789...</code></td></tr>
+  </table>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-2" onchange="toggleComplete(2)">
+    <label for="check-2">Client secret created and copied ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(1)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(3)">Next: Project Setup →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 3: PROJECT SETUP ────────── -->
+<section class="step-section" data-step="3">
+  <div class="step-badge">Step 3</div>
+  <h1>Set Up the <em>Python Project</em></h1>
+  <p class="step-subtitle">
+    Create the project folder, virtual environment, install dependencies, and configure your secrets.
+  </p>
+
+  <h2>Project Structure</h2>
+  <div class="folder-tree">
+    <span class="folder">ms-graph-flask/</span><br>
+    ├── <span class="file">app.py</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment" style="color:#6e7681">  # Main Flask application</span><br>
+    ├── <span class="file">app_config.py</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment" style="color:#6e7681">  # Configuration (reads .env)</span><br>
+    ├── <span class="env-file">.env</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment" style="color:#6e7681">  # Your secrets (never commit!)</span><br>
+    ├── <span class="file">requirements.txt</span> &nbsp;<span class="comment" style="color:#6e7681">  # Python dependencies</span><br>
+    └── <span class="folder">templates/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">index.html</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment" style="color:#6e7681">  # Home / login page</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">display.html</span> &nbsp;&nbsp;<span class="comment" style="color:#6e7681">  # Show Graph API results</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">auth_error.html</span> <span class="comment" style="color:#6e7681">  # Error page</span>
+  </div>
+
+  <h2>Terminal Commands</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">Terminal</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="comment"># Create project folder</span>
+<span class="keyword">mkdir</span> ms-graph-flask
+<span class="keyword">cd</span> ms-graph-flask
+
+<span class="comment"># Create virtual environment</span>
+<span class="keyword">python</span> -m venv venv
+
+<span class="comment"># Activate it</span>
+<span class="comment"># On Mac/Linux:</span>
+<span class="keyword">source</span> venv/bin/activate
+<span class="comment"># On Windows:</span>
+venv\Scripts\activate
+
+<span class="comment"># Install dependencies</span>
+<span class="keyword">pip</span> install flask identity requests python-dotenv</pre></div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">📦 What are these packages?</div>
+    <strong>flask</strong> — web framework<br>
+    <strong>identity</strong> — Microsoft's official MSAL wrapper for Flask (makes auth super easy)<br>
+    <strong>requests</strong> — HTTP client for calling Graph API<br>
+    <strong>python-dotenv</strong> — loads your .env secrets
+  </div>
+
+  <h2>Create the .env File</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">.env</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="comment"># Replace with YOUR values from Azure Portal</span>
+<span class="variable">CLIENT_ID</span>=paste-your-client-id-here
+<span class="variable">CLIENT_SECRET</span>=paste-your-client-secret-value-here
+<span class="variable">AUTHORITY</span>=https://login.microsoftonline.com/paste-your-tenant-id-here</pre></div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">⚠️ Never commit .env to Git</div>
+    Add <code>.env</code> to your <code>.gitignore</code> file. These secrets must stay local.
+  </div>
+
+  <h2>Create app_config.py</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">app_config.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="keyword">import</span> os
+<span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv
+
+load_dotenv()  <span class="comment"># reads .env file</span>
+
+<span class="variable">CLIENT_ID</span> = os.getenv(<span class="string">"CLIENT_ID"</span>)
+<span class="variable">CLIENT_SECRET</span> = os.getenv(<span class="string">"CLIENT_SECRET"</span>)
+<span class="variable">AUTHORITY</span> = os.getenv(<span class="string">"AUTHORITY"</span>)
+
+<span class="comment"># Where Microsoft redirects after login</span>
+<span class="variable">REDIRECT_PATH</span> = <span class="string">"/getAToken"</span>
+
+<span class="comment"># What data your app wants to access</span>
+<span class="variable">SCOPE</span> = [<span class="string">"User.Read"</span>, <span class="string">"Mail.Read"</span>, <span class="string">"Calendars.Read"</span>]
+
+<span class="comment"># Graph API base URL</span>
+<span class="variable">ENDPOINT</span> = <span class="string">"https://graph.microsoft.com/v1.0"</span></pre></div>
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-3" onchange="toggleComplete(3)">
+    <label for="check-3">Project created, dependencies installed, .env configured ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(2)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(4)">Next: Flask App Code →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 4: FLASK APP CODE ────────── -->
+<section class="step-section" data-step="4">
+  <div class="step-badge">Step 4</div>
+  <h1>Write the <em>Flask Application</em></h1>
+  <p class="step-subtitle">
+    This is the core of your app — handling login, callback, and Graph API calls.
+  </p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">app.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="keyword">import</span> identity.web
+<span class="keyword">import</span> requests
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, redirect, render_template, request, session, url_for
+<span class="keyword">import</span> app_config
+
+<span class="comment"># ─── Create Flask app ───</span>
+app = Flask(__name__)
+app.config[<span class="string">"SECRET_KEY"</span>] = <span class="string">"super-secret-dev-key-change-in-production"</span>
+
+<span class="comment"># ─── Set up Microsoft authentication ───</span>
+auth = identity.web.Auth(
+    session=session,
+    authority=app_config.AUTHORITY,
+    client_id=app_config.CLIENT_ID,
+    client_credential=app_config.CLIENT_SECRET,
+)
+
+
+<span class="comment"># ─── HOME PAGE ───</span>
+<span class="decorator">@app.route</span>(<span class="string">"/"</span>)
+<span class="keyword">def</span> <span class="func">index</span>():
+    <span class="keyword">if not</span> (app.config[<span class="string">"SECRET_KEY"</span>]):
+        <span class="keyword">return</span> render_template(<span class="string">"config_error.html"</span>)
+    <span class="keyword">return</span> render_template(
+        <span class="string">"index.html"</span>,
+        user=auth.get_user(),
+        <span class="comment"># This generates the Microsoft login URL</span>
+        auth_url=auth.log_in(
+            scopes=app_config.SCOPE,
+            redirect_uri=url_for(<span class="string">"auth_response"</span>, _external=<span class="builtin">True</span>),
+        ),
+    )
+
+
+<span class="comment"># ─── CALLBACK: Microsoft redirects here after login ───</span>
+<span class="decorator">@app.route</span>(app_config.REDIRECT_PATH)
+<span class="keyword">def</span> <span class="func">auth_response</span>():
+    result = auth.complete_log_in(request.args)
+    <span class="keyword">if</span> <span class="string">"error"</span> <span class="keyword">in</span> result:
+        <span class="keyword">return</span> render_template(<span class="string">"auth_error.html"</span>, result=result)
+    <span class="keyword">return</span> redirect(url_for(<span class="string">"index"</span>))
+
+
+<span class="comment"># ─── LOGOUT ───</span>
+<span class="decorator">@app.route</span>(<span class="string">"/logout"</span>)
+<span class="keyword">def</span> <span class="func">logout</span>():
+    <span class="keyword">return</span> redirect(auth.log_out(url_for(<span class="string">"index"</span>, _external=<span class="builtin">True</span>)))
+
+
+<span class="comment"># ─── CALL GRAPH API (generic helper) ───</span>
+<span class="keyword">def</span> <span class="func">call_graph</span>(endpoint):
+    <span class="string">"""Call Microsoft Graph with the user's token."""</span>
+    token = auth.get_token_for_user(app_config.SCOPE)
+    <span class="keyword">if</span> <span class="string">"error"</span> <span class="keyword">in</span> token:
+        <span class="keyword">return</span> redirect(url_for(<span class="string">"index"</span>))
+    response = requests.get(
+        endpoint,
+        headers={<span class="string">"Authorization"</span>: <span class="string">"Bearer "</span> + token[<span class="string">"access_token"</span>]},
+    ).json()
+    <span class="keyword">return</span> response
+
+
+<span class="comment"># ─── READ EMAILS ───</span>
+<span class="decorator">@app.route</span>(<span class="string">"/emails"</span>)
+<span class="keyword">def</span> <span class="func">emails</span>():
+    user = auth.get_user()
+    <span class="keyword">if not</span> user:
+        <span class="keyword">return</span> redirect(url_for(<span class="string">"index"</span>))
+    <span class="comment"># Get top 10 emails from inbox</span>
+    data = call_graph(
+        f<span class="string">"{app_config.ENDPOINT}/me/messages?$top=10&$select=subject,from,receivedDateTime,bodyPreview"</span>
+    )
+    <span class="keyword">return</span> render_template(<span class="string">"display.html"</span>, user=user, data=data, title=<span class="string">"Emails"</span>)
+
+
+<span class="comment"># ─── READ CALENDAR ───</span>
+<span class="decorator">@app.route</span>(<span class="string">"/calendar"</span>)
+<span class="keyword">def</span> <span class="func">calendar</span>():
+    user = auth.get_user()
+    <span class="keyword">if not</span> user:
+        <span class="keyword">return</span> redirect(url_for(<span class="string">"index"</span>))
+    <span class="comment"># Get next 10 upcoming events</span>
+    data = call_graph(
+        f<span class="string">"{app_config.ENDPOINT}/me/events?$top=10&$select=subject,start,end,location,organizer"</span>
+    )
+    <span class="keyword">return</span> render_template(<span class="string">"display.html"</span>, user=user, data=data, title=<span class="string">"Calendar"</span>)
+
+
+<span class="comment"># ─── RUN ───</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    app.run(debug=<span class="builtin">True</span>, port=<span class="builtin">5000</span>)</pre></div>
+  </div>
+
+  <h2>Code Walkthrough</h2>
+  <p>Let's break down what each part does:</p>
+
+  <h3><code>identity.web.Auth</code></h3>
+  <p>This is Microsoft's official helper. It handles the entire OAuth flow for you — generating login URLs, exchanging codes for tokens, refreshing expired tokens, and storing everything in the Flask session.</p>
+
+  <h3><code>auth.log_in()</code></h3>
+  <p>Generates the URL that sends the user to Microsoft's login page. The <code>scopes</code> parameter tells Microsoft what permissions your app needs (emails, calendar, etc.).</p>
+
+  <h3><code>auth.complete_log_in()</code></h3>
+  <p>Called when Microsoft redirects back to your app. It validates the response, exchanges the authorization code for access + refresh tokens, and stores them in the session.</p>
+
+  <h3><code>call_graph()</code></h3>
+  <p>Our helper function that gets a valid token and makes GET requests to the Graph API. The token goes in the <code>Authorization: Bearer</code> header — this is how every Graph API call is authenticated.</p>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-4" onchange="toggleComplete(4)">
+    <label for="check-4">app.py created and I understand the flow ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(3)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(5)">Next: HTML Templates →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 5: TEMPLATES ────────── -->
+<section class="step-section" data-step="5">
+  <div class="step-badge">Step 5</div>
+  <h1>Create the <em>HTML Templates</em></h1>
+  <p class="step-subtitle">
+    Three simple Jinja2 templates to display the login page, data, and errors.
+  </p>
+
+  <h2>templates/index.html</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">templates/index.html</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;MS Graph Flask App&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: 'Segoe UI', sans-serif; max-width: 800px;
+               margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+        .card { background: white; border-radius: 8px; padding: 32px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 20px 0; }
+        h1 { color: #0078d4; }
+        .btn { display: inline-block; padding: 12px 24px; background: #0078d4;
+               color: white; text-decoration: none; border-radius: 6px;
+               font-weight: 600; margin: 8px 4px; }
+        .btn:hover { background: #106ebe; }
+        .btn-danger { background: #d83b01; }
+        .btn-danger:hover { background: #c23501; }
+        .welcome { color: #107c10; font-size: 18px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="card"&gt;
+        &lt;h1&gt;&#x1F4CA; MS Graph API Explorer&lt;/h1&gt;
+
+        {% if user %}
+            &lt;p class="welcome"&gt;
+                &#x2705; Signed in as &lt;strong&gt;{{ user.get("name", "Unknown") }}&lt;/strong&gt;
+            &lt;/p&gt;
+            &lt;p&gt;What would you like to explore?&lt;/p&gt;
+            &lt;a href="/emails" class="btn"&gt;&#x1F4E7; Read My Emails&lt;/a&gt;
+            &lt;a href="/calendar" class="btn"&gt;&#x1F4C5; View My Calendar&lt;/a&gt;
+            &lt;br&gt;&lt;br&gt;
+            &lt;a href="/logout" class="btn btn-danger"&gt;Sign Out&lt;/a&gt;
+        {% else %}
+            &lt;p&gt;Sign in with your Microsoft account to explore the Graph API.&lt;/p&gt;
+            &lt;a href="{{ auth_url }}" class="btn"&gt;&#x1F510; Sign in with Microsoft&lt;/a&gt;
+        {% endif %}
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+  </div>
+
+  <h2>templates/display.html</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">templates/display.html</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{{ title }} — MS Graph&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: 'Segoe UI', sans-serif; max-width: 900px;
+               margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+        .card { background: white; border-radius: 8px; padding: 24px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 12px 0; }
+        h1 { color: #0078d4; }
+        .item { border-left: 3px solid #0078d4; padding: 12px 16px;
+                margin: 8px 0; background: #fafafa; border-radius: 0 6px 6px 0; }
+        .item h3 { margin: 0 0 4px; color: #333; }
+        .item p { margin: 2px 0; color: #666; font-size: 14px; }
+        .back { display: inline-block; padding: 10px 20px; background: #0078d4;
+                color: white; text-decoration: none; border-radius: 6px;
+                margin-top: 16px; }
+        .raw { background: #1e1e1e; color: #d4d4d4; padding: 16px;
+               border-radius: 8px; font-family: monospace; font-size: 12px;
+               white-space: pre-wrap; overflow-x: auto; margin-top: 16px;
+               max-height: 300px; overflow-y: auto; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;p&gt;Signed in as &lt;strong&gt;{{ user.get("name", "Unknown") }}&lt;/strong&gt;&lt;/p&gt;
+
+    {% if data and data.get("value") %}
+        {% for item in data["value"] %}
+        &lt;div class="item"&gt;
+            {% if title == "Emails" %}
+                &lt;h3&gt;{{ item.get("subject", "(No subject)") }}&lt;/h3&gt;
+                &lt;p&gt;&#x1F4E8; From: {{ item.get("from", {}).get("emailAddress", {}).get("address", "Unknown") }}&lt;/p&gt;
+                &lt;p&gt;&#x1F552; {{ item.get("receivedDateTime", "")[:16] }}&lt;/p&gt;
+                &lt;p&gt;{{ item.get("bodyPreview", "")[:120] }}...&lt;/p&gt;
+            {% elif title == "Calendar" %}
+                &lt;h3&gt;{{ item.get("subject", "(No subject)") }}&lt;/h3&gt;
+                &lt;p&gt;&#x1F4C5; {{ item.get("start", {}).get("dateTime", "")[:16] }}
+                   → {{ item.get("end", {}).get("dateTime", "")[:16] }}&lt;/p&gt;
+                &lt;p&gt;&#x1F4CD; {{ item.get("location", {}).get("displayName", "No location") }}&lt;/p&gt;
+            {% endif %}
+        &lt;/div&gt;
+        {% endfor %}
+    {% else %}
+        &lt;div class="card"&gt;
+            &lt;p&gt;No {{ title.lower() }} found, or there was an error.&lt;/p&gt;
+        &lt;/div&gt;
+    {% endif %}
+
+    &lt;!-- Show raw JSON for learning --&gt;
+    &lt;details&gt;
+        &lt;summary style="cursor:pointer; margin-top:20px; color:#0078d4; font-weight:600;"&gt;
+            &#x1F50D; View Raw JSON Response (for learning)
+        &lt;/summary&gt;
+        &lt;div class="raw"&gt;{{ data | tojson(indent=2) }}&lt;/div&gt;
+    &lt;/details&gt;
+
+    &lt;a href="/" class="back"&gt;← Back Home&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+  </div>
+
+  <h2>templates/auth_error.html</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">templates/auth_error.html</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Auth Error&lt;/title&gt;&lt;/head&gt;
+&lt;body style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 60px auto; text-align: center;"&gt;
+    &lt;h1 style="color: #d83b01;"&gt;&#x26A0;&#xFE0F; Authentication Error&lt;/h1&gt;
+    &lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; {{ result.get("error") }}&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Description:&lt;/strong&gt; {{ result.get("error_description") }}&lt;/p&gt;
+    &lt;a href="/" style="display:inline-block; margin-top:20px; padding:10px 20px; background:#0078d4; color:white; text-decoration:none; border-radius:6px;"&gt;
+        Try Again
+    &lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-5" onchange="toggleComplete(5)">
+    <label for="check-5">All three templates created ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(4)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(6)">Next: Run & Test →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 6: RUN & TEST ────────── -->
+<section class="step-section" data-step="6">
+  <div class="step-badge">Step 6</div>
+  <h1>Run Your App & <em>Sign In</em></h1>
+  <p class="step-subtitle">
+    Moment of truth — let's fire up the Flask server and sign in with Microsoft.
+  </p>
+
+  <h2>Start the Server</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <span class="filename">Terminal</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <div class="code-content"><pre><span class="comment"># Make sure you're in the project folder with venv active</span>
+<span class="keyword">cd</span> ms-graph-flask
+<span class="keyword">source</span> venv/bin/activate  <span class="comment"># or venv\Scripts\activate on Windows</span>
+
+<span class="comment"># Run!</span>
+<span class="keyword">python</span> app.py</pre></div>
+  </div>
+
+  <p>You should see:</p>
+  <div class="code-block">
+    <div class="code-content"><pre> * Running on http://127.0.0.1:5000
+ * Debug mode: on</pre></div>
+  </div>
+
+  <h2>Test the Flow</h2>
+  <div class="instructions">
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Open <strong><a href="http://localhost:5000" target="_blank">http://localhost:5000</a></strong> in your browser</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Click <strong>"Sign in with Microsoft"</strong></div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">You'll be redirected to Microsoft's login page — enter your credentials</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">Grant the permissions when prompted (first time only)</div>
+    </div>
+    <div class="inst-item">
+      <div class="inst-num"></div>
+      <div class="inst-text">You'll be redirected back to your app — now signed in! 🎉</div>
+    </div>
+  </div>
+
+  <div class="callout callout-warning">
+    <div class="callout-title">🔧 Common Issues</div>
+    <strong>Redirect URI mismatch error?</strong><br>
+    Go back to Azure → Authentication and check the redirect URI is exactly <code>http://localhost:5000/getAToken</code> (no trailing slash, lowercase, http not https).<br><br>
+    <strong>AADSTS65001 consent error?</strong><br>
+    Go to Azure → API Permissions → click "Grant admin consent for [your org]" if you see this button.<br><br>
+    <strong>Module not found?</strong><br>
+    Make sure your virtual environment is activated and you ran <code>pip install flask identity requests python-dotenv</code>.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-6" onchange="toggleComplete(6)">
+    <label for="check-6">App running and I can sign in! ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(5)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(7)">Next: Read Emails →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 7: EMAILS ────────── -->
+<section class="step-section" data-step="7">
+  <div class="step-badge">Step 7</div>
+  <h1>Read Your <em>Emails</em></h1>
+  <p class="step-subtitle">
+    Click "Read My Emails" in your app — let's understand what's happening under the hood.
+  </p>
+
+  <h2>The Graph API Call</h2>
+  <p>When you click the emails button, your app makes this HTTP request:</p>
+
+  <div class="code-block">
+    <div class="code-content"><pre><span class="keyword">GET</span> <span class="string">https://graph.microsoft.com/v1.0/me/messages?$top=10&$select=subject,from,receivedDateTime,bodyPreview</span>
+
+<span class="comment">Headers:</span>
+  Authorization: Bearer eyJ0eXAi...  <span class="comment">(your access token)</span></pre></div>
+  </div>
+
+  <h2>Breaking Down the URL</h2>
+  <table class="info-table">
+    <tr><th>Part</th><th>Meaning</th></tr>
+    <tr><td><code>/me</code></td><td>The signed-in user</td></tr>
+    <tr><td><code>/messages</code></td><td>Their email messages</td></tr>
+    <tr><td><code>$top=10</code></td><td>Return only the first 10 results</td></tr>
+    <tr><td><code>$select=...</code></td><td>Only return these fields (faster response)</td></tr>
+  </table>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 OData Query Parameters</div>
+    Graph API uses OData query syntax. Other useful ones:<br>
+    <code>$filter</code> — filter results (e.g., unread only)<br>
+    <code>$orderby</code> — sort results<br>
+    <code>$search</code> — full-text search<br>
+    <code>$count</code> — include total count<br><br>
+    Example: <code>/me/messages?$filter=isRead eq false&$top=5</code> returns only unread emails.
+  </div>
+
+  <h2>Explore the Raw JSON</h2>
+  <p>Click <strong>"View Raw JSON Response"</strong> in the display page. This is the actual Graph API response. Notice the structure:</p>
+
+  <div class="code-block">
+    <div class="code-content"><pre>{
+    <span class="string">"@odata.context"</span>: <span class="string">"..."</span>,
+    <span class="string">"value"</span>: [
+        {
+            <span class="string">"subject"</span>: <span class="string">"Meeting Tomorrow"</span>,
+            <span class="string">"from"</span>: {
+                <span class="string">"emailAddress"</span>: {
+                    <span class="string">"name"</span>: <span class="string">"John Doe"</span>,
+                    <span class="string">"address"</span>: <span class="string">"john@example.com"</span>
+                }
+            },
+            <span class="string">"receivedDateTime"</span>: <span class="string">"2026-03-25T10:30:00Z"</span>,
+            <span class="string">"bodyPreview"</span>: <span class="string">"Hi, just confirming..."</span>
+        },
+        <span class="comment">// ... more emails</span>
+    ]
+}</pre></div>
+  </div>
+
+  <p>The <code>value</code> array contains all the emails. Each email is a JSON object with the fields you asked for in <code>$select</code>.</p>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-7" onchange="toggleComplete(7)">
+    <label for="check-7">I can read emails and understand the API response ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(6)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(8)">Next: Read Calendar →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 8: CALENDAR ────────── -->
+<section class="step-section" data-step="8">
+  <div class="step-badge">Step 8</div>
+  <h1>Read Your <em>Calendar</em></h1>
+  <p class="step-subtitle">
+    Same pattern, different endpoint — that's the beauty of Graph API.
+  </p>
+
+  <h2>The Calendar API Call</h2>
+  <div class="code-block">
+    <div class="code-content"><pre><span class="keyword">GET</span> <span class="string">https://graph.microsoft.com/v1.0/me/events?$top=10&$select=subject,start,end,location,organizer</span></pre></div>
+  </div>
+
+  <table class="info-table">
+    <tr><th>Part</th><th>Meaning</th></tr>
+    <tr><td><code>/me/events</code></td><td>The signed-in user's calendar events</td></tr>
+    <tr><td><code>start, end</code></td><td>Event time range (includes timezone)</td></tr>
+    <tr><td><code>location</code></td><td>Where the meeting is</td></tr>
+    <tr><td><code>organizer</code></td><td>Who created the event</td></tr>
+  </table>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Calendar View vs Events</div>
+    <code>/me/events</code> returns all events. For a date-range view (like "this week"), use:<br>
+    <code>/me/calendarView?startDateTime=2026-03-25T00:00:00&endDateTime=2026-03-31T23:59:59</code><br>
+    This is more like how a calendar app works.
+  </div>
+
+  <h2>The Key Pattern</h2>
+  <p>Notice something? Every Graph call follows the exact same pattern:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-box flow-app">Get Token</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-app">GET /me/{resource}</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-ms">JSON Response</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box flow-app">Display Data</div>
+  </div>
+
+  <p>That's it. The <code>call_graph()</code> function in your app handles this pattern. To access any new resource, you just change the endpoint URL. The auth stays the same.</p>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-8" onchange="toggleComplete(8)">
+    <label for="check-8">Calendar working and I see the pattern ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(7)">← Previous</button>
+    <button class="nav-btn nav-btn-next" onclick="goToStep(9)">Next: What's Next →</button>
+  </div>
+</section>
+
+<!-- ────────── STEP 9: WHAT'S NEXT ────────── -->
+<section class="step-section" data-step="9">
+  <div class="step-badge">Complete</div>
+  <h1>What's <em>Next?</em></h1>
+  <p class="step-subtitle">
+    You've built a working MS Graph app! Here are your next learning paths.
+  </p>
+
+  <h2>Try These Graph Endpoints</h2>
+  <p>Add new routes to your Flask app using the same <code>call_graph()</code> pattern:</p>
+
+  <table class="info-table">
+    <tr><th>What</th><th>Endpoint</th><th>Permission Needed</th></tr>
+    <tr><td>Your profile photo</td><td><code>/me/photo/$value</code></td><td>User.Read</td></tr>
+    <tr><td>OneDrive files</td><td><code>/me/drive/root/children</code></td><td>Files.Read</td></tr>
+    <tr><td>Send an email</td><td><code>POST /me/sendMail</code></td><td>Mail.Send</td></tr>
+    <tr><td>Teams chats</td><td><code>/me/chats</code></td><td>Chat.Read</td></tr>
+    <tr><td>Contacts</td><td><code>/me/contacts</code></td><td>Contacts.Read</td></tr>
+  </table>
+
+  <p>Remember to add the required permissions in Azure → API Permissions before using new endpoints.</p>
+
+  <h2>Deeper Learning</h2>
+  <ul>
+    <li><strong>Graph Explorer</strong> — <a href="https://developer.microsoft.com/graph/graph-explorer" target="_blank">developer.microsoft.com/graph/graph-explorer</a> — test any endpoint in the browser before writing code</li>
+    <li><strong>Batch requests</strong> — call multiple endpoints in one HTTP request</li>
+    <li><strong>Webhooks / Change Notifications</strong> — get notified when data changes (new email arrives)</li>
+    <li><strong>Delta queries</strong> — only fetch data that changed since your last request</li>
+    <li><strong>Application permissions</strong> — build background services that run without a user</li>
+  </ul>
+
+  <h2>Integrate with Your AI Stack</h2>
+  <p>Now that you understand Graph API, consider connecting it to your agentic AI work:</p>
+  <ul>
+    <li><strong>MCP Server</strong> — Build a Graph API MCP server so your LangGraph agents can read emails and calendars</li>
+    <li><strong>RAG Pipeline</strong> — Index Outlook emails or OneDrive documents into ChromaDB for retrieval</li>
+    <li><strong>Multi-Agent System</strong> — Add a "Microsoft 365 Agent" to your LangGraph orchestrator alongside your Gmail agent</li>
+  </ul>
+
+  <div class="callout callout-success">
+    <div class="callout-title">🎉 Well Done!</div>
+    You've gone from zero to a working MS Graph integration. The core pattern — register app, get token, call API — is the same across all of Microsoft 365. You now have the foundation to build anything with Graph API.
+  </div>
+
+  <div class="step-complete-check" onclick="this.querySelector('input').click()">
+    <input type="checkbox" id="check-9" onchange="toggleComplete(9)">
+    <label for="check-9">Guide complete — ready to explore further! ✓</label>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn nav-btn-prev" onclick="goToStep(8)">← Previous</button>
+    <button class="nav-btn nav-btn-next" disabled>You're All Set! 🎉</button>
+  </div>
+</section>
+
+</div><!-- .content-wrap -->
+</main>
+
+<script>
+  let currentStep = 0;
+  const totalSteps = 10;
+  const completed = new Set();
+
+  function goToStep(n) {
+    document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(s => s.classList.remove('active'));
+    document.querySelector(`.step-section[data-step="${n}"]`).classList.add('active');
+    document.querySelector(`.nav-item[data-step="${n}"]`).classList.add('active');
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleComplete(step) {
+    const checkbox = document.getElementById(`check-${step}`);
+    if (checkbox.checked) {
+      completed.add(step);
+    } else {
+      completed.delete(step);
+    }
+    updateProgress();
+    updateNav();
+  }
+
+  function updateProgress() {
+    const pct = Math.round((completed.size / totalSteps) * 100);
+    const circumference = 94.25;
+    const offset = circumference - (pct / 100) * circumference;
+    document.getElementById('progressCircle').style.strokeDashoffset = offset;
+    document.getElementById('progressLabel').textContent = pct + '%';
+  }
+
+  function updateNav() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const step = parseInt(item.dataset.step);
+      if (completed.has(step)) {
+        item.classList.add('completed');
+      } else {
+        item.classList.remove('completed');
+      }
+    });
+  }
+
+  function copyCode(btn) {
+    const code = btn.closest('.code-block').querySelector('pre').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+</script>
+
+<!-- FOOTER -->
+<footer style="padding:3rem 0;border-top:1px solid var(--border);text-align:center;margin-top:2rem;">
+  <div style="max-width:800px;margin:0 auto;padding:0 2rem;">
+    <div style="display:inline-flex;align-items:center;gap:0.6rem;margin-bottom:1rem;">
+      <img src="https://sustainsys.co.uk/logo_only.png" alt="Sustainsys" style="height:30px;width:auto;border-radius:4px;">
+      <span style="font-weight:700;font-size:0.9rem;color:var(--text);">Sustain<span style="color:var(--accent);">sys</span></span>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-dim);margin:0.3rem 0;">AI Academy · MS Graph API with Python Flask · Technical Guide</p>
+    <p style="font-size:0.82rem;color:var(--text-dim);margin:0.3rem 0;">Python · Flask · Microsoft Graph API · MSAL · Azure AD · OAuth 2.0</p>
+    <p style="margin-top:1rem;opacity:0.4;font-size:0.75rem;">
+      <a href="https://sustainsys.co.uk" style="color:var(--accent);text-decoration:none;">sustainsys.co.uk</a> · UK · AI-Powered Engineering
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
