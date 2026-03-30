@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARchitect: AI-Powered CAR Construct Designer | Sustainsys</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -16,19 +16,19 @@
             --surface3: #f1f5f9;
             --border: #e2e8f0;
             --border2: #cbd5e1;
-            --teal: #0891b2;
-            --teal-light: #06b6d4;
-            --teal-dim: rgba(8, 145, 178, 0.10);
-            --teal-glow: rgba(8, 145, 178, 0.05);
+            --teal: #8b5cf6;
+            --teal-light: #a78bfa;
+            --teal-dim: rgba(139, 92, 246, 0.10);
+            --teal-glow: rgba(139, 92, 246, 0.05);
             --blue: #7c3aed;
             --blue-light: #8b5cf6;
             --blue-dim: rgba(124, 58, 237, 0.10);
-            --amber: #d97706;
-            --amber-dim: rgba(217, 119, 6, 0.10);
+            --amber: #a78bfa;
+            --amber-dim: rgba(167, 139, 250, 0.10);
             --coral: #c4614e;
             --coral-dim: rgba(196, 97, 78, 0.10);
-            --green: #059669;
-            --green-dim: rgba(5, 150, 105, 0.10);
+            --green: #7c3aed;
+            --green-dim: rgba(139, 92, 246, 0.10);
             --text: #1e293b;
             --text-muted: #64748b;
             --text-dim: #94a3b8;
@@ -74,16 +74,16 @@
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-track { background: transparent; }
         .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-        .sidebar-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block; }
+        .sidebar-section-label { font-family: 'DM Sans', sans-serif; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); padding: 0.5rem 1.4rem 0.4rem; display: block; }
         .sidebar-nav { list-style: none; padding: 0; }
         .sidebar-nav li { position: relative; }
         .sidebar-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1.4rem; text-decoration: none; font-size: 0.82rem; color: var(--text-muted); font-weight: 500; transition: color 0.2s, background 0.2s; border-left: 2px solid transparent; line-height: 1.3; }
-        .sidebar-nav a:hover { color: var(--teal); background: rgba(8,145,178,0.05); }
+        .sidebar-nav a:hover { color: var(--teal); background: rgba(139,92,246,0.05); }
         .sidebar-nav a.active { color: var(--teal); background: var(--teal-glow); border-left-color: var(--teal); }
-        .sidebar-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right; }
+        .sidebar-num { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--text-dim); flex-shrink: 0; width: 1.4rem; text-align: right; }
         .sidebar-nav a.active .sidebar-num { color: var(--teal); opacity: 0.6; }
         .sidebar-divider { height: 1px; background: var(--border); margin: 0.8rem 1.4rem; }
-        .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 400; width: 44px; height: 44px; background: var(--teal); border: none; border-radius: 50%; color: #fff; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(8,145,178,0.3); }
+        .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 400; width: 44px; height: 44px; background: var(--teal); border: none; border-radius: 50%; color: #fff; font-size: 1.1rem; cursor: pointer; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(139,92,246,0.3); }
 
         /* MAIN */
         .main { margin-left: var(--sidebar-w); margin-top: 58px; min-height: calc(100vh - 58px); position: relative; z-index: 1; }
@@ -103,7 +103,7 @@
         .progress-circle-wrap svg { transform: rotate(-90deg); width: 36px; height: 36px; }
         .progress-circle-track { fill: none; stroke: var(--border2); stroke-width: 3; }
         .progress-circle-fill { fill: none; stroke: var(--teal); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 94.25; stroke-dashoffset: 94.25; transition: stroke-dashoffset 0.15s ease; }
-        .progress-circle-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; font-weight: 500; color: var(--teal); line-height: 1; }
+        .progress-circle-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 0.55rem; font-weight: 500; color: var(--teal); line-height: 1; }
 
         /* SECTION */
         .section { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; scroll-margin-top: 80px; }
@@ -124,7 +124,7 @@
 
         /* DIAGRAM */
         .diagram { background: var(--code-bg); padding: 2rem; border-radius: 8px; overflow-x: auto; margin: 2rem 0; border: 1px solid var(--border); }
-        .diagram pre { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+        .diagram pre { margin: 0; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text); line-height: 1.6; }
         .code-label { display: inline-block; padding: 0.4rem 0.8rem; background: var(--teal-dim); color: var(--teal); border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; }
 
         /* FLOW */
@@ -138,21 +138,21 @@
         /* CARDS */
         .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }
         .agent-card { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; padding: 2rem; transition: all 0.2s ease; }
-        .agent-card:hover { border-color: var(--teal); box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15); transform: translateY(-4px); }
+        .agent-card:hover { border-color: var(--teal); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15); transform: translateY(-4px); }
         .agent-card h3 { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--heading); margin-bottom: 1rem; margin-top: 0; }
         .agent-card p { font-size: 0.95rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
 
         /* TERM GRID */
         .term-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
         .term-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; transition: all 0.2s ease; }
-        .term-card:hover { border-color: var(--teal); box-shadow: 0 4px 12px rgba(8, 145, 178, 0.1); }
+        .term-card:hover { border-color: var(--teal); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1); }
         .term-name { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--heading); margin-bottom: 0.75rem; }
         .term-card p { font-size: 0.95rem; color: var(--text-muted); margin: 0; }
 
         /* STAGES */
         .stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0; }
         .stage-card { background: var(--surface); border: 2px solid var(--border); border-radius: 8px; padding: 2rem 1.5rem; text-align: center; transition: all 0.2s ease; }
-        .stage-card:hover { border-color: var(--teal); box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15); transform: translateY(-4px); }
+        .stage-card:hover { border-color: var(--teal); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15); transform: translateY(-4px); }
         .stage-num { display: inline-block; width: 50px; height: 50px; background: var(--teal-dim); color: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0 auto 1rem; }
         .stage-content h4 { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--heading); margin-bottom: 0.75rem; }
         .stage-content p { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
@@ -165,13 +165,13 @@
         .tech-table tr:nth-child(even) { background: var(--surface2); }
 
         /* FILE TREE */
-        .file-tree { background: var(--code-bg); padding: 2rem; border-radius: 8px; margin: 2rem 0; border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; line-height: 1.8; color: var(--text); overflow-x: auto; }
+        .file-tree { background: var(--code-bg); padding: 2rem; border-radius: 8px; margin: 2rem 0; border: 1px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; line-height: 1.8; color: var(--text); overflow-x: auto; }
         .dir { color: var(--blue); font-weight: 600; }
         .file { color: var(--text); }
         .comment { color: var(--text-dim); margin-left: 1rem; }
 
         /* CODE */
-        code { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        code { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; }
         pre { background: var(--code-bg); padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); line-height: 1.6; }
         pre code { background: none; padding: 0; }
         .kw { color: var(--blue); font-weight: 600; }
@@ -332,7 +332,7 @@
                 <!-- Tier 1: Public Internet -->
                 <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #7dd3fc;border-radius:12px;padding:1.5rem 2rem;text-align:center;position:relative;">
                     <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:#0c4a6e;margin-bottom:0.3rem;">🌐 PUBLIC INTERNET</div>
-                    <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#0369a1;">https://carchitect.sustainsys.co.uk</div>
+                    <div style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;color:#0369a1;">https://carchitect.sustainsys.co.uk</div>
                 </div>
 
                 <!-- Arrow 1 -->
@@ -351,17 +351,17 @@
                         <!-- Auth -->
                         <div style="background:var(--coral-dim);border:1px solid rgba(196,97,78,0.25);border-radius:8px;padding:1.2rem;">
                             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;color:var(--coral);margin-bottom:0.6rem;">🔒 Auth Layer</div>
-                            <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">/demo/login<br>/demo/auth<br>/demo/app<br>Sessions</div>
+                            <div style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">/demo/login<br>/demo/auth<br>/demo/app<br>Sessions</div>
                         </div>
                         <!-- Static -->
                         <div style="background:var(--blue-dim);border:1px solid rgba(124,58,237,0.25);border-radius:8px;padding:1.2rem;">
                             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;color:var(--blue);margin-bottom:0.6rem;">📁 Static Assets</div>
-                            <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">CSS, IMG<br>JS, Fonts<br>HTML pages</div>
+                            <div style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">CSS, IMG<br>JS, Fonts<br>HTML pages</div>
                         </div>
                         <!-- AI API -->
-                        <div style="background:var(--teal-dim);border:1px solid rgba(8,145,178,0.25);border-radius:8px;padding:1.2rem;">
+                        <div style="background:var(--teal-dim);border:1px solid rgba(139,92,246,0.25);border-radius:8px;padding:1.2rem;">
                             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;color:var(--teal);margin-bottom:0.6rem;">🤖 AI API</div>
-                            <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">/api/generate<br>/api/health<br>/api/models</div>
+                            <div style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--text-muted);line-height:1.8;">/api/generate<br>/api/health<br>/api/models</div>
                         </div>
                     </div>
                 </div>
@@ -380,7 +380,7 @@
                     <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;color:#14532d;margin-bottom:0.8rem;">🧠 OLLAMA <span style="font-weight:500;font-size:0.85rem;color:#166534;">port 11434</span></div>
                     <div style="background:white;border:1px solid #bbf7d0;border-radius:8px;padding:1rem;display:inline-block;">
                         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;color:#166534;">BioMistral 7B</div>
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#4ade80;margin-top:0.2rem;">cniongolo/biomistral:latest</div>
+                        <div style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:#4ade80;margin-top:0.2rem;">cniongolo/biomistral:latest</div>
                         <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;">4.4 GB · Biomedical domain fine-tuned Mistral</div>
                     </div>
                 </div>
@@ -537,7 +537,7 @@
                     <div style="flex:1;text-align:center;">
                         <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fbbf24;border-radius:8px;padding:0.8rem 0.5rem;margin:0 0.2rem;">
                             <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.8rem;color:#92400e;">Hinge</div>
-                            <div style="font-size:0.7rem;color:#d97706;">Spacer</div>
+                            <div style="font-size:0.7rem;color:#a78bfa;">Spacer</div>
                         </div>
                         <div style="font-size:0.65rem;color:var(--text-dim);margin-top:0.4rem;line-height:1.3;">Spacer /<br>flexibility</div>
                     </div>
@@ -566,7 +566,7 @@
                     <!-- CD3ζ -->
                     <div style="flex:1.2;text-align:center;">
                         <div style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:2px solid var(--teal);border-radius:8px;padding:0.8rem 0.5rem;margin:0 0.2rem;">
-                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.8rem;color:#065f46;">CD3ζ</div>
+                            <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.8rem;color:#6d28d9;">CD3ζ</div>
                             <div style="font-size:0.7rem;color:var(--teal);">Signal</div>
                         </div>
                         <div style="font-size:0.65rem;color:var(--text-dim);margin-top:0.4rem;line-height:1.3;">Activation<br>signal</div>
@@ -575,9 +575,9 @@
 
                 <!-- N→C direction indicator -->
                 <div style="display:flex;align-items:center;gap:0.5rem;margin-top:1.5rem;justify-content:center;min-width:700px;">
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);font-weight:600;">N-terminus</span>
+                    <span style="font-family: 'DM Sans', sans-serif;font-size:0.7rem;color:var(--text-dim);font-weight:600;">N-terminus</span>
                     <div style="flex:1;max-width:300px;height:2px;background:linear-gradient(to right,var(--teal),var(--coral));border-radius:1px;"></div>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);font-weight:600;">C-terminus</span>
+                    <span style="font-family: 'DM Sans', sans-serif;font-size:0.7rem;color:var(--text-dim);font-weight:600;">C-terminus</span>
                 </div>
             </div>
 
@@ -664,11 +664,11 @@
                 <div style="padding:1.5rem;">
                     <div style="background:var(--blue-dim);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:1rem 1.2rem;margin-bottom:0.8rem;">
                         <div style="font-family:'Sora',sans-serif;font-size:0.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">System Prompt</div>
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text);">&lt;s&gt;[INST] <span style="color:var(--blue);font-weight:600;">{system_prompt}</span></div>
+                        <div style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;color:var(--text);">&lt;s&gt;[INST] <span style="color:var(--blue);font-weight:600;">{system_prompt}</span></div>
                     </div>
-                    <div style="background:var(--teal-dim);border:1px solid rgba(8,145,178,0.2);border-radius:8px;padding:1rem 1.2rem;">
+                    <div style="background:var(--teal-dim);border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:1rem 1.2rem;">
                         <div style="font-family:'Sora',sans-serif;font-size:0.7rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">User Request</div>
-                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text);">User request: <span style="color:var(--teal);font-weight:600;">{user_prompt}</span> [/INST]</div>
+                        <div style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;color:var(--text);">User request: <span style="color:var(--teal);font-weight:600;">{user_prompt}</span> [/INST]</div>
                     </div>
                 </div>
             </div>
@@ -830,53 +830,53 @@
             <div style="margin:2rem 0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
                 <div style="background:var(--surface2);padding:0.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.6rem;">
                     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;"></span>
-                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;"></span>
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#c4b5fd;"></span>
                     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;"></span>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-dim);margin-left:0.5rem;">Sustainsys_Website/</span>
+                    <span style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--text-dim);margin-left:0.5rem;">Sustainsys_Website/</span>
                 </div>
                 <div style="padding:1.2rem 1.5rem;">
                     <div style="display:grid;gap:0.5rem;">
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;background:var(--teal-dim);border-radius:6px;">
                             <span style="font-size:1rem;">🐍</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">server.py</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">server.py</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">Unified Flask server (auth + AI + static)</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;border-radius:6px;">
                             <span style="font-size:1rem;">🐍</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">ollama_backend.py</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">ollama_backend.py</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">Standalone AI backend (development)</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;background:var(--coral-dim);border-radius:6px;">
                             <span style="font-size:1rem;">⚛️</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">carchitect-app.html</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">carchitect-app.html</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">React frontend (single-file app)</span>
                         </div>
                         <div style="margin-left:0.5rem;border-left:2px solid var(--blue);padding-left:1rem;margin-top:0.3rem;margin-bottom:0.3rem;">
                             <div style="font-family:'Sora',sans-serif;font-size:0.8rem;font-weight:700;color:var(--blue);margin-bottom:0.4rem;">📂 demo/</div>
                             <div style="display:flex;align-items:center;gap:0.8rem;padding:0.4rem 0.8rem;background:var(--blue-dim);border-radius:6px;margin-bottom:0.3rem;">
                                 <span style="font-size:0.9rem;">🔐</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">login.html</span>
+                                <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">login.html</span>
                                 <span style="font-size:0.8rem;color:var(--text-muted);">Authentication page</span>
                             </div>
                             <div style="display:flex;align-items:center;gap:0.8rem;padding:0.4rem 0.8rem;background:var(--blue-dim);border-radius:6px;">
                                 <span style="font-size:0.9rem;">📖</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">carchitect-guide.html</span>
+                                <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">carchitect-guide.html</span>
                                 <span style="font-size:0.8rem;color:var(--text-muted);">This documentation</span>
                             </div>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;border-radius:6px;">
                             <span style="font-size:1rem;">🌐</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">index.html</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">index.html</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">Main Sustainsys website</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;background:var(--green-dim);border-radius:6px;">
                             <span style="font-size:1rem;">🚫</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">.gitignore</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">.gitignore</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">Excludes demo files from repo</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.8rem;padding:0.5rem 0.8rem;border-radius:6px;">
                             <span style="font-size:1rem;">🖼️</span>
-                            <span style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">*.png / *.mp4</span>
+                            <span style="font-family: 'DM Sans', sans-serif;font-size:0.85rem;font-weight:600;color:var(--heading);min-width:180px;">*.png / *.mp4</span>
                             <span style="font-size:0.8rem;color:var(--text-muted);">Brand assets, logos, media</span>
                         </div>
                     </div>
@@ -928,11 +928,11 @@
             <div style="margin:2rem 0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
                 <div style="background:var(--surface2);padding:0.8rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.6rem;">
                     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;"></span>
-                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;"></span>
+                    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#c4b5fd;"></span>
                     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;"></span>
-                    <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-dim);margin-left:0.5rem;">config-demo.yml</span>
+                    <span style="font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--text-dim);margin-left:0.5rem;">config-demo.yml</span>
                 </div>
-                <div style="padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.85rem;line-height:2;">
+                <div style="padding:1.5rem;font-family: 'DM Sans', sans-serif;font-size:0.85rem;line-height:2;">
                     <div><span style="color:var(--teal);font-weight:600;">tunnel:</span> <span style="color:var(--text-muted);">ad933903-d559-4344-a4a9-21943d7701da</span></div>
                     <div><span style="color:var(--teal);font-weight:600;">credentials-file:</span> <span style="color:var(--text-muted);">~/.cloudflared/ad933903-...json</span></div>
                     <div style="margin-top:0.5rem;"><span style="color:var(--teal);font-weight:600;">ingress:</span></div>
@@ -1012,7 +1012,15 @@
                 <a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · UK · AI-Powered Engineering
             </p>
         </div>
-    </footer>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+    <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
+        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
+        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
+    </a>
+</div>
+</footer>
 
     <script>
         function toggleSidebar() {

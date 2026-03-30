@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Building a Local RAG Pipeline — SustainSys AI Academy</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:         #f8fafc;
@@ -14,17 +14,17 @@
   --surface3:   #f1f5f9;
   --border:     #e2e8f0;
   --border2:    #cbd5e1;
-  --teal:       #0891b2;
-  --teal-light: #06b6d4;
-  --teal-dim:   rgba(8,145,178,0.10);
-  --teal-glow:  rgba(8,145,178,0.05);
+  --teal:       #8b5cf6;
+  --teal-light: #a78bfa;
+  --teal-dim:   rgba(139,92,246,0.10);
+  --teal-glow:  rgba(139,92,246,0.05);
   --blue:       #7c3aed;
   --blue-light: #8b5cf6;
   --blue-dim:   rgba(124,58,237,0.10);
-  --amber:      #d97706;
-  --amber-dim:  rgba(217,119,6,0.10);
-  --green:      #059669;
-  --green-dim:  rgba(5,150,105,0.10);
+  --amber:      #a78bfa;
+  --amber-dim:  rgba(167,139,250,0.10);
+  --green:      #7c3aed;
+  --green-dim:  rgba(139,92,246,0.10);
   --text:       #1e293b;
   --text-muted: #64748b;
   --text-dim:   #94a3b8;
@@ -35,7 +35,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.75;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 5%,rgba(8,145,178,0.04) 0%,transparent 55%),radial-gradient(ellipse 50% 70% at 85% 90%,rgba(124,58,237,0.04) 0%,transparent 55%);pointer-events:none;z-index:0}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 5%,rgba(139,92,246,0.04) 0%,transparent 55%),radial-gradient(ellipse 50% 70% at 85% 90%,rgba(124,58,237,0.04) 0%,transparent 55%);pointer-events:none;z-index:0}
 
 /* NAV */
 .topnav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;background:rgba(255,255,255,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center}
@@ -46,30 +46,30 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 .nav-logo-text span{color:var(--teal)}
 .nav-divider{width:1px;height:20px;background:var(--border2);flex-shrink:0}
 .nav-title{font-size:0.8rem;color:var(--text-muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.nav-badge{flex-shrink:0;font-family:"JetBrains Mono",monospace;font-size:0.65rem;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(8,145,178,0.25);padding:0.2rem 0.6rem;border-radius:3px;letter-spacing:0.05em;text-transform:uppercase}
+.nav-badge{flex-shrink:0;font-family: 'DM Sans', sans-serif;font-size:0.65rem;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(139,92,246,0.25);padding:0.2rem 0.6rem;border-radius:3px;letter-spacing:0.05em;text-transform:uppercase}
 
 /* PROGRESS */
 .progress-circle-wrap{position:fixed;top:12px;right:1.4rem;z-index:300;width:36px;height:36px}
 .progress-circle-wrap svg{transform:rotate(-90deg);width:36px;height:36px}
 .progress-circle-track{fill:none;stroke:var(--border2);stroke-width:3}
 .progress-circle-fill{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-dasharray:94.25;stroke-dashoffset:94.25;transition:stroke-dashoffset 0.15s ease}
-.progress-circle-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:0.55rem;font-weight:500;color:var(--teal);line-height:1}
+.progress-circle-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family: 'DM Sans', sans-serif;font-size:0.55rem;font-weight:500;color:var(--teal);line-height:1}
 
 /* SIDEBAR */
 .sidebar{position:fixed;top:58px;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;z-index:150;padding:1.5rem 0 2rem;transition:transform 0.3s ease}
 .sidebar::-webkit-scrollbar{width:4px}
 .sidebar::-webkit-scrollbar-track{background:transparent}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.sidebar-section-label{font-family:"JetBrains Mono",monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-dim);padding:0.5rem 1.4rem 0.4rem;display:block}
+.sidebar-section-label{font-family: 'DM Sans', sans-serif;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-dim);padding:0.5rem 1.4rem 0.4rem;display:block}
 .sidebar-nav{list-style:none;padding:0}
 .sidebar-nav li{position:relative}
 .sidebar-nav a{display:flex;align-items:center;gap:0.7rem;padding:0.55rem 1.4rem;text-decoration:none;font-size:0.82rem;color:var(--text-muted);font-weight:500;transition:color 0.2s,background 0.2s;border-left:2px solid transparent;line-height:1.3}
-.sidebar-nav a:hover{color:var(--teal);background:rgba(8,145,178,0.05)}
+.sidebar-nav a:hover{color:var(--teal);background:rgba(139,92,246,0.05)}
 .sidebar-nav a.active{color:var(--teal);background:var(--teal-glow);border-left-color:var(--teal)}
-.sidebar-num{font-family:"JetBrains Mono",monospace;font-size:0.65rem;color:var(--text-dim);flex-shrink:0;width:1.4rem;text-align:right}
+.sidebar-num{font-family: 'DM Sans', sans-serif;font-size:0.65rem;color:var(--text-dim);flex-shrink:0;width:1.4rem;text-align:right}
 .sidebar-nav a.active .sidebar-num{color:var(--teal);opacity:0.6}
 .sidebar-divider{height:1px;background:var(--border);margin:0.8rem 1.4rem}
-.sidebar-toggle{display:none;position:fixed;bottom:1.5rem;left:1.5rem;z-index:400;width:44px;height:44px;background:var(--teal);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(8,145,178,0.3)}
+.sidebar-toggle{display:none;position:fixed;bottom:1.5rem;left:1.5rem;z-index:400;width:44px;height:44px;background:var(--teal);border:none;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(139,92,246,0.3)}
 
 /* MAIN */
 .main{margin-left:var(--sidebar-w);margin-top:58px;min-height:calc(100vh - 58px);position:relative;z-index:1}
@@ -77,25 +77,25 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 
 /* HERO */
 .hero{padding:5rem 0 4rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;top:-40px;right:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(8,145,178,0.06) 0%,transparent 65%);pointer-events:none}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;font-family:"JetBrains Mono",monospace;font-size:0.7rem;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(8,145,178,0.25);padding:0.3rem 0.8rem;border-radius:3px;margin-bottom:1.8rem;letter-spacing:0.06em;text-transform:uppercase}
+.hero::after{content:"";position:absolute;top:-40px;right:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.06) 0%,transparent 65%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;font-family: 'DM Sans', sans-serif;font-size:0.7rem;color:var(--teal);background:var(--teal-dim);border:1px solid rgba(139,92,246,0.25);padding:0.3rem 0.8rem;border-radius:3px;margin-bottom:1.8rem;letter-spacing:0.06em;text-transform:uppercase}
 .hero h1{font-family:"Sora",sans-serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;color:var(--heading);line-height:1.12;margin-bottom:1.4rem;letter-spacing:-0.03em}
 .hero h1 .accent{color:var(--teal)}
 .hero-sub{font-size:1.05rem;color:var(--text-muted);max-width:580px;line-height:1.75;margin-bottom:2.5rem}
 .hero-pills{display:flex;flex-wrap:wrap;gap:0.6rem}
-.pill{font-family:"JetBrains Mono",monospace;font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:3px;border:1px solid var(--border2);color:var(--text-muted);background:var(--surface)}
+.pill{font-family: 'DM Sans', sans-serif;font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:3px;border:1px solid var(--border2);color:var(--text-muted);background:var(--surface)}
 
 /* TOC */
 .toc{background:var(--surface);border:1px solid var(--border2);border-top:2px solid var(--blue);padding:2rem;margin:3rem 0}
 .toc-heading{font-family:"Sora",sans-serif;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue-light);margin-bottom:1.2rem;font-weight:700}
 .toc ol{padding-left:1.2rem;display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 2rem}
 @media(max-width:560px){.toc ol{grid-template-columns:1fr}}
-.toc a{color:var(--text-muted);text-decoration:none;font-family:"JetBrains Mono",monospace;font-size:0.78rem;transition:color 0.2s}
+.toc a{color:var(--text-muted);text-decoration:none;font-family: 'DM Sans', sans-serif;font-size:0.78rem;transition:color 0.2s}
 .toc a:hover{color:var(--teal)}
 
 /* SECTIONS */
 .section{padding:4rem 0;border-bottom:1px solid var(--border)}
-.section-label{display:inline-flex;align-items:center;gap:0.5rem;font-family:"JetBrains Mono",monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--teal);margin-bottom:0.8rem}
+.section-label{display:inline-flex;align-items:center;gap:0.5rem;font-family: 'DM Sans', sans-serif;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--teal);margin-bottom:0.8rem}
 .section-label::before{content:"";display:block;width:16px;height:1px;background:var(--teal)}
 h2{font-family:"Sora",sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:var(--heading);line-height:1.2;margin-bottom:1.5rem;letter-spacing:-0.025em}
 h3{font-family:"Sora",sans-serif;font-size:1.15rem;font-weight:700;color:var(--heading);margin:2.5rem 0 0.9rem;letter-spacing:-0.015em}
@@ -107,18 +107,18 @@ ul,ol{padding-left:1.4rem;margin-bottom:1.1rem}
 li{margin-bottom:0.35rem;font-size:0.96rem}
 
 /* CODE */
-code{font-family:"JetBrains Mono",monospace;font-size:0.81em;background:var(--teal-dim);color:var(--teal-light);padding:0.1em 0.4em;border-radius:3px}
+code{font-family: 'DM Sans', sans-serif;font-size:0.81em;background:var(--teal-dim);color:var(--teal-light);padding:0.1em 0.4em;border-radius:3px}
 pre{background:var(--code-bg);border:1px solid var(--border);border-left:2px solid var(--teal);padding:1.4rem 1.5rem;overflow-x:auto;margin:1.4rem 0;border-radius:0 3px 3px 0}
-pre code{font-family:"JetBrains Mono",monospace;font-size:0.8rem;line-height:1.75;color:#334155;background:none;padding:0}
-.code-label{font-family:"JetBrains Mono",monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);opacity:0.7;display:block;margin-bottom:0.3rem}
-.kw{color:#7c3aed}.fn{color:#0891b2}.st{color:#d97706}.cm{color:#94a3b8;font-style:italic}.nm{color:#1e293b}.dt{color:#db2777}
+pre code{font-family: 'DM Sans', sans-serif;font-size:0.8rem;line-height:1.75;color:#334155;background:none;padding:0}
+.code-label{font-family: 'DM Sans', sans-serif;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);opacity:0.7;display:block;margin-bottom:0.3rem}
+.kw{color:#7c3aed}.fn{color:#8b5cf6}.st{color:#a78bfa}.cm{color:#94a3b8;font-style:italic}.nm{color:#1e293b}.dt{color:#a78bfa}
 
 /* CALLOUTS */
 .callout{padding:1.2rem 1.4rem;margin:1.8rem 0;border-left:2px solid;border-radius:0 4px 4px 0}
-.callout.tip{background:rgba(8,145,178,0.06);border-color:var(--teal)}
+.callout.tip{background:rgba(139,92,246,0.06);border-color:var(--teal)}
 .callout.info{background:rgba(124,58,237,0.06);border-color:var(--blue)}
-.callout.warning{background:rgba(217,119,6,0.06);border-color:var(--amber)}
-.callout.success{background:rgba(5,150,105,0.06);border-color:var(--green)}
+.callout.warning{background:rgba(167,139,250,0.06);border-color:var(--amber)}
+.callout.success{background:rgba(139,92,246,0.06);border-color:var(--green)}
 .callout-title{font-family:"Inter",sans-serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.45rem}
 .callout.tip .callout-title{color:var(--teal)}
 .callout.info .callout-title{color:var(--blue-light)}
@@ -135,7 +135,7 @@ pre code{font-family:"JetBrains Mono",monospace;font-size:0.8rem;line-height:1.7
 .flow{display:flex;flex-direction:column;gap:0;margin:1.8rem 0}
 .flow-step{display:flex;gap:1.2rem;align-items:flex-start;position:relative}
 .flow-step:not(:last-child)::after{content:"";position:absolute;left:1rem;top:2.6rem;bottom:-1rem;width:1px;background:var(--border2)}
-.flow-icon{width:2rem;height:2rem;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:0.7rem;color:var(--teal);flex-shrink:0;margin-top:0.15rem}
+.flow-icon{width:2rem;height:2rem;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family: 'DM Sans', sans-serif;font-size:0.7rem;color:var(--teal);flex-shrink:0;margin-top:0.15rem}
 .flow-content{padding-bottom:1.8rem;flex:1}
 .flow-content strong{display:block;font-family:"Sora",sans-serif;font-size:0.9rem;color:var(--heading);margin-bottom:0.25rem}
 .flow-content p{font-size:0.85rem;color:var(--text-muted);margin:0}
@@ -144,14 +144,14 @@ pre code{font-family:"JetBrains Mono",monospace;font-size:0.8rem;line-height:1.7
 .term-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;margin:1.8rem 0;background:var(--border)}
 .term-card{background:var(--surface);padding:1.3rem;transition:background 0.2s}
 .term-card:hover{background:var(--surface2)}
-.term-card .term-name{font-family:"JetBrains Mono",monospace;font-size:0.75rem;color:var(--teal);font-weight:500;margin-bottom:0.45rem;text-transform:uppercase;letter-spacing:0.04em}
+.term-card .term-name{font-family: 'DM Sans', sans-serif;font-size:0.75rem;color:var(--teal);font-weight:500;margin-bottom:0.45rem;text-transform:uppercase;letter-spacing:0.04em}
 .term-card p{font-size:0.85rem;color:var(--text-muted);margin:0;line-height:1.55}
 
 /* STAGES */
 .stages{display:flex;flex-direction:column;gap:1px;margin:1.8rem 0;background:var(--border)}
 .stage-card{display:flex;gap:1.4rem;background:var(--surface);padding:1.4rem;align-items:flex-start;transition:background 0.2s}
 .stage-card:hover{background:var(--surface2)}
-.stage-num{font-family:"JetBrains Mono",monospace;font-size:1.6rem;font-weight:400;color:var(--border2);line-height:1;flex-shrink:0;width:2.2rem;text-align:right;padding-top:0.15rem}
+.stage-num{font-family: 'DM Sans', sans-serif;font-size:1.6rem;font-weight:400;color:var(--border2);line-height:1;flex-shrink:0;width:2.2rem;text-align:right;padding-top:0.15rem}
 .stage-content h4{margin:0 0 0.35rem;font-size:0.95rem;color:var(--heading);text-transform:none;letter-spacing:0}
 .stage-content p{margin:0;font-size:0.86rem;color:var(--text-muted)}
 
@@ -159,11 +159,11 @@ pre code{font-family:"JetBrains Mono",monospace;font-size:0.8rem;line-height:1.7
 .tech-table{width:100%;border-collapse:collapse;margin:1.8rem 0;font-size:0.88rem}
 .tech-table th{font-family:"Inter",sans-serif;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--teal);padding:0.7rem 1rem;text-align:left;border-bottom:1px solid var(--border2);font-weight:600;background:var(--surface)}
 .tech-table td{padding:0.8rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
-.tech-table tr:hover td{background:rgba(8,145,178,0.04)}
-.tech-table td:first-child{font-family:"JetBrains Mono",monospace;font-size:0.78rem;color:var(--amber);white-space:nowrap}
+.tech-table tr:hover td{background:rgba(139,92,246,0.04)}
+.tech-table td:first-child{font-family: 'DM Sans', sans-serif;font-size:0.78rem;color:var(--amber);white-space:nowrap}
 
 /* FILE TREE */
-.file-tree{background:var(--code-bg);border:1px solid var(--border);padding:1.4rem 1.6rem;font-family:"JetBrains Mono",monospace;font-size:0.78rem;line-height:1.9;margin:1.4rem 0;white-space:pre;overflow-x:auto;border-radius:8px}
+.file-tree{background:var(--code-bg);border:1px solid var(--border);padding:1.4rem 1.6rem;font-family: 'DM Sans', sans-serif;font-size:0.78rem;line-height:1.9;margin:1.4rem 0;white-space:pre;overflow-x:auto;border-radius:8px}
 .file-tree .dir{color:#7c3aed}
 .file-tree .file{color:var(--text)}
 .file-tree .comment{color:var(--text-dim);font-style:italic}
@@ -220,7 +220,7 @@ footer a{color:var(--teal);text-decoration:none}
     </a>
     <div class="nav-divider"></div>
     <span class="nav-title">AI Academy · Building a Local RAG Pipeline</span>
-    <span style="flex-shrink:0;font-family:'Inter',sans-serif;font-size:0.75rem;white-space:nowrap;background:linear-gradient(135deg,rgba(8,145,178,0.12),rgba(124,58,237,0.12));border:1px solid rgba(8,145,178,0.35);border-radius:4px;padding:0.25rem 0.75rem;color:var(--heading);">Reviewed by: <strong style="color:var(--teal);font-weight:700;">Satyawan S.</strong></span>
+    <span style="flex-shrink:0;font-family:'Inter',sans-serif;font-size:0.75rem;white-space:nowrap;background:linear-gradient(135deg,rgba(139,92,246,0.12),rgba(124,58,237,0.12));border:1px solid rgba(139,92,246,0.35);border-radius:4px;padding:0.25rem 0.75rem;color:var(--heading);">Reviewed by: <strong style="color:var(--teal);font-weight:700;">Satyawan S.</strong></span>
     <span class="nav-badge">Student Guide</span>
   </div>
 </nav>
@@ -1078,6 +1078,14 @@ footer a{color:var(--teal);text-decoration:none}
     <p>Building a Local RAG Pipeline · AccountIQ Implementation</p>
     <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a> · Cambridge, UK</p>
   </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
+    <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
+        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
+        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
+    </a>
+</div>
 </footer>
 
 </main>
