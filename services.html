@@ -20,87 +20,162 @@
 
         /* Services accent palette (extends shared design tokens) */
         :root {
-            --svc-indigo: #8b5cf6;
-            --svc-cyan: #8b5cf6;
-            --svc-violet: #7c3aed;
-            --svc-emerald: #7c3aed;
-            --svc-amber: #a78bfa;
-            --svc-pink: #a78bfa;
+            --svc-indigo: #1d4ed8;
+            --svc-cyan: #1d4ed8;
+            --svc-violet: #1e3a8a;
+            --svc-emerald: #1d4ed8;
+            --svc-amber: #ea580c;
+            --svc-pink: #ea580c;
         }
 
-        /* ---- Hero: image left + text right ---- */
+        /* ---- Hero: centred editorial layout ---- */
         .svc-hero {
-            display: flex;
-            align-items: stretch;
+            position: relative;
             min-height: 75vh;
-            padding-top: 80px; /* clear fixed nav */
-            width: 100%;
-        }
-
-        .svc-hero-img {
-            flex: 1 1 50%;
-            min-height: 100%;
-            overflow: hidden;
-            line-height: 0;
+            padding: 160px 0 70px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 100%);
-        }
-
-        .svc-hero-img img {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            display: block;
-            padding: 1rem;
+            overflow: hidden;
+            background: linear-gradient(160deg, rgba(15,23,42,1) 0%, rgba(29,78,216,0.55) 50%, rgba(15,23,42,1) 100%);
         }
-
-        .svc-hero-text {
-            flex: 1 1 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding: 2.5rem 3rem 2.5rem 3.5rem;
-            padding-top: 0;
-            text-align: left;
-            align-self: stretch; /* match image height exactly */
-            overflow-y: auto;
+        .svc-hero-bg {
+            display: none;
         }
-
-        .svc-hero-text .page-subtitle {
+        .svc-hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 2.5rem;
+            text-align: center;
+        }
+        .svc-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            color: var(--svc-indigo);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #f97316;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.6rem;
         }
-
-        .svc-hero-text h1 {
-            font-size: 2.8rem;
+        .svc-hero-eyebrow::before,
+        .svc-hero-eyebrow::after {
+            content: '';
+            width: 32px; height: 1px;
+            background: rgba(249,115,22,0.5);
+        }
+        .svc-hero-inner h1 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 3.4rem;
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
             margin-bottom: 1.2rem;
-            background: linear-gradient(135deg, var(--text-bright), var(--svc-indigo));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-
-        .svc-hero-text .page-description {
-            font-size: 0.92rem;
-            color: var(--text-dim);
-            line-height: 1.75;
-            margin-bottom: 0.8rem;
+        .svc-hero-inner h1 span {
+            color: #93c5fd;
         }
-
-        .svc-hero-text .page-description:last-of-type {
-            margin-bottom: 0;
+        .svc-hero-desc {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.08rem;
+            color: #ffffff;
+            line-height: 1.8;
+            max-width: 680px;
+            margin: 0 auto 2.2rem;
         }
-
-        .svc-hero-text .page-description strong {
-            color: var(--text-bright, #1e293b);
+        /* Capability pills row */
+        .svc-hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2.4rem;
+        }
+        .svc-hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(147,197,253,0.2);
+            border-radius: 50px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.25s ease;
+        }
+        .svc-hero-pill:hover {
+            background: rgba(29,78,216,0.18);
+            border-color: rgba(147,197,253,0.4);
+            transform: translateY(-2px);
+        }
+        .svc-hero-pill .pill-icon {
+            font-size: 1rem;
+        }
+        /* Highlighted AI Academy pill */
+        .svc-hero-pill.pill-highlight {
+            background: linear-gradient(135deg, #1d4ed8, #ea580c);
+            border-color: transparent;
+            color: #fff;
             font-weight: 700;
+            box-shadow: 0 4px 16px rgba(234,88,12,0.3);
+        }
+        .svc-hero-pill.pill-highlight:hover {
+            background: linear-gradient(135deg, #2563eb, #f97316);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(234,88,12,0.4);
+        }
+        /* App Store badge next to pill */
+        .svc-hero-appstore {
+            display: inline-flex;
+            align-items: center;
+        }
+        .svc-hero-appstore img {
+            height: 34px;
+            width: auto;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            opacity: 0.92;
+        }
+        .svc-hero-appstore:hover img {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        .svc-hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 32px;
+            background: #ea580c;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .svc-hero-cta:hover {
+            background: #c2410c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(234,88,12,0.3);
+        }
+        /* Subtle bottom divider */
+        .svc-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(147,197,253,0.25), transparent);
+            z-index: 3;
         }
 
         /* Service cards */
@@ -201,38 +276,38 @@
 
         /* NL2SQL featured card (amber/flagship variant) */
         .svc-featured.nl2sql::before {
-            background: linear-gradient(90deg, #a78bfa, #8b5cf6);
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
         }
 
         .svc-featured.nl2sql .svc-featured-badge {
-            background: rgba(167, 139, 250, 0.08);
-            border-color: rgba(167, 139, 250, 0.2);
-            color: #a78bfa;
+            background: rgba(29, 78, 216, 0.08);
+            border-color: rgba(29, 78, 216, 0.2);
+            color: #3b82f6;
         }
 
         .svc-featured.nl2sql h3 span {
-            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .svc-featured.nl2sql .svc-featured-cta {
-            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
         }
 
         .svc-featured.nl2sql .svc-featured-cta:hover {
-            box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
         }
 
         .svc-featured.nl2sql .svc-feat-item {
-            background: rgba(167, 139, 250, 0.04);
-            border-color: rgba(167, 139, 250, 0.1);
+            background: rgba(29, 78, 216, 0.04);
+            border-color: rgba(29, 78, 216, 0.1);
         }
 
         .svc-featured.nl2sql .svc-feat-item:hover {
-            background: rgba(167, 139, 250, 0.08);
-            border-color: rgba(167, 139, 250, 0.2);
+            background: rgba(29, 78, 216, 0.08);
+            border-color: rgba(29, 78, 216, 0.2);
         }
 
         /* RegTech featured card (indigo variant) */
@@ -241,8 +316,8 @@
         }
 
         .svc-featured.regtech .svc-featured-badge {
-            background: rgba(139, 92, 246, 0.08);
-            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(29, 78, 216, 0.08);
+            border-color: rgba(29, 78, 216, 0.2);
             color: var(--svc-indigo);
         }
 
@@ -258,17 +333,17 @@
         }
 
         .svc-featured.regtech .svc-featured-cta:hover {
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
         }
 
         .svc-featured.regtech .svc-feat-item {
-            background: rgba(139, 92, 246, 0.04);
-            border-color: rgba(139, 92, 246, 0.1);
+            background: rgba(29, 78, 216, 0.04);
+            border-color: rgba(29, 78, 216, 0.1);
         }
 
         .svc-featured.regtech .svc-feat-item:hover {
-            background: rgba(139, 92, 246, 0.08);
-            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(29, 78, 216, 0.08);
+            border-color: rgba(29, 78, 216, 0.2);
         }
 
         /* AccountIQ featured card */
@@ -293,7 +368,7 @@
             top: 0; left: 0; right: 0;
             height: 3px;
             border-radius: 16px 16px 0 0;
-            background: linear-gradient(90deg, #8b5cf6, #00bfa5);
+            background: linear-gradient(90deg, #1d4ed8, #ea580c);
         }
 
         .svc-featured:hover {
@@ -312,13 +387,13 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.3rem 0.8rem;
-            background: rgba(0, 150, 136, 0.08);
-            border: 1px solid rgba(0, 150, 136, 0.2);
+            background: rgba(234, 88, 12, 0.08);
+            border: 1px solid rgba(234, 88, 12, 0.2);
             border-radius: 50px;
             font-family: 'DM Sans', sans-serif;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #8b5cf6;
+            color: #1d4ed8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             width: fit-content;
@@ -340,7 +415,7 @@
         }
 
         .svc-featured h3 span {
-            background: linear-gradient(135deg, #8b5cf6, #00bfa5);
+            background: linear-gradient(135deg, #1d4ed8, #ea580c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -360,7 +435,7 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.55rem 1.2rem;
-            background: linear-gradient(135deg, #8b5cf6, #00bfa5);
+            background: linear-gradient(135deg, #1d4ed8, #ea580c);
             color: #fff;
             font-family: 'Inter', sans-serif;
             font-size: 0.82rem;
@@ -374,7 +449,7 @@
 
         .svc-featured-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 150, 136, 0.3);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3);
         }
 
         .svc-featured-right {
@@ -388,15 +463,15 @@
             align-items: flex-start;
             gap: 0.6rem;
             padding: 0.7rem 0.8rem;
-            background: rgba(0, 150, 136, 0.04);
-            border: 1px solid rgba(0, 150, 136, 0.1);
+            background: rgba(234, 88, 12, 0.04);
+            border: 1px solid rgba(234, 88, 12, 0.1);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
 
         .svc-feat-item:hover {
-            background: rgba(0, 150, 136, 0.08);
-            border-color: rgba(0, 150, 136, 0.2);
+            background: rgba(234, 88, 12, 0.08);
+            border-color: rgba(234, 88, 12, 0.2);
         }
 
         .svc-feat-item .fi-icon {
@@ -431,29 +506,29 @@
 
         /* Color variants */
         .svc-card.ai-impl::before { background: linear-gradient(90deg, var(--svc-indigo), var(--svc-cyan)); }
-        .svc-card.ai-impl .svc-card-icon { background: rgba(139, 92, 246, 0.1); color: var(--svc-indigo); }
+        .svc-card.ai-impl .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-indigo); }
         .svc-card.ai-impl .svc-list li::before { background: var(--svc-indigo); }
-        .svc-card.ai-impl .svc-tag { background: rgba(139, 92, 246, 0.08); color: var(--svc-indigo); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .svc-card.ai-impl .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-indigo); border: 1px solid rgba(29, 78, 216, 0.2); }
 
         .svc-card.ai-safety::before { background: linear-gradient(90deg, var(--svc-emerald), var(--svc-cyan)); }
-        .svc-card.ai-safety .svc-card-icon { background: rgba(139, 92, 246, 0.1); color: var(--svc-emerald); }
+        .svc-card.ai-safety .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-emerald); }
         .svc-card.ai-safety .svc-list li::before { background: var(--svc-emerald); }
-        .svc-card.ai-safety .svc-tag { background: rgba(139, 92, 246, 0.08); color: var(--svc-emerald); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .svc-card.ai-safety .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-emerald); border: 1px solid rgba(29, 78, 216, 0.2); }
 
         .svc-card.support::before { background: linear-gradient(90deg, var(--svc-amber), var(--svc-pink)); }
-        .svc-card.support .svc-card-icon { background: rgba(167, 139, 250, 0.1); color: var(--svc-amber); }
+        .svc-card.support .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-amber); }
         .svc-card.support .svc-list li::before { background: var(--svc-amber); }
-        .svc-card.support .svc-tag { background: rgba(167, 139, 250, 0.08); color: var(--svc-amber); border: 1px solid rgba(167, 139, 250, 0.2); }
+        .svc-card.support .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-amber); border: 1px solid rgba(29, 78, 216, 0.2); }
 
         .svc-card.cloud::before { background: linear-gradient(90deg, var(--svc-cyan), var(--svc-violet)); }
-        .svc-card.cloud .svc-card-icon { background: rgba(139, 92, 246, 0.1); color: var(--svc-cyan); }
+        .svc-card.cloud .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-cyan); }
         .svc-card.cloud .svc-list li::before { background: var(--svc-cyan); }
-        .svc-card.cloud .svc-tag { background: rgba(139, 92, 246, 0.08); color: var(--svc-cyan); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .svc-card.cloud .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-cyan); border: 1px solid rgba(29, 78, 216, 0.2); }
 
         .svc-card.murex::before { background: linear-gradient(90deg, var(--svc-violet), var(--svc-pink)); }
-        .svc-card.murex .svc-card-icon { background: rgba(124, 58, 237, 0.1); color: var(--svc-violet); }
+        .svc-card.murex .svc-card-icon { background: rgba(30, 58, 138, 0.1); color: var(--svc-violet); }
         .svc-card.murex .svc-list li::before { background: var(--svc-violet); }
-        .svc-card.murex .svc-tag { background: rgba(124, 58, 237, 0.08); color: var(--svc-violet); border: 1px solid rgba(124, 58, 237, 0.2); }
+        .svc-card.murex .svc-tag { background: rgba(30, 58, 138, 0.08); color: var(--svc-violet); border: 1px solid rgba(30, 58, 138, 0.2); }
 
         /* Grids */
         .svc-grid-top {
@@ -473,7 +548,7 @@
         .svc-cta {
             text-align: center;
             padding: 3rem;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), rgba(139, 92, 246, 0.06));
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.06), rgba(29, 78, 216, 0.06));
             border: 1px solid var(--border);
             border-radius: 20px;
             margin: 3rem 0;
@@ -516,10 +591,11 @@
         @media (max-width: 768px) {
             .svc-grid-top,
             .svc-grid-bottom { grid-template-columns: 1fr; }
-            .svc-hero { flex-direction: column; min-height: auto; padding-top: 60px; }
-            .svc-hero-img { max-height: 300px; }
-            .svc-hero-text { padding: 2rem 1rem; text-align: center; }
-            .svc-hero-text h1 { font-size: 2rem; }
+            .svc-hero { min-height: auto; padding: 120px 0 50px; }
+            .svc-hero-inner h1 { font-size: 2.2rem; }
+            .svc-hero-desc { font-size: 0.95rem; }
+            .svc-hero-pills { gap: 8px; }
+            .svc-hero-pill { padding: 7px 14px; font-size: 0.76rem; }
             .svc-page-header h1 { font-size: 2rem; }
             .svc-cta { padding: 2rem 1.5rem; }
             .svc-cta h3 { font-size: 1.6rem; }
@@ -626,10 +702,13 @@
             </li>
         </ul>
     </li>
-    <li><a href="poc-access.html" class="poc-highlight">PoC Demo</a></li>
+    <li><a href="poc-access.html" class="poc-highlight">Access Demo</a></li>
     <li><a href="job-openings.html">Careers</a></li>
     <li><a href="contact.html">Contact</a></li>
-    <li><a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a></li>
+    <li style="display:flex;align-items:center;gap:8px;">
+        <a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a>
+        <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer" title="Download on the App Store" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:#1d4ed8;border-radius:8px;text-decoration:none;transition:all 0.2s ease;" onmouseover="this.style.background='#1e3a8a'" onmouseout="this.style.background='#1d4ed8'"><svg width="18" height="18" viewBox="0 0 384 512" fill="white"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></a>
+    </li>
 </ul>
         </div>
     </nav>
@@ -647,7 +726,7 @@
     <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer"><img src="Cambiologics_logo.png" alt="CamBiologics" class="mobile-dropdown-logo"> HealthCare (Cancer Research)</a></li>
     <li class="mobile-dropdown-item"><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="mobile-dropdown-logo"> Precision AI</a></li>
     <li class="mobile-dropdown-item"><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="mobile-dropdown-logo"> Community</a></li>
-    <li><a href="poc-access.html" class="poc-highlight">PoC Demo</a></li>
+    <li><a href="poc-access.html" class="poc-highlight">Access Demo</a></li>
     <li><a href="job-openings.html">Careers</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="ai-learn.html" class="ai-academy">AI Academy</a></li>
@@ -655,20 +734,25 @@
     </div>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
-    <!-- Hero: image left, text right -->
+    <!-- Hero: centred editorial layout -->
     <section class="svc-hero">
-        <div class="svc-hero-img">
-            <img src="Sustainsys_hero2.png" alt="SustainSys Services Hero" />
+        <div class="svc-hero-bg">
+            <img src="Sustainsys_hero2.png" alt="SustainSys Services">
+            <div class="hero-overlay"></div>
         </div>
-        <div class="svc-hero-text">
-            <div class="page-subtitle">[ What We Offer ]</div>
-            <h1>Our Services</h1>
-            <p class="page-description">We architect and deliver <strong>enterprise-grade AI solutions</strong> spanning the full lifecycle &mdash; from <strong>Retrieval-Augmented Generation (RAG)</strong> pipelines, multi-model orchestration frameworks, and high-throughput vector database architectures to production-hardened <strong>agentic systems</strong>, autonomous reasoning engines, and intelligent code companions purpose-built for mission-critical workloads.</p>
-            <p class="page-description">Our dedicated <strong>AI Safety &amp; Security</strong> practice embeds compliance-by-design into every deployment, enforcing rigorous governance protocols, adversarial resilience testing, prompt-injection defence layers, and alignment with evolving regulatory mandates including the <strong>EU AI Act</strong> and <strong>GDPR</strong>.</p>
-            <p class="page-description">Backed by deep-domain <strong>MLOps &amp; DevOps</strong> expertise, end-to-end <strong>CI/CD automation</strong>, and ITIL-aligned <strong>managed support services</strong>, we operationalise AI at scale &mdash; ensuring observability, model drift monitoring, and continuous delivery across heterogeneous infrastructure.</p>
-            <p class="page-description">Our <strong>Cloud Transformation</strong> consultants accelerate migration and modernisation across AWS, Azure, GCP, and hybrid environments, while our specialist <strong>Murex consulting</strong> team delivers end-to-end capital-markets platform upgrades, FRTB, IBOR transition, and XVA analytics.</p>
-            <p class="page-description">Through our <strong>AI Academy</strong>, we upskill your teams with immersive, hands-on training in prompt engineering, LLM fine-tuning, responsible AI governance, and agentic workflow design &mdash; empowering organisations to build, secure, and sustain intelligent systems with confidence.</p>
-            <p class="page-description"><strong>New:</strong> Our latest product, <strong>AccountIQ</strong>, brings AI-powered accounting intelligence to UK businesses &mdash; a privacy-first, fully on-device assistant for VAT filing, reconciliation, and year-end tax preparation, built entirely by SustainSys.</p>
+        <div class="svc-hero-inner">
+            <div class="svc-hero-eyebrow">What We Offer</div>
+            <h1>AI systems that work <span>in production</span></h1>
+            <p class="svc-hero-desc">We build, deploy, and run AI that actually ships &mdash; real systems handling real data, meeting compliance requirements, and making your teams more effective.</p>
+            <div class="svc-hero-pills">
+                <span class="svc-hero-pill"><span class="pill-icon">&#129302;</span> AI &amp; Machine Learning</span>
+                <span class="svc-hero-pill"><span class="pill-icon">&#9729;&#65039;</span> Cloud Infrastructure</span>
+                <span class="svc-hero-pill"><span class="pill-icon">&#128200;</span> Capital Markets</span>
+                <span class="svc-hero-pill"><span class="pill-icon">&#128737;&#65039;</span> Compliance &amp; RegTech</span>
+                <a href="ai-learn.html" class="svc-hero-pill pill-highlight" style="text-decoration:none;"><span class="pill-icon">&#127891;</span> AI Academy</a>
+                <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer" class="svc-hero-appstore"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store"></a>
+            </div>
+            <a href="contact.html" class="svc-hero-cta">Talk to Our Team &rarr;</a>
         </div>
     </section>
 
@@ -679,9 +763,9 @@
                     <div class="svc-featured-badge">
                         <img src="nl2sql_logo.svg" alt="NL2SQL"> NL2SQL Analytics &mdash; Flagship
                     </div>
-                    <h3>AI-Powered <span>Natural Language to SQL</span></h3>
-                    <p>Enable every team member &mdash; from analysts to executives &mdash; to <strong>query databases in plain English</strong>. No SQL knowledge required, no engineering bottleneck. Our NL2SQL platform combines RAG, local LLM inference, and multi-layer guardrails to deliver <strong>accurate, secure, and self-correcting</strong> data access.</p>
-                    <p>Built for <strong>regulated industries</strong> including banking and financial services, with <strong>12-point security guardrails</strong>, full audit trails, and 100% on-premise deployment &mdash; no data ever leaves your infrastructure.</p>
+                    <h3>Ask Your Database <span>in Plain English</span></h3>
+                    <p>Your analysts shouldn't need to wait for engineering to pull a report. With NL2SQL, anyone on the team can <strong>type a question and get an answer</strong> &mdash; the platform writes the SQL, validates it, and returns results in seconds.</p>
+                    <p>Designed for <strong>banks and regulated industries</strong> where data can't leave your network. Everything runs on-premise with 12-point security guardrails and a full audit trail. No cloud APIs, no data leaks, no surprises.</p>
                     <a href="nl2sql-sales-deck.html" class="svc-featured-cta">Explore NL2SQL Platform &rsaquo;</a>
                 </div>
                 <div class="svc-featured-right">
@@ -738,9 +822,9 @@
                     <div class="svc-featured-badge">
                         <img src="logo_only.png" alt="SustainSys"> RegTech AI Solutions &mdash; New
                     </div>
-                    <h3>AI-Driven <span>Regulatory Intelligence</span></h3>
-                    <p>Purpose-built for <strong>global banks and financial institutions</strong>, our RegTech platform uses frontier language models, RAG pipelines, and regulatory knowledge graphs to navigate reporting complexity across <strong>11 jurisdictions</strong> and <strong>200+ regulatory fields</strong>.</p>
-                    <p>From <strong>EMIR and MiFIR</strong> to <strong>CFTC, Basel III, and APAC regimes</strong>, SustainsysAI delivers citation-backed regulatory insights, cross-regime field mapping, and continuous change monitoring &mdash; reducing compliance risk and analyst hours.</p>
+                    <h3>Know What Changed <span>Before the Regulator Does</span></h3>
+                    <p>If your compliance team is still tracking regulatory changes in spreadsheets, this is for them. Our RegTech platform monitors <strong>40+ regulatory sources across 11 jurisdictions</strong> and tells you exactly which EMIR, MiFIR, or CFTC fields are affected &mdash; with citations back to the source document.</p>
+                    <p>Built for the people who actually file the reports. Not a research tool that generates vague summaries &mdash; a <strong>practical system that maps changes to your specific reporting fields</strong> and flags what needs action.</p>
                     <a href="ai-regtech-capabilities.html" class="svc-featured-cta">Explore RegTech AI &rsaquo;</a>
                 </div>
                 <div class="svc-featured-right">
@@ -797,9 +881,9 @@
                     <div class="svc-featured-badge">
                         <img src="logo_only.png" alt="SustainSys"> AccountIQ &mdash; New Product
                     </div>
-                    <h3>AI-Powered <span>Accounting Software</span></h3>
-                    <p>Built by SustainSys, AccountIQ is a <strong>privacy-first, on-device accounting assistant</strong> powered by local LLM inference. It processes invoices, bank statements, receipts and spreadsheets entirely on your machine &mdash; no data ever leaves your device.</p>
-                    <p>From <strong>VAT filing</strong> and <strong>month-end reconciliation</strong> to <strong>year-end corporation tax</strong> preparation, AccountIQ automates the workflows that matter most to UK businesses and their accountants.</p>
+                    <h3>Your Accounts, <span>On Your Machine</span></h3>
+                    <p>AccountIQ is an AI accounting assistant that runs <strong>entirely on your device</strong>. Your invoices, bank statements, and tax records never leave your computer &mdash; not to a cloud server, not to an API, nowhere. That's not a feature, it's the whole point.</p>
+                    <p>It handles the work that eats up your week: <strong>VAT returns, bank reconciliation, year-end packs for your accountant</strong>. Upload your documents, ask questions in plain English, and get answers with sources. Built specifically for UK businesses and their accountants.</p>
                     <a href="accountiq.html" class="svc-featured-cta">Explore AccountIQ &rsaquo;</a>
                 </div>
                 <div class="svc-featured-right">
@@ -859,22 +943,19 @@
                 <div class="svc-card ai-impl">
                     <div class="svc-card-icon">&#129302;</div>
                     <h3>AI Implementations</h3>
-                    <p>End-to-end Generative AI and Agentic AI solutions &mdash; from proof-of-concept to production-grade deployments. We architect, build, and scale intelligent systems tailored to your enterprise context.</p>
+                    <p>Your team shouldn't need to understand five different LLM APIs. We build the layer that connects them &mdash; RAG pipelines, agentic workflows, and knowledge systems that actually work with your existing data and infrastructure.</p>
                     <ul class="svc-list">
-                        <li>Retrieval-Augmented Generation (RAG) pipelines</li>
-                        <li>Multi-model connectivity &amp; orchestration</li>
-                        <li>Vector database design &amp; optimisation</li>
-                        <li>AI code companions &amp; IDE integrations</li>
-                        <li>Agentic workflows &amp; autonomous agents</li>
-                        <li>Fine-tuning &amp; custom model training</li>
-                        <li>Enterprise knowledge base &amp; semantic search</li>
+                        <li>RAG pipelines that ground answers in your documents</li>
+                        <li>Agentic workflows for multi-step reasoning tasks</li>
+                        <li>Model fine-tuning on your domain-specific data</li>
+                        <li>AI code companions integrated into your IDE</li>
+                        <li>Enterprise search that understands context, not just keywords</li>
                     </ul>
                     <div style="margin-top: 1rem;">
                         <span class="svc-tag">RAG</span>
-                        <span class="svc-tag">LangChain</span>
-                        <span class="svc-tag">Vector DB</span>
                         <span class="svc-tag">LLMs</span>
                         <span class="svc-tag">Agents</span>
+                        <span class="svc-tag">Fine-tuning</span>
                     </div>
                 </div>
 
@@ -882,21 +963,19 @@
                 <div class="svc-card ai-safety">
                     <div class="svc-card-icon">&#128737;</div>
                     <h3>AI Safety &amp; Security</h3>
-                    <p>Ensure your AI deployments are <strong>responsible, compliant, and secure</strong>. We implement enterprise-grade guardrails, governance frameworks, and security controls for trustworthy AI at scale.</p>
+                    <p>You've deployed an LLM. Now your compliance team wants to know: can it leak PII? Does it hallucinate about regulations? Can someone jailbreak it? We help you answer those questions before they become problems.</p>
                     <ul class="svc-list">
-                        <li>AI compliance &amp; regulatory alignment (EU AI Act, GDPR)</li>
-                        <li>Data privacy &amp; PII protection frameworks</li>
-                        <li>Guardrails, content filtering &amp; output validation</li>
-                        <li>Prompt injection defence &amp; adversarial testing</li>
-                        <li>Model explainability &amp; bias auditing</li>
-                        <li>Cyber safety assessments for AI systems</li>
-                        <li>AI governance policies &amp; risk management</li>
+                        <li>EU AI Act and GDPR compliance assessments</li>
+                        <li>Prompt injection defence and adversarial testing</li>
+                        <li>Output guardrails and content filtering</li>
+                        <li>Bias auditing and model explainability</li>
+                        <li>AI governance policies your board can actually read</li>
                     </ul>
                     <div style="margin-top: 1rem;">
                         <span class="svc-tag">Compliance</span>
                         <span class="svc-tag">Privacy</span>
                         <span class="svc-tag">Guardrails</span>
-                        <span class="svc-tag">Security</span>
+                        <span class="svc-tag">EU AI Act</span>
                     </div>
                 </div>
             </div>
@@ -907,14 +986,14 @@
                 <!-- Support Services (MLOps / DevOps / ITIL) -->
                 <div class="svc-card support">
                     <div class="svc-card-icon">&#9881;</div>
-                    <h3>Support Services</h3>
-                    <p>Production-grade AI operations, infrastructure support, and ITIL-aligned service management to keep your intelligent systems running at peak performance.</p>
+                    <h3>Support &amp; MLOps</h3>
+                    <p>Deploying a model is the easy part. Keeping it running, monitored, and retraining when the data shifts? That's where most teams struggle. We handle the ops so your data scientists can focus on the science.</p>
                     <ul class="svc-list">
-                        <li>MLOps &amp; model lifecycle management</li>
-                        <li>CI/CD pipelines for ML deployments</li>
-                        <li>Intelligent monitoring &amp; observability</li>
-                        <li>ITIL service management (L1/L2/L3)</li>
-                        <li>24/7 incident response &amp; SLA management</li>
+                        <li>ML model monitoring and drift detection</li>
+                        <li>CI/CD pipelines for automated retraining</li>
+                        <li>L1/L2/L3 support with ITIL-aligned SLAs</li>
+                        <li>24/7 incident response for production AI</li>
+                        <li>Cost tracking and infrastructure right-sizing</li>
                     </ul>
                     <div style="margin-top: 1rem;">
                         <span class="svc-tag">MLOps</span>
@@ -927,13 +1006,13 @@
                 <div class="svc-card cloud">
                     <div class="svc-card-icon">&#9729;&#65039;</div>
                     <h3>Cloud Transformations</h3>
-                    <p>From strategy and assessment through to migration and optimisation across <strong>AWS, Azure, GCP, Oracle</strong> and hybrid environments.</p>
+                    <p>Still running workloads on-prem that should have moved to the cloud three years ago? We get it &mdash; migration is risky and time-consuming. We've done it enough times to know where the pitfalls are.</p>
                     <ul class="svc-list">
-                        <li>Cloud strategy &amp; architecture design</li>
-                        <li>Migration &amp; modernisation</li>
-                        <li>Cloud security &amp; cost optimisation</li>
-                        <li>Infrastructure automation (Terraform, IaC)</li>
-                        <li>Data platform transformations</li>
+                        <li>Cloud strategy and architecture design</li>
+                        <li>Migration from on-prem to AWS, Azure, or GCP</li>
+                        <li>Infrastructure-as-code with Terraform</li>
+                        <li>Cost optimisation (we've saved clients 30%+ on cloud spend)</li>
+                        <li>Data platform modernisation</li>
                     </ul>
                     <div style="margin-top: 1rem;">
                         <span class="svc-tag">AWS</span>
@@ -942,22 +1021,23 @@
                     </div>
                 </div>
 
-                <!-- Murex Expertise -->
+                <!-- Murex & Data Engineering -->
                 <div class="svc-card murex">
                     <div class="svc-card-icon">&#128188;</div>
-                    <h3>Murex Expertise</h3>
-                    <p><strong>Consultancy and resourcing</strong> for Murex 3.1 &mdash; cloud migrations, upgrades, regulatory projects, and reporting solutions for capital markets.</p>
+                    <h3>Murex &amp; Data Engineering</h3>
+                    <p>If you're running Murex and thinking about your next upgrade, cloud migration, or getting better analytics out of your trading data &mdash; that's what our capital markets team does. We've been in this space long enough to know what works.</p>
                     <ul class="svc-list">
-                        <li>Murex upgrades &amp; Mx2.11 to Mx3.1 migration</li>
-                        <li>FRTB, IBOR, XVA &amp; ISDA SIMM delivery</li>
-                        <li>Trading &amp; risk system integration</li>
-                        <li>Datamart reporting solutions</li>
-                        <li>Cost optimisation &amp; infrastructure overhaul</li>
+                        <li>Mx2.11 to Mx3.1 upgrades and migration</li>
+                        <li>Platform enhancement and performance tuning</li>
+                        <li>Data pipeline design for trading and risk data</li>
+                        <li>AI-powered analytics and reporting</li>
+                        <li>Cloud migration and infrastructure modernisation</li>
                     </ul>
                     <div style="margin-top: 1rem;">
-                        <span class="svc-tag">FRTB</span>
-                        <span class="svc-tag">IBOR</span>
-                        <span class="svc-tag">ISDA SIMM</span>
+                        <span class="svc-tag">Murex</span>
+                        <span class="svc-tag">Data Eng</span>
+                        <span class="svc-tag">Cloud</span>
+                        <span class="svc-tag">Analytics</span>
                     </div>
                 </div>
             </div>
@@ -966,9 +1046,9 @@
         <!-- CTA -->
         <section class="svc-section">
             <div class="svc-cta">
-                <h3>Ready to Transform?</h3>
-                <p>Get in touch to learn how our AI-powered services can accelerate your business outcomes.</p>
-                <a href="contact.html" class="btn btn-primary">Get in Touch</a>
+                <h3>Let's talk about what you're building</h3>
+                <p>Book a 30-minute call &mdash; no pitch deck, just a conversation about your challenges and whether we can help.</p>
+                <a href="contact.html" class="btn btn-primary">Start a Conversation</a>
             </div>
         </section>
 
@@ -1000,7 +1080,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="mailto:accounts@sustainsys.co.uk">accounts@sustainsys.co.uk</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
             </div>
         </div>
     </footer>
