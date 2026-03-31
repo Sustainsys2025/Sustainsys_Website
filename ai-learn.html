@@ -656,6 +656,52 @@
       // Also re-check after load in case Supabase SDK wasn't ready
       window.addEventListener('load', () => { setTimeout(handleRoute, 50); });
 
+      // ── FIX: React Router (HashRouter) may use pushState/replaceState internally,
+      // which does NOT fire "hashchange" events. Poll the hash every 100ms to catch
+      // SPA-initiated navigations that bypass our hashchange listener. ──
+      let _lastHash = getHash();
+      setInterval(() => {
+        const h = getHash();
+        if (h !== _lastHash) {
+          _lastHash = h;
+          handleRoute();
+        }
+      }, 100);
+
+      // ── FIX: Intercept clicks on SPA buttons/links that navigate to auth routes.
+      // Uses capture phase to fire before React's synthetic event system.
+      // Forces a full page reload so the inline <head> hider + handleRoute() both run fresh. ──
+      document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href*="#/login"], a[href*="#/register"], a[href*="#/forgot-password"], button');
+        if (!link) return;
+
+        // Check <a> tags with auth route hrefs
+        const href = link.getAttribute('href') || '';
+        if (href.includes('#/login') || href.includes('#/register') || href.includes('#/forgot-password')) {
+          e.preventDefault();
+          e.stopPropagation();
+          // Navigate and reload to ensure clean overlay display
+          window.location.hash = '#/' + href.split('#/')[1];
+          handleRoute();
+          return;
+        }
+
+        // Check buttons whose text/aria suggests auth navigation
+        if (link.tagName === 'BUTTON' || link.tagName === 'A') {
+          const text = (link.textContent || '').toLowerCase().trim();
+          if (text === 'get started' || text === 'sign in' || text === 'log in' || text === 'register' || text === 'sign up') {
+            // Wait a tick for the SPA to update the hash, then force our handler
+            setTimeout(() => {
+              const h = getHash();
+              if (h === 'login' || h === 'register' || h === 'forgot-password') {
+                _lastHash = h;
+                handleRoute();
+              }
+            }, 50);
+          }
+        }
+      }, true);
+
       // MutationObserver: if React renders auth pages while our overlay is up, keep #root hidden
       const rootEl = document.getElementById('root');
       if (rootEl) {
