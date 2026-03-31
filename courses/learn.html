@@ -125,8 +125,17 @@
 
     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
     iframeDoc.open();
-    // Inject <base target="_parent"> so sidebar links navigate the parent window
-    const modifiedHtml = html.replace(/<head([^>]*)>/i, '<head$1><base target="_parent">');
+    // Inject <base> with correct href so relative paths (../assets/) resolve properly,
+    // and target="_parent" so sidebar links navigate the parent window
+    const baseHref = window.location.origin + '/courses/' + courseId + '/';
+    let modifiedHtml = html.replace(/<head([^>]*)>/i, '<head$1><base href="' + baseHref + '" target="_parent">');
+
+    // Strip the auth-gate scripts from lesson HTML — learn.html already handles auth/enrollment
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*supabase\.min\.js"><\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*supabase-auth\.js"><\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script>window\.COURSE_GATE_ID\s*=\s*'[^']*';<\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*course-gate\.js"><\/script>\s*/g, '');
+
     iframeDoc.write(modifiedHtml);
     iframeDoc.close();
 
