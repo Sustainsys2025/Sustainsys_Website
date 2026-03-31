@@ -377,9 +377,15 @@
 
       function showOverlay(mode) {
         removeOverlay();
-        // Hide React SPA
+        // Hide React SPA with a <style> tag — CSS !important beats any React inline style changes
         const root = document.getElementById('root');
         if (root) root.style.display = 'none';
+        if (!document.getElementById('supaHideRoot')) {
+          const s = document.createElement('style');
+          s.id = 'supaHideRoot';
+          s.textContent = '#root { display: none !important; }';
+          document.head.appendChild(s);
+        }
 
         overlay = document.createElement('div');
         overlay.className = 'supa-auth-overlay';
@@ -477,6 +483,8 @@
       function showRoot() {
         const root = document.getElementById('root');
         if (root) root.style.display = '';
+        const hider = document.getElementById('supaHideRoot');
+        if (hider) hider.remove();
       }
 
       function showError(msg) {
@@ -644,6 +652,20 @@
 
       // Also re-check after load in case Supabase SDK wasn't ready
       window.addEventListener('load', () => { setTimeout(handleRoute, 50); });
+
+      // MutationObserver: if React renders auth pages while our overlay is up, keep #root hidden
+      const rootEl = document.getElementById('root');
+      if (rootEl) {
+        new MutationObserver(() => {
+          const h = getHash();
+          if ((h === 'login' || h === 'register' || h === 'forgot-password') && !document.getElementById('supaHideRoot')) {
+            const s = document.createElement('style');
+            s.id = 'supaHideRoot';
+            s.textContent = '#root { display: none !important; }';
+            document.head.appendChild(s);
+          }
+        }).observe(rootEl, { childList: true, subtree: true });
+      }
     })();
     </script>
 
