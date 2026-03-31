@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Certifications — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/course-styles.css">
+<style>
+.main{margin-left:0;margin-top:58px}
+
+/* ── Loading state ── */
+.cert-loading {
+  display:flex; align-items:center; justify-content:center;
+  min-height:60vh; flex-direction:column; gap:1rem;
+}
+.cert-loading .spinner {
+  width:36px; height:36px; border:3px solid #e2e8f0;
+  border-top-color:#1d4ed8; border-radius:50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── User bar ── */
+.user-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 0; margin-bottom:1rem;
+}
+.user-bar .user-info {
+  display:flex; align-items:center; gap:0.75rem;
+}
+.user-bar .avatar {
+  width:40px; height:40px; border-radius:50%;
+  background:linear-gradient(135deg,#1d4ed8,#ea580c);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:700; font-size:0.95rem;
+  font-family:'DM Sans',sans-serif;
+}
+.user-bar .user-name {
+  font-family:'DM Sans',sans-serif; font-weight:600;
+  color:#0f172a; font-size:0.95rem;
+}
+.user-bar .user-email {
+  font-size:0.78rem; color:#64748b;
+}
+.user-bar .sign-out-btn {
+  font-family:'DM Sans',sans-serif; font-size:0.8rem;
+  font-weight:600; color:#64748b; background:none;
+  border:1px solid #e2e8f0; border-radius:6px;
+  padding:0.4rem 1rem; cursor:pointer; transition:all 0.2s;
+}
+.user-bar .sign-out-btn:hover {
+  color:#dc2626; border-color:#dc2626;
+}
+
+/* ── Course card states ── */
+.course-card-link { position:relative; display:block; }
+
+.course-card-link.locked {
+  pointer-events:none; opacity:0.55; filter:grayscale(0.3);
+}
+.course-card-link.locked .course-card-body::after {
+  content:''; position:absolute; inset:0; border-radius:inherit;
+  background:rgba(255,255,255,0.4);
+}
+
+.card-enrollment-status {
+  display:flex; align-items:center; gap:0.5rem;
+  margin-top:0.8rem; padding-top:0.8rem;
+  border-top:1px solid rgba(0,0,0,0.06);
+  font-family:'DM Sans',sans-serif; font-size:0.8rem;
+}
+.card-enrollment-status .status-dot {
+  width:8px; height:8px; border-radius:50%; flex-shrink:0;
+}
+.card-enrollment-status .status-dot.active { background:#16a34a; }
+.card-enrollment-status .status-dot.completed { background:#1d4ed8; }
+.card-enrollment-status .status-dot.locked { background:#94a3b8; }
+.card-enrollment-status .status-text { color:#334155; font-weight:500; }
+.card-enrollment-status .progress-text { margin-left:auto; color:#64748b; font-size:0.75rem; }
+
+.enroll-btn {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  margin-top:0.8rem; padding:0.5rem 1.2rem;
+  background:#ea580c; color:#fff; border:none; border-radius:8px;
+  font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
+  cursor:pointer; transition:background 0.2s;
+}
+.enroll-btn:hover { background:#c2410c; }
+.enroll-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+.lock-badge {
+  position:absolute; top:1rem; right:1rem; z-index:2;
+  background:rgba(15,23,42,0.7); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:0.7rem;
+  font-weight:600; padding:0.3rem 0.7rem; border-radius:6px;
+  display:flex; align-items:center; gap:0.35rem;
+  backdrop-filter:blur(4px);
+}
+.lock-badge svg { width:12px; height:12px; }
+
+/* ── Progress bar in card ── */
+.card-progress-bar {
+  height:4px; background:#e2e8f0; border-radius:2px;
+  margin-top:0.5rem; overflow:hidden;
+}
+.card-progress-bar .fill {
+  height:100%; border-radius:2px; transition:width 0.3s;
+}
+.card-progress-bar .fill.active { background:#16a34a; }
+.card-progress-bar .fill.completed { background:#1d4ed8; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">AI Academy — My Certifications</div>
+    <a href="../ai-learn.html" class="nav-home-link">AI Academy</a>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="container" style="max-width:1100px">
+
+    <!-- Loading state -->
+    <div class="cert-loading" id="certLoading">
+      <div class="spinner"></div>
+      <span style="color:#64748b;font-size:0.9rem;">Loading your certifications...</span>
+    </div>
+
+    <!-- Main content (hidden until auth check passes) -->
+    <div id="certContent" style="display:none">
+
+      <!-- User bar -->
+      <div class="user-bar" id="userBar"></div>
+
+      <!-- Hero -->
+      <section class="course-hero" style="background:none;border:none;padding:2rem 0 2rem;text-align:center">
+        <span class="hero-eyebrow" style="margin:0 auto 1.5rem">3 Certification Programs · 410 Hours</span>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);margin-bottom:1rem">My <span class="accent">Certifications</span></h1>
+        <p class="hero-sub" style="max-width:650px;margin:0 auto 1rem;text-align:center">Your enrolled certification programs. Only courses you've enrolled in are accessible.</p>
+        <p id="enrollmentSummary" style="color:#64748b;font-size:0.85rem;"></p>
+      </section>
+
+      <!-- Course Cards -->
+      <div id="courseGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin:0 0 4rem">
+
+        <!-- Associate -->
+        <div class="course-card-wrap" data-course-id="associate" data-course-type="certification">
+          <a href="associate/index.html" class="course-card-link" id="card-associate">
+            <div class="lock-badge" id="lock-associate" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#36cfc9,#5eddd8)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#36cfc9;background:rgba(54,207,201,0.1);border-color:rgba(54,207,201,0.3)">Associate</span>
+              <h3>AI Practitioner Associate</h3>
+              <p>Begin your AI journey with Python, data science, machine learning basics, and introduction to large language models and RAG pipelines.</p>
+              <div class="course-card-stats">
+                <div><strong>90</strong><span>Hours</span></div>
+                <div><strong>10</strong><span>Modules</span></div>
+                <div><strong>54</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>Python</span><span>NumPy</span><span>Pandas</span><span>ML</span><span>Deep Learning</span><span>LLMs</span><span>RAG</span>
+              </div>
+              <div class="card-enrollment-status" id="status-associate"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-associate"></div>
+        </div>
+
+        <!-- Advanced -->
+        <div class="course-card-wrap" data-course-id="advanced" data-course-type="certification">
+          <a href="advanced/index.html" class="course-card-link" id="card-advanced">
+            <div class="lock-badge" id="lock-advanced" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#9d4edd,#b57bee)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#9d4edd;background:rgba(157,78,221,0.1);border-color:rgba(157,78,221,0.3)">Advanced</span>
+              <h3>AI Practitioner Advanced</h3>
+              <p>Build production-ready AI systems with advanced RAG, chatbots, cloud deployment, fine-tuning, and evaluation methodologies.</p>
+              <div class="course-card-stats">
+                <div><strong>140</strong><span>Hours</span></div>
+                <div><strong>12</strong><span>Modules</span></div>
+                <div><strong>64</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>LLM APIs</span><span>Chatbots</span><span>RAG</span><span>FastAPI</span><span>AWS</span><span>Azure</span><span>Fine-Tuning</span>
+              </div>
+              <div class="card-enrollment-status" id="status-advanced"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-advanced"></div>
+        </div>
+
+        <!-- Architect -->
+        <div class="course-card-wrap" data-course-id="architect" data-course-type="certification">
+          <a href="architect/index.html" class="course-card-link" id="card-architect">
+            <div class="lock-badge" id="lock-architect" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#00f0ff,#36cfc9)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#00f0ff;background:rgba(0,240,255,0.1);border-color:rgba(0,240,255,0.3)">Architect</span>
+              <h3>AI Solution Architect</h3>
+              <p>Design enterprise-scale AI solutions with advanced architectures, MLOps, CI/CD, security, governance, and industry-leading practices.</p>
+              <div class="course-card-stats">
+                <div><strong>180</strong><span>Hours</span></div>
+                <div><strong>13</strong><span>Modules</span></div>
+                <div><strong>71</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>System Design</span><span>RAG</span><span>Agents</span><span>MLOps</span><span>K8s</span><span>Security</span><span>Enterprise</span>
+              </div>
+              <div class="card-enrollment-status" id="status-architect"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-architect"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<!-- Supabase SDK + shared auth -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/supabase-auth.js"></script>
+
+<script>
+(async function certGate() {
+  const LOGIN_URL = '../ai-learn.html#/login';
+  const COURSE_IDS = ['associate', 'advanced', 'architect'];
+
+  /* ── 1. Auth check ── */
+  const session = await supaGetSession();
+  if (!session) {
+    window.location.href = LOGIN_URL;
+    return;
+  }
+
+  const user = session.user;
+  const meta = user.user_metadata || {};
+  const firstName = meta.first_name || user.email.split('@')[0];
+  const lastName = meta.last_name || '';
+  const displayName = `${firstName} ${lastName}`.trim() || user.email;
+  const initials = `${(firstName[0] || '').toUpperCase()}${(lastName[0] || '').toUpperCase()}` || user.email[0].toUpperCase();
+
+  /* ── 2. Render user bar ── */
+  document.getElementById('userBar').innerHTML = `
+    <div class="user-info">
+      <div class="avatar">${initials}</div>
+      <div>
+        <div class="user-name">${displayName}</div>
+        <div class="user-email">${user.email}</div>
+      </div>
+    </div>
+    <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+  `;
+
+  document.getElementById('signOutBtn').addEventListener('click', async () => {
+    await supaSignOut();
+    window.location.href = LOGIN_URL;
+  });
+
+  /* ── 3. Fetch enrollments ── */
+  const enrollments = await supaGetEnrollments();
+  const enrolledMap = {};
+  enrollments.forEach(e => { enrolledMap[e.item_id] = e; });
+
+  const enrolledCount = COURSE_IDS.filter(id => enrolledMap[id]).length;
+  document.getElementById('enrollmentSummary').textContent =
+    enrolledCount > 0
+      ? `You are enrolled in ${enrolledCount} of 3 certification programs.`
+      : 'You are not enrolled in any certification programs yet. Enroll below to get started.';
+
+  /* ── 4. Update cards based on enrollment ── */
+  COURSE_IDS.forEach(courseId => {
+    const card = document.getElementById(`card-${courseId}`);
+    const lockBadge = document.getElementById(`lock-${courseId}`);
+    const statusEl = document.getElementById(`status-${courseId}`);
+    const actionEl = document.getElementById(`action-${courseId}`);
+    const enrollment = enrolledMap[courseId];
+
+    if (enrollment) {
+      // Enrolled — card is accessible
+      card.classList.remove('locked');
+      lockBadge.style.display = 'none';
+
+      const isCompleted = enrollment.status === 'completed';
+      const progress = enrollment.progress || 0;
+
+      statusEl.innerHTML = `
+        <span class="status-dot ${isCompleted ? 'completed' : 'active'}"></span>
+        <span class="status-text">${isCompleted ? 'Completed' : 'In Progress'}</span>
+        <span class="progress-text">${progress}% complete</span>
+      `;
+
+      if (!isCompleted) {
+        statusEl.innerHTML += `
+          <div class="card-progress-bar" style="width:100%;margin-top:0.5rem">
+            <div class="fill active" style="width:${progress}%"></div>
+          </div>`;
+      }
+
+      // Update CTA text
+      const cta = card.querySelector('.course-card-cta');
+      if (cta) {
+        cta.innerHTML = isCompleted
+          ? 'Review Course <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+          : 'Continue Learning <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+      }
+    } else {
+      // Not enrolled — card is locked
+      card.classList.add('locked');
+      lockBadge.style.display = 'flex';
+
+      statusEl.innerHTML = `
+        <span class="status-dot locked"></span>
+        <span class="status-text" style="color:#94a3b8">Not Enrolled</span>
+      `;
+
+      // Add enroll button outside the locked card
+      actionEl.innerHTML = `
+        <button class="enroll-btn" data-course="${courseId}" data-type="certification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Enroll Now
+        </button>
+      `;
+
+      actionEl.querySelector('.enroll-btn').addEventListener('click', async function() {
+        this.disabled = true;
+        this.textContent = 'Enrolling...';
+        const result = await supaEnroll(courseId, 'certification');
+        if (result) {
+          // Refresh page to show updated state
+          window.location.reload();
+        } else {
+          this.disabled = false;
+          this.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Enroll Now`;
+          alert('Failed to enroll. Please try again.');
+        }
+      });
+    }
+  });
+
+  /* ── 5. Show content, hide loading ── */
+  document.getElementById('certLoading').style.display = 'none';
+  document.getElementById('certContent').style.display = 'block';
+
+})();
+</script>
+
+</body>
+</html>
