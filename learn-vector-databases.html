@@ -15,11 +15,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -267,7 +274,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -367,7 +374,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -543,7 +550,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -757,6 +764,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -767,6 +775,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -842,6 +851,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -883,7 +893,7 @@
         }
         
         .comparison-table th {
-            background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+            background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -933,6 +943,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1096,25 +1197,25 @@
     <div class="model-bar">
         <div class="model-bar-label">LLM Inference Latency (ms)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 90%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">45ms</div>
+            <div class="model-bar-fill" style="width: 90%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">45ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Vector DB Query (100M vectors)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">125ms</div>
+            <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">125ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">SQL DB Full Scan (10M rows)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">5234ms</div>
+            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">5234ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Brute Force Cosine (1M vectors)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 15%; background: linear-gradient(90deg, #a78bfa, #f472b6);">8932ms</div>
+            <div class="model-bar-fill" style="width: 15%; background: linear-gradient(90deg, #3b82f6, #f472b6);">8932ms</div>
         </div>
     </div>
 
@@ -1624,25 +1725,25 @@ Typical speedup: 10-100x with small accuracy loss
     <div class="model-bar">
         <div class="model-bar-label">n_probe=1</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #a78bfa, #f472b6);">5ms</div>
+            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #3b82f6, #f472b6);">5ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">n_probe=10</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">35ms</div>
+            <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">35ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">n_probe=50</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">145ms</div>
+            <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">145ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">n_probe=256 (all)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #8b5cf6, #818cf8);">1850ms</div>
+            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #1d4ed8, #818cf8);">1850ms</div>
         </div>
     </div>
 
@@ -1942,25 +2043,25 @@ results = index.<span class="function">query</span>(
     <div class="model-bar">
         <div class="model-bar-label">P50 Latency</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">8ms</div>
+            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">8ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">P95 Latency</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">25ms</div>
+            <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">25ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">P99 Latency</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #8b5cf6, #818cf8);">60ms</div>
+            <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #1d4ed8, #818cf8);">60ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Throughput (QPS)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">10000+</div>
+            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">10000+</div>
         </div>
     </div>
 
@@ -2116,25 +2217,25 @@ results = client.<span class="function">search</span>(
     <div class="model-bar">
         <div class="model-bar-label">Simple search (no filter)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 25%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">2ms</div>
+            <div class="model-bar-fill" style="width: 25%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">2ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Search + filter (10% selectivity)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">3ms</div>
+            <div class="model-bar-fill" style="width: 40%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">3ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Search + complex filter (5% selectivity)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #8b5cf6, #818cf8);">8ms</div>
+            <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #1d4ed8, #818cf8);">8ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Search + filter (0.1% selectivity)</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">45ms</div>
+            <div class="model-bar-fill" style="width: 95%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">45ms</div>
         </div>
     </div>
 
@@ -2771,19 +2872,19 @@ cluster_config = {
     <div class="model-bar">
         <div class="model-bar-label">L1 Cache Hit</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 10%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">&lt;1ms</div>
+            <div class="model-bar-fill" style="width: 10%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">&lt;1ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">L2 Cache Hit</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">5-15ms</div>
+            <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">5-15ms</div>
         </div>
     </div>
     <div class="model-bar">
         <div class="model-bar-label">Disk Read</div>
         <div class="model-bar-track">
-            <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #8b5cf6, #818cf8);">50-200ms</div>
+            <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #1d4ed8, #818cf8);">50-200ms</div>
         </div>
     </div>
 

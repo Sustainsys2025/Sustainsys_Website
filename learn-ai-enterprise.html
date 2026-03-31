@@ -11,11 +11,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -263,7 +270,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -363,7 +370,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -539,7 +546,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -753,6 +760,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -763,6 +771,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -838,6 +847,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -864,6 +874,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -963,31 +1064,34 @@
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
     
-    <div class="main-container" style="padding-top: 120px;">
-        <div class="sidebar-nav">
-    <a href="#intro" class="sidebar-link">Introduction</a>
-    <a href="#why-matters" class="sidebar-link">Why It Matters</a>
-    <a href="#history" class="sidebar-link">Historical Evolution</a>
-    <a href="#core-concepts" class="sidebar-link">Core Concepts</a>
-    <a href="#architecture" class="sidebar-link">Architecture Deep Dive</a>
-    <a href="#components" class="sidebar-link">Key Components</a>
-    <a href="#implementation" class="sidebar-link">Implementation Guide</a>
-    <a href="#advanced" class="sidebar-link">Advanced Techniques</a>
-    <a href="#comparison" class="sidebar-link">Comparison</a>
-    <a href="#use-cases" class="sidebar-link">Real-World Use Cases</a>
-    <a href="#enterprise" class="sidebar-link">Enterprise Applications</a>
-    <a href="#mistakes" class="sidebar-link">Common Mistakes</a>
-    <a href="#best-practices" class="sidebar-link">Best Practices</a>
-    <a href="#advanced-insights" class="sidebar-link">Advanced Insights</a>
-    <a href="#code-examples" class="sidebar-link">Code Examples</a>
-    <a href="#exercises" class="sidebar-link">Exercises</a>
-    <a href="#interview" class="sidebar-link">Interview Questions</a>
-    <a href="#faq" class="sidebar-link">FAQ</a>
-    <a href="#summary" class="sidebar-link">Summary</a>
-    <a href="#resources" class="sidebar-link">Resources</a>
-</div>
-        
-        <div class="content">
+    <main class="ml-page-container">
+        <div class="ml-sidebar">
+            <h3>Sections</h3>
+            <ul>
+                <li><a href="#intro">Introduction</a></li>
+                <li><a href="#why-matters">Why It Matters</a></li>
+                <li><a href="#history">Historical Evolution</a></li>
+                <li><a href="#core-concepts">Core Concepts</a></li>
+                <li><a href="#architecture">Architecture Deep Dive</a></li>
+                <li><a href="#components">Key Components</a></li>
+                <li><a href="#implementation">Implementation Guide</a></li>
+                <li><a href="#advanced">Advanced Techniques</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#use-cases">Real-World Use Cases</a></li>
+                <li><a href="#enterprise">Enterprise Applications</a></li>
+                <li><a href="#mistakes">Common Mistakes</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+                <li><a href="#advanced-insights">Advanced Insights</a></li>
+                <li><a href="#code-examples">Code Examples</a></li>
+                <li><a href="#exercises">Exercises</a></li>
+                <li><a href="#interview">Interview Questions</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#summary">Summary</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </div>
+
+        <div class="ml-content">
             <header class="page-header" style="padding-top: 120px; min-height: auto; padding-bottom: 2rem;">
             <div style="text-align: center;">
                 <p class="page-subtitle">[ AI Academy ]</p>

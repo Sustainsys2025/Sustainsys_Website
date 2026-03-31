@@ -13,11 +13,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -265,7 +272,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -365,7 +372,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -541,7 +548,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -755,6 +762,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -765,6 +773,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -840,6 +849,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -899,6 +909,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
 @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1067,9 +1168,9 @@
                 <p>Modern tokenizers typically follow this pipeline:</p>
                 
                 <div class="flow-diagram">
-                    <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">Text Input</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);">Text Input</div>
                     <div class="flow-arrow">→</div>
-                    <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);">Normalization</div>
+                    <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a 0%, #d946ef 100%);">Normalization</div>
                     <div class="flow-arrow">→</div>
                     <div class="flow-step" style="background: linear-gradient(135deg, #d946ef 0%, #f97316 100%);">Pre-tokenization</div>
                     <div class="flow-arrow">→</div>

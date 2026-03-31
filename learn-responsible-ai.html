@@ -15,11 +15,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -267,7 +274,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -367,7 +374,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -543,7 +550,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -757,6 +764,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -767,6 +775,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -842,6 +851,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -932,7 +942,7 @@
         }
 
         .interview-qa {
-            border-left: 4px solid #8b5cf6;
+            border-left: 4px solid #1d4ed8;
         }
 
         .exercise-item {
@@ -941,18 +951,109 @@
 
         .warning-box {
             background: #fef3c7;
-            border-left: 4px solid #c4b5fd;
+            border-left: 4px solid #93c5fd;
         }
 
         .success-box {
             background: #d1fae5;
-            border-left: 4px solid #a78bfa;
+            border-left: 4px solid #3b82f6;
         }
         /* Full-width layout */
         .container { max-width: 100%; padding: 0 4rem; }
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1156,25 +1257,25 @@
         <div class="model-bar">
             <div class="model-bar-label">Organizations with RAI practices</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #a78bfa, #34d399);">78%</div>
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #3b82f6, #34d399);">78%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Reported improved stakeholder trust</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">85%</div>
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #1d4ed8, #1e3a8a);">85%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Reduced regulatory/legal risk</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #8b5cf6, #d946ef);">72%</div>
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #1d4ed8, #d946ef);">72%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Improved model robustness</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 81%; background: linear-gradient(90deg, #c4b5fd, #fbbf24);">81%</div>
+                <div class="model-bar-fill" style="width: 81%; background: linear-gradient(90deg, #93c5fd, #fbbf24);">81%</div>
             </div>
         </div>
     </div>
@@ -1193,13 +1294,13 @@
 
     <h3>Key Milestones</h3>
 
-    <div class="timeline-item" style="border-left: 4px solid #8b5cf6; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
-        <h4 style="margin-top: 0; color: #8b5cf6;">2016: ProPublica COMPAS Investigation</h4>
+    <div class="timeline-item" style="border-left: 4px solid #1d4ed8; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #1d4ed8;">2016: ProPublica COMPAS Investigation</h4>
         <p>ProPublica analyzes COMPAS, a widely-used recidivism prediction system. Finding: Black defendants labeled "High Risk" at nearly twice the rate of white defendants, despite similar recidivism rates. This investigation galvanizes discussion about bias in criminal justice AI.</p>
     </div>
 
-    <div class="timeline-item" style="border-left: 4px solid #7c3aed; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
-        <h4 style="margin-top: 0; color: #7c3aed;">2017: Word Embeddings Bias Studies</h4>
+    <div class="timeline-item" style="border-left: 4px solid #1e3a8a; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #1e3a8a;">2017: Word Embeddings Bias Studies</h4>
         <p>Researchers demonstrate that word embeddings trained on internet text absorb gender and racial biases: "programmer" associates with male pronouns, "nurse" with female. This sparks broader investigation of bias in NLP systems.</p>
     </div>
 
@@ -1208,13 +1309,13 @@
         <p>Reuters reports that Amazon's automated recruiting tool showed systematic bias against women. The system was trained on historical hiring data that reflected male-dominated tech industry; it learned to penalize resumes with "women's" in them. Amazon scrapped the tool.</p>
     </div>
 
-    <div class="timeline-item" style="border-left: 4px solid #c4b5fd; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
-        <h4 style="margin-top: 0; color: #c4b5fd;">2019: LIME & SHAP Papers Published</h4>
+    <div class="timeline-item" style="border-left: 4px solid #93c5fd; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #93c5fd;">2019: LIME & SHAP Papers Published</h4>
         <p>"Why Should I Trust You?" (LIME) and "A Unified Approach to Interpreting Model Predictions" (SHAP) become influential. These methods provide practical tools for explaining black-box model predictions — a major step forward for AI explainability.</p>
     </div>
 
-    <div class="timeline-item" style="border-left: 4px solid #a78bfa; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
-        <h4 style="margin-top: 0; color: #a78bfa;">2019-2021: Major Tech RAI Initiatives</h4>
+    <div class="timeline-item" style="border-left: 4px solid #3b82f6; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #3b82f6;">2019-2021: Major Tech RAI Initiatives</h4>
         <p>Microsoft launches AI Ethics and Effects Lab. Google publishes Model Cards for Model Reporting. Facebook publishes Fairness Flow. These efforts shift RAI from academic research to industry practice.</p>
     </div>
 
@@ -1223,8 +1324,8 @@
         <p>The EU proposes the AI Act, which categorizes AI by risk and requires explainability, documentation, and human oversight for high-risk systems. This is the first major regulatory framework for AI.</p>
     </div>
 
-    <div class="timeline-item" style="border-left: 4px solid #c4b5fd; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
-        <h4 style="margin-top: 0; color: #c4b5fd;">2023-Present: Enterprise Governance</h4>
+    <div class="timeline-item" style="border-left: 4px solid #93c5fd; padding-left: 1.5rem; margin-left: 0; margin-bottom: 2rem;">
+        <h4 style="margin-top: 0; color: #93c5fd;">2023-Present: Enterprise Governance</h4>
         <p>Responsible AI shifts from academic exercise to enterprise necessity. Tools like Fairlearn, What-If Tool, AI Fairness 360 gain traction. Organizations implement governance boards, audit frameworks, and RAI processes as standard practice.</p>
     </div>
 
@@ -1291,19 +1392,19 @@
 
     <h3>The RAI Pillars Framework</h3>
 
-    <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 25%, #d946ef 50%, #c4b5fd 75%, #a78bfa 100%); padding: 0.5px; border-radius: 8px; margin: 2rem 0;">
+    <div style="background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 25%, #d946ef 50%, #93c5fd 75%, #3b82f6 100%); padding: 0.5px; border-radius: 8px; margin: 2rem 0;">
         <div style="background: white; padding: 2rem; border-radius: 8px;">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
                 
                 <div style="text-align: center;">
-                    <div style="font-size: 3rem; color: #8b5cf6; margin-bottom: 0.5rem;">⚖️</div>
-                    <h4 style="color: #8b5cf6; margin: 0.5rem 0;">FAIRNESS</h4>
+                    <div style="font-size: 3rem; color: #1d4ed8; margin-bottom: 0.5rem;">⚖️</div>
+                    <h4 style="color: #1d4ed8; margin: 0.5rem 0;">FAIRNESS</h4>
                     <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Equitable treatment across groups. Detect and mitigate bias. Measure fairness metrics.</p>
                 </div>
 
                 <div style="text-align: center;">
-                    <div style="font-size: 3rem; color: #7c3aed; margin-bottom: 0.5rem;">💡</div>
-                    <h4 style="color: #7c3aed; margin: 0.5rem 0;">EXPLAINABILITY</h4>
+                    <div style="font-size: 3rem; color: #1e3a8a; margin-bottom: 0.5rem;">💡</div>
+                    <h4 style="color: #1e3a8a; margin: 0.5rem 0;">EXPLAINABILITY</h4>
                     <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Interpretable models. Feature importance. Decision explanations.</p>
                 </div>
 
@@ -1314,8 +1415,8 @@
                 </div>
 
                 <div style="text-align: center;">
-                    <div style="font-size: 3rem; color: #c4b5fd; margin-bottom: 0.5rem;">🏛️</div>
-                    <h4 style="color: #c4b5fd; margin: 0.5rem 0;">GOVERNANCE</h4>
+                    <div style="font-size: 3rem; color: #93c5fd; margin-bottom: 0.5rem;">🏛️</div>
+                    <h4 style="color: #93c5fd; margin: 0.5rem 0;">GOVERNANCE</h4>
                     <p style="margin: 0; color: var(--text-dim); font-size: 0.9rem;">Frameworks, processes, documentation, monitoring.</p>
                 </div>
 
@@ -1331,20 +1432,20 @@
                 <h4 style="margin-top: 0; color: #0284c7;">1. Planning</h4>
                 <p style="margin: 0; font-size: 0.9rem;">Define fairness requirements, governance policies, documentation standards</p>
             </div>
-            <div style="background: #fce7f3; border-left: 4px solid #8b5cf6; padding: 1rem; border-radius: 4px;">
-                <h4 style="margin-top: 0; color: #8b5cf6;">2. Data</h4>
+            <div style="background: #fed7aa; border-left: 4px solid #1d4ed8; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #1d4ed8;">2. Data</h4>
                 <p style="margin: 0; font-size: 0.9rem;">Audit data for bias. Create data cards. Document limitations.</p>
             </div>
-            <div style="background: #f3e8ff; border-left: 4px solid #7c3aed; padding: 1rem; border-radius: 4px;">
-                <h4 style="margin-top: 0; color: #7c3aed;">3. Development</h4>
+            <div style="background: #eff6ff; border-left: 4px solid #1e3a8a; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #1e3a8a;">3. Development</h4>
                 <p style="margin: 0; font-size: 0.9rem;">Build models with fairness constraints. Test for bias. Document decisions.</p>
             </div>
-            <div style="background: #fef3c7; border-left: 4px solid #a78bfa; padding: 1rem; border-radius: 4px;">
-                <h4 style="margin-top: 0; color: #a78bfa;">4. Evaluation</h4>
+            <div style="background: #fef3c7; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #3b82f6;">4. Evaluation</h4>
                 <p style="margin: 0; font-size: 0.9rem;">Measure fairness metrics. Assess explainability. Conduct ethical review.</p>
             </div>
-            <div style="background: #d1fae5; border-left: 4px solid #7c3aed; padding: 1rem; border-radius: 4px;">
-                <h4 style="margin-top: 0; color: #7c3aed;">5. Deployment</h4>
+            <div style="background: #d1fae5; border-left: 4px solid #1e3a8a; padding: 1rem; border-radius: 4px;">
+                <h4 style="margin-top: 0; color: #1e3a8a;">5. Deployment</h4>
                 <p style="margin: 0; font-size: 0.9rem;">Monitor performance. Track fairness. Handle appeals and redress.</p>
             </div>
         </div>
@@ -1429,7 +1530,7 @@
         <li>Regulatory documentation and evidence of compliance</li>
     </ul>
 
-    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #a78bfa; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Integration is Key: These components aren't separate; they're interdependent. Documentation (model cards) feeds into governance (review board decides based on documented fairness metrics). Monitoring results flow into incident response (if fairness degrades, trigger investigation). Build them together as a system.</p>
 </div>
 </section>
@@ -1451,7 +1552,7 @@
     </div>
 
     <h3>Phase 2: Tools & Infrastructure (Weeks 5-8)</h3>
-    <div style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
         <ol>
             <li><strong>Select fairness tools:</strong> <a href="https://fairlearn.org/" target="_blank" rel="noopener">Fairlearn</a>, <a href="https://aif360.res.ibm.com/" target="_blank" rel="noopener">AI Fairness 360</a>, scikit-fairness. Start with your framework (TensorFlow, <a href="https://pytorch.org/" target="_blank" rel="noopener">PyTorch</a>, <a href="https://scikit-learn.org/" target="_blank" rel="noopener">scikit-learn</a>)</li>
             <li><strong>Implement explainability:</strong> Set up <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a> and/or <a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a> for your models. Create explanation pipelines</li>
@@ -1461,7 +1562,7 @@
     </div>
 
     <h3>Phase 3: Pilot & Test (Weeks 9-16)</h3>
-    <div style="background: #d1fae5; border-left: 4px solid #7c3aed; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="background: #d1fae5; border-left: 4px solid #1e3a8a; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
         <ol>
             <li><strong>Select pilot models:</strong> Choose 1-2 high-risk models for deep RAI work. Compute fairness metrics. Identify bias sources</li>
             <li><strong>Implement mitigation:</strong> Retrain with fairness constraints. Upsample underrepresented groups. Adjust decision thresholds for fairness</li>
@@ -1471,7 +1572,7 @@
     </div>
 
     <h3>Phase 4: Scale & Monitor (Ongoing)</h3>
-    <div style="background: #f3e8ff; border-left: 4px solid #7c3aed; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="background: #eff6ff; border-left: 4px solid #1e3a8a; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
         <ol>
             <li><strong>Apply to all new models:</strong> RAI review becomes part of model development workflow. All models require fairness assessment before deployment</li>
             <li><strong>Continuous monitoring:</strong> Daily tracking of fairness metrics. Monthly reports to RAI board. Automatic alerts if metrics degrade</li>
@@ -1480,7 +1581,7 @@
         </ol>
     </div>
 
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Common Pitfall: Many organizations implement fairness metrics without governance. They compute demographic parity scores but don't act on them. Measurement without governance is just expensive reporting. Pair measurement with decision authority and action mechanisms.</p>
 </div>
 </section>
@@ -1645,7 +1746,7 @@
     </ul>
     <p><strong>Business outcome:</strong> Universities using fair admissions build more diverse cohorts and improve educational outcomes for all students.</p>
 
-    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #a78bfa; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Theme: In every case, RAI combines technical measurement (fairness metrics), transparency (explainability), human oversight, and remediation processes. No technical tool alone solves RAI; you need the full ecosystem.</p>
 </div>
 </section>
@@ -1669,12 +1770,12 @@
                     <h4 style="margin: 0 0 0.5rem 0; color: #0284c7;">AI Ethics Board</h4>
                     <p style="margin: 0; font-size: 0.85rem;">Cross-functional review of high-risk systems. Quarterly governance reports.</p>
                 </div>
-                <div style="background: #f3e8ff; padding: 1rem; border-radius: 4px;">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #7c3aed;">Data & Fairness Team</h4>
+                <div style="background: #eff6ff; padding: 1rem; border-radius: 4px;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #1e3a8a;">Data & Fairness Team</h4>
                     <p style="margin: 0; font-size: 0.85rem;">Develops fairness tools, audits data, measures bias, builds frameworks.</p>
                 </div>
                 <div style="background: #d1fae5; padding: 1rem; border-radius: 4px;">
-                    <h4 style="margin: 0 0 0.5rem 0; color: #7c3aed;">Audit & Compliance</h4>
+                    <h4 style="margin: 0 0 0.5rem 0; color: #1e3a8a;">Audit & Compliance</h4>
                     <p style="margin: 0; font-size: 0.85rem;">Monitors production systems, investigates incidents, handles regulatory requirements.</p>
                 </div>
             </div>
@@ -1688,20 +1789,20 @@
             <h4 style="margin-top: 0; color: var(--accent-cyan);">Step 1: Risk Assessment</h4>
             <p>Classify model by risk level (high/medium/low). High-risk models require full RAI review before deployment.</p>
         </div>
-        <div style="border: 2px solid var(--accent-purple); border-radius: 8px; padding: 1.5rem; background: #f3e8ff; margin-top: 1rem;">
+        <div style="border: 2px solid var(--accent-purple); border-radius: 8px; padding: 1.5rem; background: #eff6ff; margin-top: 1rem;">
             <h4 style="margin-top: 0; color: var(--accent-purple);">Step 2: Data Audit</h4>
             <p>Review training data: What are the demographics? Are underrepresented groups included? Known limitations?</p>
         </div>
-        <div style="border: 2px solid #d946ef; border-radius: 8px; padding: 1.5rem; background: #fce7f3; margin-top: 1rem;">
+        <div style="border: 2px solid #d946ef; border-radius: 8px; padding: 1.5rem; background: #fed7aa; margin-top: 1rem;">
             <h4 style="margin-top: 0; color: #d946ef;">Step 3: Fairness Testing</h4>
             <p>Measure fairness metrics. Compute performance by demographic group. Identify bias sources. Design mitigation if needed.</p>
         </div>
-        <div style="border: 2px solid #c4b5fd; border-radius: 8px; padding: 1.5rem; background: #fef3c7; margin-top: 1rem;">
-            <h4 style="margin-top: 0; color: #c4b5fd;">Step 4: Documentation</h4>
+        <div style="border: 2px solid #93c5fd; border-radius: 8px; padding: 1.5rem; background: #fef3c7; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #93c5fd;">Step 4: Documentation</h4>
             <p>Create model card, data card, system card. Document fairness metrics, limitations, use cases, and restrictions.</p>
         </div>
-        <div style="border: 2px solid #a78bfa; border-radius: 8px; padding: 1.5rem; background: #d1fae5; margin-top: 1rem;">
-            <h4 style="margin-top: 0; color: #a78bfa;">Step 5: Ethics Board Review</h4>
+        <div style="border: 2px solid #3b82f6; border-radius: 8px; padding: 1.5rem; background: #d1fae5; margin-top: 1rem;">
+            <h4 style="margin-top: 0; color: #3b82f6;">Step 5: Ethics Board Review</h4>
             <p>Board reviews high-risk systems. Approves or requests mitigation. Documents decision and rationale.</p>
         </div>
         <div style="border: 2px solid #0284c7; border-radius: 8px; padding: 1.5rem; background: #e0f2fe; margin-top: 1rem;">
@@ -1740,54 +1841,54 @@
     <h2>Common Mistakes in Implementing RAI</h2>
 
     <h3>Mistake 1: Measurement Without Action</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Organizations compute fairness metrics but don't act on findings. High demographic disparity? Shrug and deploy anyway. This creates false sense of responsibility without actual improvement.</p>
 </div>
     <p><strong>Fix:</strong> Tie measurement to decision gates. High bias → mandatory mitigation or executive approval to override. Create accountability: "Who is responsible for fairness of this model?"</p>
 
     <h3>Mistake 2: Fairness Without Context</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Optimize for demographic parity without understanding the system. Maybe equalized odds is more appropriate. Maybe fairness isn't about group statistics but individual fairness. One metric doesn't fit all.</p>
 </div>
     <p><strong>Fix:</strong> Engage stakeholders (affected communities, domain experts) early. Decide which fairness definition fits your context. Document the choice and rationale.</p>
 
     <h3>Mistake 3: Removing Protected Attributes Isn't Enough</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Remove race/gender from model thinking this guarantees fairness. But other features (ZIP code, school, name) proxy for protected attributes. Model learns them anyway and perpetuates discrimination.</p>
 </div>
     <p><strong>Fix:</strong> Actively measure bias against protected attributes. If demographic disparity exists, investigate feature proxies. Measure disparate impact, not just disparate treatment.</p>
 
     <h3>Mistake 4: Explainability Theater</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Generate <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a>/<a href="https://github.com/marcotcr/lime" target="_blank" rel="noopener">LIME</a> explanations for show. Explanations are mathematically correct but don't actually help users understand model decisions or identify bias.</p>
 </div>
     <p><strong>Fix:</strong> Test explanations with actual users. Are they meaningful? Do they help understand why decision was made? Combine with human oversight so explanations actually influence decisions.</p>
 
     <h3>Mistake 5: RAI as a Phase, Not a Process</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: RAI is a one-time checklist before launch. After deployment, no monitoring, no fairness tracking, no updates. Data drifts, model degrades, bias emerges but nobody notices.</p>
 </div>
     <p><strong>Fix:</strong> RAI is continuous. Build monitoring into production. Weekly fairness dashboards. Regular audits. Incident response procedures. Improvement cycles.</p>
 
     <h3>Mistake 6: No Stakeholder Engagement</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Build RAI in lab with data scientists and ethicists. Deploy without consulting affected communities, domain experts, or users who will interact with the system.</p>
 </div>
     <p><strong>Fix:</strong> Early and ongoing stakeholder engagement. User research with people who will be affected by system. Community feedback loops. Transparency about how system works and how to appeal.</p>
 
     <h3>Mistake 7: Governance Without Technical Integration</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: Create ethics board that reviews models post-hoc. No technical infrastructure to enforce governance decisions. Board says 'fix bias' but engineers have no tools to measure/fix bias.</p>
 </div>
     <p><strong>Fix:</strong> Integrate governance with technical pipelines. MLOps tools that compute fairness metrics automatically. Code review processes that enforce documentation. Deployment gates that check fairness before launch.</p>
 
     <h3>Mistake 8: Treating RAI as Optional</h3>
-    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #c4b5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="warning-box" style="background: #fef3c7; border-left: 4px solid #93c5fd; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Problem: RAI is extra feature for risk-conscious teams. Ambitious teams skip it to move fast. Result: inconsistent implementation, varying quality, and gaps in high-risk areas.</p>
 </div>
     <p><strong>Fix:</strong> Make RAI part of standard process for all models. Include in initial requirements, design review, development, testing, deployment, and monitoring. No exceptions for "fast-moving" teams.</p>
 
-    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #a78bfa; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">Theme: RAI failures aren't usually technical. They're organizational — lack of accountability, weak governance, no stakeholder engagement, measurement without action. Build RAI as a system, not just as technical metrics.</p>
 </div>
 </section>
@@ -2230,7 +2331,7 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
 
     <p>These exercises build practical RAI skills using real-world scenarios.</p>
 
-    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="exercise-item" style="background: #dbeafe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
     <h4 style="margin-top: 0; color: #a855f7;">Exercise 1: Bias Detection in Hiring Data</h4>
     <p>
     <p><strong>Objective:</strong> Detect bias in a hiring dataset.</p>
@@ -2247,7 +2348,7 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
     </p>
 </div>
 
-    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="exercise-item" style="background: #dbeafe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
     <h4 style="margin-top: 0; color: #a855f7;">Exercise 2: Explaining Model Decisions with <a href="https://shap.readthedocs.io/" target="_blank" rel="noopener">SHAP</a></h4>
     <p>
     <p><strong>Objective:</strong> Generate and interpret SHAP explanations for credit decisions.</p>
@@ -2264,7 +2365,7 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
     </p>
 </div>
 
-    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="exercise-item" style="background: #dbeafe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
     <h4 style="margin-top: 0; color: #a855f7;">Exercise 3: Implementing Fairness Constraints</h4>
     <p>
     <p><strong>Objective:</strong> Build a model with explicit fairness constraints.</p>
@@ -2281,7 +2382,7 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
     </p>
 </div>
 
-    <div class="exercise-item" style="background: #ede9fe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="exercise-item" style="background: #dbeafe; border-left: 4px solid #a855f7; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
     <h4 style="margin-top: 0; color: #a855f7;">Exercise 4: Creating a Model Card</h4>
     <p>
     <p><strong>Objective:</strong> Document a model comprehensively using model card format.</p>
@@ -2304,48 +2405,48 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
 
     <p>Common questions in technical interviews and ethics discussions:</p>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's the difference between fairness and accuracy in ML?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: What's the difference between fairness and accuracy in ML?</div>
     <div style="color: var(--text-dim);">A: Accuracy measures how often the model is correct overall. Fairness measures whether the model treats different demographic groups equitably. A model can be 95% accurate overall but have 99% accuracy for males and 70% accuracy for females — it's accurate but unfair. The goal is both accuracy and fairness across all groups.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: Explain demographic parity vs. equalized odds.</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: Explain demographic parity vs. equalized odds.</div>
     <div style="color: var(--text-dim);">A: Demographic parity: P(prediction=positive|group A) = P(prediction=positive|group B). The model approves at equal rates for all groups. Equalized odds: P(prediction=positive|outcome=positive,group A) = P(prediction=positive|outcome=positive,group B). The true positive rate is equal across groups — people with the same outcome get the same prediction rate. Equalized odds is generally stronger but harder to achieve.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you detect bias in a trained model?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: How do you detect bias in a trained model?</div>
     <div style="color: var(--text-dim);">A: 1) Stratified evaluation: compute performance metrics separately for each demographic group. 2) Fairness metrics: compute demographic parity difference, equalized odds difference, or calibration error by group. 3) Explainability: use SHAP/LIME to check if protected attributes are influencing predictions. 4) Manual inspection: audit decisions for specific instances, check for patterns. 5) Statistical tests: chi-square tests for independence between predictions and protected attributes.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's the difference between SHAP and LIME?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: What's the difference between SHAP and LIME?</div>
     <div style="color: var(--text-dim);">A: Both explain model predictions post-hoc, but differently. LIME fits a local linear approximation around a prediction, explaining it through feature weights. SHAP uses Shapley values from game theory, distributing prediction across features based on marginal contributions. SHAP is theoretically more rigorous, LIME is faster. SHAP is model-agnostic but slower; LIME is faster but less robust. For critical decisions, SHAP is preferred.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you handle fairness-accuracy tradeoffs?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: How do you handle fairness-accuracy tradeoffs?</div>
     <div style="color: var(--text-dim);">A: First, understand if the tradeoff exists. Sometimes fairness constraints actually improve accuracy by reducing overfitting. When tradeoffs do exist: 1) Quantify them: report both fairness and accuracy metrics. 2) Involve stakeholders: fairness vs. accuracy isn't purely technical, it's a values question. 3) Choose constraints aligned with values. 4) Consider domain: in criminal justice, false negatives (failing to flag high-risk offenders) may be worse than false positives. In hiring, false positives (rejecting qualified candidates) may be worse.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What's a model card and why does it matter?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: What's a model card and why does it matter?</div>
     <div style="color: var(--text-dim);">A: A model card documents a model's architecture, training data, performance, fairness metrics, limitations, and use cases. It matters because: 1) Accountability — clear record of what was built and how it performs. 2) Transparency — stakeholders understand model's capabilities and limitations. 3) Responsible deployment — documented limitations prevent misuse. 4) Reproducibility — future developers can understand decisions made. Model cards are becoming industry standard for responsible AI.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How would you implement monitoring for fairness in production?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: How would you implement monitoring for fairness in production?</div>
     <div style="color: var(--text-dim);">A: 1) Define metrics: demographic parity, equalized odds, calibration — decide which matter for your use case. 2) Create dashboard: daily tracking of these metrics, broken down by demographic group. 3) Set alerts: if metrics degrade by >X%, trigger investigation. 4) Baseline comparison: compare current to previous month, flag significant changes. 5) Incident response: when alert fires, investigate root cause — data drift? model degradation? population change? 6) Corrective action: retrain, adjust thresholds, or deploy new model as needed.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: What are common failures in implementing responsible AI?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: What are common failures in implementing responsible AI?</div>
     <div style="color: var(--text-dim);">A: 1) Measurement without action — compute fairness metrics but don't act on them. 2) Removing protected attributes isn't enough — other features proxy for them. 3) One fairness metric doesn't fit all — context matters. 4) No continuous monitoring — fairness only checked at launch. 5) No stakeholder engagement — build RAI in lab, deploy without consulting affected communities. 6) Explainability theater — generate explanations that don't help users understand decisions. 7) Governance without power — ethics board exists but can't block deployments. 8) Treating RAI as optional — only done for risk-conscious teams, not standard practice.</div>
 </div>
 
-    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #8b5cf6; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
-    <div style="font-weight: 600; color: #8b5cf6; margin-bottom: 0.5rem;">Q: How do you handle algorithmic bias in training data?</div>
+    <div class="interview-qa" style="background: #f3f4f6; border-left: 4px solid #1d4ed8; padding: 1.5rem; margin: 1rem 0; border-radius: 4px;">
+    <div style="font-weight: 600; color: #1d4ed8; margin-bottom: 0.5rem;">Q: How do you handle algorithmic bias in training data?</div>
     <div style="color: var(--text-dim);">A: 1) Audit data: understand demographic composition, label quality, historical biases. 2) Quantify bias: compute fairness metrics on training data, identify sources. 3) Mitigate: options include (a) rebalancing/upsampling underrepresented groups, (b) adjusting sample weights, (c) removing or anonymizing biased features, (d) using fairness constraints during training. 4) Test mitigation: verify fairness improves without too much accuracy loss. 5) Document: record what bias was found, what mitigation was applied, why. 6) Monitor: track fairness in production, watch for feedback loops that could reintroduce bias.</div>
 </div>
 </section>
@@ -2437,16 +2538,16 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
             <h4 style="margin-top: 0; color: #0284c7;">Fairness</h4>
             <p style="margin-bottom: 0;">Equitable treatment across demographic groups. Measure fairness metrics (demographic parity, equalized odds). Identify and mitigate bias.</p>
         </div>
-        <div style="background: #f3e8ff; border-radius: 8px; padding: 1.5rem;">
-            <h4 style="margin-top: 0; color: #7c3aed;">Explainability</h4>
+        <div style="background: #eff6ff; border-radius: 8px; padding: 1.5rem;">
+            <h4 style="margin-top: 0; color: #1e3a8a;">Explainability</h4>
             <p style="margin-bottom: 0;">Make decisions interpretable. Use SHAP, LIME, or inherently interpretable models. Enable stakeholders to understand why decisions were made.</p>
         </div>
-        <div style="background: #fce7f3; border-radius: 8px; padding: 1.5rem;">
+        <div style="background: #fed7aa; border-radius: 8px; padding: 1.5rem;">
             <h4 style="margin-top: 0; color: #d946ef;">Accountability</h4>
             <p style="margin-bottom: 0;">Clear responsibility for outcomes. Audit trails. Mechanisms for investigation and remediation. Appeal processes.</p>
         </div>
         <div style="background: #fef3c7; border-radius: 8px; padding: 1.5rem;">
-            <h4 style="margin-top: 0; color: #c4b5fd;">Governance</h4>
+            <h4 style="margin-top: 0; color: #93c5fd;">Governance</h4>
             <p style="margin-bottom: 0;">Organizational frameworks and processes. Model cards and documentation. Continuous monitoring. Stakeholder engagement.</p>
         </div>
     </div>
@@ -2473,7 +2574,7 @@ auditor.<span class="function">log_decision</span>(audit_id, decision=<span clas
         <li><strong>Scale:</strong> Apply RAI to all high-risk systems. Build culture. Continuous improvement.</li>
     </ol>
 
-    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #a78bfa; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+    <div class="success-box" style="background: #d1fae5; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
     <p style="margin: 0;">The Future: Organizations that build responsible AI now will be the leaders of tomorrow — earning trust, reducing legal risk, building robust systems, and creating positive human impact. Responsible AI isn't a burden; it's the foundation of sustainable AI success.</p>
 </div>
 </section>

@@ -8,15 +8,22 @@
         <link rel="stylesheet" href="styles.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-<style>
+/* continued styles */
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -264,7 +271,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -364,7 +371,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -540,7 +547,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -754,6 +761,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -764,6 +772,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -839,6 +848,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -898,9 +908,100 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
 @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
-</style>
+/* end section */
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1000,9 +1101,9 @@
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
 
-    <div class="ml-container" style="padding-top: 120px;">
-        <div class="sidebar">
-<div class="sidebar-title">Topics</div>
+    <div class="ml-page-container" style="padding-top: 120px;">
+        <div class="ml-sidebar">
+<h3>Sections</h3><ul><li><a href="#intro">Introduction</a></li><li><a href="#why-matters">Why Fine-Tuning Matters</a></li><li><a href="#transfer-learning">Transfer Learning</a></li><li><a href="#full-fine-tuning">Full Fine-Tuning</a></li><li><a href="#lora">LoRA &amp; Adapters</a></li><li><a href="#instruction-tuning">Instruction Tuning</a></li><li><a href="#rlhf">RLHF &amp; DPO</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#faq">FAQ</a></li></ul>
 
 </div>
         
@@ -1091,7 +1192,7 @@
         <div class="model-bar">
             <div class="model-bar-label">Prompt Engineering Only</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 1%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">Free, 0-1 hours</div>
+                <div class="model-bar-fill" style="width: 1%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">Free, 0-1 hours</div>
             </div>
         </div>
     </div>
@@ -1149,15 +1250,15 @@
                     <td><strong>QLoRA</strong></td>
                     <td>4-8 GB</td>
                     <td>1-6 hours</td>
-                    <td style="color: #8b5cf6;">High</td>
-                    <td style="color: #8b5cf6;">Very High</td>
+                    <td style="color: #1d4ed8;">High</td>
+                    <td style="color: #1d4ed8;">Very High</td>
                 </tr>
                 <tr>
                     <td><strong>IA3</strong></td>
                     <td>2-4 GB</td>
                     <td>30min-2 hours</td>
-                    <td style="color: #8b5cf6;">Medium-High</td>
-                    <td style="color: #8b5cf6;">High</td>
+                    <td style="color: #1d4ed8;">Medium-High</td>
+                    <td style="color: #1d4ed8;">High</td>
                 </tr>
             </tbody>
         </table>
@@ -2659,19 +2760,19 @@ training_args = <span class="function">TrainingArguments</span>(
         <div class="model-bar">
             <div class="model-bar-label">Full Fine-Tuning</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #7c3aed, #a855f7);">100% Performance, 100% Memory</div>
+                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #1e3a8a, #a855f7);">100% Performance, 100% Memory</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">LoRA (r=8)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">95% Performance, 30% Memory</div>
+                <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">95% Performance, 30% Memory</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">QLoRA</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">92% Performance, 10% Memory</div>
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">92% Performance, 10% Memory</div>
             </div>
         </div>
         <div class="model-bar">
@@ -3674,19 +3775,19 @@ trainer.<span class="function">train</span>()
 
     <h3>The Fine-Tuning Workflow</h3>
     <div class="flow-diagram" style="display: flex; flex-direction: column; gap: 20px;">
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd); text-align: center;">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd); text-align: center;">
             <strong>1. Prepare Data</strong><br><small>Clean, split, validate (100-2000 examples)</small>
         </div>
         <div style="text-align: center; color: #666;">↓</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7); text-align: center;">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #a855f7); text-align: center;">
             <strong>2. Choose Method</strong><br><small>LoRA (default) or full FT or QLoRA</small>
         </div>
         <div style="text-align: center; color: #666;">↓</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); text-align: center;">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); text-align: center;">
             <strong>3. Setup Training</strong><br><small>Learning rate, batch size, epochs</small>
         </div>
         <div style="text-align: center; color: #666;">↓</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #a78bfa, #f472b6); text-align: center;">
+        <div class="flow-step" style="background: linear-gradient(135deg, #3b82f6, #f472b6); text-align: center;">
             <strong>4. Monitor & Evaluate</strong><br><small>Watch for overfitting, use early stopping</small>
         </div>
         <div style="text-align: center; color: #666;">↓</div>

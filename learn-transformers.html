@@ -10,11 +10,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -262,7 +269,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -362,7 +369,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -538,7 +545,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -752,6 +759,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -762,6 +770,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -837,6 +846,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -896,6 +906,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
 @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1112,25 +1213,25 @@
         <div class="model-bar">
             <div class="model-bar-label">Transformer (BERT)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">94.9%</div>
+                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #1d4ed8, #1e3a8a);">94.9%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">LSTM + Attention</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">82.1%</div>
+                <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">82.1%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Vanilla LSTM</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">72.3%</div>
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">72.3%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">CNN-based (TextCNN)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 67%; background: linear-gradient(90deg, #a78bfa, #f472b6);">67.5%</div>
+                <div class="model-bar-fill" style="width: 67%; background: linear-gradient(90deg, #3b82f6, #f472b6);">67.5%</div>
             </div>
         </div>
         <div class="model-bar">
@@ -1177,22 +1278,22 @@
         <div class="flow-step" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
             <strong>1986</strong><br>Simple RNN<br><small>Sequential processing, vanishing gradients</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #818cf8);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #818cf8);">
             <strong>1997</strong><br>LSTM<br><small>Gates control information flow, mitigates vanishing gradient</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
             <strong>2014</strong><br>GRU<br><small>Simplified LSTM with fewer parameters</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
             <strong>2014</strong><br>Seq2Seq + Attention<br><small>Bahdanau attention enables selective focus</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd);">
             <strong>2017</strong><br>Transformer<br><small>"Attention Is All You Need" — no recurrence!</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #a855f7);">
             <strong>2018-19</strong><br>BERT &amp; GPT<br><small>Pre-training + fine-tuning revolution</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #a78bfa, #f472b6);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #3b82f6, #f472b6);">
             <strong>2020+</strong><br>GPT-3, Claude, LLMs<br><small>Scale enables emergent abilities</small>
         </div>
     </div>
@@ -1325,12 +1426,12 @@ where RMS(x) = √(mean(x²))
             <div style="text-align: center;">
                 <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 1rem; font-family: 'DM Serif Display', Georgia, serif; font-size: 0.9rem;">ENCODER</div>
                 <div class="nn-layer" style="gap: 8px;">
-                    <div class="nn-node" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Input Embedding + PE</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Input Embedding + PE</div>
                     <div style="color: var(--accent-cyan); font-size: 1.2rem;">↓</div>
-                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Self-Attention</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1e3a8a, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Self-Attention</div>
                     <div style="color: var(--accent-cyan); font-size: 0.65rem;">+ Add & Norm</div>
                     <div style="color: var(--accent-cyan); font-size: 1.2rem;">↓</div>
-                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
                     <div style="color: var(--accent-cyan); font-size: 0.65rem;">+ Add & Norm</div>
                     <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.5rem;">× N layers</div>
                 </div>
@@ -1341,15 +1442,15 @@ where RMS(x) = √(mean(x²))
             <div style="text-align: center;">
                 <div style="color: var(--accent-purple); font-weight: 700; margin-bottom: 1rem; font-family: 'DM Serif Display', Georgia, serif; font-size: 0.9rem;">DECODER</div>
                 <div class="nn-layer" style="gap: 8px;">
-                    <div class="nn-node" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Output Embedding + PE</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Output Embedding + PE</div>
                     <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
-                    <div class="nn-node" style="background: linear-gradient(135deg, #a78bfa, #f472b6); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Masked Multi-Head Self-Attention</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #3b82f6, #f472b6); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Masked Multi-Head Self-Attention</div>
                     <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
                     <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
-                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Cross-Attention</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1e3a8a, #a855f7); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Multi-Head Cross-Attention</div>
                     <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
                     <div style="color: var(--accent-purple); font-size: 1.2rem;">↓</div>
-                    <div class="nn-node" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
+                    <div class="nn-node" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); width: 120px; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem;">Feed-Forward Network</div>
                     <div style="color: var(--accent-purple); font-size: 0.65rem;">+ Add & Norm</div>
                     <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.5rem;">× N layers</div>
                 </div>
@@ -1754,19 +1855,19 @@ params = <span class="function">sum</span>(p.<span class="function">numel</span>
                 <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Multi-Head (MHA)</div>
                 <div style="font-size: 0.85rem;">8 Q heads + 8 K heads + 8 V heads</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 8 × d_k per layer</div>
-                <div style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">100% KV memory</div>
+                <div style="background: linear-gradient(135deg, #1d4ed8, #93c5fd); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">100% KV memory</div>
             </div>
             <div>
                 <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.5rem;">Grouped Query (GQA)</div>
                 <div style="font-size: 0.85rem;">8 Q heads + 2 K heads + 2 V heads</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 2 × d_k per layer</div>
-                <div style="background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">25% KV memory</div>
+                <div style="background: linear-gradient(135deg, #1e3a8a, #a855f7); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">25% KV memory</div>
             </div>
             <div>
                 <div style="font-weight: 700; color: var(--accent-pink); margin-bottom: 0.5rem;">Multi-Query (MQA)</div>
                 <div style="font-size: 0.85rem;">8 Q heads + 1 K head + 1 V head</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">KV cache: 1 × d_k per layer</div>
-                <div style="background: linear-gradient(135deg, #a78bfa, #f472b6); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">12.5% KV memory</div>
+                <div style="background: linear-gradient(135deg, #3b82f6, #f472b6); color: white; padding: 0.3rem 0.75rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem;">12.5% KV memory</div>
             </div>
         </div>
     </div>
@@ -1832,25 +1933,25 @@ params = <span class="function">sum</span>(p.<span class="function">numel</span>
         <div class="model-bar">
             <div class="model-bar-label">GPT-4 (Transformer)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a855f7);">96%</div>
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #1e3a8a, #a855f7);">96%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Claude 3.5 (Transformer)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">94%</div>
+                <div class="model-bar-fill" style="width: 94%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">94%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Mamba-2 (State Space)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">78%</div>
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">78%</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">RWKV-6 (Linear RNN)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">72%</div>
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">72%</div>
             </div>
         </div>
     </div>
@@ -1903,27 +2004,27 @@ params = <span class="function">sum</span>(p.<span class="function">numel</span>
             <span class="data-particle"></span>
             <span class="data-particle"></span>
             <span class="data-particle"></span>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #1e3a8a);">
                 <span class="stage-icon">📥</span>
                 Request<br>Router
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1e3a8a, #1d4ed8);">
                 <span class="stage-icon">🔤</span>
                 Tokenizer
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #7c3aed);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1e3a8a, #1e3a8a);">
                 <span class="stage-icon">💾</span>
                 KV Cache<br>Lookup
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
                 <span class="stage-icon">🧠</span>
                 GPU<br>Inference
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
                 <span class="stage-icon">📊</span>
                 Post-<br>Process
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #8b5cf6);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #1d4ed8);">
                 <span class="stage-icon">📤</span>
                 Response<br>Stream
             </div>
@@ -2037,12 +2138,12 @@ params = <span class="function">sum</span>(p.<span class="function">numel</span>
                 <div style="font-weight: 600;">Model Parameters</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">Loss ∝ N<sup>-0.076</sup></div>
             </div>
-            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f0e7ff, #fce7f3); border-radius: 8px;">
+            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f0e7ff, #fed7aa); border-radius: 8px;">
                 <div style="font-size: 2rem; font-weight: 700; color: var(--accent-purple);">D</div>
                 <div style="font-weight: 600;">Training Tokens</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">Loss ∝ D<sup>-0.095</sup></div>
             </div>
-            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #fce7f3, #fef3c7); border-radius: 8px;">
+            <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #fed7aa, #fef3c7); border-radius: 8px;">
                 <div style="font-size: 2rem; font-weight: 700; color: var(--accent-pink);">C</div>
                 <div style="font-weight: 600;">Total Compute</div>
                 <div style="font-size: 0.85rem; color: var(--text-dim);">Optimal: N ∝ C<sup>0.5</sup>, D ∝ C<sup>0.5</sup></div>

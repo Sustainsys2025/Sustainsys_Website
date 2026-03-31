@@ -15,11 +15,18 @@
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -267,7 +274,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -367,7 +374,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -543,7 +550,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -757,6 +764,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -767,6 +775,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -842,6 +851,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -875,11 +885,11 @@
             --border: #e2e8f0;
             --text: #0f172a;
             --text-dim: #64748b;
-            --accent-cyan: #8b5cf6;
-            --accent-purple: #7c3aed;
-            --accent-pink: #a78bfa;
-            --accent-gold: #c4b5fd;
-            --accent-green: #7c3aed;
+            --accent-cyan: #1d4ed8;
+            --accent-purple: #1d4ed8;
+            --accent-pink: #ea580c;
+            --accent-gold: #ea580c;
+            --accent-green: #1e3a8a;
         }
         
         @media (prefers-color-scheme: dark) {
@@ -897,6 +907,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1129,22 +1230,22 @@
         <div class="flow-step" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
             <strong>1986-1997</strong><br>RNNs &amp; LSTMs<br><small>Sequential, vanishing gradients</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #818cf8);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #818cf8);">
             <strong>2014</strong><br>Attention Mechanism<br><small>Bahdanau attention for sequence-to-sequence</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
             <strong>2017</strong><br>Transformers<br><small>"Attention Is All You Need"</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
             <strong>2018-2019</strong><br>BERT &amp; GPT<br><small>Pre-training era begins</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd);">
             <strong>2020</strong><br>GPT-3<br><small>175B parameters, emergent abilities</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #a855f7);">
             <strong>2023</strong><br>GPT-4, Claude, LLaMA<br><small>Multimodal, instruction-tuned, safe</small>
         </div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #a78bfa, #f472b6);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #3b82f6, #f472b6);">
             <strong>2024+</strong><br>Open-Source Explosion<br><small>Mixtral, Llama 2/3, DeepSeek</small>
         </div>
     </div>
@@ -1317,19 +1418,19 @@
             <div class="pipeline-stage" style="background: linear-gradient(135deg, #64748b, #94a3b8);">
                 <span class="stage-icon">📝</span>Tokenize
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #818cf8);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #818cf8);">
                 <span class="stage-icon">⬆</span>Embed
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
                 <span class="stage-icon">🧠</span>Transform
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
                 <span class="stage-icon">📊</span>Logits
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd);">
                 <span class="stage-icon">🎲</span>Sample
             </div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1e3a8a, #a855f7);">
                 <span class="stage-icon">📄</span>Detokenize
             </div>
         </div>
@@ -1360,23 +1461,23 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; margin: 2rem 0;">
             <div style="flex: 1; text-align: center; color: white;">
                 <div style="font-weight: 600; margin-bottom: 1rem;">Input Tokens</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token IDs</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len]</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token IDs</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len]</div>
             </div>
             <div style="flex: 1; text-align: center; color: white;">
                 <div style="font-weight: 600; margin-bottom: 1rem;">Embedding Layer</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token Embedding</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len, d_model]</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Token Embedding</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Shape: [batch, seq_len, d_model]</div>
             </div>
             <div style="flex: 1; text-align: center; color: white;">
                 <div style="font-weight: 600; margin-bottom: 1rem;">Decoder Blocks (×N)</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Self-Attention</div>
-                <div style="background: #8b5cf6; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Feed-Forward</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Self-Attention</div>
+                <div style="background: #1d4ed8; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Feed-Forward</div>
             </div>
             <div style="flex: 1; text-align: center; color: white;">
                 <div style="font-weight: 600; margin-bottom: 1rem;">Output Layer</div>
-                <div style="background: #7c3aed; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Layer Norm</div>
-                <div style="background: #7c3aed; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Linear to vocab</div>
+                <div style="background: #1e3a8a; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Layer Norm</div>
+                <div style="background: #1e3a8a; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem;">Linear to vocab</div>
             </div>
         </div>
     </div>
@@ -1766,31 +1867,31 @@
             <div class="model-bar">
                 <div class="model-bar-label">GPT-4</div>
                 <div class="model-bar-track">
-                    <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">98</div>
+                    <div class="model-bar-fill" style="width: 98%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">98</div>
                 </div>
             </div>
             <div class="model-bar">
                 <div class="model-bar-label">Claude 3 Opus</div>
                 <div class="model-bar-track">
-                    <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #7c3aed, #a855f7);">96</div>
+                    <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #1e3a8a, #a855f7);">96</div>
                 </div>
             </div>
             <div class="model-bar">
                 <div class="model-bar-label">LLaMA-70B</div>
                 <div class="model-bar-track">
-                    <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">82</div>
+                    <div class="model-bar-fill" style="width: 82%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">82</div>
                 </div>
             </div>
             <div class="model-bar">
                 <div class="model-bar-label">Mistral 8x7B</div>
                 <div class="model-bar-track">
-                    <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #c4b5fd, #fbbf24);">75</div>
+                    <div class="model-bar-fill" style="width: 75%; background: linear-gradient(90deg, #93c5fd, #fbbf24);">75</div>
                 </div>
             </div>
             <div class="model-bar">
                 <div class="model-bar-label">LLaMA-7B</div>
                 <div class="model-bar-track">
-                    <div class="model-bar-fill" style="width: 55%; background: linear-gradient(90deg, #a78bfa, #f472b6);">55</div>
+                    <div class="model-bar-fill" style="width: 55%; background: linear-gradient(90deg, #3b82f6, #f472b6);">55</div>
                 </div>
             </div>
         </div>

@@ -10,11 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-cyan: #8b5cf6;
-            --accent-purple: #7c3aed;
-            --accent-pink: #c4b5fd;
-            --accent-green: #a78bfa;
-            --accent-gold: #c4b5fd;
+            --accent-cyan: #1d4ed8;
+            --accent-purple: #1d4ed8;
+            --accent-pink: #ea580c;
+            --accent-green: #1d4ed8;
+            --accent-gold: #ea580c;
             --accent-orange: #f97316;
             
             --text: #1f2937;
@@ -40,15 +40,22 @@
             line-height: 1.6;
         }
 
-        <style>
+        /* continued styles */
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -296,7 +303,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -396,7 +403,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -572,7 +579,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -786,6 +793,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -796,6 +804,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -871,6 +880,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -897,9 +907,100 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
-</style>
+/* end section */
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1106,25 +1207,25 @@
         <div class="model-bar">
             <div class="model-bar-label">RAG with Citations</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">96% Verifiable</div>
+                <div class="model-bar-fill" style="width: 96%; background: linear-gradient(90deg, #1d4ed8, #1e3a8a);">96% Verifiable</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">RAG Factuality</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">91% Accurate</div>
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">91% Accurate</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">LLM Only</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">72% Factual</div>
+                <div class="model-bar-fill" style="width: 72%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">72% Factual</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Real-time Knowledge</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">100% Current</div>
+                <div class="model-bar-fill" style="width: 100%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">100% Current</div>
             </div>
         </div>
     </div>
@@ -1238,36 +1339,36 @@
     <div class="data-flow-anim">
         <h4>RAG Pipeline Flow</h4>
         <div class="pipeline-track" style="background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%); padding: 1.5rem; border-radius: 8px;">
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
                 <div class="stage-icon">📄</div>
                 <div>Documents</div>
             </div>
-            <div style="color: #8b5cf6; font-weight: bold; flex-shrink: 0;">→</div>
+            <div style="color: #1d4ed8; font-weight: bold; flex-shrink: 0;">→</div>
             <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
                 <div class="stage-icon">✂️</div>
                 <div>Chunk</div>
             </div>
             <div style="color: #3b82f6; font-weight: bold; flex-shrink: 0;">→</div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #1d4ed8, #1e3a8a);">
                 <div class="stage-icon">🧮</div>
                 <div>Embed</div>
             </div>
-            <div style="color: #8b5cf6; font-weight: bold; flex-shrink: 0;">→</div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #c4b5fd, #a78bfa);">
+            <div style="color: #1d4ed8; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #93c5fd, #3b82f6);">
                 <div class="stage-icon">💾</div>
                 <div>Store</div>
             </div>
-            <div style="color: #c4b5fd; font-weight: bold; flex-shrink: 0;">→</div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #c4b5fd, #a78bfa);">
+            <div style="color: #93c5fd; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #93c5fd, #3b82f6);">
                 <div class="stage-icon">🔍</div>
                 <div>Query</div>
             </div>
-            <div style="color: #c4b5fd; font-weight: bold; flex-shrink: 0;">→</div>
-            <div class="pipeline-stage" style="background: linear-gradient(135deg, #a78bfa, #7c3aed);">
+            <div style="color: #93c5fd; font-weight: bold; flex-shrink: 0;">→</div>
+            <div class="pipeline-stage" style="background: linear-gradient(135deg, #3b82f6, #1e3a8a);">
                 <div class="stage-icon">📥</div>
                 <div>Retrieve</div>
             </div>
-            <div style="color: #a78bfa; font-weight: bold; flex-shrink: 0;">→</div>
+            <div style="color: #3b82f6; font-weight: bold; flex-shrink: 0;">→</div>
             <div class="pipeline-stage" style="background: linear-gradient(135deg, #f97316, #ea580c);">
                 <div class="stage-icon">✍️</div>
                 <div>Generate</div>
@@ -1300,7 +1401,7 @@
         <h4>RAG System Architecture</h4>
         <svg viewBox="0 0 1000 600" style="width: 100%; height: auto; max-height: 500px;">
             <!-- Ingestion Stage -->
-            <rect x="20" y="20" width="180" height="100" fill="#e0f2fe" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+            <rect x="20" y="20" width="180" height="100" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="2" rx="8"/>
             <text x="110" y="55" text-anchor="middle" font-weight="bold" font-size="14">Document Ingestion</text>
             <text x="110" y="75" text-anchor="middle" font-size="12">PDFs, Web, APIs</text>
             <text x="110" y="95" text-anchor="middle" font-size="12">Databases, Files</text>
@@ -1312,13 +1413,13 @@
             <text x="310" y="95" text-anchor="middle" font-size="12">Normalize</text>
 
             <!-- Embedding Stage -->
-            <rect x="420" y="20" width="180" height="100" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+            <rect x="420" y="20" width="180" height="100" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2" rx="8"/>
             <text x="510" y="55" text-anchor="middle" font-weight="bold" font-size="14">Embedding</text>
             <text x="510" y="75" text-anchor="middle" font-size="12">Dense Vectors</text>
             <text x="510" y="95" text-anchor="middle" font-size="12">384-1536 dims</text>
 
             <!-- Storage Stage -->
-            <rect x="620" y="20" width="180" height="100" fill="#fce7f3" stroke="#c4b5fd" stroke-width="2" rx="8"/>
+            <rect x="620" y="20" width="180" height="100" fill="#fed7aa" stroke="#93c5fd" stroke-width="2" rx="8"/>
             <text x="710" y="55" text-anchor="middle" font-weight="bold" font-size="14">Vector Store</text>
             <text x="710" y="75" text-anchor="middle" font-size="12">FAISS, Pinecone</text>
             <text x="710" y="95" text-anchor="middle" font-size="12">Weaviate, Chroma</text>
@@ -1329,19 +1430,19 @@
             <path d="M 600 70 L 620 70" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
 
             <!-- Query Processing (bottom row) -->
-            <rect x="420" y="250" width="180" height="100" fill="#dbeafe" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+            <rect x="420" y="250" width="180" height="100" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2" rx="8"/>
             <text x="510" y="285" text-anchor="middle" font-weight="bold" font-size="14">Query Processing</text>
             <text x="510" y="305" text-anchor="middle" font-size="12">Embed Query</text>
             <text x="510" y="325" text-anchor="middle" font-size="12">Same space as docs</text>
 
             <!-- Retrieval Stage -->
-            <rect x="220" y="250" width="180" height="100" fill="#dcfce7" stroke="#a78bfa" stroke-width="2" rx="8"/>
+            <rect x="220" y="250" width="180" height="100" fill="#dcfce7" stroke="#3b82f6" stroke-width="2" rx="8"/>
             <text x="310" y="285" text-anchor="middle" font-weight="bold" font-size="14">Retrieval</text>
             <text x="310" y="305" text-anchor="middle" font-size="12">Similarity Search</text>
             <text x="310" y="325" text-anchor="middle" font-size="12">Top-K matching</text>
 
             <!-- Re-ranking Stage (optional) -->
-            <rect x="20" y="250" width="180" height="100" fill="#fef3c7" stroke="#c4b5fd" stroke-width="2" rx="8"/>
+            <rect x="20" y="250" width="180" height="100" fill="#fef3c7" stroke="#93c5fd" stroke-width="2" rx="8"/>
             <text x="110" y="285" text-anchor="middle" font-weight="bold" font-size="14">Re-ranking</text>
             <text x="110" y="305" text-anchor="middle" font-size="12" style="opacity: 0.7;">(Optional)</text>
             <text x="110" y="325" text-anchor="middle" font-size="12">Cross-encoder</text>
@@ -1362,7 +1463,7 @@
             <path d="M 110 350 L 110 420 L 710 420 L 710 350" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
 
             <!-- Output -->
-            <rect x="620" y="430" width="180" height="100" fill="#e0f2fe" stroke="#8b5cf6" stroke-width="2" rx="8"/>
+            <rect x="620" y="430" width="180" height="100" fill="#e0f2fe" stroke="#1d4ed8" stroke-width="2" rx="8"/>
             <text x="710" y="465" text-anchor="middle" font-weight="bold" font-size="14">Answer with</text>
             <text x="710" y="485" text-anchor="middle" font-size="12">Citations & Sources</text>
             <text x="710" y="505" text-anchor="middle" font-size="12">Confidence scores</text>

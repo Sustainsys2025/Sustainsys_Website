@@ -1,39 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found — SustainSys</title>
     <link rel="icon" href="logo_only.png" type="image/png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/nav.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: #0a0118;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
         .error-page {
-            flex: 1;
+            min-height: 70vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 24px;
+            padding: 120px 24px 60px;
         }
         .error-code {
             font-family: 'DM Serif Display', Georgia, serif;
             font-size: clamp(5rem, 15vw, 10rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, #00f0ff, #9d4edd, #ff006e);
+            font-weight: 400;
+            background: linear-gradient(135deg, #1d4ed8, #ea580c);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -41,56 +29,67 @@
             margin-bottom: 16px;
         }
         .error-page h2 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.6rem;
+            color: var(--text-bright);
             margin-bottom: 12px;
         }
         .error-page p {
-            color: #a0a0b0;
+            color: var(--text-dim);
             max-width: 420px;
             margin-bottom: 32px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
-        .error-home-btn {
+        .error-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .error-btn {
             display: inline-block;
             padding: 12px 28px;
-            background: linear-gradient(135deg, #00f0ff, #9d4edd);
-            color: #0a0118;
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.95rem;
             border-radius: 8px;
             transition: opacity 0.3s, transform 0.3s;
         }
-        .error-home-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .error-btn--primary {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: #fff;
         }
-        /* Full-width layout */
-        .container { max-width: 100%; padding: 0 4rem; }
-        @media (max-width: 768px) { .container { padding: 0 1rem; } }
-    @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-.nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
-</style>
+        .error-btn--secondary {
+            background: linear-gradient(135deg, #ea580c, #f97316);
+            color: #fff;
+        }
+        .error-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+    </style>
 </head>
 <body>
-    <nav class="ss-nav" id="mainNav">
-        <div class="ss-nav-inner">
-            <a href="index.html" class="ss-nav-logo">
-                <img src="logo_only.png" alt="SustainSys" height="36">
-                <span>SustainSys</span>
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="index.html" aria-label="SustainSys Home">
+                <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                    <source src="Sustainsys_Logo.mp4" type="video/mp4">
+                </video>
             </a>
-            <button class="ss-nav-toggle" id="navToggle" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-            <ul class="ss-nav-links" id="navLinks">
+            <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="sustainsys-ai-powered.html">AI Platform</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="projects.html">Projects</a></li>
+                <li class="nav-dropdown-wrap"><a href="projects.html" class="projects-highlight">Projects<span class="nav-star">&#9733;</span><span class="nav-dropdown-arrow">&#9662;</span></a>
+                    <ul class="nav-dropdown">
+                        <li><a href="ai-regtech-capabilities.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--regtech"><img src="logo_only.png" alt="SustainSys" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">RegTech AI Solutions<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">AI-driven regulatory intelligence for banks</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                        <li><a href="accountiq.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--accounting"><img src="logo_only.png" alt="SustainSys" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">AccountIQ<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">AI-powered accounting software</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                        <li><a href="nl2sql-sales-deck.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--nl2sql"><img src="nl2sql_logo.svg" alt="NL2SQL" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">NL2SQL Analytics<span class="dropdown-badge dropdown-badge--new">Flagship</span></span><span class="dropdown-desc">AI-powered natural language to SQL platform</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                        <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--health"><img src="Cambiologics_logo.png" alt="CamBiologics" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">HealthCare<span class="dropdown-badge">Live</span></span><span class="dropdown-desc">AI-driven cancer research platform</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                        <li><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--ai"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">Precision AI<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">Intelligent enterprise solutions</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                        <li><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--community"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">Community</span><span class="dropdown-desc">Cambridge GuruJi Parivaar</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+                    </ul>
+                </li>
                 <li><a href="poc-access.html" class="poc-highlight">Access Demo</a></li>
-    <li><a href="job-openings.html">Careers</a></li>
-                <li><a href="index.html#contact" class="ss-nav-cta">Contact Us</a></li>
+                <li><a href="job-openings.html">Careers</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li style="display:flex;align-items:center;gap:8px;">
+                    <a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -99,12 +98,44 @@
         <div class="error-code">404</div>
         <h2>Page not found</h2>
         <p>The page you're looking for doesn't exist or has been moved. Let's get you back on track.</p>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-            <a href="index.html" class="error-home-btn">← Back to Home</a>
-            <a href="contact.html" class="error-home-btn" style="background: linear-gradient(135deg, #9d4edd, #ff006e);">Contact Us</a>
+        <div class="error-btns">
+            <a href="index.html" class="error-btn error-btn--primary">← Back to Home</a>
+            <a href="contact.html" class="error-btn error-btn--secondary">Contact Us</a>
         </div>
     </div>
 
-    <script src="assets/js/nav.js"></script>
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <img src="logo_only.png" alt="SustainSys Logo">
+                    <div>
+                        <h3>SustainSys Consulting Ltd</h3>
+                        <p>AI-Powered Engineering Solutions</p>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
+                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
+                    </a>
+                </div>
+                <div class="footer-location">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="var(--accent-cyan)"/></svg>
+                    <div>
+                        <div class="city">Cambridge, UK</div>
+                        <div class="sub">Innovation Hub</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
 </body>
 </html>

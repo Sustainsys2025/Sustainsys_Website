@@ -7,7 +7,7 @@
     <meta name="description" content="Split documents intelligently for RAG — fixed-size, recursive, semantic, and agentic chunking strategies.">
     <meta property="og:title" content="Chunking Strategies - SustainSys AI Academy">
     <meta property="og:description" content="Master chunking strategies for RAG systems with complete implementations and optimization techniques.">
-    <meta name="theme-color" content="#8b5cf6">
+    <meta name="theme-color" content="#1d4ed8">
 
         <link rel="stylesheet" href="styles.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,11 +24,11 @@
             --text: #1e293b;
             --text-dim: #64748b;
             --border: #e2e8f0;
-            --accent-cyan: #8b5cf6;
-            --accent-purple: #7c3aed;
-            --accent-pink: #a78bfa;
-            --accent-green: #a78bfa;
-            --accent-gold: #a78bfa;
+            --accent-cyan: #1d4ed8;
+            --accent-purple: #1d4ed8;
+            --accent-pink: #ea580c;
+            --accent-green: #1d4ed8;
+            --accent-gold: #ea580c;
         }
 
         body {
@@ -38,15 +38,22 @@
             line-height: 1.6;
         }
 
-        <style>
+        /* continued styles */
         /* ML Fundamentals Page Specific Styles */
 
         .ml-page-container {
+            flex-wrap: wrap;
             display: flex;
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        .ml-page-container > header,
+        .ml-page-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
         }
 
         .ml-sidebar {
@@ -294,7 +301,7 @@
         }
 
         .comparison-table th {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1rem;
             text-align: left;
@@ -394,7 +401,7 @@
         }
 
         .flow-step {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 12px;
@@ -570,7 +577,7 @@
 
         .try-it-box h4 {
             font-family: 'DM Serif Display', Georgia, serif;
-            color: #7c3aed;
+            color: #1e3a8a;
             margin-top: 0;
             margin-bottom: 0.75rem;
             font-size: 1.1rem;
@@ -784,6 +791,7 @@
         /* Responsive Design */
         @media (max-width: 1024px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 1.5rem;
             }
 
@@ -794,6 +802,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
                 padding: 1rem;
             }
@@ -869,6 +878,7 @@
 
         @media (max-width: 480px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 gap: 0.5rem;
                 padding: 0.5rem;
             }
@@ -892,7 +902,7 @@
         }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
-</style>
+/* end section */
 
         .model-bars {
             margin: 2rem 0;
@@ -963,7 +973,7 @@
         }
 
         .code-header {
-            color: #7c3aed;
+            color: #1e3a8a;
             font-weight: 600;
             margin-bottom: 0.75rem;
             font-family: 'Courier New', monospace;
@@ -1140,6 +1150,7 @@
 
         @media (max-width: 768px) {
             .ml-page-container {
+            flex-wrap: wrap;
                 flex-direction: column;
             }
 
@@ -1173,6 +1184,97 @@
         @media (max-width: 768px) { .container { padding: 0 1rem; } }
     @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+
+        /* === Layout Consistency Fix === */
+        .ml-page-container,
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+        .ml-page-container > header,
+        .ml-page-container > .page-header,
+        .main-container > header,
+        .main-container > .page-header {
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .ml-sidebar,
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        .ml-sidebar h3 {
+            font-family: "DM Serif Display", Georgia, serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan, #1d4ed8);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-cyan, #1d4ed8);
+        }
+        .ml-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .ml-sidebar li { margin-bottom: 0.3rem; }
+        .ml-sidebar a, .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.75rem;
+            color: var(--text-dim, #64748b);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ml-sidebar a:hover, .sidebar-link:hover {
+            color: var(--accent-cyan, #1d4ed8);
+            border-left-color: var(--accent-cyan, #1d4ed8);
+        }
+        .ml-content, .content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ml-content img, .content img,
+        .ml-content svg, .content svg {
+            max-width: 100%;
+            height: auto;
+        }
+        .ml-content pre, .content pre {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+        @media (max-width: 900px) {
+            .ml-page-container, .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                padding-top: 80px;
+            }
+            .ml-sidebar, .sidebar-nav {
+                position: relative;
+                top: 0;
+                width: 100%;
+                max-height: none;
+            }
+        }
+        /* === End Layout Fix === */
 </style>
 </head>
 <body>
@@ -1360,19 +1462,19 @@
         <div class="model-bar">
             <div class="model-bar-label">Fixed-Size (512 tokens)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #a78bfa, #c4b5fd);">62% Retrieval Quality</div>
+                <div class="model-bar-fill" style="width: 62%; background: linear-gradient(90deg, #3b82f6, #93c5fd);">62% Retrieval Quality</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Recursive (document-aware)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #7c3aed, #a78bfa);">78% Retrieval Quality</div>
+                <div class="model-bar-fill" style="width: 78%; background: linear-gradient(90deg, #1e3a8a, #3b82f6);">78% Retrieval Quality</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Semantic (optimal params)</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">91% Retrieval Quality</div>
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #1d4ed8, #1e3a8a);">91% Retrieval Quality</div>
             </div>
         </div>
     </div>
@@ -1402,19 +1504,19 @@
     <p>Your choice of chunking strategy depends on your document type and use case:</p>
 
     <div class="flow-diagram">
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #818cf8);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #818cf8);">
             <strong>Document Type?</strong><br><small>Decide based on structure</small>
         </div>
         <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">Plain text ↙ Code ↓ HTML/Markdown ↘ PDF</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
             <strong>Semantics Important?</strong><br><small>Is topic coherence critical?</small>
         </div>
         <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">No → Fixed-Size | Yes → Semantic/Recursive</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1e3a8a, #a855f7);">
             <strong>Latency/Cost?</strong><br><small>Can you afford embeddings?</small>
         </div>
         <div style="text-align: center; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-dim);">Speed Critical → Recursive | High Budget → Semantic</div>
-        <div class="flow-step" style="background: linear-gradient(135deg, #8b5cf6, #c4b5fd);">
+        <div class="flow-step" style="background: linear-gradient(135deg, #1d4ed8, #93c5fd);">
             <strong>Final Strategy</strong><br><small>Implement & optimize</small>
         </div>
     </div>
@@ -1868,19 +1970,19 @@ chunks = <span class="function">semantic_chunking</span>(document, get_embedding
         <div class="model-bar">
             <div class="model-bar-label">Threshold = 0.3</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">Many small chunks, low latency</div>
+                <div class="model-bar-fill" style="width: 30%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">Many small chunks, low latency</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Threshold = 0.5</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #8b5cf6, #818cf8);">Balanced chunks, balanced latency</div>
+                <div class="model-bar-fill" style="width: 60%; background: linear-gradient(90deg, #1d4ed8, #818cf8);">Balanced chunks, balanced latency</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">Threshold = 0.8</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #7c3aed, #a855f7);">Few large chunks, high latency</div>
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #1e3a8a, #a855f7);">Few large chunks, high latency</div>
             </div>
         </div>
     </div>
@@ -2271,7 +2373,7 @@ Current chunks: {chunks}"""</span>
     <div style="overflow-x: auto; margin: 2rem 0;">
     <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
         <thead>
-            <tr style="background: linear-gradient(90deg, #8b5cf6, #7c3aed); color: white;">
+            <tr style="background: linear-gradient(90deg, #1d4ed8, #1e3a8a); color: white;">
                 <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Dimension</th>
                 <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Fixed-Size</th>
                 <th style="padding: 12px; text-align: center; border: 1px solid #e2e8f0;">Recursive</th>
@@ -2283,10 +2385,10 @@ Current chunks: {chunks}"""</span>
         <tbody>
             <tr style="background: #f8fafc;">
                 <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Retrieval Accuracy</strong></td>
-                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #8b5cf6;">62%</td>
-                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #8b5cf6;">78%</td>
-                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #a78bfa;">91%</td>
-                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #a78bfa;">85%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #1d4ed8;">62%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #1d4ed8;">78%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #3b82f6;">91%</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #3b82f6;">85%</td>
                 <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">96%</td>
             </tr>
             <tr style="background: white;">
@@ -2308,7 +2410,7 @@ Current chunks: {chunks}"""</span>
             <tr style="background: white;">
                 <td style="padding: 12px; border: 1px solid #e2e8f0;"><strong>Implementation Complexity</strong></td>
                 <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #22c55e;">Very Easy</td>
-                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #a78bfa;">Easy</td>
+                <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #3b82f6;">Easy</td>
                 <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate</td>
                 <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #eab308;">Moderate</td>
                 <td style="padding: 12px; text-align: center; border: 1px solid #e2e8f0; color: #ef4444;">Complex</td>
@@ -2337,7 +2439,7 @@ Current chunks: {chunks}"""</span>
     <p>Use this matrix to choose the right strategy for your use case:</p>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;">
-        <div style="padding: 1rem; background: #f0f9ff; border-left: 4px solid #8b5cf6; border-radius: 4px;">
+        <div style="padding: 1rem; background: #f0f9ff; border-left: 4px solid #1d4ed8; border-radius: 4px;">
             <strong>Choose Fixed-Size if:</strong>
             <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
                 <li>Building a rapid prototype</li>
@@ -2345,7 +2447,7 @@ Current chunks: {chunks}"""</span>
                 <li>Documents are homogeneous</li>
             </ul>
         </div>
-        <div style="padding: 1rem; background: #f0fdf4; border-left: 4px solid #a78bfa; border-radius: 4px;">
+        <div style="padding: 1rem; background: #f0fdf4; border-left: 4px solid #3b82f6; border-radius: 4px;">
             <strong>Choose Recursive if:</strong>
             <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.9rem;">
                 <li>Documents are structured (markdown, code)</li>
@@ -2484,31 +2586,31 @@ results = <span class="function">run_chunk_optimization</span>(documents, test_q
         <div class="model-bar">
             <div class="model-bar-label">128 tokens</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">NDCG: 0.82</div>
+                <div class="model-bar-fill" style="width: 85%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">NDCG: 0.82</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">256 tokens</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 89%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">NDCG: 0.87</div>
+                <div class="model-bar-fill" style="width: 89%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">NDCG: 0.87</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">512 tokens</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">NDCG: 0.89</div>
+                <div class="model-bar-fill" style="width: 91%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">NDCG: 0.89</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">1024 tokens</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 88%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">NDCG: 0.86</div>
+                <div class="model-bar-fill" style="width: 88%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">NDCG: 0.86</div>
             </div>
         </div>
         <div class="model-bar">
             <div class="model-bar-label">2048 tokens</div>
             <div class="model-bar-track">
-                <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #8b5cf6, #c4b5fd);">NDCG: 0.78</div>
+                <div class="model-bar-fill" style="width: 80%; background: linear-gradient(90deg, #1d4ed8, #93c5fd);">NDCG: 0.78</div>
             </div>
         </div>
     </div>
@@ -2548,25 +2650,25 @@ results = <span class="function">run_chunk_optimization</span>(documents, test_q
                 <div class="model-bar">
                     <div class="model-bar-label">128 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 92%; background: #8b5cf6;">92% Precision@5</div>
+                        <div class="model-bar-fill" style="width: 92%; background: #1d4ed8;">92% Precision@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">256 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 88%; background: #8b5cf6;">88% Precision@5</div>
+                        <div class="model-bar-fill" style="width: 88%; background: #1d4ed8;">88% Precision@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">512 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 84%; background: #8b5cf6;">84% Precision@5</div>
+                        <div class="model-bar-fill" style="width: 84%; background: #1d4ed8;">84% Precision@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">1024 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 76%; background: #8b5cf6;">76% Precision@5</div>
+                        <div class="model-bar-fill" style="width: 76%; background: #1d4ed8;">76% Precision@5</div>
                     </div>
                 </div>
             </div>
@@ -2577,25 +2679,25 @@ results = <span class="function">run_chunk_optimization</span>(documents, test_q
                 <div class="model-bar">
                     <div class="model-bar-label">128 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 65%; background: #7c3aed;">65% Recall@5</div>
+                        <div class="model-bar-fill" style="width: 65%; background: #1e3a8a;">65% Recall@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">256 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 78%; background: #7c3aed;">78% Recall@5</div>
+                        <div class="model-bar-fill" style="width: 78%; background: #1e3a8a;">78% Recall@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">512 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 86%; background: #7c3aed;">86% Recall@5</div>
+                        <div class="model-bar-fill" style="width: 86%; background: #1e3a8a;">86% Recall@5</div>
                     </div>
                 </div>
                 <div class="model-bar">
                     <div class="model-bar-label">1024 tokens</div>
                     <div class="model-bar-track">
-                        <div class="model-bar-fill" style="width: 91%; background: #7c3aed;">91% Recall@5</div>
+                        <div class="model-bar-fill" style="width: 91%; background: #1e3a8a;">91% Recall@5</div>
                     </div>
                 </div>
             </div>
@@ -2637,21 +2739,21 @@ results = <span class="function">run_chunk_optimization</span>(documents, test_q
 
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 2rem 0;">
         <div style="padding: 1rem; background: #f0f9ff; border-radius: 8px;">
-            <h4 style="color: #8b5cf6; margin: 0 0 0.5rem 0;">Fixed-Size</h4>
+            <h4 style="color: #1d4ed8; margin: 0 0 0.5rem 0;">Fixed-Size</h4>
             <div style="font-size: 0.85rem;">
                 <p><strong>Chunking:</strong> Free</p>
                 <p><strong>Embedding:</strong> N/A</p>
                 <p><strong>Storage:</strong> 1M chunks</p>
-                <p style="margin-top: 1rem; color: #7c3aed;"><strong>Total: $0</strong></p>
+                <p style="margin-top: 1rem; color: #1e3a8a;"><strong>Total: $0</strong></p>
             </div>
         </div>
         <div style="padding: 1rem; background: #f0fdf4; border-radius: 8px;">
-            <h4 style="color: #a78bfa; margin: 0 0 0.5rem 0;">Semantic</h4>
+            <h4 style="color: #3b82f6; margin: 0 0 0.5rem 0;">Semantic</h4>
             <div style="font-size: 0.85rem;">
                 <p><strong>Chunking:</strong> Free</p>
                 <p><strong>Embedding:</strong> 100M tokens → $20</p>
                 <p><strong>Storage:</strong> 1M vectors</p>
-                <p style="margin-top: 1rem; color: #7c3aed;"><strong>Total: $20 (+$5/mo)</strong></p>
+                <p style="margin-top: 1rem; color: #1e3a8a;"><strong>Total: $20 (+$5/mo)</strong></p>
             </div>
         </div>
         <div style="padding: 1rem; background: #fef2f2; border-radius: 8px;">
@@ -3640,16 +3742,16 @@ ndcg_scores = []
     <h3>Decision Framework: Which Strategy?</h3>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; font-size: 0.9rem;">
-        <div style="padding: 1rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-left: 4px solid #8b5cf6; border-radius: 8px;">
-            <strong style="color: #8b5cf6;">Fast Prototyping?</strong>
+        <div style="padding: 1rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-left: 4px solid #1d4ed8; border-radius: 8px;">
+            <strong style="color: #1d4ed8;">Fast Prototyping?</strong>
             <p style="margin: 0.5rem 0 0 0;">Use <strong>Fixed-Size</strong>. Zero overhead, instant results. Good enough for MVP.</p>
         </div>
-        <div style="padding: 1rem; background: linear-gradient(135deg, #f0fdf4, #dbeafe); border-left: 4px solid #a78bfa; border-radius: 8px;">
-            <strong style="color: #a78bfa;">Structured Documents?</strong>
+        <div style="padding: 1rem; background: linear-gradient(135deg, #f0fdf4, #dbeafe); border-left: 4px solid #3b82f6; border-radius: 8px;">
+            <strong style="color: #3b82f6;">Structured Documents?</strong>
             <p style="margin: 0.5rem 0 0 0;">Use <strong>Recursive</strong>. Respects hierarchy. Fast and effective.</p>
         </div>
         <div style="padding: 1rem; background: linear-gradient(135deg, #fffbeb, #fef3c7); border-left: 4px solid #eab308; border-radius: 8px;">
-            <strong style="color: #a78bfa;">High Quality Needed?</strong>
+            <strong style="color: #3b82f6;">High Quality Needed?</strong>
             <p style="margin: 0.5rem 0 0 0;">Use <strong>Semantic</strong>. Embedding cost worth retrieval gains.</p>
         </div>
         <div style="padding: 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-left: 4px solid #ef4444; border-radius: 8px;">
