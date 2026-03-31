@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon Bedrock for LLMs — AI Practitioner Advanced | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+<style>
+.code { color: #1e1e1e; background: #f5f5f5; padding: 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 14px; margin: 16px 0; }
+.code .kw { color: #7c3aed; } .code .fn { color: #0066cc; } .code .st { color: #22c55e; } .code .cm { color: #999; } .code .nm { color: #f97316; } .code .op { color: #0891b2; } .code .va { color: #1e1e1e; } .code .im { color: #7c3aed; }
+.callout { border-left: 4px solid #0066cc; background: #f0f7ff; padding: 16px; margin: 20px 0; border-radius: 4px; }
+.callout.warning { border-left-color: #f59e0b; background: #fffbeb; }
+.callout.success { border-left-color: #22c55e; background: #f0fdf4; }
+.infographic { background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px; margin: 20px 0; border-radius: 8px; text-align: center; }
+.exercise { background: #f3f0ff; border: 1px solid #ddd6fe; padding: 16px; margin: 20px 0; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div class="progress-circle-wrap" title="Page progress"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div>
+<nav class="topnav"><div class="topnav-inner"><a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a><div class="nav-divider"></div><div class="nav-title">Module 8 — Amazon Bedrock for LLMs</div><span class="nav-badge">Advanced</span><a href="index.html" class="nav-home-link">← Course Home</a></div></nav>
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Advanced</div>
+  <span class="sidebar-section-label">Module 1: End-to-End AI Project Lifecycle</span>
+  <ul class="sidebar-nav">
+    <li><a href="module1-lesson1.html"><span class="sidebar-num">1.1</span> Lesson 1</a></li>
+    <li><a href="module1-lesson2.html"><span class="sidebar-num">1.2</span> Lesson 2</a></li>
+    <li><a href="module1-lesson3.html"><span class="sidebar-num">1.3</span> Lesson 3</a></li>
+    <li><a href="module1-lesson4.html"><span class="sidebar-num">1.4</span> Lesson 4</a></li>
+    <li><a href="module1-lesson5.html"><span class="sidebar-num">1.5</span> Lesson 5</a></li>
+    <li><a href="module1-lesson6.html"><span class="sidebar-num">1.6</span> Lesson 6</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: LLM APIs and Integration</span>
+  <ul class="sidebar-nav">
+    <li><a href="module2-lesson1.html"><span class="sidebar-num">2.1</span> Lesson 1</a></li>
+    <li><a href="module2-lesson2.html"><span class="sidebar-num">2.2</span> Lesson 2</a></li>
+    <li><a href="module2-lesson3.html"><span class="sidebar-num">2.3</span> Lesson 3</a></li>
+    <li><a href="module2-lesson4.html"><span class="sidebar-num">2.4</span> Lesson 4</a></li>
+    <li><a href="module2-lesson5.html"><span class="sidebar-num">2.5</span> Lesson 5</a></li>
+    <li><a href="module2-lesson6.html"><span class="sidebar-num">2.6</span> Lesson 6</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3: AI Chatbots and Conversational Systems</span>
+  <ul class="sidebar-nav">
+    <li><a href="module3-lesson1.html"><span class="sidebar-num">3.1</span> Lesson 1</a></li>
+    <li><a href="module3-lesson2.html"><span class="sidebar-num">3.2</span> Lesson 2</a></li>
+    <li><a href="module3-lesson3.html"><span class="sidebar-num">3.3</span> Lesson 3</a></li>
+    <li><a href="module3-lesson4.html"><span class="sidebar-num">3.4</span> Lesson 4</a></li>
+    <li><a href="module3-lesson5.html"><span class="sidebar-num">3.5</span> Lesson 5</a></li>
+    <li><a href="module3-lesson6.html"><span class="sidebar-num">3.6</span> Lesson 6</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 4: Document Q&A Systems</span>
+  <ul class="sidebar-nav">
+    <li><a href="module4-lesson1.html"><span class="sidebar-num">4.1</span> Lesson 1</a></li>
+    <li><a href="module4-lesson2.html"><span class="sidebar-num">4.2</span> Lesson 2</a></li>
+    <li><a href="module4-lesson3.html"><span class="sidebar-num">4.3</span> Lesson 3</a></li>
+    <li><a href="module4-lesson4.html"><span class="sidebar-num">4.4</span> Lesson 4</a></li>
+    <li><a href="module4-lesson5.html"><span class="sidebar-num">4.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 5: RAG Deep Dive</span>
+  <ul class="sidebar-nav">
+    <li><a href="module5-lesson1.html"><span class="sidebar-num">5.1</span> Lesson 1</a></li>
+    <li><a href="module5-lesson2.html"><span class="sidebar-num">5.2</span> Lesson 2</a></li>
+    <li><a href="module5-lesson3.html"><span class="sidebar-num">5.3</span> Lesson 3</a></li>
+    <li><a href="module5-lesson4.html"><span class="sidebar-num">5.4</span> Lesson 4</a></li>
+    <li><a href="module5-lesson5.html"><span class="sidebar-num">5.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 6: Recommendation Systems</span>
+  <ul class="sidebar-nav">
+    <li><a href="module6-lesson1.html"><span class="sidebar-num">6.1</span> Lesson 1</a></li>
+    <li><a href="module6-lesson2.html"><span class="sidebar-num">6.2</span> Lesson 2</a></li>
+    <li><a href="module6-lesson3.html"><span class="sidebar-num">6.3</span> Lesson 3</a></li>
+    <li><a href="module6-lesson4.html"><span class="sidebar-num">6.4</span> Lesson 4</a></li>
+    <li><a href="module6-lesson5.html"><span class="sidebar-num">6.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 7: API Development with FastAPI</span>
+  <ul class="sidebar-nav">
+    <li><a href="module7-lesson1.html"><span class="sidebar-num">7.1</span> Lesson 1</a></li>
+    <li><a href="module7-lesson2.html"><span class="sidebar-num">7.2</span> Lesson 2</a></li>
+    <li><a href="module7-lesson3.html"><span class="sidebar-num">7.3</span> Lesson 3</a></li>
+    <li><a href="module7-lesson4.html"><span class="sidebar-num">7.4</span> Lesson 4</a></li>
+    <li><a href="module7-lesson5.html"><span class="sidebar-num">7.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 8: AWS AI</span>
+  <ul class="sidebar-nav">
+    <li><a href="module8-lesson1.html"><span class="sidebar-num">8.1</span> Overview</a></li>
+    <li><a href="module8-lesson2.html"><span class="sidebar-num">8.2</span> Amazon Bedrock</a></li>
+    <li><a href="module8-lesson3.html"><span class="sidebar-num">8.3</span> AWS Lambda for AI</a></li>
+    <li><a href="module8-lesson4.html"><span class="sidebar-num">8.4</span> S3 for ML Pipelines</a></li>
+    <li><a href="module8-lesson5.html"><span class="sidebar-num">8.5</span> Cost Optimization</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 9: Azure AI and Cloud</span>
+  <ul class="sidebar-nav">
+    <li><a href="module9-lesson1.html"><span class="sidebar-num">9.1</span> Azure AI Overview</a></li>
+    <li><a href="module9-lesson2.html"><span class="sidebar-num">9.2</span> Azure OpenAI</a></li>
+    <li><a href="module9-lesson3.html"><span class="sidebar-num">9.3</span> Cognitive Services</a></li>
+    <li><a href="module9-lesson4.html"><span class="sidebar-num">9.4</span> Azure ML Studio</a></li>
+    <li><a href="module9-lesson5.html"><span class="sidebar-num">9.5</span> Monitoring & Cost</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 10: Model Deployment and DevOps</span>
+  <ul class="sidebar-nav">
+    <li><a href="module10-lesson1.html"><span class="sidebar-num">10.1</span> Docker for ML</a></li>
+    <li><a href="module10-lesson2.html"><span class="sidebar-num">10.2</span> Model Serving</a></li>
+    <li><a href="module10-lesson3.html"><span class="sidebar-num">10.3</span> Scaling AI Apps</a></li>
+    <li><a href="module10-lesson4.html"><span class="sidebar-num">10.4</span> Monitoring Production</a></li>
+    <li><a href="module10-lesson5.html"><span class="sidebar-num">10.5</span> CI/CD for ML</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 11: Fine-Tuning Techniques</span>
+  <ul class="sidebar-nav">
+    <li><a href="module11-lesson1.html"><span class="sidebar-num">11.1</span> Supervised Fine-Tuning</a></li>
+    <li><a href="module11-lesson2.html"><span class="sidebar-num">11.2</span> LoRA</a></li>
+    <li><a href="module11-lesson3.html"><span class="sidebar-num">11.3</span> QLoRA</a></li>
+    <li><a href="module11-lesson4.html"><span class="sidebar-num">11.4</span> RLHF</a></li>
+    <li><a href="module11-lesson5.html"><span class="sidebar-num">11.5</span> DPO</a></li>
+    <li><a href="module11-lesson6.html"><span class="sidebar-num">11.6</span> Best Practices</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 12: LLM Evaluation Methods</span>
+  <ul class="sidebar-nav">
+    <li><a href="module12-lesson1.html"><span class="sidebar-num">12.1</span> Evaluation Fundamentals</a></li>
+    <li><a href="module12-lesson2.html"><span class="sidebar-num">12.2</span> Standard Benchmarks</a></li>
+    <li><a href="module12-lesson3.html"><span class="sidebar-num">12.3</span> RAGAS</a></li>
+    <li><a href="module12-lesson4.html"><span class="sidebar-num">12.4</span> LLM-as-Judge</a></li>
+    <li><a href="module12-lesson5.html"><span class="sidebar-num">12.5</span> Custom Pipelines</a></li>
+  </ul>
+</aside>
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+<main class="main"><div class="container">
+<section class="hero">
+<div class="breadcrumb"><a href="index.html">Advanced</a><span class="sep">›</span><span>Module 8 · Lesson 2</span></div>
+<span class="hero-eyebrow">Module 8 · Lesson 2</span>
+<h1>Amazon Bedrock for LLMs <span class="accent">Deep Dive</span></h1>
+<p class="hero-sub">Model access, InvokeModel API, streaming, knowledge bases, and agent architectures</p>
+</section>
+<div class="objectives"><h4>Learning Objectives</h4><ul><li>Access and provision foundation models through Bedrock</li><li>Implement InvokeModel API patterns with request/response handling</li><li>Build streaming inference pipelines for real-time applications</li><li>Integrate knowledge bases and RAG with Bedrock agents</li><li>Design multi-model agent systems with tool calling</li></ul></div>
+
+<section class="section" id="overview">
+<h2>Overview</h2>
+<p>Amazon Bedrock provides serverless access to foundation models from AWS, Anthropic, Meta, and third-party providers. Unlike managing infrastructure or using APIs directly, Bedrock handles scaling, security, and model versions automatically. This lesson covers practical patterns for accessing models, building intelligent agents with memory and tools, and integrating knowledge bases for retrieval-augmented generation.</p>
+
+<p>Bedrock's model access layer abstracts away deployment complexity while maintaining fine-grained control over prompts, parameters, and costs. You'll learn how to architect solutions that leverage multiple models, handle streaming responses efficiently, and build agents that can reason over custom knowledge.</p>
+</section>
+
+<section class="section" id="model-access">
+<h2>Model Access and Provisioning</h2>
+
+<p>Bedrock models are provisioned through the AWS console or programmatically. Each model has a specific invocation format and parameter constraints. Understanding these nuances prevents common integration errors.</p>
+
+<div class="infographic">
+  <strong>Bedrock Model Landscape</strong><br><br>
+  AWS: Titan (base, express, premier) | Anthropic: Claude 1-3, Haiku | Meta: Llama 2, 3 | Google: PaLM 2<br>
+  Vision models available for image understanding | Text embedding models for RAG<br>
+  Each model: different pricing, context windows, capabilities
+</div>
+
+<p><strong>Model Request Syntax</strong>: Bedrock abstracts differences between providers using a unified API. However, each model's system prompt handling, parameter names, and response formats vary subtly.</p>
+
+<div class="code"><span class="im">import</span> <span class="nm">boto3</span><span class="op">,</span> <span class="nm">json</span><br><span class="kw">from</span> <span class="nm">botocore</span>.<span class="nm">exceptions</span> <span class="kw">import</span> <span class="nm">ClientError</span><br><br><span class="nm">client</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span><span class="op">(</span><span class="st">'bedrock-runtime'</span><span class="op">)</span><br><br><span class="cm"># Invoke Claude 3 Sonnet</span><br><span class="nm">response</span> <span class="op">=</span> <span class="nm">client</span>.<span class="fn">invoke_model</span><span class="op">(</span><br>&nbsp;&nbsp;<span class="nm">modelId</span><span class="op">=</span><span class="st">'anthropic.claude-3-sonnet-20240229-v1:0'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="nm">body</span><span class="op">=</span><span class="nm">json</span>.<span class="fn">dumps</span><span class="op">({</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'anthropic_version'</span><span class="op">:</span> <span class="st">'bedrock-2023-06-01'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'max_tokens'</span><span class="op">:</span> <span class="nm">1024</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'messages'</span><span class="op">:</span> <span class="op">[{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'role'</span><span class="op">:</span> <span class="st">'user'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'content'</span><span class="op">:</span> <span class="st">'Explain quantum entanglement'</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}]</span><br>&nbsp;&nbsp;<span class="op">})</span><br><span class="op">)</span><br><br><span class="nm">result</span> <span class="op">=</span> <span class="nm">json</span>.<span class="fn">loads</span><span class="op">(</span><span class="nm">response</span><span class="op">[</span><span class="st">'body'</span><span class="op">].</span><span class="fn">read</span><span class="op">())</span><br><span class="nm">text</span> <span class="op">=</span> <span class="nm">result</span><span class="op">[</span><span class="st">'content'</span><span class="op">][</span><span class="nm">0</span><span class="op">][</span><span class="st">'text'</span><span class="op">]</span></div>
+
+<p><strong>Provisioning Through-Put</strong>: For high-traffic applications, enable provisioned throughput to lock in pricing and guarantee availability. This is critical when SLA requirements demand consistent latency.</p>
+
+<div class="callout">
+<strong>Provisioned vs On-Demand:</strong> On-demand pays per token, scales elastically. Provisioned throughput offers 50% cost reduction with reserved capacity. Use provisioned for stable, predictable workloads exceeding 3M tokens/month.
+</div>
+</section>
+
+<section class="section" id="invoke-model">
+<h2>InvokeModel API and Request Patterns</h2>
+
+<p>The InvokeModel API is the core interface for synchronous model calls. Each model requires different request payloads. Learning to construct these properly is fundamental.</p>
+
+<div class="code"><span class="cm"># Multi-model adapter pattern</span><br><span class="kw">class</span> <span class="nm">BedrockAdapter</span><span class="op">:</span><br>&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">__init__</span><span class="op">(</span><span class="va">self</span><span class="op">):</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="va">self</span>.<span class="nm">client</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span><span class="op">(</span><span class="st">'bedrock-runtime'</span><span class="op">)</span><br><br>&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">invoke_claude</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">messages</span><span class="op">,</span> <span class="va">system</span><span class="op">=</span><span class="st">''</span><span class="op">):</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">payload</span> <span class="op">=</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'anthropic_version'</span><span class="op">:</span> <span class="st">'bedrock-2023-06-01'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'max_tokens'</span><span class="op">:</span> <span class="nm">2048</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'temperature'</span><span class="op">:</span> <span class="nm">0.7</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'messages'</span><span class="op">:</span> <span class="va">messages</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="va">system</span><span class="op">:</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">payload</span><span class="op">[</span><span class="st">'system'</span><span class="op">]</span> <span class="op">=</span> <span class="va">system</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">response</span> <span class="op">=</span> <span class="va">self</span>.<span class="nm">client</span>.<span class="fn">invoke_model</span><span class="op">(</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">modelId</span><span class="op">=</span><span class="st">'anthropic.claude-3-sonnet-20240229-v1:0'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">body</span><span class="op">=</span><span class="nm">json</span>.<span class="fn">dumps</span><span class="op">(</span><span class="nm">payload</span><span class="op">)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="nm">json</span>.<span class="fn">loads</span><span class="op">(</span><span class="nm">response</span><span class="op">[</span><span class="st">'body'</span><span class="op">].</span><span class="fn">read</span><span class="op">())</span><br><br>&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">invoke_llama</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">prompt</span><span class="op">):</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">payload</span> <span class="op">=</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'prompt'</span><span class="op">:</span> <span class="va">prompt</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'max_gen_len'</span><span class="op">:</span> <span class="nm">512</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'temperature'</span><span class="op">:</span> <span class="nm">0.8</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">response</span> <span class="op">=</span> <span class="va">self</span>.<span class="nm">client</span>.<span class="fn">invoke_model</span><span class="op">(</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">modelId</span><span class="op">=</span><span class="st">'meta.llama2-70b-chat-v1'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">body</span><span class="op">=</span><span class="nm">json</span>.<span class="fn">dumps</span><span class="op">(</span><span class="nm">payload</span><span class="op">)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="nm">json</span>.<span class="fn">loads</span><span class="op">(</span><span class="nm">response</span><span class="op">[</span><span class="st">'body'</span><span class="op">].</span><span class="fn">read</span><span class="op">())</span></div>
+
+<div class="callout warning">
+<strong>Error Handling:</strong> Bedrock can throttle requests exceeding provisioned throughput. Implement exponential backoff for rate limiting (429 errors) and circuit breaker patterns for unavailable models.
+</div>
+</section>
+
+<section class="section" id="streaming">
+<h2>Streaming and Real-Time Inference</h2>
+
+<p>Streaming responses enable progressive generation and immediate user feedback. This is critical for conversational AI where token-level latency matters.</p>
+
+<div class="code"><span class="cm"># Streaming response pattern</span><br><span class="kw">def</span> <span class="fn">stream_bedrock_response</span><span class="op">(</span><span class="va">messages</span><span class="op">,</span> <span class="va">system</span><span class="op">=</span><span class="st">''</span><span class="op">):</span><br>&nbsp;&nbsp;<span class="nm">client</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span><span class="op">(</span><span class="st">'bedrock-runtime'</span><span class="op">)</span><br>&nbsp;&nbsp;<span class="nm">payload</span> <span class="op">=</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'anthropic_version'</span><span class="op">:</span> <span class="st">'bedrock-2023-06-01'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'max_tokens'</span><span class="op">:</span> <span class="nm">2048</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'messages'</span><span class="op">:</span> <span class="va">messages</span><br>&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;<span class="kw">if</span> <span class="va">system</span><span class="op">:</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">payload</span><span class="op">[</span><span class="st">'system'</span><span class="op">]</span> <span class="op">=</span> <span class="va">system</span><br><br>&nbsp;&nbsp;<span class="nm">response</span> <span class="op">=</span> <span class="nm">client</span>.<span class="fn">invoke_model_with_response_stream</span><span class="op">(</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">modelId</span><span class="op">=</span><span class="st">'anthropic.claude-3-sonnet-20240229-v1:0'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">body</span><span class="op">=</span><span class="nm">json</span>.<span class="fn">dumps</span><span class="op">(</span><span class="nm">payload</span><span class="op">)</span><br>&nbsp;&nbsp;<span class="op">)</span><br><br>&nbsp;&nbsp;<span class="kw">for</span> <span class="nm">event</span> <span class="kw">in</span> <span class="nm">response</span><span class="op">[</span><span class="st">'body'</span><span class="op">]:</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">chunk</span> <span class="op">=</span> <span class="nm">json</span>.<span class="fn">loads</span><span class="op">(</span><span class="nm">event</span><span class="op">[</span><span class="st">'chunk'</span><span class="op">][</span><span class="st">'bytes'</span><span class="op">])</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="st">'content_block_delta'</span> <span class="kw">in</span> <span class="nm">chunk</span><span class="op">:</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nm">text</span> <span class="op">=</span> <span class="nm">chunk</span><span class="op">[</span><span class="st">'content_block_delta'</span><span class="op">][</span><span class="st">'delta'</span><span class="op">][</span><span class="st">'text'</span><span class="op">]</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">yield</span> <span class="nm">text</span></div>
+
+<div class="infographic">
+  <strong>Streaming Architecture</strong><br><br>
+  User Request → Bedrock Streaming API → Event Stream (200ms latency) → WebSocket/SSE to Client<br>
+  Buffering: Optional 50-100ms batching for efficiency | Token counting in real-time
+</div>
+
+<p>Streaming requires careful error handling. Network disconnects mid-stream must gracefully resume or restart. Consider implementing server-sent events (SSE) for web applications.</p>
+</section>
+
+<section class="section" id="knowledge-bases">
+<h2>Knowledge Bases and RAG Integration</h2>
+
+<p>Bedrock Knowledge Bases enable RAG without managing vector databases. The service handles embedding, chunking, and retrieval automatically. Integration with agents enables retrieval-augmented reasoning.</p>
+
+<div class="code"><span class="cm"># Knowledge base retrieval with Bedrock</span><br><span class="nm">kb_client</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span><span class="op">(</span><span class="st">'bedrock-agent-runtime'</span><span class="op">)</span><br><br><span class="nm">response</span> <span class="op">=</span> <span class="nm">kb_client</span>.<span class="fn">retrieve</span><span class="op">(</span><br>&nbsp;&nbsp;<span class="nm">knowledgeBaseId</span><span class="op">=</span><span class="st">'KB_ID'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="nm">retrievalConfiguration</span><span class="op">={</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'vectorSearchConfiguration'</span><span class="op">:{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'numberOfResults'</span><span class="op">:</span> <span class="nm">5</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'overrideSearchType'</span><span class="op">:</span> <span class="st">'HYBRID'</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;<span class="op">},</span><br>&nbsp;&nbsp;<span class="nm">text</span><span class="op">=</span><span class="st">'What are our Q3 financial targets?'</span><br><span class="op">)</span><br><br><span class="kw">for</span> <span class="nm">result</span> <span class="kw">in</span> <span class="nm">response</span><span class="op">[</span><span class="st">'retrievalResults'</span><span class="op">]:</span><br>&nbsp;&nbsp;<span class="nm">content</span> <span class="op">=</span> <span class="nm">result</span><span class="op">[</span><span class="st">'content'</span><span class="op">][</span><span class="st">'text'</span><span class="op">]</span><br>&nbsp;&nbsp;<span class="nm">score</span> <span class="op">=</span> <span class="nm">result</span><span class="op">[</span><span class="st">'score'</span><span class="op">]</span></div>
+
+<div class="callout success">
+<strong>Hybrid Search:</strong> Bedrock supports hybrid retrieval combining keyword matching with semantic search. Use this to balance recall (keyword) with relevance (semantic).
+</div>
+
+<p>Knowledge bases support data sources from S3, web crawls, or Salesforce connectors. Synchronization is automatic when source documents change. This eliminates manual vector DB maintenance.</p>
+</section>
+
+<section class="section" id="agents">
+<h2>Building Intelligent Agents with Tool Calling</h2>
+
+<p>Bedrock Agents enable autonomous reasoning with access to tools and knowledge bases. The agent handles planning, tool selection, and error recovery automatically.</p>
+
+<div class="code"><span class="cm"># Agent with tool definitions</span><br><span class="nm">tools</span> <span class="op">=</span> <span class="op">[{</span><br>&nbsp;&nbsp;<span class="st">'name'</span><span class="op">:</span> <span class="st">'get_customer_orders'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="st">'description'</span><span class="op">:</span> <span class="st">'Retrieve order history for a customer'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="st">'inputSchema'</span><span class="op">:</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'type'</span><span class="op">:</span> <span class="st">'object'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'properties'</span><span class="op">:</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'customer_id'</span><span class="op">:</span> <span class="op">{</span><span class="st">'type'</span><span class="op">:</span> <span class="st">'string'</span><span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'limit'</span><span class="op">:</span> <span class="op">{</span><span class="st">'type'</span><span class="op">:</span> <span class="st">'integer'</span><span class="op">,</span> <span class="st">'default'</span><span class="op">:</span> <span class="nm">10</span><span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;<span class="op">}</span><br><span class="op">},{</span><br>&nbsp;&nbsp;<span class="st">'name'</span><span class="op">:</span> <span class="st">'update_inventory'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="st">'description'</span><span class="op">:</span> <span class="st">'Update product inventory count'</span><br>&nbsp;&nbsp;<span class="st">'inputSchema'</span><span class="op">:</span> <span class="op">{</span><span class="st">'type'</span><span class="op">:</span> <span class="st">'object'</span><span class="op">,</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'properties'</span><span class="op">:</span> <span class="op">{</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'product_id'</span><span class="op">:</span> <span class="op">{</span><span class="st">'type'</span><span class="op">:</span> <span class="st">'string'</span><span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">'quantity'</span><span class="op">:</span> <span class="op">{</span><span class="st">'type'</span><span class="op">:</span> <span class="st">'integer'</span><span class="op">}</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">}</span><br>&nbsp;&nbsp;<span class="op">}</span><br><span class="op">}]</span><br><br><span class="cm"># Execute agent with message</span><br><span class="nm">agent_response</span> <span class="op">=</span> <span class="nm">kb_client</span>.<span class="fn">invoke_agent</span><span class="op">(</span><br>&nbsp;&nbsp;<span class="nm">agentId</span><span class="op">=</span><span class="st">'AGENT_ID'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="nm">agentAliasId</span><span class="op">=</span><span class="st">'ALIAS_ID'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="nm">sessionId</span><span class="op">=</span><span class="st">'session123'</span><span class="op">,</span><br>&nbsp;&nbsp;<span class="nm">inputText</span><span class="op">=</span><span class="st">'What did customer C123 order in the last 30 days?'</span><br><span class="op">)</span></div>
+
+<div class="infographic">
+  <strong>Agent Reasoning Loop</strong><br><br>
+  User Message → Agent Analyzes → Selects Tool/Knowledge Base<br>
+  → Executes Action → Processes Result → Reasons → Final Response
+</div>
+
+<p>Agents maintain session memory and handle multi-step reasoning. Configure action groups to control which tools agents can access and implement approval gates for sensitive operations.</p>
+</section>
+
+<section class="section" id="best-practices">
+<h2>Production Patterns and Best Practices</h2>
+
+<p><strong>Cost Optimization</strong>: Use smaller models (Haiku) for simple tasks. Batch requests when latency isn't critical. Monitor token usage with CloudWatch metrics.</p>
+
+<p><strong>Error Handling</strong>: Implement exponential backoff for throttling. Log all model invocations for audit trails. Add circuit breakers to prevent cascading failures.</p>
+
+<p><strong>Security</strong>: Use IAM roles with least privilege. Enable content filters for sensitive domains. Encrypt knowledge base documents at rest.</p>
+
+<p><strong>Monitoring</strong>: Track latency, tokens/second, error rates, and cost per transaction. Set up alarms for elevated latency indicating model overload.</p>
+
+<div class="callout success">
+<strong>Multi-Model Evaluation:</strong> Run requests against multiple models to evaluate trade-offs. Use Claude for complex reasoning, Haiku for speed, and Llama for specific domains.
+</div>
+</section>
+
+<section class="section" id="exercise">
+<h2>Exercise: Build a Customer Support Agent</h2>
+
+<div class="exercise">
+<p><strong>Task:</strong> Create a Bedrock agent that answers customer support questions by retrieving documentation from a knowledge base and accessing order history. Implement streaming responses and tool calling for order tracking.</p>
+
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Create a Bedrock knowledge base with product documentation (PDF)</li>
+<li>Define agent tools for customer_lookup, order_status, and refund_request</li>
+<li>Implement invoke_agent with streaming response handling</li>
+<li>Add error handling for malformed tool requests</li>
+<li>Test with multi-step queries requiring tool chaining</li>
+<li>Measure latency and token efficiency</li>
+</ol>
+
+<p><strong>Validation:</strong> Agent correctly answers 5 out of 5 test questions requiring knowledge base + tool calls. Stream latency under 300ms for first token. Total tokens under 1500 per request.</p>
+</div>
+</section>
+
+
+
+<section class="section" id="real-world-example">
+<h2>Real-World Implementation Example</h2>
+<p>Let's explore how these concepts come together in a real production system. This example demonstrates architecture patterns, optimization strategies, and monitoring approaches for a system handling thousands of requests per second.</p>
+
+<h3>Case Study: Production Chatbot System</h3>
+<p>A customer service chatbot handling 500 requests/second with 2-second SLA.</p>
+
+<h3>Architecture Evolution</h3>
+<p><strong>v1 (Prototype):</strong> Synchronous pipeline. Simple. Breaks at 50 req/sec.</p>
+<p><strong>v2 (Early production):</strong> Added async queuing. Scales to 500 req/sec. But costs are high—full history added $5K/month.</p>
+<p><strong>v3 (Optimized):</strong> Sliding window memory + caching. Costs down to $1K/month, latency improved due to cache hits.</p>
+<p><strong>v4 (Advanced):</strong> Model ensemble + semantic memory. Route simple queries (70%) to fast model (saves 60%), complex queries (30%) to accurate model.</p>
+
+<h3>Monitoring Dashboard</h3>
+<p>Key metrics tracked:</p>
+<ul>
+<li>Request latency (p50, p95, p99)</li>
+<li>Cache hit rate (target: 75%+)</li>
+<li>Token consumption (cost control)</li>
+<li>Error rate (SLA tracking)</li>
+<li>Quality metrics (user satisfaction)</li>
+</ul>
+
+<h3>Cost Analysis</h3>
+<p>Optimization impact over 6 months:</p>
+<ul>
+<li>Month 1: $15,000 (synchronous, no optimization)</li>
+<li>Month 2: $12,000 (added async, but memory costs high)</li>
+<li>Month 3: $6,000 (sliding window + caching)</li>
+<li>Month 4-6: $4,000 (model ensemble, semantic memory)</li>
+</ul>
+
+<p>Key insight: most savings came from architecture choices, not code optimization. Choosing the right pattern matters more than optimizing the wrong pattern.</p>
+</section>
+
+<section class="section" id="failure-modes">
+<h2>Common Failure Modes and Solutions</h2>
+<p>Systems fail in predictable ways. Understanding these patterns helps you design robust systems.</p>
+
+<h3>Failure Mode 1: Memory Leak</h3>
+<p><strong>Symptom:</strong> System works fine then gradually slows down over hours/days.</p>
+<p><strong>Cause:</strong> Conversation history accumulates without cleanup. After 1000s of conversations, memory fills up.</p>
+<p><strong>Solution:</strong> Implement conversation TTL. Delete old sessions automatically. Monitor memory usage.</p>
+
+<h3>Failure Mode 2: Cascade Failure</h3>
+<p><strong>Symptom:</strong> One component slows down. Everything slows down. System becomes unavailable.</p>
+<p><strong>Cause:</strong> Synchronous pipeline—if API latency increases, request pile up. All requests block.</p>
+<p><strong>Solution:</strong> Async architecture with timeouts. If API slow, fail fast rather than block. Circuit breakers to stop cascading failures.</p>
+
+<h3>Failure Mode 3: Cost Explosion</h3>
+<p><strong>Symptom:</strong> API costs suddenly spike to $50K+/month.</p>
+<p><strong>Cause:</strong> Full conversation history added by mistake. Each user's history grows to 100+ messages. At GPT-4 prices, this is expensive.</p>
+<p><strong>Solution:</strong> Implement cost monitoring. Alert if daily spend exceeds threshold. Always design memory to be bounded.</p>
+
+<h3>Failure Mode 4: Hallucination Drift</h3>
+<p><strong>Symptom:</strong> Early in conversation chatbot is accurate. After 20+ turns, it starts confabulating or contradicting itself.</p>
+<p><strong>Cause:</strong> Full history creates context too long for model to track. Model invents plausible-sounding but false details to fit context.</p>
+<p><strong>Solution:</strong> Summarize history (keep only recent + summary). Use semantic memory instead of full history. Add fact-checking layer.</p>
+</section>
+
+<section class="section" id="advanced-patterns">
+<h2>Advanced Optimization Patterns</h2>
+<p>Once basics are solid, these patterns enable next-level optimization:</p>
+
+<h3>Pattern: Adaptive Routing</h3>
+<p>Route requests based on real-time system state:</p>
+<ul>
+<li>If queue depth > threshold: use faster model</li>
+<li>If latency > SLA: cache aggressively</li>
+<li>If error rate high: use safer, more conservative model</li>
+</ul>
+
+<h3>Pattern: Progressive Enhancement</h3>
+<p>Return quick approximation immediately, then improve in background:</p>
+<ul>
+<li>User gets answer in 200ms (cached or simple model)</li>
+<li>System computes better answer in background</li>
+<li>When user asks follow-up, provide improved version</li>
+</ul>
+
+<h3>Pattern: Fallback Chain</h3>
+<p>Multiple fallback options in order:</p>
+<ul>
+<li>Try cache (instant if hit)</li>
+<li>Try local model (fast, less accurate)</li>
+<li>Try API model (slow, accurate)</li>
+<li>Return error if all fail</li>
+</ul>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">async</span> <span class="kw">def</span> <span class="fn">fallback_chain</span>(<span class="va">query</span>):
+    <span class="cm"># Try each option in order</span>
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_cache</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_local_model</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_api_model</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="kw">raise</span> <span class="fn">Exception</span>(<span class="st">"All options failed"</span>)</code></pre>
+</section>
+
+<section class="section" id="production-checklist">
+<h2>Production Readiness Checklist</h2>
+<p>Before deploying to production, ensure your system is ready:</p>
+
+<h3>Architecture</h3>
+<ul>
+<li>- [ ] Bottlenecks identified and addressed</li>
+<li>- [ ] Graceful degradation: system doesn't fully fail when components slow</li>
+<li>- [ ] Retry logic with exponential backoff</li>
+<li>- [ ] Circuit breakers to prevent cascade failures</li>
+</ul>
+
+<h3>Monitoring and Observability</h3>
+<ul>
+<li>- [ ] Latency metrics collected (p50, p95, p99)</li>
+<li>- [ ] Error rate monitored and alerted on</li>
+<li>- [ ] Cost tracked per user, per day, per request</li>
+<li>- [ ] Quality metrics logged (task success, user satisfaction)</li>
+<li>- [ ] Dashboards for operations team</li>
+</ul>
+
+<h3>Testing</h3>
+<ul>
+<li>- [ ] Unit tests for components</li>
+<li>- [ ] Integration tests for workflows</li>
+<li>- [ ] Performance tests meeting SLA targets</li>
+<li>- [ ] Load tests at 2-3x expected peak</li>
+<li>- [ ] Chaos engineering tests (simulate failures)</li>
+</ul>
+
+<h3>Operations</h3>
+<ul>
+<li>- [ ] Runbook documenting common issues and fixes</li>
+<li>- [ ] On-call rotation and alerting strategy</li>
+<li>- [ ] Rollback procedure for bad deployments</li>
+<li>- [ ] Data retention and privacy policies</li>
+<li>- [ ] Compliance (GDPR, HIPAA, etc. if applicable)</li>
+</ul>
+
+<h3>Capacity</h3>
+<ul>
+<li>- [ ] Load testing shows system handles 2-3x peak traffic</li>
+<li>- [ ] Database replicated for high availability</li>
+<li>- [ ] API rate limits and quotas configured</li>
+<li>- [ ]Budget for growth: estimated costs at 2x current traffic</li>
+</ul>
+</section>
+
+<section class="section" id="conclusion">
+<h2>Bringing It All Together</h2>
+<p>Building production systems is about balancing competing concerns:</p>
+<ul>
+<li>Speed vs. cost vs. reliability</li>
+<li>Simplicity vs. feature completeness</li>
+<li>Immediate needs vs. future growth</li>
+</ul>
+
+<p>Start simple. Measure. Optimize based on data. Add complexity only when justified.</p>
+
+<p>The best systems aren't the cleverest—they're the ones the team understands, can debug, and can improve incrementally.</p>
+
+<p>As you gain experience, you develop intuition for these trade-offs. When you're new, trust the data, not your intuition. Measure first, optimize second.</p>
+</section>
+<div class="nav-buttons">
+<a href="module8-lesson1.html" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+<a href="module8-lesson3.html" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+</div></main>
+<footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>© 2026 SustainSys. All rights reserved.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'advanced';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body></html>

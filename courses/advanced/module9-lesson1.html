@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9.1 Azure AI Services Overview — AI Practitioner Advanced | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 9 — Azure AI Services Overview</div>
+    <span class="nav-badge">Advanced</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Advanced</div>
+
+  <span class="sidebar-section-label">Module 9: Azure AI &amp; Cloud</span>
+  <ul class="sidebar-nav">
+    <li><a href="module9-lesson1.html" class="active"><span class="sidebar-num">9.1</span> Azure AI Services Overview</a></li>
+    <li><a href="module9-lesson2.html"><span class="sidebar-num">9.2</span> Azure OpenAI Service</a></li>
+    <li><a href="module9-lesson3.html"><span class="sidebar-num">9.3</span> Azure Cognitive Services</a></li>
+    <li><a href="module9-lesson4.html"><span class="sidebar-num">9.4</span> Azure Machine Learning Studio</a></li>
+    <li><a href="module9-lesson5.html"><span class="sidebar-num">9.5</span> Monitoring &amp; Cost Management</a></li>
+  </ul>
+
+  <span class="sidebar-section-label">Module 10: Model Deployment &amp; DevOps</span>
+  <ul class="sidebar-nav">
+    <li><a href="module10-lesson1.html"><span class="sidebar-num">10.1</span> Docker for ML</a></li>
+    <li><a href="module10-lesson2.html"><span class="sidebar-num">10.2</span> Model Serving Frameworks</a></li>
+    <li><a href="module10-lesson3.html"><span class="sidebar-num">10.3</span> Scaling AI Applications</a></li>
+    <li><a href="module10-lesson4.html"><span class="sidebar-num">10.4</span> Monitoring ML in Production</a></li>
+    <li><a href="module10-lesson5.html"><span class="sidebar-num">10.5</span> CI/CD for ML</a></li>
+  </ul>
+
+  <span class="sidebar-section-label">Module 11: Fine-Tuning Techniques</span>
+  <ul class="sidebar-nav">
+    <li><a href="module11-lesson1.html"><span class="sidebar-num">11.1</span> Supervised Fine-Tuning</a></li>
+    <li><a href="module11-lesson2.html"><span class="sidebar-num">11.2</span> LoRA: Low-Rank Adaptation</a></li>
+    <li><a href="module11-lesson3.html"><span class="sidebar-num">11.3</span> QLoRA: Quantized LoRA</a></li>
+    <li><a href="module11-lesson4.html"><span class="sidebar-num">11.4</span> RLHF: Reinforcement Learning</a></li>
+    <li><a href="module11-lesson5.html"><span class="sidebar-num">11.5</span> DPO: Direct Preference Optimization</a></li>
+    <li><a href="module11-lesson6.html"><span class="sidebar-num">11.6</span> Fine-Tuning Best Practices</a></li>
+  </ul>
+
+  <span class="sidebar-section-label">Module 12: LLM Evaluation Methods</span>
+  <ul class="sidebar-nav">
+    <li><a href="module12-lesson1.html"><span class="sidebar-num">12.1</span> Evaluation Fundamentals</a></li>
+    <li><a href="module12-lesson2.html"><span class="sidebar-num">12.2</span> Standard Benchmarks</a></li>
+    <li><a href="module12-lesson3.html"><span class="sidebar-num">12.3</span> RAG Evaluation with RAGAS</a></li>
+    <li><a href="module12-lesson4.html"><span class="sidebar-num">12.4</span> LLM-as-Judge Evaluation</a></li>
+    <li><a href="module12-lesson5.html"><span class="sidebar-num">12.5</span> Custom Evaluation Pipelines</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Advanced</a><span class="sep">›</span>
+    <span>Module 9</span><span class="sep">›</span>
+    <span>Azure AI Services Overview</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 9 · Lesson 1</span>
+    <span class="difficulty-badge intermediate">Intermediate</span>
+  </div>
+  <h1>Azure AI Services <span class="accent">Overview</span></h1>
+  <p class="hero-sub">Microsoft Azure provides a comprehensive suite of AI and machine learning services. This lesson explores the Azure AI ecosystem, understanding when to use each service, and how they integrate with your AI workflows — from pre-built cognitive APIs to enterprise-scale machine learning platforms.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~30 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      5 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      4 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Understand the Azure AI and ML service portfolio and its organization</li>
+    <li>Identify which Azure service fits different AI use cases and project requirements</li>
+    <li>Learn the core concepts of Azure Cognitive Services, Azure OpenAI, and Azure ML</li>
+    <li>Understand authentication, key management, and security in Azure AI services</li>
+    <li>Plan a cloud AI architecture using Azure services strategically</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Basic understanding of AI, ML, and LLM concepts from earlier modules</li>
+    <li>Familiarity with cloud computing basics: VMs, storage, networking</li>
+    <li>An Azure account with free tier or subscription</li>
+    <li>Experience with REST APIs and Python HTTP libraries</li>
+  </ul>
+</div>
+
+<section class="section reveal" id="azure-landscape">
+  <span class="section-label">Fundamentals</span>
+  <h2>The Azure AI <span class="accent">Landscape</span></h2>
+
+  <p>Microsoft Azure has invested heavily in AI services, creating a multi-layered ecosystem serving different abstraction levels. At the lowest level, you have pre-built APIs for vision, language, and speech. In the middle, Azure OpenAI provides access to frontier LLMs. At the highest level, Azure Machine Learning offers end-to-end MLOps capabilities for building custom models.</p>
+
+  <p>Understanding where each service fits helps you make architectural decisions balancing time-to-market, customization needs, and cost. Building a real-time vision classification system requires a different approach than fine-tuning a large language model.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Azure's AI services form a pyramid. At the base, pre-built APIs solve common problems instantly — like adding text translation to your app. As you move up, services become more flexible and customizable but require more expertise. At the peak, custom ML offers maximum control but demands the most effort. Choose based on your problem's specificity and time constraints.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h5>Cognitive Services (APIs)</h5>
+      <p>Pre-built, ready-to-use APIs for common AI tasks. No model training required — just call the endpoint.</p>
+      <ul>
+        <li>Vision: OCR, object detection, face recognition</li>
+        <li>Language: Text analytics, NER, sentiment analysis</li>
+        <li>Speech: Speech-to-text, text-to-speech, translation</li>
+        <li>Deployment time: Minutes to hours</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Azure OpenAI (LLMs)</h5>
+      <p>Controlled access to frontier LLMs via Azure infrastructure. Full fine-tuning and deployment support.</p>
+      <ul>
+        <li>Models: GPT-4, GPT-3.5-turbo, Embedding models</li>
+        <li>Enterprise features: VPC isolation, managed keys, audit logs</li>
+        <li>Fine-tuning on custom data</li>
+        <li>Deployment time: Hours to days</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Azure Machine Learning (ML Studio)</h5>
+      <p>Full-stack MLOps platform for building, training, and deploying custom models at scale.</p>
+      <ul>
+        <li>Experiment tracking and model versioning</li>
+        <li>Automated ML (AutoML) for rapid prototyping</li>
+        <li>Integrated compute for training</li>
+        <li>Deployment time: Days to weeks</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Financial AI:</strong> Azure's Cognitive Services offer built-in compliance features for financial data processing. When you need rapid fraud detection or transaction classification, pre-built APIs deploy within hours, meeting tight regulatory timelines.</p>
+    <p><strong>In Life Sciences AI:</strong> Azure ML's integration with healthcare datasets and HIPAA compliance features makes it ideal for medical imaging and genomics analysis, where custom models often outperform off-the-shelf solutions.</p>
+    <p><strong>In Deep Tech:</strong> Enterprises building proprietary models leverage Azure ML's full MLOps stack, automating retraining pipelines and managing model versioning at scale.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Azure offers three tiers: Cognitive Services, Azure OpenAI, and ML Studio</li>
+      <li>Choose based on problem specificity: generic problems benefit from pre-built APIs</li>
+      <li>All Azure AI services share common infrastructure: authentication, monitoring, and cost management</li>
+      <li>Enterprise features like VPC isolation and audit logging are built-in to all tiers</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="cognitive-services">
+  <span class="section-label">Core Services</span>
+  <h2>Cognitive Services: Pre-Built <span class="accent">Intelligence</span></h2>
+
+  <p>Cognitive Services are Azure's library of pre-trained, ready-to-deploy AI models for common tasks. They eliminate the need to build, train, and maintain models for standard problems like document processing, text analysis, and image recognition. Each service is accessed via simple REST APIs or SDKs.</p>
+
+  <p>The strength of Cognitive Services lies in their completeness: they handle edge cases and provide high accuracy out-of-the-box. The trade-off is limited customization — you cannot retrain the models on your own data (though some services offer fine-tuning options).</p>
+
+  <h3>Vision APIs</h3>
+  <p>Azure Computer Vision handles image understanding tasks. You call the API with an image URL or binary data, and it returns detected objects, text (OCR), faces, and scene descriptions:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="im">import</span> <span class="nm">requests</span>
+<span class="im">from</span> <span class="nm">azure.cognitiveservices.vision.computervision</span> <span class="im">import</span> <span class="bi">ComputerVisionClient</span>
+
+<span class="cm"># Initialize Azure Cognitive Services client</span>
+<span class="va">client</span> <span class="op">=</span> <span class="bi">ComputerVisionClient</span>(
+    <span class="st">"https://{region}.api.cognitive.microsoft.com/"</span>,
+    <span class="bi">CognitiveServicesCredentials</span>(<span class="va">api_key</span>)
+)
+
+<span class="cm"># Analyze image for objects, text, faces</span>
+<span class="va">result</span> <span class="op">=</span> <span class="va">client</span><span class="op">.</span><span class="fn">analyze_image_in_url</span>(
+    <span class="st">"https://example.com/image.jpg"</span>,
+    <span class="va">visual_features</span><span class="op">=</span>[<span class="st">"Objects"</span>, <span class="st">"Text"</span>, <span class="st">"Faces"</span>]
+)
+
+<span class="fn">print</span>(<span class="st">f"Objects: </span>{<span class="va">result</span><span class="op">.</span><span class="va">objects</span>}<span class="st">"</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We use Computer Vision API to analyze an image URL. The API returns detected objects, text via OCR, and faces with confidence scores. This is deployment-ready code with no model training required.</p>
+  </div>
+
+  <h3>Language Services</h3>
+  <p>Azure Text Analytics processes and understands text at scale. Tasks include sentiment analysis, entity recognition, and key phrase extraction:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="im">from</span> <span class="nm">azure.ai.textanalytics</span> <span class="im">import</span> <span class="bi">TextAnalyticsClient</span>
+
+<span class="va">client</span> <span class="op">=</span> <span class="bi">TextAnalyticsClient</span>(<span class="va">endpoint</span>, <span class="bi">AzureKeyCredential</span>(<span class="va">api_key</span>))
+
+<span class="cm"># Analyze sentiment of customer feedback</span>
+<span class="va">documents</span> <span class="op">=</span> [<span class="st">"Great product, highly recommend!"</span>]
+<span class="va">result</span> <span class="op">=</span> <span class="va">client</span><span class="op">.</span><span class="fn">analyze_sentiment</span>(<span class="va">documents</span>)
+
+<span class="kw">for</span> <span class="va">doc</span> <span class="kw">in</span> <span class="va">result</span>:
+    <span class="fn">print</span>(<span class="st">f"Sentiment: </span>{<span class="va">doc</span><span class="op">.</span><span class="va">sentiment</span>}<span class="st">"</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> The Text Analytics API returns sentiment labels (positive, negative, neutral, mixed) with confidence scores. The API handles multilingual input without any training.</p>
+  </div>
+
+  <h3>Speech Services</h3>
+  <p>Azure Speech Services provides speech-to-text, text-to-speech, and real-time translation, useful for conversational AI and accessibility features:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="im">import</span> <span class="nm">azure.cognitiveservices.speech</span> <span class="kw">as</span> <span class="nm">speechsdk</span>
+
+<span class="cm"># Initialize speech recognizer</span>
+<span class="va">speech_config</span> <span class="op">=</span> <span class="nm">speechsdk</span><span class="op">.</span><span class="bi">SpeechConfig</span>(
+    <span class="va">subscription</span><span class="op">=</span><span class="va">api_key</span>,
+    <span class="va">region</span><span class="op">=</span><span class="st">"eastus"</span>
+)
+<span class="va">recognizer</span> <span class="op">=</span> <span class="nm">speechsdk</span><span class="op">.</span><span class="bi">SpeechRecognizer</span>(<span class="va">speech_config</span><span class="op">=</span><span class="va">speech_config</span>)
+
+<span class="cm"># Recognize speech from microphone</span>
+<span class="va">result</span> <span class="op">=</span> <span class="va">recognizer</span><span class="op">.</span><span class="fn">recognize_once</span>()
+<span class="fn">print</span>(<span class="st">f"Recognized: </span>{<span class="va">result</span><span class="op">.</span><span class="va">text</span>}<span class="st">"</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> The Speech API listens to microphone input and returns recognized text. This single function call handles all complexity of speech processing — acoustic modeling, language modeling, and decoding.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Cognitive Services provide instant AI capabilities via REST APIs with no training</li>
+      <li>Services include Vision, Language, Speech, and Search APIs</li>
+      <li>Each service is independently deployable and billed separately</li>
+      <li>Combine multiple services to build rich, multi-modal AI applications</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="auth-security">
+  <span class="section-label">Architecture Patterns</span>
+  <h2>Authentication, Keys &amp; <span class="accent">Security</span></h2>
+
+  <p>All Azure AI services require authentication. Azure provides multiple authentication methods, each suitable for different deployment contexts. Understanding these patterns is critical for building secure, scalable AI applications without exposing credentials.</p>
+
+  <p>The simplest approach uses API keys — long-lived credentials granting full access to a service. For production systems, you should use Azure Managed Identity, which provides token-based access without storing long-lived secrets.</p>
+
+  <div class="flow reveal">
+    <div class="flow-step">
+      <div class="flow-icon">1</div>
+      <div class="flow-content">
+        <strong>Development: API Keys</strong>
+        <p>Quick setup for local development and prototyping. Store keys in environment variables, never in code. Rotate keys regularly every 90 days.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">2</div>
+      <div class="flow-content">
+        <strong>Production: Azure Managed Identity</strong>
+        <p>Application automatically gets Azure tokens without handling secrets. Token is automatically rotated by Azure platform. Best practice for cloud-native apps.</p>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon">3</div>
+      <div class="flow-content">
+        <strong>Hybrid: Azure Key Vault</strong>
+        <p>Centralized secrets management for API keys. Integrates with Managed Identity for token-based access to stored secrets.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Secure Configuration Pattern</h3>
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="im">import</span> <span class="nm">os</span>
+<span class="im">from</span> <span class="nm">azure.identity</span> <span class="im">import</span> <span class="bi">DefaultAzureCredential</span>
+<span class="im">from</span> <span class="nm">azure.ai.textanalytics</span> <span class="im">import</span> <span class="bi">TextAnalyticsClient</span>
+
+<span class="cm"># Production: Use DefaultAzureCredential (Managed Identity)</span>
+<span class="va">credential</span> <span class="op">=</span> <span class="bi">DefaultAzureCredential</span>()
+
+<span class="cm"># Development fallback to API key from environment</span>
+<span class="va">api_key</span> <span class="op">=</span> <span class="nm">os</span><span class="op">.</span><span class="fn">getenv</span>(<span class="st">"AZURE_AI_KEY"</span>)
+<span class="va">endpoint</span> <span class="op">=</span> <span class="nm">os</span><span class="op">.</span><span class="fn">getenv</span>(<span class="st">"AZURE_AI_ENDPOINT"</span>)
+
+<span class="va">client</span> <span class="op">=</span> <span class="bi">TextAnalyticsClient</span>(<span class="va">endpoint</span>, <span class="va">credential</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We use DefaultAzureCredential, which automatically tries Managed Identity in Azure and falls back to environment variables locally. This single credential object works in both development and production without code changes.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h5>API Keys</h5>
+      <ul>
+        <li>Setup: Instant</li>
+        <li>Rotation: Manual</li>
+        <li>Audit: Basic</li>
+        <li>Use: Development only</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Managed Identity</h5>
+      <ul>
+        <li>Setup: Minutes automatic</li>
+        <li>Rotation: Automatic</li>
+        <li>Audit: Full tracking</li>
+        <li>Use: Production recommended</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Key Vault</h5>
+      <ul>
+        <li>Setup: Hours (complex)</li>
+        <li>Rotation: Scheduled/on-demand</li>
+        <li>Audit: Comprehensive</li>
+        <li>Use: Compliance-heavy environments</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Use API keys for development, Managed Identity for production</li>
+      <li>DefaultAzureCredential automatically handles credential selection</li>
+      <li>Store all secrets in environment variables or Key Vault — never commit to code</li>
+      <li>Rotate API keys regularly; Managed Identity handles rotation automatically</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="cost-planning">
+  <span class="section-label">Practical Considerations</span>
+  <h2>Cost Optimization &amp; <span class="accent">Resource Planning</span></h2>
+
+  <p>Azure AI services are billed differently depending on service tier and usage patterns. Cognitive Services charge per API call. Azure OpenAI charges per token. Azure ML charges for compute hours. Understanding these billing models upfront prevents surprise costs and optimizes your architecture.</p>
+
+  <p>A common mistake is deploying services without understanding usage patterns. A chatbot processing 100k messages daily might cost $500/month with Cognitive Services but only $50/month with Azure OpenAI, depending on model choice and token usage.</p>
+
+  <h3>Cost Optimization Strategies</h3>
+  <div class="stages">
+    <div class="stage-card">
+      <div class="stage-num">1</div>
+      <div class="stage-content">
+        <h4>Right-Size Your Service Tier</h4>
+        <p>Azure AI services come in multiple pricing tiers. Standard tier is suitable for most applications. Premium tier includes advanced features like higher quotas and priority support.</p>
+      </div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-num">2</div>
+      <div class="stage-content">
+        <h4>Use Batch Processing for Non-Real-Time Workloads</h4>
+        <p>Batch APIs offer 50% discounts compared to real-time APIs. If your use case allows 24-hour latency, use batch processing.</p>
+      </div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-num">3</div>
+      <div class="stage-content">
+        <h4>Implement Caching and Rate Limiting</h4>
+        <p>Cache API responses for identical requests. Implement rate limiting to prevent runaway costs from bugs or unexpected traffic.</p>
+      </div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-num">4</div>
+      <div class="stage-content">
+        <h4>Monitor and Alert on Spending</h4>
+        <p>Set up Azure Cost Management alerts. Monitor API call volume and set thresholds that trigger notifications when usage increases unexpectedly.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Cost Estimation Example</h3>
+  <p>Consider a document processing application processing 10,000 documents daily:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Cost calculation for Azure AI services</span>
+<span class="va">daily_documents</span> <span class="op">=</span> <span class="nm">10_000</span>
+<span class="va">monthly_documents</span> <span class="op">=</span> <span class="va">daily_documents</span> <span class="op">*</span> <span class="nm">30</span>
+
+<span class="cm"># Azure Computer Vision: $1 per 1000 API calls</span>
+<span class="va">vision_cost</span> <span class="op">=</span> (<span class="va">monthly_documents</span> <span class="op">/</span> <span class="nm">1000</span>) <span class="op">*</span> <span class="nm">1.0</span>
+
+<span class="cm"># Azure Text Analytics: $1 per 1000 records</span>
+<span class="va">text_cost</span> <span class="op">=</span> (<span class="va">monthly_documents</span> <span class="op">/</span> <span class="nm">1000</span>) <span class="op">*</span> <span class="nm">1.0</span>
+
+<span class="va">total_monthly</span> <span class="op">=</span> <span class="va">vision_cost</span> <span class="op">+</span> <span class="va">text_cost</span>
+<span class="fn">print</span>(<span class="st">f"Monthly cost: $</span>{<span class="va">total_monthly</span>:<span class="st">.2f</span>}<span class="st">"</span>)  <span class="cm"># $600</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We calculate monthly cost for running OCR and text analysis on 10,000 documents daily. Both services charge per transaction, making this example predictable for budget planning.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Different services have different billing models — understand them before deploying</li>
+      <li>Use batch processing for 50% cost savings on non-real-time workloads</li>
+      <li>Set up Azure Cost Management alerts to catch unexpected spending</li>
+      <li>Compare service costs against your requirements to optimize your architecture</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="service-selection">
+  <span class="section-label">Decision Framework</span>
+  <h2>Selecting Your <span class="accent">Azure AI Service</span></h2>
+
+  <p>Choosing between Azure's services requires understanding your problem's characteristics, timeline, and constraints. Different services excel at different things. A document classification task might use pre-built Text Analytics for 80% accuracy in hours, or custom Azure ML for 95% accuracy in weeks.</p>
+
+  <h3>Decision Matrix</h3>
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-icon">?</div>
+      <div class="step-label">Is this a standard AI problem?</div>
+      <div class="step-desc">(text, image, speech analysis)</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step">
+      <div class="step-icon">✓</div>
+      <div class="step-label">Use Cognitive Services</div>
+      <div class="step-desc">Fast, production-ready</div>
+    </div>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-icon">?</div>
+      <div class="step-label">Need state-of-the-art language AI?</div>
+      <div class="step-desc">(generation, understanding, chat)</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step">
+      <div class="step-icon">✓</div>
+      <div class="step-label">Use Azure OpenAI</div>
+      <div class="step-desc">Fine-tuning supported</div>
+    </div>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-icon">?</div>
+      <div class="step-label">Need custom model for proprietary data?</div>
+      <div class="step-desc">(specialized domain, high accuracy)</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-step">
+      <div class="step-icon">✓</div>
+      <div class="step-label">Use Azure Machine Learning</div>
+      <div class="step-desc">Full MLOps platform</div>
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h5>Cognitive Services</h5>
+      <ul>
+        <li>✓ Standard problems (OCR, translation, sentiment)</li>
+        <li>✓ Pre-trained models, instant deployment</li>
+        <li>✓ Low cost for high volume</li>
+        <li>✗ Limited customization</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Azure OpenAI</h5>
+      <ul>
+        <li>✓ LLM-based applications (chat, generation)</li>
+        <li>✓ Fine-tuning on domain data</li>
+        <li>✓ Enterprise-grade availability</li>
+        <li>✗ More expensive per token</li>
+      </ul>
+    </div>
+    <div class="compare-card">
+      <h5>Azure Machine Learning</h5>
+      <ul>
+        <li>✓ Custom models for unique problems</li>
+        <li>✓ Full MLOps (experimentation, versioning)</li>
+        <li>✓ Highest accuracy potential</li>
+        <li>✗ Requires ML expertise and time</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <h4>🧪 Test Your Understanding</h4>
+    <div class="quiz-question" data-correct="0">
+      <p>You need to classify support tickets by sentiment within 30 minutes of launch. Which service?</p>
+      <ul class="quiz-options">
+        <li>A) Cognitive Services Text Analytics (pre-built, instant)</li>
+        <li>B) Azure Machine Learning (needs training time)</li>
+        <li>C) Azure OpenAI (overkill for classification)</li>
+        <li>D) Build a custom model from scratch</li>
+      </ul>
+      <div class="quiz-answer">Cognitive Services is the right choice for rapid deployment. The Text Analytics API provides sentiment analysis out-of-the-box without training. You can add fine-tuning later if accuracy isn't sufficient.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Create Your First Cognitive Service</h4>
+    <p>Set up an Azure Text Analytics resource and test it with sample text:</p>
+    <ol>
+      <li>Create a new Text Analytics resource in Azure Portal</li>
+      <li>Note the endpoint URL and API key</li>
+      <li>Write Python code to analyze the sentiment of 3 sample sentences</li>
+      <li>Print the sentiment and confidence scores</li>
+      <li>Compare results with your intuition</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Cost Estimation</h4>
+    <p>Estimate the monthly cost for a real-world scenario:</p>
+    <ol>
+      <li>Define a use case: e.g., analyzing 50,000 customer reviews monthly</li>
+      <li>Look up current Azure pricing for Text Analytics</li>
+      <li>Calculate monthly cost using the service tiers</li>
+      <li>Compare cost across different service tiers (Standard vs Premium)</li>
+      <li>Identify cost optimization opportunities</li>
+    </ol>
+  </div>
+</section>
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson 9.2</h4>
+  <p><strong>Azure OpenAI Service</strong> — Now that you understand Azure's service portfolio, explore how to use Azure OpenAI for LLM-based applications. Learn how to set up your Azure OpenAI resource, configure models, and implement fine-tuning on your domain data.</p>
+</div>
+
+<div class="nav-buttons">
+  <span></span>
+  <a href="module9-lesson2.html" class="nav-btn next">Next: Azure OpenAI Service <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'advanced';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

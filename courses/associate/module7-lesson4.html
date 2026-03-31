@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurrent Neural Networks (RNNs) & LSTMs — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 7 — Recurrent Neural Networks (RNNs) & LSTMs</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="module1-lesson1.html"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="module1-lesson2.html"><span class="sidebar-num">1.2</span> Lists, Tuples, Dicts, Sets</a></li>
+    <li><a href="module1-lesson3.html"><span class="sidebar-num">1.3</span> Functions &amp; Reusability</a></li>
+    <li><a href="module1-lesson4.html"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="module1-lesson5.html"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="module1-lesson6.html"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy &amp; Scientific Computing</span>
+  <ul class="sidebar-nav">
+    <li><a href="module2-lesson1.html"><span class="sidebar-num">2.1</span> Arrays &amp; Operations</a></li>
+    <li><a href="module2-lesson2.html"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="module2-lesson3.html"><span class="sidebar-num">2.3</span> Indexing &amp; Slicing</a></li>
+    <li><a href="module2-lesson4.html"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="module2-lesson5.html"><span class="sidebar-num">2.5</span> Random &amp; Statistics</a></li>
+    <li><a href="module2-lesson6.html"><span class="sidebar-num">2.6</span> Advanced Linear Algebra</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3: Pandas &amp; Data</span>
+  <ul class="sidebar-nav">
+    <li><a href="module3-lesson1.html"><span class="sidebar-num">3.1</span> DataFrames Basics</a></li>
+    <li><a href="module3-lesson2.html"><span class="sidebar-num">3.2</span> Series &amp; DataFrames</a></li>
+    <li><a href="module3-lesson3.html"><span class="sidebar-num">3.3</span> Data Loading</a></li>
+    <li><a href="module3-lesson4.html"><span class="sidebar-num">3.4</span> Data Cleaning</a></li>
+    <li><a href="module3-lesson5.html"><span class="sidebar-num">3.5</span> Filtering &amp; Sorting</a></li>
+    <li><a href="module3-lesson6.html"><span class="sidebar-num">3.6</span> GroupBy &amp; Aggregation</a></li>
+    <li><a href="module3-lesson7.html"><span class="sidebar-num">3.7</span> Merging Datasets</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 4: Data Visualization</span>
+  <ul class="sidebar-nav">
+    <li><a href="module4-lesson1.html"><span class="sidebar-num">4.1</span> Intro to Matplotlib</a></li>
+    <li><a href="module4-lesson2.html"><span class="sidebar-num">4.2</span> Matplotlib Fundamentals</a></li>
+    <li><a href="module4-lesson3.html"><span class="sidebar-num">4.3</span> Seaborn Visualization</a></li>
+    <li><a href="module4-lesson4.html"><span class="sidebar-num">4.4</span> Plotly Interactive</a></li>
+    <li><a href="module4-lesson5.html"><span class="sidebar-num">4.5</span> EDA &amp; Storytelling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 5: ML Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="module5-lesson1.html"><span class="sidebar-num">5.1</span> What is ML?</a></li>
+    <li><a href="module5-lesson2.html"><span class="sidebar-num">5.2</span> Linear Regression</a></li>
+    <li><a href="module5-lesson3.html"><span class="sidebar-num">5.3</span> Logistic Regression</a></li>
+    <li><a href="module5-lesson4.html"><span class="sidebar-num">5.4</span> Decision Trees</a></li>
+    <li><a href="module5-lesson5.html"><span class="sidebar-num">5.5</span> Clustering</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 6: Model Training</span>
+  <ul class="sidebar-nav">
+    <li><a href="module6-lesson1.html"><span class="sidebar-num">6.1</span> Train/Test Splits</a></li>
+    <li><a href="module6-lesson2.html"><span class="sidebar-num">6.2</span> Classification Metrics</a></li>
+    <li><a href="module6-lesson3.html"><span class="sidebar-num">6.3</span> Regression Metrics</a></li>
+    <li><a href="module6-lesson4.html"><span class="sidebar-num">6.4</span> Hyperparameter Tuning</a></li>
+    <li><a href="module6-lesson5.html"><span class="sidebar-num">6.5</span> Preventing Overfitting</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 7: Deep Learning</span>
+  <ul class="sidebar-nav">
+    <li><a href="module7-lesson1.html"><span class="sidebar-num">7.1</span> Neural Networks</a></li>
+    <li><a href="module7-lesson2.html"><span class="sidebar-num">7.2</span> TensorFlow/Keras</a></li>
+    <li><a href="module7-lesson3.html"><span class="sidebar-num">7.3</span> CNNs</a></li>
+    <li class="active"><a href="module7-lesson4.html"><span class="sidebar-num">7.4</span> RNNs &amp; LSTMs</a></li>
+    <li><a href="module7-lesson5.html"><span class="sidebar-num">7.5</span> Transfer Learning</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 8: Prompt Engineering</span>
+  <ul class="sidebar-nav">
+    <li><a href="module8-lesson1.html"><span class="sidebar-num">8.1</span> Intro to Prompting</a></li>
+    <li><a href="module8-lesson2.html"><span class="sidebar-num">8.2</span> Zero/Few-Shot &amp; CoT</a></li>
+    <li><a href="module8-lesson3.html"><span class="sidebar-num">8.3</span> System Prompts</a></li>
+    <li><a href="module8-lesson4.html"><span class="sidebar-num">8.4</span> Output Formatting</a></li>
+    <li><a href="module8-lesson5.html"><span class="sidebar-num">8.5</span> Advanced Patterns</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 9: LLM Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="module9-lesson1.html"><span class="sidebar-num">9.1</span> How LLMs Work</a></li>
+    <li><a href="module9-lesson2.html"><span class="sidebar-num">9.2</span> Major LLM Families</a></li>
+    <li><a href="module9-lesson3.html"><span class="sidebar-num">9.3</span> Tokens &amp; Context</a></li>
+    <li><a href="module9-lesson4.html"><span class="sidebar-num">9.4</span> Fine-Tuning vs ICL</a></li>
+    <li><a href="module9-lesson5.html"><span class="sidebar-num">9.5</span> Safety &amp; Limitations</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 10: RAG Pipelines</span>
+  <ul class="sidebar-nav">
+    <li><a href="module10-lesson1.html"><span class="sidebar-num">10.1</span> What is RAG?</a></li>
+    <li><a href="module10-lesson2.html"><span class="sidebar-num">10.2</span> Document Chunking</a></li>
+    <li><a href="module10-lesson3.html"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li>
+    <li><a href="module10-lesson4.html"><span class="sidebar-num">10.4</span> Building RAG</a></li>
+    <li><a href="module10-lesson5.html"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="main">
+  <div class="container">
+
+    <section class="hero">
+      <div class="breadcrumb">
+        <a href="index.html">Associate</a><span class="sep">›</span>
+        <a href="#">Module 7</a><span class="sep">›</span>
+        <span>Recurrent Neural Networks (RNNs) & LSTMs</span>
+      </div>
+      <span class="hero-eyebrow">Module 7 · Lesson 4</span>
+      <h1>Recurrent Neural Networks &amp; <span class="accent">LSTMs</span></h1>
+      <p class="hero-sub">Master sequence modeling with RNNs and LSTMs. Learn how to process variable-length sequences, handle long-term dependencies, and build state-of-the-art models for time series, language, and sequential data.</p>
+    </section>
+
+    <div class="objectives">
+      <h4>Learning Objectives</h4>
+      <ul>
+        <li>Understand the architecture and mechanics of vanilla RNNs</li>
+        <li>Learn why LSTMs solve the vanishing gradient problem</li>
+        <li>Build and train LSTM networks for sequence tasks</li>
+        <li>Implement bidirectional and multi-layer architectures</li>
+        <li>Apply techniques like sequence padding, masking, and stateful processing</li>
+        <li>Handle variable-length sequences and implement attention mechanisms</li>
+        <li>Build sequence-to-sequence models for translation and other tasks</li>
+      </ul>
+    </div>
+
+    <section class="section" id="rnn-fundamentals">
+      <span class="section-label">Fundamentals</span>
+      <h2>Recurrent Neural Networks and Sequential Processing</h2>
+      <p>RNNs process sequences by maintaining hidden state that gets updated at each time step. Unlike feedforward networks that treat each input independently, RNNs remember previous inputs through recurrent connections. This enables modeling of temporal dependencies: predicting the next word in a sentence requires context from previous words.</p>
+
+      <p>Vanilla RNNs suffer from vanishing gradients during training: gradients shrink exponentially across time steps, making it hard to learn long-term dependencies. LSTMs solve this with gating mechanisms that selectively update memory cells, allowing gradients to flow through time effectively. GRUs provide a simpler but similarly effective alternative.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong> RNNs are powerful for sequential data, but vanilla RNNs struggle with long sequences. LSTMs with memory cells and gates are the standard solution for sequence modeling tasks like time series, language models, and translation.
+      </div>
+
+      <h3>LSTM Architecture and Gates</h3>
+      <p>An LSTM cell has three gates controlling information flow: forget gate (discard outdated info), input gate (add new info), and output gate (expose relevant memory). These gates use sigmoid functions (0-1 values) to control what information passes through. The cell state is updated additively, enabling gradient flow through time.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">import</span> <span class="va">tensorflow</span> <span class="kw">as</span> <span class="va">tf</span>
+<span class="kw">from</span> <span class="va">tensorflow.keras</span> <span class="kw">import</span> <span class="va">layers</span>
+
+<span class="cm"># Basic LSTM layer</span>
+<span class="va">lstm_layer</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">LSTM</span>(
+    <span class="nm">128</span>,              <span class="cm"># units (hidden state size)</span>
+    <span class="va">return_sequences</span><span class="op">=</span><span class="st">True</span>,  <span class="cm"># output at each timestep</span>
+    <span class="va">return_state</span><span class="op">=</span><span class="st">False</span>     <span class="cm"># don't return final state</span>
+)
+
+<span class="cm"># GRU: simpler alternative to LSTM</span>
+<span class="va">gru_layer</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">GRU</span>(<span class="nm">128</span>, <span class="va">return_sequences</span><span class="op">=</span><span class="st">True</span>)
+
+<span class="cm"># Bidirectional RNN: process sequences left-to-right AND right-to-left</span>
+<span class="va">bidirectional</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Bidirectional</span>(
+    <span class="va">layers</span><span class="op">.</span><span class="fn">LSTM</span>(<span class="nm">128</span>, <span class="va">return_sequences</span><span class="op">=</span><span class="st">True</span>)
+)</span></code></pre>
+
+      <h3>Sequence-to-Sequence Models</h3>
+      <p>Seq2seq models use an encoder RNN to process input sequences and compress information into a context vector, then a decoder RNN uses this vector to generate output sequences. This architecture powers translation, summarization, and question-answering systems.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="cm"># Encoder-Decoder for sequence-to-sequence</span>
+<span class="cm"># Encoder: compress input sequence</span>
+<span class="va">encoder_inputs</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Input</span>(<span class="va">shape</span><span class="op">=</span>(<span class="st">None</span>, <span class="nm">64</span>))
+<span class="va">encoder</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">LSTM</span>(<span class="nm">128</span>, <span class="va">return_state</span><span class="op">=</span><span class="st">True</span>)
+<span class="va">encoder_outputs</span>, <span class="va">state_h</span>, <span class="va">state_c</span> <span class="op">=</span> <span class="va">encoder</span>(<span class="va">encoder_inputs</span>)
+
+<span class="cm"># Decoder: generate output sequence</span>
+<span class="va">decoder_inputs</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Input</span>(<span class="va">shape</span><span class="op">=</span>(<span class="st">None</span>, <span class="nm">64</span>))
+<span class="va">decoder</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">LSTM</span>(<span class="nm">128</span>, <span class="va">return_sequences</span><span class="op">=</span><span class="st">True</span>)
+<span class="va">decoder_outputs</span> <span class="op">=</span> <span class="va">decoder</span>(<span class="va">decoder_inputs</span>, <span class="va">initial_state</span><span class="op">=</span>[<span class="va">state_h</span>, <span class="va">state_c</span>])
+
+<span class="cm"># Output layer</span>
+<span class="va">outputs</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Dense</span>(<span class="nm">64</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'softmax'</span>)(<span class="va">decoder_outputs</span>)
+
+<span class="va">model</span> <span class="op">=</span> <span class="va">tf.keras.Model</span>([<span class="va">encoder_inputs</span>, <span class="va">decoder_inputs</span>], <span class="va">outputs</span>)</span></code></pre>
+    </section>
+
+    <section class="section" id="training-sequences">
+      <span class="section-label">Practical Techniques</span>
+      <h2>Training and Handling Sequences</h2>
+      <p>Sequences often have variable lengths. Padding pads shorter sequences with zeros to a fixed length. Masking tells the model to ignore padded values. Stateful training maintains hidden state across batches for very long sequences. These techniques are essential for handling real-world data.</p>
+
+      <h3>Padding and Masking</h3>
+      <p>Padding ensures all sequences in a batch have the same shape. Masking prevents padded values from contributing to loss and gradients. This is particularly important for RNNs where padded time steps shouldn't influence the model.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="cm"># Sequence model with masking</span>
+<span class="va">model</span> <span class="op">=</span> <span class="va">tf.keras.Sequential</span>([
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Embedding</span>(<span class="nm">10000</span>, <span class="nm">128</span>, <span class="va">mask_zero</span><span class="op">=</span><span class="st">True</span>),  <span class="cm"># mask 0 values</span>
+    <span class="va">layers</span><span class="op">.</span><span class="fn">LSTM</span>(<span class="nm">128</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Dense</span>(<span class="nm">1</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'sigmoid'</span>)
+])
+
+<span class="cm"># Pad sequences</span>
+<span class="kw">from</span> <span class="va">tensorflow.keras.preprocessing.sequence</span> <span class="kw">import</span> <span class="va">pad_sequences</span>
+
+<span class="va">sequences</span> <span class="op">=</span> [[<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>], [<span class="nm">1</span>, <span class="nm">2</span>], [<span class="nm">1</span>]]
+<span class="va">padded</span> <span class="op">=</span> <span class="va">pad_sequences</span>(<span class="va">sequences</span>, <span class="va">maxlen</span><span class="op">=</span><span class="nm">5</span>, <span class="va">padding</span><span class="op">=</span><span class="st">'post'</span>)
+<span class="cm"># Result: [[1, 2, 3, 0, 0], [1, 2, 0, 0, 0], [1, 0, 0, 0, 0]]</span></code></pre>
+    </section>
+
+    <section class="section" id="exercises">
+      <span class="section-label">Practice</span>
+      <h2>Exercises and Challenges</h2>
+
+      <h3>Exercise 1: Time Series Forecasting</h3>
+      <p>Build an LSTM model to predict the next value in a time series. Use historical window of 30 timesteps to predict 1 step ahead. Compare with a simpler baseline model.</p>
+
+      <h3>Exercise 2: Sentiment Analysis</h3>
+      <p>Train an LSTM on movie reviews for binary sentiment classification. Use embeddings for words and implement masking. Achieve at least 85% accuracy on test set.</p>
+
+      <h3>Exercise 3: Text Generation</h3>
+      <p>Build a character-level LSTM language model. Train on a text corpus and generate new text by sampling from the network. Experiment with temperature for controlling randomness.</p>
+    </section>
+
+    <section class="section" id="key-takeaways">
+      <span class="section-label">Summary</span>
+      <h2>Key Takeaways</h2>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-card">
+          <h4>RNN Basics</h4>
+          <p>RNNs maintain hidden state across time steps, enabling sequence processing. Recurrent connections allow information to persist, but vanilla RNNs suffer from vanishing gradients.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>LSTM Solutions</h4>
+          <p>LSTMs use gating mechanisms (forget, input, output gates) to control information flow. Memory cells with additive updates enable long-term dependency learning.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Bidirectional Processing</h4>
+          <p>Processing sequences in both directions provides context from past and future. Effective for tasks where future context helps prediction.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Sequence Handling</h4>
+          <p>Padding normalizes variable-length sequences. Masking prevents padded values from affecting loss. Critical for clean training on real-world data.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Seq2Seq Models</h4>
+          <p>Encoder-decoder architecture compresses input sequences to context vector, then decodes to output. Powers translation, summarization, and generation tasks.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>State Management</h4>
+          <p>Use return_state to access hidden states for stateful training. Use return_sequences for multi-layer RNNs or attention mechanisms.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="lesson-nav">
+    <a href="module7-lesson3.html" class="nav-prev">← Previous: CNNs</a>
+    <a href="index.html" class="nav-home">Course Home</a>
+    <a href="module7-lesson5.html" class="nav-next">Next: Transfer Learning →</a>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+
+</body>
+</html>

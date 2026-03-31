@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>10.4 Building a Basic RAG Pipeline — AI Practitioner Associate</title><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/course-styles.css"></head><body><div class="progress-circle-wrap"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div><nav class="topnav"><div class="topnav-inner"><a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a><div class="nav-divider"></div><div class="nav-title">Module 10 — Building RAG</div><span class="nav-badge">Associate</span><a href="index.html" class="nav-home-link">← Course Home</a></div></nav><aside class="sidebar"><div class="sidebar-course-title">AI Practitioner Associate</div><span class="sidebar-section-label">Module 10: RAG Pipelines</span><ul class="sidebar-nav"><li><a href="module10-lesson1.html"><span class="sidebar-num">10.1</span> What is RAG?</a></li><li><a href="module10-lesson2.html"><span class="sidebar-num">10.2</span> Document Chunking</a></li><li><a href="module10-lesson3.html"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li><li><a href="module10-lesson4.html" class="active"><span class="sidebar-num">10.4</span> Building RAG</a></li><li><a href="module10-lesson5.html"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li></ul></aside><button class="sidebar-toggle">☰</button><main class="main"><div class="container"><section class="hero"><div class="breadcrumb"><a href="index.html">Associate</a><span class="sep">›</span><span>Building RAG</span></div><span class="hero-eyebrow">Module 10 · Lesson 4</span><h1>Building a Basic RAG Pipeline</h1><p class="hero-sub">Build a complete RAG system from scratch using LangChain, Chromadb, and OpenAI. Learn the integration patterns, error handling, and deployment considerations for production RAG applications. Start with simple examples and scale to complex real-world scenarios.</p></section><div class="objectives"><h4>Learning Objectives</h4><ul><li>Build a complete RAG system using LangChain and Chromadb</li><li>Integrate document loading, chunking, and embedding generation</li><li>Implement retrieval and prompt augmentation</li><li>Connect to LLMs for generation</li><li>Handle errors and edge cases in production</li><li>Optimize RAG pipeline performance</li><li>Deploy and maintain RAG systems</li></ul></div><section class="section" id="basic-pipeline"><span class="section-label">Fundamentals</span><h2>The Complete RAG Pipeline</h2><p>A RAG system integrates document loading, chunking, embedding, retrieval, and generation into a single workflow. Let's build one step by step, understanding each component's role in the overall system.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Complete RAG system from scratch</span>
+<span class="kw">from</span> <span class="im">langchain.document_loaders</span> <span class="kw">import</span> <span class="fn">TextLoader</span>
+<span class="kw">from</span> <span class="im">langchain.text_splitter</span> <span class="kw">import</span> <span class="fn">RecursiveCharacterTextSplitter</span>
+<span class="kw">from</span> <span class="im">langchain.embeddings.openai</span> <span class="kw">import</span> <span class="fn">OpenAIEmbeddings</span>
+<span class="kw">from</span> <span class="im">langchain.vectorstores</span> <span class="kw">import</span> <span class="fn">Chroma</span>
+<span class="kw">from</span> <span class="im">langchain.chat_models</span> <span class="kw">import</span> <span class="fn">ChatOpenAI</span>
+<span class="kw">from</span> <span class="im">langchain.chains</span> <span class="kw">import</span> <span class="fn">RetrievalQA</span>
+
+<span class="cm"># Step 1: Load documents</span>
+<span class="va">loader</span> <span class="op">=</span> <span class="fn">TextLoader</span>(<span class="st">"knowledge_base.txt"</span>)
+<span class="va">documents</span> <span class="op">=</span> <span class="va">loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Step 2: Split into chunks</span>
+<span class="va">splitter</span> <span class="op">=</span> <span class="fn">RecursiveCharacterTextSplitter</span>(
+    <span class="va">chunk_size</span><span class="op">=</span><span class="nm">1000</span>,
+    <span class="va">chunk_overlap</span><span class="op">=</span><span class="nm">200</span>
+)
+<span class="va">chunks</span> <span class="op">=</span> <span class="va">splitter</span>.<span class="fn">split_documents</span>(<span class="va">documents</span>)
+
+<span class="cm"># Step 3: Create embeddings and vector store</span>
+<span class="va">embeddings</span> <span class="op">=</span> <span class="fn">OpenAIEmbeddings</span>()
+<span class="va">vector_store</span> <span class="op">=</span> <span class="fn">Chroma</span>.<span class="fn">from_documents</span>(
+    <span class="va">documents</span><span class="op">=</span><span class="va">chunks</span>,
+    <span class="va">embedding</span><span class="op">=</span><span class="va">embeddings</span>,
+    <span class="va">persist_directory</span><span class="op">=</span><span class="st">"./chroma_db"</span>
+)
+
+<span class="cm"># Step 4: Create RAG chain</span>
+<span class="va">llm</span> <span class="op">=</span> <span class="fn">ChatOpenAI</span>(<span class="va">model</span><span class="op">=</span><span class="st">"gpt-4"</span>, <span class="va">temperature</span><span class="op">=</span><span class="nm">0</span>)
+<span class="va">rag_chain</span> <span class="op">=</span> <span class="fn">RetrievalQA</span>.<span class="fn">from_chain_type</span>(
+    <span class="va">llm</span><span class="op">=</span><span class="va">llm</span>,
+    <span class="va">chain_type</span><span class="op">=</span><span class="st">"stuff"</span>,
+    <span class="va">retriever</span><span class="op">=</span><span class="va">vector_store</span>.<span class="fn">as_retriever</span>(
+        <span class="va">search_kwargs</span><span class="op">=</span>{<span class="st">"k"</span>: <span class="nm">5</span>}
+    )
+)
+
+<span class="cm"># Step 5: Ask questions</span>
+<span class="va">query</span> <span class="op">=</span> <span class="st">"What is the return policy?"</span>
+<span class="va">answer</span> <span class="op">=</span> <span class="va">rag_chain</span>.<span class="fn">run</span>(<span class="va">query</span>)
+<span class="fn">print</span>(<span class="va">answer</span>)</code></pre></section><section class="section" id="advanced-rag"><span class="section-label">Advanced</span><h2>Advanced RAG Patterns</h2><p>Beyond basic RAG, you can implement sophisticated patterns for better quality and flexibility.</p><div class="subsection"><h3>Retrieval Augmentation with Context</h3><p>Include retrieved document source and scores in the LLM prompt for transparency and reasoning.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Advanced RAG with source tracking</span>
+<span class="kw">from</span> <span class="im">langchain.prompts</span> <span class="kw">import</span> <span class="fn">PromptTemplate</span>
+
+<span class="va">retriever</span> <span class="op">=</span> <span class="va">vector_store</span>.<span class="fn">as_retriever</span>(<span class="va">search_kwargs</span><span class="op">=</span>{<span class="st">"k"</span>: <span class="nm">5</span>})
+
+<span class="cm"># Custom prompt with context</span>
+<span class="va">prompt_template</span> <span class="op">=</span> <span class="st">"""Use the following context to answer:
+
+{context}
+
+Question: {question}
+Answer:"""</span>
+
+<span class="va">prompt</span> <span class="op">=</span> <span class="fn">PromptTemplate</span>(
+    <span class="va">template</span><span class="op">=</span><span class="va">prompt_template</span>,
+    <span class="va">input_variables</span><span class="op">=</span>[<span class="st">"context"</span>, <span class="st">"question"</span>]
+)
+
+<span class="cm"># Retrieve and format</span>
+<span class="va">docs</span> <span class="op">=</span> <span class="va">retriever</span>.<span class="fn">get_relevant_documents</span>(<span class="st">"return policy"</span>)
+<span class="va">context</span> <span class="op">=</span> <span class="st">"\n\n"</span>.<span class="fn">join</span>([<span class="va">d</span>.<span class="va">page_content</span> <span class="kw">for</span> <span class="va">d</span> <span class="kw">in</span> <span class="va">docs</span>])
+<span class="va">answer</span> <span class="op">=</span> <span class="va">llm</span>.<span class="fn">predict</span>(<span class="va">context</span><span class="op">=</span><span class="va">context</span>, <span class="va">question</span><span class="op">=</span><span class="st">"..."</span>)</code></pre></div><div class="subsection"><h3>Multi-Query Retrieval</h3><p>Generate multiple query variations to improve retrieval coverage and reduce the impact of any single retrieval failure.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Multi-query retrieval for robustness</span>
+<span class="kw">from</span> <span class="im">langchain.retrievers.multi_query</span> <span class="kw">import</span> <span class="fn">MultiQueryRetriever</span>
+
+<span class="va">multi_query_retriever</span> <span class="op">=</span> <span class="fn">MultiQueryRetriever</span>.<span class="fn">from_llm</span>(
+    <span class="va">retriever</span><span class="op">=</span><span class="va">vector_store</span>.<span class="fn">as_retriever</span>(),
+    <span class="va">llm</span><span class="op">=</span><span class="va">llm</span>
+)
+
+<span class="cm"># Retrieves with multiple query variations</span>
+<span class="va">docs</span> <span class="op">=</span> <span class="va">multi_query_retriever</span>.<span class="fn">get_relevant_documents</span>(
+    <span class="st">"Can I return items?"</span>
+)</code></pre></div></section><section class="section" id="production-patterns"><span class="section-label">Production</span><h2>Production RAG Patterns</h2><p>Real-world RAG systems need error handling, monitoring, and optimization. Key patterns include:</p><div class="subsection"><h3>Error Handling</h3><p>Handle API failures, embedding timeouts, and malformed queries gracefully.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Production RAG with error handling</span>
+<span class="kw">import</span> <span class="im">logging</span>
+
+<span class="va">logger</span> <span class="op">=</span> <span class="fn">logging</span>.<span class="fn">getLogger</span>(<span class="st">__name__</span>)
+
+<span class="kw">def</span> <span class="fn">query_rag</span>(<span class="va">question</span>):
+    <span class="kw">try</span>:
+        <span class="va">retriever</span> <span class="op">=</span> <span class="va">vector_store</span>.<span class="fn">as_retriever</span>()
+        <span class="va">docs</span> <span class="op">=</span> <span class="va">retriever</span>.<span class="fn">get_relevant_documents</span>(<span class="va">question</span>)
+        
+        <span class="kw">if</span> <span class="fn">len</span>(<span class="va">docs</span>) <span class="op">==</span> <span class="nm">0</span>:
+            <span class="kw">return</span> <span class="st">"No relevant documents found"</span>
+        
+        <span class="va">context</span> <span class="op">=</span> <span class="st">"\n"</span>.<span class="fn">join</span>([<span class="va">d</span>.<span class="va">page_content</span> <span class="kw">for</span> <span class="va">d</span> <span class="kw">in</span> <span class="va">docs</span>])
+        <span class="va">answer</span> <span class="op">=</span> <span class="va">llm</span>.<span class="fn">predict</span>(<span class="va">context</span><span class="op">=</span><span class="va">context</span>, <span class="va">question</span><span class="op">=</span><span class="va">question</span>)
+        
+        <span class="kw">return</span> <span class="va">answer</span>
+    <span class="kw">except</span> <span class="im">Exception</span> <span class="kw">as</span> <span class="va">e</span>:
+        <span class="va">logger</span>.<span class="fn">error</span>(<span class="st">f"RAG query failed: {str(e)}"</span>)
+        <span class="kw">return</span> <span class="st">"I encountered an error processing your question"</span></code></pre></div><div class="subsection"><h3>Caching and Performance</h3><p>Cache embeddings and frequently asked questions to reduce costs and latency.</p></div><div class="subsection"><h3>Monitoring and Metrics</h3><p>Track key metrics: retrieval quality, generation quality, latency, and error rates. Monitor for document drift and quality degradation.</p></div></section><section class="section" id="iterative-refinement"><span class="section-label">Production Patterns</span><h2>Iterative Refinement and Testing</h2><p>Building RAG systems is iterative. You start simple, test extensively, identify failures, and improve systematically. This section shows how to structure testing throughout development.</p><h3>Unit Testing Each Component</h3><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Test each RAG component independently</span>
+<span class="kw">def</span> <span class="fn">test_document_loading</span>():
+    <span class="cm"># Verify documents load correctly</span>
+    <span class="va">loader</span> <span class="op">=</span> <span class="fn">TextLoader</span>(<span class="st">"test_doc.txt"</span>)
+    <span class="va">docs</span> <span class="op">=</span> <span class="va">loader</span>.<span class="fn">load</span>()
+    <span class="fn">assert</span> <span class="fn">len</span>(<span class="va">docs</span>) <span class="op">></span> <span class="nm">0</span>
+    <span class="fn">assert</span> <span class="fn">len</span>(<span class="va">docs</span>[<span class="nm">0</span>].<span class="va">page_content</span>) <span class="op">></span> <span class="nm">0</span>
+
+<span class="kw">def</span> <span class="fn">test_chunking</span>():
+    <span class="cm"># Verify chunks are reasonable size and non-empty</span>
+    <span class="va">splitter</span> <span class="op">=</span> <span class="fn">RecursiveCharacterTextSplitter</span>(<span class="va">chunk_size</span><span class="op">=</span><span class="nm">1000</span>)
+    <span class="va">chunks</span> <span class="op">=</span> <span class="va">splitter</span>.<span class="fn">split_documents</span>(<span class="va">docs</span>)
+    <span class="fn">assert</span> <span class="fn">all</span>(<span class="fn">len</span>(<span class="va">c</span>.<span class="va">page_content</span>) <span class="op">></span> <span class="nm">0</span> <span class="kw">for</span> <span class="va">c</span> <span class="kw">in</span> <span class="va">chunks</span>)
+    <span class="fn">assert</span> <span class="fn">all</span>(<span class="fn">len</span>(<span class="va">c</span>.<span class="va">page_content</span>) <span class="op"><=</span> <span class="nm">2000</span> <span class="kw">for</span> <span class="va">c</span> <span class="kw">in</span> <span class="va">chunks</span>)
+
+<span class="kw">def</span> <span class="fn">test_embedding_generation</span>():
+    <span class="cm"># Verify embeddings have correct shape and aren't degenerate</span>
+    <span class="va">embeddings</span> <span class="op">=</span> <span class="fn">OpenAIEmbeddings</span>()
+    <span class="va">vec</span> <span class="op">=</span> <span class="va">embeddings</span>.<span class="fn">embed_query</span>(<span class="st">"test query"</span>)
+    <span class="fn">assert</span> <span class="fn">len</span>(<span class="va">vec</span>) <span class="op">==</span> <span class="nm">1536</span>  <span class="cm"># Expected dimension</span>
+    <span class="fn">assert</span> <span class="fn">not</span> <span class="fn">all</span>(<span class="va">v</span> <span class="op">==</span> <span class="nm">0</span> <span class="kw">for</span> <span class="va">v</span> <span class="kw">in</span> <span class="va">vec</span>)  <span class="cm"># Not all zeros
+
+<span class="kw">def</span> <span class="fn">test_retrieval</span>():
+    <span class="cm"># Verify retrieval returns relevant results</span>
+    <span class="va">query</span> <span class="op">=</span> <span class="st">"return policy"</span>
+    <span class="va">results</span> <span class="op">=</span> <span class="va">vector_store</span>.<span class="fn">similarity_search</span>(<span class="va">query</span>, <span class="va">k</span><span class="op">=</span><span class="nm">3</span>)
+    <span class="fn">assert</span> <span class="fn">len</span>(<span class="va">results</span>) <span class="op">==</span> <span class="nm">3</span>
+    <span class="fn">assert</span> <span class="st">"return"</span> <span class="kw">in</span> <span class="va">results</span>[<span class="nm">0</span>].<span class="va">page_content</span>.<span class="fn">lower</span>()</span>
+
+<span class="cm"># Run all tests</span>
+<span class="fn">test_document_loading</span>()
+<span class="fn">test_chunking</span>()
+<span class="fn">test_embedding_generation</span>()
+<span class="fn">test_retrieval</span>()
+<span class="fn">print</span>(<span class="st">"All tests passed!"</span>)</code></pre><h3>End-to-End Testing</h3><p>Test the complete pipeline with realistic questions and evaluate quality subjectively. Create a test set of 10-20 representative questions with expected answer characteristics.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># End-to-end quality testing</span>
+<span class="va">test_cases</span> <span class="op">=</span> [
+    {
+        <span class="st">"question"</span>: <span class="st">"How long do I have to return items?"</span>,
+        <span class="st">"should_contain"</span>: [<span class="st">"30 days"</span>, <span class="st">"60 days"</span>],  <span class="cm"># Expected answer keywords</span>
+        <span class="st">"should_not_contain"</span>: [<span class="st">"shipping"</span>]  <span class="cm"># Unexpected topics</span>
+    },
+    {
+        <span class="st">"question"</span>: <span class="st">"What is your shipping policy?"</span>,
+        <span class="st">"should_contain"</span>: [<span class="st">"shipping"</span>, <span class="st">"cost"</span>, <span class="st">"days"</span>],
+        <span class="st">"should_not_contain"</span>: [<span class="st">"return"</span>]
+    }
+]
+
+<span class="va">failures</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="va">test_case</span> <span class="kw">in</span> <span class="va">test_cases</span>:
+    <span class="va">answer</span> <span class="op">=</span> <span class="va">rag_chain</span>.<span class="fn">run</span>(<span class="va">test_case</span>[<span class="st">"question"</span>])
+    <span class="va">answer_lower</span> <span class="op">=</span> <span class="va">answer</span>.<span class="fn">lower</span>()
+
+    <span class="cm"># Check expected content</span>
+    <span class="kw">if</span> <span class="fn">not</span> <span class="fn">any</span>(<span class="va">keyword</span> <span class="kw">in</span> <span class="va">answer_lower</span> <span class="kw">for</span> <span class="va">keyword</span> <span class="kw">in</span> <span class="va">test_case</span>[<span class="st">"should_contain"</span>]):
+        <span class="va">failures</span>.<span class="fn">append</span>(<span class="va">test_case</span>[<span class="st">"question"</span>])
+
+    <span class="cm"># Check for unexpected content</span>
+    <span class="kw">if</span> <span class="fn">any</span>(<span class="va">keyword</span> <span class="kw">in</span> <span class="va">answer_lower</span> <span class="kw">for</span> <span class="va">keyword</span> <span class="kw">in</span> <span class="va">test_case</span>[<span class="st">"should_not_contain"</span>]):
+        <span class="va">failures</span>.<span class="fn">append</span>(<span class="va">test_case</span>[<span class="st">"question"</span>] <span class="op">+</span> <span class="st">" (wrong topic)"</span>)
+
+<span class="fn">print</span>(<span class="st">f"Test pass rate: {(len(test_cases) - len(failures)) / len(test_cases):.0%}"</span>)
+<span class="kw">if</span> <span class="va">failures</span>:
+    <span class="fn">print</span>(<span class="st">f"Failed cases: {failures}"</span>)</code></pre></section><section class="section" id="summary"><span class="section-label">Summary</span><h2>Key Takeaways</h2><ul><li><strong>Complete Pipeline:</strong> Load → Chunk → Embed → Store → Retrieve → Augment → Generate</li><li><strong>LangChain Integration:</strong> Simplifies building chains with retrieval, augmentation, and generation</li><li><strong>Advanced Patterns:</strong> Multi-query retrieval, context tracking, and source attribution improve quality</li><li><strong>Production Ready:</strong> Add error handling, logging, caching, and monitoring for reliability</li><li><strong>Systematic Testing:</strong> Test each component independently, then end-to-end. Identify and fix bottlenecks methodically</li><li><strong>Iteration:</strong> RAG development is iterative. Start simple, test thoroughly, measure quality, improve incrementally</li></ul></div><div class="exercise-box"><h3>Exercise: Build Your RAG System</h3><ol><li>Create a text document with 2000+ words of content</li><li>Load and chunk the document</li><li>Create embeddings and store in Chromadb</li><li>Build a RetrievalQA chain using LangChain</li><li>Ask 10 questions and evaluate answer quality</li><li>Experiment with different chunk sizes and retrieval count (k)</li><li>Document which settings gave best answers</li></ol></div><div class="nav-buttons"><a href="module10-lesson3.html" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a><a href="module10-lesson5.html" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a></div></div></main><footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>© 2026 SustainSys.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script></body></html>

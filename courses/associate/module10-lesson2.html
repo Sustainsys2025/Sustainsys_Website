@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>10.2 Document Chunking — AI Practitioner Associate</title><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/course-styles.css"></head><body><div class="progress-circle-wrap"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div><nav class="topnav"><div class="topnav-inner"><a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a><div class="nav-divider"></div><div class="nav-title">Module 10 — Document Chunking</div><span class="nav-badge">Associate</span><a href="index.html" class="nav-home-link">← Course Home</a></div></nav><aside class="sidebar"><div class="sidebar-course-title">AI Practitioner Associate</div><span class="sidebar-section-label">Module 10: RAG Pipelines</span><ul class="sidebar-nav"><li><a href="module10-lesson1.html"><span class="sidebar-num">10.1</span> What is RAG?</a></li><li><a href="module10-lesson2.html" class="active"><span class="sidebar-num">10.2</span> Document Chunking</a></li><li><a href="module10-lesson3.html"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li><li><a href="module10-lesson4.html"><span class="sidebar-num">10.4</span> Building RAG</a></li><li><a href="module10-lesson5.html"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li></ul></aside><button class="sidebar-toggle">☰</button><main class="main"><div class="container"><section class="hero"><div class="breadcrumb"><a href="index.html">Associate</a><span class="sep">›</span><span>Document Chunking</span></div><span class="hero-eyebrow">Module 10 · Lesson 2</span><h1>Document Loading and Chunking</h1><p class="hero-sub">Master the critical first step of RAG pipelines. Learn how to load documents from various sources, split them into optimal chunks, and prepare them for embedding. Discover chunking strategies that balance context preservation with retrieval efficiency.</p></section><div class="objectives"><h4>Learning Objectives</h4><ul><li>Understand why document chunking is essential for RAG systems</li><li>Learn different chunking strategies and their trade-offs</li><li>Master chunk size and overlap parameters</li><li>Implement document loading for multiple file formats</li><li>Handle semantic boundaries in text splitting</li><li>Build a robust document processing pipeline</li><li>Optimize chunking for your specific use case</li></ul></div><section class="section" id="chunking-importance"><span class="section-label">Fundamentals</span><h2>Why Chunking Matters in RAG</h2><p>Raw documents cannot be directly embedded into vector databases. Every RAG system must split documents into chunks. This process is arguably the most impactful technical decision because it directly determines what information can be retrieved and answered. Poor chunking cascades through your pipeline: bad chunks mean bad retrieval, which means bad LLM answers.</p><p>The fundamental problem: Find the right granularity. Too large: irrelevant information included. Too small: insufficient context. The sweet spot depends on your content and questions. A 5000-token policy document might be one chunk or 10 chunks depending on your use case.</p><div class="key-concept"><strong>Core Insight:</strong> Chunking directly limits RAG quality. It's your primary quality lever. Everything downstream depends on getting this right.</div><div class="compare-grid"><div class="compare-item"><div class="compare-title">Too-Large Chunks</div><div class="compare-content">Include irrelevant information. Force LLM to process unnecessary context. Exceed token limits. Low retrieval precision.</div></div><div class="compare-item"><div class="compare-title">Optimal Chunks</div><div class="compare-content">Complete information units. Sufficient context. Minimal noise. Precise retrieval. Fit easily within context windows.</div></div><div class="compare-item"><div class="compare-title">Too-Small Chunks</div><div class="compare-content">Lack context for understanding. Fragment concepts. Require retrieving many chunks. Increase latency and cost.</div></div></div></section><section class="section" id="loading-documents"><span class="section-label">Implementation</span><h2>Loading Documents from Multiple Sources</h2><p>RAG systems work with documents from many sources: PDFs, text files, web pages, databases, APIs. Each requires different parsing. LangChain provides loaders for common formats, abstracting format-specific extraction complexity while preserving document structure.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Multi-source document loading</span>
+<span class="kw">from</span> <span class="im">langchain.document_loaders</span> <span class="kw">import</span> (
+    <span class="fn">TextLoader</span>, <span class="fn">PyPDFLoader</span>, <span class="fn">CSVLoader</span>,
+    <span class="fn">WebBaseLoader</span>, <span class="fn">DirectoryLoader</span>
+)
+
+<span class="cm"># Load text file</span>
+<span class="va">text_loader</span> <span class="op">=</span> <span class="fn">TextLoader</span>(<span class="st">"policies.txt"</span>)
+<span class="va">text_docs</span> <span class="op">=</span> <span class="va">text_loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Load PDF</span>
+<span class="va">pdf_loader</span> <span class="op">=</span> <span class="fn">PyPDFLoader</span>(<span class="st">"manual.pdf"</span>)
+<span class="va">pdf_docs</span> <span class="op">=</span> <span class="va">pdf_loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Load CSV</span>
+<span class="va">csv_loader</span> <span class="op">=</span> <span class="fn">CSVLoader</span>(<span class="st">"data.csv"</span>)
+<span class="va">csv_docs</span> <span class="op">=</span> <span class="va">csv_loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Load web</span>
+<span class="va">web_loader</span> <span class="op">=</span> <span class="fn">WebBaseLoader</span>(<span class="st">"https://example.com"</span>)
+<span class="va">web_docs</span> <span class="op">=</span> <span class="va">web_loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Directory batch loading</span>
+<span class="va">dir_loader</span> <span class="op">=</span> <span class="fn">DirectoryLoader</span>(<span class="st">"./docs"</span>, <span class="va">glob</span><span class="op">=</span><span class="st">"**/*.txt"</span>)
+<span class="va">all_docs</span> <span class="op">=</span> <span class="va">dir_loader</span>.<span class="fn">load</span>()
+
+<span class="cm"># Combine from all sources</span>
+<span class="va">combined</span> <span class="op">=</span> <span class="va">text_docs</span> <span class="op">+</span> <span class="va">pdf_docs</span> <span class="op">+</span> <span class="va">csv_docs</span>
+<span class="fn">print</span>(<span class="st">f"Loaded {len(combined)} documents"</span>)</code></pre></section><section class="section" id="chunking-strategies"><span class="section-label">Strategies</span><h2>Chunking Strategies: Methods and Trade-offs</h2><p>Different documents benefit from different chunking strategies. Choose based on your document type, structure, and expected questions.</p><div class="subsection"><h3>Fixed-Size Chunking</h3><p>Simplest approach: split by character count with overlap. Easy to implement but ignores structure. Overlap preserves context at boundaries.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Fixed-size character splitting</span>
+<span class="kw">from</span> <span class="im">langchain.text_splitter</span> <span class="kw">import</span> <span class="fn">CharacterTextSplitter</span>
+
+<span class="va">splitter</span> <span class="op">=</span> <span class="fn">CharacterTextSplitter</span>(
+    <span class="va">chunk_size</span><span class="op">=</span><span class="nm">1000</span>,
+    <span class="va">chunk_overlap</span><span class="op">=</span><span class="nm">200</span>
+)
+<span class="va">chunks</span> <span class="op">=</span> <span class="va">splitter</span>.<span class="fn">split_text</span>(<span class="va">text</span>)</code></pre></div><div class="subsection"><h3>Recursive Character Splitting</h3><p>Better than fixed-size: splits on natural boundaries (paragraphs, sentences) before resorting to character splitting. Respects document structure and keeps related information together.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Recursive splitting respects document structure</span>
+<span class="kw">from</span> <span class="im">langchain.text_splitter</span> <span class="kw">import</span> <span class="fn">RecursiveCharacterTextSplitter</span>
+
+<span class="va">splitter</span> <span class="op">=</span> <span class="fn">RecursiveCharacterTextSplitter</span>(
+    <span class="va">separators</span><span class="op">=</span>[<span class="st">"
+
+"</span>, <span class="st">"
+"</span>, <span class="st">" "</span>, <span class="st">""</span>],
+    <span class="va">chunk_size</span><span class="op">=</span><span class="nm">1000</span>,
+    <span class="va">chunk_overlap</span><span class="op">=</span><span class="nm">200</span>
+)
+<span class="va">chunks</span> <span class="op">=</span> <span class="va">splitter</span>.<span class="fn">split_documents</span>(<span class="va">documents</span>)</code></pre></div><div class="subsection"><h3>Token-Based Chunking</h3><p>Most accurate for LLMs: split by token count instead of characters. More precise because tokens directly relate to model limits and costs.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Token-based splitting more accurate for LLMs</span>
+<span class="kw">import</span> <span class="im">tiktoken</span>
+
+<span class="va">encoding</span> <span class="op">=</span> <span class="fn">tiktoken</span>.<span class="fn">get_encoding</span>(<span class="st">"cl100k_base"</span>)
+
+<span class="kw">def</span> <span class="fn">split_by_tokens</span>(<span class="va">text</span>, <span class="va">max_tokens</span><span class="op">=</span><span class="nm">1000</span>):
+    <span class="va">tokens</span> <span class="op">=</span> <span class="va">encoding</span>.<span class="fn">encode</span>(<span class="va">text</span>)
+    <span class="va">chunks</span> <span class="op">=</span> []
+    <span class="kw">for</span> <span class="va">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">0</span>, <span class="fn">len</span>(<span class="va">tokens</span>), <span class="va">max_tokens</span>):
+        <span class="va">chunk_tokens</span> <span class="op">=</span> <span class="va">tokens</span>[<span class="va">i</span>:<span class="va">i</span><span class="op">+</span><span class="va">max_tokens</span>]
+        <span class="va">chunk_text</span> <span class="op">=</span> <span class="va">encoding</span>.<span class="fn">decode</span>(<span class="va">chunk_tokens</span>)
+        <span class="va">chunks</span>.<span class="fn">append</span>(<span class="va">chunk_text</span>)
+    <span class="kw">return</span> <span class="va">chunks</span></code></pre></div></section><section class="section" id="practical-pipeline"><span class="section-label">Best Practices</span><h2>Building a Production Document Pipeline</h2><p>Here's a complete pipeline with error handling and best practices:</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Production-ready document processor</span>
+<span class="kw">from</span> <span class="im">langchain.document_loaders</span> <span class="kw">import</span> <span class="fn">DirectoryLoader</span>
+<span class="kw">from</span> <span class="im">langchain.text_splitter</span> <span class="kw">import</span> <span class="fn">RecursiveCharacterTextSplitter</span>
+<span class="kw">import</span> <span class="im">re</span>
+
+<span class="va">class</span> <span class="fn">DocumentProcessor</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="va">self</span>, <span class="va">chunk_size</span><span class="op">=</span><span class="nm">1000</span>, <span class="va">overlap</span><span class="op">=</span><span class="nm">200</span>):
+        <span class="va">self</span>.<span class="va">splitter</span> <span class="op">=</span> <span class="fn">RecursiveCharacterTextSplitter</span>(
+            <span class="va">chunk_size</span><span class="op">=</span><span class="va">chunk_size</span>,
+            <span class="va">chunk_overlap</span><span class="op">=</span><span class="va">overlap</span>
+        )
+
+    <span class="kw">def</span> <span class="fn">clean_text</span>(<span class="va">self</span>, <span class="va">text</span>):
+        <span class="cm"># Remove extra whitespace</span>
+        <span class="va">text</span> <span class="op">=</span> <span class="fn">re</span>.<span class="fn">sub</span>(<span class="st">r'\s+'</span>, <span class="st">' '</span>, <span class="va">text</span>)
+        <span class="cm"># Remove control characters</span>
+        <span class="va">text</span> <span class="op">=</span> <span class="fn">re</span>.<span class="fn">sub</span>(<span class="st">r'[ -]'</span>, <span class="st">''</span>, <span class="va">text</span>)
+        <span class="kw">return</span> <span class="va">text</span>.<span class="fn">strip</span>()
+
+    <span class="kw">def</span> <span class="fn">process</span>(<span class="va">self</span>, <span class="va">documents</span>):
+        <span class="kw">for</span> <span class="va">doc</span> <span class="kw">in</span> <span class="va">documents</span>:
+            <span class="va">doc</span>.<span class="va">page_content</span> <span class="op">=</span> <span class="va">self</span>.<span class="fn">clean_text</span>(<span class="va">doc</span>.<span class="va">page_content</span>)
+        <span class="kw">return</span> <span class="va">self</span>.<span class="va">splitter</span>.<span class="fn">split_documents</span>(<span class="va">documents</span>)
+
+<span class="cm"># Usage</span>
+<span class="va">processor</span> <span class="op">=</span> <span class="fn">DocumentProcessor</span>()
+<span class="va">loader</span> <span class="op">=</span> <span class="fn">DirectoryLoader</span>(<span class="st">"./docs"</span>)
+<span class="va">docs</span> <span class="op">=</span> <span class="va">loader</span>.<span class="fn">load</span>()
+<span class="va">chunks</span> <span class="op">=</span> <span class="va">processor</span>.<span class="fn">process</span>(<span class="va">docs</span>)</code></pre></section><section class="section" id="parameters"><span class="section-label">Fine-Tuning</span><h2>Choosing Optimal Parameters</h2><p><strong>Chunk Size:</strong> 800-1000 tokens typical. Depends on question complexity and document density. Small chunks (500 tokens) for factual Q&A. Large chunks (1500 tokens) for analytical questions.</p><p><strong>Chunk Overlap:</strong> 10-20% of chunk size typical. 100-200 tokens for 1000-token chunks. Preserves context at boundaries. Too much overlap wastes computation.</p><p><strong>Testing:</strong> Build test set of questions. Iterate on parameters to optimize retrieval quality. Track metrics like precision and answer quality.</p></section><section class="section" id="metadata"><span class="section-label">Advanced</span><h2>Metadata for Chunks and Document Versioning</h2><p>Add metadata to chunks for filtering, ranking, and tracking document versions. Metadata enables sophisticated retrieval strategies and helps maintain document quality.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Add metadata to chunks</span>
+<span class="kw">from</span> <span class="im">langchain.schema</span> <span class="kw">import</span> <span class="fn">Document</span>
+<span class="kw">import</span> <span class="im">hashlib</span>
+
+<span class="kw">for</span> <span class="va">i</span>, <span class="va">chunk</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="va">raw_chunks</span>):
+    <span class="cm"># Create content hash for change detection</span>
+    <span class="va">content_hash</span> <span class="op">=</span> <span class="fn">hashlib</span>.<span class="fn">md5</span>(<span class="va">chunk</span>.<span class="fn">encode</span>()).<span class="fn">hexdigest</span>()
+
+    <span class="va">doc</span> <span class="op">=</span> <span class="fn">Document</span>(
+        <span class="va">page_content</span><span class="op">=</span><span class="va">chunk</span>,
+        <span class="va">metadata</span><span class="op">=</span>{
+            <span class="st">"source"</span>: <span class="st">"policies.txt"</span>,
+            <span class="st">"section"</span>: <span class="st">"returns"</span>,
+            <span class="st">"date"</span>: <span class="st">"2024-03-15"</span>,
+            <span class="st">"version"</span>: <span class="st">"2.1"</span>,
+            <span class="st">"chunk_index"</span>: <span class="va">i</span>,
+            <span class="st">"content_hash"</span>: <span class="va">content_hash</span>,
+            <span class="st">"importance"</span>: <span class="st">"high"</span> <span class="kw">if</span> <span class="st">"return"</span> <span class="kw">in</span> <span class="va">chunk</span> <span class="kw">else</span> <span class="st">"normal"</span>
+        }
+    )</code></pre><p>Metadata strategies: Include source file name to track origin. Add section/topic tags for filtering before retrieval. Include document date and version for freshness checking. Use importance flags to weight retrieval results. Add content hashes to detect when documents change.</p><h3>Filtering Before Retrieval</h3><p>Use metadata to restrict retrieval to specific document versions, time ranges, or importance levels:</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Retrieve only from high-importance recent documents</span>
+<span class="va">retriever</span> <span class="op">=</span> <span class="va">vector_store</span>.<span class="fn">as_retriever</span>(
+    <span class="va">search_kwargs</span><span class="op">=</span>{
+        <span class="st">"k"</span>: <span class="nm">5</span>,
+        <span class="st">"filter"</span>: {
+            <span class="st">"importance"</span>: <span class="st">"high"</span>,
+            <span class="st">"version"</span>: <span class="st">"2.1"</span>
+        }
+    }
+)</code></pre></section><section class="section" id="quality-metrics"><span class="section-label">Best Practices</span><h2>Measuring Chunking Quality</h2><p>Good chunking is invisible—the user never notices it. Bad chunking breaks the RAG pipeline. How do you measure if your chunking is working?</p><h3>Key Metrics for Chunk Quality</h3><ul><li><strong>Chunk Coherence:</strong> Does each chunk represent a complete concept? Measure by checking if sentences are complete and logical units intact.</li><li><strong>Redundancy:</strong> Is essential information repeated across chunks? Some overlap is necessary for context, but excessive duplication wastes tokens.</li><li><strong>Information Density:</strong> Does each chunk contain relevant information? Fillers and boilerplate lower quality.</li><li><strong>Retrievability:</strong> Can the chunk be found by semantically similar queries? Test with sample questions.</li></ul><h3>Testing Chunking Decisions</h3><p>Create a small test set of representative questions. For each question, manually identify which documents/sections should be retrieved. Then test your chunking strategy: Does it naturally retrieve those sections? Count successes and failures.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Evaluate chunking strategy</span>
+<span class="va">test_questions</span> <span class="op">=</span> [
+    (<span class="st">"How long is the return window?"</span>, [<span class="st">"returns_section"</span>]),
+    (<span class="st">"What is the shipping cost?"</span>, [<span class="st">"shipping_section"</span>]),
+]
+
+<span class="va">successes</span> <span class="op">=</span> <span class="nm">0</span>
+<span class="kw">for</span> <span class="va">question</span>, <span class="va">expected_sections</span> <span class="kw">in</span> <span class="va">test_questions</span>:
+    <span class="va">retrieved</span> <span class="op">=</span> <span class="va">retriever</span>.<span class="fn">get_relevant_documents</span>(<span class="va">question</span>)
+    <span class="va">retrieved_sections</span> <span class="op">=</span> [<span class="va">d</span>.<span class="va">metadata</span>[<span class="st">"section"</span>] <span class="kw">for</span> <span class="va">d</span> <span class="kw">in</span> <span class="va">retrieved</span>]
+
+    <span class="cm"># Check if at least one expected section was retrieved</span>
+    <span class="kw">if</span> <span class="fn">any</span>(<span class="va">section</span> <span class="kw">in</span> <span class="va">retrieved_sections</span> <span class="kw">for</span> <span class="va">section</span> <span class="kw">in</span> <span class="va">expected_sections</span>):
+        <span class="va">successes</span> <span class="op">+=</span> <span class="nm">1</span>
+
+<span class="fn">print</span>(<span class="st">f"Retrieval success rate: {successes / len(test_questions):.0%}"</span>)</code></pre></section><section class="section" id="summary"><span class="section-label">Summary</span><h2>Key Takeaways</h2><ul><li><strong>Chunking is Critical:</strong> Limits what RAG can retrieve and answer. Invest time optimizing this step.</li><li><strong>Strategy Matters:</strong> Recursive splitting respects structure. Use for most cases.</li><li><strong>Token-based Better:</strong> More precise than character-based splitting for LLMs.</li><li><strong>Parameters:</strong> 800-1000 token chunks, 10-20% overlap typical. Test and iterate.</li><li><strong>Clean Data:</strong> Remove artifacts before chunking. Preserve semantic structure.</li><li><strong>Add Metadata:</strong> Track source, section, date, version for better retrieval.</li></ul></div><div class="exercise-box"><h3>Exercise: Compare Chunking Methods</h3><ol><li>Take a 3000+ word document</li><li>Chunk with 500, 1000, and 2000 character limits</li><li>For each method, rate chunk quality (1-10): Does it contain complete information units?</li><li>Write 10 questions you'd ask about the document</li><li>For each method, manually determine which chunks would be retrieved</li><li>Which method retrieves most relevant chunks?</li></ol></div><div class="nav-buttons"><a href="module10-lesson1.html" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a><a href="module10-lesson3.html" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a></div></div></main><footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>© 2026 SustainSys.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script></body></html>

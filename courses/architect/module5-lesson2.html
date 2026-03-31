@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>5.2 Experiment Tracking and Model Versioning with MLflow — AI Solution Architect | SustainSys AI Academy</title><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/course-styles.css"></head><body>
+<div class="progress-circle-wrap" title="Page progress"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div>
+<nav class="topnav"><div class="topnav-inner"><a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a><div class="nav-divider"></div><div class="nav-title">Module 5 — Experiment Tracking and Model Versioning</div><span class="nav-badge">Architect</span><a href="index.html" class="nav-home-link">← Course Home</a></div></nav>
+<aside class="sidebar"><div class="sidebar-course-title">AI Solution Architect</div><span class="sidebar-section-label">Module 5: MLOps Fundamentals</span><ul class="sidebar-nav"><li><a href="module5-lesson1.html"><span class="sidebar-num">5.1</span> MLOps Overview</a></li><li><a href="module5-lesson2.html" class="active"><span class="sidebar-num">5.2</span> Experiment Tracking</a></li><li><a href="module5-lesson3.html"><span class="sidebar-num">5.3</span> Data Versioning</a></li><li><a href="module5-lesson4.html"><span class="sidebar-num">5.4</span> Feature Stores</a></li><li><a href="module5-lesson5.html"><span class="sidebar-num">5.5</span> Model Governance</a></li></ul><span class="sidebar-section-label">Module 6: LLMOps</span><ul class="sidebar-nav"><li><a href="module6-lesson1.html"><span class="sidebar-num">6.1</span> LLMOps Overview</a></li><li><a href="module6-lesson2.html"><span class="sidebar-num">6.2</span> Prompt Versioning</a></li><li><a href="module6-lesson3.html"><span class="sidebar-num">6.3</span> Cost Tracking</a></li><li><a href="module6-lesson4.html"><span class="sidebar-num">6.4</span> Latency Optimization</a></li><li><a href="module6-lesson5.html"><span class="sidebar-num">6.5</span> LLM Guardrails</a></li></ul><span class="sidebar-section-label">Module 7: CI/CD for AI</span><ul class="sidebar-nav"><li><a href="module7-lesson1.html"><span class="sidebar-num">7.1</span> CI/CD Overview</a></li><li><a href="module7-lesson2.html"><span class="sidebar-num">7.2</span> Model Validation</a></li><li><a href="module7-lesson3.html"><span class="sidebar-num">7.3</span> Deployment Pipelines</a></li><li><a href="module7-lesson4.html"><span class="sidebar-num">7.4</span> Rollback & Incidents</a></li><li><a href="module7-lesson5.html"><span class="sidebar-num">7.5</span> Testing ML Models</a></li></ul></aside><button class="sidebar-toggle">☰</button>
+<main class="main"><div class="container"><section class="hero"><div class="breadcrumb"><a href="../index.html">Courses</a><span class="sep">›</span><a href="index.html">Architect</a><span class="sep">›</span><span>Module 5</span><span class="sep">›</span><span>Experiment Tracking</span></div><div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap"><span class="hero-eyebrow">Module 5 · Lesson 2</span><span class="difficulty-badge advanced">Advanced</span></div><h1>Experiment Tracking <span class="accent">and Model Versioning with MLflow</span></h1><p class="hero-sub">Master MLflow, the industry-standard tool for tracking experiments, versioning models, and managing the complete ML lifecycle. Learn to instrument your training code, compare experiments, and build reproducible ML workflows at enterprise scale.</p><div class="hero-meta"><div class="hero-meta-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~40 minutes</div><div class="hero-meta-item"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>5 sections</div><div class="hero-meta-item"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>4 exercises</div></div></section>
+<div class="objectives reveal"><h4>🎯 Learning Objectives</h4><ul><li>Understand MLflow's architecture and core components</li><li>Instrument training code with MLflow for automatic experiment tracking</li><li>Compare multiple experiments and analyze their results</li><li>Manage model versioning and the model registry lifecycle</li><li>Integrate MLflow into production ML workflows and CI/CD pipelines</li></ul></div>
+<div class="prerequisites reveal"><h4>📋 Prerequisites</h4><ul><li>Understanding of MLOps fundamentals and the ML lifecycle</li><li>Proficiency with Python and scikit-learn or TensorFlow</li><li>Familiarity with experiment design and model evaluation</li><li>Basic knowledge of REST APIs and logging concepts</li></ul></div>
+<section class="section reveal" id="mlflow-fundamentals"><span class="section-label">Fundamentals</span><h2>MLflow Architecture & Components</h2><p>MLflow is an open-source platform for managing the complete machine learning lifecycle. It consists of four main components: Tracking (log parameters, metrics, artifacts), Projects (reproducible package format), Models (unified model format), and Registry (central model store with versioning and staging).</p><div class="analogy"><h4>💡 Think of It This Way</h4><p>If Git is version control for code, MLflow is version control for machine learning experiments. Just as Git tracks file changes over time, MLflow tracks model training runs, hyperparameters, metrics, and artifacts. You can compare runs like comparing git commits, revert to a previous model like reverting a commit, and deploy specific versions to production.</p></div><div class="infographic reveal"><div class="infographic-title">MLflow Components and Data Flow</div><svg viewBox="0 0 800 300" style="width:100%;max-width:800px;margin:0 auto;display:block"><defs><marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1d4ed8"/></marker></defs><g><rect x="20" y="30" width="140" height="100" rx="8" fill="#f1f5f9" stroke="#1d4ed8" stroke-width="2"/><text x="90" y="60" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">TRACKING API</text><text x="90" y="85" text-anchor="middle" fill="#64748b" font-size="9">Log params, metrics,</text><text x="90" y="100" text-anchor="middle" fill="#64748b" font-size="9">artifacts, models</text><line x1="160" y1="80" x2="200" y2="80" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr2)"/></g><g><rect x="210" y="30" width="140" height="100" rx="8" fill="#f1f5f9" stroke="#ea580c" stroke-width="2"/><text x="280" y="60" text-anchor="middle" fill="#ea580c" font-size="12" font-weight="700">BACKEND</text><text x="280" y="85" text-anchor="middle" fill="#64748b" font-size="9">Store metadata in</text><text x="280" y="100" text-anchor="middle" fill="#64748b" font-size="9">SQL database</text><line x1="350" y1="80" x2="390" y2="80" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr2)"/></g><g><rect x="400" y="30" width="140" height="100" rx="8" fill="#f1f5f9" stroke="#16a34a" stroke-width="2"/><text x="470" y="60" text-anchor="middle" fill="#16a34a" font-size="12" font-weight="700">UI &amp; API</text><text x="470" y="85" text-anchor="middle" fill="#64748b" font-size="9">Compare runs,</text><text x="470" y="100" text-anchor="middle" fill="#64748b" font-size="9">search experiments</text><line x1="540" y1="80" x2="580" y2="80" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr2)"/></g><g><rect x="590" y="30" width="140" height="100" rx="8" fill="#f1f5f9" stroke="#f97316" stroke-width="2"/><text x="660" y="60" text-anchor="middle" fill="#f97316" font-size="12" font-weight="700">REGISTRY</text><text x="660" y="85" text-anchor="middle" fill="#64748b" font-size="9">Model versioning,</text><text x="660" y="100" text-anchor="middle" fill="#64748b" font-size="9">staging, promotion</text></g><rect x="20" y="160" width="710" height="120" rx="8" fill="rgba(54,207,201,0.04)" stroke="rgba(54,207,201,0.1)"/><text x="40" y="190" fill="#1d4ed8" font-size="11" font-weight="600">Typical Workflow:</text><text x="40" y="215" fill="#64748b" font-size="10">1. Your training script calls MLflow Tracking API with parameters, metrics</text><text x="40" y="235" fill="#64748b" font-size="10">2. MLflow backend stores metadata and artifacts in local or remote storage</text><text x="40" y="255" fill="#64748b" font-size="10">3. UI shows experiment history, compare runs, export metrics</text><text x="40" y="275" fill="#64748b" font-size="10">4. Registry stores production models with versioning, staging gates</text></svg></div><p>The beauty of MLflow is that it's backend-agnostic. You can use SQLite locally during development, migrate to PostgreSQL for team collaboration, and store artifacts in S3, GCS, or Azure Blob Storage for production. Your tracking code doesn't change — only the configuration.</p><div class="key-takeaway"><h4>✦ Key Takeaways</h4><ul><li>MLflow Tracking logs experiments: parameters, metrics, artifacts, models</li><li>MLflow Registry provides centralized model versioning and lifecycle management</li><li>Architecture is flexible: use local storage for development, cloud backends for production</li><li>All components are designed to work together seamlessly</li></ul></div></section><hr class="section-divider"><section class="section reveal" id="tracking-api"><span class="section-label">Practical Skills</span><h2>Instrumenting Code with MLflow Tracking</h2><p>The Tracking API is where you spend most of your time with MLflow. You instrument your training code to log hyperparameters, metrics during training, and model artifacts for later use. This creates a complete record of every experiment.</p><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="kw">import</span> <span class="im">mlflow</span>
+<span class="kw">import</span> <span class="im">mlflow.sklearn</span>
+<span class="kw">from</span> <span class="im">sklearn.ensemble</span> <span class="kw">import</span> <span class="bi">GradientBoostingClassifier</span>
+<span class="kw">from</span> <span class="im">sklearn.metrics</span> <span class="kw">import</span> <span class="bi">accuracy_score</span>, <span class="bi">roc_auc_score</span>
+
+<span class="cm"># Set experiment</span>
+<span class="fn">mlflow.set_experiment</span>(<span class="st">"customer_churn"</span>)
+
+<span class="cm"># Start tracking run</span>
+<span class="kw">with</span> <span class="fn">mlflow.start_run</span>():
+    <span class="cm"># Log hyperparameters before training</span>
+    <span class="fn">mlflow.log_param</span>(<span class="st">"n_estimators"</span>, <span class="nm">100</span>)
+    <span class="fn">mlflow.log_param</span>(<span class="st">"learning_rate"</span>, <span class="nm">0.1</span>)
+    <span class="fn">mlflow.log_param</span>(<span class="st">"max_depth"</span>, <span class="nm">5</span>)
+
+    <span class="cm"># Train model</span>
+    <span class="va">model</span> <span class="op">=</span> <span class="bi">GradientBoostingClassifier</span>(
+        <span class="va">n_estimators</span><span class="op">=</span><span class="nm">100</span>, <span class="va">learning_rate</span><span class="op">=</span><span class="nm">0.1</span>, <span class="va">max_depth</span><span class="op">=</span><span class="nm">5</span>
+    )
+    <span class="va">model</span>.<span class="fn">fit</span>(<span class="va">X_train</span>, <span class="va">y_train</span>)
+
+    <span class="cm"># Log metrics after evaluation</span>
+    <span class="va">accuracy</span> <span class="op">=</span> <span class="fn">accuracy_score</span>(<span class="va">y_test</span>, <span class="va">model</span>.<span class="fn">predict</span>(<span class="va">X_test</span>))
+    <span class="va">auc</span> <span class="op">=</span> <span class="fn">roc_auc_score</span>(<span class="va">y_test</span>, <span class="va">model</span>.<span class="fn">predict_proba</span>(<span class="va">X_test</span>)[:, <span class="nm">1</span>])
+    <span class="fn">mlflow.log_metric</span>(<span class="st">"accuracy"</span>, <span class="va">accuracy</span>)
+    <span class="fn">mlflow.log_metric</span>(<span class="st">"auc"</span>, <span class="va">auc</span>)
+
+    <span class="cm"># Log model artifact</span>
+    <span class="fn">mlflow.sklearn.log_model</span>(<span class="va">model</span>, <span class="st">"model"</span>)
+
+    <span class="cm"># Log additional metadata</span>
+    <span class="fn">mlflow.log_dict</span>({<span class="st">"data_version"</span>: <span class="st">"v2.1"</span>}, <span class="st">"config"</span>)</code></pre><div class="code-explain"><p><strong>What is happening here:</strong> We set the experiment name (like a folder for related runs), then use a context manager to start a run. Within the run, we log parameters before training, metrics after evaluation, the trained model, and any additional metadata. Each run gets a unique ID, timestamp, and tags automatically.</p></div><h3>Advanced Tracking Features</h3><p>Beyond basic logging, MLflow supports metrics history (log the same metric multiple times during training), nested runs (for hyperparameter tuning), and custom tags for filtering. You can also log plots, text files, and other artifacts.</p><div class="key-takeaway"><h4>✦ Key Takeaways</h4><ul><li>Use <code>mlflow.log_param()</code> for hyperparameters logged before training</li><li>Use <code>mlflow.log_metric()</code> for metrics logged during or after training</li><li>Use framework-specific loggers like <code>mlflow.sklearn.log_model()</code></li><li>Tags and metadata help organize and search experiments later</li></ul></div></section><hr class="section-divider"><section class="section reveal" id="model-registry"><span class="section-label">Advanced Concepts</span><h2>The Model Registry: Versioning &amp; Lifecycle</h2><p>The Model Registry is MLflow's model governance layer. Instead of tracking models scattered across different machines or S3 buckets, the Registry provides a single source of truth for which models are approved for which environments. Models move through stages: Staging (testing), Production (live), Archived (retired).</p><div class="infographic reveal"><div class="infographic-title">Model Registry Workflow: From Training to Production</div><svg viewBox="0 0 800 320" style="width:100%;max-width:800px;margin:0 auto;display:block"><defs><marker id="arr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1d4ed8"/></marker></defs><rect x="30" y="40" width="130" height="90" rx="10" fill="#f1f5f9" stroke="#1d4ed8" stroke-width="2"/><text x="95" y="70" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">1. RUN</text><text x="95" y="95" text-anchor="middle" fill="#64748b" font-size="9">Training completes,</text><text x="95" y="110" text-anchor="middle" fill="#64748b" font-size="9">model logged</text><line x1="160" y1="85" x2="200" y2="85" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr3)"/><rect x="210" y="40" width="130" height="90" rx="10" fill="#f1f5f9" stroke="#ea580c" stroke-width="2"/><text x="275" y="70" text-anchor="middle" fill="#ea580c" font-size="12" font-weight="700">2. REGISTER</text><text x="275" y="95" text-anchor="middle" fill="#64748b" font-size="9">Transition to</text><text x="275" y="110" text-anchor="middle" fill="#64748b" font-size="9">registry</text><line x1="340" y1="85" x2="380" y2="85" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr3)"/><rect x="390" y="40" width="130" height="90" rx="10" fill="#f1f5f9" stroke="#16a34a" stroke-width="2"/><text x="455" y="70" text-anchor="middle" fill="#16a34a" font-size="12" font-weight="700">3. STAGE</text><text x="455" y="95" text-anchor="middle" fill="#64748b" font-size="9">Move to Staging</text><text x="455" y="110" text-anchor="middle" fill="#64748b" font-size="9">(validation)</text><line x1="520" y1="85" x2="560" y2="85" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr3)"/><rect x="570" y="40" width="130" height="90" rx="10" fill="#f1f5f9" stroke="#f97316" stroke-width="2"/><text x="635" y="70" text-anchor="middle" fill="#f97316" font-size="12" font-weight="700">4. PRODUCE</text><text x="635" y="95" text-anchor="middle" fill="#64748b" font-size="9">Approve and</text><text x="635" y="110" text-anchor="middle" fill="#64748b" font-size="9">move to Prod</text><line x1="700" y1="85" x2="740" y2="85" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arr3)"/><rect x="750" y="40" width="30" height="90" rx="10" fill="#f1f5f9" stroke="#e946ef" stroke-width="2"/><rect x="30" y="160" width="750" height="140" rx="8" fill="rgba(54,207,201,0.04)" stroke="rgba(54,207,201,0.1)"/><text x="50" y="190" fill="#1d4ed8" font-size="11" font-weight="600">Key Benefits of Registry:</text><text x="50" y="215" fill="#64748b" font-size="10">• Centralized tracking: all models in one place with complete lineage</text><text x="50" y="235" fill="#64748b" font-size="10">• Versioning: compare model versions, understand which performed best</text><text x="50" y="255" fill="#64748b" font-size="10">• Staging gates: validation in Staging before promoting to Production</text><text x="50" y="275" fill="#64748b" font-size="10">• Audit trail: track approvals, timestamps, description changes</text></svg></div><div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Register a model from a run</span>
+<span class="fn">mlflow.register_model</span>(<span class="st">"runs:/abc123/model"</span>, <span class="st">"churn-predictor"</span>)
+
+<span class="cm"># Move model to Staging for validation</span>
+<span class="va">client</span> <span class="op">=</span> <span class="fn">mlflow.tracking.MlflowClient</span>()
+<span class="fn">client.transition_model_version_stage</span>(
+    <span class="va">name</span><span class="op">=</span><span class="st">"churn-predictor"</span>,
+    <span class="va">version</span><span class="op">=</span><span class="nm">1</span>,
+    <span class="va">stage</span><span class="op">=</span><span class="st">"Staging"</span>
+)
+
+<span class="cm"># After validation, promote to Production</span>
+<span class="fn">client.transition_model_version_stage</span>(
+    <span class="va">name</span><span class="op">=</span><span class="st">"churn-predictor"</span>,
+    <span class="va">version</span><span class="op">=</span><span class="nm">1</span>,
+    <span class="va">stage</span><span class="op">=</span><span class="st">"Production"</span>
+)</code></pre><div class="code-explain"><p><strong>What is happening here:</strong> We register a model that was logged during a training run, giving it a name. Then using the MLflow client API, we transition it through stages. This creates an audit trail: anyone can see when a model was promoted, by whom (if authenticated), and why (via descriptions).</p></div><div class="why-matters"><h4>🌍 Why This Matters</h4><p><strong>In Regulated Industries:</strong> The Registry audit trail proves compliance: which model was approved, when, by whom, and based on what tests. This is non-negotiable for financial and healthcare deployments.</p><p><strong>In Data Science Teams:</strong> No more confusion about which model is in production. The Registry is the single source of truth. Rollback is one API call away if issues arise.</p></div></section><hr class="section-divider"><section class="section reveal" id="integration"><span class="section-label">Production Integration</span><h2>Integrating MLflow into CI/CD</h2><p>MLflow shines when integrated into automated pipelines. Your CI/CD system can automatically register models, run validation in Staging, and promote to Production when tests pass. This reduces manual errors and accelerates the deployment process.</p><h3>Example CI/CD Integration</h3><p>A typical pipeline: on code commit, train all models, log to MLflow, run validation tests on registered models in Staging, if all tests pass, automatically promote to Production. If metrics regress, block promotion and alert the team.</p><div class="key-takeaway"><h4>✦ Key Takeaways</h4><ul><li>Model Registry provides versioning, staging, and audit trails for governance</li><li>Stages (None → Staging → Production → Archived) enforce approval workflows</li><li>Integration with CI/CD enables fully automated, compliant deployments</li><li>API-first design means MLflow integrates into any deployment tool or custom system</li></ul></div></section><hr class="section-divider"><section class="section reveal" id="exercises"><span class="section-label">Practice</span><h2>Hands-On Exercises</h2><div class="exercise"><h4>🔬 Exercise 1: Set Up MLflow Locally</h4><p>Install MLflow, create an experiment, write a training script that logs parameters and metrics, and view results in the MLflow UI at localhost:5000. Experiment with logging different metric types.</p></div><div class="exercise"><h4>🔬 Exercise 2: Compare Experiments</h4><p>Train the same model with 5 different hyperparameter sets. Use MLflow UI to compare runs side-by-side: which hyperparameters matter most for your metric? What's the best run?</p></div><div class="exercise"><h4>🔬 Exercise 3: Register and Stage a Model</h4><p>Register one of your trained models in the Model Registry, transition it to Staging, and write code to load it from the registry in Staging vs Production stages.</p></div><div class="exercise"><h4>🔬 Exercise 4: Build a Simple CI Pipeline</h4><p>Create a GitHub Actions workflow that trains a model on code commit, logs to MLflow, and registers the model. Set approval gates for promotion to Production.</p></div></section><div class="next-preview reveal"><h4>📍 Up Next: Lesson 5.3</h4><p><strong>Data Versioning with DVC</strong> — MLflow tracks models, but what about the data used to train them? DVC enables data versioning and pipeline orchestration, ensuring your training data is tracked and reproducible just like your code.</p></div>
+<hr class="section-divider">
+
+<section class="section reveal" id="advanced-topics">
+  <span class="section-label">Advanced</span>
+  <h2>Advanced Techniques and Optimization Strategies</h2>
+
+  <p>As your systems mature, you'll encounter challenges that require deeper expertise. This section covers advanced patterns used by organizations running massive-scale AI systems.</p>
+
+  <div class="code-header"><span class="code-lang">YAML</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Example configuration for production deployments</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-system-config
+data:
+  enable_observability: <span class="st">"true"</span>
+  metric_interval: <span class="st">"30s"</span>
+  alert_threshold: <span class="st">"95"</span>
+  enable_tracing: <span class="st">"true"</span>
+  sampling_rate: <span class="st">"0.1"</span>
+  log_level: <span class="st">"INFO"</span>
+  retention_days: <span class="st">"30"</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> Production configurations define behavior across all environments. Sampling rate controls what percentage of traces are recorded. Alert thresholds should be tuned to your SLOs, not arbitrary values. Log retention balances compliance requirements with storage costs.</p>
+  </div>
+
+  <p><strong>Challenge 1: Scaling Observability</strong> — When you have thousands of services generating millions of metrics per second, storage becomes expensive. Solutions include better compression, sampling strategies, and tiered storage.</p>
+
+  <p><strong>Challenge 2: Cost Management</strong> — Cloud observability services charge per metric, per log line, and per trace. Large-scale systems can spend hundreds of thousands per month. Effective cardinality management and sampling strategies are essential.</p>
+
+  <p><strong>Challenge 3: Alert Tuning</strong> — Too many alerts cause alert fatigue. Too few and you miss real issues. The solution is iterative tuning based on incident analysis: when incidents occur, tune alerts to catch them; when false alerts fire, adjust thresholds.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Observability Scaling Patterns</div>
+    <svg viewBox="0 0 800 240" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <text x="400" y="25" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">Scaling Observability as Systems Grow</text>
+
+      <!-- Stage 1 -->
+      <rect x="40" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#1d4ed8" stroke-width="1.5"/>
+      <text x="120" y="75" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="700">Stage 1: Single Service</text>
+      <text x="60" y="100" fill="#64748b" font-size="8">• Few metrics</text>
+      <text x="60" y="118" fill="#64748b" font-size="8">• Local Prometheus</text>
+      <text x="60" y="136" fill="#64748b" font-size="8">• 1-3 dashboards</text>
+      <text x="60" y="154" fill="#64748b" font-size="8">• Manual alerts</text>
+      <text x="120" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 1-5</text>
+
+      <!-- Stage 2 -->
+      <rect x="230" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#ea580c" stroke-width="1.5"/>
+      <text x="310" y="75" text-anchor="middle" fill="#ea580c" font-size="11" font-weight="700">Stage 2: Multi-Service</text>
+      <text x="250" y="100" fill="#64748b" font-size="8">• Hundreds of metrics</text>
+      <text x="250" y="118" fill="#64748b" font-size="8">• Federated Prometheus</text>
+      <text x="250" y="136" fill="#64748b" font-size="8">• 5-10 dashboards</text>
+      <text x="250" y="154" fill="#64748b" font-size="8">• Alertmanager</text>
+      <text x="310" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 5-20</text>
+
+      <!-- Stage 3 -->
+      <rect x="420" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="500" y="75" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">Stage 3: Platform</text>
+      <text x="440" y="100" fill="#64748b" font-size="8">• Millions of metrics</text>
+      <text x="440" y="118" fill="#64748b" font-size="8">• Thanos/VictoriaMetrics</text>
+      <text x="440" y="136" fill="#64748b" font-size="8">• 20+ dashboards</text>
+      <text x="440" y="154" fill="#64748b" font-size="8">• ML-based alerts</text>
+      <text x="500" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 20-100</text>
+
+      <!-- Stage 4 -->
+      <rect x="610" y="50" width="150" height="170" rx="6" fill="#f1f5f9" stroke="#f97316" stroke-width="2"/>
+      <text x="685" y="75" text-anchor="middle" fill="#f97316" font-size="11" font-weight="700">Stage 4: Enterprise</text>
+      <text x="630" y="100" fill="#64748b" font-size="8">• Billions of metrics</text>
+      <text x="630" y="118" fill="#64748b" font-size="8">• Multi-region setup</text>
+      <text x="630" y="136" fill="#64748b" font-size="8">• 100+ dashboards</text>
+      <text x="630" y="154" fill="#64748b" font-size="8">• AIOps integration</text>
+      <text x="685" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 100+</text>
+    </svg>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Observability complexity scales with system size—plan for growth from day one</li>
+      <li>Cardinality management and sampling strategies are critical at scale</li>
+      <li>Alert tuning is an ongoing process based on incident analysis</li>
+      <li>Cost management requires continuous optimization of what you measure</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises and Case Studies</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Design Your Observability Stack</h4>
+    <p>Design a complete observability solution for an AI system with these characteristics:</p>
+    <ul>
+      <li>Three ML models serving different prediction tasks</li>
+      <li>Distributed across three regions (US, EU, Asia)</li>
+      <li>Peak load of 100K predictions per second</li>
+      <li>SLO: 99.9% availability, p99 latency < 100ms, accuracy > 92%</li>
+    </ul>
+    <p><strong>What to include:</strong> Metrics to track, dashboard layouts, alerting thresholds, log aggregation strategy, trace sampling rate, and cost estimates.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Incident Analysis</h4>
+    <p>Analyze this incident: Your fraud detection model's accuracy dropped to 87% overnight, but infrastructure metrics were normal.</p>
+    <p><strong>Tasks:</strong></p>
+    <ul>
+      <li>What metric would have detected this issue?</li>
+      <li>What logs would help root-cause it?</li>
+      <li>What trace data would be useful?</li>
+      <li>How would you prevent this in the future?</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Cost Optimization</h4>
+    <p>Your observability bill is \$50,000/month. You've identified that 80% comes from high-cardinality metrics. Design a plan to reduce costs by 50% without losing visibility into critical issues.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="summary">
+  <span class="section-label">Wrap-Up</span>
+  <h2>Summary and Key Takeaways</h2>
+
+  <p>In this lesson, you've learned the foundations of building observability systems that enable production excellence. The core principles:</p>
+
+  <ul>
+    <li><strong>Observability is Architectural</strong> — Design it in from day one; retrofitting is expensive and incomplete</li>
+    <li><strong>Three Pillars Enable Root-Cause Analysis</strong> — Metrics show trends, logs show details, traces show flows</li>
+    <li><strong>AI Systems Need AI-Specific Metrics</strong> — Model accuracy, confidence, data drift are as important as infrastructure metrics</li>
+    <li><strong>Start Simple, Scale Deliberately</strong> — Begin with essential metrics and dashboards; expand based on needs</li>
+    <li><strong>Close the Feedback Loop</strong> — Incidents should drive observability improvements; use postmortems to iterate</li>
+  </ul>
+
+  <p>Production AI systems require continuous attention to observability. The teams that excel at observability respond faster to incidents, ship features confidently, and build systems that customers trust.</p>
+
+  <div class="quiz-box">
+    <h4>🧪 Final Understanding Check</h4>
+    <div class="quiz-question" data-correct="3">
+      <p>You're building a new AI service. When should you design your observability strategy?</p>
+      <ul class="quiz-options">
+        <li>A) After the MVP is ready to ship</li>
+        <li>B) When the first incident occurs</li>
+        <li>C) When you move to production</li>
+        <li>D) During the architectural design phase, before implementation</li>
+      </ul>
+      <div class="quiz-answer">The answer is D. Observability must be designed alongside architecture, not bolted on afterward. During design, you decide what's critical to measure, how you'll aggregate data, and how you'll alert. Building observability from day one is cheaper and more effective than retrofitting it later.</div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-buttons"><span></span><a href="module5-lesson3.html" class="nav-btn next">Next: Data Versioning <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a></div></div></main>
+<footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>&copy; 2026 SustainSys. All rights reserved.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'architect';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script></body></html>

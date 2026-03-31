@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.3 Indexing & Slicing NumPy Arrays — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 2 — Indexing & Slicing NumPy Arrays</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="module1-lesson1.html"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="module1-lesson2.html"><span class="sidebar-num">1.2</span> Collections</a></li>
+    <li><a href="module1-lesson3.html"><span class="sidebar-num">1.3</span> Functions</a></li>
+    <li><a href="module1-lesson4.html"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="module1-lesson5.html"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="module1-lesson6.html"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy</span>
+  <ul class="sidebar-nav">
+    <li><a href="module2-lesson1.html"><span class="sidebar-num">2.1</span> Arrays</a></li>
+    <li><a href="module2-lesson2.html"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="module2-lesson3.html" class="active"><span class="sidebar-num">2.3</span> Indexing</a></li>
+    <li><a href="module2-lesson4.html"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="module2-lesson5.html"><span class="sidebar-num">2.5</span> Random &amp; Stats</a></li>
+    <li><a href="module2-lesson6.html"><span class="sidebar-num">2.6</span> Advanced LA</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Associate</a><span class="sep">›</span>
+    <span>Module 2</span><span class="sep">›</span>
+    <span>Indexing & Slicing</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 2 · Lesson 3</span>
+    <span class="difficulty-badge intermediate">Intermediate</span>
+  </div>
+  <h1>Indexing &amp; Slicing <span class="accent">NumPy Arrays</span></h1>
+  <p class="hero-sub">Master precise data access and extraction patterns. Learn basic indexing, advanced indexing with boolean masks, and fancy indexing. These are fundamental skills for data manipulation, feature engineering, and debugging machine learning pipelines.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~28 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      5 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      5 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Master basic indexing for 1D, 2D, and N-dimensional arrays</li>
+    <li>Understand slicing syntax and stride behavior</li>
+    <li>Use boolean indexing to filter arrays based on conditions</li>
+    <li>Perform fancy indexing with integer arrays</li>
+    <li>Combine multiple indexing techniques for complex data extraction</li>
+    <li>Avoid common indexing pitfalls and copy vs. view behavior</li>
+    <li>Apply indexing to real data manipulation tasks in machine learning</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Completion of Module 2.1 and 2.2 (NumPy basics and linear algebra)</li>
+    <li>Understanding of NumPy arrays and shapes</li>
+    <li>Familiarity with Python list indexing</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="basic-indexing">
+  <span class="section-label">Fundamentals</span>
+  <h2>Basic Indexing and Slicing</h2>
+
+  <p>NumPy indexing extends Python list indexing to multiple dimensions. While Python lists only support integer indexing, NumPy arrays support slicing, boolean indexing, and integer array indexing. Understanding all these modes is essential for effective data manipulation.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>If a NumPy array is a multi-dimensional spreadsheet, indexing is how you point to specific cells or regions. A single index selects one row. A slice selects a range. Boolean indexing selects cells that meet a condition. Fancy indexing uses another array to specify which cells to select.</p>
+  </div>
+
+  <h3>One-Dimensional Indexing</h3>
+
+  <p>Basic indexing in 1D works like Python lists, but with slicing enhancements. NumPy slicing creates views (efficient) rather than copies (memory-expensive).</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># 1D indexing</span>
+<span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+
+<span class="va">arr</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">10</span>, <span class="nm">20</span>, <span class="nm">30</span>, <span class="nm">40</span>, <span class="nm">50</span>])
+
+<span class="cm"># Single element indexing (returns scalar)</span>
+<span class="va">first</span> <span class="op">=</span> <span class="va">arr</span>[<span class="nm">0</span>]      <span class="cm"># 10</span>
+<span class="va">last</span> <span class="op">=</span> <span class="va">arr</span>[<span class="op">-</span><span class="nm">1</span>]     <span class="cm"># 50 (from the end)</span>
+
+<span class="cm"># Slicing (returns array)</span>
+<span class="va">slice1</span> <span class="op">=</span> <span class="va">arr</span>[<span class="nm">1</span>:<span class="nm">4</span>]     <span class="cm"># [20, 30, 40] - from index 1 to 3</span>
+<span class="va">slice2</span> <span class="op">=</span> <span class="va">arr</span>[:<span class="nm">3</span>]       <span class="cm"># [10, 20, 30] - from start to index 2</span>
+<span class="va">slice3</span> <span class="op">=</span> <span class="va">arr</span>[<span class="nm">2</span>:]       <span class="cm"># [30, 40, 50] - from index 2 to end</span>
+
+<span class="cm"># Stride (step)</span>
+<span class="va">every_other</span> <span class="op">=</span> <span class="va">arr</span>[<span class="op">::</span><span class="nm">2</span>]   <span class="cm"># [10, 30, 50] - every 2nd element</span>
+<span class="va">reversed_arr</span> <span class="op">=</span> <span class="va">arr</span>[::<span class="op">-</span><span class="nm">1</span>]  <span class="cm"># [50, 40, 30, 20, 10] - backwards</span>
+
+<span class="cm"># Important: slicing creates a view, not a copy!</span>
+<span class="va">subset</span> <span class="op">=</span> <span class="va">arr</span>[<span class="nm">1</span>:<span class="nm">3</span>]
+<span class="va">subset</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="nm">999</span>
+<span class="fn">print</span>(<span class="va">arr</span>)  <span class="cm"># [10, 999, 30, 40, 50] - original modified!</span></code></pre>
+
+  <h3>Multi-Dimensional Indexing</h3>
+
+  <p>2D and higher-dimensional arrays use comma-separated indices. Each index/slice applies to one dimension. This is crucial for working with image data, batch processing, and time series.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># 2D indexing</span>
+<span class="va">matrix</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>],
+                      [<span class="nm">4</span>, <span class="nm">5</span>, <span class="nm">6</span>],
+                      [<span class="nm">7</span>, <span class="nm">8</span>, <span class="nm">9</span>]])
+
+<span class="cm"># Single element</span>
+<span class="va">elem</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="nm">0</span>, <span class="nm">2</span>]     <span class="cm"># 3 (row 0, col 2)</span>
+
+<span class="cm"># Entire row</span>
+<span class="va">row</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="nm">1</span>, :]     <span class="cm"># [4, 5, 6]</span>
+
+<span class="cm"># Entire column</span>
+<span class="va">col</span> <span class="op">=</span> <span class="va">matrix</span>[:, <span class="nm">2</span>]     <span class="cm"># [3, 6, 9]</span>
+
+<span class="cm"># Submatrix</span>
+<span class="va">submat</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="nm">1</span>:<span class="nm">3</span>, <span class="op">:</span><span class="nm">2</span>]  <span class="cm"># [[4, 5], [7, 8]]</span>
+
+<span class="cm"># Every other row and column</span>
+<span class="va">sparse</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="op">::</span><span class="nm">2</span>, <span class="op">::</span><span class="nm">2</span>]   <span class="cm"># [[1, 3], [7, 9]]</span></code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Integer indexing returns a scalar or reduced-dimension array</li>
+      <li>Slicing with : returns an array of the same dimensionality</li>
+      <li>Slicing creates views, not copies (modifying affects original)</li>
+      <li>Use explicit .copy() if you need an independent copy</li>
+      <li>Strides and negative indices work across all dimensions</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="boolean-indexing">
+  <span class="section-label">Advanced Techniques</span>
+  <h2>Boolean Indexing and Filtering</h2>
+
+  <p>Boolean indexing is one of NumPy's most powerful features. It enables filtering arrays based on conditions—essential for data cleaning, feature selection, and anomaly detection. A boolean array of the same shape is used as a mask.</p>
+
+  <h3>Creating and Using Boolean Masks</h3>
+
+  <p>Boolean indexing is particularly useful in machine learning for filtering data that meets certain conditions.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Boolean indexing</span>
+<span class="va">scores</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">45</span>, <span class="nm">72</span>, <span class="nm">89</span>, <span class="nm">55</span>, <span class="nm">92</span>, <span class="nm">68</span>])
+
+<span class="cm"># Create a boolean mask</span>
+<span class="va">passing</span> <span class="op">=</span> <span class="va">scores</span> <span class="op">>=</span> <span class="nm">70</span>  <span class="cm"># [False, True, True, False, True, False]</span>
+
+<span class="cm"># Extract passing scores</span>
+<span class="va">passing_scores</span> <span class="op">=</span> <span class="va">scores</span>[<span class="va">passing</span>]  <span class="cm"># [72, 89, 92]</span>
+
+<span class="cm"># Complex conditions with logical operators</span>
+<span class="va">good_but_not_perfect</span> <span class="op">=</span> (<span class="va">scores</span> <span class="op">=</span> <span class="nm">80</span>) <span class="op">&</span> (<span class="va">scores</span> <span class="op"><</span> <span class="nm">100</span>)
+<span class="va">result</span> <span class="op">=</span> <span class="va">scores</span>[<span class="va">good_but_not_perfect</span>]  <span class="cm"># [89, 92]</span>
+
+<span class="cm"># Use ~(NOT) to invert mask</span>
+<span class="va">failing_scores</span> <span class="op">=</span> <span class="va">scores</span>[<span class="op">~</span><span class="va">passing</span>]  <span class="cm"># [45, 55, 68]</span></code></pre>
+
+  <h3>Practical Data Cleaning Example</h3>
+
+  <p>Boolean indexing is ubiquitous in real data science work. Here's a realistic example combining multiple conditions.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Real-world: cleaning sensor data</span>
+<span class="va">temperatures</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">20.1</span>, <span class="nm">21.3</span>, <span class="nm">-999</span>, <span class="nm">19.8</span>, <span class="nm">22.5</span>, <span class="nm">999</span>, <span class="nm">20.0</span>])
+
+<span class="cm"># Remove sensor errors (values outside physical range)</span>
+<span class="va">valid_temps</span> <span class="op">=</span> <span class="va">temperatures</span>[(<span class="va">temperatures</span> <span class="op">></span> <span class="nm">-50</span>) <span class="op">&</span> (<span class="va">temperatures</span> <span class="op"><</span> <span class="nm">60</span>)]
+<span class="fn">print</span>(<span class="st">f"Valid temperatures: {valid_temps}"</span>)  <span class="cm"># [20.1, 21.3, 19.8, 22.5, 20.0]</span>
+
+<span class="cm"># Identify anomalies</span>
+<span class="va">mean_temp</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">valid_temps</span>)
+<span class="va">std_temp</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">std</span>(<span class="va">valid_temps</span>)
+<span class="va">z_scores</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">abs</span>((<span class="va">valid_temps</span> <span class="op">-</span> <span class="va">mean_temp</span>) <span class="op">/</span> <span class="va">std_temp</span>)
+<span class="va">anomalies</span> <span class="op">=</span> <span class="va">valid_temps</span>[<span class="va">z_scores</span> <span class="op">></span> <span class="nm">2</span>]
+
+<span class="fn">print</span>(<span class="st">f"Anomalies (>2 std from mean): {anomalies}"</span>)</code></pre>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Data Science:</strong> Real datasets are messy. Boolean indexing is your primary tool for cleaning: removing missing values, filtering outliers, and extracting subsets for analysis. Efficient boolean indexing saves time and prevents errors.</p>
+    <p><strong>In Machine Learning:</strong> Feature engineering often requires conditional logic. Selecting samples where a feature exceeds a threshold, splitting data by categories, creating binary labels—all rely on boolean indexing.</p>
+    <p><strong>In Financial AI:</strong> Risk management uses boolean indexing to flag anomalies, outliers, and unusual transactions. Fraud detection systems filter millions of transactions in microseconds using boolean masks.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Boolean arrays are created from comparison operations (&lt;, &gt;, ==, !=, &lt;=, &gt;=)</li>
+      <li>Combine conditions with & (AND), | (OR), ~ (NOT)</li>
+      <li>Boolean indexing filters arrays, returning only elements where mask is True</li>
+      <li>Use boolean indexing for data cleaning, outlier detection, and feature selection</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="fancy-indexing">
+  <span class="section-label">Advanced Patterns</span>
+  <h2>Fancy Indexing and Integer Arrays</h2>
+
+  <p>Fancy indexing uses integer arrays to specify which elements to extract. This enables non-sequential selection and reordering of data—crucial for shuffling datasets, sampling, and reordering results.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Fancy indexing with integer arrays</span>
+<span class="va">arr</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">10</span>, <span class="nm">20</span>, <span class="nm">30</span>, <span class="nm">40</span>, <span class="nm">50</span>])
+
+<span class="cm"># Select specific indices</span>
+<span class="va">indices</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">2</span>, <span class="nm">4</span>])
+<span class="va">selected</span> <span class="op">=</span> <span class="va">arr</span>[<span class="va">indices</span>]  <span class="cm"># [10, 30, 50]</span>
+
+<span class="cm"># Reorder elements</span>
+<span class="va">order</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">4</span>, <span class="nm">3</span>, <span class="nm">2</span>, <span class="nm">1</span>, <span class="nm">0</span>])
+<span class="va">reversed_arr</span> <span class="op">=</span> <span class="va">arr</span>[<span class="va">order</span>]  <span class="cm"># [50, 40, 30, 20, 10]</span>
+
+<span class="cm"># Duplicate elements (useful for sampling with replacement)</span>
+<span class="va">sample_indices</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">3</span>, <span class="nm">3</span>, <span class="nm">3</span>])
+<span class="va">sample</span> <span class="op">=</span> <span class="va">arr</span>[<span class="va">sample_indices</span>]  <span class="cm"># [20, 20, 40, 40, 40]</span></code></pre>
+
+  <h3>Multi-Dimensional Fancy Indexing</h3>
+
+  <p>Fancy indexing in 2D is particularly useful for extracting specific rows and columns.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># 2D fancy indexing</span>
+<span class="va">matrix</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">arange</span>(<span class="nm">12</span>).<span class="fn">reshape</span>(<span class="nm">3</span>, <span class="nm">4</span>)
+
+<span class="cm"># Select specific rows</span>
+<span class="va">row_indices</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">2</span>])
+<span class="va">rows</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="va">row_indices</span>, :]  <span class="cm"># Rows 0 and 2</span>
+
+<span class="cm"># Select specific elements (row i, col i)</span>
+<span class="va">row_idx</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">2</span>])
+<span class="va">col_idx</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">2</span>, <span class="nm">3</span>])
+<span class="va">diagonal_like</span> <span class="op">=</span> <span class="va">matrix</span>[<span class="va">row_idx</span>, <span class="va">col_idx</span>]  <span class="cm"># [0, 6, 11]</span></code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Integer array indexing selects elements at specified indices</li>
+      <li>Useful for reordering, sampling, and extracting subsets</li>
+      <li>Different from slicing—fancy indexing creates copies, not views</li>
+      <li>Can be combined with boolean indexing for complex filtering</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="copy-vs-view">
+  <span class="section-label">Best Practices</span>
+  <h2>Copy vs. View and Performance</h2>
+
+  <p>Understanding when NumPy creates views versus copies affects both memory usage and performance. Views are efficient (no data duplication) but their modifications affect the original. Copies are independent but use more memory.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Views vs. Copies</span>
+<span class="va">original</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>, <span class="nm">5</span>])
+
+<span class="cm"># Slicing creates a VIEW</span>
+<span class="va">view</span> <span class="op">=</span> <span class="va">original</span>[<span class="nm">1</span>:<span class="nm">4</span>]
+<span class="va">view</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="nm">999</span>
+<span class="fn">print</span>(<span class="st">"Original after modifying view:"</span>, <span class="va">original</span>)  <span class="cm"># [1, 999, 3, 4, 5]</span>
+
+<span class="cm"># Boolean indexing creates a COPY</span>
+<span class="va">mask</span> <span class="op">=</span> <span class="va">original</span> <span class="op">></span> <span class="nm">2</span>
+<span class="va">copy</span> <span class="op">=</span> <span class="va">original</span>[<span class="va">mask</span>]
+<span class="va">copy</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="nm">999</span>
+<span class="fn">print</span>(<span class="st">"Original after modifying boolean-indexed copy:"</span>, <span class="va">original</span>)  <span class="cm"># Unchanged</span>
+
+<span class="cm"># Explicit copy</span>
+<span class="va">explicit_copy</span> <span class="op">=</span> <span class="va">original</span>.<span class="fn">copy</span>()
+<span class="va">explicit_copy</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="nm">888</span>
+<span class="fn">print</span>(<span class="st">"Original after modifying explicit copy:"</span>, <span class="va">original</span>)  <span class="cm"># Unchanged</span></code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Slicing creates a view—modifications affect the original</li>
+      <li>Boolean and fancy indexing create copies—safe to modify</li>
+      <li>Use .copy() explicitly when you need independence</li>
+      <li>Views are more memory-efficient; use them when possible</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Multi-Dimensional Slicing</h4>
+    <p>Create a 4x5x3 array. Extract the middle 2 rows, all columns, and specific layers. Verify your slicing with array.shape.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Boolean Filtering Pipeline</h4>
+    <p>Create an array of 100 random numbers. Filter for values between 0.3 and 0.7. Count how many pass. Create a mask for outliers (>2 std from mean).</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Fancy Indexing Shuffling</h4>
+    <p>Create an array [1,2,3,4,5]. Shuffle it using np.random.permutation. Create a sampled version with replacement using fancy indexing.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 4: Data Cleaning Challenge</h4>
+    <p>Create a 2D array simulating sensor data with missing values (NaN) and out-of-range values. Use boolean indexing to clean it, replacing invalid values with the mean of valid values.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 5: View vs. Copy Behavior</h4>
+    <p>Create an array. Take a slice (view), modify it, and verify the original changes. Then take a boolean-indexed subset (copy), modify it, and verify the original doesn't change.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson 2.4</h4>
+  <p><strong>Broadcasting and Element-wise Operations</strong> — Now that you can access array elements precisely, learn how NumPy's broadcasting enables operations on arrays of different shapes. This powerful feature eliminates many loops and enables efficient vectorized code.</p>
+</div>
+
+<div class="nav-buttons">
+  <a href="module2-lesson2.html" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+  <a href="module2-lesson4.html" class="nav-btn next">Next: Broadcasting <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>
