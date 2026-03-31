@@ -10,6 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <title>Sustainsys - AI Academy | AI-Powered Learning Platform</title>
+    <!-- Hide React SPA immediately on auth routes to prevent flash of old login form -->
+    <script>
+    (function(){var h=location.hash.replace('#/','');if(h==='login'||h==='register'||h==='forgot-password'){document.write('<style>#root{display:none!important}</style>')}})();
+    </script>
     <script type="module" crossorigin src="./ai-learn-assets/index-C5f5ZBA_.js"></script>
     <link rel="stylesheet" crossorigin href="./ai-learn-assets/index-Dll_YlUf.css">
     <style>
@@ -550,20 +554,21 @@
       }
 
       /* ── Route handler ── */
-      async function handleRoute() {
+      function handleRoute() {
         const hash = getHash();
 
         if (hash === 'login' || hash === 'register' || hash === 'forgot-password') {
-          // Check if already authenticated
-          const session = await supaGetSession();
-          if (session) {
-            window.location.href = CERTIFICATIONS_URL;
-            return;
-          }
-
+          // Show overlay immediately (don't wait for session check)
           if (hash === 'login') showOverlay('login');
           else if (hash === 'register') showOverlay('register');
           else if (hash === 'forgot-password') showOverlay('forgot');
+
+          // Then check session in background — redirect if already logged in
+          if (typeof supaGetSession === 'function') {
+            supaGetSession().then(session => {
+              if (session) window.location.href = CERTIFICATIONS_URL;
+            }).catch(() => {});
+          }
         } else {
           removeOverlay();
           showRoot();
@@ -573,11 +578,11 @@
       // Listen for hash changes
       window.addEventListener('hashchange', handleRoute);
 
-      // Initial check on load
-      window.addEventListener('load', () => {
-        // Small delay to let Supabase SDK initialize
-        setTimeout(handleRoute, 100);
-      });
+      // Run immediately — don't wait for load event to beat the React SPA
+      handleRoute();
+
+      // Also re-check after load in case Supabase SDK wasn't ready
+      window.addEventListener('load', () => { setTimeout(handleRoute, 50); });
     })();
     </script>
 
