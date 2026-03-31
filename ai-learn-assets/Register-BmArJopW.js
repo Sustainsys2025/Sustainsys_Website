@@ -1,1 +1,1 @@
-import{r as j,j as e}from"./index-C5f5ZBA_.js";function se(){return j.useEffect(function(){var s=document.getElementById("supaHideRoot");if(!s){s=document.createElement("style");s.id="supaHideRoot";s.textContent="#root{display:none!important}";document.head.appendChild(s)}var o=document.getElementById("supaAuthOverlay");if(!o&&typeof window.handleRoute==="function"){window.handleRoute()}return function(){}},[]),null}export{se as default};
+import{r as j}from"./index-C5f5ZBA_.js";function se(){return null}export{se as default};
