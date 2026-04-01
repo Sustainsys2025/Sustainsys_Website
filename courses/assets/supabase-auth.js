@@ -171,6 +171,88 @@ async function supaUnenroll(enrollmentId) {
   return true;
 }
 
+/* ── Entitlement helpers (Stripe-backed) ────────────── */
+
+/**
+ * Get all active entitlements for the current user.
+ * Entitlements are created by the Stripe webhook — read-only from the client.
+ */
+async function supaGetEntitlements() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const user = await supaGetUser();
+  if (!user) return [];
+
+  const { data, error } = await sb
+    .from('entitlements')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('status', 'active');
+
+  if (error) { console.warn('Entitlements fetch failed:', error.message); return []; }
+
+  // Filter out expired entitlements client-side
+  const now = new Date().toISOString();
+  return (data || []).filter(e => !e.expires_at || e.expires_at > now);
+}
+
+/**
+ * Check if the user has an active all-access subscription.
+ */
+async function supaHasAllAccess() {
+  const entitlements = await supaGetEntitlements();
+  return entitlements.some(
+    e => e.product_type === 'subscription' && e.product_id === 'all-access'
+  );
+}
+
+/**
+ * Check if the user has access to a specific certification.
+ * Access is granted via all-access subscription OR individual certification purchase.
+ */
+async function supaHasEntitlement(certificationId) {
+  const entitlements = await supaGetEntitlements();
+
+  // All-access subscription grants everything
+  const hasSub = entitlements.some(
+    e => e.product_type === 'subscription' && e.product_id === 'all-access'
+  );
+  if (hasSub) return true;
+
+  // Check for specific certification purchase
+  return entitlements.some(
+    e => e.product_type === 'certification' && e.product_id === certificationId
+  );
+}
+
+/**
+ * Check if user has any premium access at all.
+ */
+async function supaHasAnyEntitlement() {
+  const entitlements = await supaGetEntitlements();
+  return entitlements.length > 0;
+}
+
+/**
+ * Get a map of certification IDs the user has paid access to.
+ * Returns { hasAllAccess: boolean, certifications: Set<string> }
+ */
+async function supaGetAccessMap() {
+  const entitlements = await supaGetEntitlements();
+  const result = { hasAllAccess: false, certifications: new Set() };
+
+  for (const e of entitlements) {
+    if (e.product_type === 'subscription' && e.product_id === 'all-access') {
+      result.hasAllAccess = true;
+    }
+    if (e.product_type === 'certification') {
+      result.certifications.add(e.product_id);
+    }
+  }
+
+  return result;
+}
+
 /* ── Auth state listener ─────────────────────────────── */
 
 function onAuthStateChange(callback) {

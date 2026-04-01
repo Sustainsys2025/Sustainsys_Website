@@ -60,15 +60,24 @@
 <!-- Lesson content injected here -->
 <div id="lessonContent"></div>
 
-<!-- Supabase SDK + auth -->
+<!-- Supabase SDK + auth + Stripe -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="assets/stripe-checkout.js"></script>
 
 <script>
 (async function loadLesson() {
   const LOGIN_URL = '../ai-learn.html#/login';
   const CERTS_URL = 'index.html';
   const STORAGE_BUCKET = 'lessons';
+
+  /* ── Map course IDs to entitlement product IDs ── */
+  const COURSE_TO_ENTITLEMENT = {
+    'associate': 'ai-practitioner-associate',
+    'advanced':  'ai-practitioner-advanced',
+    'architect': 'ai-solution-architect',
+  };
 
   /* ── Parse URL params ── */
   const params = new URLSearchParams(window.location.search);
@@ -87,11 +96,18 @@
     return;
   }
 
-  /* ── 2. Enrollment check ── */
+  /* ── 2. Entitlement check (paid access) ── */
+  const entitlementId = COURSE_TO_ENTITLEMENT[courseId] || courseId;
+  const hasAccess = await supaHasEntitlement(entitlementId);
+  if (!hasAccess) {
+    showError('Premium Content', `This lesson requires a purchase. Visit the <a href="${CERTS_URL}" style="color:#1d4ed8;text-decoration:underline">Certifications page</a> to get access.`);
+    return;
+  }
+
+  // Auto-enroll for progress tracking if not already enrolled
   const enrollment = await supaIsEnrolled(courseId, 'certification');
   if (!enrollment) {
-    showError('Not Enrolled', `You need to enroll in the ${courseId} certification to access this lesson.`);
-    return;
+    await supaEnroll(courseId, 'certification');
   }
 
   /* ── 3. Fetch lesson from Supabase Storage ── */

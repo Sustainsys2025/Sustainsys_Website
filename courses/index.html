@@ -144,7 +144,7 @@
       <section class="course-hero" style="background:none;border:none;padding:2rem 0 2rem;text-align:center">
         <span class="hero-eyebrow" style="margin:0 auto 1.5rem">3 Certification Programs · 410 Hours</span>
         <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);margin-bottom:1rem">My <span class="accent">Certifications</span></h1>
-        <p class="hero-sub" style="max-width:650px;margin:0 auto 1rem;text-align:center">Your enrolled certification programs. Only courses you've enrolled in are accessible.</p>
+        <p class="hero-sub" style="max-width:650px;margin:0 auto 1rem;text-align:center">Your certification programs. Purchase individual courses or get the All-Access subscription.</p>
         <p id="enrollmentSummary" style="color:#64748b;font-size:0.85rem;"></p>
       </section>
 
@@ -245,9 +245,11 @@
   </div>
 </footer>
 
-<!-- Supabase SDK + shared auth -->
+<!-- Supabase SDK + shared auth + Stripe -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="assets/stripe-checkout.js"></script>
 
 <script>
 (async function certGate() {
@@ -285,18 +287,29 @@
     window.location.href = LOGIN_URL;
   });
 
-  /* ── 3. Fetch enrollments ── */
+  /* ── 3. Fetch entitlements (paid access) and enrollments (progress) ── */
+  const accessMap = await supaGetAccessMap();
   const enrollments = await supaGetEnrollments();
   const enrolledMap = {};
   enrollments.forEach(e => { enrolledMap[e.item_id] = e; });
 
-  const enrolledCount = COURSE_IDS.filter(id => enrolledMap[id]).length;
-  document.getElementById('enrollmentSummary').textContent =
-    enrolledCount > 0
-      ? `You are enrolled in ${enrolledCount} of 3 certification programs.`
-      : 'You are not enrolled in any certification programs yet. Enroll below to get started.';
+  // Count courses user has paid access to
+  let accessCount = 0;
+  if (accessMap.hasAllAccess) {
+    accessCount = 3;
+  } else {
+    COURSE_IDS.forEach(id => {
+      const productId = COURSE_TO_PRODUCT[id];
+      if (productId && accessMap.certifications.has(productId)) accessCount++;
+    });
+  }
 
-  /* ── 4. Update cards based on enrollment ── */
+  document.getElementById('enrollmentSummary').textContent =
+    accessCount > 0
+      ? `You have access to ${accessCount} of 3 certification programs.`
+      : 'Purchase a certification below to get started, or get the All-Access subscription for all 3.';
+
+  /* ── 4. Update cards based on entitlement + enrollment ── */
   COURSE_IDS.forEach(courseId => {
     const card = document.getElementById(`card-${courseId}`);
     const lockBadge = document.getElementById(`lock-${courseId}`);
@@ -304,65 +317,82 @@
     const actionEl = document.getElementById(`action-${courseId}`);
     const enrollment = enrolledMap[courseId];
 
-    if (enrollment) {
-      // Enrolled — card is accessible
+    // Check if user has paid access
+    const productId = COURSE_TO_PRODUCT[courseId];
+    const hasPaidAccess = accessMap.hasAllAccess || (productId && accessMap.certifications.has(productId));
+
+    if (hasPaidAccess) {
+      // Has paid access — card is unlocked
       card.classList.remove('locked');
       lockBadge.style.display = 'none';
 
-      const isCompleted = enrollment.status === 'completed';
-      const progress = enrollment.progress || 0;
+      if (enrollment) {
+        const isCompleted = enrollment.status === 'completed';
+        const progress = enrollment.progress || 0;
 
-      statusEl.innerHTML = `
-        <span class="status-dot ${isCompleted ? 'completed' : 'active'}"></span>
-        <span class="status-text">${isCompleted ? 'Completed' : 'In Progress'}</span>
-        <span class="progress-text">${progress}% complete</span>
-      `;
+        statusEl.innerHTML = `
+          <span class="status-dot ${isCompleted ? 'completed' : 'active'}"></span>
+          <span class="status-text">${isCompleted ? 'Completed' : 'In Progress'}</span>
+          <span class="progress-text">${progress}% complete</span>
+        `;
 
-      if (!isCompleted) {
-        statusEl.innerHTML += `
-          <div class="card-progress-bar" style="width:100%;margin-top:0.5rem">
-            <div class="fill active" style="width:${progress}%"></div>
-          </div>`;
-      }
+        if (!isCompleted) {
+          statusEl.innerHTML += `
+            <div class="card-progress-bar" style="width:100%;margin-top:0.5rem">
+              <div class="fill active" style="width:${progress}%"></div>
+            </div>`;
+        }
 
-      // Update CTA text
-      const cta = card.querySelector('.course-card-cta');
-      if (cta) {
-        cta.innerHTML = isCompleted
-          ? 'Review Course <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
-          : 'Continue Learning <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+        const cta = card.querySelector('.course-card-cta');
+        if (cta) {
+          cta.innerHTML = isCompleted
+            ? 'Review Course <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+            : 'Continue Learning <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+        }
+      } else {
+        // Paid but not yet enrolled — auto-enroll for progress tracking
+        statusEl.innerHTML = `
+          <span class="status-dot active"></span>
+          <span class="status-text" style="color:#16a34a">Access Granted</span>
+        `;
+        // Auto-enroll in the background
+        supaEnroll(courseId, 'certification').catch(() => {});
       }
     } else {
-      // Not enrolled — card is locked
+      // No paid access — show pricing & checkout button
       card.classList.add('locked');
       lockBadge.style.display = 'flex';
+      lockBadge.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        ${getCoursePrice(courseId)}
+      `;
 
       statusEl.innerHTML = `
         <span class="status-dot locked"></span>
-        <span class="status-text" style="color:#94a3b8">Not Enrolled</span>
+        <span class="status-text" style="color:#94a3b8">Not Purchased</span>
+        <span class="progress-text">${getCoursePrice(courseId)}</span>
       `;
 
-      // Add enroll button outside the locked card
+      // Add checkout button
       actionEl.innerHTML = `
-        <button class="enroll-btn" data-course="${courseId}" data-type="certification">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          Enroll Now
+        <button class="enroll-btn" data-course="${courseId}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4-7M7 13l-2.3 4.3a1 1 0 0 0 .9 1.5H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+          Get Access — ${getCoursePrice(courseId)}
         </button>
       `;
 
       actionEl.querySelector('.enroll-btn').addEventListener('click', async function() {
         this.disabled = true;
-        this.textContent = 'Enrolling...';
-        const result = await supaEnroll(courseId, 'certification');
-        if (result) {
-          // Refresh page to show updated state
-          window.location.reload();
-        } else {
+        this.textContent = 'Redirecting to checkout...';
+        try {
+          await startCourseCheckout(courseId);
+        } catch (err) {
+          console.error('Checkout error:', err);
           this.disabled = false;
           this.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-            Enroll Now`;
-          alert('Failed to enroll. Please try again.');
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4-7M7 13l-2.3 4.3a1 1 0 0 0 .9 1.5H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+            Get Access — ${getCoursePrice(courseId)}`;
+          alert('Checkout failed. Please try again.');
         }
       });
     }
