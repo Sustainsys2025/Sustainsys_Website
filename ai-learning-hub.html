@@ -602,13 +602,17 @@
         <ul class="mobile-nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="services.html">Services</a></li>
-    <li><a href="projects.html" class="projects-highlight">Projects<span class="nav-star">&#9733;</span></a></li>
-    <li class="mobile-dropdown-item"><a href="ai-regtech-capabilities.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> RegTech AI Solutions</a></li>
-    <li class="mobile-dropdown-item"><a href="accountiq.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> AccountIQ</a></li>
-    <li class="mobile-dropdown-item"><a href="nl2sql-sales-deck.html"><img src="nl2sql_logo.svg" alt="NL2SQL" class="mobile-dropdown-logo"> NL2SQL Analytics</a></li>
-    <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer"><img src="Cambiologics_logo.png" alt="CamBiologics" class="mobile-dropdown-logo"> HealthCare (Cancer Research)</a></li>
-    <li class="mobile-dropdown-item"><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="mobile-dropdown-logo"> Precision AI</a></li>
-    <li class="mobile-dropdown-item"><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="mobile-dropdown-logo"> Community</a></li>
+    <li>
+            <span class="projects-highlight" id="mobileProjectsToggle" style="cursor:pointer;display:block;padding:0.5rem 0;font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Projects<span class="nav-star" style="color:#ea580c;">&#9733;</span> <span id="mobileProjectsArrow" style="font-size:0.7rem;opacity:0.5;transition:transform 0.2s;display:inline-block;">&#9662;</span></span>
+            <ul class="mobile-projects-sub" id="mobileProjectsSub" style="display:none;list-style:none;padding:0;margin:0.3rem 0 0 0;">
+                <li class="mobile-dropdown-item"><a href="ai-regtech-capabilities.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> RegTech AI Solutions</a></li>
+                <li class="mobile-dropdown-item"><a href="accountiq.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> AccountIQ</a></li>
+                <li class="mobile-dropdown-item"><a href="nl2sql-sales-deck.html"><img src="nl2sql_logo.svg" alt="NL2SQL" class="mobile-dropdown-logo"> NL2SQL Analytics</a></li>
+                <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer"><img src="Cambiologics_logo.png" alt="CamBiologics" class="mobile-dropdown-logo"> HealthCare</a></li>
+                <li class="mobile-dropdown-item"><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="mobile-dropdown-logo"> Precision AI</a></li>
+                <li class="mobile-dropdown-item"><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="mobile-dropdown-logo"> Community</a></li>
+            </ul>
+        </li>
     <li><a href="job-openings.html">Careers</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li class="mobile-cta-row"><a href="poc-access.html" class="btn-demo">Access Demo</a><a href="ai-learn.html" class="btn-ai-academy">AI Academy</a></li>
@@ -999,5 +1003,22 @@
     </footer>
 
     <script src="main.js"></script>
+<script>
+// Mobile Projects dropdown toggle
+document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('mobileProjectsToggle');
+    var sub = document.getElementById('mobileProjectsSub');
+    var arrow = document.getElementById('mobileProjectsArrow');
+    if (toggle && sub) {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var isOpen = sub.style.display !== 'none';
+            sub.style.display = isOpen ? 'none' : 'block';
+            if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+        });
+    }
+});
+</script>
 </body>
 </html>
