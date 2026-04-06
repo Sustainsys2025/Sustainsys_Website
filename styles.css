@@ -574,6 +574,96 @@ nav {
     margin-top: 0.8rem;
 }
 
+/* ── Mobile CTA buttons (stacked vertically) ── */
+.mobile-cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1.2rem;
+    padding: 0;
+    list-style: none;
+}
+
+/* Access Demo — smaller, understated */
+.mobile-cta-row .btn-demo {
+    display: block;
+    background: transparent;
+    border: 1.5px solid #ea580c;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: #ea580c;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.72rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mobile-cta-row .btn-demo:active {
+    background: rgba(234,88,12,0.08);
+}
+
+/* AI Academy — prominent 3D hero button */
+.mobile-cta-row .btn-ai-academy {
+    display: block;
+    background: linear-gradient(145deg, #3b82f6 0%, #2563eb 35%, #1d4ed8 65%, #1e3a8a 100%);
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.1rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    border: 1.5px solid rgba(96,165,250,0.5);
+    /* Deep 3D shadow stack */
+    box-shadow:
+        0 3px 0 #1e3a8a,
+        0 6px 0 #172554,
+        0 8px 16px rgba(30,58,138,0.5),
+        0 16px 32px rgba(29,78,216,0.3),
+        inset 0 2px 0 rgba(255,255,255,0.3),
+        inset 0 -3px 6px rgba(0,0,0,0.12);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.35);
+    transform: translateY(-3px);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Glossy shine overlay */
+.mobile-cta-row .btn-ai-academy::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+}
+
+/* Subtle pulse glow animation */
+@keyframes academy-glow {
+    0%, 100% { box-shadow: 0 3px 0 #1e3a8a, 0 6px 0 #172554, 0 8px 16px rgba(30,58,138,0.5), 0 16px 32px rgba(29,78,216,0.3), inset 0 2px 0 rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.12); }
+    50% { box-shadow: 0 3px 0 #1e3a8a, 0 6px 0 #172554, 0 8px 20px rgba(30,58,138,0.6), 0 20px 40px rgba(59,130,246,0.35), inset 0 2px 0 rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.12); }
+}
+.mobile-cta-row .btn-ai-academy {
+    animation: academy-glow 3s ease-in-out infinite;
+}
+
+.mobile-cta-row .btn-ai-academy:active {
+    transform: translateY(1px);
+    animation: none;
+    box-shadow:
+        0 1px 0 #1e3a8a,
+        0 2px 6px rgba(30,58,138,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        inset 0 -2px 4px rgba(0,0,0,0.12);
+}
+
 .mobile-nav-links a.poc-highlight {
     background: linear-gradient(135deg, rgba(125, 211, 252, 0.12), rgba(245, 158, 11, 0.12));
     padding: 0.7rem 1.2rem;
