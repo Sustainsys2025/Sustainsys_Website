@@ -1,31 +1,90 @@
-// @ts-ignore - Supabase Edge Runtime types
-import Stripe from "https://esm.sh/stripe@14.14.0?target=deno";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY")!;
+const WEBHOOK_SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
-  apiVersion: "2023-10-16",
-});
-
-const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
-const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
-/**
- * Map Stripe Price IDs to product identifiers used in the entitlements table.
- * UPDATE THESE with your real Stripe Price IDs from the dashboard.
- */
+/** Map Stripe Price IDs to entitlement product info */
 const PRICE_TO_PRODUCT: Record<string, { product_type: string; product_id: string }> = {
-  // Individual certifications (one-time payments)
   "price_1THLekPq7EC8TeurVwXSBLSI": { product_type: "certification", product_id: "ai-practitioner-associate" },
-  "price_1THLfFPq7EC8TeurzbofRSO0":  { product_type: "certification", product_id: "ai-practitioner-advanced" },
+  "price_1THLfFPq7EC8TeurzbofRSO0": { product_type: "certification", product_id: "ai-practitioner-advanced" },
   "price_1THLfXPq7EC8Teur0irCW2Sf": { product_type: "certification", product_id: "ai-solution-architect" },
-
-  // All-Access (one-time payment)
   "price_1THLeFPq7EC8TeurNvY8vvZm": { product_type: "subscription", product_id: "all-access" },
 };
 
+/** Verify Stripe webhook signature using Web Crypto */
+async function verifySignature(payload: string, sigHeader: string, secret: string): Promise<boolean> {
+  const parts = sigHeader.split(",");
+  let timestamp = "";
+  let signature = "";
+  for (const part of parts) {
+    const [key, value] = part.split("=");
+    if (key === "t") timestamp = value;
+    if (key === "v1") signature = value;
+  }
+  if (!timestamp || !signature) return false;
+  if (Math.abs(Math.floor(Date.now() / 1000) - parseInt(timestamp)) > 300) return false;
+
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${timestamp}.${payload}`));
+  const expected = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("");
+  return expected === signature;
+}
+
+/** Supabase REST helper — upsert into entitlements */
+async function upsertEntitlement(row: Record<string, unknown>) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/entitlements`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      "Content-Type": "application/json",
+      Prefer: "resolution=merge-duplicates",
+    },
+    body: JSON.stringify(row),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("Supabase upsert error:", err);
+  }
+  return res.ok;
+}
+
+/** Supabase REST helper — update entitlements */
+async function updateEntitlement(
+  filters: Record<string, string>,
+  updates: Record<string, unknown>
+) {
+  const params = new URLSearchParams();
+  for (const [k, v] of Object.entries(filters)) {
+    params.append(k, `eq.${v}`);
+  }
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/entitlements?${params.toString()}`, {
+    method: "PATCH",
+    headers: {
+      apikey: SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updates),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error("Supabase update error:", err);
+  }
+}
+
+/** Stripe REST helper */
+async function stripeGet(endpoint: string) {
+  const res = await fetch(`https://api.stripe.com/v1${endpoint}`, {
+    headers: { Authorization: `Bearer ${STRIPE_SECRET_KEY}` },
+  });
+  return res.json();
+}
+
 Deno.serve(async (req: Request) => {
-  // Only accept POST
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
   }
@@ -33,90 +92,59 @@ Deno.serve(async (req: Request) => {
   try {
     const body = await req.text();
     const sig = req.headers.get("stripe-signature");
+    if (!sig) return new Response("No signature", { status: 400 });
 
-    if (!sig) {
-      return new Response("No signature", { status: 400 });
+    const valid = await verifySignature(body, sig, WEBHOOK_SECRET);
+    if (!valid) {
+      console.error("Invalid webhook signature");
+      return new Response("Invalid signature", { status: 400 });
     }
 
-    // Verify the webhook signature
-    let event: Stripe.Event;
-    try {
-      event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-    } catch (err) {
-      console.error("Webhook signature verification failed:", err.message);
-      return new Response(`Webhook Error: ${err.message}`, { status: 400 });
-    }
+    const event = JSON.parse(body);
+    console.log("Webhook event:", event.type);
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // ── Handle events ──
     switch (event.type) {
-
       case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
+        const session = event.data.object;
         const userId = session.metadata?.supabase_user_id || session.client_reference_id;
-
-        if (!userId) {
-          console.error("No user ID in checkout session");
-          break;
-        }
+        if (!userId) { console.error("No user ID"); break; }
 
         if (session.mode === "payment") {
-          // One-time payment — grant lifetime access
-          // Expand line_items to get the price ID
-          const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-            expand: ["line_items.data.price"],
-          });
-
-          for (const item of fullSession.line_items?.data || []) {
-            const priceId = item.price?.id;
-            const productInfo = priceId ? PRICE_TO_PRODUCT[priceId] : null;
-
-            if (productInfo) {
-              await supabase.from("entitlements").upsert(
-                {
-                  user_id: userId,
-                  product_type: productInfo.product_type,
-                  product_id: productInfo.product_id,
-                  stripe_customer_id: session.customer as string,
-                  stripe_payment_intent_id: session.payment_intent as string,
-                  status: "active",
-                  starts_at: new Date().toISOString(),
-                  expires_at: null, // Lifetime access for one-time purchases
-                },
-                { onConflict: "user_id,product_id,status" }
-              );
-              console.log(`Granted ${productInfo.product_id} to user ${userId}`);
-            } else {
-              console.warn(`Unknown price ID: ${priceId}`);
+          const lineItems = await stripeGet(`/checkout/sessions/${session.id}/line_items`);
+          for (const item of lineItems.data || []) {
+            const info = PRICE_TO_PRODUCT[item.price?.id];
+            if (info) {
+              await upsertEntitlement({
+                user_id: userId,
+                product_type: info.product_type,
+                product_id: info.product_id,
+                stripe_customer_id: session.customer,
+                stripe_payment_intent_id: session.payment_intent,
+                status: "active",
+                starts_at: new Date().toISOString(),
+                expires_at: null,
+              });
+              console.log(`Granted ${info.product_id} to ${userId}`);
             }
           }
         }
 
         if (session.mode === "subscription") {
-          // Subscription — grant access with expiry
-          const subscriptionId = session.subscription as string;
-          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-
-          for (const item of subscription.items.data) {
-            const priceId = item.price.id;
-            const productInfo = PRICE_TO_PRODUCT[priceId];
-
-            if (productInfo) {
-              await supabase.from("entitlements").upsert(
-                {
-                  user_id: userId,
-                  product_type: productInfo.product_type,
-                  product_id: productInfo.product_id,
-                  stripe_customer_id: session.customer as string,
-                  stripe_subscription_id: subscriptionId,
-                  status: "active",
-                  starts_at: new Date(subscription.current_period_start * 1000).toISOString(),
-                  expires_at: new Date(subscription.current_period_end * 1000).toISOString(),
-                },
-                { onConflict: "user_id,product_id,status" }
-              );
-              console.log(`Granted subscription ${productInfo.product_id} to user ${userId}`);
+          const sub = await stripeGet(`/subscriptions/${session.subscription}`);
+          for (const item of sub.items?.data || []) {
+            const info = PRICE_TO_PRODUCT[item.price?.id];
+            if (info) {
+              await upsertEntitlement({
+                user_id: userId,
+                product_type: info.product_type,
+                product_id: info.product_id,
+                stripe_customer_id: session.customer,
+                stripe_subscription_id: session.subscription,
+                status: "active",
+                starts_at: new Date(sub.current_period_start * 1000).toISOString(),
+                expires_at: new Date(sub.current_period_end * 1000).toISOString(),
+              });
+              console.log(`Granted subscription ${info.product_id} to ${userId}`);
             }
           }
         }
@@ -124,56 +152,35 @@ Deno.serve(async (req: Request) => {
       }
 
       case "customer.subscription.updated": {
-        const subscription = event.data.object as Stripe.Subscription;
-        const supabaseUserId = subscription.metadata?.supabase_user_id;
-
-        // Update expiry and status
-        for (const item of subscription.items.data) {
-          const priceId = item.price.id;
-          const productInfo = PRICE_TO_PRODUCT[priceId];
-
-          if (productInfo && supabaseUserId) {
-            const newStatus = subscription.status === "active" ? "active" : "expired";
-            await supabase
-              .from("entitlements")
-              .update({
-                status: newStatus,
-                expires_at: new Date(subscription.current_period_end * 1000).toISOString(),
-                cancelled_at: subscription.canceled_at
-                  ? new Date(subscription.canceled_at * 1000).toISOString()
-                  : null,
-              })
-              .eq("user_id", supabaseUserId)
-              .eq("product_id", productInfo.product_id)
-              .eq("stripe_subscription_id", subscription.id);
-
-            console.log(`Updated subscription for user ${supabaseUserId}: ${newStatus}`);
+        const sub = event.data.object;
+        const userId = sub.metadata?.supabase_user_id;
+        for (const item of sub.items?.data || []) {
+          const info = PRICE_TO_PRODUCT[item.price?.id];
+          if (info && userId) {
+            await updateEntitlement(
+              { user_id: userId, product_id: info.product_id, stripe_subscription_id: sub.id },
+              {
+                status: sub.status === "active" ? "active" : "expired",
+                expires_at: new Date(sub.current_period_end * 1000).toISOString(),
+                cancelled_at: sub.canceled_at ? new Date(sub.canceled_at * 1000).toISOString() : null,
+              }
+            );
           }
         }
         break;
       }
 
       case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
-        const supabaseUserId = subscription.metadata?.supabase_user_id;
-
-        if (supabaseUserId) {
-          await supabase
-            .from("entitlements")
-            .update({
-              status: "expired",
-              cancelled_at: new Date().toISOString(),
-            })
-            .eq("stripe_subscription_id", subscription.id)
-            .eq("user_id", supabaseUserId);
-
-          console.log(`Expired subscription for user ${supabaseUserId}`);
+        const sub = event.data.object;
+        const userId = sub.metadata?.supabase_user_id;
+        if (userId) {
+          await updateEntitlement(
+            { user_id: userId, stripe_subscription_id: sub.id },
+            { status: "expired", cancelled_at: new Date().toISOString() }
+          );
         }
         break;
       }
-
-      default:
-        console.log(`Unhandled event type: ${event.type}`);
     }
 
     return new Response(JSON.stringify({ received: true }), {
@@ -181,7 +188,7 @@ Deno.serve(async (req: Request) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("Webhook processing error:", err);
+    console.error("Webhook error:", err.message);
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
