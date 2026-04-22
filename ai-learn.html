@@ -120,12 +120,12 @@
     /* Hero visual — AI tutor mock */
     .hero-visual {
         position: relative;
-        height: 620px;
+        height: 560px;
         display: block;
     }
     .tutor-card {
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 80px;
+        inset: 0;
         background: #0A0E1A;
         border-radius: 28px;
         overflow: hidden;
@@ -158,42 +158,79 @@
     .msg.viz { padding: 0; overflow: hidden; background: rgba(29,78,216,0.15); border: 1px solid rgba(29,78,216,0.25); max-width: 92%; align-self: flex-start; }
     .msg.viz .label { padding: 12px 16px 6px; font-size: 13px; color: rgba(255,255,255,0.85); }
     .msg.viz svg { width: 100%; display: block; }
-    .tutor-input { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; position: relative; }
-    .tutor-input .ph { flex: 1; color: rgba(255,255,255,0.55); font-size: 13px; font-family: 'Inter', sans-serif; }
-    .tutor-input .send { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, #1D4ED8, #F97316); display: grid; place-items: center; }
+    /* (tutor-input replaced by gurubot-bar) */
 
     /* Floating mini cards */
     .float { position: absolute; background: #fff; border: 1px solid #E5E7EE; border-radius: 14px; box-shadow: 0 20px 40px -15px rgba(10,14,26,0.2); padding: 14px; z-index: 2; }
     .float-1 { top: 40px; left: -60px; width: 210px; transform: rotate(-4deg); }
     .float-2 { bottom: 30px; right: -50px; width: 230px; transform: rotate(3deg); }
-    .float-3 {
-        bottom: -30px; left: 8px; right: 8px; width: auto;
-        background: #0F1320;
-        border: 1px solid rgba(249,115,22,0.35);
-        border-radius: 18px;
-        padding: 16px 18px;
-        transform: rotate(0.3deg);
-        box-shadow: 0 20px 40px -15px rgba(10,14,26,0.4);
+    /* GuruBot bar inside tutor card */
+    .gurubot-bar {
+        margin-top: auto;
+        background: linear-gradient(135deg, rgba(249,115,22,0.14), rgba(234,88,12,0.06));
+        border: 1px solid rgba(249,115,22,0.3);
+        border-radius: 14px;
+        padding: 12px 14px;
+        position: relative;
         overflow: hidden;
     }
-    .float-3::before {
+    .gurubot-bar::before {
         content: '';
         position: absolute;
         top: -1px; left: -1px; right: -1px;
-        height: 3px;
+        height: 2px;
         background: linear-gradient(90deg, #f97316, #ea580c, #f97316);
-        border-radius: 18px 18px 0 0;
+        border-radius: 14px 14px 0 0;
     }
-    .float-3::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 80% 20%, rgba(249,115,22,0.15), transparent 60%);
-        pointer-events: none;
+    .gurubot-bar-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 2px 8px;
+        background: rgba(249,115,22,0.2);
+        border: 1px solid rgba(249,115,22,0.4);
+        border-radius: 20px;
+        font-size: 9px;
+        font-weight: 700;
+        color: #fdba74;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 8px;
     }
-    .float-3 .f-header { color: #fdba74; }
-    .float-3 .f-title { color: #fff; font-size: 14px; font-weight: 700; position: relative; }
-    .float-3 .f-meta { color: rgba(255,255,255,0.7); font-size: 12px; position: relative; }
+    .gurubot-pulse {
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: #f97316;
+        display: inline-block;
+        animation: guruPulse 2s ease-in-out infinite;
+    }
+    .gurubot-bar-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .gurubot-bar-icon {
+        width: 26px; height: 26px;
+        border-radius: 7px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .gurubot-bar-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+    }
+    .gurubot-bar-desc {
+        font-family: 'Inter', sans-serif;
+        font-size: 11.5px;
+        color: rgba(255,255,255,0.65);
+        line-height: 1.4;
+        margin-top: 2px;
+    }
     @keyframes guruPulse {
         0%, 100% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.4; transform: scale(0.7); }
@@ -1026,7 +1063,7 @@
     @media (max-width: 1024px) {
         .academy-hero-inner { grid-template-columns: 1fr; gap: 40px; }
         .hero-visual { height: 440px; }
-        .float-1, .float-2, .float-3 { display: none; }
+        .float-1, .float-2 { display: none; }
         .academy-hero-text { max-width: 100%; }
         .academy-hero .hero-eyebrow { justify-content: flex-start; }
         .hero-cta-group { justify-content: flex-start; }
@@ -1261,16 +1298,6 @@
                 </div>
             </div>
 
-            <!-- GuruBot announcement -->
-            <div class="float float-3">
-                <div class="f-header" style="color:#fdba74;"><span class="dot" style="background:#f97316; box-shadow: 0 0 8px rgba(249,115,22,0.6); animation: guruPulse 2s ease-in-out infinite;"></span>COMING SOON</div>
-                <div class="f-title" style="display:flex;align-items:center;gap:8px;">
-                    <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#f97316,#ea580c);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><path d="m8 20-4 4V10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M9 13v2"/><path d="M15 13v2"/></svg></span>
-                    GuruBot &mdash; AI Tutor Agent
-                </div>
-                <div class="f-meta" style="margin-top:6px;line-height:1.45;">Your personal AI learning companion. Ask questions, get explanations, and receive guided help.</div>
-            </div>
-
             <!-- Tutor card mock -->
             <div class="tutor-card">
                 <div class="tutor-head">
@@ -1308,11 +1335,15 @@
                     </div>
                 </div>
 
-                <div class="tutor-input">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                    <div class="ph">Ask anything about this lesson&hellip;</div>
-                    <div class="send">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+                <!-- GuruBot announcement — integrated into tutor card -->
+                <div class="gurubot-bar">
+                    <div class="gurubot-bar-badge"><span class="gurubot-pulse"></span> Coming Soon</div>
+                    <div class="gurubot-bar-row">
+                        <span class="gurubot-bar-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><path d="m8 20-4 4V10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M9 13v2"/><path d="M15 13v2"/></svg></span>
+                        <div>
+                            <div class="gurubot-bar-title">GuruBot &mdash; AI Tutor Agent</div>
+                            <div class="gurubot-bar-desc">Your personal AI companion. Ask questions, get guided help across every course.</div>
+                        </div>
                     </div>
                 </div>
             </div>
