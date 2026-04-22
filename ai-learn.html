@@ -15,7 +15,7 @@
     /* --- Hero (editorial design) --- */
     .academy-hero {
         position: relative;
-        padding: 48px 0 72px;
+        padding: 140px 0 72px;
         margin-left: calc(-50vw + 50%);
         margin-right: calc(-50vw + 50%);
         width: 100vw;
@@ -54,27 +54,16 @@
         background: #F97316;
     }
     .academy-hero h1 {
-        font-family: 'Inter', sans-serif;
-        font-size: 68px;
-        font-weight: 700;
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 3.4rem;
+        font-weight: 400;
         color: #0A0E1A;
-        line-height: 0.97;
-        letter-spacing: -2.5px;
+        line-height: 1.12;
+        letter-spacing: -0.5px;
         margin: 18px 0 22px;
     }
     .academy-hero h1 span {
-        position: relative;
-        display: inline-block;
         color: #0A0E1A;
-    }
-    .academy-hero h1 span::after {
-        content: '';
-        position: absolute;
-        left: 0; right: 0; bottom: 4px;
-        height: 14px;
-        background: #FFEDD5;
-        z-index: -1;
-        border-radius: 4px;
     }
     .academy-hero h1 .accent-orange {
         font-family: 'Instrument Serif', Georgia, serif;
@@ -83,7 +72,6 @@
         font-weight: 400;
         letter-spacing: -1px;
     }
-    .academy-hero h1 .accent-orange::after { display: none; }
     .academy-hero-desc {
         font-family: 'Inter', sans-serif;
         font-size: 19px;
@@ -132,12 +120,12 @@
     /* Hero visual — AI tutor mock */
     .hero-visual {
         position: relative;
-        height: 560px;
+        height: 620px;
         display: block;
     }
     .tutor-card {
         position: absolute;
-        inset: 0;
+        top: 0; left: 0; right: 0; bottom: 80px;
         background: #0A0E1A;
         border-radius: 28px;
         overflow: hidden;
@@ -178,6 +166,18 @@
     .float { position: absolute; background: #fff; border: 1px solid #E5E7EE; border-radius: 14px; box-shadow: 0 20px 40px -15px rgba(10,14,26,0.2); padding: 14px; z-index: 2; }
     .float-1 { top: 40px; left: -60px; width: 210px; transform: rotate(-4deg); }
     .float-2 { bottom: 30px; right: -50px; width: 230px; transform: rotate(3deg); }
+    .float-3 {
+        bottom: -40px; left: 10px; right: 10px; width: auto;
+        background: linear-gradient(135deg, rgba(249,115,22,0.12), rgba(234,88,12,0.06));
+        border: 1px solid rgba(249,115,22,0.35);
+        transform: rotate(0.5deg);
+    }
+    .float-3 .f-title { color: #0f172a; font-size: 13px; }
+    .float-3 .f-meta { color: #64748b; font-size: 11.5px; }
+    @keyframes guruPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.7); }
+    }
     .f-header { font-size: 10px; color: #5B6478; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .f-header .dot { width: 6px; height: 6px; border-radius: 999px; background: #F97316; }
     .f-title { font-weight: 700; font-size: 14px; letter-spacing: -0.2px; color: #0A0E1A; }
@@ -1006,7 +1006,7 @@
     @media (max-width: 1024px) {
         .academy-hero-inner { grid-template-columns: 1fr; gap: 40px; }
         .hero-visual { height: 440px; }
-        .float-1, .float-2 { display: none; }
+        .float-1, .float-2, .float-3 { display: none; }
         .academy-hero-text { max-width: 100%; }
         .academy-hero .hero-eyebrow { justify-content: flex-start; }
         .hero-cta-group { justify-content: flex-start; }
@@ -1196,11 +1196,7 @@
     <div class="academy-hero-inner">
         <div class="academy-hero-text">
             <div class="hero-eyebrow">SustainSys AI Academy</div>
-            <h1>
-                Master AI with<br/>
-                <span>industry-leading</span><br/>
-                <span class="accent-orange">courses &amp; certifications.</span>
-            </h1>
+            <h1>Master AI with <span>Industry-Leading</span> Courses &amp; <span class="accent-orange">Certifications</span></h1>
             <p class="academy-hero-desc">From foundational AI concepts to advanced solution architecture. 8 expert-led courses, 3 professional certification programmes, and hands-on projects designed for real-world impact.</p>
             <div class="hero-cta-group">
                 <a href="#courses" class="btn-cta-orange">
@@ -1243,6 +1239,16 @@
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
                     Verified on-chain
                 </div>
+            </div>
+
+            <!-- GuruBot announcement -->
+            <div class="float float-3">
+                <div class="f-header" style="color:#fdba74;"><span class="dot" style="background:#f97316; box-shadow: 0 0 8px rgba(249,115,22,0.6); animation: guruPulse 2s ease-in-out infinite;"></span>COMING SOON</div>
+                <div class="f-title" style="display:flex;align-items:center;gap:8px;">
+                    <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#f97316,#ea580c);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><path d="m8 20-4 4V10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M9 13v2"/><path d="M15 13v2"/></svg></span>
+                    GuruBot &mdash; AI Tutor Agent
+                </div>
+                <div class="f-meta" style="margin-top:6px;line-height:1.45;">Your personal AI learning companion. Ask questions, get explanations, and receive guided help.</div>
             </div>
 
             <!-- Tutor card mock -->
