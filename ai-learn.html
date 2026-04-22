@@ -167,13 +167,33 @@
     .float-1 { top: 40px; left: -60px; width: 210px; transform: rotate(-4deg); }
     .float-2 { bottom: 30px; right: -50px; width: 230px; transform: rotate(3deg); }
     .float-3 {
-        bottom: -40px; left: 10px; right: 10px; width: auto;
-        background: linear-gradient(135deg, rgba(249,115,22,0.12), rgba(234,88,12,0.06));
+        bottom: -30px; left: 8px; right: 8px; width: auto;
+        background: #0F1320;
         border: 1px solid rgba(249,115,22,0.35);
-        transform: rotate(0.5deg);
+        border-radius: 18px;
+        padding: 16px 18px;
+        transform: rotate(0.3deg);
+        box-shadow: 0 20px 40px -15px rgba(10,14,26,0.4);
+        overflow: hidden;
     }
-    .float-3 .f-title { color: #0f172a; font-size: 13px; }
-    .float-3 .f-meta { color: #64748b; font-size: 11.5px; }
+    .float-3::before {
+        content: '';
+        position: absolute;
+        top: -1px; left: -1px; right: -1px;
+        height: 3px;
+        background: linear-gradient(90deg, #f97316, #ea580c, #f97316);
+        border-radius: 18px 18px 0 0;
+    }
+    .float-3::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 80% 20%, rgba(249,115,22,0.15), transparent 60%);
+        pointer-events: none;
+    }
+    .float-3 .f-header { color: #fdba74; }
+    .float-3 .f-title { color: #fff; font-size: 14px; font-weight: 700; position: relative; }
+    .float-3 .f-meta { color: rgba(255,255,255,0.7); font-size: 12px; position: relative; }
     @keyframes guruPulse {
         0%, 100% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.4; transform: scale(0.7); }
