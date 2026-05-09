@@ -12,634 +12,319 @@
     <meta property="og:url" content="https://sustainsys.co.uk/services">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@Sustain_IT_uk">
-    <meta name="theme-color" content="#f8fafc">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#1d4ed8">
+    <link rel="canonical" href="https://sustainsys.co.uk/services">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ===== Services Page-Specific Styles ===== */
-
-        /* Services accent palette (extends shared design tokens) */
-        :root {
-            --svc-indigo: #1d4ed8;
-            --svc-cyan: #1d4ed8;
-            --svc-violet: #1e3a8a;
-            --svc-emerald: #1d4ed8;
-            --svc-amber: #ea580c;
-            --svc-pink: #ea580c;
-        }
-
-        /* ---- Hero: centred editorial layout ---- */
-        .svc-hero {
-            position: relative;
-            min-height: 75vh;
-            padding: 160px 0 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            overflow: hidden;
-            background: linear-gradient(160deg, rgba(15,23,42,1) 0%, rgba(29,78,216,0.55) 50%, rgba(15,23,42,1) 100%);
-        }
-        .svc-hero-bg {
-            display: none;
-        }
-        .svc-hero-inner {
-            position: relative;
-            z-index: 2;
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 0 2.5rem;
-            text-align: center;
-        }
-        .svc-hero-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #f97316;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1.6rem;
-        }
-        .svc-hero-eyebrow::before,
-        .svc-hero-eyebrow::after {
-            content: '';
-            width: 32px; height: 1px;
-            background: rgba(249,115,22,0.5);
-        }
-        .svc-hero-inner h1 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 3.4rem;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 1.15;
-            letter-spacing: -0.5px;
-            margin-bottom: 1.2rem;
-        }
-        .svc-hero-inner h1 span {
-            color: #93c5fd;
-        }
-        .svc-hero-desc {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.08rem;
-            color: #ffffff;
-            line-height: 1.8;
-            max-width: 680px;
-            margin: 0 auto 2.2rem;
-        }
-        /* Capability pills row */
-        .svc-hero-pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 2.4rem;
-        }
-        .svc-hero-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 18px;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(147,197,253,0.2);
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            color: #e2e8f0;
-            font-weight: 500;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.25s ease;
-        }
-        .svc-hero-pill:hover {
-            background: rgba(29,78,216,0.18);
-            border-color: rgba(147,197,253,0.4);
-            transform: translateY(-2px);
-        }
-        .svc-hero-pill .pill-icon {
-            font-size: 1rem;
-        }
-        /* Highlighted AI Academy pill */
-        .svc-hero-pill.pill-highlight {
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-            border-color: transparent;
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 4px 16px rgba(234,88,12,0.3);
-        }
-        .svc-hero-pill.pill-highlight:hover {
-            background: linear-gradient(135deg, #2563eb, #f97316);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 22px rgba(234,88,12,0.4);
-        }
-        /* App Store badge next to pill */
-        .svc-hero-appstore {
-            display: inline-flex;
-            align-items: center;
-        }
-        .svc-hero-appstore img {
-            height: 34px;
-            width: auto;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            opacity: 0.92;
-        }
-        .svc-hero-appstore:hover img {
-            opacity: 1;
-            transform: translateY(-2px);
-        }
-        .svc-hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 32px;
-            background: #ea580c;
-            color: #fff;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.92rem;
-            font-weight: 600;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .svc-hero-cta:hover {
-            background: #c2410c;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(234,88,12,0.3);
-        }
-        /* Subtle bottom divider */
-        .svc-hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(147,197,253,0.25), transparent);
-            z-index: 3;
-        }
-
-        /* Service cards */
-        .svc-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .svc-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            border-radius: 16px 16px 0 0;
-        }
-
-        .svc-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-        }
-
-        .svc-card-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .svc-card h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--text-bright);
-            margin-bottom: 0.8rem;
-        }
-
-        .svc-card p {
-            color: var(--text-dim);
-            font-size: 0.92rem;
-            line-height: 1.7;
-            margin-bottom: 0.6rem;
-        }
-
-        .svc-card p:last-of-type { margin-bottom: 0; }
-        .svc-card p strong { color: var(--text); }
-
-        /* List items */
-        .svc-list {
-            list-style: none;
-            margin: 1rem 0;
-            padding: 0;
-        }
-
-        .svc-list li {
-            padding: 0.45rem 0 0.45rem 1.5rem;
-            position: relative;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .svc-list li:last-child { border-bottom: none; }
-
-        .svc-list li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-        }
-
-        /* Tags */
-        .svc-tag {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-right: 0.4rem;
-            margin-bottom: 0.4rem;
-        }
-
-        /* NL2SQL featured card (amber/flagship variant) */
-        .svc-featured.nl2sql::before {
-            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-        }
-
-        .svc-featured.nl2sql .svc-featured-badge {
-            background: rgba(29, 78, 216, 0.08);
-            border-color: rgba(29, 78, 216, 0.2);
-            color: #3b82f6;
-        }
-
-        .svc-featured.nl2sql h3 span {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .svc-featured.nl2sql .svc-featured-cta {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        }
-
-        .svc-featured.nl2sql .svc-featured-cta:hover {
-            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
-        }
-
-        .svc-featured.nl2sql .svc-feat-item {
-            background: rgba(29, 78, 216, 0.04);
-            border-color: rgba(29, 78, 216, 0.1);
-        }
-
-        .svc-featured.nl2sql .svc-feat-item:hover {
-            background: rgba(29, 78, 216, 0.08);
-            border-color: rgba(29, 78, 216, 0.2);
-        }
-
-        /* RegTech featured card (indigo variant) */
-        .svc-featured.regtech::before {
-            background: linear-gradient(90deg, var(--svc-indigo), var(--svc-cyan));
-        }
-
-        .svc-featured.regtech .svc-featured-badge {
-            background: rgba(29, 78, 216, 0.08);
-            border-color: rgba(29, 78, 216, 0.2);
-            color: var(--svc-indigo);
-        }
-
-        .svc-featured.regtech h3 span {
-            background: linear-gradient(135deg, var(--svc-indigo), var(--svc-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .svc-featured.regtech .svc-featured-cta {
-            background: linear-gradient(135deg, var(--svc-indigo), var(--svc-cyan));
-        }
-
-        .svc-featured.regtech .svc-featured-cta:hover {
-            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
-        }
-
-        .svc-featured.regtech .svc-feat-item {
-            background: rgba(29, 78, 216, 0.04);
-            border-color: rgba(29, 78, 216, 0.1);
-        }
-
-        .svc-featured.regtech .svc-feat-item:hover {
-            background: rgba(29, 78, 216, 0.08);
-            border-color: rgba(29, 78, 216, 0.2);
-        }
-
-        /* AccountIQ featured card */
-        .svc-featured {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: center;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .svc-featured::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            border-radius: 16px 16px 0 0;
-            background: linear-gradient(90deg, #1d4ed8, #ea580c);
-        }
-
-        .svc-featured:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-        }
-
-        .svc-featured-left {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .svc-featured-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.3rem 0.8rem;
-            background: rgba(234, 88, 12, 0.08);
-            border: 1px solid rgba(234, 88, 12, 0.2);
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #1d4ed8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            width: fit-content;
-            margin-bottom: 1rem;
-        }
-
-        .svc-featured-badge img {
-            width: 18px;
-            height: 18px;
-            border-radius: 3px;
-        }
-
-        .svc-featured h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--text-bright);
-            margin-bottom: 0.8rem;
-        }
-
-        .svc-featured h3 span {
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .svc-featured p {
-            color: var(--text-dim);
-            font-size: 0.92rem;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-
-        .svc-featured p strong { color: var(--text); }
-
-        .svc-featured-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.55rem 1.2rem;
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            width: fit-content;
-            margin-top: 0.5rem;
-        }
-
-        .svc-featured-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3);
-        }
-
-        .svc-featured-right {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-        }
-
-        .svc-feat-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.6rem;
-            padding: 0.7rem 0.8rem;
-            background: rgba(234, 88, 12, 0.04);
-            border: 1px solid rgba(234, 88, 12, 0.1);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .svc-feat-item:hover {
-            background: rgba(234, 88, 12, 0.08);
-            border-color: rgba(234, 88, 12, 0.2);
-        }
-
-        .svc-feat-item .fi-icon {
-            font-size: 1.1rem;
-            flex-shrink: 0;
-            margin-top: 0.1rem;
-        }
-
-        .svc-feat-item .fi-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .svc-feat-item .fi-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-bright);
-            margin-bottom: 0.15rem;
-        }
-
-        .svc-feat-item .fi-desc {
-            font-size: 0.72rem;
-            color: var(--text-dim);
-            line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .svc-featured { grid-template-columns: 1fr; padding: 1.5rem; }
-            .svc-featured-right { grid-template-columns: 1fr; }
-            .svc-featured h3 { font-size: 1.3rem; }
-        }
-
-        /* AI Compliance featured card (governance variant) */
-        .svc-featured.ai-compliance::before {
-            background: linear-gradient(90deg, #1e3a8a, #ea580c);
-        }
-
-        .svc-featured.ai-compliance .svc-featured-badge {
-            background: rgba(30, 58, 138, 0.08);
-            border-color: rgba(30, 58, 138, 0.2);
-            color: #1e3a8a;
-        }
-
-        .svc-featured.ai-compliance h3 span {
-            background: linear-gradient(135deg, #1e3a8a, #ea580c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .svc-featured.ai-compliance .svc-featured-cta {
-            background: linear-gradient(135deg, #1e3a8a, #ea580c);
-        }
-
-        .svc-featured.ai-compliance .svc-featured-cta:hover {
-            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
-        }
-
-        .svc-featured.ai-compliance .svc-feat-item {
-            background: rgba(30, 58, 138, 0.04);
-            border-color: rgba(30, 58, 138, 0.1);
-        }
-
-        .svc-featured.ai-compliance .svc-feat-item:hover {
-            background: rgba(30, 58, 138, 0.08);
-            border-color: rgba(30, 58, 138, 0.2);
-        }
-
-        /* Color variants */
-        .svc-card.ai-impl::before { background: linear-gradient(90deg, var(--svc-indigo), var(--svc-cyan)); }
-        .svc-card.ai-impl .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-indigo); }
-        .svc-card.ai-impl .svc-list li::before { background: var(--svc-indigo); }
-        .svc-card.ai-impl .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-indigo); border: 1px solid rgba(29, 78, 216, 0.2); }
-
-        .svc-card.ai-safety::before { background: linear-gradient(90deg, var(--svc-emerald), var(--svc-cyan)); }
-        .svc-card.ai-safety .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-emerald); }
-        .svc-card.ai-safety .svc-list li::before { background: var(--svc-emerald); }
-        .svc-card.ai-safety .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-emerald); border: 1px solid rgba(29, 78, 216, 0.2); }
-
-        .svc-card.support::before { background: linear-gradient(90deg, var(--svc-amber), var(--svc-pink)); }
-        .svc-card.support .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-amber); }
-        .svc-card.support .svc-list li::before { background: var(--svc-amber); }
-        .svc-card.support .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-amber); border: 1px solid rgba(29, 78, 216, 0.2); }
-
-        .svc-card.cloud::before { background: linear-gradient(90deg, var(--svc-cyan), var(--svc-violet)); }
-        .svc-card.cloud .svc-card-icon { background: rgba(29, 78, 216, 0.1); color: var(--svc-cyan); }
-        .svc-card.cloud .svc-list li::before { background: var(--svc-cyan); }
-        .svc-card.cloud .svc-tag { background: rgba(29, 78, 216, 0.08); color: var(--svc-cyan); border: 1px solid rgba(29, 78, 216, 0.2); }
-
-        .svc-card.murex::before { background: linear-gradient(90deg, var(--svc-violet), var(--svc-pink)); }
-        .svc-card.murex .svc-card-icon { background: rgba(30, 58, 138, 0.1); color: var(--svc-violet); }
-        .svc-card.murex .svc-list li::before { background: var(--svc-violet); }
-        .svc-card.murex .svc-tag { background: rgba(30, 58, 138, 0.08); color: var(--svc-violet); border: 1px solid rgba(30, 58, 138, 0.2); }
-
-        /* Grids */
-        .svc-grid-top {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .svc-grid-bottom {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        /* CTA */
-        .svc-cta {
-            text-align: center;
-            padding: 3rem;
-            background: linear-gradient(135deg, rgba(29, 78, 216, 0.06), rgba(29, 78, 216, 0.06));
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            margin: 3rem 0;
-        }
-
-        .svc-cta h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 2rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            color: var(--svc-indigo);
-        }
-
-        .svc-cta p {
-            font-size: 1.05rem;
-            color: var(--text-dim);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Full-width sections with comfortable padding */
-        .svc-section {
-            padding: 2rem 4rem;
-            max-width: 100%;
-        }
-
-        .svc-cta {
-            margin-left: 4rem;
-            margin-right: 4rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .svc-grid-bottom { grid-template-columns: repeat(2, 1fr); }
-            .svc-page-header h1 { font-size: 2.5rem; }
-        }
-
-        @media (max-width: 768px) {
-            .svc-grid-top,
-            .svc-grid-bottom { grid-template-columns: 1fr; }
-            .svc-hero { min-height: auto; padding: 120px 0 50px; }
-            .svc-hero-inner h1 { font-size: 2.2rem; }
-            .svc-hero-desc { font-size: 0.95rem; }
-            .svc-hero-pills { gap: 8px; }
-            .svc-hero-pill { padding: 7px 14px; font-size: 0.76rem; }
-            .svc-page-header h1 { font-size: 2rem; }
-            .svc-cta { padding: 2rem 1.5rem; }
-            .svc-cta h3 { font-size: 1.6rem; }
-            .svc-section { padding: 1.5rem 1rem; }
-            .svc-cta { margin-left: 1rem; margin-right: 1rem; }
-        }
-    @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-.nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+  :root {
+    --blue-50:#EFF6FF; --blue-100:#DBEAFE; --blue-200:#BFDBFE;
+    --blue-400:#60A5FA; --blue-500:#3B82F6; --blue-600:#2563EB;
+    --blue-700:#1D4ED8; --blue-800:#1E3A8A; --blue-900:#0F1F4A; --blue-950:#0A1633;
+    --orange-50:#FFF7ED; --orange-100:#FFEDD5; --orange-300:#FDBA74;
+    --orange-400:#FB923C; --orange-500:#F97316; --orange-600:#EA580C; --orange-700:#C2410C;
+    --ink:#0B1220; --ink-2:#1E293B; --ink-3:#475569; --muted:#64748B;
+    --line:#E2E8F0; --line-2:#F1F5F9; --bg:#FFFFFF; --bg-2:#F8FAFC;
+    --r-sm:8px; --r:14px; --r-lg:20px; --r-xl:28px;
+    --shadow-sm:0 1px 2px rgba(15,23,42,.04),0 1px 3px rgba(15,23,42,.06);
+    --shadow:0 4px 12px rgba(15,23,42,.06),0 1px 3px rgba(15,23,42,.04);
+    --shadow-lg:0 24px 48px -12px rgba(15,23,42,.18),0 8px 16px -8px rgba(15,23,42,.10);
+    --sans:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+    --display:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px;}
+  h1,h2,h3,h4{font-family:var(--display);letter-spacing:-0.02em;margin:0;font-weight:700;color:inherit;}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-600);padding:6px 12px;border-radius:999px;background:var(--orange-50);border:1px solid var(--orange-100);}
+  .eyebrow.blue{color:var(--blue-700);background:var(--blue-50);border-color:var(--blue-100);}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+
+  /* BUTTONS */
+  .svc-btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-family:var(--sans);font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all 180ms ease;border:1px solid transparent;white-space:nowrap;text-decoration:none;}
+  .svc-btn-primary{background:linear-gradient(180deg,var(--orange-500),var(--orange-600));color:#fff;box-shadow:0 6px 16px -4px rgba(234,88,12,.4),inset 0 1px 0 rgba(255,255,255,.2);}
+  .svc-btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 24px -6px rgba(234,88,12,.5);}
+  .svc-btn-blue{background:var(--blue-700);color:#fff;box-shadow:0 6px 16px -4px rgba(29,78,216,.35);}
+  .svc-btn-blue:hover{background:var(--blue-800);transform:translateY(-1px);}
+  .svc-btn-ghost{background:#fff;color:var(--ink);border-color:var(--line);}
+  .svc-btn-ghost:hover{border-color:var(--blue-700);color:var(--blue-700);}
+  .svc-btn-on-dark{background:rgba(0,0,0,.06);color:#0A0E1A;border-color:rgba(0,0,0,.15);backdrop-filter:blur(8px);}
+  .svc-btn-on-dark:hover{background:rgba(0,0,0,.1);border-color:rgba(0,0,0,.25);}
+  .svc-btn .arr{display:inline-block;transition:transform 150ms;}
+  .svc-btn:hover .arr{transform:translateX(3px);}
+
+  /* HERO */
+  .svc-hero2{position:relative;background:radial-gradient(ellipse 90% 60% at 78% 0%,rgba(249,115,22,.08),transparent 60%),radial-gradient(ellipse 70% 80% at 0% 30%,rgba(59,130,246,.12),transparent 60%),linear-gradient(180deg,#FAFAF7 0%,#F5F3EE 50%,#F0EDE6 100%);color:var(--ink);overflow:hidden;padding:140px 0 40px;}
+  .svc-hero2::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black,transparent 80%);-webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black,transparent 80%);pointer-events:none;}
+  .svc-hero2-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center;text-align:center;}
+  .svc-hero2-pill{display:inline-flex;align-items:center;gap:10px;padding:6px 6px 6px 16px;font-size:13px;color:var(--blue-700);background:var(--blue-50);border:1px solid var(--blue-100);border-radius:999px;backdrop-filter:blur(8px);margin-bottom:28px;margin-left:auto;margin-right:auto;}
+  .svc-hero2-pill .badge{background:var(--orange-500);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:999px;text-transform:uppercase;}
+  .svc-hero2 h1{font-family:'DM Serif Display',Georgia,serif;font-size:3.4rem;font-weight:400;color:#000 !important;-webkit-text-fill-color:#000 !important;background:none !important;-webkit-background-clip:unset !important;background-clip:unset !important;animation:none !important;line-height:1.12;letter-spacing:-0.5px;}
+  .svc-hero2 h1 .accent{color:#F97316 !important;-webkit-text-fill-color:#F97316 !important;font-style:normal;}
+  .svc-hero2 h1 .gradient-blue{color:#1d4ed8 !important;-webkit-text-fill-color:#1d4ed8 !important;font-style:normal;}
+  .svc-hero2-sub{font-size:19px;line-height:1.6;color:var(--ink-3);margin:28px auto 36px;max-width:560px;}
+  .svc-hero2-cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:8px;}
+  .svc-hero2-pills-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;justify-content:center;}
+  .svc-hero2-pills-row .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;font-size:12.5px;font-weight:500;color:var(--ink-2);backdrop-filter:blur(8px);}
+  .svc-hero2-pills-row .chip .d{width:6px;height:6px;border-radius:50%;background:var(--orange-500);}
+
+  /* HERO ART — Services Catalogue panel */
+  .svc-hero2-art{position:relative;width:100%;max-width:560px;justify-self:center;}
+  .svc-panel{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 32px 60px -16px rgba(15,23,42,.18),0 12px 24px -12px rgba(15,23,42,.08);}
+  .svc-panel::before{content:"";position:absolute;left:18px;right:18px;top:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--orange-500),transparent);}
+  .svc-panel-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line-2);margin-bottom:14px;}
+  .svc-panel-head .label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.04em;}
+  .svc-panel-head .label .live{width:8px;height:8px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px rgba(34,197,94,.6);animation:pulse 1.6s infinite;}
+  .svc-panel-head .meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);}
+  .svc-rows{display:flex;flex-direction:column;gap:8px;}
+  .svc-row{display:grid;grid-template-columns:32px 1fr auto;gap:14px;align-items:center;padding:12px 14px;background:linear-gradient(180deg,#FAFBFE,#F4F6FB);border:1px solid var(--line-2);border-radius:12px;transition:all 200ms;cursor:default;}
+  .svc-row:hover{border-color:var(--blue-200);transform:translateX(2px);background:linear-gradient(180deg,#fff,#F8FAFF);}
+  .svc-row .num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--blue-700);background:var(--blue-50);border-radius:6px;height:28px;width:28px;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
+  .svc-row .info .t{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.2;}
+  .svc-row .info .d{font-size:11px;color:var(--muted);margin-top:3px;font-family:var(--mono);}
+  .svc-row .stat{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--ink-2);background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:999px;}
+  .svc-row .stat .d2{width:6px;height:6px;border-radius:50%;background:#22C55E;}
+  .svc-row .stat .d2.amber{background:var(--orange-500);}
+  .svc-row.featured{background:linear-gradient(135deg,var(--blue-700),var(--blue-900));border-color:var(--blue-800);color:#fff;box-shadow:0 8px 24px -8px rgba(29,78,216,.4);}
+  .svc-row.featured .num{background:rgba(255,255,255,.18);color:#fff;}
+  .svc-row.featured .info .t{color:#fff;}
+  .svc-row.featured .info .d{color:#BFDBFE;}
+  .svc-row.featured .stat{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff;}
+  .svc-panel-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;margin-top:14px;border-top:1px solid var(--line-2);font-size:11px;color:var(--muted);font-family:var(--mono);}
+  .svc-panel-foot .ago{display:inline-flex;align-items:center;gap:6px;}
+  .svc-panel-foot .ago::before{content:"";width:6px;height:6px;border-radius:50%;background:#22C55E;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+  /* HERO STATS bar */
+  .svc-stats-bar{position:relative;z-index:1;margin-top:40px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;grid-template-columns:repeat(4,1fr);box-shadow:var(--shadow);}
+  .svc-stats-bar .cell{padding:0 24px;border-right:1px solid var(--line);}
+  .svc-stats-bar .cell:last-child{border-right:0;}
+  .svc-stats-bar .snum{font-size:36px;font-weight:800;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
+  .svc-stats-bar .snum sup{color:var(--orange-500);-webkit-text-fill-color:var(--orange-500);font-size:18px;vertical-align:super;margin-left:2px;}
+  .svc-stats-bar .lab{color:var(--muted);font-size:13px;margin-top:8px;}
+
+  /* SECTION SHELL */
+  .svc-section2{padding:48px 0;}
+  .svc-section-head{max-width:760px;margin-bottom:36px;}
+  .svc-section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .svc-section-head h2{margin-top:18px;font-size:clamp(32px,3.4vw,46px);line-height:1.1;font-weight:700;}
+  .svc-section-head h2 .grad{color:#1d4ed8;}
+  .svc-section-head .lede{font-size:18px;color:var(--ink-3);margin-top:16px;line-height:1.65;}
+
+  /* CAPABILITIES — master/detail tabs */
+  .svc-shell{display:grid;grid-template-columns:380px 1fr;gap:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#fff;box-shadow:var(--shadow);min-height:560px;}
+  .svc-rail{background:linear-gradient(180deg,#FAFBFE,#F4F6FB);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:6px;}
+  .svc-tab{display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:center;padding:16px 16px;border-radius:14px;cursor:pointer;border:1px solid transparent;background:transparent;text-align:left;font-family:inherit;transition:all 200ms;position:relative;}
+  .svc-tab:hover{background:#fff;border-color:var(--line);}
+  .svc-tab .n{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--blue-700);background:var(--blue-50);border-radius:8px;height:32px;width:32px;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
+  .svc-tab .nm{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.25;}
+  .svc-tab .kk{display:block;font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-top:4px;letter-spacing:.04em;}
+  .svc-tab .chev{font-size:14px;color:var(--muted);opacity:0;transition:all 180ms;}
+  .svc-tab:hover .chev{opacity:1;}
+  .svc-tab[aria-selected="true"]{background:linear-gradient(135deg,var(--blue-700),var(--blue-900));border-color:var(--blue-800);box-shadow:0 8px 20px -8px rgba(29,78,216,.5);}
+  .svc-tab[aria-selected="true"] .n{background:rgba(255,255,255,.18);color:#fff;}
+  .svc-tab[aria-selected="true"] .nm{color:#fff;}
+  .svc-tab[aria-selected="true"] .kk{color:#BFDBFE;}
+  .svc-tab[aria-selected="true"] .chev{opacity:1;color:var(--orange-400);transform:translateX(2px);}
+  .svc-rail-foot{margin-top:auto;padding:14px 16px 6px;border-top:1px solid var(--line);font-size:11px;font-family:var(--mono);color:var(--muted);display:flex;justify-content:space-between;}
+  .svc-rail-foot .live{display:inline-flex;align-items:center;gap:6px;}
+  .svc-rail-foot .live::before{content:"";width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 6px rgba(34,197,94,.6);}
+  .svc-detail{padding:48px 56px;position:relative;display:none;}
+  .svc-detail[data-active="true"]{display:block;animation:svcFade 360ms ease;}
+  @keyframes svcFade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .svc-detail .crumb{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:24px;letter-spacing:.04em;}
+  .svc-detail .crumb .idx{color:var(--orange-600);font-weight:700;}
+  .svc-detail .crumb .sep{color:var(--line);}
+  .svc-detail h3{font-family:'DM Serif Display',Georgia,serif;font-size:42px;font-weight:400;color:var(--ink);line-height:1.1;letter-spacing:-1px;margin-bottom:18px;max-width:600px;}
+  .svc-detail h3 em{font-style:italic;color:var(--orange-600);}
+  .svc-detail .lede{font-size:16.5px;color:var(--ink-3);line-height:1.65;margin-bottom:36px;max-width:620px;}
+  .svc-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:32px;max-width:680px;}
+  .svc-feat2{padding:18px 20px;background:linear-gradient(180deg,#FAFBFE,#F4F6FB);border:1px solid var(--line-2);border-radius:14px;display:flex;align-items:flex-start;gap:12px;}
+  .svc-feat2 .ic{width:32px;height:32px;border-radius:8px;background:#fff;border:1px solid var(--blue-100);display:flex;align-items:center;justify-content:center;color:var(--blue-700);font-family:var(--mono);font-size:12px;font-weight:700;flex-shrink:0;}
+  .svc-feat2 .ft{font-size:13.5px;color:var(--ink);font-weight:600;line-height:1.45;}
+  .svc-feat2 .fd{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45;}
+  .svc-meta-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:24px;border-top:1px solid var(--line-2);max-width:680px;flex-wrap:wrap;}
+  .svc-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .svc-tags .tg{font-size:10.5px;font-weight:600;letter-spacing:.04em;padding:5px 11px;border-radius:999px;background:var(--blue-50);color:var(--blue-700);text-transform:uppercase;}
+  .svc-tags .tg.o{background:var(--orange-50);color:var(--orange-700);}
+  .svc-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue-700);text-decoration:none;}
+  .svc-link .arr{transition:transform 180ms;}
+  .svc-link:hover .arr{transform:translateX(3px);}
+  .svc-stamp{position:absolute;top:32px;right:40px;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);}
+  .svc-stamp .ok{color:#16A34A;font-weight:700;}
+  @media (max-width:980px){.svc-shell{grid-template-columns:1fr;}.svc-rail{border-right:0;border-bottom:1px solid var(--line);}.svc-detail{padding:36px 28px;}.svc-detail h3{font-size:32px;}}
+
+  /* PRODUCTS / Flagship row */
+  .svc-products{background:var(--bg-2);position:relative;overflow:hidden;}
+  .svc-products::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(59,130,246,.06),transparent 40%),radial-gradient(circle at 80% 70%,rgba(249,115,22,.06),transparent 40%);pointer-events:none;}
+  .svc-products-inner{position:relative;z-index:1;}
+
+  .product-row{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:36px 0;border-bottom:1px solid var(--line);}
+  .product-row:last-child{border-bottom:0;}
+  .product-row.reverse{grid-template-columns:1fr 1.05fr;}
+  .product-row.reverse .product-vis{order:-1;}
+  .product-info .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:linear-gradient(90deg,var(--orange-500),var(--orange-600));color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;}
+  .product-info .badge.blue{background:linear-gradient(90deg,var(--blue-600),var(--blue-800));}
+  .product-info .badge.violet{background:linear-gradient(90deg,#7C3AED,var(--blue-800));}
+  .product-info .badge.green{background:linear-gradient(90deg,#16A34A,#0891B2);}
+  .product-info h3{font-family:'DM Serif Display',Georgia,serif;font-size:34px;font-weight:400;line-height:1.15;margin-bottom:16px;letter-spacing:-0.5px;}
+  .product-info h3 em{font-style:normal;color:var(--blue-700);}
+  .product-info p{font-size:16px;color:var(--ink-3);line-height:1.65;margin:0 0 18px;max-width:520px;}
+  .product-info p strong{color:var(--ink);font-weight:600;}
+  .product-info .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;}
+
+  .product-feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;max-width:560px;}
+  .pfeat{padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;transition:all 200ms;}
+  .pfeat:hover{border-color:var(--blue-200);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .pfeat .pf-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .pfeat .pf-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+  /* Product visual mock */
+  .product-vis{position:relative;aspect-ratio:1/0.86;background:linear-gradient(160deg,#0F1F4A,#061130);border-radius:24px;padding:24px;box-shadow:0 32px 60px -12px rgba(15,23,42,.4),0 12px 24px -8px rgba(15,23,42,.2);color:#fff;overflow:hidden;border:1px solid rgba(255,255,255,.1);}
+  .product-vis::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;}
+  .pv-head{position:relative;display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .pv-head .title{font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:10px;}
+  .pv-head .dot{width:8px;height:8px;border-radius:50%;background:#4ADE80;box-shadow:0 0 8px #4ADE80;}
+  .pv-head .meta{font-size:11px;color:#94A3B8;font-family:var(--mono);}
+  .pv-body{position:relative;display:flex;flex-direction:column;gap:12px;}
+  .pv-prompt{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;font-size:13px;color:#fff;}
+  .pv-prompt::before{content:"\25B8";color:var(--orange-400);margin-right:8px;}
+  .pv-sql{background:#050B1F;border:1px solid rgba(96,165,250,.2);border-radius:12px;padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.7;overflow:hidden;}
+  .pv-sql .kw{color:#60A5FA;} .pv-sql .str{color:#FB923C;} .pv-sql .com{color:#64748B;} .pv-sql .fn{color:#A78BFA;}
+  .pv-result{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;}
+  .pv-result .head{display:grid;grid-template-columns:2fr 1fr 1fr;padding:8px 14px;font-size:10px;color:#94A3B8;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);}
+  .pv-result .row{display:grid;grid-template-columns:2fr 1fr 1fr;padding:8px 14px;font-size:12px;color:#E2E8F0;border-bottom:1px solid rgba(255,255,255,.04);align-items:center;}
+  .pv-result .row:last-child{border-bottom:0;}
+  .pv-result .row b{color:#fff;}
+  .pv-result .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;}
+  .pv-result .pill.up{background:rgba(74,222,128,.15);color:#4ADE80;}
+  .pv-result .pill.down{background:rgba(249,115,22,.15);color:var(--orange-400);}
+  .pv-status{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:#94A3B8;margin-top:4px;}
+  .pv-status .it{display:inline-flex;align-items:center;gap:6px;}
+  .pv-status .it .dt{width:6px;height:6px;border-radius:50%;background:#4ADE80;}
+
+  /* NL2SQL (default) = deep navy-blue */
+  /* RegTech = deep purple-indigo */
+  .product-vis.regtech{background:linear-gradient(160deg,#2D1B69,#130B3A);border-color:rgba(139,92,246,.2);}
+  .product-vis.regtech .pv-head{border-bottom-color:rgba(139,92,246,.15);}
+  .product-vis.regtech .pv-prompt::before{color:#A78BFA;}
+  .product-vis.regtech .pv-tile{border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.06);}
+  .product-vis.regtech .pv-tile .v small{color:#A78BFA;}
+  .product-vis.regtech .pv-li{border-color:rgba(139,92,246,.12);background:rgba(139,92,246,.04);}
+  .product-vis.regtech .pv-status .dt{background:#A78BFA;}
+  /* AccountIQ = deep teal-emerald */
+  .product-vis.accountiq{background:linear-gradient(160deg,#064E3B,#022C22);border-color:rgba(52,211,153,.2);}
+  .product-vis.accountiq .pv-head{border-bottom-color:rgba(52,211,153,.15);}
+  .product-vis.accountiq .pv-head .dot{background:#34D399;box-shadow:0 0 8px #34D399;}
+  .product-vis.accountiq .pv-prompt::before{color:#34D399;}
+  .product-vis.accountiq .pv-tile{border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.06);}
+  .product-vis.accountiq .pv-tile .v small{color:#34D399;}
+  .product-vis.accountiq .pv-li{border-color:rgba(52,211,153,.12);background:rgba(52,211,153,.04);}
+  .product-vis.accountiq .pv-status .dt{background:#34D399;}
+  /* Compliance = warm dark with orange accents */
+  .product-vis.compliance{background:linear-gradient(160deg,#451A03,#1C0A01);border-color:rgba(251,146,60,.2);}
+  .product-vis.compliance .pv-head{border-bottom-color:rgba(251,146,60,.15);}
+  .product-vis.compliance .pv-head .dot{background:#FB923C;box-shadow:0 0 8px #FB923C;}
+  .product-vis.compliance .pv-prompt::before{color:#FB923C;}
+  .product-vis.compliance .pv-tile{border-color:rgba(251,146,60,.15);background:rgba(251,146,60,.06);}
+  .product-vis.compliance .pv-tile .v small{color:#FB923C;}
+  .product-vis.compliance .pv-li{border-color:rgba(251,146,60,.12);background:rgba(251,146,60,.04);}
+  .product-vis.compliance .pv-status .dt{background:#FB923C;}
+
+  .pv-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .pv-tile{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;}
+  .pv-tile .lbl{font-size:9.5px;color:#94A3B8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .pv-tile .v{font-size:14px;font-weight:700;color:#fff;}
+  .pv-tile .v small{color:#FB923C;font-size:10px;font-weight:500;margin-left:4px;}
+
+  .pv-list{display:flex;flex-direction:column;gap:6px;}
+  .pv-li{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:12px;color:#E2E8F0;}
+  .pv-li .dot{width:6px;height:6px;border-radius:50%;background:#4ADE80;flex-shrink:0;}
+  .pv-li .dot.amber{background:#FBBF24;}
+  .pv-li .dot.blue{background:#60A5FA;}
+  .pv-li .meta{margin-left:auto;font-family:var(--mono);font-size:10px;color:#94A3B8;}
+
+  /* PROCESS */
+  .svc-process{background:#fff;}
+  .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;}
+  .process-grid::before{content:"";position:absolute;left:28px;right:28px;top:26px;height:2px;background:repeating-linear-gradient(90deg,var(--blue-200) 0 6px,transparent 6px 12px);}
+  .step{position:relative;}
+  .step .num-circle{width:56px;height:56px;border-radius:50%;background:#fff;border:2px solid var(--blue-100);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue-700);margin-bottom:22px;position:relative;z-index:1;}
+  .step.active .num-circle{background:linear-gradient(135deg,var(--orange-500),var(--orange-600));border-color:var(--orange-600);color:#fff;box-shadow:0 8px 20px -4px rgba(249,115,22,.4);}
+  .step h3{margin-bottom:10px;font-size:20px;}
+  .step p{font-size:14px;color:var(--ink-3);line-height:1.6;}
+  .step .duration{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--blue-700);padding:3px 10px;border-radius:6px;background:var(--blue-50);}
+
+  /* TRUST PANEL */
+  .svc-trust-panel{background:linear-gradient(160deg,#c8d3e8 0%,#dde4f0 100%);color:#0A0E1A;padding:60px 0;position:relative;overflow:hidden;}
+  .svc-trust-panel::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 60% 80% at 50% 50%,black,transparent 80%);-webkit-mask-image:radial-gradient(ellipse 60% 80% at 50% 50%,black,transparent 80%);}
+  .trust-grid{position:relative;display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center;}
+  .trust-grid h2{color:#0A0E1A;margin-bottom:18px;font-size:clamp(32px,3.4vw,46px);line-height:1.1;font-weight:700;}
+  .trust-grid p{color:#334155;font-size:17px;line-height:1.6;max-width:460px;}
+  .badges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .badge-card{background:rgba(255,255,255,.5);border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:20px 18px;text-align:center;backdrop-filter:blur(12px);transition:all 200ms;}
+  .badge-card:hover{transform:translateY(-3px);border-color:rgba(0,0,0,.15);background:rgba(255,255,255,.7);}
+  .badge-card .ico{width:44px;height:44px;margin:0 auto 10px;border-radius:12px;background:linear-gradient(135deg,var(--blue-600),var(--blue-800));display:flex;align-items:center;justify-content:center;color:#fff;}
+  .badge-card .ico svg{width:22px;height:22px;}
+  .badge-card .name{font-size:13px;font-weight:600;color:#0A0E1A;}
+  .badge-card .meta{font-size:11px;color:#64748B;margin-top:3px;}
+
+  /* CTA BAND */
+  .svc-cta-band{padding:70px 0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(249,115,22,.15),transparent 60%),radial-gradient(ellipse 50% 100% at 0% 50%,rgba(59,130,246,.18),transparent 60%),linear-gradient(160deg,#061130,#0F1F4A);color:#fff;text-align:center;position:relative;overflow:hidden;}
+  .svc-cta-band::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent);}
+  .svc-cta-band-inner{position:relative;max-width:760px;margin:0 auto;}
+  .svc-cta-band h2{font-size:clamp(40px,4.6vw,64px);line-height:1.1;margin-bottom:22px;font-weight:700;}
+  .svc-cta-band h2 .grad{color:#93C5FD;}
+  .svc-cta-band p{font-size:19px;color:#CBD5E1;margin-bottom:36px;}
+  .cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* RESPONSIVE */
+  @media (max-width:1024px){
+    .svc-hero2-grid{grid-template-columns:1fr;gap:48px;text-align:center;}
+    .svc-hero2 h1{font-size:46px;letter-spacing:-1.5px;}
+    .svc-hero2-sub{margin-left:auto;margin-right:auto;}
+    .svc-hero2-pill{margin-left:auto;margin-right:auto;}
+    .svc-hero2-cta-row,.svc-hero2-pills-row{justify-content:center;}
+    .svc-hero2-art{max-width:460px;margin:0 auto;}
+    .svc-stats-bar{grid-template-columns:repeat(2,1fr);gap:20px 0;text-align:center;}
+    .svc-stats-bar .cell:nth-child(2){border-right:0;}
+    .product-row,.product-row.reverse{grid-template-columns:1fr;gap:40px;}
+    .product-row.reverse .product-vis{order:0;}
+    .process-grid{grid-template-columns:repeat(2,1fr);}
+    .process-grid::before{display:none;}
+    .trust-grid{grid-template-columns:1fr;gap:40px;}
+  }
+  @media (max-width:640px){
+    .wrap{padding-left:20px;padding-right:20px;}
+    .svc-section2{padding:36px 0;}
+    .svc-hero2 h1{font-size:36px;}
+    .process-grid{grid-template-columns:1fr;}
+    .svc-stats-bar{grid-template-columns:1fr;}
+    .svc-stats-bar .cell{border-right:0;border-bottom:1px solid var(--line);padding:16px 0;}
+    .product-feats{grid-template-columns:1fr;}
+  }
+
+  @keyframes blink-star{0%,100%{opacity:1;}50%{opacity:.2;}}
+  .nav-star{display:inline-block;margin-left:3px;font-size:.7rem;animation:blink-star 1.2s ease-in-out infinite;color:#ef4444;vertical-align:middle;}
+
+  /* Nav app icon overrides */
+  .nav-links li[style*="gap"] a[href*="apple.com"],
+  .nav-links li[style*="gap"] a[href*="google.com"] {
+    padding: 0 !important; border-radius: 8px !important;
+  }
+  .nav-links li[style*="gap"] a[href*="apple.com"] {
+    background: #1d4ed8 !important;
+  }
+  .nav-links li[style*="gap"] a[href*="apple.com"]:hover {
+    background: #1e3a8a !important;
+  }
+  .nav-links li[style*="gap"] a[href*="google.com"] {
+    background: white !important;
+  }
+  .nav-links li[style*="gap"] a[href*="google.com"]:hover {
+    background: #f5f5f5 !important;
+  }
 </style>
 </head>
 <body>
@@ -769,7 +454,7 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="services.html" class="active">Services</a></li>
     <li>
-            <span class="projects-highlight" id="mobileProjectsToggle" style="cursor:pointer;display:block;padding:0.5rem 0;font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Projects<span class="nav-star" style="color:#ea580c;">&#9733;</span> <span id="mobileProjectsArrow" style="font-size:0.7rem;opacity:0.5;transition:transform 0.2s;display:inline-block;">&#9662;</span></span>
+            <span class="projects-highlight" id="mobileProjectsToggle" style="cursor:pointer;display:block;padding:0.5rem 0;font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Projects<span class="nav-star" style="color:#ea580c;">&#9733;</span> <span id="mobileProjectsArrow" style="font-size:1.2rem;opacity:1;transition:transform 0.2s;display:inline-block;color:#1d4ed8;margin-left:4px;">&#9660;</span></span>
             <ul class="mobile-projects-sub" id="mobileProjectsSub" style="display:none;list-style:none;padding:0;margin:0.3rem 0 0 0;">
                 <li class="mobile-dropdown-item"><a href="ai-regtech-capabilities.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> RegTech AI Solutions</a></li>
                 <li class="mobile-dropdown-item"><a href="accountiq.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> AccountIQ</a></li>
@@ -789,371 +474,511 @@
     </div>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
-    <!-- Hero: centred editorial layout -->
-    <section class="svc-hero">
-        <div class="svc-hero-bg">
-            <img src="Sustainsys_hero2.png" alt="SustainSys Services">
-            <div class="hero-overlay"></div>
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="svc-hero2">
+  <div class="wrap">
+    <div class="svc-hero2-grid">
+      <div>
+        <div class="svc-hero2-pill">
+          <span class="badge">Services</span>
+          <span>What we build, deploy and run for regulated enterprises</span>
+          <span style="opacity:.6;">&rarr;</span>
         </div>
-        <div class="svc-hero-inner">
-            <div class="svc-hero-eyebrow">What We Offer</div>
-            <h1>AI systems that work <span>in production</span></h1>
-            <p class="svc-hero-desc">We build, deploy, and run AI that actually ships &mdash; real systems handling real data, meeting compliance requirements, and making your teams more effective.</p>
-            <div class="svc-hero-pills">
-                <span class="svc-hero-pill">AI &amp; Machine Learning</span>
-                <span class="svc-hero-pill">Cloud Infrastructure</span>
-                <span class="svc-hero-pill">Capital Markets</span>
-                <span class="svc-hero-pill">Compliance &amp; RegTech</span>
-                <a href="ai-learn.html" class="svc-hero-pill pill-highlight" style="text-decoration:none;">AI Academy</a>
-                <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer" class="svc-hero-appstore"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store"></a>
-            </div>
-            <a href="contact.html" class="svc-hero-cta">Talk to Our Team &rarr;</a>
+
+        <h1>
+          AI systems that work <span class="gradient-blue">in production</span><span class="accent">.</span>
+        </h1>
+
+        <p class="svc-hero2-sub">
+          We design, deploy and run AI that actually ships &mdash; real systems handling real data, meeting compliance requirements, and making your teams more effective. Built by engineers, governed by design.
+        </p>
+
+        <div class="svc-hero2-cta-row">
+          <a class="svc-btn svc-btn-primary" href="contact.html">Talk to our team<span class="arr">&rarr;</span></a>
+          <a class="svc-btn svc-btn-ghost" href="#capabilities">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            Explore capabilities
+          </a>
         </div>
-    </section>
 
-        <!-- NL2SQL Analytics Featured -->
-        <section class="svc-section">
-            <div class="svc-featured nl2sql">
-                <div class="svc-featured-left">
-                    <div class="svc-featured-badge">
-                        <img src="nl2sql_logo.svg" alt="NL2SQL"> NL2SQL Analytics &mdash; Flagship
-                    </div>
-                    <h3>Ask Your Database <span>in Plain English</span></h3>
-                    <p>Your analysts shouldn't need to wait for engineering to pull a report. With NL2SQL, anyone on the team can <strong>type a question and get an answer</strong> &mdash; the platform writes the SQL, validates it, and returns results in seconds.</p>
-                    <p>Designed for <strong>banks and regulated industries</strong> where data can't leave your network. Everything runs on-premise with 12-point security guardrails and a full audit trail. No cloud APIs, no data leaks, no surprises.</p>
-                    <a href="nl2sql-sales-deck.html" class="svc-featured-cta">Explore NL2SQL Platform &rsaquo;</a>
-                </div>
-                <div class="svc-featured-right">
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Natural Language Querying</span>
-                            <span class="fi-desc">Ask in plain English &mdash; JOINs, aggregations &amp; GROUP BY handled automatically</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">RAG-Powered Context</span>
-                            <span class="fi-desc">4 FAISS indexes for schema, glossary, relationships &amp; policy-aware retrieval</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">12-Point Guardrails</span>
-                            <span class="fi-desc">SELECT-only enforcement, schema whitelisting, injection prevention &amp; complexity limits</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Self-Healing Queries</span>
-                            <span class="fi-desc">Auto-corrects failed SQL via LLM feedback loop &mdash; 100% success with retry</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Multi-Format Output</span>
-                            <span class="fi-desc">Text tables, timestamped CSV exports &amp; styled HTML reports with metadata</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Full Audit Trail</span>
-                            <span class="fi-desc">Every query logged: user, SQL, validation result, execution status &amp; latency</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="svc-hero2-pills-row">
+          <span class="chip"><span class="d"></span>AI &amp; Machine Learning</span>
+          <span class="chip"><span class="d"></span>Cloud Infrastructure</span>
+          <span class="chip"><span class="d"></span>Capital Markets</span>
+          <span class="chip"><span class="d"></span>Compliance &amp; RegTech</span>
+          <span class="chip"><span class="d"></span>Data Engineering</span>
+          <span class="chip"><span class="d"></span>AI Safety &amp; Governance</span>
+        </div>
+      </div>
+
+      <!-- HERO ART: services catalogue panel -->
+      <div class="svc-hero2-art" aria-hidden="true">
+        <div class="svc-panel">
+          <div class="svc-panel-head">
+            <div class="label"><span class="live"></span>SERVICES CATALOGUE &middot; LIVE</div>
+            <div class="meta">env &middot; sustainsys.uk</div>
+          </div>
+          <div class="svc-rows">
+            <div class="svc-row featured">
+              <div class="num">01</div>
+              <div class="info"><div class="t">AI Implementations</div><div class="d">RAG &middot; agents &middot; fine-tuning</div></div>
+              <div class="stat"><span class="d2"></span>14 active</div>
             </div>
-        </section>
-
-        <!-- RegTech AI Solutions Featured -->
-        <section class="svc-section">
-            <div class="svc-featured regtech">
-                <div class="svc-featured-left">
-                    <div class="svc-featured-badge">
-                        <img src="logo_only.png" alt="SustainSys"> RegTech AI Solutions &mdash; New
-                    </div>
-                    <h3>Know What Changed <span>Before the Regulator Does</span></h3>
-                    <p>If your compliance team is still tracking regulatory changes in spreadsheets, this is for them. Our RegTech platform monitors <strong>40+ regulatory sources across 11 jurisdictions</strong> and tells you exactly which EMIR, MiFIR, or CFTC fields are affected &mdash; with citations back to the source document.</p>
-                    <p>Built for the people who actually file the reports. Not a research tool that generates vague summaries &mdash; a <strong>practical system that maps changes to your specific reporting fields</strong> and flags what needs action.</p>
-                    <a href="ai-regtech-capabilities.html" class="svc-featured-cta">Explore RegTech AI &rsaquo;</a>
-                </div>
-                <div class="svc-featured-right">
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Frontier LLM Models</span>
-                            <span class="fi-desc">Multi-model architecture interprets regulatory docs &amp; generates implementation guidance</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">RAG + CAG Pipeline</span>
-                            <span class="fi-desc">Every response grounded in actual regulatory source documents with full citations</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Regulatory Knowledge Graph</span>
-                            <span class="fi-desc">Structured relationships across regimes, fields, validation rules &amp; ISO standards</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Regime-Specific AI Agents</span>
-                            <span class="fi-desc">Dedicated agents for EU EMIR, UK EMIR, CFTC, MiFIR, SFTR, Basel III &amp; APAC</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Field-Level Impact Intelligence</span>
-                            <span class="fi-desc">Canonical field mapping, cross-regime comparison &amp; regulatory impact scoring</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Change Monitoring</span>
-                            <span class="fi-desc">Continuous tracking of 40+ regulatory sources with automated impact alerts</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="svc-row">
+              <div class="num">02</div>
+              <div class="info"><div class="t">AI Safety &amp; Security</div><div class="d">EU AI Act &middot; guardrails</div></div>
+              <div class="stat"><span class="d2"></span>audited</div>
             </div>
-        </section>
-
-        <!-- AccountIQ Featured -->
-        <section class="svc-section">
-            <div class="svc-featured">
-                <div class="svc-featured-left">
-                    <div class="svc-featured-badge">
-                        <img src="logo_only.png" alt="SustainSys"> AccountIQ &mdash; New Product
-                    </div>
-                    <h3>Your Accounts, <span>On Your Machine</span></h3>
-                    <p>AccountIQ is an AI accounting assistant that runs <strong>entirely on your device</strong>. Your invoices, bank statements, and tax records never leave your computer &mdash; not to a cloud server, not to an API, nowhere. That's not a feature, it's the whole point.</p>
-                    <p>It handles the work that eats up your week: <strong>VAT returns, bank reconciliation, year-end packs for your accountant</strong>. Upload your documents, ask questions in plain English, and get answers with sources. Built specifically for UK businesses and their accountants.</p>
-                    <a href="accountiq.html" class="svc-featured-cta">Explore AccountIQ &rsaquo;</a>
-                </div>
-                <div class="svc-featured-right">
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Ask Documents</span>
-                            <span class="fi-desc">Natural language search across invoices, receipts &amp; bank statements with cited answers</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">VAT Filing</span>
-                            <span class="fi-desc">Quarterly VAT return preparation with input/output tax identification &amp; HMRC-ready output</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Month-End Reconciliation</span>
-                            <span class="fi-desc">Cross-reference bank statements with receipts to surface mismatches automatically</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Year-End &amp; Corp Tax</span>
-                            <span class="fi-desc">Compile CT600 packs with disallowed expenses, director costs &amp; P&amp;L summaries</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">Accountant Pack</span>
-                            <span class="fi-desc">Track outstanding requests, identify missing documents &amp; draft accurate responses</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        
-                        <div class="fi-text">
-                            <span class="fi-title">100% On-Device</span>
-                            <span class="fi-desc">Local LLM via Ollama &mdash; no cloud APIs, no data leaves your machine</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="svc-row">
+              <div class="num">03</div>
+              <div class="info"><div class="t">Support &amp; MLOps</div><div class="d">24/7 &middot; drift &middot; CI/CD</div></div>
+              <div class="stat"><span class="d2"></span>SLA 99.9</div>
             </div>
-        </section>
-
-        <!-- AI Regulatory Compliance & Governance Featured -->
-        <section class="svc-section">
-            <div class="svc-featured ai-compliance">
-                <div class="svc-featured-left">
-                    <div class="svc-featured-badge">
-                        <img src="logo_only.png" alt="SustainSys"> AI Compliance &amp; Governance &mdash; New
-                    </div>
-                    <h3>AI Systems That Are <span>Regulator-Ready</span></h3>
-                    <p>We provide end-to-end regulatory compliance support for AI projects, helping organisations assess legal obligations, implement governance controls, and maintain production-ready safeguards across the AI lifecycle. From <strong>regulatory impact assessments</strong> to ongoing monitoring, we turn compliance uncertainty into a clear roadmap.</p>
-                    <p>Aligned with <strong>EU AI Act, ISO/IEC 42001, and NIST AI RMF</strong> &mdash; we ensure your AI systems are designed for compliance and operated with the guardrails needed for regulatory and reputational risk reduction.</p>
-                    <a href="ai-compliance-governance.html" class="svc-featured-cta">Explore AI Compliance Services &rsaquo;</a>
-                </div>
-                <div class="svc-featured-right">
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Regulatory Impact Assessment</span>
-                            <span class="fi-desc">Identify legal, standards &amp; governance obligations early in the AI lifecycle</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Framework Gap Analysis</span>
-                            <span class="fi-desc">Structured assessments against EU AI Act, ISO 42001 &amp; NIST AI RMF</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Governance &amp; Policy Design</span>
-                            <span class="fi-desc">AI governance frameworks, risk classification &amp; organisational policy drafting</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Production Safeguards</span>
-                            <span class="fi-desc">Monitoring, logging, incident response, escalation paths &amp; evidence retention</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Bias &amp; Fairness Testing</span>
-                            <span class="fi-desc">Model validation, discriminatory outcome testing &amp; documented remediation</span>
-                        </div>
-                    </div>
-                    <div class="svc-feat-item">
-                        <div class="fi-text">
-                            <span class="fi-title">Audit Readiness</span>
-                            <span class="fi-desc">Evidence packs, technical documentation &amp; regulator response support</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="svc-row">
+              <div class="num">04</div>
+              <div class="info"><div class="t">Cloud Transformation</div><div class="d">AWS &middot; Azure &middot; GCP</div></div>
+              <div class="stat"><span class="d2 amber"></span>30% saved</div>
             </div>
-        </section>
-
-        <!-- Services -->
-        <section class="svc-section">
-
-            <!-- Row 1: Two large cards - AI Implementation & AI Safety -->
-            <div class="svc-grid-top">
-
-                <!-- AI Implementations -->
-                <div class="svc-card ai-impl">
-                    <h3>AI Implementations</h3>
-                    <p>Your team shouldn't need to understand five different LLM APIs. We build the layer that connects them &mdash; RAG pipelines, agentic workflows, and knowledge systems that actually work with your existing data and infrastructure.</p>
-                    <ul class="svc-list">
-                        <li>RAG pipelines that ground answers in your documents</li>
-                        <li>Agentic workflows for multi-step reasoning tasks</li>
-                        <li>Model fine-tuning on your domain-specific data</li>
-                        <li>AI code companions integrated into your IDE</li>
-                        <li>Enterprise search that understands context, not just keywords</li>
-                    </ul>
-                    <div style="margin-top: 1rem;">
-                        <span class="svc-tag">RAG</span>
-                        <span class="svc-tag">LLMs</span>
-                        <span class="svc-tag">Agents</span>
-                        <span class="svc-tag">Fine-tuning</span>
-                    </div>
-                </div>
-
-                <!-- AI Safety & Security -->
-                <div class="svc-card ai-safety">
-                    <h3>AI Safety &amp; Security</h3>
-                    <p>You've deployed an LLM. Now your compliance team wants to know: can it leak PII? Does it hallucinate about regulations? Can someone jailbreak it? We help you answer those questions before they become problems.</p>
-                    <ul class="svc-list">
-                        <li>EU AI Act and GDPR compliance assessments</li>
-                        <li>Prompt injection defence and adversarial testing</li>
-                        <li>Output guardrails and content filtering</li>
-                        <li>Bias auditing and model explainability</li>
-                        <li>AI governance policies your board can actually read</li>
-                    </ul>
-                    <div style="margin-top: 1rem;">
-                        <span class="svc-tag">Compliance</span>
-                        <span class="svc-tag">Privacy</span>
-                        <span class="svc-tag">Guardrails</span>
-                        <span class="svc-tag">EU AI Act</span>
-                    </div>
-                </div>
+            <div class="svc-row">
+              <div class="num">05</div>
+              <div class="info"><div class="t">Murex &amp; Data Eng</div><div class="d">Mx3.1 &middot; pipelines</div></div>
+              <div class="stat"><span class="d2"></span>Tier-1</div>
             </div>
-
-            <!-- Row 2: Three smaller cards -->
-            <div class="svc-grid-bottom">
-
-                <!-- Support Services (MLOps / DevOps / ITIL) -->
-                <div class="svc-card support">
-                    <h3>Support &amp; MLOps</h3>
-                    <p>Deploying a model is the easy part. Keeping it running, monitored, and retraining when the data shifts? That's where most teams struggle. We handle the ops so your data scientists can focus on the science.</p>
-                    <ul class="svc-list">
-                        <li>ML model monitoring and drift detection</li>
-                        <li>CI/CD pipelines for automated retraining</li>
-                        <li>L1/L2/L3 support with ITIL-aligned SLAs</li>
-                        <li>24/7 incident response for production AI</li>
-                        <li>Cost tracking and infrastructure right-sizing</li>
-                    </ul>
-                    <div style="margin-top: 1rem;">
-                        <span class="svc-tag">MLOps</span>
-                        <span class="svc-tag">CI/CD</span>
-                        <span class="svc-tag">ITIL</span>
-                    </div>
-                </div>
-
-                <!-- Cloud Transformations -->
-                <div class="svc-card cloud">
-                    <h3>Cloud Transformations</h3>
-                    <p>Still running workloads on-prem that should have moved to the cloud three years ago? We get it &mdash; migration is risky and time-consuming. We've done it enough times to know where the pitfalls are.</p>
-                    <ul class="svc-list">
-                        <li>Cloud strategy and architecture design</li>
-                        <li>Migration from on-prem to AWS, Azure, or GCP</li>
-                        <li>Infrastructure-as-code with Terraform</li>
-                        <li>Cost optimisation (we've saved clients 30%+ on cloud spend)</li>
-                        <li>Data platform modernisation</li>
-                    </ul>
-                    <div style="margin-top: 1rem;">
-                        <span class="svc-tag">AWS</span>
-                        <span class="svc-tag">Azure</span>
-                        <span class="svc-tag">GCP</span>
-                    </div>
-                </div>
-
-                <!-- Murex & Data Engineering -->
-                <div class="svc-card murex">
-                    <h3>Murex &amp; Data Engineering</h3>
-                    <p>If you're running Murex and thinking about your next upgrade, cloud migration, or getting better analytics out of your trading data &mdash; that's what our capital markets team does. We've been in this space long enough to know what works.</p>
-                    <ul class="svc-list">
-                        <li>Mx2.11 to Mx3.1 upgrades and migration</li>
-                        <li>Platform enhancement and performance tuning</li>
-                        <li>Data pipeline design for trading and risk data</li>
-                        <li>AI-powered analytics and reporting</li>
-                        <li>Cloud migration and infrastructure modernisation</li>
-                    </ul>
-                    <div style="margin-top: 1rem;">
-                        <span class="svc-tag">Murex</span>
-                        <span class="svc-tag">Data Eng</span>
-                        <span class="svc-tag">Cloud</span>
-                        <span class="svc-tag">Analytics</span>
-                    </div>
-                </div>
+            <div class="svc-row">
+              <div class="num">06</div>
+              <div class="info"><div class="t">Compliance &amp; Governance</div><div class="d">ISO 42001 &middot; NIST AI RMF</div></div>
+              <div class="stat"><span class="d2"></span>ready</div>
             </div>
-        </section>
+          </div>
+          <div class="svc-panel-foot">
+            <span class="ago">last sync &middot; 2m ago</span>
+            <span>v3.1 &middot; audit #84217</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <!-- CTA -->
-        <section class="svc-section">
-            <div class="svc-cta">
-                <h3>Let's talk about what you're building</h3>
-                <p>Book a 30-minute call &mdash; no pitch deck, just a conversation about your challenges and whether we can help.</p>
-                <a href="contact.html" class="btn btn-primary">Start a Conversation</a>
-            </div>
-        </section>
+    <!-- HERO STATS -->
+    <div class="svc-stats-bar">
+      <div class="cell"><div class="snum">6<sup>+</sup></div><div class="lab">practice areas</div></div>
+      <div class="cell"><div class="snum">24/7</div><div class="lab">production support</div></div>
+      <div class="cell"><div class="snum">11</div><div class="lab">jurisdictions covered</div></div>
+      <div class="cell"><div class="snum">8<sup>w</sup></div><div class="lab">PoC to production</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CAPABILITIES (services) ===================== -->
+<section class="svc-section2" id="capabilities">
+  <div class="wrap">
+    <div class="svc-section-head">
+      <span class="eyebrow blue"><span class="dot"></span>What we offer</span>
+      <h2>End-to-end AI capabilities, <span class="grad">delivered as a partnership</span>.</h2>
+      <p class="lede">From applied AI implementation to production operations, safety governance, cloud transformation and capital markets engineering &mdash; six practice areas, one continuous engineering operation.</p>
+    </div>
+
+    <div class="svc-shell" id="svcShell">
+      <!-- LEFT RAIL: 6 service tabs -->
+      <div class="svc-rail" role="tablist" aria-label="Services">
+        <button class="svc-tab" role="tab" aria-selected="true" data-svc="01"><span class="n">01</span><span><span class="nm">AI Implementations</span><span class="kk">FLAGSHIP &middot; RAG &middot; AGENTS</span></span><span class="chev">&rarr;</span></button>
+        <button class="svc-tab" role="tab" aria-selected="false" data-svc="02"><span class="n">02</span><span><span class="nm">AI Safety &amp; Security</span><span class="kk">GOVERNANCE</span></span><span class="chev">&rarr;</span></button>
+        <button class="svc-tab" role="tab" aria-selected="false" data-svc="03"><span class="n">03</span><span><span class="nm">Support &amp; MLOps</span><span class="kk">OPERATIONS &middot; 24/7</span></span><span class="chev">&rarr;</span></button>
+        <button class="svc-tab" role="tab" aria-selected="false" data-svc="04"><span class="n">04</span><span><span class="nm">Cloud Transformation</span><span class="kk">INFRASTRUCTURE</span></span><span class="chev">&rarr;</span></button>
+        <button class="svc-tab" role="tab" aria-selected="false" data-svc="05"><span class="n">05</span><span><span class="nm">Murex &amp; Data Eng</span><span class="kk">CAPITAL MARKETS</span></span><span class="chev">&rarr;</span></button>
+        <button class="svc-tab" role="tab" aria-selected="false" data-svc="06"><span class="n">06</span><span><span class="nm">Compliance &amp; Governance</span><span class="kk">REGULATOR-READY</span></span><span class="chev">&rarr;</span></button>
+        <div class="svc-rail-foot"><span class="live">6 PRACTICES &middot; LIVE</span><span>v3.1</span></div>
+      </div>
+
+      <!-- RIGHT DETAIL PANELS -->
+      <div class="svc-detail" data-svc="01" data-active="true" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>FLAGSHIP PRACTICE</span></div>
+        <div class="crumb"><span class="idx">01</span><span class="sep">/</span><span>FLAGSHIP PRACTICE</span></div>
+        <h3>AI <em>Implementations</em> that work with your stack.</h3>
+        <p class="lede">Your team shouldn't need to understand five different LLM APIs. We build the layer that connects them &mdash; RAG pipelines, agentic workflows and knowledge systems that work with your existing data and infrastructure.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">R</div><div><div class="ft">RAG pipelines</div><div class="fd">Grounded in your documents and schema</div></div></div>
+          <div class="svc-feat2"><div class="ic">A</div><div><div class="ft">Agentic workflows</div><div class="fd">Multi-step reasoning &amp; tool use</div></div></div>
+          <div class="svc-feat2"><div class="ic">F</div><div><div class="ft">Domain fine-tuning</div><div class="fd">Models tuned on your private data</div></div></div>
+          <div class="svc-feat2"><div class="ic">S</div><div><div class="ft">Enterprise search</div><div class="fd">Context-aware, not keyword-matching</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg">RAG</span><span class="tg">LLMs</span><span class="tg">Agents</span><span class="tg">Fine-tuning</span><span class="tg">Vector DB</span></div>
+          <a class="svc-link" href="#products">See products built on this <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="svc-detail" data-svc="02" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>EU AI ACT &middot; GDPR</span></div>
+        <div class="crumb"><span class="idx">02</span><span class="sep">/</span><span>GOVERNANCE</span></div>
+        <h3>AI Safety &amp; <em>Security</em> for production systems.</h3>
+        <p class="lede">You've deployed an LLM. Now your compliance team wants to know: can it leak PII? Can someone jailbreak it? We answer those questions before they become problems.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">&#9878;</div><div><div class="ft">EU AI Act &amp; GDPR</div><div class="fd">Compliance assessments &amp; remediation plans</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9876;</div><div><div class="ft">Prompt injection defence</div><div class="fd">Adversarial testing &amp; red-teaming</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9940;</div><div><div class="ft">Output guardrails</div><div class="fd">PII redaction, allowlists, content filters</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9878;</div><div><div class="ft">Bias auditing</div><div class="fd">Fairness metrics across user cohorts</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg o">Compliance</span><span class="tg o">Privacy</span><span class="tg o">EU AI Act</span><span class="tg o">GDPR</span></div>
+          <a class="svc-link" href="#trust">View certifications <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="svc-detail" data-svc="03" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>SLA &middot; 99.9%</span></div>
+        <div class="crumb"><span class="idx">03</span><span class="sep">/</span><span>OPERATIONS &middot; 24/7</span></div>
+        <h3>Support &amp; <em>MLOps</em> for models that stay healthy.</h3>
+        <p class="lede">Deploying a model is the easy part. Keeping it running, monitored, and retraining when the data shifts? That's where most teams struggle. We handle the ops.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">&#8635;</div><div><div class="ft">Drift detection</div><div class="fd">Auto-retraining when data shifts</div></div></div>
+          <div class="svc-feat2"><div class="ic">L</div><div><div class="ft">L1 / L2 / L3 SLAs</div><div class="fd">ITIL-aligned, full incident lifecycle</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9889;</div><div><div class="ft">24/7 response</div><div class="fd">Production AI on-call rota</div></div></div>
+          <div class="svc-feat2"><div class="ic">Q</div><div><div class="ft">Quarterly reviews</div><div class="fd">Performance, drift &amp; cost reports</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg">MLOps</span><span class="tg">CI/CD</span><span class="tg">ITIL</span><span class="tg">SRE</span></div>
+          <a class="svc-link" href="contact.html">Talk to ops team <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="svc-detail" data-svc="04" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>30%+ AVG SAVINGS</span></div>
+        <div class="crumb"><span class="idx">04</span><span class="sep">/</span><span>INFRASTRUCTURE</span></div>
+        <h3>Cloud <em>Transformation</em>, done by people who've done it.</h3>
+        <p class="lede">Still running workloads on-prem that should have moved to the cloud three years ago? We've done it enough times to know where the pitfalls are &mdash; and how to avoid them.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">&#9729;</div><div><div class="ft">AWS &middot; Azure &middot; GCP</div><div class="fd">Migration with zero-downtime cutover</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9004;</div><div><div class="ft">Infrastructure-as-code</div><div class="fd">Terraform modules, GitOps pipelines</div></div></div>
+          <div class="svc-feat2"><div class="ic">&pound;</div><div><div class="ft">FinOps</div><div class="fd">Clients save 30%+ on cloud spend</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#10556;</div><div><div class="ft">Resilience &amp; DR</div><div class="fd">Multi-region failover &amp; chaos testing</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg o">AWS</span><span class="tg o">Azure</span><span class="tg o">GCP</span><span class="tg o">Terraform</span></div>
+          <a class="svc-link" href="contact.html">Plan your migration <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="svc-detail" data-svc="05" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>TIER-1 BANK CLIENTS</span></div>
+        <div class="crumb"><span class="idx">05</span><span class="sep">/</span><span>CAPITAL MARKETS</span></div>
+        <h3>Murex &amp; <em>Data Engineering</em> for trading desks.</h3>
+        <p class="lede">If you're running Murex and thinking about your next upgrade, cloud migration or better trading-data analytics &mdash; that's what our capital markets team does, full-time, for tier-1 banks.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">M</div><div><div class="ft">Mx2.11 &rarr; Mx3.1</div><div class="fd">Upgrade &amp; cloud-migration projects</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#8767;</div><div><div class="ft">Trading pipelines</div><div class="fd">Risk &amp; P&amp;L data engineering</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#8721;</div><div><div class="ft">AI analytics</div><div class="fd">Anomaly detection &amp; reporting</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9881;</div><div><div class="ft">Platform support</div><div class="fd">Run-the-bank &amp; change-the-bank</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg">Murex</span><span class="tg">Data Eng</span><span class="tg">Risk</span><span class="tg">Analytics</span></div>
+          <a class="svc-link" href="contact.html">Speak to capital markets team <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="svc-detail" data-svc="06" role="tabpanel">
+        <div class="svc-stamp"><span class="ok">&#9679;</span><span>ISO 42001 &middot; NIST AI RMF</span></div>
+        <div class="crumb"><span class="idx">06</span><span class="sep">/</span><span>REGULATOR-READY</span></div>
+        <h3>Compliance &amp; <em>Governance</em> from day zero.</h3>
+        <p class="lede">End-to-end regulatory compliance for AI projects &mdash; from impact assessment to ongoing monitoring &mdash; aligned to ISO/IEC 42001 and NIST AI RMF, with audit-ready evidence packs.</p>
+        <div class="svc-grid2">
+          <div class="svc-feat2"><div class="ic">&#8865;</div><div><div class="ft">Impact assessments</div><div class="fd">Regulatory triage at project kickoff</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#916;</div><div><div class="ft">Framework gap analysis</div><div class="fd">Mapped to ISO 42001 &amp; NIST RMF</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#9960;</div><div><div class="ft">Production safeguards</div><div class="fd">Continuous monitoring controls</div></div></div>
+          <div class="svc-feat2"><div class="ic">&#10003;</div><div><div class="ft">Audit-ready packs</div><div class="fd">Evidence &amp; documentation portfolio</div></div></div>
+        </div>
+        <div class="svc-meta-row">
+          <div class="svc-tags"><span class="tg o">ISO 42001</span><span class="tg o">NIST RMF</span><span class="tg o">EU AI Act</span></div>
+          <a class="svc-link" href="#trust">See trust &amp; certifications <span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      var shell = document.getElementById('svcShell');
+      if(!shell) return;
+      var tabs = shell.querySelectorAll('.svc-tab');
+      var panels = shell.querySelectorAll('.svc-detail');
+      tabs.forEach(function(t){
+        t.addEventListener('click', function(){
+          var id = t.dataset.svc;
+          tabs.forEach(function(x){ x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
+          panels.forEach(function(p){ p.dataset.active = (p.dataset.svc === id) ? 'true' : 'false'; });
+        });
+      });
+    })();
+    </script>
+  </div>
+</section>
+
+<!-- ===================== FLAGSHIP PRODUCTS ===================== -->
+<section class="svc-section2 svc-products" id="products">
+  <div class="wrap svc-products-inner">
+    <div class="svc-section-head">
+      <span class="eyebrow"><span class="dot"></span>Flagship products</span>
+      <h2>Four products, <span class="grad">one engineering rhythm</span>.</h2>
+      <p class="lede">Each one tackles a real bottleneck inside regulated enterprises &mdash; analytics, regulatory change, accounting, governance &mdash; built on the same secure, audit-ready stack.</p>
+    </div>
+
+    <!-- 1) NL2SQL -->
+    <div class="product-row">
+      <div class="product-info">
+        <div class="badge blue">&#9733; NL2SQL Analytics &mdash; Flagship</div>
+        <h3>Ask your database <em>in plain English</em>.</h3>
+        <p>Your analysts shouldn't need to wait for engineering to pull a report. With NL2SQL, anyone on the team can <strong>type a question and get an answer</strong> &mdash; the platform writes the SQL, validates it, and returns results in seconds.</p>
+        <p>Designed for <strong>banks and regulated industries</strong> where data can't leave your network. Everything runs on-premise with 12-point security guardrails and a full audit trail. No cloud APIs, no data leaks.</p>
+        <div class="product-feats">
+          <div class="pfeat"><div class="pf-title">Natural Language Querying</div><div class="pf-desc">JOINs, aggregations &amp; GROUP BY handled automatically</div></div>
+          <div class="pfeat"><div class="pf-title">RAG-Powered Context</div><div class="pf-desc">4 FAISS indexes for schema, glossary &amp; relationships</div></div>
+          <div class="pfeat"><div class="pf-title">12-Point Guardrails</div><div class="pf-desc">SELECT-only, schema whitelisting, injection prevention</div></div>
+          <div class="pfeat"><div class="pf-title">Self-Healing Queries</div><div class="pf-desc">Auto-corrects via LLM feedback &mdash; 100% retry success</div></div>
+        </div>
+        <div class="actions">
+          <a class="svc-btn svc-btn-blue" href="nl2sql-sales-deck.html">Explore NL2SQL<span class="arr">&rarr;</span></a>
+          <a class="svc-btn svc-btn-ghost" href="contact.html">Book a demo</a>
+        </div>
+      </div>
+      <div class="product-vis">
+        <div class="pv-head">
+          <div class="title"><span class="dot"></span>NL2SQL &middot; Risk Analytics Console</div>
+          <div class="meta">env &middot; prod-eu</div>
+        </div>
+        <div class="pv-body">
+          <div class="pv-prompt">Show me top 3 counterparties by exposure that breached VaR limits last quarter</div>
+          <pre class="pv-sql"><span class="com">-- generated &middot; validated &middot; 12 guardrails passed</span>
+<span class="kw">SELECT</span> c.name, <span class="fn">SUM</span>(p.exposure) <span class="kw">AS</span> total,
+       <span class="fn">COUNT</span>(b.id) <span class="kw">AS</span> breaches
+<span class="kw">FROM</span> counterparties c
+<span class="kw">JOIN</span> var_breaches b <span class="kw">ON</span> b.cp_id = c.id
+<span class="kw">WHERE</span> b.quarter = <span class="str">'2026-Q1'</span>
+<span class="kw">ORDER BY</span> total <span class="kw">DESC</span> <span class="kw">LIMIT</span> 3;</pre>
+          <div class="pv-result">
+            <div class="head"><span>Counterparty</span><span>Exposure</span><span>&Delta; vs Q4</span></div>
+            <div class="row"><span><b>Helix Capital Ltd</b></span><span>&pound;2.4B</span><span class="pill up">+18%</span></div>
+            <div class="row"><span><b>Northwind Holdings</b></span><span>&pound;1.8B</span><span class="pill down">&minus;6%</span></div>
+            <div class="row"><span><b>Meridian Bank</b></span><span>&pound;1.2B</span><span class="pill up">+9%</span></div>
+          </div>
+          <div class="pv-status">
+            <span class="it"><span class="dt"></span>12 guardrails passed</span>
+            <span class="it"><span class="dt"></span>0.42s &middot; zero egress</span>
+            <span class="it"><span class="dt"></span>audit &middot; #84217</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2) RegTech -->
+    <div class="product-row reverse">
+      <div class="product-info">
+        <div class="badge violet">RegTech AI Solutions &mdash; New</div>
+        <h3>Know what changed <em>before the regulator does</em>.</h3>
+        <p>If your compliance team is still tracking regulatory changes in spreadsheets, this is for them. Our RegTech platform monitors <strong>40+ regulatory sources across 11 jurisdictions</strong> and tells you exactly which EMIR, MiFIR or CFTC fields are affected &mdash; with citations back to the source document.</p>
+        <p>Built for the people who file the reports. A practical system that <strong>maps changes to your specific reporting fields</strong> and flags what needs action.</p>
+        <div class="product-feats">
+          <div class="pfeat"><div class="pf-title">Frontier LLM Models</div><div class="pf-desc">Multi-model interprets regulatory docs &amp; guidance</div></div>
+          <div class="pfeat"><div class="pf-title">RAG + CAG Pipeline</div><div class="pf-desc">Every response grounded with full source citations</div></div>
+          <div class="pfeat"><div class="pf-title">Regime-Specific Agents</div><div class="pf-desc">EMIR, MiFIR, CFTC, SFTR, Basel III &amp; APAC</div></div>
+          <div class="pfeat"><div class="pf-title">Field-Level Impact</div><div class="pf-desc">Canonical mapping &amp; cross-regime comparison</div></div>
+        </div>
+        <div class="actions">
+          <a class="svc-btn svc-btn-blue" href="ai-regtech-capabilities.html">Explore RegTech<span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+      <div class="product-vis regtech">
+        <div class="pv-head">
+          <div class="title"><span class="dot" style="background:#A78BFA;box-shadow:0 0 8px #A78BFA;"></span>RegTech &middot; Regulatory Intelligence</div>
+          <div class="meta">11 jurisdictions</div>
+        </div>
+        <div class="pv-body">
+          <div class="pv-tiles">
+            <div class="pv-tile"><div class="lbl">Sources monitored</div><div class="v">40<small>+ live</small></div></div>
+            <div class="pv-tile"><div class="lbl">Reg fields tracked</div><div class="v">200<small>+</small></div></div>
+            <div class="pv-tile"><div class="lbl">Precision</div><div class="v">94<small>%</small></div></div>
+            <div class="pv-tile"><div class="lbl">New alerts (24h)</div><div class="v">7<small>&uarr;3</small></div></div>
+          </div>
+          <div class="pv-list">
+            <div class="pv-li"><span class="dot"></span>EMIR REFIT &mdash; Article 9 amendment<span class="meta">2h ago</span></div>
+            <div class="pv-li"><span class="dot amber"></span>MiFIR &mdash; Field 41 validation rule changed<span class="meta">5h ago</span></div>
+            <div class="pv-li"><span class="dot blue"></span>CFTC Part 43 &mdash; Block trade thresholds<span class="meta">1d ago</span></div>
+            <div class="pv-li"><span class="dot"></span>SFTR &mdash; ESMA Q&amp;A v3.2 published<span class="meta">2d ago</span></div>
+          </div>
+          <div class="pv-status">
+            <span class="it"><span class="dt"></span>RAG + CAG &middot; cited sources</span>
+            <span class="it"><span class="dt"></span>knowledge graph synced</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) AccountIQ -->
+    <div class="product-row">
+      <div class="product-info">
+        <div class="badge green">AccountIQ &mdash; On-Device AI</div>
+        <h3>Your accounts, <em>on your machine</em>.</h3>
+        <p>AccountIQ is an AI accounting assistant that runs <strong>entirely on your device</strong>. Your invoices, bank statements and tax records never leave your computer &mdash; not to a cloud server, not to an API. That's not a feature, it's the whole point.</p>
+        <p>It handles the work that eats up your week: <strong>VAT returns, bank reconciliation, year-end packs</strong>. Upload documents, ask questions in plain English, get answers with sources.</p>
+        <div class="product-feats">
+          <div class="pfeat"><div class="pf-title">Ask Documents</div><div class="pf-desc">Natural-language search across invoices &amp; statements</div></div>
+          <div class="pfeat"><div class="pf-title">VAT Filing</div><div class="pf-desc">Quarterly returns, HMRC-ready output</div></div>
+          <div class="pfeat"><div class="pf-title">Month-End Recon</div><div class="pf-desc">Auto-surface mismatches between bank &amp; receipts</div></div>
+          <div class="pfeat"><div class="pf-title">100% On-Device</div><div class="pf-desc">Local LLM via Ollama &mdash; no cloud APIs</div></div>
+        </div>
+        <div class="actions">
+          <a class="svc-btn svc-btn-blue" href="accountiq.html">Explore AccountIQ<span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+      <div class="product-vis accountiq">
+        <div class="pv-head">
+          <div class="title"><span class="dot"></span>AccountIQ &middot; VAT Q1 2026</div>
+          <div class="meta">on-device &middot; ollama</div>
+        </div>
+        <div class="pv-body">
+          <div class="pv-prompt">Prepare my VAT return for Q1 and flag anything missing</div>
+          <div class="pv-tiles">
+            <div class="pv-tile"><div class="lbl">Output VAT</div><div class="v">&pound;18,420</div></div>
+            <div class="pv-tile"><div class="lbl">Input VAT</div><div class="v">&pound;6,148</div></div>
+            <div class="pv-tile"><div class="lbl">Net payable</div><div class="v">&pound;12,272</div></div>
+            <div class="pv-tile"><div class="lbl">Confidence</div><div class="v">98<small>%</small></div></div>
+          </div>
+          <div class="pv-list">
+            <div class="pv-li"><span class="dot"></span>147 invoices reconciled<span class="meta">complete</span></div>
+            <div class="pv-li"><span class="dot amber"></span>2 receipts missing &mdash; Feb<span class="meta">action</span></div>
+            <div class="pv-li"><span class="dot"></span>Bank statement matched<span class="meta">100%</span></div>
+          </div>
+          <div class="pv-status">
+            <span class="it"><span class="dt"></span>HMRC-ready</span>
+            <span class="it"><span class="dt"></span>0 bytes uploaded</span>
+            <span class="it"><span class="dt"></span>local audit log</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4) AI Compliance & Governance -->
+    <div class="product-row reverse">
+      <div class="product-info">
+        <div class="badge">AI Compliance &amp; Governance &mdash; New</div>
+        <h3>AI systems that are <em>regulator-ready</em>.</h3>
+        <p>End-to-end regulatory compliance support for AI projects, helping organisations assess legal obligations, implement governance controls, and maintain production-ready safeguards across the AI lifecycle. From <strong>regulatory impact assessments</strong> to ongoing monitoring, we turn compliance uncertainty into a clear roadmap.</p>
+        <p>Aligned with <strong>EU AI Act, ISO/IEC 42001 and NIST AI RMF</strong> &mdash; your AI systems designed for compliance and operated with the guardrails needed for regulatory and reputational risk reduction.</p>
+        <div class="product-feats">
+          <div class="pfeat"><div class="pf-title">Regulatory Impact</div><div class="pf-desc">Identify obligations early in the AI lifecycle</div></div>
+          <div class="pfeat"><div class="pf-title">Framework Gap Analysis</div><div class="pf-desc">EU AI Act, ISO 42001 &amp; NIST AI RMF</div></div>
+          <div class="pfeat"><div class="pf-title">Production Safeguards</div><div class="pf-desc">Monitoring, logging, incident response, evidence</div></div>
+          <div class="pfeat"><div class="pf-title">Audit Readiness</div><div class="pf-desc">Evidence packs &amp; regulator response support</div></div>
+        </div>
+        <div class="actions">
+          <a class="svc-btn svc-btn-blue" href="ai-compliance-governance.html">Explore Compliance<span class="arr">&rarr;</span></a>
+        </div>
+      </div>
+      <div class="product-vis compliance">
+        <div class="pv-head">
+          <div class="title"><span class="dot"></span>Governance &middot; System Inventory</div>
+          <div class="meta">EU AI Act</div>
+        </div>
+        <div class="pv-body">
+          <div class="pv-tiles">
+            <div class="pv-tile"><div class="lbl">AI systems</div><div class="v">23<small>tracked</small></div></div>
+            <div class="pv-tile"><div class="lbl">High-risk</div><div class="v">4<small>monitored</small></div></div>
+            <div class="pv-tile"><div class="lbl">ISO 42001</div><div class="v">92<small>%</small></div></div>
+            <div class="pv-tile"><div class="lbl">Open actions</div><div class="v">3</div></div>
+          </div>
+          <div class="pv-list">
+            <div class="pv-li"><span class="dot"></span>Risk classification &mdash; RAG-ASSIST<span class="meta">limited</span></div>
+            <div class="pv-li"><span class="dot"></span>Bias evaluation &mdash; Q1 2026<span class="meta">passed</span></div>
+            <div class="pv-li"><span class="dot amber"></span>Evidence pack &mdash; model card v3<span class="meta">due</span></div>
+            <div class="pv-li"><span class="dot"></span>Incident response plan<span class="meta">v2.1</span></div>
+          </div>
+          <div class="pv-status">
+            <span class="it"><span class="dt"></span>EU AI Act ready</span>
+            <span class="it"><span class="dt"></span>NIST AI RMF aligned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== PROCESS ===================== -->
+<section class="svc-section2 svc-process" id="process">
+  <div class="wrap">
+    <div class="svc-section-head center">
+      <span class="eyebrow"><span class="dot"></span>How we work</span>
+      <h2>From discovery to <span class="grad">production</span>, in four phases.</h2>
+      <p class="lede">A repeatable engineering rhythm that gets AI from idea to live, governed and observable &mdash; typically in eight to twelve weeks.</p>
+    </div>
+
+    <div class="process-grid">
+      <div class="step">
+        <div class="num-circle">01</div>
+        <h3>Diagnose</h3>
+        <p>Two-week immersion. We map data, systems, regulatory exposure and decision points to identify where AI compounds value.</p>
+        <span class="duration">Week 1&ndash;2</span>
+      </div>
+      <div class="step active">
+        <div class="num-circle">02</div>
+        <h3>Architect</h3>
+        <p>Reference architecture, model selection, evaluation harness and governance plan &mdash; all aligned to your stack.</p>
+        <span class="duration">Week 3&ndash;4</span>
+      </div>
+      <div class="step">
+        <div class="num-circle">03</div>
+        <h3>Build</h3>
+        <p>Engineering sprints with embedded teams. Pipelines, guardrails, CI/CD and observability shipped iteratively.</p>
+        <span class="duration">Week 5&ndash;10</span>
+      </div>
+      <div class="step">
+        <div class="num-circle">04</div>
+        <h3>Operate</h3>
+        <p>Production hand-off with 24/7 MLOps coverage, drift monitoring and quarterly model reviews.</p>
+        <span class="duration">Week 11+</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST PANEL ===================== -->
+<section class="svc-trust-panel" id="trust">
+  <div class="wrap">
+    <div class="trust-grid">
+      <div>
+        <span class="eyebrow" style="background:rgba(0,0,0,.05);color:#1d4ed8;border-color:rgba(0,0,0,.08);">Built for regulated industries</span>
+        <h2 style="margin-top:18px;"><span style="color:#F97316;">Security, governance &amp; compliance</span> &mdash; first-class, not bolted on.</h2>
+        <p>Every system we ship is auditable end-to-end. We design for the most stringent regulatory regimes and operate with the rigour your security team expects.</p>
+        <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;">
+          <a class="svc-btn svc-btn-on-dark" href="ai-compliance-governance.html">Trust centre<span class="arr">&rarr;</span></a>
+          <a class="svc-btn svc-btn-on-dark" href="contact.html">Request SOC 2 report</a>
+        </div>
+      </div>
+
+      <div class="badges-grid">
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="name">SOC 2 Type II</div><div class="meta">Audited &middot; 2026</div></div>
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="name">ISO 27001</div><div class="meta">Certified</div></div>
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></div><div class="name">EU AI Act</div><div class="meta">Ready</div></div>
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="name">GDPR</div><div class="meta">UK + EU</div></div>
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div><div class="name">HIPAA</div><div class="meta">Compliant</div></div>
+        <div class="badge-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><div class="name">PCI DSS</div><div class="meta">Level 1</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="svc-cta-band">
+  <div class="wrap svc-cta-band-inner">
+    <h2>Let's talk about <span class="grad">what you're building</span>.</h2>
+    <p>Book a 30-minute call &mdash; no pitch deck, just a conversation about your challenges and whether we can help.</p>
+    <div class="cta-actions">
+      <a class="svc-btn svc-btn-primary" href="contact.html">Start a conversation<span class="arr">&rarr;</span></a>
+      <a class="svc-btn" href="ai-learn.html" style="background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18);">Visit the AI Academy</a>
+    </div>
+  </div>
+</section>
+
+</main>
 
     <!-- Footer -->
     <footer>
@@ -1166,7 +991,7 @@
                         <p>AI-Powered Engineering Solutions</p>
                     </div>
                 </div>
-                
+
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
                         <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
