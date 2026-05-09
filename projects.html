@@ -67,55 +67,82 @@
   /* Hero counter strip */
   .proj-counters{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;max-width:480px;}
 
-  /* ===== HERO 3D INFOGRAPHIC ===== */
-  .proj-art{position:relative;width:100%;min-height:420px;}
-  .proj-art-svg{position:absolute;inset:0;width:100%;height:100%;}
-  .proj-art-card{position:absolute;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:0 8px 24px -6px rgba(15,23,42,.1),0 2px 6px rgba(15,23,42,.04);}
-  /* Center hub */
-  .proj-art-hub{top:50%;left:50%;transform:translate(-50%,-50%);width:120px;text-align:center;background:linear-gradient(145deg,var(--blue-800),var(--blue-950));border:1px solid rgba(96,165,250,.25);z-index:2;}
-  .proj-art-hub .hub-icon{width:40px;height:40px;margin:0 auto 8px;background:linear-gradient(135deg,var(--orange-400),var(--orange-600));border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(249,115,22,.3);}
-  .proj-art-hub .hub-label{font-size:11px;font-weight:700;color:#fff;letter-spacing:.03em;}
-  .proj-art-hub .hub-stat{font-size:9px;color:#93C5FD;font-family:var(--mono);margin-top:4px;}
-  /* Floating project cards */
-  .pj-1{top:2%;left:6%;width:46%;}
-  .pj-2{top:6%;right:0;width:38%;}
-  .pj-3{bottom:22%;left:0;width:40%;}
-  .pj-4{bottom:8%;right:2%;width:46%;}
-  .pj-5{top:46%;right:-4%;width:32%;}
-  .pjc-row{display:flex;align-items:center;gap:10px;}
-  .pjc-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .pjc-icon.i-blue{background:linear-gradient(135deg,var(--blue-500),var(--blue-700));}
-  .pjc-icon.i-orange{background:linear-gradient(135deg,var(--orange-400),var(--orange-600));}
-  .pjc-icon.i-teal{background:linear-gradient(135deg,#0D9488,#14B8A6);}
-  .pjc-icon.i-purple{background:linear-gradient(135deg,#7C3AED,#8B5CF6);}
-  .pjc-icon.i-green{background:linear-gradient(135deg,#16A34A,#22C55E);}
-  .pjc-title{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.2;}
-  .pjc-meta{font-size:9.5px;color:var(--muted);font-family:var(--mono);margin-top:2px;}
-  .pjc-bar{height:5px;background:var(--line-2);border-radius:3px;overflow:hidden;margin-top:10px;}
-  .pjc-bar i{display:block;height:100%;border-radius:3px;}
-  .pjc-bar .fill-blue{background:linear-gradient(90deg,var(--blue-400),var(--blue-600));}
-  .pjc-bar .fill-orange{background:linear-gradient(90deg,var(--orange-300),var(--orange-500));}
-  .pjc-bar .fill-teal{background:linear-gradient(90deg,#2DD4BF,#0D9488);}
-  .pjc-bar .fill-purple{background:linear-gradient(90deg,#A78BFA,#7C3AED);}
-  .pjc-dots{display:flex;gap:4px;margin-top:8px;}
-  .pjc-dots span{width:7px;height:7px;border-radius:50%;}
-  .pjc-num{font-size:20px;font-weight:800;color:var(--blue-700);line-height:1;}
-  .pjc-num small{font-size:10px;color:var(--muted);font-weight:500;margin-left:3px;}
-  .pjc-mini-bars{display:flex;align-items:end;gap:3px;height:28px;margin-top:8px;}
-  .pjc-mini-bars i{width:6px;border-radius:2px;background:linear-gradient(180deg,var(--orange-400),var(--orange-500));}
-  .pjc-mini-bars i:nth-child(1){height:35%;}
-  .pjc-mini-bars i:nth-child(2){height:60%;}
-  .pjc-mini-bars i:nth-child(3){height:45%;}
-  .pjc-mini-bars i:nth-child(4){height:85%;}
-  .pjc-mini-bars i:nth-child(5){height:70%;}
-  .pjc-tags{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
-  .pjc-tags span{font-size:8px;padding:2px 7px;border-radius:4px;font-weight:600;}
-  @keyframes pj-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-  .pj-1{animation:pj-float 5s ease-in-out infinite;}
-  .pj-2{animation:pj-float 4.5s ease-in-out infinite .5s;}
-  .pj-3{animation:pj-float 5.5s ease-in-out infinite 1s;}
-  .pj-4{animation:pj-float 4s ease-in-out infinite 1.5s;}
-  .pj-5{animation:pj-float 5s ease-in-out infinite .8s;}
+  /* ===== HERO — DARK DASHBOARD INFOGRAPHIC ===== */
+  .proj-dash{position:relative;perspective:1200px;}
+  .proj-dash-panel{
+    background:linear-gradient(165deg,#0C1425 0%,#111B30 40%,#0F172A 100%);
+    border:1px solid rgba(96,165,250,.12);
+    border-radius:20px;
+    padding:0;
+    box-shadow:
+      0 32px 64px -16px rgba(10,22,51,.5),
+      0 8px 20px -4px rgba(10,22,51,.3),
+      inset 0 1px 0 rgba(255,255,255,.04);
+    overflow:hidden;
+    transform:rotateY(-4deg) rotateX(2deg);
+    transition:transform .4s ease;
+  }
+  .proj-dash-panel:hover{transform:rotateY(-1deg) rotateX(0.5deg);}
+  /* Title bar */
+  .dash-titlebar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.15);}
+  .dash-dots{display:flex;gap:6px;}
+  .dash-dots span{width:10px;height:10px;border-radius:50%;}
+  .dash-dots .d-r{background:#EF4444;}
+  .dash-dots .d-y{background:#F59E0B;}
+  .dash-dots .d-g{background:#22C55E;}
+  .dash-title{font-size:11px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono);}
+  .dash-live{display:flex;align-items:center;gap:6px;font-size:10px;color:#4ADE80;font-family:var(--mono);font-weight:500;}
+  .dash-live::before{content:"";width:6px;height:6px;border-radius:50%;background:#4ADE80;animation:dash-pulse 2s ease-in-out infinite;}
+  @keyframes dash-pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  /* Dashboard body */
+  .dash-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  /* Metric tile */
+  .dash-tile{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;}
+  .dash-tile-label{font-size:9.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:8px;}
+  .dash-tile-value{font-family:var(--mono);font-size:24px;font-weight:800;line-height:1;}
+  .dash-tile-value.v-blue{color:#60A5FA;}
+  .dash-tile-value.v-orange{color:#FB923C;}
+  .dash-tile-value.v-teal{color:#2DD4BF;}
+  .dash-tile-value.v-green{color:#4ADE80;}
+  .dash-tile-value small{font-size:10px;color:rgba(255,255,255,.35);font-weight:500;margin-left:2px;}
+  .dash-tile-delta{font-size:9px;font-family:var(--mono);margin-top:4px;}
+  .dash-tile-delta.up{color:#4ADE80;}
+  .dash-tile-delta.down{color:#FB923C;}
+  /* Sparkline */
+  .dash-spark{display:flex;align-items:end;gap:3px;height:32px;margin-top:10px;}
+  .dash-spark i{flex:1;border-radius:2px 2px 0 0;min-width:4px;transition:height .3s;}
+  .dash-spark .s-blue{background:linear-gradient(180deg,rgba(96,165,250,.8),rgba(96,165,250,.3));}
+  .dash-spark .s-orange{background:linear-gradient(180deg,rgba(251,146,60,.8),rgba(251,146,60,.3));}
+  /* Project rows — full width */
+  .dash-projects{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;}
+  .dash-proj-title{font-size:9.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px;}
+  .dash-proj-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .dash-proj-row:last-child{border-bottom:0;}
+  .dash-proj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .dash-proj-dot.c-blue{background:#3B82F6;}
+  .dash-proj-dot.c-orange{background:#F97316;}
+  .dash-proj-dot.c-teal{background:#14B8A6;}
+  .dash-proj-dot.c-purple{background:#8B5CF6;}
+  .dash-proj-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);flex:1;}
+  .dash-proj-bar{width:80px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+  .dash-proj-bar i{display:block;height:100%;border-radius:2px;}
+  .dash-proj-status{font-size:9px;font-family:var(--mono);padding:2px 8px;border-radius:4px;font-weight:600;letter-spacing:.03em;}
+  .dash-proj-status.s-live{background:rgba(74,222,128,.12);color:#4ADE80;}
+  .dash-proj-status.s-beta{background:rgba(251,146,60,.12);color:#FB923C;}
+  /* Pipeline row — full width */
+  .dash-pipeline{grid-column:1/-1;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;}
+  .dash-pipe-label{font-size:9.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px;}
+  .dash-pipe-flow{display:flex;align-items:center;gap:0;}
+  .dash-pipe-step{text-align:center;flex:1;}
+  .dash-pipe-step .step-icon{width:32px;height:32px;border-radius:10px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;}
+  .dash-pipe-step .step-icon.si-blue{background:linear-gradient(135deg,#3B82F6,#1D4ED8);}
+  .dash-pipe-step .step-icon.si-orange{background:linear-gradient(135deg,#FB923C,#EA580C);}
+  .dash-pipe-step .step-icon.si-green{background:linear-gradient(135deg,#22C55E,#16A34A);}
+  .dash-pipe-step .step-icon.si-purple{background:linear-gradient(135deg,#8B5CF6,#7C3AED);}
+  .dash-pipe-step .step-name{font-size:9px;color:rgba(255,255,255,.55);font-weight:600;}
+  .dash-pipe-arrow{color:rgba(255,255,255,.15);font-size:14px;margin:0 -2px;padding-bottom:16px;}
+  @keyframes dash-glow{0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,0);}50%{box-shadow:0 0 20px 2px rgba(96,165,250,.08);}}
+  .proj-dash-panel{animation:dash-glow 4s ease-in-out infinite;}
   .proj-counter{padding:24px 20px;text-align:center;border-right:1px solid var(--line);}
   .proj-counter:last-child{border-right:0;}
   .proj-counter .big{font-family:var(--display);font-size:32px;font-weight:800;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;}
@@ -214,7 +241,8 @@
     .proj-hero-sub{margin:0 auto 32px;}
     .proj-hero-actions{justify-content:center;}
     .proj-counters{margin:0 auto;}
-    .proj-art{min-height:360px;}
+    .proj-dash-panel{transform:none;max-width:520px;margin:0 auto;}
+    .proj-dash-panel:hover{transform:none;}
     .proj-hero h1{font-size:44px;}
   }
   @media(max-width:640px){
@@ -225,8 +253,9 @@
     .proj-counters{grid-template-columns:1fr;max-width:320px;}
     .proj-counter{border-right:0;border-bottom:1px solid var(--line);padding:16px 0;}
     .proj-counter:last-child{border-bottom:0;}
-    .proj-art{min-height:300px;}
-    .pj-5{display:none;}
+    .dash-body{grid-template-columns:1fr;}
+    .dash-pipe-flow{flex-wrap:wrap;gap:4px;}
+    .dash-pipe-arrow{display:none;}
   }
 
   @keyframes blink-star{0%,100%{opacity:1;}50%{opacity:.2;}}
@@ -409,96 +438,117 @@
       </div>
     </div>
 
-    <!-- RIGHT — 3D Infographic -->
-    <div class="proj-art" aria-hidden="true">
-      <svg class="proj-art-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <!-- connector lines to hub center -->
-        <path id="pline1" d="M28,12 L50,50" stroke="rgba(29,78,216,0.18)" stroke-width="0.8" stroke-dasharray="2.5 2.5" fill="none"/>
-        <path id="pline2" d="M78,16 L50,50" stroke="rgba(29,78,216,0.18)" stroke-width="0.8" stroke-dasharray="2.5 2.5" fill="none"/>
-        <path id="pline3" d="M18,72 L50,50" stroke="rgba(29,78,216,0.18)" stroke-width="0.8" stroke-dasharray="2.5 2.5" fill="none"/>
-        <path id="pline4" d="M76,82 L50,50" stroke="rgba(29,78,216,0.18)" stroke-width="0.8" stroke-dasharray="2.5 2.5" fill="none"/>
-        <path id="pline5" d="M84,50 L50,50" stroke="rgba(249,115,22,0.15)" stroke-width="0.8" stroke-dasharray="2.5 2.5" fill="none"/>
-        <!-- travelling data dots -->
-        <circle r="1.1" fill="#F97316"><animateMotion dur="3s" repeatCount="indefinite"><mpath href="#pline1"/></animateMotion></circle>
-        <circle r="1.1" fill="#3B82F6"><animateMotion dur="3.5s" begin="0.6s" repeatCount="indefinite"><mpath href="#pline2"/></animateMotion></circle>
-        <circle r="1.1" fill="#F97316"><animateMotion dur="4s" begin="1.2s" repeatCount="indefinite"><mpath href="#pline3"/></animateMotion></circle>
-        <circle r="1.1" fill="#3B82F6"><animateMotion dur="3.6s" begin="1.8s" repeatCount="indefinite"><mpath href="#pline4"/></animateMotion></circle>
-        <circle r="1.1" fill="#F97316"><animateMotion dur="2.8s" begin="0.4s" repeatCount="indefinite"><mpath href="#pline5"/></animateMotion></circle>
-      </svg>
+    <!-- RIGHT — Dark Dashboard Infographic -->
+    <div class="proj-dash" aria-hidden="true">
+      <div class="proj-dash-panel">
 
-      <!-- Center hub -->
-      <div class="proj-art-card proj-art-hub">
-        <div class="hub-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <!-- macOS-style title bar -->
+        <div class="dash-titlebar">
+          <div class="dash-dots"><span class="d-r"></span><span class="d-y"></span><span class="d-g"></span></div>
+          <div class="dash-title">project-hub.ai</div>
+          <div class="dash-live">Live</div>
         </div>
-        <div class="hub-label">Innovation Hub</div>
-        <div class="hub-stat">6 projects &middot; live</div>
-      </div>
 
-      <!-- Card 1 — RegTech (top-left) -->
-      <div class="proj-art-card pj-1">
-        <div class="pjc-row">
-          <div class="pjc-icon i-blue">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div>
-            <div class="pjc-title">RegTech AI</div>
-            <div class="pjc-meta">40+ reg sources</div>
-          </div>
-        </div>
-        <div class="pjc-bar"><i class="fill-blue" style="width:88%;"></i></div>
-      </div>
+        <div class="dash-body">
 
-      <!-- Card 2 — NL2SQL (top-right) -->
-      <div class="proj-art-card pj-2">
-        <div class="pjc-meta" style="margin-bottom:4px;">Query accuracy</div>
-        <div class="pjc-num">94.2<small>%</small></div>
-        <div class="pjc-mini-bars"><i></i><i></i><i></i><i></i><i></i></div>
-      </div>
+          <!-- Metric 1 — Active Projects -->
+          <div class="dash-tile">
+            <div class="dash-tile-label">Active Projects</div>
+            <div class="dash-tile-value v-blue">6<small>+</small></div>
+            <div class="dash-tile-delta up">&#8593; 2 this quarter</div>
+            <div class="dash-spark">
+              <i class="s-blue" style="height:30%;"></i>
+              <i class="s-blue" style="height:50%;"></i>
+              <i class="s-blue" style="height:40%;"></i>
+              <i class="s-blue" style="height:65%;"></i>
+              <i class="s-blue" style="height:55%;"></i>
+              <i class="s-blue" style="height:80%;"></i>
+              <i class="s-blue" style="height:70%;"></i>
+              <i class="s-blue" style="height:95%;"></i>
+            </div>
+          </div>
 
-      <!-- Card 3 — AccountIQ (bottom-left) -->
-      <div class="proj-art-card pj-3">
-        <div class="pjc-row">
-          <div class="pjc-icon i-teal">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+          <!-- Metric 2 — Model Accuracy -->
+          <div class="dash-tile">
+            <div class="dash-tile-label">Avg Model Accuracy</div>
+            <div class="dash-tile-value v-orange">96.4<small>%</small></div>
+            <div class="dash-tile-delta up">&#8593; 3.1% wow</div>
+            <div class="dash-spark">
+              <i class="s-orange" style="height:55%;"></i>
+              <i class="s-orange" style="height:60%;"></i>
+              <i class="s-orange" style="height:52%;"></i>
+              <i class="s-orange" style="height:70%;"></i>
+              <i class="s-orange" style="height:78%;"></i>
+              <i class="s-orange" style="height:85%;"></i>
+              <i class="s-orange" style="height:88%;"></i>
+              <i class="s-orange" style="height:96%;"></i>
+            </div>
           </div>
-          <div>
-            <div class="pjc-title">AccountIQ</div>
-            <div class="pjc-meta">Desktop &amp; Mobile</div>
-          </div>
-        </div>
-        <div class="pjc-dots">
-          <span style="background:#4ADE80;"></span>
-          <span style="background:#4ADE80;"></span>
-          <span style="background:#4ADE80;"></span>
-          <span style="background:#FB923C;"></span>
-          <span style="background:rgba(0,0,0,.08);"></span>
-        </div>
-      </div>
 
-      <!-- Card 4 — CAR Analytics (bottom-right) -->
-      <div class="proj-art-card pj-4">
-        <div class="pjc-row">
-          <div class="pjc-icon i-purple">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6m-10 0H1"/></svg>
+          <!-- Project status rows -->
+          <div class="dash-projects">
+            <div class="dash-proj-title">Project Status</div>
+            <div class="dash-proj-row">
+              <span class="dash-proj-dot c-blue"></span>
+              <span class="dash-proj-name">RegTech AI</span>
+              <div class="dash-proj-bar"><i style="width:92%;background:linear-gradient(90deg,#3B82F6,#60A5FA);"></i></div>
+              <span class="dash-proj-status s-live">Live</span>
+            </div>
+            <div class="dash-proj-row">
+              <span class="dash-proj-dot c-orange"></span>
+              <span class="dash-proj-name">NL2SQL Analytics</span>
+              <div class="dash-proj-bar"><i style="width:88%;background:linear-gradient(90deg,#F97316,#FB923C);"></i></div>
+              <span class="dash-proj-status s-live">Live</span>
+            </div>
+            <div class="dash-proj-row">
+              <span class="dash-proj-dot c-teal"></span>
+              <span class="dash-proj-name">AccountIQ</span>
+              <div class="dash-proj-bar"><i style="width:75%;background:linear-gradient(90deg,#0D9488,#2DD4BF);"></i></div>
+              <span class="dash-proj-status s-beta">Beta</span>
+            </div>
+            <div class="dash-proj-row">
+              <span class="dash-proj-dot c-purple"></span>
+              <span class="dash-proj-name">CAR Analytics</span>
+              <div class="dash-proj-bar"><i style="width:82%;background:linear-gradient(90deg,#7C3AED,#A78BFA);"></i></div>
+              <span class="dash-proj-status s-live">Live</span>
+            </div>
           </div>
-          <div>
-            <div class="pjc-title">CAR Analytics</div>
-            <div class="pjc-meta">Cancer research &middot; live</div>
-          </div>
-        </div>
-        <div class="pjc-tags">
-          <span style="background:rgba(124,58,237,.1);color:#7C3AED;">ML</span>
-          <span style="background:rgba(29,78,216,.1);color:#1D4ED8;">NLP</span>
-          <span style="background:rgba(22,163,74,.1);color:#16A34A;">FDA</span>
-        </div>
-      </div>
 
-      <!-- Card 5 — Research (right edge) -->
-      <div class="proj-art-card pj-5">
-        <div class="pjc-meta">Research areas</div>
-        <div class="pjc-num" style="font-size:16px;">6<small>active</small></div>
-        <div style="font-size:9px;color:#16A34A;font-family:var(--mono);margin-top:4px;">&#8593; 2 new this quarter</div>
+          <!-- AI Pipeline visualization -->
+          <div class="dash-pipeline">
+            <div class="dash-pipe-label">AI Pipeline</div>
+            <div class="dash-pipe-flow">
+              <div class="dash-pipe-step">
+                <div class="step-icon si-blue">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                </div>
+                <div class="step-name">Ingest</div>
+              </div>
+              <div class="dash-pipe-arrow">&rarr;</div>
+              <div class="dash-pipe-step">
+                <div class="step-icon si-orange">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="step-name">Process</div>
+              </div>
+              <div class="dash-pipe-arrow">&rarr;</div>
+              <div class="dash-pipe-step">
+                <div class="step-icon si-purple">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 20V10m0 0l3 3m-3-3l-3 3"/><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                </div>
+                <div class="step-name">Train</div>
+              </div>
+              <div class="dash-pipe-arrow">&rarr;</div>
+              <div class="dash-pipe-step">
+                <div class="step-icon si-green">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <div class="step-name">Deploy</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
