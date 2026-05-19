@@ -12,10 +12,180 @@
     <style>
     /* ====== AI ACADEMY PAGE STYLES ====== */
 
+    /* --- Dim main nav links on this page (except AI Academy + app icons) --- */
+    .nav-links > li {
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+    }
+    .nav-links > li:hover {
+        opacity: 1;
+    }
+    .nav-links > li:last-child,
+    .nav-links > li:has(.ai-academy) {
+        opacity: 1 !important;
+    }
+
+    /* --- App top bar --- */
+    .academy-topbar {
+        position: relative;
+        z-index: 10;
+        max-width: 100%;
+        margin: 0;
+        padding: 92px 0 0;
+        background: linear-gradient(180deg, #EEF2FF 0%, #F5F3FF 50%, #FAFAF7 100%);
+        border-bottom: 1px solid #e0e7ff;
+    }
+    .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 10px 32px;
+        gap: 16px;
+        position: relative;
+    }
+    .topbar-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .topbar-logo-img {
+        height: 28px;
+        width: auto;
+        flex-shrink: 0;
+        border-radius: 6px;
+    }
+    .topbar-brand {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #0A0E1A;
+        letter-spacing: -0.2px;
+    }
+    .topbar-nav {
+        position: static !important;
+        display: flex !important;
+        align-items: center;
+        gap: 2px;
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 10px;
+        padding: 3px;
+        width: auto;
+        top: auto;
+        z-index: auto;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: none;
+        animation: none;
+        overflow: visible;
+    }
+    .topbar-link {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: #64748b;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+    }
+    .topbar-link:hover { color: #0A0E1A; background: #fff; }
+    .topbar-link.active { color: #1d4ed8; background: #fff; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .topbar-link.topbar-highlight {
+        color: #ea580c;
+        font-weight: 700;
+        background: linear-gradient(135deg, #fff7ed, #FFF1E6);
+        border: 1px solid rgba(234,88,12,0.2);
+        border-radius: 8px;
+    }
+    .topbar-new-badge {
+        display: inline-block;
+        font-size: 9px;
+        font-weight: 800;
+        color: #fff;
+        background: #ea580c;
+        padding: 1px 6px;
+        border-radius: 6px;
+        letter-spacing: 0.4px;
+        line-height: 1.3;
+        margin-left: 4px;
+        vertical-align: middle;
+    }
+    .topbar-link.topbar-highlight:hover { background: #fff7ed; color: #c2410c; }
+    .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: absolute;
+        right: 32px;
+    }
+    .topbar-btn-signin {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #0A0E1A;
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        transition: all 0.15s ease;
+        background: #fff;
+    }
+    .topbar-btn-signin:hover { border-color: #1d4ed8; color: #1d4ed8; }
+    .topbar-btn-register {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: none;
+        padding: 7px 16px;
+        border-radius: 8px;
+        background: #F97316;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 8px -2px rgba(249,115,22,0.4);
+    }
+    .topbar-btn-register:hover { background: #ea580c; transform: translateY(-1px); }
+    .topbar-avatar {
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1d4ed8, #ea580c);
+        display: flex; align-items: center; justify-content: center;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .topbar-btn-signout {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #dc2626;
+        background: none;
+        border: 1px solid rgba(220,38,38,0.2);
+        padding: 5px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .topbar-btn-signout:hover { background: #fef2f2; border-color: #dc2626; }
+    .topbar-user { display: none; }
+    @media (max-width: 860px) {
+        .topbar-nav { display: none !important; }
+    }
+    @media (max-width: 600px) {
+        .topbar-inner { padding: 6px 8px 6px 12px; gap: 6px; }
+        .topbar-brand { display: none; }
+        .topbar-btn-signin { padding: 6px 10px; font-size: 0.72rem; }
+        .topbar-btn-register { padding: 6px 12px; font-size: 0.72rem; }
+    }
+
     /* --- Hero (editorial design) --- */
     .academy-hero {
         position: relative;
-        padding: 140px 0 72px;
+        padding: 32px 0 48px;
         margin-left: calc(-50vw + 50%);
         margin-right: calc(-50vw + 50%);
         width: 100vw;
@@ -71,9 +241,9 @@
     }
     .academy-hero-desc {
         font-family: 'Inter', sans-serif;
-        font-size: 19px;
+        font-size: 18px;
         color: #5B6478;
-        line-height: 1.55;
+        line-height: 1.45;
         margin-bottom: 0;
         max-width: 520px;
     }
@@ -261,7 +431,7 @@
         gap: 12px;
         align-items: center;
         flex-wrap: wrap;
-        margin-top: 34px;
+        margin-top: 24px;
     }
     .btn-cta-orange {
         display: inline-flex;
@@ -302,7 +472,7 @@
 
     /* --- Section shared --- */
     .academy-section {
-        padding: 5rem 32px;
+        padding: 2.5rem 32px;
         max-width: 1280px;
         margin: 0 auto;
     }
@@ -313,21 +483,21 @@
         color: #ea580c;
         text-transform: uppercase;
         letter-spacing: 2px;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
     }
     .section-heading {
         font-family: 'DM Serif Display', Georgia, serif;
         font-size: 2.2rem;
         color: #0f172a;
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.5rem;
     }
     .section-desc {
         font-family: 'DM Sans', sans-serif;
         font-size: 1rem;
         color: #64748b;
         max-width: 600px;
-        line-height: 1.7;
-        margin-bottom: 2.5rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
     }
 
     /* --- Filter tabs --- */
@@ -475,7 +645,7 @@
         font-family: 'DM Sans', sans-serif;
         font-size: 0.82rem;
         color: #64748b;
-        line-height: 1.6;
+        line-height: 1.5;
         margin-bottom: 1rem;
         flex: 1;
         display: -webkit-box;
@@ -647,8 +817,8 @@
         font-family: 'DM Sans', sans-serif;
         font-size: 0.85rem;
         color: #64748b;
-        line-height: 1.65;
-        margin-bottom: 1.2rem;
+        line-height: 1.5;
+        margin-bottom: 0.8rem;
         flex: 1;
     }
     .cert-stats {
@@ -1107,7 +1277,7 @@
         .courses-grid, .certs-grid, .ai-tools-grid { grid-template-columns: 1fr; }
         .how-steps { grid-template-columns: 1fr 1fr; gap: 1rem; }
         .section-heading { font-size: 1.8rem; }
-        .academy-section { padding: 3rem 1.5rem; }
+        .academy-section { padding: 2rem 1.5rem; }
         .cert-card-body { padding: 1.5rem; }
         .lock-banner { padding: 2rem 1.5rem; }
         .lock-banner h3 { font-size: 1.2rem; }
@@ -1159,6 +1329,454 @@
     .pub-mobile-sub { display: flex; align-items: center; gap: 8px; padding: 0.5rem 1rem 0.5rem 2.25rem; font-size: 0.82rem; color: #64748b; text-decoration: none; transition: all 0.2s ease; border-radius: 6px; }
     .pub-mobile-sub:hover { background: #f1f5f9; color: #1d4ed8; }
     .pub-mobile-sub .pub-mobile-badge { font-size: 0.6rem; font-weight: 700; padding: 0.1rem 0.35rem; border-radius: 4px; background: rgba(29,78,216,0.1); color: #1d4ed8; }
+
+    /* ===== CAREER COUNSELLING ===================== */
+    .counselling-section {
+        background: linear-gradient(180deg, #FAFAF7 0%, #FFFFFF 100%);
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        width: 100vw;
+        padding: 2.5rem 0 3rem;
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .counselling-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+    .section-heading .ital-blue {
+        font-family: 'DM Serif Display', Georgia, serif;
+        color: #1d4ed8;
+        font-style: italic;
+    }
+    .section-heading .ital-orange {
+        font-family: 'DM Serif Display', Georgia, serif;
+        color: #ea580c;
+        font-style: italic;
+    }
+    .counselling-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: 1.75rem;
+        margin-top: 1.25rem;
+        align-items: start;
+    }
+    .roadmap-card {
+        background: #FFFFFF;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        padding: 1.25rem 1.5rem 1.25rem;
+        box-shadow: 0 10px 32px -16px rgba(10,14,26,0.1);
+    }
+    .roadmap-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .roadmap-pill {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 5px 12px 5px 11px; border-radius: 99px;
+        background: #fff7ed;
+        border: 1px solid rgba(234,88,12,0.2);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: #ea580c;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+    .roadmap-pill svg { width: 13px; height: 13px; }
+    .roadmap-meta {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: #94a3b8;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .roadmap-steps {
+        list-style: none;
+        margin: 0 0 0.75rem;
+        padding: 0;
+        position: relative;
+    }
+    .roadmap-step {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        padding-bottom: 0.75rem;
+        position: relative;
+    }
+    .roadmap-step:last-child { padding-bottom: 0; }
+    .roadmap-step:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        left: 17px;
+        top: 36px;
+        bottom: 0;
+        width: 2px;
+        background: #e2e8f0;
+    }
+    .roadmap-step.done:not(:last-child)::before { background: #a7f3d0; }
+    .roadmap-step-num {
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #94a3b8;
+        border: 2px solid #e2e8f0;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        z-index: 1;
+    }
+    .roadmap-step.done .roadmap-step-num {
+        background: #d1fae5;
+        color: #059669;
+        border-color: #059669;
+    }
+    .roadmap-step.active .roadmap-step-num {
+        background: #fff7ed;
+        color: #ea580c;
+        border-color: #ea580c;
+        box-shadow: 0 0 0 6px rgba(234,88,12,0.12);
+    }
+    .roadmap-step-body { flex: 1; padding-top: 5px; }
+    .roadmap-step-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0A0E1A;
+        margin-bottom: 3px;
+        letter-spacing: -0.1px;
+    }
+    .roadmap-badge {
+        padding: 2px 8px;
+        border-radius: 5px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+    }
+    .roadmap-badge.done   { background: #d1fae5; color: #059669; }
+    .roadmap-badge.active { background: #ea580c; color: #fff; }
+    .roadmap-step-sub {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.85rem;
+        color: #5B6478;
+        margin: 0;
+    }
+    .roadmap-cta {
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(180deg, #f97316, #ea580c);
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        box-shadow: 0 10px 24px -8px rgba(234,88,12,0.4);
+        text-decoration: none;
+    }
+    .roadmap-cta:hover { transform: translateY(-1px); box-shadow: 0 14px 30px -8px rgba(234,88,12,0.5); }
+    .counselling-side .cs-eyebrow {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: #ea580c;
+        font-weight: 700;
+        margin: 0 0 1rem;
+    }
+    .cs-services {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    .cs-service {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1rem 1rem 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    .cs-service:hover {
+        border-color: rgba(29,78,216,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px -12px rgba(10,14,26,0.12);
+    }
+    .cs-service-icon {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 0.6rem;
+    }
+    .cs-service-icon.blue   { background: #eff6ff; color: #1d4ed8; }
+    .cs-service-icon.orange { background: #fff7ed; color: #ea580c; }
+    .cs-service-icon.purple { background: #f5f3ff; color: #7c3aed; }
+    .cs-service-icon.green  { background: #ecfdf5; color: #059669; }
+    .cs-service h4 {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0A0E1A;
+        margin: 0 0 0.25rem;
+        letter-spacing: -0.1px;
+    }
+    .cs-service p {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.82rem;
+        color: #5B6478;
+        margin: 0;
+        line-height: 1.4;
+    }
+    .mentor-strip {
+        margin-top: 1rem;
+        background: #0A0E1A;
+        color: #fff;
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .mentor-avatars { display: flex; align-items: center; flex-shrink: 0; }
+    .mentor-avatars span {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        border: 2px solid #0A0E1A;
+        margin-left: -10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .mentor-avatars span:first-child { margin-left: 0; }
+    .mentor-info { flex: 1; line-height: 1.3; }
+    .mentor-info b { font-size: 0.9rem; font-weight: 700; display: block; }
+    .mentor-info small { font-size: 0.75rem; color: #94a3b8; }
+    .mentor-cta {
+        padding: 0.55rem 1rem;
+        background: #ea580c;
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .mentor-cta:hover { background: #c2410c; }
+
+    /* ===== CORPORATE TRAINING ===================== */
+    .corporate-section {
+        background: #FFFFFF;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
+        width: 100vw;
+        padding: 2.5rem 0 3rem;
+    }
+    .corporate-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+    .corporate-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        overflow: hidden;
+        margin-top: 1.25rem;
+        box-shadow: 0 14px 36px -18px rgba(10,14,26,0.14);
+    }
+    .corporate-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.05fr;
+    }
+    .corp-header {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        color: #fff;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        min-height: 100%;
+    }
+    .corp-header::before {
+        content: "";
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+        background-size: 36px 36px;
+        -webkit-mask-image: radial-gradient(ellipse 70% 80% at 100% 0%, black, transparent);
+                mask-image: radial-gradient(ellipse 70% 80% at 100% 0%, black, transparent);
+        pointer-events: none;
+    }
+    .corp-header > * { position: relative; z-index: 1; }
+    .corp-header-eyebrow {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #fb923c;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        margin-bottom: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .corp-header h3 {
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: #fff;
+        line-height: 1.1;
+        letter-spacing: -0.6px;
+        margin: 0 0 0.6rem;
+    }
+    .corp-header h3 i {
+        color: #fb923c;
+        font-style: italic;
+    }
+    .corp-header p {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.98rem;
+        color: #dbeafe;
+        margin: 0 0 1rem;
+        max-width: 380px;
+        line-height: 1.45;
+    }
+    .corp-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .corp-stat {
+        padding: 1.1rem 0.8rem;
+        text-align: center;
+        border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .corp-stat:last-child { border-right: none; }
+    .corp-stat-val {
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 1.85rem;
+        line-height: 1;
+        color: #fff;
+    }
+    .corp-stat-lab {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.66rem;
+        font-weight: 600;
+        color: #bfdbfe;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
+        margin-top: 0.55rem;
+    }
+    .corp-body {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .corp-body-eyebrow {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #1d4ed8;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        margin-bottom: 0.75rem;
+    }
+    .corp-list { list-style: none; padding: 0; margin: 0 0 1rem; flex: 1; }
+    .corp-list-item {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .corp-list-item:last-child { border-bottom: none; }
+    .corp-item-num {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #1d4ed8;
+        width: 24px;
+        flex-shrink: 0;
+    }
+    .corp-item-body { flex: 1; }
+    .corp-item-title {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0A0E1A;
+        margin: 0;
+        letter-spacing: -0.1px;
+    }
+    .corp-item-sub {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.85rem;
+        color: #5B6478;
+        margin: 0.2rem 0 0;
+        line-height: 1.45;
+    }
+    .corp-item-check {
+        width: 26px; height: 26px;
+        border-radius: 50%;
+        background: #d1fae5;
+        color: #059669;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+    .corp-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    /* Responsive — Counselling & Corporate */
+    @media (max-width: 980px) {
+        .counselling-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        .corporate-grid { grid-template-columns: 1fr; }
+        .corp-header  { padding: 2rem; }
+        .corp-body    { padding: 2rem; }
+    }
+    @media (max-width: 600px) {
+        .cs-services { grid-template-columns: 1fr; }
+        .corp-stats  { grid-template-columns: 1fr 1fr; }
+        .corp-stat:nth-child(2) { border-right: none; }
+        .corp-stat:nth-child(3) {
+            grid-column: span 2;
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+        .corp-actions { flex-direction: column; align-items: stretch; }
+        .roadmap-card { padding: 1.5rem; }
+        .mentor-strip { flex-wrap: wrap; }
+    }
     </style>
 </head>
 <body>
@@ -1263,10 +1881,33 @@
 </div>
 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
+<!-- App-style top bar (outside hero to avoid overflow:hidden clipping) -->
+<div class="academy-topbar">
+    <div class="topbar-inner">
+        <nav class="topbar-nav">
+            <a href="#courses" class="topbar-link active">Courses</a>
+            <a href="#certifications" class="topbar-link">Certifications</a>
+            <a href="#counselling" class="topbar-link topbar-highlight">Career Counselling <span class="topbar-new-badge">New</span></a>
+            <a href="#corporate" class="topbar-link">Corporate Training</a>
+        </nav>
+        <div class="topbar-right" id="topbarAuth">
+            <a href="#/login" class="topbar-btn-signin">Sign In</a>
+            <a href="#/register" class="topbar-btn-register">Get Started Free</a>
+        </div>
+        <!-- Shown when logged in (hidden by default, JS toggles) -->
+        <div class="topbar-right topbar-user" id="topbarUser" style="display:none;">
+            <a href="courses/index.html" class="topbar-link">My Courses</a>
+            <div class="topbar-avatar" id="topbarAvatar"></div>
+            <button class="topbar-btn-signout" id="topbarSignOut">Sign Out</button>
+        </div>
+    </div>
+</div>
+
 <!-- ══════ HERO ══════ -->
 <section class="academy-hero">
     <div class="hero-pattern"></div>
     <div class="hero-overlay"></div>
+
     <div class="academy-hero-inner">
         <div class="academy-hero-text">
             <div class="hero-eyebrow">SustainSys AI Academy</div>
@@ -1379,7 +2020,7 @@
 </section>
 
 <!-- ══════ HOW IT WORKS ══════ -->
-<section class="academy-section" style="padding-top: 2.5rem; padding-bottom: 2.5rem;">
+<section class="academy-section" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
     <div class="section-eyebrow">How it works</div>
     <h2 class="section-heading">Your Learning Journey</h2>
     <div class="how-steps">
@@ -1402,6 +2043,125 @@
             <div class="how-step-num">4</div>
             <h4>Apply &amp; Grow</h4>
             <p>Apply your skills to real projects with our hands-on capstone exercises and join the SustainSys community.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══════ CAREER COUNSELLING ══════ -->
+<section class="counselling-section" id="counselling">
+    <div class="counselling-inner">
+        <div style="max-width: 760px;">
+            <div class="section-eyebrow">Career Counselling</div>
+            <h2 class="section-heading">Engineer your <span class="ital-orange">AI&nbsp;journey</span>.</h2>
+            <p class="section-desc">From "where do I start?" to "I'm an AI Architect" — we'll map every step, upgrade every skill, and place you in the right role.</p>
+        </div>
+
+        <div class="counselling-grid">
+
+            <!-- ROADMAP CARD -->
+            <div class="roadmap-card">
+                <div class="roadmap-head">
+                    <span class="roadmap-pill">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                        Your Roadmap
+                    </span>
+                    <span class="roadmap-meta">Est. 14 weeks</span>
+                </div>
+
+                <ul class="roadmap-steps">
+                    <li class="roadmap-step done">
+                        <span class="roadmap-step-num">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </span>
+                        <div class="roadmap-step-body">
+                            <div class="roadmap-step-title">AI Career Pathfinder <span class="roadmap-badge done">Complete</span></div>
+                            <p class="roadmap-step-sub">Career counselling · identify role</p>
+                        </div>
+                    </li>
+                    <li class="roadmap-step active">
+                        <span class="roadmap-step-num">2</span>
+                        <div class="roadmap-step-body">
+                            <div class="roadmap-step-title">Skill-Gap Audit <span class="roadmap-badge active">You are here</span></div>
+                            <p class="roadmap-step-sub">CV vs. target role · 90-day plan</p>
+                        </div>
+                    </li>
+                    <li class="roadmap-step">
+                        <span class="roadmap-step-num">3</span>
+                        <div class="roadmap-step-body">
+                            <div class="roadmap-step-title">1:1 with Mentor</div>
+                            <p class="roadmap-step-sub">Senior practitioner · 30 min</p>
+                        </div>
+                    </li>
+                    <li class="roadmap-step">
+                        <span class="roadmap-step-num">4</span>
+                        <div class="roadmap-step-body">
+                            <div class="roadmap-step-title">Personalised Curriculum</div>
+                            <p class="roadmap-step-sub">Custom 90-day learning plan</p>
+                        </div>
+                    </li>
+                    <li class="roadmap-step">
+                        <span class="roadmap-step-num">5</span>
+                        <div class="roadmap-step-body">
+                            <div class="roadmap-step-title">Placement &amp; Interview Prep</div>
+                            <p class="roadmap-step-sub">Mock interviews · referrals</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <a href="#contact" class="roadmap-cta">
+                    Continue your roadmap
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+
+            <!-- QUICK SERVICES -->
+            <div class="counselling-side">
+                <div class="cs-eyebrow">Quick start</div>
+                <div class="cs-services">
+                    <a href="#contact" class="cs-service">
+                        <div class="cs-service-icon blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                        </div>
+                        <h4>Book a 1:1</h4>
+                        <p>30 min · Free intro session</p>
+                    </a>
+                    <a href="#contact" class="cs-service">
+                        <div class="cs-service-icon orange">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                        </div>
+                        <h4>Skill-Gap Audit</h4>
+                        <p>AI-powered · 5 min</p>
+                    </a>
+                    <a href="#contact" class="cs-service">
+                        <div class="cs-service-icon purple">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg>
+                        </div>
+                        <h4>CV Review</h4>
+                        <p>Senior practitioner reviews</p>
+                    </a>
+                    <a href="#contact" class="cs-service">
+                        <div class="cs-service-icon green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                        </div>
+                        <h4>Salary Check</h4>
+                        <p>Live UK · EU market data</p>
+                    </a>
+                </div>
+
+                <div class="mentor-strip">
+                    <div class="mentor-avatars">
+                        <span style="background:#1d4ed8;">N</span>
+                        <span style="background:#ea580c;">A</span>
+                        <span style="background:#059669;">S</span>
+                        <span style="background:#7c3aed;">M</span>
+                    </div>
+                    <div class="mentor-info">
+                        <b>14 senior mentors available</b>
+                        <small>From DeepMind, Stripe, OpenAI, Anthropic, JP Morgan</small>
+                    </div>
+                    <a href="#contact" class="mentor-cta">Browse</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -1816,8 +2576,103 @@
 </section>
 
 
+<!-- ══════ CORPORATE TRAINING ══════ -->
+<section class="corporate-section" id="corporate">
+    <div class="corporate-inner">
+        <div style="max-width: 760px;">
+            <div class="section-eyebrow">For teams of 5 to 5,000</div>
+            <h2 class="section-heading">Corporate <span class="ital-blue">training</span>.</h2>
+            <p class="section-desc">Tailored AI training programmes for your whole organisation — live cohorts, dedicated coaches, and measurable business outcomes.</p>
+        </div>
+
+        <div class="corporate-card">
+            <div class="corporate-grid">
+
+                <!-- Blue header (left) -->
+                <div class="corp-header">
+                    <div>
+                        <div class="corp-header-eyebrow">
+                            <span style="width:6px;height:6px;border-radius:50%;background:#fb923c;display:inline-block;"></span>
+                            Custom programmes
+                        </div>
+                        <h3>Train your whole org on <i>production AI</i>.</h3>
+                        <p>Live cohorts, dedicated coaches, measurable outcomes — built around what your business actually cares about.</p>
+                    </div>
+                    <div class="corp-stats">
+                        <div class="corp-stat">
+                            <div class="corp-stat-val">84%</div>
+                            <div class="corp-stat-lab">Completion</div>
+                        </div>
+                        <div class="corp-stat">
+                            <div class="corp-stat-val">+38%</div>
+                            <div class="corp-stat-lab">Productivity</div>
+                        </div>
+                        <div class="corp-stat">
+                            <div class="corp-stat-val">3.2×</div>
+                            <div class="corp-stat-lab">ROI / yr</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programme list (right) -->
+                <div class="corp-body">
+                    <div class="corp-body-eyebrow">What's included</div>
+                    <ul class="corp-list">
+                        <li class="corp-list-item">
+                            <span class="corp-item-num">01</span>
+                            <div class="corp-item-body">
+                                <h4 class="corp-item-title">Role-based learning paths</h4>
+                                <p class="corp-item-sub">Tracks for engineering, product and executive teams</p>
+                            </div>
+                            <span class="corp-item-check">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                        </li>
+                        <li class="corp-list-item">
+                            <span class="corp-item-num">02</span>
+                            <div class="corp-item-body">
+                                <h4 class="corp-item-title">Dedicated cohort coach</h4>
+                                <p class="corp-item-sub">Live sessions, async support, L&amp;D partnership</p>
+                            </div>
+                            <span class="corp-item-check">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                        </li>
+                        <li class="corp-list-item">
+                            <span class="corp-item-num">03</span>
+                            <div class="corp-item-body">
+                                <h4 class="corp-item-title">Team progress dashboards</h4>
+                                <p class="corp-item-sub">Per-learner telemetry + skill heatmaps</p>
+                            </div>
+                            <span class="corp-item-check">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                        </li>
+                        <li class="corp-list-item">
+                            <span class="corp-item-num">04</span>
+                            <div class="corp-item-body">
+                                <h4 class="corp-item-title">Verifiable certificates</h4>
+                                <p class="corp-item-sub">Industry-recognised credentials on completion</p>
+                            </div>
+                            <span class="corp-item-check">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="corp-actions">
+                        <a href="#contact" class="btn-cta-orange">Book to Consult →</a>
+                        <a href="#contact" class="btn-cta-outline">Download brochure</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <!-- ══════ WEBSITE-EXCLUSIVE: AI LEARNING TOOLS ══════ -->
-<section style="background: #f8fafc; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw; padding: 4rem 0;">
+<section style="background: #f8fafc; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw; padding: 2.5rem 0;">
     <div style="max-width: 1140px; margin: 0 auto; padding: 0 2.5rem;">
         <div style="text-align:center;">
             <div class="section-eyebrow">Website Exclusive</div>
@@ -1867,49 +2722,6 @@
                 <h4>Publications Library</h4>
                 <p>Access our growing collection of in-depth technical guides on RAG, agents, PyTorch, NL2SQL, and more.</p>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- ══════ FAQ ══════ -->
-<section class="academy-section">
-    <div class="section-eyebrow">FAQs</div>
-    <h2 class="section-heading">Frequently Asked Questions</h2>
-    <div class="faq-list">
-        <div class="faq-item">
-            <button class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
-                Are the courses the same as on the mobile app?
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-a">Yes. All 8 courses and 3 certification programmes are identical to the SustainSysAI mobile app. Your progress, enrolments, and certificates sync seamlessly between web and app using the same account.</div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
-                Can I try courses before paying?
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-a">Absolutely. Two courses (Introduction to AI and AI Ethics &amp; Safety) are completely free. Every paid course also includes free preview lessons marked in each module, so you can experience the teaching style and content quality before enrolling.</div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
-                How do certifications work?
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-a">Each certification programme has structured modules with lessons, quizzes, and hands-on projects. Complete all modules, achieve the minimum quiz score, and finish the required projects to earn a verifiable certificate with a unique certificate ID.</div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
-                What content is locked for non-logged-in users?
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-a">Free preview lessons are accessible without an account. Full course content, progress tracking, quizzes, and certifications require a free sign-in. Paid courses additionally require enrolment (purchase) to access all lessons beyond the free previews.</div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');">
-                Do I need any prerequisites?
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="faq-a">Beginner courses require only basic programming knowledge and high school maths. Intermediate courses build on foundational AI knowledge. Each course and certification lists specific prerequisites on its detail page so you can plan your learning path.</div>
         </div>
     </div>
 </section>
@@ -2053,6 +2865,22 @@ document.addEventListener('DOMContentLoaded', function() {
     .supa-auth-card .auth-success { background: rgba(22,163,74,0.08); color: #16a34a; padding: 0.6rem 0.9rem; border-radius: 8px; font-size: 0.82rem; margin-bottom: 1rem; display: none; }
     .supa-auth-card .auth-forgot { display: block; text-align: right; font-size: 0.8rem; color: #1d4ed8; text-decoration: none; margin-top: -0.6rem; margin-bottom: 1rem; }
     .supa-auth-card .auth-forgot:hover { text-decoration: underline; }
+    .auth-close-btn {
+        position: absolute;
+        top: 12px; right: 14px;
+        width: 32px; height: 32px;
+        border: none;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 1.3rem;
+        line-height: 1;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.15s ease;
+        z-index: 1;
+    }
+    .auth-close-btn:hover { background: #e2e8f0; color: #0f172a; }
 </style>
 <script>
 (function supaAuthOverlay() {
@@ -2074,6 +2902,20 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (mode === 'forgot') {
             overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Reset Password</h2><p class="auth-subtitle">We&rsquo;ll send you a link to reset your password</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div><form id="supaForgotForm" autocomplete="on"><label for="forgotEmail">Email</label><input type="email" id="forgotEmail" name="email" placeholder="you@example.com" required autocomplete="email"><button type="submit" class="auth-btn" id="forgotBtn">Send Reset Link</button></form><div class="auth-switch"><a id="backToLogin">Back to Sign In</a></div></div>`;
         }
+
+        // Add close button to the card
+        const card = overlay.querySelector('.supa-auth-card');
+        if (card) {
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'auth-close-btn';
+            closeBtn.innerHTML = '&times;';
+            closeBtn.title = 'Close';
+            closeBtn.addEventListener('click', function() { window.location.hash = ''; });
+            card.style.position = 'relative';
+            card.insertBefore(closeBtn, card.firstChild);
+        }
+        // Close on backdrop click
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) window.location.hash = ''; });
 
         document.body.appendChild(overlay);
         bindEvents(mode);
@@ -2194,6 +3036,27 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {
         console.log('Nav user init error:', e);
     }
+})();
+</script>
+
+<!-- Topbar auth state -->
+<script>
+(async function initTopbar() {
+    if (typeof supaGetSession !== 'function') return;
+    try {
+        const session = await supaGetSession();
+        const authBar = document.getElementById('topbarAuth');
+        const userBar = document.getElementById('topbarUser');
+        if (!session || !session.user) { if(authBar) authBar.style.display='flex'; if(userBar) userBar.style.display='none'; return; }
+        const user = session.user;
+        const meta = user.user_metadata || {};
+        const firstName = meta.first_name || user.email.split('@')[0];
+        const lastName = meta.last_name || '';
+        const initials = ((firstName[0]||'')+(lastName[0]||'')).toUpperCase() || user.email[0].toUpperCase();
+        if(authBar) authBar.style.display='none';
+        if(userBar) { userBar.style.display='flex'; document.getElementById('topbarAvatar').textContent=initials; }
+        document.getElementById('topbarSignOut').addEventListener('click', async function(){ await supaSignOut(); window.location.reload(); });
+    } catch(e) { console.log('Topbar init error:', e); }
 })();
 </script>
 
