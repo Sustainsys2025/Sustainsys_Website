@@ -13,750 +13,890 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@Sustain_IT_uk">
     <meta name="theme-color" content="#f8fafc">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ===== AI Compliance Page-Specific Styles ===== */
+  /* ===== AI Compliance v2 Page-Specific Styles ===== */
 
-        /* Hero */
-        @keyframes heroGradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes orbFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.05); }
-            66% { transform: translate(-20px, 20px) scale(0.95); }
-        }
-        @keyframes orbFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-40px, 30px) scale(0.95); }
-            66% { transform: translate(25px, -35px) scale(1.08); }
-        }
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(29,78,216,0.15), inset 0 1px 0 rgba(255,255,255,0.06); }
-            50% { box-shadow: 0 0 30px rgba(29,78,216,0.25), inset 0 1px 0 rgba(255,255,255,0.1); }
-        }
-        .comp-hero {
-            position: relative;
-            min-height: 75vh;
-            padding: 160px 0 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            overflow: hidden;
-            background:
-                linear-gradient(160deg,
-                    #0a0f1e 0%,
-                    #0d1a3a 20%,
-                    #112252 40%,
-                    #0f1d45 60%,
-                    #1a1230 78%,
-                    #0a0f1e 100%
-                );
-        }
-        /* Decorative gradient orb — top right */
-        .comp-hero::before {
-            content: '';
-            position: absolute;
-            top: -10%; right: -5%;
-            width: 600px; height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(29,78,216,0.3) 0%, rgba(29,78,216,0.08) 40%, transparent 70%);
-            animation: orbFloat1 8s ease-in-out infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-        /* Decorative gradient orb — bottom left (warm accent) */
-        .comp-hero::after {
-            content: '';
-            position: absolute;
-            bottom: -15%; left: -8%;
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(234,88,12,0.12) 0%, rgba(234,88,12,0.03) 45%, transparent 70%);
-            animation: orbFloat2 10s ease-in-out infinite;
-            z-index: 1;
-            pointer-events: none;
-        }
-        /* Bottom separator line */
-        .comp-hero-inner::after {
-            content: '';
-            position: absolute;
-            bottom: -70px; left: -50vw; right: -50vw;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(147,197,253,0.25), transparent);
-            z-index: 3;
-            pointer-events: none;
-        }
-        /* Subtle dot grid overlay */
-        .comp-hero-grid {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            background-image: radial-gradient(rgba(147,197,253,0.07) 1px, transparent 1px);
-            background-size: 28px 28px;
-            mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, black 30%, transparent 72%);
-            -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, black 30%, transparent 72%);
-            pointer-events: none;
-        }
-        /* Shield / regulatory accent line on the left edge */
-        .comp-hero-accent {
-            position: absolute;
-            top: 15%; left: 0;
-            width: 3px;
-            height: 35%;
-            background: linear-gradient(to bottom, transparent, #1d4ed8, #ea580c, transparent);
-            z-index: 2;
-            border-radius: 0 2px 2px 0;
-        }
-        .comp-hero-inner {
-            position: relative;
-            z-index: 2;
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 0 2.5rem;
-            text-align: center;
-        }
-        .comp-hero-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #f97316;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 1.6rem;
-            animation: fadeSlideUp 0.6s ease-out both;
-        }
-        .comp-hero-eyebrow::before,
-        .comp-hero-eyebrow::after {
-            content: '';
-            width: 32px; height: 1px;
-            background: rgba(249,115,22,0.5);
-        }
-        .comp-hero-inner h1 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 3.2rem;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 1.15;
-            letter-spacing: -0.5px;
-            margin-bottom: 1.2rem;
-            animation: fadeSlideUp 0.8s ease-out both;
-        }
-        .comp-hero-inner h1 span {
-            background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 50%, #f97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .comp-hero-desc {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.08rem;
-            color: rgba(226,232,240,0.95);
-            line-height: 1.8;
-            max-width: 720px;
-            margin: 0 auto 2.2rem;
-            opacity: 0;
-            animation: fadeSlideUp 0.8s ease-out 0.3s both;
-        }
-        .comp-hero-pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 2.4rem;
-            animation: fadeSlideUp 0.9s ease-out 0.7s both;
-        }
-        .comp-hero-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 18px;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(147,197,253,0.2);
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            color: #e2e8f0;
-            font-weight: 500;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.25s ease;
-        }
-        .comp-hero-pill:hover {
-            background: rgba(29,78,216,0.18);
-            border-color: rgba(147,197,253,0.4);
-            transform: translateY(-2px);
-        }
-        .comp-hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 15px 32px;
-            background: linear-gradient(135deg, #ea580c, #dc2626);
-            color: #fff;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.92rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: fadeSlideUp 1s ease-out 0.9s both;
-            box-shadow: 0 4px 15px rgba(234,88,12,0.25);
-            position: relative;
-            overflow: hidden;
-        }
-        .comp-hero-cta::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-        .comp-hero-cta:hover::before {
-            transform: translateX(100%);
-        }
-        .comp-hero-cta:hover {
-            background: linear-gradient(135deg, #c2410c, #b91c1c);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(234,88,12,0.4);
-        }
-        /* Hero KPI strip */
-        .comp-hero-kpis {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2.4rem;
-            flex-wrap: wrap;
-            animation: fadeSlideUp 0.9s ease-out 0.5s both;
-        }
-        .comp-hero-kpi {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid transparent;
-            border-radius: 14px;
-            padding: 1.1rem 1.6rem;
-            text-align: center;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 140px;
-            position: relative;
-            background-image: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.02)), linear-gradient(135deg, rgba(29,78,216,0.35), rgba(147,197,253,0.15), rgba(234,88,12,0.2));
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            animation: pulseGlow 4s ease-in-out infinite;
-        }
-        .comp-hero-kpi:nth-child(2) { animation-delay: 0.5s; }
-        .comp-hero-kpi:nth-child(3) { animation-delay: 1s; }
-        .comp-hero-kpi:nth-child(4) { animation-delay: 1.5s; }
-        .comp-hero-kpi:hover {
-            background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.04)), linear-gradient(135deg, rgba(29,78,216,0.55), rgba(147,197,253,0.3), rgba(234,88,12,0.35));
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 8px 32px rgba(29,78,216,0.2), 0 0 20px rgba(29,78,216,0.1);
-        }
-        .comp-hero-kpi .kpi-val {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.65rem;
-            font-weight: 700;
-            color: #ffffff;
-            display: block;
-            text-shadow: 0 0 20px rgba(147,197,253,0.3);
-        }
-        .comp-hero-kpi .kpi-label {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.7rem;
-            color: #f97316;
-            margin-top: 0.25rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: block;
-        }
+  :root {
+    --blue-50:#EFF6FF; --blue-100:#DBEAFE; --blue-200:#BFDBFE;
+    --blue-400:#60A5FA; --blue-500:#3B82F6; --blue-600:#2563EB;
+    --blue-700:#1D4ED8; --blue-800:#1E3A8A; --blue-900:#0F1F4A; --blue-950:#0A1633;
+    --orange-50:#FFF7ED; --orange-100:#FFEDD5; --orange-300:#FDBA74;
+    --orange-400:#FB923C; --orange-500:#F97316; --orange-600:#EA580C; --orange-700:#C2410C;
+    --green-50:#F0FDF4; --green-100:#DCFCE7; --green-600:#16A34A;
+    --red-50:#FEF2F2; --red-600:#DC2626; --red-700:#B91C1C;
+    --ink:#0B1220; --ink-2:#1E293B; --ink-3:#475569;
+    --muted:#64748B; --line:#E2E8F0; --line-2:#F1F5F9;
+    --bg:#FFFFFF; --bg-2:#F8FAFC; --bg-warm:#FAFAF7;
+    --r-sm:8px; --r:14px; --r-lg:20px; --r-xl:28px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+    --shadow:    0 4px 12px rgba(15,23,42,0.06), 0 1px 3px rgba(15,23,42,0.04);
+    --shadow-lg: 0 24px 48px -12px rgba(15,23,42,0.18), 0 8px 16px -8px rgba(15,23,42,0.10);
+    --sans:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+    --display:'DM Serif Display',Georgia,serif;
+    --display-sans:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
 
-        /* Sections */
-        .comp-section {
-            padding: 4rem;
-            max-width: 100%;
-        }
-        .comp-section-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
 
-        /* Section headers */
-        .comp-label {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #1d4ed8;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .comp-label::before {
-            content: '';
-            width: 3px;
-            height: 16px;
-            border-radius: 2px;
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-        }
+  /* Display headings for v2 sections */
+  .hero h1, .hero h2, .section-head h2, .sf-content h2, .trust-grid h2, .package-card h2, .cta-band h2 { font-family: var(--display); font-weight: 400; line-height: 1.1; letter-spacing: -0.5px; margin: 0; }
+  .hero h3, .section h3, .cap h3, .step h3, .svc-item h4 { letter-spacing: -0.01em; }
 
-        .comp-section h2 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 2rem;
-            font-weight: 400;
-            color: #0f172a;
-            margin-bottom: 1rem;
-        }
-        .comp-section-desc {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            color: #64748b;
-            max-width: 740px;
-            line-height: 1.75;
-            margin-bottom: 2.5rem;
-        }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--sans);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--orange-600);
+    padding: 6px 12px; border-radius: 999px;
+    background: var(--orange-50); border: 1px solid var(--orange-100);
+  }
+  .eyebrow.blue  { color: var(--blue-700); background: var(--blue-50); border-color: var(--blue-100); }
+  .eyebrow.green { color: var(--green-600); background: var(--green-50); border-color: var(--green-100); }
+  .eyebrow.red   { color: var(--red-600);   background: var(--red-50);  border-color: #FECACA; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-        /* Intro two-column */
-        .comp-intro-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-            margin-top: 2rem;
-        }
-        .comp-intro-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .comp-intro-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #1d4ed8, #ea580c);
-        }
-        .comp-intro-card:hover {
-            border-color: rgba(29,78,216,0.25);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-        }
-        .comp-intro-card h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: #0f172a;
-            margin-bottom: 0.8rem;
-        }
-        .comp-intro-card p {
-            font-family: 'DM Sans', sans-serif;
-            color: #64748b;
-            font-size: 0.92rem;
-            line-height: 1.7;
-        }
+  /* ========== BUTTONS ========== */
+  .v2-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 48px; padding: 0 22px;
+    font-family: var(--sans); font-size: 14px; font-weight: 600;
+    border-radius: 12px; cursor: pointer;
+    transition: all 180ms ease;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--orange-500), var(--orange-600));
+    color: #fff;
+    box-shadow: 0 8px 20px -4px rgba(234,88,12,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -6px rgba(234,88,12,0.5); }
+  .btn-blue { background: var(--blue-700); color: #fff; box-shadow: 0 6px 16px -4px rgba(29,78,216,0.35); }
+  .btn-blue:hover { background: var(--blue-800); transform: translateY(-1px); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--blue-700); color: var(--blue-700); }
+  .btn-on-dark { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.18); backdrop-filter: blur(8px); }
+  .btn-on-dark:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32); }
+  .v2-btn .arr { display: inline-block; transition: transform 150ms; }
+  .v2-btn:hover .arr { transform: translateX(3px); }
 
-        /* Service items — clean list, no emoji icons */
-        .comp-services-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-        .comp-svc-item {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 1.8rem 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: flex-start;
-            gap: 1.2rem;
-        }
-        .comp-svc-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            border-radius: 16px 16px 0 0;
-            background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
-        }
-        .comp-svc-item:nth-child(even)::before {
-            background: linear-gradient(90deg, #1e3a8a, #ea580c);
-        }
-        .comp-svc-item:hover {
-            border-color: rgba(29,78,216,0.25);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-        }
-        .comp-svc-num {
-            flex-shrink: 0;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #1d4ed8;
-            background: rgba(29,78,216,0.08);
-            margin-top: 2px;
-        }
-        .comp-svc-item:nth-child(even) .comp-svc-num {
-            color: #1e3a8a;
-            background: rgba(30,58,138,0.08);
-        }
-        .comp-svc-text h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1rem;
-            font-weight: 400;
-            color: #0f172a;
-            margin-bottom: 0.4rem;
-        }
-        .comp-svc-text p {
-            font-family: 'DM Sans', sans-serif;
-            color: #64748b;
-            font-size: 0.88rem;
-            line-height: 1.65;
-        }
+  /* ========== HERO ========== */
+  .hero {
+    position: relative;
+    background:
+      radial-gradient(ellipse 90% 60% at 78% 0%, rgba(249,115,22,0.10), transparent 60%),
+      radial-gradient(ellipse 70% 80% at 0% 30%, rgba(59,130,246,0.12), transparent 60%),
+      linear-gradient(180deg, #FAFAF7 0%, #F5F3EE 50%, #F0EDE6 100%);
+    overflow: hidden;
+    padding: 140px 0 60px;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent 80%);
+    pointer-events: none;
+  }
+  .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
 
-        /* Collapsible service grid */
-        .comp-services-wrap {
-            position: relative;
-        }
-        .comp-services-wrap.is-collapsed .comp-services-grid {
-            max-height: 340px;
-            overflow: hidden;
-        }
-        .comp-services-wrap.is-collapsed .comp-services-fade {
-            display: block;
-        }
-        .comp-services-fade {
-            display: none;
-            position: absolute;
-            bottom: 52px;
-            left: 0; right: 0;
-            height: 100px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
-            pointer-events: none;
-            z-index: 2;
-        }
-        .comp-services-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            margin-top: 1rem;
-            padding: 12px 0;
-            background: none;
-            border: none;
-            border-top: 1px solid #e2e8f0;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: #1d4ed8;
-            transition: all 0.25s ease;
-            position: relative;
-            z-index: 3;
-        }
-        .comp-services-toggle:hover {
-            color: #1e3a8a;
-            border-top-color: rgba(29,78,216,0.3);
-        }
-        .comp-services-toggle svg {
-            width: 18px; height: 18px;
-            transition: transform 0.3s ease;
-        }
-        .comp-services-wrap:not(.is-collapsed) .comp-services-toggle svg {
-            transform: rotate(180deg);
-        }
+  .hero-eyebrow-line {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--sans);
+    font-size: 11px; font-weight: 700; color: var(--orange-600);
+    text-transform: uppercase; letter-spacing: 1.6px;
+    margin-bottom: 18px;
+  }
+  .hero-eyebrow-line::before { content: ''; width: 18px; height: 1px; background: var(--orange-500); }
 
-        /* Lifecycle section */
-        .comp-lifecycle {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.2rem;
-            margin-top: 2rem;
-        }
-        .comp-phase {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 1.6rem 1.4rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .comp-phase::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #1d4ed8, #1e3a8a);
-        }
-        .comp-phase:nth-child(2)::before { background: linear-gradient(90deg, #1e3a8a, #1d4ed8); }
-        .comp-phase:nth-child(3)::before { background: linear-gradient(90deg, #1d4ed8, #ea580c); }
-        .comp-phase:nth-child(4)::before { background: linear-gradient(90deg, #ea580c, #1e3a8a); }
-        .comp-phase:hover {
-            border-color: rgba(29,78,216,0.25);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-        }
-        .comp-phase-num {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #1d4ed8;
-            margin-bottom: 0.7rem;
-        }
-        .comp-phase h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.05rem;
-            font-weight: 400;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-        }
-        .comp-phase p {
-            font-family: 'DM Sans', sans-serif;
-            color: #64748b;
-            font-size: 0.82rem;
-            line-height: 1.6;
-        }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(40px, 4.7vw, 64px);
+    font-weight: 400; color: #0A0E1A;
+    line-height: 1.06; letter-spacing: -0.8px;
+  }
+  .hero h1 .accent-blue { color: var(--blue-700); font-style: normal; }
+  .hero h1 .accent-orange { color: var(--orange-600); font-style: italic; }
 
-        /* Framework tags */
-        .comp-frameworks {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 1.5rem;
-        }
-        .comp-fw-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #1d4ed8;
-            transition: all 0.25s ease;
-        }
-        .comp-fw-pill:hover {
-            border-color: rgba(29,78,216,0.3);
-            background: rgba(29,78,216,0.04);
-            transform: translateY(-1px);
-        }
+  .hero-sub {
+    font-family: var(--sans);
+    font-size: 17px; line-height: 1.6; color: #475569;
+    margin: 16px 0 20px; max-width: 560px;
+  }
+  .hero-pills {
+    display: flex; flex-wrap: nowrap; gap: 6px;
+    justify-content: center;
+    margin-bottom: 24px;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hero-pills::-webkit-scrollbar { display: none; }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600; color: var(--ink-2);
+    backdrop-filter: blur(8px);
+    transition: all 200ms;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .hero-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--blue-600); }
+  .hero-pill:nth-child(2n)::before { background: var(--orange-500); }
+  .hero-pill:hover { border-color: var(--blue-200); transform: translateY(-1px); }
 
-        /* Package callout */
-        .comp-package {
-            background: linear-gradient(135deg, rgba(29,78,216,0.06), rgba(234,88,12,0.04));
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 2.8rem 3.5rem;
-            margin-top: 3rem;
-            position: relative;
-            overflow: hidden;
-            max-width: 820px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .comp-package::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #1d4ed8, #ea580c);
-        }
-        .comp-package h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.6rem;
-            font-weight: 400;
-            color: #0f172a;
-            margin-bottom: 1.2rem;
-        }
-        .comp-package h3 span {
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .comp-package p {
-            font-family: 'DM Sans', sans-serif;
-            color: #475569;
-            font-size: 0.92rem;
-            line-height: 1.8;
-            max-width: 680px;
-            margin-bottom: 1.2rem;
-        }
-        .comp-package p:last-of-type {
-            margin-bottom: 1.6rem;
-        }
-        .comp-package-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.75rem 1.6rem;
-            background: linear-gradient(135deg, #1d4ed8, #ea580c);
-            color: #fff;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .comp-package-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(29,78,216,0.3);
-        }
+  .hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
 
-        /* Regulatory context callout */
-        .comp-context {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .comp-context-card {
-            border-radius: 16px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .comp-context-card.why {
-            background: linear-gradient(135deg, #fef2f2, #fff1f2);
-            border: 1px solid #fecdd3;
-            border-left: 4px solid #e11d48;
-        }
-        .comp-context-card.how {
-            background: linear-gradient(135deg, #eff6ff, #e0f2fe);
-            border: 1px solid #93c5fd;
-            border-left: 4px solid #1d4ed8;
-        }
-        .comp-context-card h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.1rem;
-            font-weight: 400;
-            margin-bottom: 0.6rem;
-        }
-        .comp-context-card.why h3 { color: #9f1239; }
-        .comp-context-card.how h3 { color: #1d4ed8; }
-        .comp-context-card p {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.88rem;
-            line-height: 1.65;
-        }
-        .comp-context-card.why p { color: #881337; }
-        .comp-context-card.how p { color: #1e3a8a; }
+  .hero-deadline {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin-top: 18px;
+    padding: 10px 16px;
+    background: rgba(220,38,38,0.06);
+    border: 1px solid rgba(220,38,38,0.18);
+    border-radius: 10px;
+    font-size: 13px; color: #991B1B; font-weight: 500;
+  }
+  .hero-deadline .blink {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #DC2626;
+    box-shadow: 0 0 0 0 rgba(220,38,38,0.5);
+    animation: blink 1.8s ease-out infinite;
+  }
+  .hero-deadline b { color: #7F1D1D; font-weight: 700; }
+  @keyframes blink {
+    0% { box-shadow: 0 0 0 0 rgba(220,38,38,0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(220,38,38,0); }
+    100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+  }
 
-        /* CTA section */
-        .comp-cta {
-            text-align: center;
-            padding: 3rem;
-            background: linear-gradient(135deg, rgba(29,78,216,0.06), rgba(29,78,216,0.06));
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            margin: 3rem 4rem;
-        }
-        .comp-cta h3 {
-            font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 2rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            color: #1d4ed8;
-        }
-        .comp-cta p {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.05rem;
-            color: #64748b;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+  /* ===== HERO ART: EU AI Act Risk Pyramid ===== */
+  .hero-art { position: relative; width: 100%; max-width: 560px; justify-self: center; padding: 18px 0; }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .comp-services-grid { grid-template-columns: 1fr; }
-            .comp-lifecycle { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 768px) {
-            .comp-hero {
-                min-height: auto;
-                padding: 120px 0 50px;
-                background:
-                    linear-gradient(175deg,
-                        #070b18 0%,
-                        #0c1633 25%,
-                        #112252 50%,
-                        #0d1a3a 75%,
-                        #070b18 100%
-                    );
-            }
-            .comp-hero::before {
-                width: 300px; height: 300px;
-                top: -5%; right: -10%;
-                background: radial-gradient(circle, rgba(29,78,216,0.35) 0%, transparent 65%);
-            }
-            .comp-hero::after {
-                width: 250px; height: 250px;
-                bottom: -5%; left: -10%;
-                background: radial-gradient(circle, rgba(234,88,12,0.18) 0%, transparent 65%);
-            }
-            .comp-hero-accent { display: none; }
-            .comp-hero-inner h1 { font-size: 2.2rem; }
-            .comp-hero-desc { font-size: 0.95rem; color: rgba(255,255,255,0.92); }
-            .comp-hero-kpis { gap: 0.6rem; }
-            .comp-hero-kpi {
-                min-width: 100px;
-                padding: 0.8rem 1rem;
-                background-image:
-                    linear-gradient(rgba(15,23,60,0.85), rgba(15,23,60,0.7)),
-                    linear-gradient(135deg, rgba(29,78,216,0.5), rgba(147,197,253,0.2), rgba(234,88,12,0.3));
-            }
-            .comp-hero-kpi .kpi-val { font-size: 1.3rem; }
-            .comp-hero-pill {
-                background: rgba(15,23,60,0.6);
-                border-color: rgba(147,197,253,0.25);
-            }
-            .comp-intro-grid { grid-template-columns: 1fr; }
-            .comp-services-grid { grid-template-columns: 1fr; }
-            .comp-lifecycle { grid-template-columns: 1fr; }
-            .comp-context { grid-template-columns: 1fr; }
-            .comp-section { padding: 2rem 1rem; }
-            .comp-cta { margin: 2rem 1rem; padding: 2rem 1.5rem; }
-            .comp-cta h3 { font-size: 1.6rem; }
-            .comp-package { padding: 2rem 1.5rem; }
-        }
-    @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-    .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
+  .pyramid-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 26px 24px 28px;
+    box-shadow: 0 32px 80px -20px rgba(15,23,42,0.18), 0 12px 32px -12px rgba(15,23,42,0.10);
+    position: relative;
+    overflow: hidden;
+  }
+  .pyramid-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #DC2626 0%, var(--orange-500) 35%, #EAB308 65%, var(--green-600) 100%);
+  }
+  .pyr-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .pyr-head-l { display: flex; align-items: center; gap: 12px; }
+  .pyr-head-flag {
+    width: 38px; height: 28px; border-radius: 5px;
+    background: #003399;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,51,153,0.25);
+    position: relative;
+  }
+  .pyr-head-flag svg { width: 20px; height: 20px; }
+  .pyr-head-t { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .pyr-head-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+  .pyr-live {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 10px; font-weight: 700; color: var(--green-600);
+    text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  .pyr-live::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green-600);
+    animation: blink 1.8s ease-out infinite;
+  }
+  .pyramid { position: relative; padding: 0 24px; }
+  .pyr-tier {
+    position: relative; margin: 0 auto 7px;
+    height: 60px;
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 0 18px 0 22px;
+    color: #fff;
+    font-family: var(--sans);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(15,23,42,0.10);
+    transition: transform 220ms ease;
+  }
+  .pyr-tier:hover { transform: translateY(-2px) scale(1.015); }
+  .pyr-tier-1 { width: 30%; background: linear-gradient(135deg, #DC2626, #7F1D1D); }
+  .pyr-tier-2 { width: 56%; background: linear-gradient(135deg, var(--orange-500), #B91C1C); position: relative; z-index: 2; }
+  .pyr-tier-2::after {
+    content: ''; position: absolute; inset: -3px; border-radius: 9px;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.18);
+    pointer-events: none;
+    animation: focusGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes focusGlow {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(249,115,22,0.15); }
+    50% { box-shadow: 0 0 0 10px rgba(249,115,22,0.0); }
+  }
+  .pyr-tier-3 { width: 78%; background: linear-gradient(135deg, #EAB308, #92400E); }
+  .pyr-tier-4 { width: 100%; background: linear-gradient(135deg, var(--green-600), #14532D); margin-bottom: 0; }
+  .pyr-tier-l { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .pyr-tier-nm { font-size: 13px; font-weight: 800; letter-spacing: -0.01em; text-shadow: 0 1px 1px rgba(0,0,0,0.18); }
+  .pyr-tier-1 .pyr-tier-nm { font-size: 11px; }
+  .pyr-tier-meta { font-size: 10px; opacity: 0.86; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pyr-tier-1 .pyr-tier-meta { display: none; }
+  .pyr-tier-r {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px;
+    background: rgba(255,255,255,0.20);
+    backdrop-filter: blur(4px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .pyr-tier-r b { font-family: var(--display); font-size: 16px; font-weight: 400; line-height: 1; letter-spacing: -0.5px; }
+  .pyr-tier-1 .pyr-tier-r { padding: 3px 8px; font-size: 9px; }
+  .pyr-tier-1 .pyr-tier-r b { font-size: 12px; }
+  .pyr-callout {
+    position: absolute;
+    right: -4px; top: 50%; transform: translate(100%, -50%);
+    background: var(--ink);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px -4px rgba(15,23,42,0.3);
+    z-index: 3;
+  }
+  .pyr-callout::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: 50%; transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid var(--ink);
+  }
+  .pyr-callout b { color: var(--orange-400); margin-right: 4px; font-weight: 800; }
+  .pyr-foot {
+    margin-top: 24px; padding-top: 18px;
+    border-top: 1px dashed var(--line);
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .pyr-foot-cell { display: flex; flex-direction: column; gap: 2px; }
+  .pyr-foot-cell .v {
+    font-family: var(--display); font-size: 22px; font-weight: 400;
+    color: var(--ink); line-height: 1;
+  }
+  .pyr-foot-cell .v.orange { color: var(--orange-600); }
+  .pyr-foot-cell .v.red { color: #DC2626; }
+  .pyr-foot-cell .l {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-weight: 600; margin-top: 4px;
+  }
+
+  /* ========== FRAMEWORK STRIP ========== */
+  .fw-strip { padding: 18px 0; background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .fw-strip-head { text-align: center; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 12px; font-weight: 600; }
+  .fw-strip-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; align-items: center; }
+  .fw-strip-item {
+    height: 56px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    padding: 0 14px;
+    transition: all 200ms;
+  }
+  .fw-strip-item:hover { border-color: var(--blue-200); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .fw-strip-item .icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--sans); font-weight: 800; font-size: 12px; letter-spacing: -0.02em;
+  }
+  .fw-strip-item .icon.eu  { background: linear-gradient(135deg, #003399, #1D4ED8); color: #FFCC00; }
+  .fw-strip-item .icon.iso { background: linear-gradient(135deg, #0F172A, #334155); color: #fff; }
+  .fw-strip-item .icon.nist{ background: linear-gradient(135deg, #1E40AF, #312E81); color: #fff; }
+  .fw-strip-item .icon.uk  { background: linear-gradient(135deg, #DC2626, #1E40AF); color: #fff; }
+  .fw-strip-item .icon.gdpr{ background: linear-gradient(135deg, #003399, #2563EB); color: #FFCC00; }
+  .fw-strip-item .icon.fria{ background: linear-gradient(135deg, var(--orange-500), var(--orange-700)); color: #fff; }
+  .fw-strip-item .lbl { display: flex; flex-direction: column; }
+  .fw-strip-item .lbl b { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .fw-strip-item .lbl span { font-size: 10px; color: var(--muted); margin-top: 1px; }
+
+  /* ========== SECTIONS ========== */
+  .section { padding: 48px 0; }
+  .section.alt { background: var(--bg-2); }
+  .section-head { max-width: 760px; margin-bottom: 28px; }
+  .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+  .section-head h2 {
+    margin-top: 12px;
+    font-size: clamp(28px, 3.2vw, 42px);
+    color: #0A0E1A;
+  }
+  .section-head h2 .grad { color: var(--blue-700); font-style: normal; }
+  .section-head h2 .grad-orange { color: var(--orange-600); font-style: italic; }
+  .section-head .lede { font-family: var(--sans); font-size: 16px; color: var(--ink-3); margin-top: 12px; line-height: 1.6; }
+
+  /* ========== CAPS GRID (services) ========== */
+  .caps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .cap {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    transition: all 250ms ease;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .cap::after {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue-700), var(--blue-500));
+    opacity: 0; transition: opacity 220ms;
+  }
+  .cap:hover { border-color: var(--blue-200); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .cap:hover::after { opacity: 1; }
+  .cap.orange::after { background: linear-gradient(90deg, var(--orange-500), var(--orange-700)); }
+
+  .cap.featured {
+    background: linear-gradient(160deg, var(--blue-800), var(--blue-950));
+    color: #fff;
+    border-color: var(--blue-800);
+    grid-column: 1 / -1;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+  }
+  .cap.featured::after { display: none; }
+  .cap.featured h3 { color: #fff; }
+  .cap.featured p { color: #CBD5E1; }
+
+  .cap-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue-700);
+    margin-bottom: 16px;
+  }
+  .cap.orange .cap-icon { background: linear-gradient(135deg, var(--orange-50), var(--orange-100)); color: var(--orange-600); }
+  .cap.featured .cap-icon { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--orange-400); }
+  .cap-icon svg { width: 22px; height: 22px; }
+
+  .cap h3 { margin-bottom: 10px; font-family: var(--sans); font-weight: 700; font-size: 19px; letter-spacing: -0.01em; }
+  .cap p { font-size: 14.5px; color: var(--ink-3); line-height: 1.6; margin: 0 0 18px; flex: 1; }
+  .cap-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .cap-tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; background: var(--blue-50); color: var(--blue-700); }
+  .cap.orange .cap-tag { background: var(--orange-50); color: var(--orange-700); }
+  .cap.featured .cap-tag { background: rgba(255,255,255,0.1); color: #BFDBFE; }
+
+  /* Visual block for featured */
+  .cap-vis {
+    width: 220px; flex-shrink: 0;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .cap-vis-row { display: flex; align-items: center; gap: 10px; }
+  .cap-vis-row .lbl { font-size: 11px; color: #93C5FD; flex: 1; }
+  .cap-vis-row .bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; flex: 2; }
+  .cap-vis-row .bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--orange-500), var(--orange-300)); border-radius: 3px; }
+  .cap-vis-row .pct { font-size: 11px; color: #fff; font-family: var(--mono); width: 36px; text-align: right; }
+
+  /* ========== SHOWCASE ========== */
+  .showcase {
+    background:
+      radial-gradient(circle at 20% 30%, rgba(59,130,246,0.06), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(249,115,22,0.06), transparent 40%),
+      var(--bg-2);
+    padding: 48px 0;
+    position: relative; overflow: hidden;
+  }
+  .showcase-feature { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 0; }
+  .sf-content .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--orange-500), var(--orange-600));
+    color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .sf-content h2 { font-size: clamp(24px, 2.8vw, 34px); margin-bottom: 14px; }
+  .sf-content p { font-family: var(--sans); font-size: 15px; color: var(--ink-3); line-height: 1.6; margin-bottom: 20px; max-width: 480px; }
+  .sf-bullets { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 10px; }
+  .sf-bullets li { display: flex; align-items: flex-start; gap: 12px; font-family: var(--sans); font-size: 15px; color: var(--ink-2); }
+  .sf-bullets .check { width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(135deg, var(--blue-600), var(--blue-700)); color: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+  /* Conformity Passport */
+  .passport {
+    position: relative;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 60px, rgba(15,31,74,0.02) 60px 61px),
+      repeating-linear-gradient(0deg, transparent 0 60px, rgba(15,31,74,0.02) 60px 61px),
+      linear-gradient(160deg, #FDFBF5 0%, #F5F0E4 100%);
+    border: 1px solid #E8DFCC;
+    border-radius: 14px;
+    padding: 32px 34px 34px;
+    box-shadow: 0 32px 60px -16px rgba(15,23,42,0.20), 0 8px 24px -8px rgba(15,23,42,0.10);
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .passport::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: repeating-linear-gradient(45deg, var(--blue-700) 0 8px, #FFCC00 8px 16px);
+  }
+  .pp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1.5px solid #E8DFCC; }
+  .pp-head-l { display: flex; align-items: center; gap: 12px; }
+  .pp-flag {
+    width: 44px; height: 32px; border-radius: 4px;
+    background: #003399;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,51,153,0.3);
+  }
+  .pp-flag svg { width: 22px; height: 22px; }
+  .pp-head-titles { display: flex; flex-direction: column; }
+  .pp-head-t1 { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; }
+  .pp-head-t2 { font-family: var(--display); font-size: 20px; font-weight: 400; color: var(--ink); margin-top: 2px; letter-spacing: -0.3px; }
+  .pp-head-r {
+    display: flex; align-items: center; justify-content: center;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 2px solid #DC2626;
+    color: #DC2626;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    line-height: 1.2;
+    transform: rotate(-12deg);
+    text-align: center;
+    background: rgba(254,242,242,0.3);
+    flex-shrink: 0;
+    padding: 4px;
+  }
+  .pp-head-r b { display: block; font-size: 13px; letter-spacing: 0; font-family: var(--display); font-weight: 400; margin-bottom: 2px; }
+  .pp-body { padding: 22px 0 0; }
+  .pp-row { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 8px 0; align-items: baseline; }
+  .pp-row + .pp-row { border-top: 1px dashed #E8DFCC; }
+  .pp-row .k { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+  .pp-row .v { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink); }
+  .pp-row .v .pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; margin-right: 6px; }
+  .pp-row .v .pill.high { background: rgba(220,38,38,0.10); color: #B91C1C; }
+  .pp-row .v .pill.ce { background: rgba(0,51,153,0.10); color: #003399; }
+  .pp-row .v .pill.ok { background: rgba(22,163,74,0.12); color: #15803D; }
+
+  .pp-articles {
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(232,223,204,0.8);
+    border-radius: 10px;
+  }
+  .pp-articles-h {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .pp-articles-h .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+  .pp-articles-h .cnt { font-family: var(--mono); font-size: 11px; color: var(--green-600); font-weight: 700; }
+  .pp-arts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+  .pp-art {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink-2); font-weight: 500;
+  }
+  .pp-art svg { color: var(--green-600); flex-shrink: 0; }
+  .pp-art.pending { color: var(--orange-700); }
+  .pp-art.pending svg { color: var(--orange-500); }
+
+  .pp-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1.5px solid #E8DFCC;
+  }
+  .pp-sig { flex: 1; }
+  .pp-sig-name {
+    font-family: 'DM Serif Display', cursive; font-size: 18px; font-style: italic;
+    color: var(--blue-800); line-height: 1;
+    border-bottom: 1px solid var(--ink-3); padding-bottom: 4px; display: inline-block;
+  }
+  .pp-sig-role { font-size: 10px; color: var(--muted); margin-top: 6px; font-weight: 600; }
+  .pp-stamp {
+    width: 78px; height: 78px; border-radius: 50%;
+    border: 2px solid var(--green-600);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    color: var(--green-600);
+    font-family: var(--mono); font-size: 8px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transform: rotate(8deg);
+    background: rgba(240,253,244,0.4);
+    flex-shrink: 0;
+    line-height: 1.1;
+    padding: 4px;
+    text-align: center;
+  }
+  .pp-stamp b { display: block; font-family: var(--display); font-weight: 400; font-size: 14px; letter-spacing: 0; margin: 2px 0; }
+
+  /* ===== LIFECYCLE: PDCA Circle ===== */
+  .cycle-wrap {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    aspect-ratio: 1/1;
+  }
+  .cycle-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .cycle-center {
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 190px; height: 190px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    box-shadow: 0 16px 40px -10px rgba(15,23,42,0.15), 0 0 0 10px rgba(255,255,255,0.6);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+  }
+  .cycle-center-eye {
+    font-size: 10px; font-weight: 700; color: var(--orange-600);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .cycle-center h3 {
+    font-family: var(--display); font-size: 22px; font-weight: 400;
+    color: var(--ink); line-height: 1.1; letter-spacing: -0.3px;
+    margin: 0;
+  }
+  .cycle-center .desc {
+    font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5;
+  }
+  .cycle-center .frames {
+    display: flex; gap: 6px; margin-top: 12px; justify-content: center;
+  }
+  .cycle-center .frames span {
+    font-size: 9px; padding: 2px 7px; border-radius: 4px;
+    background: var(--blue-50); color: var(--blue-700); font-weight: 700;
+  }
+  .cycle-card {
+    position: absolute;
+    width: 195px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 16px 40px -8px rgba(15,23,42,0.12);
+    transition: all 280ms ease;
+  }
+  .cycle-card:hover { transform: scale(1.04); box-shadow: 0 24px 50px -8px rgba(15,23,42,0.18); }
+  .cycle-card-1 { top: 0; left: 50%; transform: translateX(-50%); }
+  .cycle-card-1:hover { transform: translateX(-50%) scale(1.04); }
+  .cycle-card-2 { top: 50%; right: 0; transform: translateY(-50%); }
+  .cycle-card-2:hover { transform: translateY(-50%) scale(1.04); }
+  .cycle-card-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .cycle-card-3:hover { transform: translateX(-50%) scale(1.04); }
+  .cycle-card-4 { top: 50%; left: 0; transform: translateY(-50%); }
+  .cycle-card-4:hover { transform: translateY(-50%) scale(1.04); }
+
+  .cycle-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .cycle-card-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 14px; font-weight: 400;
+    color: #fff; flex-shrink: 0;
+  }
+  .cycle-card-1 .cycle-card-num { background: linear-gradient(135deg, var(--blue-600), var(--blue-800)); }
+  .cycle-card-2 .cycle-card-num { background: linear-gradient(135deg, var(--orange-500), var(--orange-700)); }
+  .cycle-card-3 .cycle-card-num { background: linear-gradient(135deg, #16A34A, #166534); }
+  .cycle-card-4 .cycle-card-num { background: linear-gradient(135deg, #7C3AED, #4C1D95); }
+  .cycle-card-l { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
+  .cycle-card-l b { color: var(--ink); font-weight: 800; letter-spacing: -0.01em; font-size: 14px; display: block; text-transform: none; margin-top: 1px; font-family: var(--sans); }
+  .cycle-card-p { font-size: 12.5px; color: var(--ink-3); line-height: 1.55; margin: 0; }
+  .cycle-card-anchors { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+  .cycle-card-anchors span {
+    font-size: 9.5px; padding: 2px 7px; border-radius: 4px;
+    background: var(--line-2); color: var(--ink-3); font-weight: 600;
+  }
+  .cycle-card-1 .cycle-card-anchors span { background: var(--blue-50); color: var(--blue-700); }
+  .cycle-card-2 .cycle-card-anchors span { background: var(--orange-50); color: var(--orange-700); }
+  .cycle-card-3 .cycle-card-anchors span { background: var(--green-50); color: #166534; }
+  .cycle-card-4 .cycle-card-anchors span { background: #F5F3FF; color: #5B21B6; }
+
+  /* ========== SERVICE CATALOGUE ========== */
+  .svc-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .svc-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 18px;
+    transition: all 250ms;
+    display: flex; align-items: flex-start; gap: 16px;
+    position: relative;
+  }
+  .svc-item:hover { border-color: var(--blue-200); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .svc-num {
+    flex-shrink: 0;
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    background: var(--blue-50); color: var(--blue-700);
+    margin-top: 2px;
+  }
+  .svc-item:nth-child(even) .svc-num { background: var(--orange-50); color: var(--orange-700); }
+  .svc-item h4 { font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; }
+  .svc-item p { font-size: 13px; color: var(--ink-3); line-height: 1.55; margin: 0; }
+
+  .svc-wrap { position: relative; }
+  .svc-wrap.is-collapsed .svc-list { max-height: 360px; overflow: hidden; }
+  .svc-wrap.is-collapsed .svc-fade { display: block; }
+  .svc-fade {
+    display: none;
+    position: absolute; bottom: 60px; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(248,250,252,0) 0%, rgba(248,250,252,1) 85%);
+    pointer-events: none; z-index: 2;
+  }
+  .section.alt .svc-fade { background: linear-gradient(to bottom, rgba(248,250,252,0) 0%, var(--bg-2) 85%); }
+  .svc-toggle {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin: 24px auto 0;
+    padding: 12px 28px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 13px; font-weight: 600; color: var(--blue-700);
+    transition: all 200ms;
+    box-shadow: var(--shadow-sm);
+  }
+  .svc-toggle:hover { border-color: var(--blue-700); background: var(--blue-50); }
+  .svc-toggle svg { width: 16px; height: 16px; transition: transform 0.3s; }
+  .svc-wrap:not(.is-collapsed) .svc-toggle svg { transform: rotate(180deg); }
+  .svc-toggle-wrap { position: relative; z-index: 3; display: flex; justify-content: center; }
+
+  /* ========== TRUST PANEL ========== */
+  .trust-panel {
+    background: linear-gradient(160deg, #c8d3e8 0%, #dde4f0 100%);
+    color: #0A0E1A;
+    padding: 48px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .trust-panel::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 60% 80% at 50% 50%, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 50%, black, transparent 80%);
+  }
+  .trust-grid { position: relative; display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
+  .trust-grid h2 { color: #0A0E1A; font-size: clamp(28px, 3vw, 38px); margin-bottom: 18px; }
+  .trust-grid h2 .grad { color: var(--orange-600); font-style: italic; }
+  .trust-grid p { font-family: var(--sans); color: #334155; font-size: 17px; line-height: 1.6; max-width: 460px; }
+
+  /* Standards Stack */
+  .stack-wrap {
+    position: relative;
+    padding: 20px 0 0;
+  }
+  .stack-label-top {
+    text-align: center; margin-bottom: 18px;
+    font-size: 11px; font-weight: 700; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.16em;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .stack-label-top svg { color: var(--orange-500); }
+  .stack {
+    display: flex; flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  .stack-layer {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px -8px rgba(15,23,42,0.10);
+    transition: all 220ms ease;
+    position: relative;
+  }
+  .stack-layer:hover { transform: translateX(4px); background: rgba(255,255,255,1); border-color: rgba(0,0,0,0.12); }
+  .stack-layer::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+  }
+  .stack-layer-1::before { background: linear-gradient(180deg, #003399, #1D4ED8); }
+  .stack-layer-2::before { background: linear-gradient(180deg, #1E293B, #0F172A); }
+  .stack-layer-3::before { background: linear-gradient(180deg, var(--orange-500), var(--orange-700)); }
+  .stack-layer-4::before { background: linear-gradient(180deg, #1D4ED8, #1E3A8A); }
+  .stack-layer-5::before { background: linear-gradient(180deg, var(--green-600), #14532D); }
+  .stack-ico {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; flex-shrink: 0;
+  }
+  .stack-layer-1 .stack-ico { background: linear-gradient(135deg, #003399, #1D4ED8); }
+  .stack-layer-2 .stack-ico { background: linear-gradient(135deg, #1E293B, #0F172A); }
+  .stack-layer-3 .stack-ico { background: linear-gradient(135deg, var(--orange-500), var(--orange-700)); }
+  .stack-layer-4 .stack-ico { background: linear-gradient(135deg, var(--blue-600), var(--blue-800)); }
+  .stack-layer-5 .stack-ico { background: linear-gradient(135deg, var(--green-600), #14532D); }
+  .stack-ico svg { width: 22px; height: 22px; }
+  .stack-text { min-width: 0; }
+  .stack-text h4 { font-family: var(--sans); font-size: 15px; font-weight: 800; color: #0A0E1A; letter-spacing: -0.01em; margin: 0 0 2px; }
+  .stack-text p { font-size: 12px; color: #475569; margin: 0; line-height: 1.45; }
+  .stack-tag {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 6px;
+    background: rgba(0,0,0,0.05); color: #1E293B;
+    white-space: nowrap;
+  }
+  .stack-foundation {
+    margin-top: 14px;
+    padding: 14px 22px;
+    background: rgba(15,31,74,0.08);
+    border: 1px dashed rgba(15,31,74,0.18);
+    border-radius: 14px;
+    text-align: center;
+    font-size: 11px; color: #0A0E1A; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.14em;
+  }
+
+  /* ========== PACKAGE CARD ========== */
+  .package-card {
+    background: linear-gradient(160deg, #ffffff 0%, #fdfbf7 100%);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 32px 40px;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    max-width: 980px; margin: 0 auto;
+  }
+  .package-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: linear-gradient(90deg, var(--blue-700), var(--orange-500));
+  }
+  .package-card::after {
+    content: ""; position: absolute; bottom: -80px; right: -80px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.10), transparent 70%);
+  }
+  .package-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--orange-600); margin-bottom: 10px; position: relative; }
+  .package-card h2 { font-size: clamp(28px, 3vw, 38px); color: #0A0E1A; margin-bottom: 16px; position: relative; }
+  .package-card h2 .grad { color: var(--blue-700); font-style: normal; }
+  .package-card p { font-family: var(--sans); font-size: 16px; color: var(--ink-3); line-height: 1.7; margin: 0 0 14px; max-width: 720px; position: relative; }
+  .package-actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; position: relative; }
+  .package-incl {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .package-incl-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--ink-2); font-family: var(--sans); }
+  .package-incl-item svg { color: var(--green-600); flex-shrink: 0; margin-top: 1px; }
+
+  /* ========== CTA BAND ========== */
+  .cta-band {
+    padding: 120px 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(249,115,22,0.15), transparent 60%),
+      radial-gradient(ellipse 50% 100% at 0% 50%, rgba(59,130,246,0.20), transparent 60%),
+      linear-gradient(160deg, #061130, #0F1F4A);
+    color: #fff;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-band::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+  }
+  .cta-band-inner { position: relative; max-width: 760px; margin: 0 auto; }
+  .cta-band .eyebrow { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.14); color: #FDBA74; margin-bottom: 22px; }
+  .cta-band h2 { font-size: clamp(36px, 4.4vw, 56px); line-height: 1.08; margin-bottom: 22px; }
+  .cta-band h2 .grad { color: #93C5FD; font-style: normal; }
+  .cta-band h2 .grad-o { color: var(--orange-400); font-style: italic; }
+  .cta-band p { font-family: var(--sans); font-size: 19px; color: #CBD5E1; margin-bottom: 36px; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* ===== Responsive overrides for new visuals ===== */
+  @media (max-width: 1024px) {
+    .pyr-callout { display: none; }
+    .cycle-wrap { aspect-ratio: auto; max-width: 100%; }
+    .cycle-svg { display: none; }
+    .cycle-center { position: static; transform: none; width: 100%; max-width: 360px; margin: 0 auto 24px; border-radius: 20px; aspect-ratio: auto; height: auto; padding: 28px; }
+    .cycle-card { position: static; transform: none !important; width: 100%; margin-bottom: 14px; }
+    .cycle-card:hover { transform: scale(1.02) !important; }
+  }
+  @media (max-width: 640px) {
+    .pp-head-r { width: 60px; height: 60px; font-size: 7px; }
+    .pp-head-r b { font-size: 10px; }
+    .pp-stamp { width: 60px; height: 60px; font-size: 7px; }
+    .pp-stamp b { font-size: 10px; }
+    .pp-arts { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 1024px) {
+    .hero { padding: 120px 0 36px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+    .hero-grid > div { display: flex; flex-direction: column; align-items: center; }
+    .hero-eyebrow-line { justify-content: center; }
+    .hero-sub { margin-left: auto; margin-right: auto; }
+    .hero-pills { justify-content: center; }
+    .hero-cta-row { justify-content: center; width: 100%; }
+    .hero-art { max-width: 460px; margin: 0 auto; }
+    .caps-grid { grid-template-columns: repeat(2, 1fr); }
+    .cap.featured { grid-column: span 2; grid-template-columns: 1fr; }
+    .cap-vis { width: 100%; }
+    .showcase-feature { grid-template-columns: 1fr; gap: 28px; }
+    .trust-grid { grid-template-columns: 1fr; gap: 28px; }
+    .svc-list { grid-template-columns: 1fr; }
+    .fw-strip-row { grid-template-columns: repeat(3, 1fr); }
+    .package-incl { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding-left: 20px; padding-right: 20px; }
+    .section { padding: 36px 0; }
+    .hero h1 { font-size: 36px; letter-spacing: -0.5px; }
+    .hero-sub { font-size: 16px; }
+    .caps-grid { grid-template-columns: 1fr; }
+    .cap.featured { grid-column: span 1; }
+    .badges-grid { grid-template-columns: repeat(2, 1fr); }
+    .fw-strip-row { grid-template-columns: repeat(2, 1fr); }
+    .package-card { padding: 24px 20px; }
+    .package-incl { grid-template-columns: 1fr; }
+  }
+
+  /* Nav star animation (from original) */
+  @keyframes blink-star { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+  .nav-star { display: inline-block; margin-left: 3px; font-size: 0.7rem; animation: blink-star 1.2s ease-in-out infinite; color: #ef4444; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -905,299 +1045,736 @@
     </div>
     <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
 
-    <!-- Hero -->
-    <section class="comp-hero">
-        <div class="comp-hero-grid"></div>
-        <div class="comp-hero-accent"></div>
-        <div class="comp-hero-inner">
-            <div class="comp-hero-eyebrow">AI Governance &amp; Compliance</div>
-            <h1>AI Regulatory Compliance <span>&amp; Governance</span></h1>
-            <p class="comp-hero-desc">End-to-end regulatory compliance support for AI projects &mdash; from regulatory impact assessment and risk classification to conformity assessment, production safeguards, and continuous post-deployment monitoring.</p>
-            <div class="comp-hero-kpis">
-                <div class="comp-hero-kpi">
-                    <span class="kpi-val">Aug 2026</span>
-                    <span class="kpi-label">EU AI Act Enforcement</span>
-                </div>
-                <div class="comp-hero-kpi">
-                    <span class="kpi-val">&euro;35M</span>
-                    <span class="kpi-label">Max Penalty</span>
-                </div>
-                <div class="comp-hero-kpi">
-                    <span class="kpi-val">3</span>
-                    <span class="kpi-label">Key Frameworks</span>
-                </div>
-                <div class="comp-hero-kpi">
-                    <span class="kpi-val">Full</span>
-                    <span class="kpi-label">Lifecycle Coverage</span>
-                </div>
-            </div>
-            <div class="comp-hero-pills">
-                <span class="comp-hero-pill">EU AI Act</span>
-                <span class="comp-hero-pill">ISO/IEC 42001</span>
-                <span class="comp-hero-pill">NIST AI RMF</span>
-                <span class="comp-hero-pill">Conformity Assessment</span>
-                <span class="comp-hero-pill">FRIA</span>
-            </div>
-            <a href="contact.html" class="comp-hero-cta">Talk to Our Team &rarr;</a>
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <div>
+        <div class="hero-eyebrow-line">AI Governance &amp; Compliance</div>
+
+        <h1>
+          Make your AI systems<br>
+          <span class="accent-blue">regulator-ready</span> &mdash;<br>
+          <span class="accent-orange">end&#8209;to&#8209;end.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Impact assessments, governance design, conformity assessments, FRIAs, production safeguards and continuous monitoring &mdash; aligned to the EU AI Act, ISO/IEC 42001 and NIST AI RMF.
+        </p>
+
+        <div class="hero-pills">
+          <span class="hero-pill">EU AI Act</span>
+          <span class="hero-pill">ISO/IEC 42001</span>
+          <span class="hero-pill">NIST AI RMF</span>
+          <span class="hero-pill">Article 27 FRIA</span>
+          <span class="hero-pill">Conformity Assessment</span>
         </div>
-    </section>
 
-    <!-- Section 1: Regulatory Context -->
-    <section class="comp-section">
-        <div class="comp-section-inner">
-            <div class="comp-label">Why This Matters Now</div>
-            <h2>The Regulatory Landscape Has Changed</h2>
-            <p class="comp-section-desc">Full enforcement of the EU AI Act begins 2 August 2026 for high-risk AI systems. Organisations that place AI systems on the EU market or use AI outputs within the EU must comply, regardless of where they are established. Penalties reach &euro;35 million or 7% of global annual turnover.</p>
-
-            <div class="comp-context">
-                <div class="comp-context-card why">
-                    <h3>The Compliance Challenge</h3>
-                    <p>Most organisations lack the governance structures, documentation, and technical controls the EU AI Act requires. High-risk AI systems used in employment, financial services, education, and public administration now need a functioning risk management system, data governance framework, technical documentation, human oversight mechanisms, and conformity assessments &mdash; all demonstrable before deployment.</p>
-                </div>
-                <div class="comp-context-card how">
-                    <h3>Our Approach</h3>
-                    <p>We help you build an AI compliance programme that works in practice, not just on paper. We start with a complete inventory of your AI systems, classify each by risk level, map applicable obligations under the EU AI Act, ISO/IEC 42001, and NIST AI RMF, then design and implement the controls, documentation, and monitoring your organisation needs to demonstrate ongoing compliance.</p>
-                </div>
-            </div>
+        <div class="hero-cta-row">
+          <a class="v2-btn btn-primary" href="contact.html">Talk to our team<span class="arr">&rarr;</span></a>
+          <a class="v2-btn btn-ghost" href="#lifecycle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            See the lifecycle
+          </a>
         </div>
-    </section>
+      </div>
 
-    <!-- Section 2: Overview Cards -->
-    <section class="comp-section" style="background: #ffffff;">
-        <div class="comp-section-inner">
-            <div class="comp-label">What We Deliver</div>
-            <h2>Comprehensive AI Regulatory Compliance</h2>
-            <p class="comp-section-desc">We help organisations assess, design, and operationalise compliance for AI systems across the full lifecycle &mdash; from concept through deployment and ongoing operations.</p>
-
-            <div class="comp-intro-grid">
-                <div class="comp-intro-card">
-                    <h3>Regulatory Impact Assessment</h3>
-                    <p>We deliver comprehensive regulatory impact assessments for AI initiatives to identify applicable legal, standards, and governance obligations early in the lifecycle. We map those obligations into actionable controls covering risk management, technical documentation, transparency, human oversight, data governance, accuracy, robustness, and cybersecurity &mdash; so your team can move from uncertainty to a clear compliance roadmap.</p>
-                </div>
-                <div class="comp-intro-card">
-                    <h3>Production Safeguards Review</h3>
-                    <p>We assess the sufficiency of your production safeguards, including policy controls, approval workflows, monitoring, logging, incident response, escalation paths, and evidence retention. This ensures your AI systems are not only designed for compliance, but also operated with the guardrails needed for ongoing regulatory and reputational risk reduction.</p>
-                </div>
-                <div class="comp-intro-card">
-                    <h3>Conformity Assessment Support</h3>
-                    <p>High-risk AI systems require conformity assessments before market placement. We prepare your systems for internal control-based assessments and, where required, notified body assessments &mdash; including EU declaration of conformity, CE marking readiness, and registration in the EU AI database as mandated under the EU AI Act.</p>
-                </div>
-                <div class="comp-intro-card">
-                    <h3>Fundamental Rights Impact Assessment</h3>
-                    <p>Article 27 of the EU AI Act mandates deployers of high-risk AI systems to conduct Fundamental Rights Impact Assessments (FRIAs) before deployment. We conduct these assessments, examining algorithmic bias, privacy risks, discriminatory outcomes, and broader societal implications of your AI systems against fundamental rights standards.</p>
-                </div>
+      <!-- HERO ART: EU AI Act Risk Pyramid -->
+      <div class="hero-art" aria-hidden="true">
+        <div class="pyramid-card">
+          <div class="pyr-head">
+            <div class="pyr-head-l">
+              <span class="pyr-head-flag">
+                <svg viewBox="0 0 24 24" fill="#FFCC00"><circle cx="12" cy="12" r="2"/><g fill="#FFCC00"><circle cx="12" cy="4" r="1.2"/><circle cx="12" cy="20" r="1.2"/><circle cx="4" cy="12" r="1.2"/><circle cx="20" cy="12" r="1.2"/><circle cx="6.3" cy="6.3" r="1.1"/><circle cx="17.7" cy="6.3" r="1.1"/><circle cx="6.3" cy="17.7" r="1.1"/><circle cx="17.7" cy="17.7" r="1.1"/><circle cx="3" cy="8" r="1"/><circle cx="3" cy="16" r="1"/><circle cx="21" cy="8" r="1"/><circle cx="21" cy="16" r="1"/></g></svg>
+              </span>
+              <div>
+                <div class="pyr-head-t">EU AI Act Risk Taxonomy</div>
+                <div class="pyr-head-sub">Article 6 &middot; Annex III</div>
+              </div>
             </div>
+            <span class="pyr-live">Live</span>
+          </div>
 
-            <div class="comp-frameworks">
-                <span class="comp-fw-pill">EU AI Act (Articles 9&ndash;49)</span>
-                <span class="comp-fw-pill">ISO/IEC 42001:2023 AIMS</span>
-                <span class="comp-fw-pill">NIST AI RMF 1.0</span>
-                <span class="comp-fw-pill">GDPR</span>
-                <span class="comp-fw-pill">UK AI Regulation</span>
-                <span class="comp-fw-pill">ISO/IEC 23894</span>
-                <span class="comp-fw-pill">Annex III High-Risk Categories</span>
+          <div class="pyramid">
+            <div class="pyr-tier pyr-tier-1">
+              <div class="pyr-tier-l">
+                <span class="pyr-tier-nm">PROHIBITED</span>
+              </div>
+              <span class="pyr-tier-r"><b>0</b> &nbsp;OK</span>
             </div>
+            <div class="pyr-tier pyr-tier-2">
+              <div class="pyr-tier-l">
+                <span class="pyr-tier-nm">HIGH-RISK</span>
+                <span class="pyr-tier-meta">Annex III &middot; full obligations</span>
+              </div>
+              <span class="pyr-tier-r"><b>4</b> &nbsp;systems</span>
+              <div class="pyr-callout"><b>YOU ARE HERE</b> Regulated tier</div>
+            </div>
+            <div class="pyr-tier pyr-tier-3">
+              <div class="pyr-tier-l">
+                <span class="pyr-tier-nm">LIMITED RISK</span>
+                <span class="pyr-tier-meta">Transparency obligations</span>
+              </div>
+              <span class="pyr-tier-r"><b>7</b> &nbsp;systems</span>
+            </div>
+            <div class="pyr-tier pyr-tier-4">
+              <div class="pyr-tier-l">
+                <span class="pyr-tier-nm">MINIMAL RISK</span>
+                <span class="pyr-tier-meta">Voluntary codes of conduct</span>
+              </div>
+              <span class="pyr-tier-r"><b>6</b> &nbsp;systems</span>
+            </div>
+          </div>
+
+          <div class="pyr-foot">
+            <div class="pyr-foot-cell">
+              <span class="v">17</span>
+              <span class="l">Total AI systems</span>
+            </div>
+            <div class="pyr-foot-cell">
+              <span class="v orange">4</span>
+              <span class="l">High-risk &middot; obligated</span>
+            </div>
+            <div class="pyr-foot-cell">
+              <span class="v" style="color: var(--green-600);">100<small style="font-size: 14px;">%</small></span>
+              <span class="l">FRIA complete</span>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- Section 3: Compliance Lifecycle -->
-    <section class="comp-section">
-        <div class="comp-section-inner">
-            <div class="comp-label">Compliance Lifecycle</div>
-            <h2>From Assessment to Continuous Monitoring</h2>
-            <p class="comp-section-desc">Our engagement follows the AI compliance lifecycle &mdash; aligning with the NIST AI RMF's Govern, Map, Measure, Manage functions and the ISO/IEC 42001 Plan-Do-Check-Act methodology.</p>
+    </div>
+  </div>
+</section>
 
-            <div class="comp-lifecycle">
-                <div class="comp-phase">
-                    <div class="comp-phase-num">Phase 01 &mdash; Assess</div>
-                    <h3>Discovery &amp; Classification</h3>
-                    <p>Build a complete AI system inventory, classify each system by risk level (prohibited, high-risk, limited, minimal), identify applicable regulations, and document the rationale for each classification. Includes regulatory scoping and applicability analysis across all relevant jurisdictions.</p>
-                </div>
-                <div class="comp-phase">
-                    <div class="comp-phase-num">Phase 02 &mdash; Design</div>
-                    <h3>Framework &amp; Control Design</h3>
-                    <p>Map regulatory obligations to actionable controls. Design your AI governance framework including organisational policies, roles and responsibilities, risk tolerance thresholds, and accountability structures. Draft the technical documentation and model cards required for conformity assessment.</p>
-                </div>
-                <div class="comp-phase">
-                    <div class="comp-phase-num">Phase 03 &mdash; Implement</div>
-                    <h3>Controls &amp; Safeguards</h3>
-                    <p>Implement human oversight mechanisms, logging and monitoring infrastructure, approval workflows, incident response procedures, and escalation paths. Prepare evidence packs and compliance documentation. Conduct bias testing, model validation, and Fundamental Rights Impact Assessments.</p>
-                </div>
-                <div class="comp-phase">
-                    <div class="comp-phase-num">Phase 04 &mdash; Monitor</div>
-                    <h3>Ongoing Compliance</h3>
-                    <p>Continuous post-deployment monitoring, drift detection, and periodic compliance checks. Maintain audit readiness with evidence retention and regulator response support. Track evolving regulatory requirements and update your controls as frameworks mature.</p>
-                </div>
-            </div>
+<!-- ===================== FRAMEWORK STRIP ===================== -->
+<section class="fw-strip">
+  <div class="wrap">
+    <div class="fw-strip-head">Aligned to the frameworks that matter</div>
+    <div class="fw-strip-row">
+      <div class="fw-strip-item">
+        <span class="icon eu">EU</span>
+        <span class="lbl"><b>EU AI Act</b><span>Articles 9&ndash;49</span></span>
+      </div>
+      <div class="fw-strip-item">
+        <span class="icon iso">ISO</span>
+        <span class="lbl"><b>ISO/IEC 42001</b><span>AIMS &middot; 2023</span></span>
+      </div>
+      <div class="fw-strip-item">
+        <span class="icon nist">N</span>
+        <span class="lbl"><b>NIST AI RMF</b><span>v1.0 &middot; GMMM</span></span>
+      </div>
+      <div class="fw-strip-item">
+        <span class="icon gdpr">&#9733;</span>
+        <span class="lbl"><b>GDPR</b><span>UK + EU</span></span>
+      </div>
+      <div class="fw-strip-item">
+        <span class="icon uk">UK</span>
+        <span class="lbl"><b>UK AI Reg</b><span>White paper</span></span>
+      </div>
+      <div class="fw-strip-item">
+        <span class="icon fria">&sect;</span>
+        <span class="lbl"><b>Article 27</b><span>FRIA mandate</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHY THIS MATTERS ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow red"><span class="dot"></span>Why this matters now</span>
+      <h2>The regulatory landscape <span class="grad">has changed</span>.</h2>
+      <p class="lede">From 2 August 2026, organisations that place or use high-risk AI in the EU face audited obligations on risk management, data governance, technical documentation, human oversight, and post-market monitoring &mdash; demonstrable before deployment, regardless of where the organisation is established.</p>
+    </div>
+
+    <div class="caps-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="cap orange">
+        <div class="cap-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 1 21 23 21 12 2"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
-    </section>
-
-    <!-- Section 4: Full Service Catalogue -->
-    <section class="comp-section" style="background: #ffffff;">
-        <div class="comp-section-inner">
-            <div class="comp-label">Service Catalogue</div>
-            <h2>Full-Spectrum AI Compliance Services</h2>
-            <p class="comp-section-desc">Every service required to take an AI system from initial scoping through to sustained regulatory compliance and audit readiness.</p>
-
-            <div class="comp-services-wrap is-collapsed">
-            <div class="comp-services-grid">
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">01</div>
-                    <div class="comp-svc-text">
-                        <h3>AI System Inventory &amp; Risk Classification</h3>
-                        <p>Build a complete registry of all AI use cases across your organisation. Classify each system against the EU AI Act risk taxonomy (prohibited, high-risk, limited, minimal) with documented rationale, and triage compliance priorities based on regulatory exposure.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">02</div>
-                    <div class="comp-svc-text">
-                        <h3>Regulatory Scoping &amp; Applicability Analysis</h3>
-                        <p>Determine which regulations, standards, and governance obligations apply to your specific AI use cases, jurisdictions, and risk profiles &mdash; covering the EU AI Act, ISO/IEC 42001, NIST AI RMF, GDPR, and sector-specific requirements.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">03</div>
-                    <div class="comp-svc-text">
-                        <h3>Gap Assessment &amp; Framework Mapping</h3>
-                        <p>Structured gap analysis against the EU AI Act (Articles 9&ndash;49), ISO/IEC 42001 AIMS requirements, and the NIST AI RMF Govern-Map-Measure-Manage functions. Identifies compliance shortfalls and maps them to specific remediation actions.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">04</div>
-                    <div class="comp-svc-text">
-                        <h3>AI Governance Framework &amp; Policy Drafting</h3>
-                        <p>Design and document AI governance frameworks including organisational policies, roles and responsibilities, decision-making structures, risk tolerance thresholds, and accountability mechanisms. Aligned with ISO/IEC 42001 Plan-Do-Check-Act methodology.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">05</div>
-                    <div class="comp-svc-text">
-                        <h3>Conformity Assessment &amp; CE Marking Readiness</h3>
-                        <p>Prepare high-risk AI systems for the conformity assessment procedures required under the EU AI Act &mdash; including internal control assessments, notified body engagement where required, EU declaration of conformity, and CE marking and EU database registration.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">06</div>
-                    <div class="comp-svc-text">
-                        <h3>Fundamental Rights Impact Assessment</h3>
-                        <p>Conduct Article 27 FRIAs to evaluate the impact of high-risk AI systems on fundamental rights before deployment. Covers algorithmic bias, privacy, discrimination, accessibility, and broader societal implications with documented mitigation measures.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">07</div>
-                    <div class="comp-svc-text">
-                        <h3>Data Governance &amp; Dataset Quality Review</h3>
-                        <p>Review data sourcing, quality, labelling, representativeness, and governance practices. Assess training data lineage, identify gaps in data documentation, and ensure compliance with the data governance requirements mandated for high-risk AI systems.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">08</div>
-                    <div class="comp-svc-text">
-                        <h3>Bias, Fairness &amp; Discriminatory Outcome Testing</h3>
-                        <p>Independent testing of AI models for bias and discriminatory outcomes across protected characteristics. Includes statistical fairness analysis, disparate impact assessment, and documented remediation recommendations with re-test verification.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">09</div>
-                    <div class="comp-svc-text">
-                        <h3>Model Validation &amp; Performance Review</h3>
-                        <p>Independent validation of model accuracy, robustness, and reliability against stated objectives and regulatory expectations. Includes model card documentation, performance benchmarking, adversarial testing, and explainability assessment.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">10</div>
-                    <div class="comp-svc-text">
-                        <h3>Human Oversight &amp; Control Implementation</h3>
-                        <p>Design and implement human-in-the-loop and human-on-the-loop controls for high-risk AI systems. Includes real-time intervention mechanisms, override procedures, escalation paths, and documented decision authority frameworks as required by the EU AI Act.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">11</div>
-                    <div class="comp-svc-text">
-                        <h3>Technical Documentation &amp; Evidence Packs</h3>
-                        <p>Produce comprehensive technical documentation including system architecture, training methodology, validation results, risk assessments, and model cards. Organised into audit-ready evidence packs aligned with conformity assessment requirements.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">12</div>
-                    <div class="comp-svc-text">
-                        <h3>Automatic Logging &amp; Record-Keeping Infrastructure</h3>
-                        <p>Design and implement the automatic logging capabilities mandated for high-risk AI systems. Covers input/output logging, decision audit trails, system performance metrics, and tamper-evident record retention for regulatory and audit purposes.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">13</div>
-                    <div class="comp-svc-text">
-                        <h3>Audit Readiness &amp; Regulator Response Support</h3>
-                        <p>Prepare your organisation for regulatory audits with evidence collation, mock assessments, and structured response procedures for regulator queries. Covers both internal control-based audits and notified body engagement.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">14</div>
-                    <div class="comp-svc-text">
-                        <h3>Continuous Monitoring &amp; Post-Deployment Compliance</h3>
-                        <p>Ongoing compliance monitoring, model drift detection, and periodic compliance re-assessment. Track evolving regulatory requirements across jurisdictions and update controls, documentation, and safeguards as frameworks mature through 2026 and beyond.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">15</div>
-                    <div class="comp-svc-text">
-                        <h3>Incident Response &amp; Post-Market Surveillance</h3>
-                        <p>Develop incident response plans for AI failures, unexpected behaviour, or serious incidents. Includes escalation paths, communication protocols, root cause analysis procedures, and the post-market monitoring obligations required under the EU AI Act.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">16</div>
-                    <div class="comp-svc-text">
-                        <h3>Vendor &amp; Third-Party AI Due Diligence</h3>
-                        <p>Assess third-party AI providers and vendors against your governance standards and regulatory obligations. Review contractual clauses for liability, audit rights, data and model rights, and supply chain compliance as required for deployers of high-risk AI systems.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">17</div>
-                    <div class="comp-svc-text">
-                        <h3>Transparency &amp; User Notification Controls</h3>
-                        <p>Implement the transparency obligations required under the EU AI Act, including disclosure mechanisms, user notification systems, and information provision for individuals interacting with or affected by AI systems. Covers both provider and deployer obligations.</p>
-                    </div>
-                </div>
-                <div class="comp-svc-item">
-                    <div class="comp-svc-num">18</div>
-                    <div class="comp-svc-text">
-                        <h3>Staff Training &amp; Organisational Awareness</h3>
-                        <p>Tailored training programmes for product, legal, compliance, and engineering teams covering AI governance obligations, responsible AI practices, risk identification, and the practical requirements of the EU AI Act, ISO/IEC 42001, and NIST AI RMF.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="comp-services-fade"></div>
-            <button class="comp-services-toggle" onclick="toggleServices(this)" aria-expanded="false">
-                <span>Show all 18 services</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            </div>
+        <h3>The compliance challenge</h3>
+        <p>Most organisations lack the governance structures, documentation and technical controls the EU AI Act requires. High-risk systems in employment, financial services, education and public administration now need a functioning risk management system, data governance framework, technical documentation, human oversight mechanisms and conformity assessments &mdash; all demonstrable before deployment.</p>
+        <div class="cap-tags">
+          <span class="cap-tag">Annex III scope</span>
+          <span class="cap-tag">High-risk obligations</span>
+          <span class="cap-tag">Pre-market</span>
         </div>
-    </section>
+      </div>
+      <div class="cap">
+        <div class="cap-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Our approach</h3>
+        <p>We help you build an AI compliance programme that works in practice, not just on paper. We start with a complete inventory of your AI systems, classify each by risk level, map applicable obligations under the EU AI Act, ISO/IEC 42001 and NIST AI RMF, then design and implement the controls, documentation and monitoring you need to demonstrate ongoing compliance.</p>
+        <div class="cap-tags">
+          <span class="cap-tag">Inventory</span>
+          <span class="cap-tag">Risk-mapped</span>
+          <span class="cap-tag">Audit-ready</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Section 5: Bundled Package -->
-    <section class="comp-section">
-        <div class="comp-section-inner">
-            <div class="comp-package">
-                <div class="comp-label" style="color: #ea580c;">Packaged Offer</div>
-                <h3>AI Compliance <span>Readiness Package</span></h3>
-                <p>A bundled engagement covering the full compliance lifecycle &mdash; from AI system inventory and risk classification through governance design, conformity assessment, technical documentation, and ongoing post-deployment monitoring.</p>
-                <p>Built for organisations whose AI systems fall within the EU AI Act's high-risk categories: employment, credit scoring, biometric identification, critical infrastructure, and essential services. Demonstrates responsible governance from concept through operations.</p>
-                <a href="contact.html" class="comp-package-cta">Discuss Your Requirements &rsaquo;</a>
+<!-- ===================== CAPABILITIES (4 core services) ===================== -->
+<section class="section alt" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow blue"><span class="dot"></span>What we deliver</span>
+      <h2>Comprehensive AI regulatory compliance, <span class="grad-orange">in four practices</span>.</h2>
+      <p class="lede">From scoping through to audit. Each engagement combines regulatory expertise, hands-on engineering, and the documentation regulators want to see.</p>
+    </div>
+
+    <div class="caps-grid">
+
+      <!-- Featured wide card: Regulatory Impact Assessment -->
+      <div class="cap featured">
+        <div>
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+          </div>
+          <h3>Regulatory Impact Assessment</h3>
+          <p>Comprehensive impact assessments to identify applicable legal, standards and governance obligations early in the lifecycle &mdash; mapped to actionable controls covering risk, transparency, oversight, data, accuracy, robustness and cybersecurity.</p>
+          <div class="cap-tags">
+            <span class="cap-tag">Scoping</span>
+            <span class="cap-tag">Articles 9&ndash;49</span>
+            <span class="cap-tag">Risk taxonomy</span>
+            <span class="cap-tag">Roadmap</span>
+          </div>
+        </div>
+        <div class="cap-vis">
+          <div class="cap-vis-row"><span class="lbl">Risk mapping</span><span class="bar"><i style="width:92%;"></i></span><span class="pct">92%</span></div>
+          <div class="cap-vis-row"><span class="lbl">Controls</span><span class="bar"><i style="width:78%;"></i></span><span class="pct">78%</span></div>
+          <div class="cap-vis-row"><span class="lbl">Documentation</span><span class="bar"><i style="width:84%;"></i></span><span class="pct">84%</span></div>
+          <div class="cap-vis-row"><span class="lbl">Sign-off</span><span class="bar"><i style="width:100%;"></i></span><span class="pct">100%</span></div>
+        </div>
+      </div>
+
+      <!-- Production Safeguards -->
+      <div class="cap orange">
+        <div class="cap-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3>Production Safeguards Review</h3>
+        <p>Assess the sufficiency of your production guardrails &mdash; policy controls, approval workflows, monitoring, logging, incident response, escalation paths and evidence retention.</p>
+        <div class="cap-tags">
+          <span class="cap-tag">Guardrails</span>
+          <span class="cap-tag">Logging</span>
+          <span class="cap-tag">Incident</span>
+        </div>
+      </div>
+
+      <!-- Conformity Assessment -->
+      <div class="cap">
+        <div class="cap-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <h3>Conformity Assessment Support</h3>
+        <p>Prepare high-risk systems for internal control-based or notified-body conformity assessments &mdash; including EU declaration of conformity, CE marking readiness and EU AI database registration.</p>
+        <div class="cap-tags">
+          <span class="cap-tag">CE marking</span>
+          <span class="cap-tag">Notified body</span>
+          <span class="cap-tag">EU database</span>
+        </div>
+      </div>
+
+      <!-- Fundamental Rights Impact Assessment -->
+      <div class="cap orange">
+        <div class="cap-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+        </div>
+        <h3>Fundamental Rights Impact Assessment</h3>
+        <p>Article 27 mandates deployers of high-risk AI to conduct FRIAs before deployment. We examine algorithmic bias, privacy risks, discriminatory outcomes and broader societal implications.</p>
+        <div class="cap-tags">
+          <span class="cap-tag">Article 27</span>
+          <span class="cap-tag">Bias audit</span>
+          <span class="cap-tag">Mitigation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SHOWCASE (compliance dashboard mock) ===================== -->
+<section class="showcase" id="dashboard">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom: 24px;">
+      <span class="eyebrow"><span class="dot"></span>Inside the engagement</span>
+      <h2>A live <span class="grad-orange">compliance posture</span> &mdash; not a one-off audit.</h2>
+    </div>
+
+    <div class="showcase-feature">
+      <div class="sf-content">
+        <div class="badge">Audit-ready &middot; from day one</div>
+        <h2>One inventory, every obligation, mapped to controls.</h2>
+        <p>Every AI system you operate, classified against the EU AI Act risk taxonomy, with the obligations, evidence and owners visible to your board, your auditors and your regulators &mdash; in one place.</p>
+        <ul class="sf-bullets">
+          <li><span class="check">&#10003;</span><span><b>Risk classification</b> across prohibited, high-risk, limited and minimal categories with documented rationale.</span></li>
+          <li><span class="check">&#10003;</span><span><b>Control mapping</b> to Articles 9&ndash;49, ISO/IEC 42001 AIMS and NIST AI RMF Govern&middot;Map&middot;Measure&middot;Manage.</span></li>
+          <li><span class="check">&#10003;</span><span><b>Tamper-evident audit trails</b> for every model decision, override, and post-market incident.</span></li>
+          <li><span class="check">&#10003;</span><span><b>FRIA + DPIA evidence packs</b> ready for notified-body or regulator inspection.</span></li>
+        </ul>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a class="v2-btn btn-blue" href="contact.html">Request a walkthrough<span class="arr">&rarr;</span></a>
+          <a class="v2-btn btn-ghost" href="#lifecycle">See the lifecycle</a>
+        </div>
+      </div>
+
+      <!-- CONFORMITY PASSPORT -->
+      <div class="passport" aria-hidden="true">
+        <div class="pp-head">
+          <div class="pp-head-l">
+            <span class="pp-flag">
+              <svg viewBox="0 0 24 24" fill="#FFCC00"><g><circle cx="12" cy="4" r="1.2"/><circle cx="12" cy="20" r="1.2"/><circle cx="4" cy="12" r="1.2"/><circle cx="20" cy="12" r="1.2"/><circle cx="6.3" cy="6.3" r="1.1"/><circle cx="17.7" cy="6.3" r="1.1"/><circle cx="6.3" cy="17.7" r="1.1"/><circle cx="17.7" cy="17.7" r="1.1"/><circle cx="3" cy="8" r="0.9"/><circle cx="3" cy="16" r="0.9"/><circle cx="21" cy="8" r="0.9"/><circle cx="21" cy="16" r="0.9"/></g></svg>
+            </span>
+            <div class="pp-head-titles">
+              <span class="pp-head-t1">EU AI Act &middot; 2024/1689</span>
+              <span class="pp-head-t2">Declaration of Conformity</span>
             </div>
+          </div>
+          <div class="pp-head-r">
+            Issued<b>EU</b>2026
+          </div>
         </div>
-    </section>
 
-    <!-- CTA -->
-    <section>
-        <div class="comp-cta">
-            <h3>Ready to get your AI systems regulator-ready?</h3>
-            <p>Book a 30-minute call &mdash; we'll assess your current position and outline a clear path to compliance ahead of the August 2026 enforcement deadline.</p>
-            <a href="contact.html" class="btn btn-primary">Start a Conversation</a>
+        <div class="pp-body">
+          <div class="pp-row">
+            <span class="k">System</span>
+            <span class="v">Credit Decisioning AI &middot; v3.0</span>
+          </div>
+          <div class="pp-row">
+            <span class="k">Risk class</span>
+            <span class="v"><span class="pill high">&#9679; HIGH-RISK</span>Annex III, point 5(b)</span>
+          </div>
+          <div class="pp-row">
+            <span class="k">Provider</span>
+            <span class="v">Helix Capital Ltd &middot; Cambridge, UK</span>
+          </div>
+          <div class="pp-row">
+            <span class="k">Assessment</span>
+            <span class="v"><span class="pill ce">CE</span><span class="pill ok">PASSED</span></span>
+          </div>
+          <div class="pp-row">
+            <span class="k">Valid from</span>
+            <span class="v">02 Aug 2026 &middot; review annually</span>
+          </div>
         </div>
-    </section>
+
+        <div class="pp-articles">
+          <div class="pp-articles-h">
+            <span class="lbl">Articles complied with</span>
+            <span class="cnt">17 / 18 &#10003;</span>
+          </div>
+          <div class="pp-arts">
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 9 &mdash; Risk management
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 10 &mdash; Data &amp; governance
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 11 &mdash; Tech documentation
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 12 &mdash; Record-keeping
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 13 &mdash; Transparency
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 14 &mdash; Human oversight
+            </div>
+            <div class="pp-art">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Art. 15 &mdash; Accuracy &amp; robust
+            </div>
+            <div class="pp-art pending">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Art. 27 &mdash; FRIA (in review)
+            </div>
+          </div>
+        </div>
+
+        <div class="pp-foot">
+          <div class="pp-sig">
+            <span class="pp-sig-name">SustainSys Compliance</span>
+            <div class="pp-sig-role">Authorised assessor &middot; Audit ID #84217</div>
+          </div>
+          <div class="pp-stamp">
+            CONFORMITY<b>&#10003;</b>VERIFIED
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LIFECYCLE / PROCESS ===================== -->
+<section class="section" id="lifecycle">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow blue"><span class="dot"></span>Compliance lifecycle</span>
+      <h2>From assessment to <span class="grad">continuous monitoring</span>.</h2>
+      <p class="lede">Our engagement follows the AI compliance lifecycle &mdash; aligning with the NIST AI RMF's Govern&middot;Map&middot;Measure&middot;Manage functions and ISO/IEC 42001's Plan&middot;Do&middot;Check&middot;Act methodology.</p>
+    </div>
+
+    <div class="cycle-wrap">
+      <svg class="cycle-svg" viewBox="0 0 760 760">
+        <defs>
+          <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#1D4ED8"/>
+          </marker>
+          <marker id="arrowO" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#F97316"/>
+          </marker>
+          <marker id="arrowG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#16A34A"/>
+          </marker>
+          <marker id="arrowP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#7C3AED"/>
+          </marker>
+        </defs>
+        <path d="M 480,150 A 280,280 0 0 1 610,380" fill="none" stroke="#1D4ED8" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowB)" opacity="0.55"/>
+        <path d="M 610,380 A 280,280 0 0 1 480,610" fill="none" stroke="#F97316" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowO)" opacity="0.55"/>
+        <path d="M 480,610 A 280,280 0 0 1 280,610" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowG)" opacity="0.55"/>
+        <path d="M 280,610 A 280,280 0 0 1 280,150" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrowP)" opacity="0.55"/>
+      </svg>
+
+      <div class="cycle-center">
+        <div class="cycle-center-eye">Continuous</div>
+        <h3>Compliance<br>Lifecycle</h3>
+        <div class="desc">A repeating loop &mdash; not a one-off audit.</div>
+        <div class="frames">
+          <span>NIST GMMM</span>
+          <span>PDCA</span>
+        </div>
+      </div>
+
+      <div class="cycle-card cycle-card-1">
+        <div class="cycle-card-head">
+          <span class="cycle-card-num">01</span>
+          <div class="cycle-card-l">Phase 01<b>Assess</b></div>
+        </div>
+        <p class="cycle-card-p">Complete AI inventory. Classify every system by risk level and document the rationale.</p>
+        <div class="cycle-card-anchors"><span>Inventory</span><span>Risk class</span><span>Scoping</span></div>
+      </div>
+
+      <div class="cycle-card cycle-card-2">
+        <div class="cycle-card-head">
+          <span class="cycle-card-num">02</span>
+          <div class="cycle-card-l">Phase 02<b>Design</b></div>
+        </div>
+        <p class="cycle-card-p">Map obligations to controls. Design the governance framework, policies, and technical docs.</p>
+        <div class="cycle-card-anchors"><span>Governance</span><span>Model cards</span><span>Tech docs</span></div>
+      </div>
+
+      <div class="cycle-card cycle-card-3">
+        <div class="cycle-card-head">
+          <span class="cycle-card-num">03</span>
+          <div class="cycle-card-l">Phase 03<b>Implement</b></div>
+        </div>
+        <p class="cycle-card-p">Ship oversight, logging, approval workflows and incident response. Conduct FRIAs.</p>
+        <div class="cycle-card-anchors"><span>Oversight</span><span>Logging</span><span>FRIA</span></div>
+      </div>
+
+      <div class="cycle-card cycle-card-4">
+        <div class="cycle-card-head">
+          <span class="cycle-card-num">04</span>
+          <div class="cycle-card-l">Phase 04<b>Monitor</b></div>
+        </div>
+        <p class="cycle-card-p">Continuous post-deployment monitoring, drift detection, periodic re-assessment.</p>
+        <div class="cycle-card-anchors"><span>Drift</span><span>Re-assess</span><span>Audit</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICE CATALOGUE ===================== -->
+<section class="section alt" id="catalogue">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow"><span class="dot"></span>Service catalogue</span>
+      <h2>Eighteen services. <span class="grad-orange">One compliance programme.</span></h2>
+      <p class="lede">Every service required to take an AI system from initial scoping through to sustained regulatory compliance and audit readiness.</p>
+    </div>
+
+    <div class="svc-wrap is-collapsed" id="svcWrap">
+      <div class="svc-list">
+        <div class="svc-item">
+          <div class="svc-num">01</div>
+          <div>
+            <h4>AI System Inventory &amp; Risk Classification</h4>
+            <p>Complete registry of AI use cases, classified against the EU AI Act risk taxonomy with documented rationale, and triaged by regulatory exposure.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">02</div>
+          <div>
+            <h4>Regulatory Scoping &amp; Applicability Analysis</h4>
+            <p>Determine which regulations, standards and governance obligations apply across your jurisdictions, sectors and use cases.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">03</div>
+          <div>
+            <h4>Gap Assessment &amp; Framework Mapping</h4>
+            <p>Structured gap analysis against EU AI Act Articles 9&ndash;49, ISO/IEC 42001 AIMS and NIST AI RMF Govern&middot;Map&middot;Measure&middot;Manage.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">04</div>
+          <div>
+            <h4>AI Governance Framework &amp; Policy Drafting</h4>
+            <p>Design and document AI governance &mdash; policies, roles, risk tolerance, accountability &mdash; aligned to ISO/IEC 42001 Plan&middot;Do&middot;Check&middot;Act.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">05</div>
+          <div>
+            <h4>Conformity Assessment &amp; CE Marking Readiness</h4>
+            <p>Prepare high-risk AI systems for internal control or notified-body conformity assessments, including declaration of conformity and EU database registration.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">06</div>
+          <div>
+            <h4>Fundamental Rights Impact Assessment</h4>
+            <p>Article 27 FRIAs evaluating impact on fundamental rights &mdash; bias, privacy, discrimination, accessibility and broader societal implications.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">07</div>
+          <div>
+            <h4>Data Governance &amp; Dataset Quality Review</h4>
+            <p>Review data sourcing, quality, labelling, representativeness and lineage against the data governance requirements for high-risk AI.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">08</div>
+          <div>
+            <h4>Bias, Fairness &amp; Discriminatory Outcome Testing</h4>
+            <p>Independent fairness analysis across protected characteristics &mdash; statistical tests, disparate-impact assessment, remediation and re-test.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">09</div>
+          <div>
+            <h4>Model Validation &amp; Performance Review</h4>
+            <p>Independent validation of accuracy, robustness and reliability &mdash; model cards, benchmarking, adversarial testing, explainability.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">10</div>
+          <div>
+            <h4>Human Oversight &amp; Control Implementation</h4>
+            <p>Design human-in-the-loop and human-on-the-loop controls &mdash; real-time intervention, overrides, escalation, documented decision authority.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">11</div>
+          <div>
+            <h4>Technical Documentation &amp; Evidence Packs</h4>
+            <p>Audit-ready technical documentation &mdash; architecture, training, validation, risk assessments, model cards &mdash; organised for conformity review.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">12</div>
+          <div>
+            <h4>Automatic Logging &amp; Record-Keeping</h4>
+            <p>Logging infrastructure for input/output, decision audit trails, performance metrics and tamper-evident retention for regulator inspection.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">13</div>
+          <div>
+            <h4>Audit Readiness &amp; Regulator Response</h4>
+            <p>Evidence collation, mock assessments and structured response procedures for regulator queries &mdash; internal control and notified-body engagement.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">14</div>
+          <div>
+            <h4>Continuous Monitoring &amp; Post-Deployment Compliance</h4>
+            <p>Ongoing monitoring, drift detection and periodic re-assessment. Track evolving regulatory requirements across jurisdictions.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">15</div>
+          <div>
+            <h4>Incident Response &amp; Post-Market Surveillance</h4>
+            <p>Incident response plans, escalation, root-cause analysis and the post-market monitoring obligations required under the EU AI Act.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">16</div>
+          <div>
+            <h4>Vendor &amp; Third-Party AI Due Diligence</h4>
+            <p>Assess AI vendors against your standards &mdash; liability, audit rights, model/data rights and supply-chain compliance for deployers.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">17</div>
+          <div>
+            <h4>Transparency &amp; User Notification Controls</h4>
+            <p>Disclosure mechanisms and notifications for individuals interacting with AI &mdash; both provider and deployer obligations under the EU AI Act.</p>
+          </div>
+        </div>
+        <div class="svc-item">
+          <div class="svc-num">18</div>
+          <div>
+            <h4>Staff Training &amp; Organisational Awareness</h4>
+            <p>Tailored programmes for product, legal, compliance and engineering teams on AI governance, responsible AI and the practical requirements.</p>
+          </div>
+        </div>
+      </div>
+      <div class="svc-fade"></div>
+      <div class="svc-toggle-wrap">
+        <button class="svc-toggle" onclick="toggleSvc(this)" aria-expanded="false">
+          <span>Show all 18 services</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST / FRAMEWORKS PANEL ===================== -->
+<section class="trust-panel">
+  <div class="wrap">
+    <div class="trust-grid">
+      <div>
+        <span class="eyebrow blue" style="background:rgba(29,78,216,0.08);color:var(--blue-700);border-color:rgba(29,78,216,0.18);"><span class="dot"></span>Standards we deliver against</span>
+        <h2 style="margin-top:18px;"><span class="grad">Three frameworks</span>, one auditable programme.</h2>
+        <p>Every engagement maps your obligations across the three frameworks every AI compliance regime references &mdash; so your controls hold up under regulator inspection, vendor due diligence and board scrutiny.</p>
+        <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;">
+          <a class="v2-btn btn-blue" href="contact.html">Talk to our compliance team<span class="arr">&rarr;</span></a>
+          <a class="v2-btn btn-ghost" href="#catalogue">See full catalogue</a>
+        </div>
+      </div>
+
+      <div class="stack-wrap">
+        <div class="stack-label-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Your compliance stack
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="stack">
+          <div class="stack-layer stack-layer-1">
+            <span class="stack-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+            </span>
+            <div class="stack-text">
+              <h4>EU AI Act</h4>
+              <p>Risk-based regulation for AI systems placed or used in the EU.</p>
+            </div>
+            <span class="stack-tag">Art. 9&ndash;49</span>
+          </div>
+          <div class="stack-layer stack-layer-2">
+            <span class="stack-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+            </span>
+            <div class="stack-text">
+              <h4>ISO/IEC 42001 &middot; AIMS</h4>
+              <p>AI management system standard &mdash; Plan&middot;Do&middot;Check&middot;Act methodology.</p>
+            </div>
+            <span class="stack-tag">2023</span>
+          </div>
+          <div class="stack-layer stack-layer-3">
+            <span class="stack-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </span>
+            <div class="stack-text">
+              <h4>NIST AI RMF</h4>
+              <p>Govern, Map, Measure, Manage &mdash; the operational backbone for AI risk.</p>
+            </div>
+            <span class="stack-tag">v1.0</span>
+          </div>
+          <div class="stack-layer stack-layer-4">
+            <span class="stack-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <div class="stack-text">
+              <h4>GDPR + Article 27 FRIA</h4>
+              <p>Data protection + Fundamental Rights Impact Assessment for deployers.</p>
+            </div>
+            <span class="stack-tag">UK + EU</span>
+          </div>
+          <div class="stack-layer stack-layer-5">
+            <span class="stack-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <div class="stack-text">
+              <h4>Continuous monitoring</h4>
+              <p>Post-market drift detection, incident response, re-assessment.</p>
+            </div>
+            <span class="stack-tag">24 / 7</span>
+          </div>
+        </div>
+        <div class="stack-foundation">
+          &#9660; &nbsp; Your AI System &nbsp; &#9660;
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PACKAGE OFFER ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="package-card">
+      <div class="package-eyebrow">Packaged Offer</div>
+      <h2>AI Compliance <span class="grad">Readiness Package</span>.</h2>
+      <p>A bundled engagement covering the full compliance lifecycle &mdash; from inventory and risk classification through governance design, conformity assessment, technical documentation and ongoing post-deployment monitoring.</p>
+      <p>Built for organisations whose AI systems fall within the EU AI Act's high-risk categories &mdash; employment, credit scoring, biometric identification, critical infrastructure and essential services.</p>
+
+      <div class="package-incl">
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Full AI inventory &amp; risk classification
+        </div>
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Governance framework &amp; policies
+        </div>
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          FRIA + DPIA assessments
+        </div>
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Conformity assessment &amp; CE readiness
+        </div>
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Logging &amp; monitoring infrastructure
+        </div>
+        <div class="package-incl-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          12 months of post-deployment support
+        </div>
+      </div>
+
+      <div class="package-actions">
+        <a class="v2-btn btn-primary" href="contact.html">Discuss your requirements<span class="arr">&rarr;</span></a>
+        <a class="v2-btn btn-ghost" href="#catalogue">Browse the catalogue</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
 
     <!-- Footer -->
     <footer>
@@ -1250,19 +1827,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function toggleServices(btn) {
-    var wrap = btn.closest('.comp-services-wrap');
+function toggleSvc(btn) {
+    var wrap = document.getElementById('svcWrap');
     var label = btn.querySelector('span');
     var isCollapsed = wrap.classList.contains('is-collapsed');
     if (isCollapsed) {
-        wrap.classList.remove('is-collapsed');
-        label.textContent = 'Show fewer services';
-        btn.setAttribute('aria-expanded', 'true');
+      wrap.classList.remove('is-collapsed');
+      label.textContent = 'Show fewer services';
+      btn.setAttribute('aria-expanded', 'true');
     } else {
-        wrap.classList.add('is-collapsed');
-        label.textContent = 'Show all 18 services';
-        btn.setAttribute('aria-expanded', 'false');
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      wrap.classList.add('is-collapsed');
+      label.textContent = 'Show all 18 services';
+      btn.setAttribute('aria-expanded', 'false');
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 </script>
