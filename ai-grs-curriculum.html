@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance, Risk &amp; Safety Certification Curriculum | SustainSys AI Academy</title>
+<meta name="description" content="AI-GRS Certification: a practitioner-grade, 12-week, 50-hour programme covering AI governance, risk, safety, agentic AI, and regulatory compliance. SustainSys AI Academy.">
+<meta name="theme-color" content="#1d4ed8">
+<link rel="icon" type="image/svg+xml" href="./assets/sustainsys-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ====== AI-GRS CURRICULUM PAGE STYLES ====== */
+:root {
+  --grs-teal: #0d9488;
+  --grs-teal-deep: #0f766e;
+  --grs-teal-bright: #14b8a6;
+  --grs-amber: #d97706;
+  --grs-amber-bright: #f59e0b;
+  --grs-rose: #be123c;
+  --grs-rose-deep: #9f1239;
+  --grs-ink: #0b1220;
+  --grs-ink-soft: #2a3346;
+  --grs-muted: #5d6678;
+  --grs-line: #e2e8f0;
+  --grs-surface: #ffffff;
+  --grs-surface-warm: #fbf8f3;
+  --grs-surface-tinted: #f4f1ea;
+  --grs-blue-700: #1d4ed8;
+  --grs-blue-800: #1e3a8a;
+  --grs-blue-500: #3b82f6;
+  --grs-orange-500: #f97316;
+  --grs-orange-600: #ea580c;
+}
+
+/* Dim main nav links except Academy */
+.nav-links > li {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+.nav-links > li:hover { opacity: 1; }
+.nav-links > li:last-child,
+.nav-links > li:has(.ai-academy) { opacity: 1 !important; }
+
+/* ---- HERO ---- */
+.grs-hero {
+  position: relative;
+  background: linear-gradient(160deg, #0a0e1a 0%, #0f172a 40%, #1e293b 100%);
+  color: #f4f1ea;
+  overflow: hidden;
+  padding: 120px 0 50px;
+}
+.grs-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(20,184,166,0.18), transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(249,115,22,0.15), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(245,158,11,0.06), transparent 60%);
+  pointer-events: none;
+}
+.grs-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.grs-hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+}
+.grs-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--grs-amber-bright);
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  margin-bottom: 24px;
+}
+.grs-hero-eyebrow::before {
+  content: '';
+  width: 14px;
+  height: 1.5px;
+  background: var(--grs-amber-bright);
+}
+.grs-hero h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin: 0 0 18px;
+  max-width: 920px;
+  color: #f4f1ea;
+}
+.grs-hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--grs-teal-bright);
+}
+.grs-hero-lede {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.5;
+  color: #c9d0db;
+  max-width: 800px;
+  margin: 0 0 48px;
+}
+.grs-meta-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+  max-width: 920px;
+}
+.grs-meta-item .grs-meta-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a93a7;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.grs-meta-item .grs-meta-value {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #f4f1ea;
+}
+
+/* ---- STICKY MODULE NAV ---- */
+.grs-toc {
+  position: sticky;
+  top: 72px;
+  z-index: 50;
+  background: rgba(251, 248, 243, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--grs-line);
+}
+.grs-toc-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.grs-toc-inner::-webkit-scrollbar { height: 4px; }
+.grs-toc-inner::-webkit-scrollbar-thumb { background: #c8c1b0; border-radius: 2px; }
+.grs-toc a {
+  flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grs-ink-soft);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.grs-toc a:hover { background: var(--grs-ink); color: var(--grs-surface-warm); }
+.grs-toc a.flag { color: var(--grs-rose); font-weight: 700; }
+.grs-toc a.flag:hover { background: var(--grs-rose); color: white; }
+.grs-toc a.capstone { color: var(--grs-amber); font-weight: 700; }
+.grs-toc a.capstone:hover { background: var(--grs-amber); color: white; }
+
+/* ---- SECTION WRAPPER ---- */
+.grs-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px 32px 0;
+}
+.grs-section-heading {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+  color: var(--grs-ink);
+}
+.grs-section-sub {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--grs-muted);
+  margin: 0 0 24px;
+  font-size: 16px;
+}
+
+/* ---- PERSONAS ---- */
+.grs-personas-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grs-muted);
+  margin: 0 0 18px;
+  font-weight: 700;
+}
+.grs-personas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.grs-persona {
+  background: var(--grs-surface);
+  border: 1px solid var(--grs-line);
+  border-top: 3px solid var(--grs-teal);
+  padding: 24px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.grs-persona:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(15,23,42,0.1);
+}
+.grs-persona:nth-child(2) { border-top-color: var(--grs-blue-700); }
+.grs-persona:nth-child(3) { border-top-color: var(--grs-amber); }
+.grs-persona .grs-persona-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grs-teal-deep);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.grs-persona:nth-child(2) .grs-persona-tag { color: var(--grs-blue-700); }
+.grs-persona:nth-child(3) .grs-persona-tag { color: var(--grs-amber); }
+.grs-persona .grs-persona-who {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.25;
+  margin: 0 0 10px;
+  color: var(--grs-ink);
+}
+.grs-persona .grs-persona-what {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--grs-ink-soft);
+  margin: 0;
+}
+
+/* ---- DELIVERY ---- */
+.grs-delivery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.grs-delivery-card {
+  background: var(--grs-surface);
+  border: 1px solid var(--grs-line);
+  padding: 24px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+.grs-delivery-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+}
+.grs-delivery-card .grs-dc-icon {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 32px;
+  color: var(--grs-teal-deep);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.grs-delivery-card h5 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 17px;
+  margin: 0 0 6px;
+  color: var(--grs-ink);
+}
+.grs-delivery-card p {
+  font-size: 14px;
+  color: var(--grs-muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ---- SCHEDULE TABLE ---- */
+.grs-schedule-table {
+  background: var(--grs-surface);
+  border: 1px solid var(--grs-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.grs-sched-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 200px;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--grs-line);
+  align-items: center;
+  font-size: 14.5px;
+}
+.grs-sched-row:last-child { border-bottom: none; }
+.grs-sched-row.header {
+  background: var(--grs-surface-tinted);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--grs-muted);
+  font-weight: 700;
+}
+.grs-sched-row .wk {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: var(--grs-teal-deep);
+}
+.grs-sched-row .topic {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--grs-ink);
+}
+.grs-sched-row .mod {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--grs-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+.grs-sched-row.flagged { background: rgba(190,18,60,0.03); }
+.grs-sched-row.flagged .wk,
+.grs-sched-row.flagged .mod { color: var(--grs-rose); }
+
+/* ---- MODULES (main) ---- */
+.grs-modules-wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 32px 20px;
+}
+.grs-module {
+  margin-bottom: 48px;
+  position: relative;
+  scroll-margin-top: 140px;
+}
+.grs-module-header {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--grs-line);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease;
+}
+.grs-module-header:hover { opacity: 0.8; }
+.grs-module-header .grs-toggle {
+  font-size: 14px;
+  color: var(--grs-muted);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+.grs-module.open .grs-module-header .grs-toggle {
+  transform: rotate(180deg);
+}
+.grs-module-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.grs-module.open .grs-module-content {
+  max-height: 5000px;
+}
+.grs-module.open .grs-module-header {
+  margin-bottom: 20px;
+}
+.grs-module.capstone .grs-module-header .grs-toggle {
+  color: #8a93a7;
+}
+.grs-module-number {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--grs-teal);
+  letter-spacing: -0.02em;
+}
+.grs-module-title h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(18px, 2.2vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  color: var(--grs-ink);
+}
+.grs-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.grs-tag {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.grs-tag.tier { color: var(--grs-blue-700); background: rgba(29,78,216,0.08); }
+.grs-tag.hours { color: var(--grs-teal-deep); background: rgba(13,148,136,0.08); }
+.grs-tag.weeks { color: var(--grs-amber); background: rgba(217,119,6,0.10); }
+.grs-tag.new-flag {
+  color: white;
+  background: var(--grs-rose);
+  letter-spacing: 0.14em;
+}
+.grs-module-tier {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--grs-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-top: 6px;
+  font-weight: 600;
+}
+
+/* Module goal */
+.grs-module-goal {
+  background: rgba(13,148,136,0.05);
+  border-left: 3px solid var(--grs-teal);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 0 6px 6px 0;
+}
+.grs-module-goal .grs-goal-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grs-teal-deep);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.grs-module-goal .grs-goal-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--grs-ink-soft);
+  margin: 0;
+}
+
+/* Chapter */
+.grs-chapter {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--grs-line);
+}
+.grs-chapter:last-child { border-bottom: none; }
+.grs-chapter-id {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--grs-teal-deep);
+  letter-spacing: 0.04em;
+  padding-top: 4px;
+}
+.grs-chapter-body h3 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.3;
+  margin: 0 0 14px;
+  color: var(--grs-ink);
+  letter-spacing: -0.005em;
+}
+.grs-chapter-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.grs-chapter-body li {
+  position: relative;
+  padding-left: 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--grs-ink-soft);
+  line-height: 1.55;
+}
+.grs-chapter-body li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 10px;
+  height: 1.5px;
+  background: var(--grs-amber-bright);
+}
+.grs-chapter-body .annot {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grs-blue-700);
+  background: rgba(29,78,216,0.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.grs-lab-block {
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: rgba(217,119,6,0.06);
+  border-left: 3px solid var(--grs-amber-bright);
+  border-radius: 0 6px 6px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--grs-amber);
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+/* ---- FLAGSHIP MODULE (M4) ---- */
+.grs-module.flagship {
+  background: var(--grs-surface);
+  border: 1px solid var(--grs-line);
+  border-left: 5px solid var(--grs-rose);
+  padding: 28px 32px;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(190,18,60,0.06);
+}
+.grs-module.flagship .grs-module-number { color: var(--grs-rose); }
+.grs-module.flagship .grs-module-goal { background: rgba(190,18,60,0.04); border-left-color: var(--grs-rose); }
+.grs-module.flagship .grs-module-goal .grs-goal-label { color: var(--grs-rose-deep); }
+.grs-module.flagship .grs-chapter-id { color: var(--grs-rose-deep); }
+
+/* Core idea callout */
+.grs-core-idea {
+  background: rgba(190,18,60,0.05);
+  border: 1px solid rgba(190,18,60,0.18);
+  padding: 18px 22px;
+  border-radius: 6px;
+  margin-bottom: 28px;
+}
+.grs-core-idea .grs-ci-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grs-rose);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.grs-core-idea .grs-ci-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--grs-ink);
+  margin: 0;
+}
+.grs-core-idea .grs-ci-text strong { color: var(--grs-rose-deep); font-weight: 700; }
+
+/* Pull quote */
+.grs-pull-quote {
+  margin: 28px 0;
+  padding: 24px 28px;
+  background: var(--grs-ink);
+  color: var(--grs-surface-warm);
+  border-radius: 8px;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 400;
+}
+.grs-pull-quote .attr {
+  display: block;
+  margin-top: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grs-amber-bright);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* Break grid */
+.grs-break-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.grs-break-box {
+  border: 1px solid var(--grs-line);
+  background: var(--grs-surface-tinted);
+  padding: 18px 20px;
+  border-radius: 6px;
+  border-top: 3px solid var(--grs-rose);
+}
+.grs-break-box .grs-bb-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--grs-rose);
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.grs-break-box .grs-bb-head {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 15.5px;
+  margin-bottom: 6px;
+  color: var(--grs-ink);
+  line-height: 1.3;
+}
+.grs-break-box .grs-bb-body {
+  font-size: 13.5px;
+  color: var(--grs-ink-soft);
+  line-height: 1.55;
+}
+
+/* Evidence box */
+.grs-evidence-box {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(--grs-surface-tinted);
+  border: 1px solid var(--grs-line);
+  border-left: 3px solid var(--grs-ink);
+  border-radius: 0 6px 6px 0;
+}
+.grs-evidence-box .grs-ev-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--grs-ink);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.grs-evidence-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.grs-evidence-box li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--grs-ink-soft);
+  line-height: 1.5;
+}
+.grs-evidence-box li::before {
+  content: "\00b7";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  color: var(--grs-ink);
+  font-weight: 700;
+}
+
+/* Nested lists */
+.grs-chapter-body ul ul {
+  margin-top: 8px;
+  padding-left: 4px;
+  gap: 6px;
+}
+.grs-chapter-body ul ul li { font-size: 14px; }
+
+/* ---- CAPSTONE MODULE (M7) ---- */
+.grs-module.capstone {
+  background: var(--grs-ink);
+  color: var(--grs-surface-warm);
+  padding: 36px 32px;
+  border-radius: 12px;
+  margin: 40px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+.grs-module.capstone::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(245,158,11,0.25), transparent 70%);
+  pointer-events: none;
+}
+.grs-module.capstone .grs-module-header { border-bottom-color: rgba(255,255,255,0.12); }
+.grs-module.capstone .grs-module-number { color: var(--grs-amber-bright); }
+.grs-module.capstone .grs-module-title h2 { color: var(--grs-surface-warm); }
+.grs-module.capstone .grs-tag { background: rgba(245,158,11,0.15); color: var(--grs-amber-bright); }
+.grs-module.capstone .grs-tag.hours { background: rgba(20,184,166,0.15); color: var(--grs-teal-bright); }
+.grs-module.capstone .grs-module-tier { color: #8a93a7; }
+.grs-module.capstone .grs-module-goal { background: rgba(245,158,11,0.08); border-left-color: var(--grs-amber-bright); }
+.grs-module.capstone .grs-module-goal .grs-goal-label { color: var(--grs-amber-bright); }
+.grs-module.capstone .grs-module-goal .grs-goal-text { color: #c9d0db; }
+.grs-module.capstone .grs-chapter { border-bottom-color: rgba(255,255,255,0.08); }
+.grs-module.capstone .grs-chapter-id { color: var(--grs-amber-bright); }
+.grs-module.capstone .grs-chapter-body h3 { color: var(--grs-surface-warm); }
+.grs-module.capstone .grs-chapter-body li { color: #c9d0db; }
+.grs-module.capstone .grs-chapter-body li::before { background: var(--grs-teal-bright); }
+
+/* ---- CAREER PATHWAYS ---- */
+.grs-career-section {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 32px;
+}
+.grs-career-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+.grs-career-pill {
+  background: var(--grs-surface);
+  border: 1px solid var(--grs-line);
+  padding: 18px 20px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.grs-career-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15,23,42,0.08);
+  border-color: var(--grs-teal);
+}
+.grs-career-pill .grs-role {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 15.5px;
+  color: var(--grs-ink);
+  line-height: 1.3;
+}
+
+/* ---- CTA BAND ---- */
+.grs-cta {
+  background: linear-gradient(160deg, rgba(30,42,74,0.95) 0%, rgba(180,83,9,0.35) 40%, rgba(59,130,246,0.30) 70%, rgba(30,42,74,0.95) 100%), #1a2e4a;
+  border-radius: 16px;
+  padding: 56px 48px;
+  text-align: center;
+  max-width: 1240px;
+  margin: 0 auto 56px;
+  position: relative;
+  overflow: hidden;
+}
+.grs-cta h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2rem;
+  color: #fff;
+  margin: 0 0 12px;
+}
+.grs-cta p {
+  color: rgba(255,255,255,0.7);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  max-width: 560px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+.grs-cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.grs-btn-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  background: var(--grs-orange-600);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 16px -4px rgba(234,88,12,0.4);
+}
+.grs-btn-orange:hover { background: #c2410c; transform: translateY(-1px); }
+.grs-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 24px;
+  background: transparent;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.grs-btn-outline:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .grs-module-header, .grs-chapter { grid-template-columns: 1fr; gap: 12px; }
+  .grs-module-number { font-size: 56px; }
+  .grs-sched-row { grid-template-columns: 60px 1fr; }
+  .grs-sched-row .mod { display: none; }
+}
+@media (max-width: 768px) {
+  .grs-hero { padding: 120px 0 56px; }
+  .grs-modules-wrap { padding: 48px 24px 32px; }
+  .grs-module.capstone, .grs-module.flagship { padding: 28px 20px; }
+  .grs-toc { top: 0; }
+  .grs-cta { margin-left: 20px; margin-right: 20px; padding: 40px 24px; }
+  .grs-career-section, .grs-section { padding-left: 20px; padding-right: 20px; }
+  .grs-sched-row { grid-template-columns: 1fr; gap: 6px; }
+  .grs-sched-row .mod { display: block; text-align: left; }
+}
+@media (max-width: 480px) {
+  .grs-hero { padding: 100px 0 40px; }
+  .grs-hero-inner { padding: 0 20px; }
+  .grs-meta-row { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grs-break-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation (from main site) -->
+<nav>
+    <div class="nav-container">
+        <a class="logo" href="index.html" aria-label="SustainSys Home">
+            <video id="logoVideo" autoplay loop muted playsinline webkit-playsinline preload="auto" width="280" height="72" disablePictureInPicture controlsList="nodownload nofullscreen noremoteplayback">
+                <source src="Sustainsys_Logo.mp4" type="video/mp4">
+            </video>
+        </a>
+        <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li class="nav-dropdown-wrap"><a href="projects.html" class="projects-highlight">Projects<span class="nav-star">&#9733;</span><span class="nav-dropdown-arrow">&#9662;</span></a>
+        <ul class="nav-dropdown">
+            <li><a href="ai-regtech-capabilities.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--regtech"><img src="logo_only.png" alt="SustainSys" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">RegTech AI Solutions<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">AI-driven regulatory intelligence for banks</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li><a href="accountiq.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--accounting"><img src="logo_only.png" alt="SustainSys" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">AccountIQ<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">AI-powered accounting software</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li><a href="nl2sql-sales-deck.html" class="dropdown-card"><span class="dropdown-icon dropdown-icon--nl2sql"><img src="nl2sql_logo.svg" alt="NL2SQL" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">NL2SQL Analytics<span class="dropdown-badge dropdown-badge--new">Flagship</span></span><span class="dropdown-desc">AI-powered natural language to SQL platform</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--health"><img src="Cambiologics_logo.png" alt="CamBiologics" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">HealthCare<span class="dropdown-badge">Live</span></span><span class="dropdown-desc">AI-driven cancer research platform</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--ai"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">Precision AI<span class="dropdown-badge dropdown-badge--new">New</span></span><span class="dropdown-desc">Intelligent enterprise solutions</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer" class="dropdown-card"><span class="dropdown-icon dropdown-icon--community"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="dropdown-logo"></span><span class="dropdown-text"><span class="dropdown-title">Community</span><span class="dropdown-desc">Cambridge GuruJi Parivaar</span></span><span class="dropdown-arrow-right">&rsaquo;</span></a></li>
+            <li>
+                <a href="poc-access.html" class="dropdown-card" style="background:linear-gradient(135deg,rgba(234,88,12,0.06),rgba(234,88,12,0.10));border:1px solid rgba(234,88,12,0.18);border-radius:10px;margin-top:4px;">
+                    <span class="dropdown-icon" style="background:rgba(234,88,12,0.1);">
+                        <img src="logo_only.png" alt="SustainSys" class="dropdown-logo">
+                    </span>
+                    <span class="dropdown-text">
+                        <span class="dropdown-title" style="color:#ea580c;">Access Demo</span>
+                        <span class="dropdown-desc">Try our AI platform live</span>
+                    </span>
+                    <span class="dropdown-arrow-right" style="color:#ea580c;">&rsaquo;</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li><a href="ai-compliance-governance.html" class="compliance-highlight">AI Compliance</a></li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li style="display:flex;align-items:center;gap:8px;">
+        <a href="ai-learn.html" class="ai-academy">AI Academy<span class="academy-badge">Learn</span></a>
+        <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer" title="Download on the App Store" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:#1d4ed8;border-radius:8px;text-decoration:none;transition:all 0.2s ease;" onmouseover="this.style.background='#1e3a8a'" onmouseout="this.style.background='#1d4ed8'"><svg width="18" height="18" viewBox="0 0 384 512" fill="white"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></a>
+        <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer" title="Get it on Google Play" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:white;border-radius:8px;text-decoration:none;transition:all 0.2s ease;border:1px solid #e0e0e0;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4CAF50" d="M7.7 4.1L7.7 4.1c-1.2.7-2 2-2 3.4v33c0 1.5.8 2.8 2 3.4l.3.2L27.8 24.3v-.5L7.7 4.1z"/><path fill="#F44336" d="M34.5 31l-6.7-6.7v-.5l6.7-6.7.2.1 8 4.5c2.3 1.3 2.3 3.4 0 4.7l-8 4.5-.2.1z"/><path fill="#FFC107" d="M34.7 30.9L27.8 24 7.7 44c.8.8 2 .9 3.3.2l23.7-13.3"/><path fill="#2196F3" d="M34.7 17.1L11 3.8C9.7 3.1 8.5 3.2 7.7 4l20.1 20 6.9-6.9z"/></svg></a>
+    </li>
+</ul>
+    </div>
+</nav>
+
+<!-- Mobile Navigation -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li>
+            <span class="projects-highlight" id="mobileProjectsToggle" style="cursor:pointer;display:block;padding:0.5rem 0;font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;">Projects<span class="nav-star" style="color:#ea580c;">&#9733;</span> <span id="mobileProjectsArrow" style="font-size:1.2rem;opacity:1;transition:transform 0.2s;display:inline-block;color:#1d4ed8;margin-left:4px;">&#9660;</span></span>
+            <ul class="mobile-projects-sub" id="mobileProjectsSub" style="display:none;list-style:none;padding:0;margin:0.3rem 0 0 0;">
+                <li class="mobile-dropdown-item"><a href="ai-regtech-capabilities.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> RegTech AI Solutions</a></li>
+                <li class="mobile-dropdown-item"><a href="accountiq.html"><img src="logo_only.png" alt="SustainSys" class="mobile-dropdown-logo"> AccountIQ</a></li>
+                <li class="mobile-dropdown-item"><a href="nl2sql-sales-deck.html"><img src="nl2sql_logo.svg" alt="NL2SQL" class="mobile-dropdown-logo"> NL2SQL Analytics</a></li>
+                <li class="mobile-dropdown-item"><a href="https://cambiologics.com" target="_blank" rel="noopener noreferrer"><img src="Cambiologics_logo.png" alt="CamBiologics" class="mobile-dropdown-logo"> HealthCare</a></li>
+                <li class="mobile-dropdown-item"><a href="http://intelliquest.uk/index.html" target="_blank" rel="noopener noreferrer"><img src="Logo_intelliquest..png" alt="IntelliQuest" class="mobile-dropdown-logo"> Precision AI</a></li>
+                <li class="mobile-dropdown-item"><a href="https://gurujicambridge.com/" target="_blank" rel="noopener noreferrer"><img src="guruji_logo.png" alt="GuruJi Cambridge" class="mobile-dropdown-logo"> Community</a></li>
+                <li class="mobile-dropdown-item"><a href="poc-access.html" style="color:#ea580c;font-weight:700;">Access Demo</a></li>
+            </ul>
+        </li>
+    <li><a href="ai-compliance-governance.html" class="compliance-highlight">AI Compliance</a></li>
+    <li><a href="job-openings.html">Careers</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="mobile-cta-row"><a href="ai-learn.html" class="btn-ai-academy">AI Academy</a></li>
+</ul>
+</div>
+<button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">&#9776;</button>
+
+
+<!-- ==================== HERO ==================== -->
+<header class="grs-hero">
+  <div class="grs-hero-inner">
+    <div class="grs-hero-eyebrow">Professional Certification &middot; v5.0 &middot; 2026 Edition</div>
+    <h1>AI Governance, Risk &amp;&nbsp;<em>Safety</em></h1>
+    <p class="grs-hero-lede">
+      A practitioner-grade certification for the people who actually run AI safely in
+      organisations. Now with a dedicated module on Agentic AI Governance &mdash;
+      the part of the framework that fails first, that examiners are about to start
+      testing, and that nobody else is teaching properly. Twelve weeks. Fifty hours of
+      instructor-led teaching. Business-first, with optional technical depth.
+    </p>
+
+    <div class="grs-meta-row">
+      <div class="grs-meta-item">
+        <div class="grs-meta-label">Duration</div>
+        <div class="grs-meta-value">12 weeks &middot; ~4 hrs / week</div>
+      </div>
+      <div class="grs-meta-item">
+        <div class="grs-meta-label">Live teaching</div>
+        <div class="grs-meta-value">50 instructor-led hours</div>
+      </div>
+      <div class="grs-meta-item">
+        <div class="grs-meta-label">Structure</div>
+        <div class="grs-meta-value">7 modules + capstone</div>
+      </div>
+      <div class="grs-meta-item">
+        <div class="grs-meta-label">Assessment</div>
+        <div class="grs-meta-value">Proctored exam + capstone</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- ==================== STICKY MODULE NAV ==================== -->
+<nav class="grs-toc">
+  <div class="grs-toc-inner">
+    <a href="#delivery">What's included</a>
+    <a href="#schedule">12-week schedule</a>
+    <a href="#m1">M1 &middot; Foundations</a>
+    <a href="#m2">M2 &middot; Regulation</a>
+    <a href="#m3">M3 &middot; Risk &amp; Safety</a>
+    <a href="#m4" class="flag">M4 &middot; AI Agents &#9670;</a>
+    <a href="#m5">M5 &middot; Framework</a>
+    <a href="#m6">M6 &middot; GRC &amp; Implementation</a>
+    <a href="#m7" class="capstone">M7 &middot; Capstone &#9670;</a>
+  </div>
+</nav>
+
+
+<!-- ==================== WHAT'S INCLUDED ==================== -->
+<section class="grs-section" id="delivery" style="scroll-margin-top:140px;">
+  <h3 class="grs-section-heading">What's included</h3>
+  <div class="grs-delivery-grid">
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">i.</div>
+      <h5>50 hours live teaching</h5>
+      <p>12 weekly sessions, ~4 hours each. Live, online or blended cohorts.</p>
+    </div>
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">ii.</div>
+      <h5>Self-paced study materials</h5>
+      <p>Reading packs, annex videos, regulatory primers, glossary.</p>
+    </div>
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">iii.</div>
+      <h5>Real-world case studies</h5>
+      <p>15+ anonymised incidents and use cases across regulated sectors, including agent failures.</p>
+    </div>
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">iv.</div>
+      <h5>Exercises &amp; labs</h5>
+      <p>Per-module exercises plus hands-on labs in Microsoft, AWS, and OSS tooling.</p>
+    </div>
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">v.</div>
+      <h5>Office hours &amp; mentoring</h5>
+      <p>Weekly Q&amp;A and 1:1 mentor sessions with practising AI governance leads.</p>
+    </div>
+    <div class="grs-delivery-card">
+      <div class="grs-dc-icon">vi.</div>
+      <h5>Capstone portfolio</h5>
+      <p>Finish with a defensible artefact pack &mdash; register entry, risk assessment, policy, workflow, agent control plan.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 12-WEEK SCHEDULE ==================== -->
+<section class="grs-section" id="schedule" style="scroll-margin-top:140px;">
+  <h3 class="grs-section-heading">12-week schedule at a glance</h3>
+  <p class="grs-section-sub">Each week = ~4 hours instructor-led + ~2&ndash;3 hours self-paced study.</p>
+  <div class="grs-schedule-table">
+    <div class="grs-sched-row header">
+      <div>Week</div>
+      <div>Topic</div>
+      <div>Module</div>
+    </div>
+    <div class="grs-sched-row"><div class="wk">01</div><div class="topic">AI in business terms; where AI goes wrong; first case studies</div><div class="mod">M1 &middot; Foundations</div></div>
+    <div class="grs-sched-row"><div class="wk">02</div><div class="topic">Responsible AI principles, governance vs management, key roles</div><div class="mod">M1 &middot; Foundations</div></div>
+    <div class="grs-sched-row"><div class="wk">03</div><div class="topic">EU AI Act deep dive &mdash; risk tiers, obligations, GPAI, timelines</div><div class="mod">M2 &middot; Regulation</div></div>
+    <div class="grs-sched-row"><div class="wk">04</div><div class="topic">UK, US, global regimes; standards (ISO 42001, NIST AI RMF); sector rules</div><div class="mod">M2 &middot; Regulation</div></div>
+    <div class="grs-sched-row"><div class="wk">05</div><div class="topic">AI risk taxonomy; data &amp; model risk; AI risk and impact assessment</div><div class="mod">M3 &middot; Risk &amp; Safety</div></div>
+    <div class="grs-sched-row"><div class="wk">06</div><div class="topic">Generative AI risks; AI security &amp; MLSecOps; safety engineering &amp; evals</div><div class="mod">M3 &middot; Risk &amp; Safety</div></div>
+    <div class="grs-sched-row flagged"><div class="wk">07</div><div class="topic">Governing AI Agents &mdash; why agents differ from models; inventory, scope, revocation, accountability, examiner readiness</div><div class="mod">M4 &middot; AI Agents &#9670;</div></div>
+    <div class="grs-sched-row"><div class="wk">08</div><div class="topic">Designing the AI governance framework; 3 lines of defence; policies</div><div class="mod">M5 &middot; Framework</div></div>
+    <div class="grs-sched-row"><div class="wk">09</div><div class="topic">Lifecycle governance, AI TRiSM, KRIs, board reporting, vendor risk</div><div class="mod">M5 &middot; Framework</div></div>
+    <div class="grs-sched-row"><div class="wk">10</div><div class="topic">AI in project management, risk management, internal audit workflows</div><div class="mod">M6 &middot; GRC Practice</div></div>
+    <div class="grs-sched-row"><div class="wk">11</div><div class="topic">Implementation tour: Microsoft (Purview, Foundry, Copilot) + multi-cloud + OSS</div><div class="mod">M6 &middot; GRC Practice</div></div>
+    <div class="grs-sched-row"><div class="wk">12</div><div class="topic">Capstone presentations, panel defence, proctored exam, career briefing</div><div class="mod">M7 &middot; Capstone</div></div>
+  </div>
+</section>
+
+
+<!-- ==================== MODULES ==================== -->
+<div class="grs-modules-wrap">
+
+  <!-- ======= MODULE 1 ======= -->
+  <section class="grs-module" id="m1" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">01</div>
+      <div class="grs-module-title">
+        <h2>Foundations of AI &amp; AI Governance</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag tier">Foundational</span>
+          <span class="grs-tag hours">~7 hrs</span>
+          <span class="grs-tag weeks">Weeks 1&ndash;2</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 01</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Bring AI and non-AI people to a common baseline so everyone can meaningfully discuss governance and risk by the end of week 2.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 1.1</div>
+      <div class="grs-chapter-body">
+        <h3>What is AI &amp; Generative AI in business terms</h3>
+        <ul>
+          <li>Plain-English concepts: data, models, training, inference, the AI lifecycle</li>
+          <li>Types of AI: classical ML, generative AI, foundation models, agentic systems</li>
+          <li>Typical enterprise use cases: customer service, scoring, forecasting, copilots, agents</li>
+          <li><span class="annot">Tech drilldown</span>Optional annex: how transformers, embeddings and RAG actually work</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 1.2</div>
+      <div class="grs-chapter-body">
+        <h3>Where things go wrong &mdash; case studies</h3>
+        <ul>
+          <li>Bias and unfair outcomes, hallucinations, privacy breaches, security issues, automation over-reliance</li>
+          <li>Real incidents: Apple Card credit limits, Air Canada chatbot, Dutch SyRI, COMPAS, agent jailbreaks, deepfake fraud</li>
+          <li>Anatomy of an AI failure: root causes and missing controls</li>
+          <li>Reference sources you will keep tracking: AIAAIC, OECD AI Incidents Monitor</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 1.3</div>
+      <div class="grs-chapter-body">
+        <h3>What &ldquo;AI governance&rdquo; means</h3>
+        <ul>
+          <li>Governance vs. management vs. technical controls &mdash; clean distinctions</li>
+          <li>Responsible AI principles: fairness, accountability, transparency, safety, privacy, human oversight, robustness</li>
+          <li>Ethics, society, environment &mdash; including AI literacy obligations under EU AI Act Article 4</li>
+          <li>The Govern / Map / Measure / Manage framing (NIST) and the PDCA loop (ISO/IEC 42001)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 1.4</div>
+      <div class="grs-chapter-body">
+        <h3>Key roles &amp; the three perspectives</h3>
+        <ul>
+          <li>Model developer / data scientist / MLOps engineer</li>
+          <li>Product owner, business sponsor, AI sponsor at executive level</li>
+          <li>AI governance function, RAI lead, risk, compliance, legal, internal audit, security</li>
+          <li>Three perspectives carried through the course: PM view &middot; GRC view &middot; business-owner view</li>
+        </ul>
+        <div class="grs-lab-block">&#9670; Exercise: map your organisation's existing or planned AI use cases and assign roles using a RACI template</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 2 ======= -->
+  <section class="grs-module" id="m2" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">02</div>
+      <div class="grs-module-title">
+        <h2>Laws, Regulations &amp; Standards</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag tier">Foundational</span>
+          <span class="grs-tag hours">~7 hrs</span>
+          <span class="grs-tag weeks">Weeks 3&ndash;4</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 01</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Give learners a working map of the regulatory environment so they can identify obligations and design compliant processes.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 2.1</div>
+      <div class="grs-chapter-body">
+        <h3>EU AI Act &mdash; Deep Dive</h3>
+        <ul>
+          <li>Scope, extraterritoriality, prohibited practices, risk tiers</li>
+          <li>High-risk system obligations: risk management, data, documentation, oversight, accuracy, robustness, cybersecurity</li>
+          <li>General-purpose AI (GPAI), systemic risk thresholds, the Code of Practice</li>
+          <li>Conformity assessment, CE marking, post-market monitoring, serious incident reporting</li>
+          <li>Full enforcement August 2026 &mdash; penalties up to &euro;35M; the first enforcement actions to watch</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 2.2</div>
+      <div class="grs-chapter-body">
+        <h3>UK, US &amp; global regulatory landscape</h3>
+        <ul>
+          <li>UK pro-innovation approach; ICO, FCA, PRA, MHRA, Ofcom, CMA guidance; UK AISI</li>
+          <li>US: NIST AI RMF + Generative AI Profile, OMB M-24-10, FTC, SEC 2025 examination priorities on AI governance</li>
+          <li>State laws: Colorado AI Act, NYC Local Law 144, California AB 2013</li>
+          <li>Global: China deep-synthesis rules, Singapore AI Verify, Canada AIDA, Japan, Korea, Brazil, India</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 2.3</div>
+      <div class="grs-chapter-body">
+        <h3>Interaction with adjacent law</h3>
+        <ul>
+          <li>GDPR, UK GDPR, and Article 22 automated decision-making</li>
+          <li>DSA, DMA, Data Act, NIS2, Cyber Resilience Act, Product Liability Directive, AI Liability Directive</li>
+          <li>IP and copyright in training data; live litigation landscape</li>
+          <li>Consumer protection, equality &amp; non-discrimination law, employment law</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 2.4</div>
+      <div class="grs-chapter-body">
+        <h3>Standards ecosystem</h3>
+        <ul>
+          <li>ISO/IEC 42001 AI Management System &mdash; clauses, controls, certification path</li>
+          <li>ISO/IEC 23894 (AI risk), 5338 (AI lifecycle), 23053, 42005 (impact assessment), 42006 (audit bodies)</li>
+          <li>NIST AI RMF + Generative AI Profile (AI 600-1)</li>
+          <li>ISO/IEC 27001 / security standards crossover; IEEE 7000 series; CEN-CENELEC harmonised standards</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 2.5</div>
+      <div class="grs-chapter-body">
+        <h3>Sector-specific obligations</h3>
+        <ul>
+          <li>Financial services: SR 11-7, EBA, PRA SS1/23, FCA AI discussion paper, FFIEC IT Handbook on third-party risk</li>
+          <li>Healthcare: FDA SaMD/PCCP, MHRA AI as a Medical Device, EU MDR</li>
+          <li>HR &amp; employment: NYC LL144, Illinois AI Video Interview Act, EEOC guidance</li>
+          <li>Critical infrastructure, public sector procurement, defence and dual-use</li>
+        </ul>
+        <div class="grs-lab-block">&#9670; Exercise: map a real use case to EU AI Act Annex III, list obligations, and identify the technical file documents you will need</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 3 ======= -->
+  <section class="grs-module" id="m3" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">03</div>
+      <div class="grs-module-title">
+        <h2>AI Risk, Safety &amp; Trustworthiness</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag tier">Practitioner</span>
+          <span class="grs-tag hours">~9 hrs</span>
+          <span class="grs-tag weeks">Weeks 5&ndash;6</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 02</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Build the AI risk mindset and a working knowledge of safety and security themes that any role can act on, with optional technical depth. Agent-specific governance is then covered in depth in Module 4.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 3.1</div>
+      <div class="grs-chapter-body">
+        <h3>AI risk taxonomy &amp; assessment</h3>
+        <ul>
+          <li>Model risks: bias, robustness, drift, adversarial behaviour</li>
+          <li>Data risks: quality, lineage, privacy, security, IP</li>
+          <li>Operational risks: change management, third-party, shadow AI</li>
+          <li>Ethical &amp; societal risks: discrimination, misinformation, reputational damage</li>
+          <li>AI-specific risk and impact assessment (AI RIA), DPIA, Fundamental Rights Impact Assessment (FRIA)</li>
+          <li>Use-case risk scoring and the AI risk register</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 3.2</div>
+      <div class="grs-chapter-body">
+        <h3>Data &amp; model governance</h3>
+        <ul>
+          <li>Data lifecycle, lineage, quality, drift, ground-truth management</li>
+          <li>Bias detection and mitigation; privacy-preserving techniques (DP, federated learning, synthetic)</li>
+          <li>SR 11-7 / PRA SS1/23 model risk management principles applied to AI/ML</li>
+          <li>Evaluation, validation, benchmarking, robustness, stress testing, monitoring, drift, lifecycle controls</li>
+          <li>Documentation artefacts: model cards, datasheets, system cards</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 3.3</div>
+      <div class="grs-chapter-body">
+        <h3>Generative AI risks</h3>
+        <ul>
+          <li>Hallucinations, groundedness, factuality &mdash; causes, detection, mitigation</li>
+          <li>Prompt injection (direct and indirect), jailbreaks, data leakage</li>
+          <li>Content provenance: C2PA, watermarking (SynthID), deepfake disclosure (EU AI Act Art. 50)</li>
+          <li><span class="annot">Note</span>Agent-specific risks &mdash; composition, runtime drift, accountability across chains &mdash; are covered as a dedicated module next week</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 3.4</div>
+      <div class="grs-chapter-body">
+        <h3>AI security (MLSecOps essentials)</h3>
+        <ul>
+          <li>AI attack surface mapped to OWASP LLM Top 10 (2025) and MITRE ATLAS</li>
+          <li>Adversarial attacks: evasion, model inversion, membership inference, poisoning</li>
+          <li>Supply-chain risk: weight integrity, open-source model risk, serialisation attacks</li>
+          <li>AI Bill of Materials (AI-BOM): SPDX-AI and CycloneDX ML-BOM</li>
+          <li>AI incident response: detection, containment, forensics, disclosure</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 3.5</div>
+      <div class="grs-chapter-body">
+        <h3>AI safety, alignment &amp; evaluation</h3>
+        <ul>
+          <li>Safety engineering: safe-by-design, defence-in-depth, fail-safe, kill-switches, staged rollouts</li>
+          <li>Human oversight models: human-in-the-loop, human-on-the-loop, human-over-the-loop</li>
+          <li>Red teaming, evals, continuous assurance pipelines</li>
+          <li>Frontier and catastrophic risks: CBRN, cyber, autonomy; responsible scaling policies; AISI work</li>
+          <li>A control library: preventive, detective, corrective</li>
+        </ul>
+        <div class="grs-lab-block">&#9670; Exercise: produce an AI risk and impact assessment plus a threat model for a real generative-AI use case</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 4 — FLAGSHIP / AGENTIC ======= -->
+  <section class="grs-module flagship" id="m4" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">04</div>
+      <div class="grs-module-title">
+        <h2>Governing AI Agents: Risks, Safety &amp; Accountability</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag new-flag">&#9670; NEW &middot; Flagship</span>
+          <span class="grs-tag tier">Practitioner</span>
+          <span class="grs-tag hours">~6 hrs</span>
+          <span class="grs-tag weeks">Week 7</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 02</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Why this module matters</div>
+      <p class="grs-goal-text">Traditional AI governance was designed for systems that predict things. Agentic AI is different. Agents do not just make predictions &mdash; they take actions: they read information, use tools, call APIs, send messages, trigger workflows, and even hand work to other agents. In regulated organisations, this creates new risks around control, accountability, safety, oversight and legal exposure. This module teaches you how to govern agentic systems in a safe, controlled and auditable way.</p>
+    </div>
+
+    <div class="grs-core-idea">
+      <div class="grs-ci-label">Core idea</div>
+      <p class="grs-ci-text">Approval alone is not enough. A real control must also let you <strong>limit, monitor and revoke</strong> an agent's access when needed.</p>
+    </div>
+
+    <div class="grs-pull-quote">
+      &ldquo;Approval without revocation is not a control. It is a hope.&rdquo;
+      <span class="attr">&mdash; The principle that reframes this module</span>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.1</div>
+      <div class="grs-chapter-body">
+        <h3>Why agents are different from models</h3>
+        <ul>
+          <li>Most existing AI governance was built for models that produce outputs from inputs. A model answers a question.</li>
+          <li>An agent acts across systems. In a single task an agent may:
+            <ul>
+              <li>read a CRM record</li>
+              <li>draft an email</li>
+              <li>query a vendor system</li>
+              <li>update a ticket</li>
+              <li>trigger a workflow</li>
+              <li>call another agent to continue the task</li>
+            </ul>
+          </li>
+          <li>The governance challenge is therefore no longer just the model itself. It is the full chain of action across people, systems, tools and vendors.</li>
+          <li>Agents are already appearing inside platforms such as Microsoft 365, Salesforce, ServiceNow, core banking platforms, and other enterprise SaaS.</li>
+          <li>In many organisations, business teams are also building their own internal agents without going through formal governance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.2</div>
+      <div class="grs-chapter-body">
+        <h3>Where current governance frameworks break down</h3>
+        <ul>
+          <li>Current AI governance frameworks do not fully fit agentic systems. They break in four main ways.</li>
+        </ul>
+        <div class="grs-break-grid">
+          <div class="grs-break-box">
+            <div class="grs-bb-num">Break 01</div>
+            <div class="grs-bb-head">Inventories assume fixed systems</div>
+            <div class="grs-bb-body">Traditional governance assumes each AI system can be listed once and reviewed periodically. Agents compose actions dynamically at runtime, so the workflow may change during execution.</div>
+          </div>
+          <div class="grs-break-box">
+            <div class="grs-bb-num">Break 02</div>
+            <div class="grs-bb-head">Validation assumes stable behaviour</div>
+            <div class="grs-bb-body">Many AI controls assume the system behaves consistently between reviews. Agent behaviour depends on the prompt, available tools, memory, context, permissions and previous actions.</div>
+          </div>
+          <div class="grs-break-box">
+            <div class="grs-bb-num">Break 03</div>
+            <div class="grs-bb-head">Accountability becomes unclear</div>
+            <div class="grs-bb-body">If Agent A calls Agent B, and Agent B uses a vendor tool to complete the action, it becomes difficult to say who is responsible for the final outcome. This creates a serious accountability gap.</div>
+          </div>
+          <div class="grs-break-box">
+            <div class="grs-bb-num">Break 04</div>
+            <div class="grs-bb-head">Approval is not enough</div>
+            <div class="grs-bb-body">With agentic systems, the more important question is whether the organisation can quickly remove access, stop action execution, and prove that the stop worked.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.3</div>
+      <div class="grs-chapter-body">
+        <h3>Inventorying agents at runtime</h3>
+        <ul>
+          <li>A static list of AI systems is not enough for agentic environments. Organisations need a live understanding of what agents exist, what they can access, and what they are doing.</li>
+          <li>The inventory must include:
+            <ul>
+              <li>internal agents built by business teams</li>
+              <li>vendor-shipped agents inside enterprise platforms</li>
+              <li>agents activated indirectly through software updates or platform changes</li>
+            </ul>
+          </li>
+          <li>For each agent, capture: tools and APIs it can use, sub-agents it can call, memory or retrieval sources, identities and credentials, systems it can affect</li>
+          <li>Governance must shift from a one-time inventory to continuous discovery and monitoring</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.4</div>
+      <div class="grs-chapter-body">
+        <h3>Authorised scope, approval and revocation</h3>
+        <ul>
+          <li>An agent should not just be described in policy. Its limits must be enforced by the system.</li>
+          <li>Important control patterns: human approval for sensitive actions, sandboxing, budget limits, rate limits, restricted tool lists, session time limits</li>
+          <li>Identity and access management for agents: agents need their own identities, permissions and secrets handling, following least-privilege principles</li>
+          <li>Revocation must be a first-class control. If an agent behaves unexpectedly, the organisation should be able to disable its permissions, shut down its access, and confirm that the revocation worked.</li>
+          <li>Target a 90-second revocation, with evidence the control fired. Tested regularly, not just documented.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.5</div>
+      <div class="grs-chapter-body">
+        <h3>Accountability across agent chains</h3>
+        <ul>
+          <li>When multiple agents and tools work together, accountability must be defined at two levels:
+            <ul>
+              <li>who owns the agent at design time &mdash; accountable for what it is authorised to do</li>
+              <li>who owns the agent at runtime &mdash; accountable for what it actually did in a specific session</li>
+            </ul>
+          </li>
+          <li>For every production agent, the organisation should be able to answer four questions:
+            <ul>
+              <li>1. Who is the named owner of the agent at design time?</li>
+              <li>2. Who is the named owner during runtime?</li>
+              <li>3. What actions is the agent allowed to take, and how is that enforced?</li>
+              <li>4. How can the agent be revoked, and when was that revocation last tested?</li>
+            </ul>
+          </li>
+          <li>Contracts alone do not solve the accountability problem. The organisation still needs a clear internal ownership model.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 4.6</div>
+      <div class="grs-chapter-body">
+        <h3>Safety and examiner readiness</h3>
+        <ul>
+          <li>Regulators and examiners are increasingly likely to ask how organisations govern agents that can take real-world actions.</li>
+          <li>Existing rules on model risk, IT control, operational risk, and AI governance already support these oversight expectations &mdash; no new authority is required.</li>
+          <li>The likely examiner questions:
+            <ul>
+              <li>Can you show your full inventory of production agents?</li>
+              <li>Can you name the individual accountable for each agent?</li>
+              <li>Can you demonstrate how an agent is prevented from acting outside its authorised scope?</li>
+              <li>Can you produce evidence that revocation worked the last time it was tested?</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="grs-evidence-box">
+          <div class="grs-ev-label">Evidence a regulator or auditor may expect</div>
+          <ul>
+            <li>A live inventory of agents in production</li>
+            <li>Owner records &mdash; design-time and runtime, by name</li>
+            <li>Scope controls enforced by the system</li>
+            <li>Revocation records and the date of the last test</li>
+            <li>Proof that controls were tested and that they fired correctly</li>
+          </ul>
+        </div>
+
+        <div class="grs-lab-block">&#9670; Capstone-feeder lab: (a) identify agents in your environment &middot; (b) select one agent &middot; (c) define the design-time owner &middot; (d) define the runtime owner &middot; (e) describe the system-enforced scope &middot; (f) test or document the revocation path. This artefact carries directly into the Module 7 capstone.</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 5 ======= -->
+  <section class="grs-module" id="m5" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">05</div>
+      <div class="grs-module-title">
+        <h2>Governance Frameworks, Policies &amp; Operating Model</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag tier">Practitioner</span>
+          <span class="grs-tag hours">~7 hrs</span>
+          <span class="grs-tag weeks">Weeks 8&ndash;9</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 02</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Translate principles, obligations and agent controls into concrete governance structures, policies and lifecycle controls &mdash; the operating model your organisation will actually run.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 5.1</div>
+      <div class="grs-chapter-body">
+        <h3>Designing AI governance frameworks</h3>
+        <ul>
+          <li>Comparison and mapping: ISO 42001 vs. NIST AI RMF vs. industry RAI frameworks</li>
+          <li>Mapping AI governance onto existing IT, data, security and model-risk governance &mdash; without rebuilding from scratch</li>
+          <li>Policy hierarchy: principles &rarr; policies &rarr; standards &rarr; procedures &rarr; guidelines</li>
+          <li>Adapting the framework to cover both models and agents (lessons from Module 4)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 5.2</div>
+      <div class="grs-chapter-body">
+        <h3>Operating model, roles &amp; three lines of defence</h3>
+        <ul>
+          <li>Operating models: centralised, federated, hub-and-spoke, embedded</li>
+          <li>Governance bodies: AI Council, Responsible AI Board, Use-Case Review Panel, Ethics Committee</li>
+          <li>Three lines of defence applied to AI: 1LoD (product, MLOps), 2LoD (risk, compliance, validation), 3LoD (audit, external assurance)</li>
+          <li>RACI for AI use-case approval, model lifecycle, monitoring, incident handling &mdash; and for agent design-time and runtime ownership</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 5.3</div>
+      <div class="grs-chapter-body">
+        <h3>Policies, standards &amp; guidelines</h3>
+        <ul>
+          <li>AI acceptable use policy (including consumer GenAI tools and shadow AI)</li>
+          <li>AI development and validation standard</li>
+          <li>Agent-specific policy: scope, approval, revocation testing cadence, vendor-agent activation review</li>
+          <li>Data governance extensions for AI; AI literacy programme (EU AI Act Art. 4) tailored by role</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 5.4</div>
+      <div class="grs-chapter-body">
+        <h3>Lifecycle governance &amp; monitoring</h3>
+        <ul>
+          <li>Use-case intake, triage, stage gates</li>
+          <li>Design-time checks, testing, validation, explainability reviews</li>
+          <li>Deployment, monitoring, incident management, decommissioning</li>
+          <li>AI risk register, KRIs and KCIs (including agent-specific: revocation-test freshness, scope-violation rate, vendor-agent activation count)</li>
+          <li>Board-level reporting and dashboards</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 5.5</div>
+      <div class="grs-chapter-body">
+        <h3>AI TRiSM, tooling &amp; vendor / third-party risk</h3>
+        <ul>
+          <li>Gartner AI TRiSM pillars: explainability, ModelOps, AI app security, privacy</li>
+          <li>Governance-platform landscape: Credo AI, Holistic AI, Fairly, Trustible, ModelOp</li>
+          <li>Procurement &amp; vendor due-diligence questionnaires (NIST AI RMF mapping)</li>
+          <li>Contractual clauses: indemnities, data use, IP, audit rights, sub-processors, agent-activation notice, revocation guarantees</li>
+          <li>Foundation-model provider risk and exit planning</li>
+        </ul>
+        <div class="grs-lab-block">&#9670; Exercise: design an AI governance operating model and draft an AI acceptable use policy plus an agent-specific addendum for your sector</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 6 ======= -->
+  <section class="grs-module" id="m6" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">06</div>
+      <div class="grs-module-title">
+        <h2>AI in GRC Practice, Audit &amp; Implementation</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag tier">Practitioner / Implementer</span>
+          <span class="grs-tag hours">~10 hrs</span>
+          <span class="grs-tag weeks">Weeks 10&ndash;11</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 03</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Show how AI governance and risk management fit into real project, risk, audit and procurement workflows &mdash; and tour the toolchain you will actually use to implement controls.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 6.1</div>
+      <div class="grs-chapter-body">
+        <h3>AI in project &amp; product management</h3>
+        <ul>
+          <li>Adding AI risk and governance checkpoints to project lifecycles (waterfall and agile)</li>
+          <li>Requirements, acceptance criteria and documentation for AI features, including agentic features</li>
+          <li>Working with technical teams on explainability, data, and testing &mdash; the questions to ask</li>
+          <li>Reconciling agile delivery with stage-gated governance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 6.2</div>
+      <div class="grs-chapter-body">
+        <h3>AI in risk management</h3>
+        <ul>
+          <li>Updating risk taxonomies to include AI-specific and agent-specific risks</li>
+          <li>AI risk appetite statements, KRIs and KCIs</li>
+          <li>Integration with enterprise risk management, operational risk and model risk management</li>
+          <li>Board reporting and risk-committee packs</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 6.3</div>
+      <div class="grs-chapter-body">
+        <h3>AI in compliance &amp; internal audit</h3>
+        <ul>
+          <li>Testing AI controls: sampling, evidence collection, walkthroughs</li>
+          <li>Algorithmic, technical, impact and outcome audits</li>
+          <li>Conformity assessment dry runs against EU AI Act and ISO 42001</li>
+          <li>Bias audits (NYC LL144); DPIA / FRIA / AIA bundles</li>
+          <li>Auditing agent inventory, scope enforcement and revocation &mdash; direct application of Module 4</li>
+          <li>Whistleblowing, contestability, redress, mandatory incident reporting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 6.4</div>
+      <div class="grs-chapter-body">
+        <h3>Using AI to support GRC</h3>
+        <ul>
+          <li>AI for compliance monitoring, policy analysis, control mapping</li>
+          <li>Anomaly detection in GRC systems and audit data</li>
+          <li>Copilots for risk, audit and legal teams &mdash; and the governance of those copilots</li>
+          <li>Risks of AI-assisted GRC: over-reliance, automation bias, hallucination in evidence</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 6.5</div>
+      <div class="grs-chapter-body">
+        <h3>Implementation tour: Microsoft + multi-cloud + OSS</h3>
+        <ul>
+          <li>Microsoft Responsible AI Standard, Responsible AI dashboard, Fairlearn, InterpretML</li>
+          <li>Purview AI Hub, DSPM for AI, Communication Compliance, Insider Risk Management</li>
+          <li>Azure AI Foundry: model catalogue, evaluations, Content Safety (prompt shields, groundedness), agent governance</li>
+          <li>M365 Copilot &amp; Copilot Studio agents: Conditional Access, data boundary, oversharing controls, Restricted SharePoint Search, eDiscovery, Defender for Cloud Apps shadow AI, agent identity</li>
+          <li>AWS: Bedrock Guardrails, Bedrock Agents, SageMaker Clarify, Model Monitor</li>
+          <li>Google: Vertex AI Safety, Model Garden, Agent Builder, Responsible AI Toolkit</li>
+          <li>Open-source: Guardrails AI, NeMo Guardrails, LangSmith, Promptfoo, Garak, PyRIT, Giskard, AgentOps</li>
+        </ul>
+        <div class="grs-lab-block">&#9670; Lab pack (graded): (a) Purview AI Hub setup + shadow-AI remediation &middot; (b) Build a RAG app with Azure Content Safety + groundedness eval &middot; (c) Red-team a Copilot agent with PyRIT &middot; (d) M365 Copilot oversharing audit &middot; (e) Agent inventory and revocation drill on a real tenant</div>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+
+  <!-- ======= MODULE 7 — CAPSTONE ======= -->
+  <section class="grs-module capstone" id="m7" style="scroll-margin-top:140px;">
+    <div class="grs-module-header">
+      <div class="grs-module-number">07</div>
+      <div class="grs-module-title">
+        <h2>Capstone Case Study, Exam &amp; Career Track</h2>
+        <div class="grs-tag-row">
+          <span class="grs-tag">&#9670; Applied</span>
+          <span class="grs-tag hours">~4 hrs live + project</span>
+          <span class="grs-tag weeks">Week 12</span>
+        </div>
+      </div>
+      <div class="grs-module-tier">Tier 03</div>
+      <span class="grs-toggle">&#9662;</span>
+    </div>
+
+    <div class="grs-module-content">
+    <div class="grs-module-goal">
+      <div class="grs-goal-label">Module goal</div>
+      <p class="grs-goal-text">Apply everything to a realistic scenario &mdash; including an agentic component &mdash; defend it before a panel, sit a proctored exam, and leave with a portfolio piece and a credible next career step.</p>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 7.1</div>
+      <div class="grs-chapter-body">
+        <h3>Capstone case study</h3>
+        <ul>
+          <li>Scenario: a regulated organisation deploying a generative or agentic AI use case (e.g. AI-based hiring agent, credit-scoring assistant, healthcare triage agent, customer-service agent)</li>
+          <li>Identify risks; map regulatory obligations against EU AI Act / NIST AI RMF / ISO 42001</li>
+          <li>Propose governance, controls and oversight structure</li>
+          <li>Produce a Responsible AI impact assessment, DPIA and FRIA bundle</li>
+          <li>Design controls across data, model, prompt, output, agent, identity &mdash; including a tested revocation path</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 7.2</div>
+      <div class="grs-chapter-body">
+        <h3>Practical artefacts &mdash; your portfolio</h3>
+        <ul>
+          <li>AI / agent use-case register entry</li>
+          <li>AI risk assessment template (completed for your scenario)</li>
+          <li>AI policy snippet (acceptable use or development standard) plus agent addendum</li>
+          <li>Governance workflow diagram for your organisation</li>
+          <li>Agent Accountability Test answers for one production-class agent</li>
+          <li>Board-reporting pack and KRI dashboard mock</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 7.3</div>
+      <div class="grs-chapter-body">
+        <h3>Certification assessment</h3>
+        <ul>
+          <li>Proctored exam: 60&ndash;80 multiple-choice and scenario-based questions across all seven modules</li>
+          <li>Focused on understanding, application and decision-making &mdash; not coding or statistics</li>
+          <li>Capstone submission and panel defence with examiners drawn from regulators, industry and academia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grs-chapter">
+      <div class="grs-chapter-id">CH 7.4</div>
+      <div class="grs-chapter-body">
+        <h3>Career pathways &amp; continuing education</h3>
+        <ul>
+          <li>Role map: AI Governance Lead, AI Risk Officer, Responsible AI Manager, AI Compliance Officer, AI Auditor, Model Validator, MLSecOps Engineer, AI Ethics Lead, AI Project / Product Manager, Agent Governance Lead</li>
+          <li>Stackable certifications: IAPP AIGP, ISACA AAIA, ISO/IEC 42001 LA/LI, CertNexus CAIP, BCS AI Ethics, GARP Risk &amp; AI, CSA TAISE</li>
+          <li>Alumni network, mentor pool, public-speaking and writing routes</li>
+          <li>CPE: 40 hours over 2 years for recertification; recommended reading list and regulator feeds to follow</li>
+        </ul>
+      </div>
+    </div>
+    </div><!-- /grs-module-content -->
+  </section>
+
+</div>
+
+
+<!-- ==================== CAREER PATHWAYS ==================== -->
+<section class="grs-career-section">
+  <h3 class="grs-section-heading">Careers this certification targets</h3>
+  <p class="grs-section-sub">Agent-governance-fluent candidates command a premium at the top end of each role.</p>
+  <div class="grs-career-grid">
+    <div class="grs-career-pill"><div class="grs-role">AI Governance Lead</div></div>
+    <div class="grs-career-pill"><div class="grs-role">Agent Governance Lead</div></div>
+    <div class="grs-career-pill"><div class="grs-role">AI Risk Officer</div></div>
+    <div class="grs-career-pill"><div class="grs-role">Responsible AI Manager</div></div>
+    <div class="grs-career-pill"><div class="grs-role">AI Compliance Officer</div></div>
+    <div class="grs-career-pill"><div class="grs-role">AI Project / Product Manager</div></div>
+    <div class="grs-career-pill"><div class="grs-role">AI Auditor</div></div>
+    <div class="grs-career-pill"><div class="grs-role">Model Validator (AI/ML)</div></div>
+  </div>
+</section>
+
+
+<!-- ==================== CTA ==================== -->
+<div style="padding: 0 32px;">
+  <div class="grs-cta">
+    <h2>Ready to get certified?</h2>
+    <p>Explore the full AI Academy catalogue, register for the next cohort, or speak with an adviser about corporate enrolment.</p>
+    <div class="grs-cta-buttons">
+      <a href="ai-learn.html" class="grs-btn-orange">Explore AI Academy &rarr;</a>
+      <a href="contact.html" class="grs-btn-outline">Talk to an adviser</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer (from main site) -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="logo_only.png" alt="SustainSys Logo">
+                <div>
+                    <h3>SustainSys Consulting Ltd</h3>
+                    <p>AI-Powered Engineering Solutions</p>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
+                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/white/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
+                </a>
+            </div>
+            <div class="footer-location">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1d4ed8"/></svg>
+                <div>
+                    <div class="city">Cambridge, UK</div>
+                    <div class="sub">Innovation Hub</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="support.html">Support</a> &middot; <a href="delete-account.html">Unsubscribe</a></p>
+        </div>
+    </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+// Mobile Projects dropdown toggle
+document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('mobileProjectsToggle');
+    var sub = document.getElementById('mobileProjectsSub');
+    var arrow = document.getElementById('mobileProjectsArrow');
+    if (toggle && sub) {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var isOpen = sub.style.display !== 'none';
+            sub.style.display = isOpen ? 'none' : 'block';
+            if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+        });
+    }
+});
+
+// Module accordion - collapse/expand
+document.querySelectorAll('.grs-module-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+        var module = this.closest('.grs-module');
+        module.classList.toggle('open');
+    });
+});
+</script>
+</body>
+</html>
