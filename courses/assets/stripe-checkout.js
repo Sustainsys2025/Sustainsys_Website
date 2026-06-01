@@ -27,6 +27,8 @@ const PRICE_IDS = {
   'ai-practitioner-associate': 'price_1THLekPq7EC8TeurVwXSBLSI',
   'ai-practitioner-advanced':  'price_1THLfFPq7EC8TeurzbofRSO0',
   'ai-solution-architect':     'price_1THLfXPq7EC8Teur0irCW2Sf',
+  // TODO: replace with real Stripe Price ID for the Governance flagship
+  'ai-governance-risk-safety': 'price_REPLACE_WITH_GRS_PRICE_ID',
 };
 
 // Display prices (shown on UI — keep in sync with Stripe prices)
@@ -35,13 +37,15 @@ const DISPLAY_PRICES = {
   'ai-practitioner-associate': '£49.99',
   'ai-practitioner-advanced':  '£79.99',
   'ai-solution-architect':     '£99.99',
+  'ai-governance-risk-safety': '£199',
 };
 
 // Map course IDs to product IDs (for entitlement matching)
 const COURSE_TO_PRODUCT = {
-  'associate': 'ai-practitioner-associate',
-  'advanced':  'ai-practitioner-advanced',
-  'architect': 'ai-solution-architect',
+  'associate':  'ai-practitioner-associate',
+  'advanced':   'ai-practitioner-advanced',
+  'architect':  'ai-solution-architect',
+  'governance': 'ai-governance-risk-safety',
 };
 
 /* ── Stripe Checkout ── */
