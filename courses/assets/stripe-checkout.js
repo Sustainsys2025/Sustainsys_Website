@@ -27,8 +27,8 @@ const PRICE_IDS = {
   'ai-practitioner-associate': 'price_1THLekPq7EC8TeurVwXSBLSI',
   'ai-practitioner-advanced':  'price_1THLfFPq7EC8TeurzbofRSO0',
   'ai-solution-architect':     'price_1THLfXPq7EC8Teur0irCW2Sf',
-  // TODO: replace with real Stripe Price ID for the Governance flagship
-  'ai-governance-risk-safety': 'price_REPLACE_WITH_GRS_PRICE_ID',
+  // Reusing the All-Access Price ID until a dedicated Governance product is set up in Stripe
+  'ai-governance-risk-safety': 'price_1THLeFPq7EC8TeurNvY8vvZm',
 };
 
 // Display prices (shown on UI — keep in sync with Stripe prices)
