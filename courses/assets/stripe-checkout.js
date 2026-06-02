@@ -13,21 +13,22 @@
 
 /* ── Configuration (replace with real values) ── */
 
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_51THLW6Pq7EC8Teur7aaGbjZFuQIKQQUkHLjHFY3ewcYL1i9onhvXv9qXIc4PLbx0bb2nbvPLYM3DRX72Rd3ZX49P00Ol5lYWom';
+// LIVE mode publishable key
+const STRIPE_PUBLISHABLE_KEY = 'pk_live_51THLVyLdpo0vxIGI3GcI1b3kyzL2YfyHKEs9BvMsOq359uqa86jVmMDIXFfRZSoEQWSJHmqAWwSDF2MF8rtzThrw00VoIXyZ6J';
 
 // Supabase Edge Function that creates a Stripe Checkout session
 const SUPABASE_CHECKOUT_URL = 'https://lubfkbvgrlvyjsrdzlyl.supabase.co/functions/v1/create-checkout';
 
-// Stripe Price IDs — replace with real IDs from your Stripe Dashboard → Products
+// Stripe LIVE Price IDs (from Stripe Dashboard → Products in Live mode)
 const PRICE_IDS = {
-  // All-Access (one-time payment)
+  // All-Access — TODO: replace with LIVE price ID once created in Stripe (currently still the test mode ID)
   'all-access': 'price_1THLeFPq7EC8TeurNvY8vvZm',
 
-  // Individual Certifications (one-time payments)
-  'ai-practitioner-associate': 'price_1THLekPq7EC8TeurVwXSBLSI',
-  'ai-practitioner-advanced':  'price_1THLfFPq7EC8TeurzbofRSO0',
-  'ai-solution-architect':     'price_1THLfXPq7EC8Teur0irCW2Sf',
-  'ai-governance-risk-safety': 'price_1TdaKaPq7EC8TeurlKzvO0Jf',
+  // Individual Certifications (one-time payments) — LIVE
+  'ai-practitioner-associate': 'price_1TdanVLdpo0vxIGIkFFY5csZ',
+  'ai-practitioner-advanced':  'price_1TdanWLdpo0vxIGIjGWUmHch',
+  'ai-solution-architect':     'price_1TdanULdpo0vxIGIMenFzW5A',
+  'ai-governance-risk-safety': 'price_1TdanVLdpo0vxIGINDER4X61',
 };
 
 // Display prices (shown on UI — keep in sync with Stripe prices)
