@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Dashboard — AI Governance, Risk &amp; Safety</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --grs-teal: #0d9488;
+  --grs-teal-deep: #0f766e;
+  --grs-teal-bright: #14b8a6;
+  --grs-amber: #d97706;
+  --grs-amber-bright: #f59e0b;
+  --grs-rose: #be123c;
+  --grs-rose-bright: #fb7185;
+  --grs-ink: #0b1220;
+  --grs-ink-soft: #2a3346;
+  --grs-muted: #5d6678;
+  --grs-line: #e2e8f0;
+  --grs-surface: #ffffff;
+  --grs-surface-warm: #fbf8f3;
+  --grs-surface-tinted: #f4f1ea;
+  --grs-bg: #f7f5f0;
+  --grs-navy: #1e3a5f;
+  --grs-navy-deep: #14233a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--grs-bg);
+  color: var(--grs-ink);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Top bar ── */
+.gd-topbar {
+  background: var(--grs-surface);
+  border-bottom: 1px solid var(--grs-line);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.gd-topbar-left { display: flex; align-items: center; gap: 18px; }
+.gd-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 1.05rem;
+  color: var(--grs-ink); text-decoration: none;
+}
+.gd-logo img { height: 28px; width: 28px; }
+.gd-logo b { color: var(--grs-teal); }
+.gd-divider { width: 1px; height: 22px; background: var(--grs-line); }
+.gd-crumb {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; color: var(--grs-muted);
+}
+.gd-crumb a { color: var(--grs-muted); text-decoration: none; }
+.gd-crumb a:hover { color: var(--grs-teal-deep); }
+.gd-topbar-right { display: flex; align-items: center; gap: 14px; }
+.gd-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--grs-teal), var(--grs-amber-bright));
+  color: white; font-weight: 700; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.gd-signout {
+  font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
+  color: var(--grs-muted); background: transparent;
+  border: 1px solid var(--grs-line); border-radius: 6px;
+  padding: 6px 14px; cursor: pointer; transition: all 0.18s;
+}
+.gd-signout:hover { color: var(--grs-rose); border-color: var(--grs-rose); }
+
+/* ── Layout ── */
+.gd-wrap { max-width: 1280px; margin: 0 auto; padding: 28px; }
+
+/* ── Loading + gates ── */
+.gd-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 70vh; flex-direction: column; gap: 14px;
+}
+.gd-spinner {
+  width: 36px; height: 36px; border: 3px solid var(--grs-line);
+  border-top-color: var(--grs-teal); border-radius: 50%;
+  animation: gd-spin 0.8s linear infinite;
+}
+@keyframes gd-spin { to { transform: rotate(360deg); } }
+.gd-loading span { color: var(--grs-muted); font-size: 0.9rem; }
+
+.gd-gate {
+  max-width: 540px; margin: 8rem auto; padding: 2.5rem;
+  background: var(--grs-surface); border: 1px solid var(--grs-line);
+  border-radius: 16px; text-align: center;
+}
+.gd-gate h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.6rem; color: var(--grs-ink); margin: 0 0 0.5rem;
+}
+.gd-gate p { color: var(--grs-muted); font-size: 0.95rem; margin: 0 0 1.5rem; line-height: 1.6; }
+.gd-gate-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--grs-amber-bright); color: var(--grs-navy);
+  font-family: 'Inter', sans-serif; font-weight: 700;
+  padding: 0.75rem 1.4rem; border-radius: 8px;
+  text-decoration: none; font-size: 0.9rem;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.3);
+}
+.gd-gate-btn:hover { background: #fbbf24; }
+
+/* ── Hero ── */
+.gd-hero {
+  background: linear-gradient(160deg, var(--grs-navy-deep) 0%, var(--grs-navy) 45%, #1a5c5a 75%, var(--grs-navy-deep) 100%);
+  border-radius: 18px;
+  padding: 2.2rem 2.4rem;
+  color: var(--grs-surface-warm);
+  position: relative; overflow: hidden;
+  margin-bottom: 1.8rem;
+  border: 1px solid rgba(20,184,166,0.2);
+}
+.gd-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 12% 25%, rgba(20,184,166,0.16), transparent 55%),
+              radial-gradient(ellipse at 88% 75%, rgba(249,115,22,0.12), transparent 55%);
+  pointer-events: none;
+}
+.gd-hero-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: center;
+}
+.gd-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--grs-teal-bright); margin-bottom: 0.8rem;
+}
+.gd-hero-eyebrow .dot {
+  width: 8px; height: 8px; background: var(--grs-amber-bright);
+  border-radius: 50%; box-shadow: 0 0 12px var(--grs-amber-bright);
+}
+.gd-hero h1 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(1.75rem, 3.2vw, 2.4rem);
+  margin: 0 0 0.4rem; line-height: 1.1; letter-spacing: -0.5px;
+}
+.gd-hero h1 em { font-style: italic; color: var(--grs-teal-bright); }
+.gd-hero-sub {
+  font-size: 0.92rem; color: #c9d0db; margin: 0 0 1.2rem; line-height: 1.55;
+}
+.gd-hero-stats { display: flex; gap: 1.5rem; flex-wrap: wrap;
+  padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
+.gd-hero-stat-val {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.2rem; color: var(--grs-surface-warm);
+}
+.gd-hero-stat-lbl {
+  font-family: 'Inter', sans-serif; font-size: 0.6rem;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: #8a93a7; margin-top: 3px;
+}
+
+/* Progress side panel */
+.gd-hero-panel {
+  background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 1.25rem 1.35rem;
+  backdrop-filter: blur(6px);
+}
+.gd-hero-panel-lbl {
+  font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: #8a93a7;
+  margin-bottom: 0.4rem;
+}
+.gd-hero-panel-val {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2.6rem; line-height: 1; color: var(--grs-surface-warm);
+  margin-bottom: 0.4rem;
+}
+.gd-hero-panel-sub { font-size: 0.8rem; color: #c9d0db; margin-bottom: 1rem; }
+.gd-hero-progress {
+  height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden;
+}
+.gd-hero-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--grs-teal-bright), var(--grs-amber-bright));
+  border-radius: 999px; transition: width 0.6s ease;
+}
+
+/* ── Section heading ── */
+.gd-section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin: 2rem 0 1rem;
+}
+.gd-section-head h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.5rem; color: var(--grs-ink); margin: 0;
+}
+.gd-section-head .gd-section-sub {
+  font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--grs-muted);
+}
+
+/* ── Body grid ── */
+.gd-body {
+  display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Modules ── */
+.gd-modules { display: flex; flex-direction: column; gap: 0.75rem; }
+.gd-module-card {
+  background: var(--grs-surface); border: 1px solid var(--grs-line);
+  border-radius: 14px; padding: 1.1rem 1.3rem;
+  display: grid; grid-template-columns: 60px 1fr auto; gap: 1.1rem;
+  align-items: center; transition: border-color 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.gd-module-card:hover { border-color: var(--grs-teal-bright); box-shadow: 0 4px 18px rgba(13,148,136,0.08); }
+.gd-module-num {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2rem; color: var(--grs-teal); text-align: center; line-height: 1;
+}
+.gd-module-num.flagship { color: var(--grs-rose); }
+.gd-module-num.capstone { color: var(--grs-amber); }
+.gd-module-body { min-width: 0; }
+.gd-module-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.gd-module-title {
+  font-family: 'Inter', sans-serif; font-weight: 700;
+  font-size: 0.98rem; color: var(--grs-ink);
+}
+.gd-module-tag {
+  font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; padding: 2px 7px; border-radius: 999px;
+  background: rgba(13,148,136,0.1); color: var(--grs-teal-deep);
+}
+.gd-module-tag.flagship { background: rgba(190,18,60,0.1); color: var(--grs-rose); }
+.gd-module-tag.capstone { background: rgba(245,158,11,0.13); color: var(--grs-amber); }
+.gd-module-desc { color: var(--grs-muted); font-size: 0.82rem; margin-bottom: 0.7rem; line-height: 1.5; }
+.gd-module-progress {
+  height: 6px; background: #eef2f7; border-radius: 999px;
+  overflow: hidden; margin-bottom: 4px;
+}
+.gd-module-progress-fill {
+  height: 100%; border-radius: 999px;
+  transition: width 0.6s ease; background: var(--grs-teal);
+}
+.gd-module-progress-fill.completed { background: var(--grs-teal-deep); }
+.gd-module-progress-fill.notstarted { background: var(--grs-line); }
+.gd-module-meta {
+  font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--grs-muted);
+  display: flex; gap: 14px;
+}
+.gd-module-status {
+  font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600;
+  padding: 0.5rem 0.9rem; border-radius: 8px; white-space: nowrap; text-align: center;
+}
+.gd-module-status.not_started { background: #f1f5f9; color: var(--grs-muted); }
+.gd-module-status.in_progress { background: rgba(13,148,136,0.1); color: var(--grs-teal-deep); }
+.gd-module-status.completed { background: rgba(15,118,110,0.12); color: var(--grs-teal-deep); }
+
+/* ── Sidebar ── */
+.gd-side { display: flex; flex-direction: column; gap: 1.25rem; }
+.gd-side-card {
+  background: var(--grs-surface); border: 1px solid var(--grs-line);
+  border-radius: 14px; padding: 1.25rem;
+}
+.gd-side-card h3 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.1rem; margin: 0 0 0.85rem; color: var(--grs-ink);
+}
+.gd-side-card.next-session { background: linear-gradient(135deg, rgba(20,184,166,0.07), rgba(245,158,11,0.05)); border-color: rgba(13,148,136,0.25); }
+.gd-side-eyebrow {
+  font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--grs-teal-deep);
+  margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px;
+}
+.gd-side-eyebrow .ping { width: 8px; height: 8px; border-radius: 50%; background: var(--grs-teal-bright); box-shadow: 0 0 0 0 rgba(20,184,166,0.5); animation: gd-ping 1.6s infinite; }
+@keyframes gd-ping { 0% { box-shadow: 0 0 0 0 rgba(20,184,166,0.5); } 70% { box-shadow: 0 0 0 8px rgba(20,184,166,0); } 100% { box-shadow: 0 0 0 0 rgba(20,184,166,0); } }
+.gd-next-title { font-weight: 700; font-size: 0.95rem; color: var(--grs-ink); margin-bottom: 0.3rem; }
+.gd-next-when { color: var(--grs-muted); font-size: 0.82rem; margin-bottom: 0.85rem; }
+.gd-next-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--grs-teal); color: white; padding: 0.5rem 0.95rem;
+  border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.78rem;
+  font-weight: 600; text-decoration: none;
+}
+.gd-next-btn:hover { background: var(--grs-teal-deep); }
+
+.gd-week-list { list-style: none; padding: 0; margin: 0; }
+.gd-week-item {
+  display: grid; grid-template-columns: 32px 1fr auto; gap: 10px;
+  padding: 0.55rem 0; border-bottom: 1px solid var(--grs-line);
+  font-size: 0.82rem; align-items: center;
+}
+.gd-week-item:last-child { border-bottom: 0; }
+.gd-week-item .wk { font-family: 'JetBrains Mono', monospace; color: var(--grs-muted); font-size: 0.78rem; }
+.gd-week-item .topic { color: var(--grs-ink-soft); line-height: 1.4; }
+.gd-week-item .ind {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--grs-line);
+}
+.gd-week-item.done .ind { background: var(--grs-teal); }
+.gd-week-item.now .ind { background: var(--grs-amber-bright); box-shadow: 0 0 0 3px rgba(245,158,11,0.18); }
+
+.gd-capstone-status {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.18);
+  border-radius: 10px; padding: 0.7rem 0.9rem; font-size: 0.83rem;
+  color: var(--grs-amber); font-weight: 600; margin-bottom: 0.7rem;
+}
+.gd-capstone-desc { color: var(--grs-muted); font-size: 0.82rem; line-height: 1.5; }
+
+.gd-mentor {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 0.85rem;
+}
+.gd-mentor-av {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--grs-teal-deep), var(--grs-navy));
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-family: 'Inter', sans-serif; font-size: 0.95rem;
+}
+.gd-mentor-name { font-weight: 700; font-size: 0.92rem; color: var(--grs-ink); }
+.gd-mentor-role { font-size: 0.78rem; color: var(--grs-muted); }
+.gd-mentor-btn {
+  display: block; text-align: center; background: transparent;
+  border: 1px solid var(--grs-line); padding: 0.55rem; border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: var(--grs-teal-deep); text-decoration: none;
+}
+.gd-mentor-btn:hover { border-color: var(--grs-teal); background: rgba(13,148,136,0.04); }
+
+@media (max-width: 900px) {
+  .gd-body { grid-template-columns: 1fr; }
+  .gd-hero-inner { grid-template-columns: 1fr; }
+  .gd-module-card { grid-template-columns: 48px 1fr; }
+  .gd-module-status { grid-column: 1 / -1; justify-self: start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Top bar ── -->
+<nav class="gd-topbar">
+  <div class="gd-topbar-left">
+    <a href="../../index.html" class="gd-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys">
+      Sustain<b>Sys</b>
+    </a>
+    <div class="gd-divider"></div>
+    <div class="gd-crumb"><a href="../index.html">My Certifications</a> · Learning Dashboard</div>
+  </div>
+  <div class="gd-topbar-right" id="userBar"></div>
+</nav>
+
+<!-- ── Loading state ── -->
+<div class="gd-loading" id="gdLoading">
+  <div class="gd-spinner"></div>
+  <span>Loading your dashboard…</span>
+</div>
+
+<!-- ── Locked state (no entitlement) ── -->
+<div class="gd-gate" id="gdGate" style="display:none">
+  <h2>Enrolment required</h2>
+  <p>The Learning Dashboard is available only to enrolled cohort members of the <strong>AI Governance, Risk &amp; Safety</strong> certification.</p>
+  <a href="../index.html" class="gd-gate-btn">Go to My Certifications</a>
+</div>
+
+<!-- ── Main content ── -->
+<main class="gd-wrap" id="gdMain" style="display:none">
+
+  <!-- Hero with progress -->
+  <section class="gd-hero">
+    <div class="gd-hero-inner">
+      <div>
+        <div class="gd-hero-eyebrow"><span class="dot"></span>Flagship Certification · 2026 Cohort</div>
+        <h1>AI Governance, Risk &amp; <em>Safety</em></h1>
+        <p class="gd-hero-sub" id="gdWelcome">Welcome back. Pick up where you left off, or explore an upcoming module.</p>
+        <div class="gd-hero-stats">
+          <div><div class="gd-hero-stat-val" id="gdStatWeek">Week —</div><div class="gd-hero-stat-lbl">Current</div></div>
+          <div><div class="gd-hero-stat-val" id="gdStatModulesDone">0 / 8</div><div class="gd-hero-stat-lbl">Modules</div></div>
+          <div><div class="gd-hero-stat-val" id="gdStatHours">0 hrs</div><div class="gd-hero-stat-lbl">Live attended</div></div>
+          <div><div class="gd-hero-stat-val" id="gdStatExam">Pending</div><div class="gd-hero-stat-lbl">Exam</div></div>
+        </div>
+      </div>
+      <div class="gd-hero-panel">
+        <div class="gd-hero-panel-lbl">Overall progress</div>
+        <div class="gd-hero-panel-val" id="gdHeroPct">0%</div>
+        <div class="gd-hero-panel-sub" id="gdHeroSub">Complete each module to unlock the proctored exam.</div>
+        <div class="gd-hero-progress"><div class="gd-hero-progress-fill" id="gdHeroProgress" style="width:0%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Body: modules + sidebar -->
+  <div class="gd-body">
+
+    <div>
+      <div class="gd-section-head">
+        <h2>Your modules</h2>
+        <div class="gd-section-sub">7 + Capstone · self-paced + cohort sessions</div>
+      </div>
+      <div class="gd-modules" id="gdModules"></div>
+    </div>
+
+    <aside class="gd-side">
+
+      <div class="gd-side-card next-session">
+        <div class="gd-side-eyebrow"><span class="ping"></span>Next live session</div>
+        <div class="gd-next-title" id="gdNextTitle">Module 1 · Foundations</div>
+        <div class="gd-next-when" id="gdNextWhen">Monday · 18:00 BST</div>
+        <a href="#" class="gd-next-btn" id="gdNextLink">Join session →</a>
+      </div>
+
+      <div class="gd-side-card">
+        <h3>12-week schedule</h3>
+        <ul class="gd-week-list" id="gdSchedule"></ul>
+      </div>
+
+      <div class="gd-side-card">
+        <h3>Capstone</h3>
+        <div class="gd-capstone-status" id="gdCapstoneStatus">Not started · due Week 12</div>
+        <div class="gd-capstone-desc">Defensible artefact pack — register entry, risk assessment, policy, workflow, and agent control plan. Panel defence + proctored exam in Week 12.</div>
+      </div>
+
+      <div class="gd-side-card">
+        <h3>Your mentor</h3>
+        <div class="gd-mentor">
+          <div class="gd-mentor-av">SK</div>
+          <div>
+            <div class="gd-mentor-name">Satyawan Kant</div>
+            <div class="gd-mentor-role">AI Governance Lead</div>
+          </div>
+        </div>
+        <a href="mailto:sustainsys.co.uk@gmail.com?subject=AI%20GRS%20cohort%20question" class="gd-mentor-btn">Email mentor</a>
+      </div>
+
+    </aside>
+
+  </div>
+
+</main>
+
+<!-- Supabase + auth -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+
+<script>
+(async function dashboardGate() {
+  const LOGIN_URL = '../../ai-learn.html#/login';
+  const COURSE_ID = 'ai-governance-risk-safety';
+
+  /* ── Curriculum data (kept in sync with ai-grs-curriculum.html) ── */
+  const MODULES = [
+    { id: 'm1', num: '01', title: 'Foundations',        desc: 'AI in business terms, where AI goes wrong, governance vs management.', weeks: '1–2', hours: 8, tag: 'Module' },
+    { id: 'm2', num: '02', title: 'Regulation',         desc: 'EU AI Act, UK + US regimes, ISO 42001, NIST AI RMF, sector rules.', weeks: '3–4', hours: 8, tag: 'Module' },
+    { id: 'm3', num: '03', title: 'Risk & Safety',      desc: 'AI risk taxonomy, generative AI risks, MLSecOps, evals, safety engineering.', weeks: '5–6', hours: 8, tag: 'Module' },
+    { id: 'm4', num: '04', title: 'AI Agents',          desc: 'Governing AI agents — inventory, scope, revocation, examiner readiness.', weeks: '7', hours: 4, tag: 'Flagship', tagType: 'flagship' },
+    { id: 'm5', num: '05', title: 'Framework',          desc: 'AI governance framework, 3 lines of defence, lifecycle, AI TRiSM, KRIs.', weeks: '8–9', hours: 8, tag: 'Module' },
+    { id: 'm6', num: '06', title: 'GRC Practice',       desc: 'AI in project mgmt, internal audit, Microsoft + multi-cloud + OSS tooling.', weeks: '10–11', hours: 8, tag: 'Module' },
+    { id: 'm7', num: '07', title: 'Capstone',           desc: 'Capstone presentations, panel defence, proctored exam, career briefing.', weeks: '12', hours: 6, tag: 'Capstone', tagType: 'capstone' },
+  ];
+  const SCHEDULE = [
+    { wk: '01', topic: 'AI in business terms; where AI goes wrong; first case studies' },
+    { wk: '02', topic: 'Responsible AI principles, governance vs management, roles' },
+    { wk: '03', topic: 'EU AI Act deep dive — risk tiers, obligations, GPAI, timelines' },
+    { wk: '04', topic: 'UK, US, global regimes; standards (ISO 42001, NIST AI RMF); sector rules' },
+    { wk: '05', topic: 'AI risk taxonomy; data & model risk; risk and impact assessment' },
+    { wk: '06', topic: 'Generative AI risks; AI security & MLSecOps; safety engineering' },
+    { wk: '07', topic: 'Governing AI Agents — inventory, scope, revocation, examiner readiness' },
+    { wk: '08', topic: 'Designing the AI governance framework; 3 lines of defence; policies' },
+    { wk: '09', topic: 'Lifecycle governance, AI TRiSM, KRIs, board reporting, vendor risk' },
+    { wk: '10', topic: 'AI in project management, risk management, internal audit workflows' },
+    { wk: '11', topic: 'Implementation tour: Microsoft + multi-cloud + OSS tooling' },
+    { wk: '12', topic: 'Capstone presentations, panel defence, proctored exam, career briefing' },
+  ];
+
+  /* ── 1. Auth check ── */
+  const session = await supaGetSession();
+  if (!session) { window.location.href = LOGIN_URL; return; }
+
+  const user = session.user;
+  const meta = user.user_metadata || {};
+  const firstName = meta.first_name || (user.email ? user.email.split('@')[0] : 'there');
+  const lastName  = meta.last_name || '';
+  const displayName = `${firstName} ${lastName}`.trim() || user.email;
+  const initials = ((firstName[0] || '?') + (lastName[0] || '')).toUpperCase();
+
+  /* ── 2. Render user bar (always visible once authed) ── */
+  document.getElementById('userBar').innerHTML = `
+    <div class="gd-avatar" title="${displayName}">${initials}</div>
+    <button class="gd-signout" id="signOutBtn">Sign out</button>
+  `;
+  document.getElementById('signOutBtn').addEventListener('click', async () => {
+    await supaSignOut();
+    window.location.href = LOGIN_URL;
+  });
+
+  /* ── 3. Entitlement gate ── */
+  const accessMap = await supaGetAccessMap();
+  const hasAccess = accessMap.hasAllAccess || accessMap.certifications.has(COURSE_ID);
+  if (!hasAccess) {
+    document.getElementById('gdLoading').style.display = 'none';
+    document.getElementById('gdGate').style.display = 'block';
+    return;
+  }
+
+  /* ── 4. Load progress from Supabase (governance_progress table) ── */
+  // Schema (run in Supabase SQL editor):
+  //   create table governance_progress (
+  //     user_id uuid references auth.users on delete cascade,
+  //     module_id text not null,
+  //     status text default 'not_started' check (status in ('not_started','in_progress','completed')),
+  //     progress_pct int default 0 check (progress_pct between 0 and 100),
+  //     hours_attended numeric default 0,
+  //     completed_at timestamptz,
+  //     updated_at timestamptz default now(),
+  //     primary key (user_id, module_id)
+  //   );
+  //   alter table governance_progress enable row level security;
+  //   create policy "Users read own progress"   on governance_progress for select using (auth.uid() = user_id);
+  //   create policy "Users update own progress" on governance_progress for update using (auth.uid() = user_id);
+  //   create policy "Users insert own progress" on governance_progress for insert with check (auth.uid() = user_id);
+
+  const sb = getSupabase();
+  let progressRows = [];
+  try {
+    const { data, error } = await sb
+      .from('governance_progress')
+      .select('*')
+      .eq('user_id', user.id);
+    if (error) console.warn('Progress fetch failed:', error.message);
+    progressRows = data || [];
+  } catch (e) { console.warn('Progress query error', e); }
+
+  // Build a map for quick lookup
+  const progressByModule = {};
+  progressRows.forEach(r => { progressByModule[r.module_id] = r; });
+
+  /* ── 5. Compute aggregates ── */
+  let totalPct = 0, modulesDone = 0, hoursAttended = 0;
+  MODULES.forEach(m => {
+    const p = progressByModule[m.id];
+    if (p) {
+      totalPct += (p.progress_pct || 0);
+      if (p.status === 'completed') modulesDone++;
+      hoursAttended += parseFloat(p.hours_attended || 0);
+    }
+  });
+  const overallPct = Math.round(totalPct / MODULES.length);
+  const currentWeek = Math.max(1, Math.min(12, modulesDone === 0 ? 1 :
+    (modulesDone < MODULES.length ? parseInt(MODULES[modulesDone].weeks.split('–')[0]) : 12)));
+
+  /* ── 6. Populate hero ── */
+  document.getElementById('gdWelcome').textContent =
+    overallPct === 0
+      ? `Welcome, ${firstName}. Your cohort is enrolled — pick a module to begin.`
+      : (overallPct === 100
+          ? `Congratulations, ${firstName}. All modules complete — proceed to the proctored exam.`
+          : `Welcome back, ${firstName}. You are ${overallPct}% through the certification.`);
+  document.getElementById('gdStatWeek').textContent = `Week ${String(currentWeek).padStart(2,'0')}`;
+  document.getElementById('gdStatModulesDone').textContent = `${modulesDone} / ${MODULES.length}`;
+  document.getElementById('gdStatHours').textContent = `${hoursAttended} hrs`;
+  document.getElementById('gdStatExam').textContent = overallPct === 100 ? 'Ready' : 'Pending';
+  document.getElementById('gdHeroPct').textContent = `${overallPct}%`;
+  document.getElementById('gdHeroProgress').style.width = `${overallPct}%`;
+  document.getElementById('gdHeroSub').textContent =
+    overallPct === 100
+      ? 'All modules complete — proctored exam unlocked.'
+      : `Complete ${MODULES.length - modulesDone} more module${MODULES.length - modulesDone === 1 ? '' : 's'} to unlock the exam.`;
+
+  /* ── 7. Render module cards ── */
+  const modulesContainer = document.getElementById('gdModules');
+  modulesContainer.innerHTML = MODULES.map(m => {
+    const p = progressByModule[m.id] || { status: 'not_started', progress_pct: 0 };
+    const pct = p.progress_pct || 0;
+    const status = p.status || 'not_started';
+    const tagType = m.tagType || '';
+    const fillClass = status === 'completed' ? 'completed' : (status === 'not_started' ? 'notstarted' : '');
+    const statusLabel = status === 'completed' ? '✓ Completed'
+                      : status === 'in_progress' ? `${pct}% in progress`
+                      : 'Not started';
+    return `
+      <a class="gd-module-card" href="#${m.id}" data-module="${m.id}">
+        <div class="gd-module-num ${tagType}">${m.num}</div>
+        <div class="gd-module-body">
+          <div class="gd-module-title-row">
+            <div class="gd-module-title">${m.title}</div>
+            <span class="gd-module-tag ${tagType}">${m.tag}</span>
+          </div>
+          <div class="gd-module-desc">${m.desc}</div>
+          <div class="gd-module-progress"><div class="gd-module-progress-fill ${fillClass}" style="width:${status === 'completed' ? 100 : pct}%"></div></div>
+          <div class="gd-module-meta"><span>Week ${m.weeks}</span><span>${m.hours} hours</span></div>
+        </div>
+        <div class="gd-module-status ${status}">${statusLabel}</div>
+      </a>
+    `;
+  }).join('');
+
+  /* ── 8. Schedule sidebar (mark done/current) ── */
+  const scheduleEl = document.getElementById('gdSchedule');
+  scheduleEl.innerHTML = SCHEDULE.map(s => {
+    const wkInt = parseInt(s.wk);
+    const cls = wkInt < currentWeek ? 'done' : (wkInt === currentWeek ? 'now' : '');
+    return `<li class="gd-week-item ${cls}"><span class="wk">W${s.wk}</span><span class="topic">${s.topic}</span><span class="ind"></span></li>`;
+  }).join('');
+
+  /* ── 9. Capstone status ── */
+  const capstoneProgress = progressByModule['m7'] || { status: 'not_started' };
+  const capstoneEl = document.getElementById('gdCapstoneStatus');
+  if (capstoneProgress.status === 'completed') {
+    capstoneEl.textContent = '✓ Capstone submitted';
+    capstoneEl.style.color = 'var(--grs-teal-deep)';
+    capstoneEl.style.background = 'rgba(13,148,136,0.08)';
+    capstoneEl.style.borderColor = 'rgba(13,148,136,0.25)';
+  } else if (capstoneProgress.status === 'in_progress') {
+    capstoneEl.textContent = `${capstoneProgress.progress_pct || 0}% drafted · due Week 12`;
+  } else {
+    capstoneEl.textContent = 'Not started · due Week 12';
+  }
+
+  /* ── 10. Reveal ── */
+  document.getElementById('gdLoading').style.display = 'none';
+  document.getElementById('gdMain').style.display = 'block';
+
+})();
+</script>
+
+</body>
+</html>
