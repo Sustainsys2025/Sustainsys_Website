@@ -3055,6 +3055,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .supa-auth-card .auth-btn { width: 100%; padding: 0.75rem; font-size: 0.95rem; font-weight: 600; color: #fff; background: #ea580c; border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s; margin-top: 0.5rem; }
     .supa-auth-card .auth-btn:hover { background: #c2410c; }
     .supa-auth-card .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .supa-auth-card .auth-btn-google { width: 100%; padding: 0.7rem; font-size: 0.92rem; font-weight: 600; color: #1f2937; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.18s, border-color 0.18s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1.1rem; }
+    .supa-auth-card .auth-btn-google:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .supa-auth-card .auth-btn-google:disabled { opacity: 0.6; cursor: not-allowed; }
+    .supa-auth-card .auth-btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .supa-auth-card .auth-divider { display: flex; align-items: center; gap: 12px; margin: 0.2rem 0 1rem; color: #94a3b8; font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .supa-auth-card .auth-divider::before, .supa-auth-card .auth-divider::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
     .supa-auth-card .auth-switch { text-align: center; margin-top: 1.2rem; font-size: 0.85rem; color: #64748b; }
     .supa-auth-card .auth-switch a { color: #1d4ed8; font-weight: 600; text-decoration: none; cursor: pointer; }
     .supa-auth-card .auth-switch a:hover { text-decoration: underline; }
@@ -3092,10 +3098,13 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.className = 'supa-auth-overlay';
         overlay.id = 'supaAuthOverlay';
 
+        // Reusable Google button markup (Google-brand multicolour "G" SVG)
+        const googleBtnHtml = `<button type="button" class="auth-btn-google" id="googleAuthBtn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continue with Google</button>`;
+
         if (mode === 'login') {
-            overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Welcome Back</h2><p class="auth-subtitle">Sign in to access your certifications</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div><form id="supaLoginForm" autocomplete="on"><label for="loginEmail">Email</label><input type="email" id="loginEmail" name="email" placeholder="you@example.com" required autocomplete="email"><label for="loginPassword">Password</label><input type="password" id="loginPassword" name="password" placeholder="Your password" required autocomplete="current-password"><a href="#" class="auth-forgot" id="forgotLink">Forgot password?</a><button type="submit" class="auth-btn" id="loginBtn">Sign In</button></form><div class="auth-switch">Don&rsquo;t have an account? <a id="goRegister">Create one</a></div></div>`;
+            overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Welcome Back</h2><p class="auth-subtitle">Sign in to access your certifications</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div>${googleBtnHtml}<div class="auth-divider">or sign in with email</div><form id="supaLoginForm" autocomplete="on"><label for="loginEmail">Email</label><input type="email" id="loginEmail" name="email" placeholder="you@example.com" required autocomplete="email"><label for="loginPassword">Password</label><input type="password" id="loginPassword" name="password" placeholder="Your password" required autocomplete="current-password"><a href="#" class="auth-forgot" id="forgotLink">Forgot password?</a><button type="submit" class="auth-btn" id="loginBtn">Sign In</button></form><div class="auth-switch">Don&rsquo;t have an account? <a id="goRegister">Create one</a></div></div>`;
         } else if (mode === 'register') {
-            overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Create Account</h2><p class="auth-subtitle">Join the academy and start learning</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div><form id="supaRegisterForm" autocomplete="on"><div class="name-row"><div><label for="regFirstName">First Name</label><input type="text" id="regFirstName" name="given-name" placeholder="First name" required autocomplete="given-name"></div><div><label for="regLastName">Last Name</label><input type="text" id="regLastName" name="family-name" placeholder="Last name" required autocomplete="family-name"></div></div><label for="regEmail">Email</label><input type="email" id="regEmail" name="email" placeholder="you@example.com" required autocomplete="email"><label for="regPassword">Password</label><input type="password" id="regPassword" name="new-password" placeholder="Min 8 chars, 1 uppercase, 1 number" required autocomplete="new-password" minlength="8"><label for="regConfirm">Confirm Password</label><input type="password" id="regConfirm" name="confirm-password" placeholder="Confirm your password" required autocomplete="new-password"><button type="submit" class="auth-btn" id="registerBtn">Create Account</button></form><div class="auth-switch">Already have an account? <a id="goLogin">Sign in</a></div></div>`;
+            overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Create Account</h2><p class="auth-subtitle">Join the academy and start learning</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div>${googleBtnHtml}<div class="auth-divider">or sign up with email</div><form id="supaRegisterForm" autocomplete="on"><div class="name-row"><div><label for="regFirstName">First Name</label><input type="text" id="regFirstName" name="given-name" placeholder="First name" required autocomplete="given-name"></div><div><label for="regLastName">Last Name</label><input type="text" id="regLastName" name="family-name" placeholder="Last name" required autocomplete="family-name"></div></div><label for="regEmail">Email</label><input type="email" id="regEmail" name="email" placeholder="you@example.com" required autocomplete="email"><label for="regPassword">Password</label><input type="password" id="regPassword" name="new-password" placeholder="Min 8 chars, 1 uppercase, 1 number" required autocomplete="new-password" minlength="8"><label for="regConfirm">Confirm Password</label><input type="password" id="regConfirm" name="confirm-password" placeholder="Confirm your password" required autocomplete="new-password"><button type="submit" class="auth-btn" id="registerBtn">Create Account</button></form><div class="auth-switch">Already have an account? <a id="goLogin">Sign in</a></div></div>`;
         } else if (mode === 'forgot') {
             overlay.innerHTML = `<div class="supa-auth-card"><div class="auth-logo"><img src="assets/logo_only.png" alt="SustainSys"><span>Sustain<b>Sys</b> AI Academy</span></div><h2>Reset Password</h2><p class="auth-subtitle">We&rsquo;ll send you a link to reset your password</p><div class="auth-error" id="authError"></div><div class="auth-success" id="authSuccess"></div><form id="supaForgotForm" autocomplete="on"><label for="forgotEmail">Email</label><input type="email" id="forgotEmail" name="email" placeholder="you@example.com" required autocomplete="email"><button type="submit" class="auth-btn" id="forgotBtn">Send Reset Link</button></form><div class="auth-switch"><a id="backToLogin">Back to Sign In</a></div></div>`;
         }
@@ -3123,7 +3132,26 @@ document.addEventListener('DOMContentLoaded', function() {
     function showSuccess(msg) { const el = document.getElementById('authSuccess'); if (el) { el.textContent = msg; el.style.display = 'block'; } const e = document.getElementById('authError'); if (e) e.style.display = 'none'; }
     function setLoading(btnId, loading) { const btn = document.getElementById(btnId); if (!btn) return; btn.disabled = loading; btn.textContent = loading ? 'Please wait...' : btn.dataset.label || btn.textContent; }
 
+    function bindGoogleButton() {
+        const gBtn = document.getElementById('googleAuthBtn');
+        if (!gBtn) return;
+        gBtn.addEventListener('click', async () => {
+            gBtn.disabled = true;
+            const original = gBtn.innerHTML;
+            gBtn.innerHTML = 'Redirecting to Google…';
+            try {
+                await supaSignInWithGoogle(window.location.origin + '/' + CERTIFICATIONS_URL);
+                // Supabase redirects the browser to Google; nothing else to do here.
+            } catch (err) {
+                showError(err.message || 'Google sign-in failed. Please try again.');
+                gBtn.disabled = false;
+                gBtn.innerHTML = original;
+            }
+        });
+    }
+
     function bindEvents(mode) {
+        bindGoogleButton();
         if (mode === 'login') {
             const form = document.getElementById('supaLoginForm');
             const btn = document.getElementById('loginBtn');

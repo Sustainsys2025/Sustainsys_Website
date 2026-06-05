@@ -56,6 +56,33 @@ async function supaSignIn({ email, password }) {
   return data;
 }
 
+/**
+ * Sign in (or sign up) with Google OAuth via Supabase.
+ * Requires the Google provider to be enabled in Supabase dashboard
+ * (Authentication → Providers → Google).
+ *
+ * @param {string} [redirectTo] - URL to land on after successful auth.
+ *                                Defaults to /courses/index.html on the current origin.
+ */
+async function supaSignInWithGoogle(redirectTo) {
+  const sb = getSupabase();
+  if (!sb) throw new Error('Supabase not initialized');
+
+  const defaultRedirect = `${window.location.origin}/courses/index.html`;
+  const { data, error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: redirectTo || defaultRedirect,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+    },
+  });
+  if (error) throw error;
+  return data;
+}
+
 async function supaSignOut() {
   const sb = getSupabase();
   if (!sb) return;
