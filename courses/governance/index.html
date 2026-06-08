@@ -1,739 +1,940 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learning Dashboard — AI Governance, Risk &amp; Safety</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Learning Dashboard · AI-GRS Certification · SustainSys AI Academy</title>
+<link rel="icon" type="image/png" href="../../logo_only.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  /* aligned with ai-learn.html / styles.css */
-  --grs-bg: #f8fafc;
-  --grs-surface: #ffffff;
-  --grs-surface-warm: #fbf8f3;
-  --grs-line: #e2e8f0;
-  --grs-ink: #0f172a;
-  --grs-ink-soft: #1e293b;
-  --grs-muted: #64748b;
-  --grs-blue: #1d4ed8;          /* accent-cyan in ai-learn */
-  --grs-blue-deep: #1e3a8a;
-  --grs-orange: #ea580c;
-  /* GRS sub-brand accents (kept for module/capstone colour coding) */
-  --grs-teal: #0d9488;
-  --grs-teal-deep: #0f766e;
-  --grs-teal-bright: #14b8a6;
-  --grs-amber: #d97706;
-  --grs-amber-bright: #f59e0b;
-  --grs-rose: #be123c;
-  --grs-rose-bright: #fb7185;
-  --grs-navy: #1e3a5f;
-  --grs-navy-deep: #14233a;
+:root{
+  /* Brand — aligned to ai-learn.html palette */
+  --primary-50:#eff6ff;--primary-100:#dbeafe;--primary-200:#bfdbfe;--primary-300:#93c5fd;
+  --primary-400:#60a5fa;--primary-500:#3b82f6;--primary-600:#1d4ed8;--primary-700:#1e40af;
+  --primary-800:#1e3a8a;--primary-950:#0f172a;
+  --accent-400:#fb923c;--accent-500:#f97316;--accent-600:#ea580c;--accent-700:#c2410c;
+  --success:#0ea371;--success-bg:#e6f7f0;--warning:#d97706;--warning-bg:#fffbeb;
+  --danger:#e11d48;--rose:#be123c;
+  /* Surfaces — ai-learn parity */
+  --bg:#f8fafc;--surface:#ffffff;--surface-2:#f1f5f9;--surface-3:#e8edf5;
+  --sidebar:#0f1b33;--sidebar-2:#0b1426;
+  /* Text */
+  --fg-1:#0f172a;--fg-2:#475569;--fg-3:#94a3b8;--fg-dim:#64748b;
+  --line:#e2e8f0;--line-2:#cbd5e1;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-full:9999px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.05);
+  --shadow-md:0 4px 16px -4px rgba(15,23,42,.10);
+  --shadow-lg:0 12px 32px -8px rgba(15,23,42,.16);
+  --display:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --sidebar-w:248px;
 }
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--grs-bg);
-  color: var(--grs-ink);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--fg-1);-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+::selection{background:var(--primary-200)}
 
-/* ── Top bar ── */
-.gd-topbar {
-  background: var(--grs-surface);
-  border-bottom: 1px solid var(--grs-line);
-  padding: 14px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky; top: 0; z-index: 50;
-}
-.gd-topbar-left { display: flex; align-items: center; gap: 18px; }
-.gd-logo {
-  display: flex; align-items: center; gap: 10px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700; font-size: 1.05rem;
-  color: var(--grs-ink); text-decoration: none;
-}
-.gd-logo img { height: 28px; width: 28px; }
-.gd-logo b { color: var(--grs-blue); }
-.gd-divider { width: 1px; height: 22px; background: var(--grs-line); }
-.gd-crumb {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem; color: var(--grs-muted);
-}
-.gd-crumb a { color: var(--grs-muted); text-decoration: none; }
-.gd-crumb a:hover { color: var(--grs-blue); }
-.gd-topbar-right { display: flex; align-items: center; gap: 14px; }
-.gd-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--grs-teal), var(--grs-amber-bright));
-  color: white; font-weight: 700; font-size: 0.85rem;
-  display: flex; align-items: center; justify-content: center;
-}
-.gd-signout {
-  font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
-  color: var(--grs-muted); background: transparent;
-  border: 1px solid var(--grs-line); border-radius: 6px;
-  padding: 6px 14px; cursor: pointer; transition: all 0.18s;
-}
-.gd-signout:hover { color: var(--grs-rose); border-color: var(--grs-rose); }
+/* ============ LAYOUT ============ */
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
 
-/* ── Layout ── */
-.gd-wrap { max-width: 1280px; margin: 0 auto; padding: 28px; }
+/* ============ SIDEBAR ============ */
+.sidebar{
+  background:linear-gradient(185deg,var(--sidebar) 0%,var(--sidebar-2) 100%);
+  color:#c7d2e4;position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;padding:22px 16px;gap:6px;z-index:40;
+}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 22px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:14px;text-decoration:none;color:inherit}
+.brand img{width:34px;height:34px;display:block;border-radius:8px;background:#fff;padding:3px;object-fit:contain}
+.brand .bname{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.02em;color:#fff;line-height:1}
+.brand .bname .sys{color:var(--primary-400)}
+.brand .bsub{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7d8aa3;margin-top:3px;font-weight:600}
 
-/* ── Loading + gates ── */
-.gd-loading {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 70vh; flex-direction: column; gap: 14px;
+.nav-group{margin-top:6px}
+.nav-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#5e6c87;font-weight:700;padding:0 12px 8px;margin-top:10px}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;
+  font-size:14px;font-weight:500;color:#aeb9cf;transition:.16s;position:relative;
 }
-.gd-spinner {
-  width: 36px; height: 36px; border: 3px solid var(--grs-line);
-  border-top-color: var(--grs-teal); border-radius: 50%;
-  animation: gd-spin 0.8s linear infinite;
-}
-@keyframes gd-spin { to { transform: rotate(360deg); } }
-.gd-loading span { color: var(--grs-muted); font-size: 0.9rem; }
+.nav-item svg{width:18px;height:18px;flex-shrink:0;stroke-width:1.9}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.active{background:linear-gradient(100deg,rgba(29,78,216,.95),rgba(59,130,246,.85));color:#fff;box-shadow:0 6px 18px -6px rgba(29,78,216,.7)}
+.nav-item .badge{margin-left:auto;font-size:10.5px;font-weight:700;background:var(--accent-500);color:#fff;padding:2px 7px;border-radius:var(--r-full);letter-spacing:.02em}
+.nav-item .count{margin-left:auto;font-size:11px;font-weight:600;color:#7d8aa3}
 
-.gd-gate {
-  max-width: 540px; margin: 8rem auto; padding: 2.5rem;
-  background: var(--grs-surface); border: 1px solid var(--grs-line);
-  border-radius: 16px; text-align: center;
-}
-.gd-gate h2 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.6rem; color: var(--grs-ink); margin: 0 0 0.5rem;
-}
-.gd-gate p { color: var(--grs-muted); font-size: 0.95rem; margin: 0 0 1.5rem; line-height: 1.6; }
-.gd-gate-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--grs-amber-bright); color: var(--grs-navy);
-  font-family: 'Inter', sans-serif; font-weight: 700;
-  padding: 0.75rem 1.4rem; border-radius: 8px;
-  text-decoration: none; font-size: 0.9rem;
-  box-shadow: 0 4px 14px rgba(245,158,11,0.3);
-}
-.gd-gate-btn:hover { background: #fbbf24; }
+.side-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+.side-progress{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;margin-bottom:12px}
+.side-progress .sp-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.side-progress .sp-lbl{font-size:11px;color:#9aa6bf;font-weight:600}
+.side-progress .sp-pct{font-family:var(--display);font-weight:800;font-size:15px;color:#fff}
+.side-bar{height:6px;background:rgba(255,255,255,.1);border-radius:var(--r-full);overflow:hidden}
+.side-bar i{display:block;height:100%;width:38%;background:linear-gradient(90deg,var(--primary-400),var(--accent-400));border-radius:inherit}
+.side-user{display:flex;align-items:center;gap:11px;padding:8px 6px}
+.side-user .av{width:36px;height:36px;border-radius:var(--r-full);background:linear-gradient(135deg,var(--accent-500),var(--accent-600));display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+.side-user .su-name{font-size:13px;font-weight:600;color:#fff;line-height:1.2}
+.side-user .su-role{font-size:11px;color:#7d8aa3}
+.side-user .su-out{margin-left:auto;color:#7d8aa3;display:flex}
+.side-user .su-out:hover{color:#fff}
 
-/* ── Hero ── */
-.gd-hero {
-  background: linear-gradient(160deg, var(--grs-navy-deep) 0%, var(--grs-navy) 45%, #1a5c5a 75%, var(--grs-navy-deep) 100%);
-  border-radius: 18px;
-  padding: 2.2rem 2.4rem;
-  color: var(--grs-surface-warm);
-  position: relative; overflow: hidden;
-  margin-bottom: 1.8rem;
-  border: 1px solid rgba(20,184,166,0.2);
+/* ============ TOPBAR ============ */
+.main{display:flex;flex-direction:column;min-width:0}
+.topbar{
+  position:sticky;top:0;z-index:30;background:rgba(248,250,252,.88);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:18px;padding:14px 32px;
 }
-.gd-hero::before {
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 12% 25%, rgba(20,184,166,0.16), transparent 55%),
-              radial-gradient(ellipse at 88% 75%, rgba(249,115,22,0.12), transparent 55%);
-  pointer-events: none;
-}
-.gd-hero-inner {
-  position: relative; z-index: 1;
-  display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; align-items: center;
-}
-.gd-hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 700;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: var(--grs-teal-bright); margin-bottom: 0.8rem;
-}
-.gd-hero-eyebrow .dot {
-  width: 8px; height: 8px; background: var(--grs-amber-bright);
-  border-radius: 50%; box-shadow: 0 0 12px var(--grs-amber-bright);
-}
-.gd-hero h1 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: clamp(1.75rem, 3.2vw, 2.4rem);
-  margin: 0 0 0.4rem; line-height: 1.1; letter-spacing: -0.5px;
-}
-.gd-hero h1 em { font-style: italic; color: var(--grs-teal-bright); }
-.gd-hero-sub {
-  font-size: 0.92rem; color: #c9d0db; margin: 0 0 1.2rem; line-height: 1.55;
-}
-.gd-hero-stats { display: flex; gap: 1.5rem; flex-wrap: wrap;
-  padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
-.gd-hero-stat-val {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.2rem; color: var(--grs-surface-warm);
-}
-.gd-hero-stat-lbl {
-  font-family: 'Inter', sans-serif; font-size: 0.6rem;
-  text-transform: uppercase; letter-spacing: 1.5px;
-  color: #8a93a7; margin-top: 3px;
-}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-dim)}
+.crumbs b{color:var(--fg-1);font-weight:600}
+.crumbs .sep{color:var(--fg-3)}
+.crumbs a{color:inherit}
+.crumbs a:hover{color:var(--primary-600)}
+.search{margin-left:auto;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-full);padding:9px 16px;width:300px;box-shadow:var(--shadow-sm)}
+.search svg{width:16px;height:16px;color:var(--fg-3);flex-shrink:0}
+.search input{border:none;outline:none;background:none;font-size:13.5px;width:100%;color:var(--fg-1)}
+.search input::placeholder{color:var(--fg-3)}
+.tb-actions{display:flex;align-items:center;gap:10px}
+.icon-btn{width:40px;height:40px;border-radius:var(--r-full);background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;color:var(--fg-2);box-shadow:var(--shadow-sm);position:relative;transition:.16s}
+.icon-btn:hover{color:var(--primary-600);border-color:var(--primary-200)}
+.icon-btn svg{width:18px;height:18px}
+.icon-btn .dot{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--accent-500);border:2px solid var(--surface)}
+.streak-chip{display:flex;align-items:center;gap:7px;background:var(--warning-bg);border:1px solid #fde6c2;color:var(--accent-700);font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--r-full)}
+.streak-chip svg{width:16px;height:16px}
 
-/* Progress side panel */
-.gd-hero-panel {
-  background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px; padding: 1.25rem 1.35rem;
-  backdrop-filter: blur(6px);
-}
-.gd-hero-panel-lbl {
-  font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; color: #8a93a7;
-  margin-bottom: 0.4rem;
-}
-.gd-hero-panel-val {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 2.6rem; line-height: 1; color: var(--grs-surface-warm);
-  margin-bottom: 0.4rem;
-}
-.gd-hero-panel-sub { font-size: 0.8rem; color: #c9d0db; margin-bottom: 1rem; }
-.gd-hero-progress {
-  height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden;
-}
-.gd-hero-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--grs-teal-bright), var(--grs-amber-bright));
-  border-radius: 999px; transition: width 0.6s ease;
-}
+/* ============ CONTENT ============ */
+.content{padding:26px 32px 48px;max-width:1480px;width:100%;margin:0 auto}
+.grid-main{display:grid;grid-template-columns:1fr 348px;gap:24px;align-items:start}
+@media(max-width:1180px){.grid-main{grid-template-columns:1fr}}
 
-/* ── Section heading ── */
-.gd-section-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin: 2rem 0 1rem;
-}
-.gd-section-head h2 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.5rem; color: var(--grs-ink); margin: 0;
-}
-.gd-section-head .gd-section-sub {
-  font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--grs-muted);
-}
+/* page title */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px;flex-wrap:wrap}
+.page-head h1{font-family:var(--display);font-size:27px;font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.page-head .greet{color:var(--fg-2);font-size:14.5px;margin-top:6px}
+.page-head .greet b{color:var(--fg-1);font-weight:700}
+.hd-actions{display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:var(--r-sm);font-weight:600;font-size:13.5px;transition:.16s;white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--primary-600);color:#fff;box-shadow:0 6px 16px -6px rgba(29,78,216,.6)}
+.btn-primary:hover{background:var(--primary-700);transform:translateY(-1px)}
+.btn-ghost{background:var(--surface);color:var(--fg-1);border:1px solid var(--line-2);box-shadow:var(--shadow-sm)}
+.btn-ghost:hover{border-color:var(--primary-300);color:var(--primary-700)}
+.btn-orange{background:var(--accent-500);color:#fff;box-shadow:0 6px 16px -6px rgba(249,115,22,.6)}
+.btn-orange:hover{background:var(--accent-600);transform:translateY(-1px)}
 
-/* ── Body grid ── */
-.gd-body {
-  display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem;
-  margin-top: 0.5rem;
+/* ============ HERO PROGRESS CARD ============ */
+.hero{
+  position:relative;border-radius:var(--r-xl);overflow:hidden;color:#eef3fb;margin-bottom:24px;
+  background:linear-gradient(120deg,#0c1730 0%,#13294f 48%,#1b3e74 100%);
+  box-shadow:var(--shadow-lg);
 }
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(ellipse at 88% 18%,rgba(249,115,22,.30),transparent 46%),
+  radial-gradient(ellipse at 70% 110%,rgba(59,130,246,.42),transparent 55%);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;background-image:
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:46px 46px;mask-image:radial-gradient(ellipse at 30% 40%,#000 20%,transparent 72%);
+  -webkit-mask-image:radial-gradient(ellipse at 30% 40%,#000 20%,transparent 72%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:30px;padding:30px 34px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#ffd9a8;margin-bottom:14px}
+.hero-eyebrow .pip{width:7px;height:7px;border-radius:50%;background:var(--accent-500);box-shadow:0 0 0 4px rgba(249,115,22,.22)}
+.hero h2{font-family:var(--display);font-size:clamp(24px,2.6vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.08;color:#fff;margin-bottom:6px}
+.hero h2 em{font-style:normal;color:var(--primary-300)}
+.hero .hero-sub{font-size:14.5px;color:#aebed8;max-width:440px;line-height:1.55}
+.hero-stats{display:flex;gap:30px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.hstat .hs-v{font-family:var(--display);font-size:21px;font-weight:800;color:#fff;line-height:1;display:flex;align-items:baseline;gap:4px}
+.hstat .hs-v small{font-size:12px;font-weight:600;color:#9fb0cd}
+.hstat .hs-l{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8fa0bd;margin-top:7px;font-weight:600}
+/* ring */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.ring{position:relative;width:152px;height:152px}
+.ring svg{transform:rotate(-90deg)}
+.ring .rc-bg{stroke:rgba(255,255,255,.12)}
+.ring .rc-fg{stroke:url(#ringGrad);stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center .rcp{font-family:var(--display);font-size:34px;font-weight:800;color:#fff;line-height:1}
+.ring-center .rcl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#9fb0cd;margin-top:4px;font-weight:600}
+.ring-note{font-size:12px;color:#9fb0cd;text-align:center;max-width:160px}
+.ring-note b{color:#ffd9a8;font-weight:700}
+@media(max-width:720px){.hero-inner{grid-template-columns:1fr}.hero-stats{flex-wrap:wrap;gap:18px 28px}}
 
-/* ── Modules ── */
-.gd-modules { display: flex; flex-direction: column; gap: 0.75rem; }
-.gd-module-card {
-  background: var(--grs-surface); border: 1px solid var(--grs-line);
-  border-radius: 14px; padding: 1.1rem 1.3rem;
-  display: grid; grid-template-columns: 60px 1fr auto; gap: 1.1rem;
-  align-items: center; transition: border-color 0.18s, box-shadow 0.18s;
-  cursor: pointer;
-}
-.gd-module-card:hover { border-color: var(--grs-teal-bright); box-shadow: 0 4px 18px rgba(13,148,136,0.08); }
-.gd-module-num {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 2rem; color: var(--grs-teal); text-align: center; line-height: 1;
-}
-.gd-module-num.flagship { color: var(--grs-rose); }
-.gd-module-num.capstone { color: var(--grs-amber); }
-.gd-module-body { min-width: 0; }
-.gd-module-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.gd-module-title {
-  font-family: 'Inter', sans-serif; font-weight: 700;
-  font-size: 0.98rem; color: var(--grs-ink);
-}
-.gd-module-tag {
-  font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 1px; padding: 2px 7px; border-radius: 999px;
-  background: rgba(13,148,136,0.1); color: var(--grs-teal-deep);
-}
-.gd-module-tag.flagship { background: rgba(190,18,60,0.1); color: var(--grs-rose); }
-.gd-module-tag.capstone { background: rgba(245,158,11,0.13); color: var(--grs-amber); }
-.gd-module-desc { color: var(--grs-muted); font-size: 0.82rem; margin-bottom: 0.7rem; line-height: 1.5; }
-.gd-module-progress {
-  height: 6px; background: #eef2f7; border-radius: 999px;
-  overflow: hidden; margin-bottom: 4px;
-}
-.gd-module-progress-fill {
-  height: 100%; border-radius: 999px;
-  transition: width 0.6s ease; background: var(--grs-teal);
-}
-.gd-module-progress-fill.completed { background: var(--grs-teal-deep); }
-.gd-module-progress-fill.notstarted { background: var(--grs-line); }
-.gd-module-meta {
-  font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--grs-muted);
-  display: flex; gap: 14px;
-}
-.gd-module-status {
-  font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600;
-  padding: 0.5rem 0.9rem; border-radius: 8px; white-space: nowrap; text-align: center;
-}
-.gd-module-status.not_started { background: #f1f5f9; color: var(--grs-muted); }
-.gd-module-status.in_progress { background: rgba(13,148,136,0.1); color: var(--grs-teal-deep); }
-.gd-module-status.completed { background: rgba(15,118,110,0.12); color: var(--grs-teal-deep); }
+/* ============ SECTION HEADERS ============ */
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:4px 0 16px}
+.sec-head h3{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:-.02em}
+.sec-head .sh-meta{font-size:12.5px;color:var(--fg-dim)}
+.sec-head a.view-all{font-size:12.5px;font-weight:600;color:var(--primary-600);display:inline-flex;align-items:center;gap:5px}
+.sec-head a.view-all:hover{gap:8px}
+.sec-head a.view-all svg{width:14px;height:14px}
 
-/* ── Sidebar ── */
-.gd-side { display: flex; flex-direction: column; gap: 1.25rem; }
-.gd-side-card {
-  background: var(--grs-surface); border: 1px solid var(--grs-line);
-  border-radius: 14px; padding: 1.25rem;
+/* ============ MODULE LIST ============ */
+.modules{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.module{
+  display:grid;grid-template-columns:54px 1fr auto;gap:18px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:18px 20px;box-shadow:var(--shadow-sm);transition:.18s;position:relative;overflow:hidden;
 }
-.gd-side-card h3 {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.1rem; margin: 0 0 0.85rem; color: var(--grs-ink);
-}
-.gd-side-card.next-session { background: linear-gradient(135deg, rgba(20,184,166,0.07), rgba(245,158,11,0.05)); border-color: rgba(13,148,136,0.25); }
-.gd-side-eyebrow {
-  font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; color: var(--grs-teal-deep);
-  margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px;
-}
-.gd-side-eyebrow .ping { width: 8px; height: 8px; border-radius: 50%; background: var(--grs-teal-bright); box-shadow: 0 0 0 0 rgba(20,184,166,0.5); animation: gd-ping 1.6s infinite; }
-@keyframes gd-ping { 0% { box-shadow: 0 0 0 0 rgba(20,184,166,0.5); } 70% { box-shadow: 0 0 0 8px rgba(20,184,166,0); } 100% { box-shadow: 0 0 0 0 rgba(20,184,166,0); } }
-.gd-next-title { font-weight: 700; font-size: 0.95rem; color: var(--grs-ink); margin-bottom: 0.3rem; }
-.gd-next-when { color: var(--grs-muted); font-size: 0.82rem; margin-bottom: 0.85rem; }
-.gd-next-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: var(--grs-teal); color: white; padding: 0.5rem 0.95rem;
-  border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.78rem;
-  font-weight: 600; text-decoration: none;
-}
-.gd-next-btn:hover { background: var(--grs-teal-deep); }
+.module:hover{border-color:var(--primary-200);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.module .accent{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--primary-500)}
+.module.done .accent{background:var(--success)}
+.module.active .accent{background:var(--accent-500)}
+.module.flagship .accent{background:var(--rose)}
+.module.locked{opacity:.72}
+.module.locked .accent{background:var(--fg-3)}
+.m-num{font-family:var(--display);font-size:26px;font-weight:800;color:var(--primary-300);letter-spacing:-.02em;text-align:center}
+.module.done .m-num{color:var(--success)}
+.module.active .m-num{color:var(--accent-500)}
+.module.flagship .m-num{color:var(--rose)}
+.m-num .check{display:none}
+.module.done .m-num .num{display:none}
+.module.done .m-num .check{display:inline-flex;width:40px;height:40px;border-radius:var(--r-full);background:var(--success-bg);color:var(--success);align-items:center;justify-content:center;margin:0 auto}
+.module.done .m-num .check svg{width:21px;height:21px;stroke-width:2.6}
 
-.gd-week-list { list-style: none; padding: 0; margin: 0; }
-.gd-week-item {
-  display: grid; grid-template-columns: 32px 1fr auto; gap: 10px;
-  padding: 0.55rem 0; border-bottom: 1px solid var(--grs-line);
-  font-size: 0.82rem; align-items: center;
-}
-.gd-week-item:last-child { border-bottom: 0; }
-.gd-week-item .wk { font-family: 'JetBrains Mono', monospace; color: var(--grs-muted); font-size: 0.78rem; }
-.gd-week-item .topic { color: var(--grs-ink-soft); line-height: 1.4; }
-.gd-week-item .ind {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--grs-line);
-}
-.gd-week-item.done .ind { background: var(--grs-teal); }
-.gd-week-item.now .ind { background: var(--grs-amber-bright); box-shadow: 0 0 0 3px rgba(245,158,11,0.18); }
+.m-body{min-width:0}
+.m-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+.m-title{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:-.01em;color:var(--fg-1)}
+.tag{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:5px}
+.tag.module{color:var(--primary-700);background:var(--primary-50)}
+.tag.flag{color:#fff;background:var(--rose)}
+.tag.cap{color:var(--accent-700);background:var(--warning-bg)}
+.tag.pract{color:var(--success);background:var(--success-bg)}
+.m-desc{font-size:13.5px;color:var(--fg-2);line-height:1.5;margin-bottom:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-foot{display:flex;align-items:center;gap:16px}
+.m-meta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-dim);font-weight:500}
+.m-meta svg{width:13px;height:13px;color:var(--fg-3)}
+.m-prog{flex:1;min-width:80px;max-width:240px;display:flex;align-items:center;gap:10px}
+.m-prog .bar{flex:1;height:6px;background:var(--surface-3);border-radius:var(--r-full);overflow:hidden}
+.m-prog .bar i{display:block;height:100%;border-radius:inherit;background:var(--primary-500)}
+.module.done .m-prog .bar i{background:var(--success)}
+.module.active .m-prog .bar i{background:linear-gradient(90deg,var(--accent-500),var(--accent-400))}
+.m-prog .ppct{font-size:11.5px;font-weight:700;color:var(--fg-2);min-width:30px;text-align:right}
 
-.gd-capstone-status {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.18);
-  border-radius: 10px; padding: 0.7rem 0.9rem; font-size: 0.83rem;
-  color: var(--grs-amber); font-weight: 600; margin-bottom: 0.7rem;
-}
-.gd-capstone-desc { color: var(--grs-muted); font-size: 0.82rem; line-height: 1.5; }
+.m-cta{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.m-status{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:5px 11px;border-radius:var(--r-full)}
+.m-status.done{color:var(--success);background:var(--success-bg)}
+.m-status.active{color:var(--accent-700);background:var(--warning-bg)}
+.m-status.todo{color:var(--fg-dim);background:var(--surface-2)}
+.m-status.lock{color:var(--fg-dim);background:var(--surface-2);display:flex;align-items:center;gap:5px}
+.m-status.lock svg{width:11px;height:11px}
+.m-go{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary-600)}
+.module.active .m-go{color:var(--accent-600)}
+.m-go svg{width:14px;height:14px;transition:.16s}
+.module:hover .m-go svg{transform:translateX(3px)}
+.m-go.disabled{color:var(--fg-3);pointer-events:none}
+@media(max-width:640px){.module{grid-template-columns:44px 1fr}.m-cta{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}.m-desc{white-space:normal}}
 
-.gd-mentor {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 0.85rem;
-}
-.gd-mentor-av {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--grs-teal-deep), var(--grs-navy));
-  color: white; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-family: 'Inter', sans-serif; font-size: 0.95rem;
-}
-.gd-mentor-name { font-weight: 700; font-size: 0.92rem; color: var(--grs-ink); }
-.gd-mentor-role { font-size: 0.78rem; color: var(--grs-muted); }
-.gd-mentor-btn {
-  display: block; text-align: center; background: transparent;
-  border: 1px solid var(--grs-line); padding: 0.55rem; border-radius: 8px;
-  font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
-  color: var(--grs-teal-deep); text-decoration: none;
-}
-.gd-mentor-btn:hover { border-color: var(--grs-teal); background: rgba(13,148,136,0.04); }
+/* ============ RIGHT RAIL ============ */
+.rail{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px}
+@media(max-width:1180px){.rail{position:static}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);overflow:hidden}
+.card-pad{padding:20px}
+.card-head{display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--fg-dim);margin-bottom:14px}
+.card-head .live{display:inline-flex;align-items:center;gap:7px;color:var(--success)}
+.card-head .live .blip{width:8px;height:8px;border-radius:50%;background:var(--success);position:relative}
+.card-head .live .blip::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--success);opacity:.5;animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.7);opacity:.6}100%{transform:scale(1.7);opacity:0}}
 
-@media (max-width: 900px) {
-  .gd-body { grid-template-columns: 1fr; }
-  .gd-hero-inner { grid-template-columns: 1fr; }
-  .gd-module-card { grid-template-columns: 48px 1fr; }
-  .gd-module-status { grid-column: 1 / -1; justify-self: start; }
-}
+/* live session card */
+.live-card{background:linear-gradient(165deg,#0f1b33,#15294c);color:#dbe5f5;border:none}
+.live-card .card-head{color:#8fa0bd}
+.live-card .ls-title{font-family:var(--display);font-size:17px;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:4px}
+.live-card .ls-sub{font-size:12.5px;color:#9fb0cd;margin-bottom:16px}
+.countdown{display:flex;gap:8px;margin-bottom:16px}
+.cd-unit{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 4px;text-align:center}
+.cd-unit .cd-n{font-family:var(--display);font-size:23px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.cd-unit .cd-l{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8fa0bd;margin-top:6px;font-weight:600}
+.live-card .ls-when{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#aebed8;margin-bottom:16px}
+.live-card .ls-when svg{width:14px;height:14px;color:#7d8aa3}
+.live-card .btn-orange{width:100%;justify-content:center}
 
-/* ── Footer (matches ai-learn.html) ── */
-.gd-footer {
-  border-top: 1px solid var(--grs-line);
-  padding: 3rem 0 2rem;
-  margin-top: 4rem;
-  background: var(--grs-bg);
+/* schedule timeline */
+.timeline{display:flex;flex-direction:column}
+.tl-row{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:10px 0;position:relative}
+.tl-rail{display:flex;flex-direction:column;align-items:center;position:relative}
+.tl-wk{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--fg-3);font-family:var(--display)}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--surface-3);border:2px solid var(--line-2);margin-top:5px;z-index:1}
+.tl-line{position:absolute;top:22px;bottom:-10px;width:2px;background:var(--line-2);left:50%;transform:translateX(-50%)}
+.tl-row:last-child .tl-line{display:none}
+.tl-row.done .tl-dot{background:var(--success);border-color:var(--success)}
+.tl-row.done .tl-line{background:var(--success)}
+.tl-row.done .tl-wk{color:var(--success)}
+.tl-row.current .tl-dot{background:var(--accent-500);border-color:var(--accent-500);box-shadow:0 0 0 4px rgba(249,115,22,.18)}
+.tl-row.current .tl-wk{color:var(--accent-600)}
+.tl-body{padding-top:1px}
+.tl-topic{font-size:13px;color:var(--fg-1);line-height:1.4;font-weight:500}
+.tl-row.done .tl-topic{color:var(--fg-2)}
+.tl-mod{font-size:10.5px;color:var(--fg-3);margin-top:3px;letter-spacing:.02em;font-weight:600;text-transform:uppercase}
+.tl-row.current .tl-topic{font-weight:600}
+.tl-now{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent-500);padding:2px 6px;border-radius:4px;margin-left:7px;vertical-align:1px}
+
+/* activity feed */
+.feed{display:flex;flex-direction:column}
+.feed-row{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.feed-row:last-child{border-bottom:none;padding-bottom:0}
+.feed-ic{width:34px;height:34px;border-radius:var(--r-full);display:grid;place-items:center;flex-shrink:0}
+.feed-ic svg{width:16px;height:16px;stroke-width:2}
+.feed-ic.green{background:var(--success-bg);color:var(--success)}
+.feed-ic.blue{background:var(--primary-50);color:var(--primary-600)}
+.feed-ic.orange{background:var(--warning-bg);color:var(--accent-600)}
+.feed-ic.rose{background:#fee7ec;color:var(--rose)}
+.feed-txt{font-size:13px;color:var(--fg-1);line-height:1.45}
+.feed-txt b{font-weight:700}
+.feed-time{font-size:11.5px;color:var(--fg-3);margin-top:3px}
+
+/* capstone mini */
+.capstone-card{background:linear-gradient(160deg,#1a1205,#241803);color:#f5ecd9;border:none;position:relative;overflow:hidden}
+.capstone-card::before{content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,158,11,.3),transparent 68%)}
+.capstone-card .card-head{color:#caa978}
+.capstone-card .cap-title{font-family:var(--display);font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+.capstone-card .cap-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#ffd9a8;background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.3);padding:5px 11px;border-radius:var(--r-full);margin-bottom:12px}
+.capstone-card .cap-desc{font-size:12.5px;color:#bcae97;line-height:1.55;position:relative}
+
+/* deadlines */
+.deadline-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.deadline-row:last-child{border-bottom:none;padding-bottom:0}
+.dl-date{width:46px;flex-shrink:0;text-align:center;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:5px 0}
+.dl-date .dl-d{font-family:var(--display);font-size:17px;font-weight:800;line-height:1;color:var(--fg-1)}
+.dl-date .dl-m{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-dim);font-weight:700;margin-top:2px}
+.dl-body{min-width:0}
+.dl-title{font-size:13px;font-weight:600;color:var(--fg-1);line-height:1.35}
+.dl-sub{font-size:11.5px;color:var(--fg-3);margin-top:2px}
+.dl-flag{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:var(--r-full);flex-shrink:0}
+.dl-flag.warn{color:var(--accent-700);background:var(--warning-bg)}
+.dl-flag.soon{color:var(--primary-700);background:var(--primary-50)}
+
+/* mobile sidebar */
+.menu-toggle{display:none}
+@media(max-width:920px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:.25s;width:260px;box-shadow:var(--shadow-lg)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-toggle{display:grid}
+  .search{display:none}
+  .content{padding:20px 18px 40px}
+  .topbar{padding:12px 16px}
 }
-.gd-footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+.scrim{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:35}
+.scrim.show{display:block}
+
+/* ============ ACCESS-GATE STATES ============ */
+.gate-splash{
+  position:fixed;inset:0;background:var(--bg);z-index:100;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
 }
-.gd-footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 2rem;
+.gate-splash .spin{
+  width:38px;height:38px;border:3px solid var(--line);border-top-color:var(--primary-600);
+  border-radius:50%;animation:gd-spin .85s linear infinite;
 }
-.gd-footer-brand { display: flex; align-items: center; gap: 1rem; }
-.gd-footer-brand img { height: 50px; width: auto; }
-.gd-footer-brand h3 {
-  font-size: 1.1rem;
-  color: var(--grs-blue);
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
+.gate-splash .lbl{color:var(--fg-dim);font-size:14px}
+@keyframes gd-spin{to{transform:rotate(360deg)}}
+.gate-card{
+  position:fixed;inset:0;background:var(--bg);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:24px;
 }
-.gd-footer-brand p {
-  font-size: 0.85rem;
-  color: var(--grs-muted);
-  margin: 0.2rem 0 0;
+.gate-card-inner{
+  max-width:480px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:36px 32px;text-align:center;
+  box-shadow:var(--shadow-md);
 }
-.gd-footer-apps { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.gd-footer-location {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.8rem 1.2rem;
-  background: var(--grs-surface);
-  border: 1px solid var(--grs-line);
-  border-radius: 12px;
+.gate-card-inner .lock-ic{
+  width:56px;height:56px;border-radius:50%;background:var(--primary-50);color:var(--primary-600);
+  display:grid;place-items:center;margin:0 auto 16px;
 }
-.gd-footer-location .city {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--grs-blue);
+.gate-card-inner .lock-ic svg{width:24px;height:24px;stroke-width:2}
+.gate-card-inner h2{
+  font-family:var(--display);font-size:22px;color:var(--fg-1);margin-bottom:10px;letter-spacing:-.02em;
 }
-.gd-footer-location .sub {
-  font-size: 0.8rem;
-  color: var(--grs-muted);
+.gate-card-inner p{color:var(--fg-2);font-size:14px;line-height:1.55;margin-bottom:22px}
+.gate-card-inner .gate-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.app{display:none}
+
+/* ============ FOOTER (matches ai-learn.html) ============ */
+.gd-footer{
+  border-top:1px solid var(--line);
+  padding:3rem 0 2rem;
+  margin-top:4rem;
+  background:var(--bg);
 }
-.gd-footer-bottom {
-  text-align: center;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--grs-line);
-}
-.gd-footer-bottom p {
-  color: var(--grs-muted);
-  font-size: 0.85rem;
-  margin: 0;
-}
-.gd-footer-bottom a {
-  color: var(--grs-blue);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.gd-footer-bottom a:hover { opacity: 0.75; }
+.gd-footer-inner{max-width:1200px;margin:0 auto;padding:0 2rem}
+.gd-footer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem}
+.gd-footer-brand{display:flex;align-items:center;gap:1rem}
+.gd-footer-brand img{height:50px;width:auto}
+.gd-footer-brand h3{font-size:1.1rem;color:var(--primary-600);margin:0;font-family:'Inter',var(--sans);font-weight:700}
+.gd-footer-brand p{font-size:.85rem;color:var(--fg-dim);margin:.2rem 0 0}
+.gd-footer-apps{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gd-footer-location{display:inline-flex;align-items:center;gap:.7rem;padding:.8rem 1.2rem;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.gd-footer-location .city{font-family:'Plus Jakarta Sans',Georgia,serif;font-size:.95rem;font-weight:700;color:var(--primary-600)}
+.gd-footer-location .sub{font-size:.8rem;color:var(--fg-dim)}
+.gd-footer-bottom{text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+.gd-footer-bottom p{color:var(--fg-dim);font-size:.85rem;margin:0}
+.gd-footer-bottom a{color:var(--primary-600);text-decoration:none;transition:opacity .2s}
+.gd-footer-bottom a:hover{opacity:.75}
 </style>
 </head>
 <body>
 
-<!-- ── Top bar ── -->
-<nav class="gd-topbar">
-  <div class="gd-topbar-left">
-    <a href="../../index.html" class="gd-logo">
-      <img src="../../assets/logo_only.png" alt="SustainSys">
-      Sustain<b>Sys</b>
-    </a>
-    <div class="gd-divider"></div>
-    <div class="gd-crumb"><a href="../index.html">My Certifications</a> · Learning Dashboard</div>
+<!-- ===================== ACCESS GATE: loading ===================== -->
+<div class="gate-splash" id="gateSplash">
+  <div class="spin"></div>
+  <div class="lbl">Checking your enrolment…</div>
+</div>
+
+<!-- ===================== ACCESS GATE: denied ===================== -->
+<div class="gate-card" id="gateDenied" style="display:none">
+  <div class="gate-card-inner">
+    <div class="lock-ic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    </div>
+    <h2>Enrolment required</h2>
+    <p>The Learning Dashboard is available to enrolled members of the <strong>AI Governance, Risk &amp; Safety</strong> cohort. Purchase the certification to unlock your dashboard, live sessions, and capstone workspace.</p>
+    <div class="gate-actions">
+      <a href="../index.html" class="btn btn-primary">View Certifications</a>
+      <a href="../../ai-grs-curriculum.html" class="btn btn-ghost">See curriculum</a>
+    </div>
   </div>
-  <div class="gd-topbar-right" id="userBar"></div>
-</nav>
-
-<!-- ── Loading state ── -->
-<div class="gd-loading" id="gdLoading">
-  <div class="gd-spinner"></div>
-  <span>Loading your dashboard…</span>
 </div>
 
-<!-- ── Locked state (no entitlement) ── -->
-<div class="gd-gate" id="gdGate" style="display:none">
-  <h2>Enrolment required</h2>
-  <p>The Learning Dashboard is available only to enrolled cohort members of the <strong>AI Governance, Risk &amp; Safety</strong> certification.</p>
-  <a href="../index.html" class="gd-gate-btn">Go to My Certifications</a>
-</div>
+<div class="app" id="appRoot">
 
-<!-- ── Main content ── -->
-<main class="gd-wrap" id="gdMain" style="display:none">
-
-  <!-- Hero with progress -->
-  <section class="gd-hero">
-    <div class="gd-hero-inner">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../../index.html" class="brand">
+      <img src="../../logo_only.png" alt="SustainSys">
       <div>
-        <div class="gd-hero-eyebrow"><span class="dot"></span>Flagship Certification · 2026 Cohort</div>
-        <h1>AI Governance, Risk &amp; <em>Safety</em></h1>
-        <p class="gd-hero-sub" id="gdWelcome">Welcome back. Pick up where you left off, or explore an upcoming module.</p>
-        <div class="gd-hero-stats">
-          <div><div class="gd-hero-stat-val" id="gdStatWeek">Week —</div><div class="gd-hero-stat-lbl">Current</div></div>
-          <div><div class="gd-hero-stat-val" id="gdStatModulesDone">0 / 8</div><div class="gd-hero-stat-lbl">Modules</div></div>
-          <div><div class="gd-hero-stat-val" id="gdStatHours">0 hrs</div><div class="gd-hero-stat-lbl">Live attended</div></div>
-          <div><div class="gd-hero-stat-val" id="gdStatExam">Pending</div><div class="gd-hero-stat-lbl">Exam</div></div>
+        <div class="bname">Sustain<span class="sys">Sys</span></div>
+        <div class="bsub">AI Academy</div>
+      </div>
+    </a>
+
+    <div class="nav-group">
+      <div class="nav-label">Learning</div>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#modules">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5.5A2 2 0 0 1 6 4h6v15H6a2 2 0 0 0-2 1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-6v15h6a2 2 0 0 1 2 1.5z"/></svg>
+        My Courses
+        <span class="badge">1</span>
+      </a>
+      <a class="nav-item" href="#schedule">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+        Schedule
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1 2.7 3 6 3s6-2 6-3v-5.5"/></svg>
+        Resources
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Programme</div>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 11a4 4 0 1 0-8 0M3 20a7 7 0 0 1 14 0M19 8v6M22 11h-6"/></svg>
+        Cohort &amp; Community
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="9" r="5"/><path d="M9 13.5 8 21l4-2 4 2-1-7.5"/></svg>
+        Certificate &amp; Exam
+        <span class="count">Wk 12</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m12 2 2.6 6.4 6.9.5-5.3 4.5 1.7 6.7L12 17l-5.9 3.6 1.7-6.7L2.5 9.4l6.9-.5L12 2Z"/></svg>
+        Achievements
+        <span class="count">6</span>
+      </a>
+    </div>
+
+    <div class="side-foot">
+      <div class="side-progress">
+        <div class="sp-top">
+          <span class="sp-lbl">Certification progress</span>
+          <span class="sp-pct">38%</span>
+        </div>
+        <div class="side-bar"><i></i></div>
+      </div>
+      <div class="side-user">
+        <div class="av" id="sideAvatar">·</div>
+        <div>
+          <div class="su-name" id="sideName">Loading…</div>
+          <div class="su-role">2026 Cohort</div>
+        </div>
+        <a class="su-out" href="#" title="Sign out" id="signOutBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="crumbs">
+        <a href="../index.html">My Certifications</a><span class="sep">/</span><b>Learning Dashboard</b>
+      </nav>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+        <input type="text" placeholder="Search modules, lessons, resources…">
+      </div>
+      <div class="tb-actions">
+        <div class="streak-chip" title="12-day study streak">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c0 4-5 5-5 10a5 5 0 0 0 10 0c0-2-1-3-1-3 1 4-4 4-4 1 0-2 2-3 0-8Z"/></svg>
+          12 days
+        </div>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <button class="icon-btn" aria-label="Messages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-3.6A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1 id="pageGreet">Welcome back 👋</h1>
+          <p class="greet">You're in <b>Week 5</b> of 12 — keep the momentum going. <b>Module 3</b> is in progress.</p>
+        </div>
+        <div class="hd-actions">
+          <a class="btn btn-ghost" href="#schedule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+            View schedule
+          </a>
+          <a class="btn btn-primary" href="#modules">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v18l15-9z"/></svg>
+            Resume learning
+          </a>
         </div>
       </div>
-      <div class="gd-hero-panel">
-        <div class="gd-hero-panel-lbl">Overall progress</div>
-        <div class="gd-hero-panel-val" id="gdHeroPct">0%</div>
-        <div class="gd-hero-panel-sub" id="gdHeroSub">Complete each module to unlock the proctored exam.</div>
-        <div class="gd-hero-progress"><div class="gd-hero-progress-fill" id="gdHeroProgress" style="width:0%"></div></div>
+
+      <div class="grid-main">
+        <!-- ========== LEFT COLUMN ========== -->
+        <div>
+          <!-- HERO -->
+          <section class="hero">
+            <div class="hero-inner">
+              <div>
+                <div class="hero-eyebrow"><span class="pip"></span>Flagship Certification · 2026 Cohort</div>
+                <h2>AI Governance, Risk &amp; <em>Safety</em></h2>
+                <p class="hero-sub">A practitioner-grade, 12-week programme. You've completed the Foundations and Regulation tiers — next up is Risk &amp; Safety.</p>
+                <div class="hero-stats">
+                  <div class="hstat"><div class="hs-v">5<small>/ 12</small></div><div class="hs-l">Current week</div></div>
+                  <div class="hstat"><div class="hs-v">2<small>/ 7</small></div><div class="hs-l">Modules done</div></div>
+                  <div class="hstat"><div class="hs-v">19<small>hrs</small></div><div class="hs-l">Live attended</div></div>
+                  <div class="hstat"><div class="hs-v">12<small>days</small></div><div class="hs-l">Streak</div></div>
+                </div>
+              </div>
+              <div class="ring-wrap">
+                <div class="ring">
+                  <svg width="152" height="152" viewBox="0 0 152 152">
+                    <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#f97316"/>
+                    </linearGradient></defs>
+                    <circle class="rc-bg" cx="76" cy="76" r="66" fill="none" stroke-width="13"/>
+                    <circle class="rc-fg" id="ringFg" cx="76" cy="76" r="66" fill="none" stroke-width="13" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+                  </svg>
+                  <div class="ring-center"><div class="rcp">38%</div><div class="rcl">Complete</div></div>
+                </div>
+                <div class="ring-note">Complete <b>5 more modules</b> to unlock the proctored exam.</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- MODULES -->
+          <div class="sec-head" id="modules">
+            <h3>Your modules</h3>
+            <span class="sh-meta">7 modules + capstone · self-paced + cohort sessions</span>
+          </div>
+          <section class="modules">
+
+            <!-- M1 done -->
+            <article class="module done">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">01</span><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">Foundations of AI &amp; Governance</span><span class="tag module">Foundational</span></div>
+                <p class="m-desc">AI in business terms, where AI goes wrong, governance vs management, key roles.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Weeks 1–2</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>7 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:100%"></i></div><span class="ppct">100%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status done">Completed</span>
+                <a class="m-go" href="#">Review<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M2 done -->
+            <article class="module done">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">02</span><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">Laws, Regulations &amp; Standards</span><span class="tag module">Foundational</span></div>
+                <p class="m-desc">EU AI Act, UK + US regimes, ISO 42001, NIST AI RMF, sector rules.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Weeks 3–4</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>7 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:100%"></i></div><span class="ppct">100%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status done">Completed</span>
+                <a class="m-go" href="#">Review<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M3 active -->
+            <article class="module active">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">03</span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">AI Risk, Safety &amp; Trustworthiness</span><span class="tag pract">Practitioner</span></div>
+                <p class="m-desc">AI risk taxonomy, generative AI risks, MLSecOps, evals, safety engineering.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Weeks 5–6</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>9 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:45%"></i></div><span class="ppct">45%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status active">In progress</span>
+                <a class="m-go" href="#">Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M4 flagship not started -->
+            <article class="module flagship">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">04</span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">Governing AI Agents</span><span class="tag flag">Flagship</span></div>
+                <p class="m-desc">Agent inventory, scope, revocation, accountability, examiner readiness.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Week 7</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>4 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:0"></i></div><span class="ppct">0%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status todo">Not started</span>
+                <a class="m-go" href="#">Preview<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M5 not started -->
+            <article class="module">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">05</span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">Designing the AI Governance Framework</span><span class="tag pract">Practitioner</span></div>
+                <p class="m-desc">AI governance framework, 3 lines of defence, lifecycle, AI TRiSM, KRIs.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Weeks 8–9</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>8 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:0"></i></div><span class="ppct">0%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status todo">Not started</span>
+                <a class="m-go" href="#">Preview<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M6 not started -->
+            <article class="module">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">06</span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">GRC in Practice &amp; Implementation</span><span class="tag pract">Practitioner</span></div>
+                <p class="m-desc">AI in project mgmt, internal audit, Microsoft + multi-cloud + OSS tooling.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Weeks 10–11</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>8 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:0"></i></div><span class="ppct">0%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status todo">Not started</span>
+                <a class="m-go" href="#">Preview<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </article>
+
+            <!-- M7 capstone locked -->
+            <article class="module locked">
+              <span class="accent"></span>
+              <div class="m-num"><span class="num">07</span></div>
+              <div class="m-body">
+                <div class="m-title-row"><span class="m-title">Capstone &amp; Proctored Exam</span><span class="tag cap">Capstone</span></div>
+                <p class="m-desc">Capstone presentations, panel defence, proctored exam, career briefing.</p>
+                <div class="m-foot">
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Week 12</span>
+                  <span class="m-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>6 hrs</span>
+                  <div class="m-prog"><div class="bar"><i style="width:0"></i></div><span class="ppct">0%</span></div>
+                </div>
+              </div>
+              <div class="m-cta">
+                <span class="m-status lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Locked</span>
+                <span class="m-go disabled">Unlocks Wk 12</span>
+              </div>
+            </article>
+
+          </section>
+        </div>
+
+        <!-- ========== RIGHT RAIL ========== -->
+        <aside class="rail">
+
+          <!-- NEXT LIVE SESSION -->
+          <div class="card live-card card-pad">
+            <div class="card-head"><span class="live"><span class="blip"></span>Next live session</span></div>
+            <div class="ls-title">Generative AI Risks &amp; MLSecOps</div>
+            <div class="ls-sub">Module 3 · Risk &amp; Safety · with Dr. Priya Anand</div>
+            <div class="countdown" id="countdown">
+              <div class="cd-unit"><div class="cd-n" id="cd-d">00</div><div class="cd-l">Days</div></div>
+              <div class="cd-unit"><div class="cd-n" id="cd-h">00</div><div class="cd-l">Hrs</div></div>
+              <div class="cd-unit"><div class="cd-n" id="cd-m">00</div><div class="cd-l">Min</div></div>
+              <div class="cd-unit"><div class="cd-n" id="cd-s">00</div><div class="cd-l">Sec</div></div>
+            </div>
+            <div class="ls-when">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <span id="ls-when-text">Monday · 18:00 BST · 90 min</span>
+            </div>
+            <a class="btn btn-orange" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m23 7-7 5 7 5V7zM1 5h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5z"/></svg>
+              Join session
+            </a>
+          </div>
+
+          <!-- DEADLINES -->
+          <div class="card card-pad">
+            <div class="card-head">Upcoming deadlines</div>
+            <div class="deadline-row">
+              <div class="dl-date"><div class="dl-d">18</div><div class="dl-m">Jun</div></div>
+              <div class="dl-body"><div class="dl-title">Module 3 — Risk register exercise</div><div class="dl-sub">Submit before live session</div></div>
+              <span class="dl-flag warn">3 days</span>
+            </div>
+            <div class="deadline-row">
+              <div class="dl-date"><div class="dl-d">02</div><div class="dl-m">Jul</div></div>
+              <div class="dl-body"><div class="dl-title">Module 4 — Agent inventory draft</div><div class="dl-sub">Flagship assignment</div></div>
+              <span class="dl-flag soon">Wk 7</span>
+            </div>
+            <div class="deadline-row">
+              <div class="dl-date"><div class="dl-d">27</div><div class="dl-m">Aug</div></div>
+              <div class="dl-body"><div class="dl-title">Capstone artefact pack</div><div class="dl-sub">Panel defence + proctored exam</div></div>
+              <span class="dl-flag soon">Wk 12</span>
+            </div>
+          </div>
+
+          <!-- 12-WEEK SCHEDULE -->
+          <div class="card card-pad" id="schedule">
+            <div class="card-head" style="justify-content:space-between"><span>12-week schedule</span></div>
+            <div class="timeline">
+              <div class="tl-row done"><div class="tl-rail"><span class="tl-wk">W01</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">AI in business terms; where AI goes wrong; first case studies</div><div class="tl-mod">M1 · Foundations</div></div></div>
+              <div class="tl-row done"><div class="tl-rail"><span class="tl-wk">W02</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Responsible AI principles, governance vs management, roles</div><div class="tl-mod">M1 · Foundations</div></div></div>
+              <div class="tl-row done"><div class="tl-rail"><span class="tl-wk">W03</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">EU AI Act deep dive — risk tiers, obligations, GPAI, timelines</div><div class="tl-mod">M2 · Regulation</div></div></div>
+              <div class="tl-row done"><div class="tl-rail"><span class="tl-wk">W04</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">UK, US, global regimes; standards (ISO 42001, NIST AI RMF)</div><div class="tl-mod">M2 · Regulation</div></div></div>
+              <div class="tl-row current"><div class="tl-rail"><span class="tl-wk">W05</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">AI risk taxonomy; data &amp; model risk; impact assessment<span class="tl-now">Now</span></div><div class="tl-mod">M3 · Risk &amp; Safety</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W06</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Generative AI risks; AI security &amp; MLSecOps; safety engineering</div><div class="tl-mod">M3 · Risk &amp; Safety</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W07</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Governing AI Agents — inventory, scope, revocation, readiness</div><div class="tl-mod">M4 · AI Agents ◆</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W08</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Designing the AI governance framework; 3 lines of defence</div><div class="tl-mod">M5 · Framework</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W09</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Lifecycle governance, AI TRiSM, KRIs, board reporting, vendor risk</div><div class="tl-mod">M5 · Framework</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W10</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">AI in project management, risk management, internal audit</div><div class="tl-mod">M6 · GRC Practice</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W11</span><span class="tl-dot"></span><span class="tl-line"></span></div><div class="tl-body"><div class="tl-topic">Implementation tour: Microsoft + multi-cloud + OSS tooling</div><div class="tl-mod">M6 · GRC Practice</div></div></div>
+              <div class="tl-row"><div class="tl-rail"><span class="tl-wk">W12</span><span class="tl-dot"></span></div><div class="tl-body"><div class="tl-topic">Capstone presentations, panel defence, proctored exam</div><div class="tl-mod">M7 · Capstone ◆</div></div></div>
+            </div>
+          </div>
+
+          <!-- RECENT ACTIVITY -->
+          <div class="card card-pad">
+            <div class="card-head">Recent activity</div>
+            <div class="feed">
+              <div class="feed-row">
+                <div class="feed-ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <div><div class="feed-txt">Completed lesson <b>EU AI Act — Deep Dive</b></div><div class="feed-time">2 hours ago</div></div>
+              </div>
+              <div class="feed-row">
+                <div class="feed-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg></div>
+                <div><div class="feed-txt">Submitted exercise <b>Annex III mapping</b></div><div class="feed-time">Yesterday · 16:40</div></div>
+              </div>
+              <div class="feed-row">
+                <div class="feed-ic orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m23 7-7 5 7 5V7zM1 5h13a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5z"/></svg></div>
+                <div><div class="feed-txt">Attended live session <b>UK/US regimes &amp; standards</b></div><div class="feed-time">2 days ago</div></div>
+              </div>
+              <div class="feed-row">
+                <div class="feed-ic rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m12 2 2.6 6.4 6.9.5-5.3 4.5 1.7 6.7L12 17l-5.9 3.6 1.7-6.7L2.5 9.4l6.9-.5L12 2Z"/></svg></div>
+                <div><div class="feed-txt">Earned badge <b>Regulation Navigator</b></div><div class="feed-time">3 days ago</div></div>
+              </div>
+              <div class="feed-row">
+                <div class="feed-ic blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></div>
+                <div><div class="feed-txt">Downloaded <b>ISO 42001 primer (PDF)</b></div><div class="feed-time">4 days ago</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CAPSTONE -->
+          <div class="card capstone-card card-pad">
+            <div class="card-head">Your capstone</div>
+            <div class="cap-title">Defensible Artefact Pack</div>
+            <span class="cap-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Not started · due Week 12</span>
+            <p class="cap-desc">Register entry, risk assessment, policy, workflow, and agent control plan. Panel defence + proctored exam in Week 12.</p>
+          </div>
+
+        </aside>
       </div>
-    </div>
-  </section>
+    </main>
 
-  <!-- Body: modules + sidebar -->
-  <div class="gd-body">
-
-    <div>
-      <div class="gd-section-head">
-        <h2>Your modules</h2>
-        <div class="gd-section-sub">7 + Capstone · self-paced + cohort sessions</div>
-      </div>
-      <div class="gd-modules" id="gdModules"></div>
-    </div>
-
-    <aside class="gd-side">
-
-      <div class="gd-side-card next-session">
-        <div class="gd-side-eyebrow"><span class="ping"></span>Next live session</div>
-        <div class="gd-next-title" id="gdNextTitle">Module 1 · Foundations</div>
-        <div class="gd-next-when" id="gdNextWhen">Monday · 18:00 BST</div>
-        <a href="#" class="gd-next-btn" id="gdNextLink">Join session →</a>
-      </div>
-
-      <div class="gd-side-card">
-        <h3>12-week schedule</h3>
-        <ul class="gd-week-list" id="gdSchedule"></ul>
-      </div>
-
-      <div class="gd-side-card">
-        <h3>Capstone</h3>
-        <div class="gd-capstone-status" id="gdCapstoneStatus">Not started · due Week 12</div>
-        <div class="gd-capstone-desc">Defensible artefact pack — register entry, risk assessment, policy, workflow, and agent control plan. Panel defence + proctored exam in Week 12.</div>
-      </div>
-
-      <div class="gd-side-card">
-        <h3>Your mentor</h3>
-        <div class="gd-mentor">
-          <div class="gd-mentor-av">SK</div>
-          <div>
-            <div class="gd-mentor-name">Satyawan Kant</div>
-            <div class="gd-mentor-role">AI Governance Lead</div>
+    <!-- ===================== FOOTER (matches ai-learn.html) ===================== -->
+    <footer class="gd-footer">
+      <div class="gd-footer-inner">
+        <div class="gd-footer-top">
+          <div class="gd-footer-brand">
+            <img src="../../logo_only.png" alt="SustainSys Logo">
+            <div>
+              <h3>SustainSys Consulting Ltd</h3>
+              <p>AI-Powered Engineering Solutions</p>
+            </div>
+          </div>
+          <div class="gd-footer-apps">
+            <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
+              <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
+              <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
+            </a>
+          </div>
+          <div class="gd-footer-location">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1d4ed8"/></svg>
+            <div>
+              <div class="city">Cambridge, UK</div>
+              <div class="sub">Innovation Hub</div>
+            </div>
           </div>
         </div>
-        <a href="mailto:sustainsys.co.uk@gmail.com?subject=AI%20GRS%20cohort%20question" class="gd-mentor-btn">Email mentor</a>
-      </div>
-
-    </aside>
-
-  </div>
-
-</main>
-
-<!-- ── Footer (same as ai-learn.html) ── -->
-<footer class="gd-footer">
-  <div class="gd-footer-inner">
-    <div class="gd-footer-top">
-      <div class="gd-footer-brand">
-        <img src="../../logo_only.png" alt="SustainSys Logo">
-        <div>
-          <h3>SustainSys Consulting Ltd</h3>
-          <p>AI-Powered Engineering Solutions</p>
+        <div class="gd-footer-bottom">
+          <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="../../privacy.html">Privacy Policy</a> &middot; <a href="../../support.html">Support</a> &middot; <a href="../../delete-account.html">Unsubscribe</a></p>
         </div>
       </div>
-      <div class="gd-footer-apps">
-        <a href="https://apps.apple.com/app/sustainsysai/id6760136910" target="_blank" rel="noopener noreferrer">
-          <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" style="height:36px;">
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=com.sustainsysai.app" target="_blank" rel="noopener noreferrer">
-          <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" style="height:52px;margin:-8px 0;">
-        </a>
-      </div>
-      <div class="gd-footer-location">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#1d4ed8"/></svg>
-        <div>
-          <div class="city">Cambridge, UK</div>
-          <div class="sub">Innovation Hub</div>
-        </div>
-      </div>
-    </div>
-    <div class="gd-footer-bottom">
-      <p>&copy; 2026 SustainSys Consulting Ltd. All rights reserved. &middot; <a href="../../privacy.html">Privacy Policy</a> &middot; <a href="../../support.html">Support</a> &middot; <a href="../../delete-account.html">Unsubscribe</a></p>
-    </div>
+    </footer>
   </div>
-</footer>
+</div>
 
-<!-- Supabase + auth -->
+<!-- ===================== AUTH + ENTITLEMENT GATE ===================== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../assets/supabase-auth.js"></script>
-
 <script>
-(async function dashboardGate() {
+(async function gate(){
   const LOGIN_URL = '../../ai-learn.html#/login';
+  const CERTS_URL = '../index.html';
   const COURSE_ID = 'ai-governance-risk-safety';
+  const splash = document.getElementById('gateSplash');
+  const denied = document.getElementById('gateDenied');
+  const app    = document.getElementById('appRoot');
 
-  /* ── Curriculum data (kept in sync with ai-grs-curriculum.html) ── */
-  const MODULES = [
-    { id: 'm1', num: '01', title: 'Foundations',        desc: 'AI in business terms, where AI goes wrong, governance vs management.', weeks: '1–2', hours: 8, tag: 'Module' },
-    { id: 'm2', num: '02', title: 'Regulation',         desc: 'EU AI Act, UK + US regimes, ISO 42001, NIST AI RMF, sector rules.', weeks: '3–4', hours: 8, tag: 'Module' },
-    { id: 'm3', num: '03', title: 'Risk & Safety',      desc: 'AI risk taxonomy, generative AI risks, MLSecOps, evals, safety engineering.', weeks: '5–6', hours: 8, tag: 'Module' },
-    { id: 'm4', num: '04', title: 'AI Agents',          desc: 'Governing AI agents — inventory, scope, revocation, examiner readiness.', weeks: '7', hours: 4, tag: 'Flagship', tagType: 'flagship' },
-    { id: 'm5', num: '05', title: 'Framework',          desc: 'AI governance framework, 3 lines of defence, lifecycle, AI TRiSM, KRIs.', weeks: '8–9', hours: 8, tag: 'Module' },
-    { id: 'm6', num: '06', title: 'GRC Practice',       desc: 'AI in project mgmt, internal audit, Microsoft + multi-cloud + OSS tooling.', weeks: '10–11', hours: 8, tag: 'Module' },
-    { id: 'm7', num: '07', title: 'Capstone',           desc: 'Capstone presentations, panel defence, proctored exam, career briefing.', weeks: '12', hours: 6, tag: 'Capstone', tagType: 'capstone' },
-  ];
-  const SCHEDULE = [
-    { wk: '01', topic: 'AI in business terms; where AI goes wrong; first case studies' },
-    { wk: '02', topic: 'Responsible AI principles, governance vs management, roles' },
-    { wk: '03', topic: 'EU AI Act deep dive — risk tiers, obligations, GPAI, timelines' },
-    { wk: '04', topic: 'UK, US, global regimes; standards (ISO 42001, NIST AI RMF); sector rules' },
-    { wk: '05', topic: 'AI risk taxonomy; data & model risk; risk and impact assessment' },
-    { wk: '06', topic: 'Generative AI risks; AI security & MLSecOps; safety engineering' },
-    { wk: '07', topic: 'Governing AI Agents — inventory, scope, revocation, examiner readiness' },
-    { wk: '08', topic: 'Designing the AI governance framework; 3 lines of defence; policies' },
-    { wk: '09', topic: 'Lifecycle governance, AI TRiSM, KRIs, board reporting, vendor risk' },
-    { wk: '10', topic: 'AI in project management, risk management, internal audit workflows' },
-    { wk: '11', topic: 'Implementation tour: Microsoft + multi-cloud + OSS tooling' },
-    { wk: '12', topic: 'Capstone presentations, panel defence, proctored exam, career briefing' },
-  ];
+  function fail(redirect){ window.location.href = redirect; }
+  function show(el){ el.style.display = ''; }
+  function hide(el){ el.style.display = 'none'; }
 
-  /* ── 1. Auth check ── */
-  const session = await supaGetSession();
-  if (!session) { window.location.href = LOGIN_URL; return; }
+  // 1. Session check
+  let session;
+  try { session = await supaGetSession(); }
+  catch(e){ console.error('Session error', e); fail(LOGIN_URL); return; }
+  if(!session){ fail(LOGIN_URL); return; }
 
-  const user = session.user;
-  const meta = user.user_metadata || {};
-  const firstName = meta.first_name || (user.email ? user.email.split('@')[0] : 'there');
-  const lastName  = meta.last_name || '';
-  const displayName = `${firstName} ${lastName}`.trim() || user.email;
-  const initials = ((firstName[0] || '?') + (lastName[0] || '')).toUpperCase();
-
-  /* ── 2. Render user bar (always visible once authed) ── */
-  document.getElementById('userBar').innerHTML = `
-    <div class="gd-avatar" title="${displayName}">${initials}</div>
-    <button class="gd-signout" id="signOutBtn">Sign out</button>
-  `;
-  document.getElementById('signOutBtn').addEventListener('click', async () => {
-    await supaSignOut();
-    window.location.href = LOGIN_URL;
-  });
-
-  /* ── 3. Entitlement gate ── */
-  const accessMap = await supaGetAccessMap();
-  const hasAccess = accessMap.hasAllAccess || accessMap.certifications.has(COURSE_ID);
-  if (!hasAccess) {
-    document.getElementById('gdLoading').style.display = 'none';
-    document.getElementById('gdGate').style.display = 'block';
+  // 2. Entitlement check
+  let access;
+  try { access = await supaGetAccessMap(); }
+  catch(e){ console.error('Entitlement fetch error', e); access = { hasAllAccess:false, certifications:new Set() }; }
+  const hasAccess = access.hasAllAccess || access.certifications.has(COURSE_ID);
+  if(!hasAccess){
+    hide(splash);
+    show(denied);
     return;
   }
 
-  /* ── 4. Load progress from Supabase (governance_progress table) ── */
-  // Schema (run in Supabase SQL editor):
-  //   create table governance_progress (
-  //     user_id uuid references auth.users on delete cascade,
-  //     module_id text not null,
-  //     status text default 'not_started' check (status in ('not_started','in_progress','completed')),
-  //     progress_pct int default 0 check (progress_pct between 0 and 100),
-  //     hours_attended numeric default 0,
-  //     completed_at timestamptz,
-  //     updated_at timestamptz default now(),
-  //     primary key (user_id, module_id)
-  //   );
-  //   alter table governance_progress enable row level security;
-  //   create policy "Users read own progress"   on governance_progress for select using (auth.uid() = user_id);
-  //   create policy "Users update own progress" on governance_progress for update using (auth.uid() = user_id);
-  //   create policy "Users insert own progress" on governance_progress for insert with check (auth.uid() = user_id);
+  // 3. Populate user-bound elements
+  const user  = session.user;
+  const meta  = user.user_metadata || {};
+  const first = meta.first_name || (user.email ? user.email.split('@')[0] : 'there');
+  const last  = meta.last_name || '';
+  const name  = (first + ' ' + last).trim() || user.email;
+  const initials = ((first[0] || '?') + (last[0] || '')).toUpperCase();
 
-  const sb = getSupabase();
-  let progressRows = [];
-  try {
-    const { data, error } = await sb
-      .from('governance_progress')
-      .select('*')
-      .eq('user_id', user.id);
-    if (error) console.warn('Progress fetch failed:', error.message);
-    progressRows = data || [];
-  } catch (e) { console.warn('Progress query error', e); }
+  document.getElementById('sideName').textContent   = name;
+  document.getElementById('sideAvatar').textContent = initials;
+  document.getElementById('pageGreet').innerHTML    = `Welcome back, ${first} 👋`;
 
-  // Build a map for quick lookup
-  const progressByModule = {};
-  progressRows.forEach(r => { progressByModule[r.module_id] = r; });
-
-  /* ── 5. Compute aggregates ── */
-  let totalPct = 0, modulesDone = 0, hoursAttended = 0;
-  MODULES.forEach(m => {
-    const p = progressByModule[m.id];
-    if (p) {
-      totalPct += (p.progress_pct || 0);
-      if (p.status === 'completed') modulesDone++;
-      hoursAttended += parseFloat(p.hours_attended || 0);
-    }
+  // 4. Sign-out
+  document.getElementById('signOutBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    try { await supaSignOut(); } catch(_){}
+    fail(LOGIN_URL);
   });
-  const overallPct = Math.round(totalPct / MODULES.length);
-  const currentWeek = Math.max(1, Math.min(12, modulesDone === 0 ? 1 :
-    (modulesDone < MODULES.length ? parseInt(MODULES[modulesDone].weeks.split('–')[0]) : 12)));
 
-  /* ── 6. Populate hero ── */
-  document.getElementById('gdWelcome').textContent =
-    overallPct === 0
-      ? `Welcome, ${firstName}. Your cohort is enrolled — pick a module to begin.`
-      : (overallPct === 100
-          ? `Congratulations, ${firstName}. All modules complete — proceed to the proctored exam.`
-          : `Welcome back, ${firstName}. You are ${overallPct}% through the certification.`);
-  document.getElementById('gdStatWeek').textContent = `Week ${String(currentWeek).padStart(2,'0')}`;
-  document.getElementById('gdStatModulesDone').textContent = `${modulesDone} / ${MODULES.length}`;
-  document.getElementById('gdStatHours').textContent = `${hoursAttended} hrs`;
-  document.getElementById('gdStatExam').textContent = overallPct === 100 ? 'Ready' : 'Pending';
-  document.getElementById('gdHeroPct').textContent = `${overallPct}%`;
-  document.getElementById('gdHeroProgress').style.width = `${overallPct}%`;
-  document.getElementById('gdHeroSub').textContent =
-    overallPct === 100
-      ? 'All modules complete — proctored exam unlocked.'
-      : `Complete ${MODULES.length - modulesDone} more module${MODULES.length - modulesDone === 1 ? '' : 's'} to unlock the exam.`;
-
-  /* ── 7. Render module cards ── */
-  const modulesContainer = document.getElementById('gdModules');
-  modulesContainer.innerHTML = MODULES.map(m => {
-    const p = progressByModule[m.id] || { status: 'not_started', progress_pct: 0 };
-    const pct = p.progress_pct || 0;
-    const status = p.status || 'not_started';
-    const tagType = m.tagType || '';
-    const fillClass = status === 'completed' ? 'completed' : (status === 'not_started' ? 'notstarted' : '');
-    const statusLabel = status === 'completed' ? '✓ Completed'
-                      : status === 'in_progress' ? `${pct}% in progress`
-                      : 'Not started';
-    return `
-      <a class="gd-module-card" href="#${m.id}" data-module="${m.id}">
-        <div class="gd-module-num ${tagType}">${m.num}</div>
-        <div class="gd-module-body">
-          <div class="gd-module-title-row">
-            <div class="gd-module-title">${m.title}</div>
-            <span class="gd-module-tag ${tagType}">${m.tag}</span>
-          </div>
-          <div class="gd-module-desc">${m.desc}</div>
-          <div class="gd-module-progress"><div class="gd-module-progress-fill ${fillClass}" style="width:${status === 'completed' ? 100 : pct}%"></div></div>
-          <div class="gd-module-meta"><span>Week ${m.weeks}</span><span>${m.hours} hours</span></div>
-        </div>
-        <div class="gd-module-status ${status}">${statusLabel}</div>
-      </a>
-    `;
-  }).join('');
-
-  /* ── 8. Schedule sidebar (mark done/current) ── */
-  const scheduleEl = document.getElementById('gdSchedule');
-  scheduleEl.innerHTML = SCHEDULE.map(s => {
-    const wkInt = parseInt(s.wk);
-    const cls = wkInt < currentWeek ? 'done' : (wkInt === currentWeek ? 'now' : '');
-    return `<li class="gd-week-item ${cls}"><span class="wk">W${s.wk}</span><span class="topic">${s.topic}</span><span class="ind"></span></li>`;
-  }).join('');
-
-  /* ── 9. Capstone status ── */
-  const capstoneProgress = progressByModule['m7'] || { status: 'not_started' };
-  const capstoneEl = document.getElementById('gdCapstoneStatus');
-  if (capstoneProgress.status === 'completed') {
-    capstoneEl.textContent = '✓ Capstone submitted';
-    capstoneEl.style.color = 'var(--grs-teal-deep)';
-    capstoneEl.style.background = 'rgba(13,148,136,0.08)';
-    capstoneEl.style.borderColor = 'rgba(13,148,136,0.25)';
-  } else if (capstoneProgress.status === 'in_progress') {
-    capstoneEl.textContent = `${capstoneProgress.progress_pct || 0}% drafted · due Week 12`;
-  } else {
-    capstoneEl.textContent = 'Not started · due Week 12';
-  }
-
-  /* ── 10. Reveal ── */
-  document.getElementById('gdLoading').style.display = 'none';
-  document.getElementById('gdMain').style.display = 'block';
-
+  // 5. Reveal
+  hide(splash);
+  app.style.display = 'grid';
 })();
 </script>
 
+<script>
+/* ===== progress ring fill ===== */
+(function(){
+  var pct=38, r=66, C=2*Math.PI*r;
+  var fg=document.getElementById('ringFg');
+  fg.setAttribute('stroke-dasharray', C.toFixed(1));
+  fg.setAttribute('stroke-dashoffset', C.toFixed(1));
+  requestAnimationFrame(function(){
+    setTimeout(function(){ fg.setAttribute('stroke-dashoffset', (C*(1-pct/100)).toFixed(1)); }, 150);
+  });
+})();
+
+/* ===== live countdown to next Monday 18:00 (local) ===== */
+(function(){
+  function nextTarget(){
+    var now=new Date();
+    var t=new Date(now);
+    t.setHours(18,0,0,0);
+    var day=t.getDay(); // 0 Sun .. 1 Mon
+    var add=(1-day+7)%7;
+    if(add===0 && t<=now) add=7;
+    t.setDate(t.getDate()+add);
+    return t;
+  }
+  var target=nextTarget();
+  var pad=function(n){return String(n).padStart(2,'0');};
+  function tick(){
+    var diff=Math.max(0, target-new Date());
+    var s=Math.floor(diff/1000);
+    var d=Math.floor(s/86400); s-=d*86400;
+    var h=Math.floor(s/3600); s-=h*3600;
+    var m=Math.floor(s/60); s-=m*60;
+    document.getElementById('cd-d').textContent=pad(d);
+    document.getElementById('cd-h').textContent=pad(h);
+    document.getElementById('cd-m').textContent=pad(m);
+    document.getElementById('cd-s').textContent=pad(s);
+  }
+  tick(); setInterval(tick,1000);
+})();
+
+/* ===== mobile sidebar ===== */
+(function(){
+  var sb=document.getElementById('sidebar'), sc=document.getElementById('scrim'), mt=document.getElementById('menuToggle');
+  function open(){sb.classList.add('open');sc.classList.add('show');}
+  function close(){sb.classList.remove('open');sc.classList.remove('show');}
+  mt&&mt.addEventListener('click',open);
+  sc&&sc.addEventListener('click',close);
+})();
+</script>
 </body>
 </html>
