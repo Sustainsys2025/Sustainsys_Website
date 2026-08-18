@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill-Gap Audit — SustainSys AI Academy</title>
+<meta name="description" content="AI-powered skill gap audit comparing your CV against your target AI role with a 30/60/90-day improvement plan.">
+<meta name="theme-color" content="#1A3A6B">
+<link rel="icon" type="image/svg+xml" href="./assets/sustainsys-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/css/nav.css">
+<link rel="stylesheet" href="assets/css/journey.css">
+<style>
+  /* Radar chart (SVG-based, scoped) */
+  .radar-wrap { position: relative; aspect-ratio: 1/1; max-width: 380px; margin: 0 auto; }
+  .radar-wrap svg { width: 100%; height: 100%; display: block; }
+  .radar-grid  { fill: none; stroke: #e2e8f0; stroke-width: 1; }
+  .radar-axis  { stroke: #f1f5f9; stroke-width: 1; }
+  .radar-label { font-family: 'DM Sans', 'Inter', sans-serif; font-size: 11px; font-weight: 600; fill: #475569; }
+  .radar-area-target  { fill: rgba(26, 58, 107, 0.10); stroke: #1A3A6B; stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .radar-area-current { fill: rgba(164, 66, 31, 0.22); stroke: #A4421F; stroke-width: 2; }
+  .radar-point        { fill: #A4421F; }
+  /* Score ring */
+  .score-ring { transform: rotate(-90deg); transform-origin: center; }
+  .ring-bg       { stroke: #f1f5f9; stroke-width: 12; fill: none; }
+  .ring-progress { stroke: url(#scoreGrad); stroke-width: 12; stroke-linecap: round; fill: none; transition: stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1); }
+  /* Skill row */
+  .skill-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 50px;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--j-line-soft);
+  }
+  .skill-row:last-child { border-bottom: 0; }
+  .skill-row .skill-name { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 0.86rem; color: var(--j-ink-2); }
+  .skill-row .skill-bar { background: var(--j-line-soft); border-radius: 999px; height: 6px; overflow: hidden; position: relative; }
+  .skill-row .skill-bar > i { position: absolute; left: 0; top: 0; bottom: 0; background: #e2e8f0; border-radius: 999px; }
+  .skill-row .skill-bar > i.target { background: rgba(26, 58, 107, 0.30); }
+  .skill-row .skill-bar > i.current { background: linear-gradient(90deg, #A4421F, #C0522F); }
+  .skill-row .skill-score { font-family: 'DM Sans', 'Inter', sans-serif; font-weight: 700; font-size: 0.78rem; color: var(--j-ink); text-align: right; }
+  /* Plan tab */
+  .plan-week {
+    background: #fff;
+    border: 1px solid var(--j-line);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .plan-week h5 {
+    margin: 0 0 0.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--j-ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .plan-week h5 .num {
+    background: var(--j-blue-50); color: var(--j-blue);
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .plan-list { list-style: none; margin: 0; padding: 0; }
+  .plan-list li {
+    padding: 0.3rem 0;
+    font-size: 0.82rem;
+    color: var(--j-ink-2);
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .plan-list li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--j-orange);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  /* CV uploader */
+  .cv-drop {
+    border: 2px dashed var(--j-line);
+    border-radius: 14px;
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    background: var(--j-surface-soft);
+    transition: all 0.2s ease;
+  }
+  .cv-drop:hover { border-color: var(--j-blue); background: var(--j-blue-50); }
+</style>
+</head>
+<body>
+
+<!-- ══════ MAIN NAV ══════ -->
+<nav>
+  <div class="nav-container">
+    <a class="logo" href="index.html" aria-label="SustainSys Home">
+      <video id="logoVideo" autoplay loop muted playsinline preload="auto" width="280" height="72" disablePictureInPicture>
+        <source src="Sustainsys_Logo.mp4" type="video/mp4">
+      </video>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="projects.html" class="projects-highlight">Projects<span class="nav-star" style="color:#A4421F;">&#9733;</span></a></li>
+      <li><a href="ai-compliance-governance.html" class="compliance-highlight">AI Compliance</a></li>
+      <li><a href="job-openings.html">Careers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="ai-learn.html" class="ai-academy active">AI Academy<span class="academy-badge">Learn</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══════ JOURNEY TOPBAR ══════ -->
+<div class="journey-topbar">
+  <div class="journey-topbar-inner">
+    <div class="journey-topbar-nav">
+      <a href="journey.html" class="journey-topbar-link">Journey</a>
+      <a href="journey-roadmap.html" class="journey-topbar-link">Roadmap</a>
+      <a href="journey-skill-gap.html" class="journey-topbar-link active"><span class="dot"></span> Skill Gap</a>
+      <a href="journey-curriculum.html" class="journey-topbar-link">Curriculum</a>
+      <a href="journey-mentors.html" class="journey-topbar-link">Mentors</a>
+      <a href="journey-messages.html" class="journey-topbar-link">Messages</a>
+      <a href="journey-interview-prep.html" class="journey-topbar-link">Interview Prep</a>
+    </div>
+    <div class="journey-topbar-right">
+      <a href="ai-learn.html" class="journey-topbar-help">AI Academy</a>
+      <div class="journey-topbar-avatar" id="journeyAvatar" title="Your account">S</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ HERO ══════ -->
+<header class="journey-hero">
+  <div class="journey-hero-inner">
+    <div>
+      <span class="j-eyebrow blue">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Skill-Gap Audit
+      </span>
+      <h1>Where you are vs. <span class="accent">where you're heading</span>.</h1>
+      <p>We compared your CV against the <strong style="color:var(--j-ink);">AI Solutions Architect</strong> role benchmark across 8 dimensions. Strengths are clear — and so is the next 90 days.</p>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a href="#cv" class="j-btn j-btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Re-upload CV
+      </a>
+      <a href="journey-roadmap.html" class="j-btn j-btn-primary">
+        Update roadmap →
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════ PAGE ══════ -->
+<main class="journey-page">
+  <div class="journey-container">
+
+    <!-- ─── Top row: score ring + radar ─── -->
+    <div class="journey-grid cols-2" style="margin-bottom:1.25rem;">
+      <!-- Readiness score -->
+      <div class="j-card">
+        <div class="j-card-head" style="margin-bottom:0;">
+          <div>
+            <h3 class="j-card-title">Career readiness score</h3>
+            <p class="j-card-subtitle">Composite signal across 8 dimensions, weighted to your target role.</p>
+          </div>
+          <span class="j-badge j-badge-green"><span class="dot"></span>Up 8 pts this month</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 200px 1fr; gap:1.5rem; align-items:center; margin-top:1.2rem;">
+          <div style="position:relative; width:200px; height:200px;">
+            <svg viewBox="0 0 140 140" class="score-ring" style="width:100%; height:100%;">
+              <defs>
+                <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#1A3A6B"/>
+                  <stop offset="100%" stop-color="#A4421F"/>
+                </linearGradient>
+              </defs>
+              <circle cx="70" cy="70" r="52" class="ring-bg"/>
+              <circle cx="70" cy="70" r="52" class="ring-progress" style="stroke-dasharray:326.7; stroke-dashoffset:91.5;"/>
+            </svg>
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <div style="font-family:'DM Serif Display',serif; font-size:3rem; color:var(--j-ink); line-height:1;">72</div>
+              <div style="font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:600; color:var(--j-muted); letter-spacing:0.06em; text-transform:uppercase;">of 100</div>
+            </div>
+          </div>
+
+          <div class="j-stack">
+            <div>
+              <div class="j-row" style="margin-bottom:4px;">
+                <span class="j-text-sm" style="color:var(--j-muted);">Foundations</span>
+                <strong style="font-size:0.85rem; color:var(--j-ink);">88</strong>
+              </div>
+              <div class="j-progress thin"><span style="width:88%; background: linear-gradient(90deg,#16a34a,#4ade80);"></span></div>
+            </div>
+            <div>
+              <div class="j-row" style="margin-bottom:4px;">
+                <span class="j-text-sm" style="color:var(--j-muted);">Practical engineering</span>
+                <strong style="font-size:0.85rem; color:var(--j-ink);">76</strong>
+              </div>
+              <div class="j-progress thin"><span style="width:76%;"></span></div>
+            </div>
+            <div>
+              <div class="j-row" style="margin-bottom:4px;">
+                <span class="j-text-sm" style="color:var(--j-muted);">Production &amp; MLOps</span>
+                <strong style="font-size:0.85rem; color:var(--j-ink);">54</strong>
+              </div>
+              <div class="j-progress thin"><span style="width:54%; background: linear-gradient(90deg,#f59e0b,#fbbf24);"></span></div>
+            </div>
+            <div>
+              <div class="j-row" style="margin-bottom:4px;">
+                <span class="j-text-sm" style="color:var(--j-muted);">Interview signal</span>
+                <strong style="font-size:0.85rem; color:var(--j-ink);">61</strong>
+              </div>
+              <div class="j-progress thin"><span style="width:61%; background: linear-gradient(90deg,#f59e0b,#fbbf24);"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Radar -->
+      <div class="j-card">
+        <div class="j-card-head" style="margin-bottom:0.4rem;">
+          <div>
+            <h3 class="j-card-title">Skill radar</h3>
+            <p class="j-card-subtitle">
+              <span style="display:inline-block; width:10px; height:10px; background:rgba(164,66,31,0.22); border:1.5px solid #A4421F; border-radius:2px; vertical-align:middle; margin-right:4px;"></span> You
+              <span style="margin: 0 6px; color:var(--j-line);">·</span>
+              <span style="display:inline-block; width:10px; height:10px; background:rgba(26,58,107,0.10); border:1.5px dashed #1A3A6B; border-radius:2px; vertical-align:middle; margin-right:4px;"></span> Target role
+            </p>
+          </div>
+        </div>
+
+        <div class="radar-wrap">
+          <svg viewBox="0 0 320 320">
+            <!-- Grid -->
+            <g transform="translate(160,160)">
+              <polygon class="radar-grid" points="0,-120 113.2,-37 70.7,97 -70.7,97 -113.2,-37"/>
+              <polygon class="radar-grid" points="0,-96 90.6,-29.6 56.6,77.6 -56.6,77.6 -90.6,-29.6"/>
+              <polygon class="radar-grid" points="0,-72 67.9,-22.2 42.4,58.2 -42.4,58.2 -67.9,-22.2"/>
+              <polygon class="radar-grid" points="0,-48 45.3,-14.8 28.3,38.8 -28.3,38.8 -45.3,-14.8"/>
+              <polygon class="radar-grid" points="0,-24 22.6,-7.4 14.1,19.4 -14.1,19.4 -22.6,-7.4"/>
+              <!-- Axes -->
+              <line class="radar-axis" x1="0" y1="0" x2="0"     y2="-120"/>
+              <line class="radar-axis" x1="0" y1="0" x2="113.2" y2="-37"/>
+              <line class="radar-axis" x1="0" y1="0" x2="70.7"  y2="97"/>
+              <line class="radar-axis" x1="0" y1="0" x2="-70.7" y2="97"/>
+              <line class="radar-axis" x1="0" y1="0" x2="-113.2" y2="-37"/>
+
+              <!-- Target shape (88, 80, 85, 75, 82) -->
+              <polygon class="radar-area-target"
+                points="0,-105.6 90.6,-29.6 59.5,81.5 -53,72.7 -92.8,-30.3"/>
+              <!-- Current shape (88, 76, 54, 61, 80) -->
+              <polygon class="radar-area-current"
+                points="0,-105.6 86,-28.1 38.2,52.4 -43,59 -90.6,-29.6"/>
+
+              <!-- Points -->
+              <circle class="radar-point" cx="0"   cy="-105.6" r="3.5"/>
+              <circle class="radar-point" cx="86"  cy="-28.1"  r="3.5"/>
+              <circle class="radar-point" cx="38.2" cy="52.4"  r="3.5"/>
+              <circle class="radar-point" cx="-43" cy="59"     r="3.5"/>
+              <circle class="radar-point" cx="-90.6" cy="-29.6" r="3.5"/>
+            </g>
+            <!-- Axis labels -->
+            <text class="radar-label" x="160" y="22"  text-anchor="middle">Foundations</text>
+            <text class="radar-label" x="298" y="118" text-anchor="end">Engineering</text>
+            <text class="radar-label" x="248" y="278" text-anchor="middle">MLOps</text>
+            <text class="radar-label" x="72"  y="278" text-anchor="middle">Interview</text>
+            <text class="radar-label" x="22"  y="118" text-anchor="start">Domain</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Detailed skill matrix + Recommendations ─── -->
+    <div class="journey-grid cols-2">
+      <!-- Skill matrix -->
+      <div class="j-card">
+        <div class="j-card-head">
+          <div>
+            <h3 class="j-card-title">Skill matrix — you vs. target</h3>
+            <p class="j-card-subtitle">22 competencies extracted from your CV.</p>
+          </div>
+          <div class="j-tabs" data-tabs-group="skills">
+            <button class="j-tab active" data-tab="gaps">Gaps</button>
+            <button class="j-tab" data-tab="all">All</button>
+            <button class="j-tab" data-tab="strengths">Strengths</button>
+          </div>
+        </div>
+
+        <div data-tabs-panel="skills">
+          <div class="tab-panel" data-tab="gaps">
+
+            <div class="skill-row">
+              <div class="skill-name">MLOps · CI/CD for models</div>
+              <div class="skill-bar"><i class="target" style="width:85%"></i><i class="current" style="width:45%"></i></div>
+              <div class="skill-score">45 <span style="color:var(--j-muted); font-weight:400;">/ 85</span></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-name">Vector databases &amp; retrieval</div>
+              <div class="skill-bar"><i class="target" style="width:80%"></i><i class="current" style="width:55%"></i></div>
+              <div class="skill-score">55 <span style="color:var(--j-muted); font-weight:400;">/ 80</span></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-name">LLM evaluation &amp; observability</div>
+              <div class="skill-bar"><i class="target" style="width:78%"></i><i class="current" style="width:50%"></i></div>
+              <div class="skill-score">50 <span style="color:var(--j-muted); font-weight:400;">/ 78</span></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-name">Distributed training (DDP / FSDP)</div>
+              <div class="skill-bar"><i class="target" style="width:75%"></i><i class="current" style="width:40%"></i></div>
+              <div class="skill-score">40 <span style="color:var(--j-muted); font-weight:400;">/ 75</span></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-name">Cost &amp; latency optimisation</div>
+              <div class="skill-bar"><i class="target" style="width:72%"></i><i class="current" style="width:48%"></i></div>
+              <div class="skill-score">48 <span style="color:var(--j-muted); font-weight:400;">/ 72</span></div>
+            </div>
+            <div class="skill-row">
+              <div class="skill-name">System design under load</div>
+              <div class="skill-bar"><i class="target" style="width:82%"></i><i class="current" style="width:60%"></i></div>
+              <div class="skill-score">60 <span style="color:var(--j-muted); font-weight:400;">/ 82</span></div>
+            </div>
+
+          </div>
+          <div class="tab-panel" data-tab="all" style="display:none;">
+            <div class="skill-row"><div class="skill-name">Python &amp; data tooling</div><div class="skill-bar"><i class="target" style="width:90%"></i><i class="current" style="width:92%"></i></div><div class="skill-score">92</div></div>
+            <div class="skill-row"><div class="skill-name">PyTorch / TensorFlow</div><div class="skill-bar"><i class="target" style="width:85%"></i><i class="current" style="width:82%"></i></div><div class="skill-score">82</div></div>
+            <div class="skill-row"><div class="skill-name">RAG architecture</div><div class="skill-bar"><i class="target" style="width:80%"></i><i class="current" style="width:65%"></i></div><div class="skill-score">65</div></div>
+            <div class="skill-row"><div class="skill-name">MLOps · CI/CD</div><div class="skill-bar"><i class="target" style="width:85%"></i><i class="current" style="width:45%"></i></div><div class="skill-score">45</div></div>
+            <div class="skill-row"><div class="skill-name">Vector databases</div><div class="skill-bar"><i class="target" style="width:80%"></i><i class="current" style="width:55%"></i></div><div class="skill-score">55</div></div>
+            <div class="skill-row"><div class="skill-name">LLM eval &amp; obs</div><div class="skill-bar"><i class="target" style="width:78%"></i><i class="current" style="width:50%"></i></div><div class="skill-score">50</div></div>
+            <div class="skill-row"><div class="skill-name">Cloud (AWS / GCP)</div><div class="skill-bar"><i class="target" style="width:75%"></i><i class="current" style="width:78%"></i></div><div class="skill-score">78</div></div>
+            <div class="skill-row"><div class="skill-name">Stakeholder communication</div><div class="skill-bar"><i class="target" style="width:75%"></i><i class="current" style="width:85%"></i></div><div class="skill-score">85</div></div>
+          </div>
+          <div class="tab-panel" data-tab="strengths" style="display:none;">
+            <div class="skill-row"><div class="skill-name">Stakeholder communication</div><div class="skill-bar"><i class="target" style="width:75%"></i><i class="current" style="width:88%"></i></div><div class="skill-score">88</div></div>
+            <div class="skill-row"><div class="skill-name">Python &amp; data tooling</div><div class="skill-bar"><i class="target" style="width:90%"></i><i class="current" style="width:92%"></i></div><div class="skill-score">92</div></div>
+            <div class="skill-row"><div class="skill-name">PyTorch / TensorFlow</div><div class="skill-bar"><i class="target" style="width:85%"></i><i class="current" style="width:82%"></i></div><div class="skill-score">82</div></div>
+            <div class="skill-row"><div class="skill-name">Architectural reasoning</div><div class="skill-bar"><i class="target" style="width:80%"></i><i class="current" style="width:84%"></i></div><div class="skill-score">84</div></div>
+            <div class="skill-row"><div class="skill-name">Cloud (AWS / GCP)</div><div class="skill-bar"><i class="target" style="width:75%"></i><i class="current" style="width:78%"></i></div><div class="skill-score">78</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strengths / Weaknesses / Confidence -->
+      <div class="j-stack">
+        <div class="j-card">
+          <div class="j-card-head" style="margin-bottom:0.6rem;">
+            <h3 class="j-card-title">Strengths to lead with</h3>
+            <span class="j-badge j-badge-green">5 signals</span>
+          </div>
+          <div class="j-stack" style="gap:0.45rem;">
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-green); flex-shrink:0;">✓</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);">Strong systems-engineering background — translates well to AI architecture roles.</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-green); flex-shrink:0;">✓</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);">2 production ML projects shipped — rare among candidates we see.</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-green); flex-shrink:0;">✓</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);">Cloud foundation is solid (AWS, some GCP).</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-green); flex-shrink:0;">✓</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);">Communication and stakeholder framing reads at senior level.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="j-card">
+          <div class="j-card-head" style="margin-bottom:0.6rem;">
+            <h3 class="j-card-title">Areas to close</h3>
+            <span class="j-badge j-badge-amber">6 gaps</span>
+          </div>
+          <div class="j-stack" style="gap:0.45rem;">
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-orange); flex-shrink:0;">!</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);"><strong>MLOps</strong> — limited evidence of CI/CD for models or model registries.</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-orange); flex-shrink:0;">!</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);"><strong>Evaluation rigour</strong> — interview signal here is the biggest score lift available.</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-orange); flex-shrink:0;">!</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);"><strong>Vector DBs &amp; retrieval</strong> — needed for nearly every architect interview.</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <span style="color:var(--j-orange); flex-shrink:0;">!</span>
+              <span class="j-text-sm" style="color:var(--j-ink-2);"><strong>Distributed training</strong> — DDP / FSDP fluency.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="j-card">
+          <div class="j-card-head" style="margin-bottom:0.6rem;">
+            <h3 class="j-card-title">Confidence indicators</h3>
+            <span class="j-badge j-badge-blue">High</span>
+          </div>
+          <p class="j-muted" style="font-size:0.78rem; line-height:1.6;">
+            Audit confidence is <strong style="color:var(--j-ink);">87%</strong> — built from your CV, two assessments and LinkedIn import. To push it above 95%, add a GitHub link and complete the practical engineering quiz.
+          </p>
+          <div style="display:flex; gap:6px; margin-top:0.7rem;">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">Connect GitHub</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Take quiz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 30 / 60 / 90 day plan ─── -->
+    <div class="j-card" style="margin-top:1.25rem;">
+      <div class="j-card-head" style="margin-bottom:1rem;">
+        <div>
+          <span class="j-eyebrow">90-Day Plan</span>
+          <h3 class="j-card-title" style="margin-top:0.5rem;">Your AI-generated improvement plan</h3>
+          <p class="j-card-subtitle">Built specifically for AI Solutions Architect · 7–10 hrs per week.</p>
+        </div>
+        <a href="journey-curriculum.html" class="j-btn j-btn-primary j-btn-sm">Add to curriculum →</a>
+      </div>
+
+      <div class="journey-grid cols-3">
+        <!-- 30 -->
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.6rem;">
+            <div style="background:var(--j-blue); color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.8rem;">30</div>
+            <strong style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--j-ink);">Foundation lift</strong>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 1–2</span> Close the eval gap</h5>
+            <ul class="plan-list">
+              <li>Complete LLM evaluation patterns course (1h 40m).</li>
+              <li>Read RAGAS + DeepEval docs, run on 1 of your projects.</li>
+              <li>Write a 1-pager: "How I'd evaluate X" — share with mentor.</li>
+            </ul>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 3–4</span> RAG architecture</h5>
+            <ul class="plan-list">
+              <li>RAG deep-dive course modules 1–4.</li>
+              <li>Build a hybrid retrieval pipeline (BM25 + vector).</li>
+              <li>Ship to GitHub with a clean README.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- 60 -->
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.6rem;">
+            <div style="background:var(--j-orange); color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.8rem;">60</div>
+            <strong style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--j-ink);">Production muscle</strong>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 5–6</span> MLOps in earnest</h5>
+            <ul class="plan-list">
+              <li>MLOps for AI Architects course (5h 10m).</li>
+              <li>Set up a model CI/CD pipeline on your RAG project.</li>
+              <li>Add a model registry + drift alerts.</li>
+            </ul>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 7–8</span> Distributed &amp; scale</h5>
+            <ul class="plan-list">
+              <li>DDP / FSDP fundamentals — implement on toy model.</li>
+              <li>Cost &amp; latency lab: optimise a real inference path.</li>
+              <li>Second mentor 1:1 — architecture review of your project.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- 90 -->
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:0.6rem;">
+            <div style="background:var(--j-green); color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.8rem;">90</div>
+            <strong style="font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--j-ink);">Interview-ready</strong>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 9–10</span> System design</h5>
+            <ul class="plan-list">
+              <li>3 architect-level system design drills (mentor-graded).</li>
+              <li>Build polished portfolio writeup of RAG + MLOps work.</li>
+              <li>Refine resume with your mentor.</li>
+            </ul>
+          </div>
+          <div class="plan-week">
+            <h5><span class="num">W 11–12</span> Live runs</h5>
+            <ul class="plan-list">
+              <li>2 mock interviews with senior practitioners.</li>
+              <li>AI interview simulator — behavioural + technical.</li>
+              <li>Apply to first 5 target roles · we'll handle warm intros.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CV upload card ─── -->
+    <div class="j-card" id="cv" style="margin-top:1.25rem;">
+      <div class="journey-grid cols-2" style="gap:1.5rem;">
+        <div>
+          <span class="j-eyebrow blue">CV &amp; Profile</span>
+          <h3 style="font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--j-ink); margin:0.6rem 0 0.5rem; line-height:1.2;">Keep your audit fresh.</h3>
+          <p class="j-muted" style="font-size:0.86rem; line-height:1.6;">
+            Re-upload your CV any time. We re-parse, re-score and refresh your 90-day plan in under a minute. You can also connect LinkedIn or GitHub for richer signal.
+          </p>
+          <div style="display:flex; gap:8px; margin-top:1rem; flex-wrap:wrap;">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3v9zM6.5 8.3a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zM19 19h-3v-4.7c0-1.1 0-2.5-1.5-2.5S13 13 13 14.2V19h-3v-9h2.9v1.3h.04c.4-.8 1.4-1.5 2.8-1.5 3 0 3.6 2 3.6 4.5V19z"/></svg>
+              Connect LinkedIn
+            </a>
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>
+              Connect GitHub
+            </a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Edit profile</a>
+          </div>
+        </div>
+        <div>
+          <label for="cvFile" class="cv-drop" style="cursor:pointer; display:block;">
+            <div style="width:48px; height:48px; border-radius:12px; background:var(--j-blue-50); border:1px solid var(--j-blue-100); display:inline-flex; align-items:center; justify-content:center; color:var(--j-blue); margin-bottom:0.6rem;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem; color:var(--j-ink); margin-bottom:0.25rem;">Drop your CV here</div>
+            <div class="j-muted" style="font-size:0.78rem;">PDF or DOCX · up to 8 MB · parsed in ~12s</div>
+            <input id="cvFile" type="file" accept=".pdf,.docx" hidden>
+          </label>
+          <div class="j-row j-mt-2">
+            <span class="j-muted">Currently on file: <strong style="color:var(--j-ink);">satya_cv_v3.pdf</strong></span>
+            <a href="#" style="font-size:0.78rem; color:var(--j-blue); text-decoration:none; font-weight:600;">Replace</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══════ SCRIPTS ══════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="courses/assets/supabase-auth.js"></script>
+<script src="assets/js/journey.js"></script>
+<script>
+  // CV upload — friendly stub
+  document.getElementById('cvFile')?.addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    journeyToast(`Uploading ${f.name}…`);
+    setTimeout(() => journeyToast('CV parsed · audit refreshed', { kind: 'success' }), 1400);
+  });
+</script>
+
+</body>
+</html>

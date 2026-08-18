@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading Lesson... — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/course-styles.css">
+<style>
+  body { background: var(--bg); }
+  .lesson-loading {
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; flex-direction:column; gap:1rem;
+    font-family:'DM Sans','Inter',system-ui,sans-serif;
+  }
+  .lesson-loading .spinner {
+    width:36px; height:36px; border:3px solid #e2e8f0;
+    border-top-color:#1A3A6B; border-radius:50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .lesson-loading .msg { color:#7A756B; font-size:0.9rem; }
+  .lesson-error {
+    display:none; align-items:center; justify-content:center;
+    min-height:100vh; flex-direction:column; gap:1rem;
+    font-family:'DM Sans','Inter',system-ui,sans-serif; text-align:center;
+    padding:2rem;
+  }
+  .lesson-error h2 {
+    font-family:'DM Serif Display',serif; font-size:1.5rem; color:#0f172a;
+  }
+  .lesson-error p { color:#7A756B; font-size:0.9rem; max-width:400px; }
+  .lesson-error a {
+    display:inline-block; margin-top:0.5rem; padding:0.6rem 1.5rem;
+    background:#A4421F; color:#fff; border-radius:8px; text-decoration:none;
+    font-weight:600; font-size:0.9rem;
+  }
+  /* Hide the content container until loaded */
+  #lessonFrame { display:none; width:100%; min-height:100vh; border:none; }
+</style>
+</head>
+<body>
+
+<!-- Loading state -->
+<div class="lesson-loading" id="lessonLoading">
+  <div class="spinner"></div>
+  <span class="msg">Loading lesson content...</span>
+</div>
+
+<!-- Error state -->
+<div class="lesson-error" id="lessonError">
+  <div style="width:56px;height:56px;border-radius:50%;background:rgba(220,38,38,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:0.5rem">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+  </div>
+  <h2 id="errorTitle">Access Denied</h2>
+  <p id="errorMsg">You need to be enrolled in this certification to access lesson content.</p>
+  <a href="index.html">Back to Certifications</a>
+</div>
+
+<!-- Lesson content injected here -->
+<div id="lessonContent"></div>
+
+<!-- Supabase SDK + auth + Stripe -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="assets/stripe-checkout.js"></script>
+
+<script>
+(async function loadLesson() {
+  const LOGIN_URL = '../ai-learn.html#/login';
+  const CERTS_URL = 'index.html';
+  const STORAGE_BUCKET = 'lessons';
+
+  /* ── Map course IDs to entitlement product IDs ── */
+  const COURSE_TO_ENTITLEMENT = {
+    'associate': 'ai-practitioner-associate',
+    'advanced':  'ai-practitioner-advanced',
+    'architect': 'ai-solution-architect',
+  };
+
+  /* ── Parse URL params ── */
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get('c') || params.get('course');
+  const lessonId = params.get('l') || params.get('lesson');
+
+  if (!courseId || !lessonId) {
+    showError('Invalid Lesson URL', 'No course or lesson specified in the URL.');
+    return;
+  }
+
+  /* ── 1. Auth check ── */
+  const session = await supaGetSession();
+  if (!session) {
+    window.location.href = LOGIN_URL;
+    return;
+  }
+
+  /* ── 2. Entitlement check (paid access) ── */
+  const entitlementId = COURSE_TO_ENTITLEMENT[courseId] || courseId;
+  const hasAccess = await supaHasEntitlement(entitlementId);
+  if (!hasAccess) {
+    showError('Premium Content', `This lesson requires a purchase. Visit the <a href="${CERTS_URL}" style="color:#1A3A6B;text-decoration:underline">Certifications page</a> to get access.`);
+    return;
+  }
+
+  // Auto-enroll for progress tracking if not already enrolled
+  const enrollment = await supaIsEnrolled(courseId, 'certification');
+  if (!enrollment) {
+    await supaEnroll(courseId, 'certification');
+  }
+
+  /* ── 3. Fetch lesson from Supabase Storage ── */
+  try {
+    const sb = getSupabase();
+    const filePath = `${courseId}/${lessonId}.html`;
+
+    const { data, error } = await sb.storage
+      .from(STORAGE_BUCKET)
+      .download(filePath);
+
+    if (error) {
+      console.error('Storage download error:', error);
+      showError('Lesson Not Found', `Could not load "${lessonId}" from the ${courseId} course. The lesson may not be available yet.`);
+      return;
+    }
+
+    /* ── 4. Render the lesson ── */
+    const html = await data.text();
+    document.getElementById('lessonLoading').style.display = 'none';
+
+    // Extract and set the title
+    const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+    if (titleMatch) document.title = titleMatch[1];
+
+    // Inject the full lesson HTML into an iframe for proper CSS/JS isolation
+    const iframe = document.createElement('iframe');
+    iframe.id = 'lessonFrame';
+    iframe.style.cssText = 'width:100%;min-height:100vh;border:none;display:block;';
+    document.getElementById('lessonContent').appendChild(iframe);
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+    // Inject <base> with correct href so relative paths (../assets/) resolve properly,
+    // and target="_parent" so sidebar links navigate the parent window
+    const baseHref = window.location.origin + '/courses/' + courseId + '/';
+    let modifiedHtml = html.replace(/<head([^>]*)>/i, '<head$1><base href="' + baseHref + '" target="_parent">');
+
+    // Strip the auth-gate scripts from lesson HTML — learn.html already handles auth/enrollment
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*supabase\.min\.js"><\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*supabase-auth\.js"><\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script>window\.COURSE_GATE_ID\s*=\s*'[^']*';<\/script>\s*/g, '');
+    modifiedHtml = modifiedHtml.replace(/<script src="[^"]*course-gate\.js"><\/script>\s*/g, '');
+
+    iframeDoc.write(modifiedHtml);
+    iframeDoc.close();
+
+    // Auto-resize iframe to content height
+    function resizeIframe() {
+      const h = iframeDoc.documentElement.scrollHeight || iframeDoc.body.scrollHeight;
+      iframe.style.height = h + 'px';
+    }
+    iframe.onload = resizeIframe;
+    setTimeout(resizeIframe, 500);
+    setTimeout(resizeIframe, 1500);
+    // Also resize on window resize
+    window.addEventListener('resize', resizeIframe);
+
+    // Update last_accessed on enrollment
+    if (sb && enrollment.id) {
+      sb.from('enrollments')
+        .update({ last_accessed: new Date().toISOString() })
+        .eq('id', enrollment.id)
+        .then(() => {});
+    }
+
+  } catch (err) {
+    console.error('Lesson load error:', err);
+    showError('Failed to Load', 'An error occurred while loading the lesson. Please try again.');
+  }
+
+  function showError(title, msg) {
+    document.getElementById('lessonLoading').style.display = 'none';
+    document.getElementById('errorTitle').textContent = title;
+    document.getElementById('errorMsg').textContent = msg;
+    document.getElementById('lessonError').style.display = 'flex';
+  }
+})();
+</script>
+
+</body>
+</html>

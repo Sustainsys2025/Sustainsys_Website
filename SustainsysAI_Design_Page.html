@@ -1,0 +1,1061 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SustainsysAI — Learn AI. Get certified. Build what's next.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #0A0E1A;
+    --ink-2: #1A1F2E;
+    --muted: #5B6478;
+    --soft: #8A93A6;
+    --line: #E5E7EE;
+    --line-soft: #F1F3F7;
+    --bg: #FAFAF7;
+    --paper: #FFFFFF;
+    --cream: #FDF8EF;
+    --blue: #1D4ED8;
+    --blue-deep: #0B1C5C;
+    --blue-soft: #DBEAFE;
+    --blue-ghost: #EFF6FF;
+    --orange: #F97316;
+    --orange-deep: #C2410C;
+    --orange-soft: #FFEDD5;
+    --lime: #84CC16;
+    --violet: #8B5CF6;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans); background: var(--bg); color: var(--ink);
+    font-size: 15px; line-height: 1.55;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--orange); display: inline-flex; align-items: center; gap: 8px; }
+  .eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--orange); }
+  .serif { font-family: var(--serif); font-weight: 400; font-style: italic; }
+  .mono { font-family: var(--mono); }
+
+  /* ───────── NAV ───────── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,247,0.82); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.3px; font-size: 16px; }
+  .logo-mark { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--blue), var(--orange)); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 15px; letter-spacing: -0.5px; }
+  .nav-links { display: flex; align-items: center; gap: 30px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta { display: flex; gap: 10px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 16px; border-radius: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; letter-spacing: -0.1px; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; font-family: var(--sans); }
+  .btn-ghost { background: transparent; color: var(--ink); }
+  .btn-ghost:hover { color: var(--orange); }
+  .btn-primary { background: var(--ink); color: #fff; }
+  .btn-primary:hover { background: var(--ink-2); transform: translateY(-1px); }
+  .btn-orange { background: var(--orange); color: #fff; box-shadow: 0 10px 22px -10px rgba(249,115,22,0.7); }
+  .btn-orange:hover { background: var(--orange-deep); transform: translateY(-1px); }
+  .btn-lg { height: 52px; padding: 0 22px; font-size: 15px; border-radius: 12px; }
+  .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn-outline:hover { border-color: var(--ink); }
+
+  /* ───────── HERO ───────── */
+  .hero { padding: 48px 0 72px; position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 60px; align-items: center; }
+  .hero h1 {
+    font-size: 72px; line-height: 0.97; letter-spacing: -2.5px;
+    margin: 18px 0 22px; font-weight: 700;
+  }
+  .hero h1 .acc { font-family: var(--serif); font-style: italic; color: var(--orange); font-weight: 400; letter-spacing: -1px; }
+  .hero h1 .underline { position: relative; display: inline-block; }
+  .hero h1 .underline::after { content: ''; position: absolute; left: 0; right: 0; bottom: 4px; height: 14px; background: var(--orange-soft); z-index: -1; border-radius: 4px; }
+  .hero-sub { font-size: 19px; color: var(--muted); max-width: 520px; line-height: 1.55; }
+  .hero-actions { display: flex; gap: 12px; margin-top: 34px; align-items: center; flex-wrap: wrap; }
+  .hero-proof { margin-top: 28px; display: flex; align-items: center; gap: 14px; }
+  .avatars { display: flex; }
+  .avatar { width: 32px; height: 32px; border-radius: 999px; border: 2px solid var(--bg); margin-left: -8px; font-size: 11px; font-weight: 700; display: grid; place-items: center; color: #fff; }
+  .avatar:first-child { margin-left: 0; }
+  .proof-meta { font-size: 13px; color: var(--muted); }
+  .proof-meta strong { color: var(--ink); font-weight: 700; }
+  .proof-stars { color: var(--orange); letter-spacing: 1px; font-size: 11px; }
+
+  /* hero visual — AI tutor mock */
+  .hero-visual { position: relative; height: 560px; }
+  .tutor-card {
+    position: absolute; inset: 0;
+    background: #0A0E1A; border-radius: 28px; overflow: hidden;
+    box-shadow: 0 40px 80px -20px rgba(10,14,26,0.35), 0 0 0 1px rgba(10,14,26,0.04);
+    padding: 28px;
+    color: #fff;
+    display: flex; flex-direction: column; gap: 18px;
+    transform: rotate(-0.6deg);
+  }
+  .tutor-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 85% 10%, rgba(249,115,22,0.35), transparent 45%),
+                radial-gradient(circle at 10% 95%, rgba(29,78,216,0.45), transparent 45%);
+    pointer-events: none;
+  }
+  .tutor-head { display: flex; align-items: center; gap: 10px; position: relative; }
+  .tutor-badge { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, var(--blue), var(--orange)); display: grid; place-items: center; }
+  .tutor-title { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  .tutor-status { margin-left: auto; font-size: 11px; color: #A7F3D0; display: flex; align-items: center; gap: 6px; }
+  .tutor-status::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: #10B981; box-shadow: 0 0 10px #10B981; }
+  .tutor-chat { display: flex; flex-direction: column; gap: 12px; position: relative; }
+  .msg { padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.55; max-width: 85%; }
+  .msg.u { align-self: flex-end; background: var(--orange); color: #fff; border-top-right-radius: 4px; }
+  .msg.a { align-self: flex-start; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-top-left-radius: 4px; }
+  .msg.viz { padding: 0; overflow: hidden; background: rgba(29,78,216,0.15); border: 1px solid rgba(29,78,216,0.25); max-width: 92%; align-self: flex-start; }
+  .msg.viz .label { padding: 12px 16px 6px; font-size: 13px; color: rgba(255,255,255,0.85); }
+  .msg.viz svg { width: 100%; display: block; }
+  .tutor-input { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; position: relative; }
+  .tutor-input .ph { flex: 1; color: rgba(255,255,255,0.55); font-size: 13px; }
+  .tutor-input .send { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, var(--blue), var(--orange)); display: grid; place-items: center; }
+
+  /* floating mini cards around tutor */
+  .float { position: absolute; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 20px 40px -15px rgba(10,14,26,0.2); padding: 14px; z-index: 2; }
+  .float-1 { top: 40px; left: -60px; width: 210px; transform: rotate(-4deg); }
+  .float-2 { bottom: 30px; right: -50px; width: 230px; transform: rotate(3deg); }
+  .f-header { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .f-header .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--orange); }
+  .f-title { font-weight: 700; font-size: 14px; letter-spacing: -0.2px; }
+  .f-meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .f-progress { margin-top: 10px; height: 4px; border-radius: 999px; background: var(--line-soft); overflow: hidden; }
+  .f-progress > div { height: 100%; background: linear-gradient(90deg, var(--blue), var(--orange)); border-radius: 999px; }
+
+  /* ───────── LOGO STRIP ───────── */
+  .strip {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 26px 0; background: var(--paper);
+  }
+  .strip-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .strip-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; }
+  .strip-logos { display: flex; gap: 44px; align-items: center; flex-wrap: wrap; opacity: 0.65; }
+  .strip-logos span { font-weight: 700; font-size: 17px; letter-spacing: -0.4px; color: var(--muted); font-family: var(--sans); }
+
+  /* ───────── SECTION PADDING ───────── */
+  section { padding: 96px 0; }
+  .sec-head { max-width: 680px; margin-bottom: 52px; }
+  .sec-head h2 { font-size: 52px; line-height: 1.05; letter-spacing: -1.8px; margin: 14px 0 16px; font-weight: 700; }
+  .sec-head h2 .acc { font-family: var(--serif); font-style: italic; color: var(--orange); font-weight: 400; }
+  .sec-head p { font-size: 17px; color: var(--muted); line-height: 1.55; }
+
+  /* ───────── AI TUTOR section ───────── */
+  .tutor-sec { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .tutor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .feature-list { display: flex; flex-direction: column; gap: 18px; margin-top: 32px; }
+  .feature {
+    display: flex; gap: 16px; padding: 18px; border-radius: 14px; border: 1px solid transparent;
+    transition: all .2s ease; cursor: pointer;
+  }
+  .feature.active { background: var(--cream); border-color: var(--orange-soft); }
+  .feature-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--blue-ghost); display: grid; place-items: center; flex-shrink: 0; color: var(--blue); }
+  .feature.active .feature-icon { background: var(--orange-soft); color: var(--orange-deep); }
+  .feature-title { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
+
+  .tutor-demo {
+    background: linear-gradient(165deg, #0A0E1A, #1A1F2E);
+    border-radius: 24px; padding: 32px; color: #fff; position: relative; overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(10,14,26,0.3);
+    min-height: 520px;
+  }
+  .tutor-demo::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 90% 0%, rgba(249,115,22,0.4), transparent 50%);
+  }
+  .demo-tab { display: inline-block; font-size: 11px; color: #A7F3D0; font-weight: 600; padding: 4px 10px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 999px; position: relative; }
+  .demo-q { font-family: var(--serif); font-size: 32px; font-style: italic; line-height: 1.2; margin: 20px 0 24px; position: relative; letter-spacing: -0.5px; }
+  .demo-code { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; position: relative; }
+  .demo-code .k { color: #F472B6; } .demo-code .s { color: #FDBA74; } .demo-code .c { color: #64748B; } .demo-code .fn { color: #60A5FA; } .demo-code .n { color: #86EFAC; }
+  .demo-explain { margin-top: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; font-size: 14px; line-height: 1.55; position: relative; }
+  .demo-explain strong { color: var(--orange); }
+  .demo-actions { margin-top: 16px; display: flex; gap: 8px; position: relative; }
+  .demo-chip { font-size: 12px; padding: 7px 12px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; }
+
+  /* ───────── CERTS section ───────── */
+  .certs-sec { background: var(--ink); color: #fff; border-radius: 36px; margin: 0 32px; position: relative; overflow: hidden; }
+  .certs-sec::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 10% 10%, rgba(29,78,216,0.3), transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(249,115,22,0.25), transparent 50%);
+    pointer-events: none;
+  }
+  .certs-inner { padding: 96px 64px; position: relative; }
+  .certs-sec .eyebrow { color: #FBA774; }
+  .certs-sec .eyebrow::before { background: #FBA774; }
+  .certs-sec .sec-head h2 { color: #fff; }
+  .certs-sec .sec-head p { color: rgba(255,255,255,0.7); }
+  .certs-grid { display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 60px; align-items: center; }
+  .tier-list { display: flex; flex-direction: column; gap: 14px; }
+  .tier {
+    display: flex; gap: 18px; align-items: center;
+    padding: 22px; border-radius: 18px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    transition: all .2s ease;
+  }
+  .tier.featured { background: linear-gradient(135deg, var(--orange), var(--orange-deep)); border: none; box-shadow: 0 20px 40px -15px rgba(249,115,22,0.6); }
+  .tier-num { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.1); display: grid; place-items: center; font-weight: 800; font-size: 15px; letter-spacing: -0.3px; flex-shrink: 0; }
+  .tier.featured .tier-num { background: rgba(255,255,255,0.2); }
+  .tier-body { flex: 1; }
+  .tier-level { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; opacity: 0.7; text-transform: uppercase; }
+  .tier-name { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; margin-top: 3px; }
+  .tier-meta { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+  .tier-arrow { opacity: 0.5; transition: all .2s ease; }
+  .tier:hover .tier-arrow { opacity: 1; transform: translateX(4px); }
+
+  /* certificate preview */
+  .cert-preview { position: relative; padding: 20px; }
+  .cert {
+    background: linear-gradient(135deg, #FFF9F0, #FEF3DB);
+    border-radius: 20px; padding: 6px;
+    box-shadow: 0 40px 80px -20px rgba(249,115,22,0.4);
+    transform: rotate(-2deg);
+    position: relative;
+  }
+  .cert-inner {
+    background: #FFFDF7; border-radius: 16px; padding: 40px; color: var(--ink); position: relative; overflow: hidden; aspect-ratio: 1.4;
+  }
+  .cert-inner::before {
+    content: ''; position: absolute; right: -60px; bottom: -60px; width: 220px; height: 220px; border-radius: 999px; border: 8px solid var(--orange-soft);
+  }
+  .cert-inner::after {
+    content: ''; position: absolute; right: -40px; bottom: -40px; width: 180px; height: 180px; border-radius: 999px; border: 8px solid var(--blue-soft);
+  }
+  .cert-top { display: flex; justify-content: space-between; align-items: center; position: relative; }
+  .cert-brand { font-size: 10px; font-weight: 800; color: var(--orange); letter-spacing: 2px; }
+  .cert-seal { width: 44px; height: 44px; border-radius: 999px; background: linear-gradient(135deg, var(--blue), var(--orange)); color: #fff; display: grid; place-items: center; font-size: 20px; font-weight: 700; }
+  .cert-award { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--muted); margin-top: 32px; position: relative; }
+  .cert-name { font-size: 32px; font-weight: 700; letter-spacing: -0.8px; margin-top: 4px; position: relative; }
+  .cert-for { font-size: 13px; color: var(--muted); margin-top: 18px; font-style: italic; font-family: var(--serif); position: relative; }
+  .cert-title { font-size: 19px; font-weight: 700; color: var(--blue-deep); margin-top: 4px; letter-spacing: -0.3px; position: relative; }
+  .cert-foot { margin-top: 28px; display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); letter-spacing: 1px; font-weight: 600; position: relative; }
+  .cert-sticker { position: absolute; top: -20px; right: -20px; background: var(--orange); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; transform: rotate(8deg); box-shadow: 0 10px 20px -6px rgba(249,115,22,0.6); }
+
+  /* ───────── COURSES ───────── */
+  .courses-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 44px; gap: 20px; flex-wrap: wrap; }
+  .pill-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { padding: 8px 14px; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .pill.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .courses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .course {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+    cursor: pointer;
+  }
+  .course:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px rgba(10,14,26,0.15); }
+  .course-img { aspect-ratio: 4/3; background: var(--blue-ghost); position: relative; overflow: hidden; }
+  .course-img img { width: 100%; height: 100%; object-fit: cover; }
+  .course-tag { position: absolute; top: 12px; left: 12px; background: rgba(10,14,26,0.8); color: #fff; padding: 4px 9px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; backdrop-filter: blur(8px); }
+  .course-body { padding: 18px; }
+  .course-cat { font-size: 10.5px; color: var(--blue); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .course-title { font-weight: 700; font-size: 16px; letter-spacing: -0.3px; margin-top: 6px; }
+  .course-meta { margin-top: 10px; display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); }
+  .course-rating { color: var(--orange); font-weight: 600; }
+  .courses-foot { margin-top: 40px; text-align: center; }
+
+  /* ───────── PROJECTS ───────── */
+  .projects-sec { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .projects-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: repeat(2, 320px); gap: 16px; }
+  .project {
+    border-radius: 22px; overflow: hidden; position: relative;
+    padding: 28px; display: flex; flex-direction: column; justify-content: space-between;
+    cursor: pointer; transition: transform .25s ease;
+  }
+  .project:hover { transform: translateY(-4px); }
+  .project h3 { font-size: 26px; line-height: 1.1; letter-spacing: -0.6px; font-weight: 700; margin: 0; }
+  .project p { font-size: 13.5px; margin: 6px 0 0; line-height: 1.5; }
+  .project .p-tag { font-size: 10.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .project .p-cta { font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+
+  .p-1 { grid-row: span 2; background: linear-gradient(160deg, var(--blue-deep), var(--blue)); color: #fff; }
+  .p-1 h3 { font-size: 42px; letter-spacing: -1.2px; }
+  .p-1 .viz { position: absolute; right: -40px; bottom: -40px; width: 340px; opacity: 0.8; }
+  .p-2 { background: var(--cream); color: var(--ink); }
+  .p-2 .p-tag { color: var(--orange-deep); }
+  .p-3 { background: var(--ink); color: #fff; }
+  .p-3 .p-tag { color: #FBA774; }
+  .p-4 { background: #E6F0FA; color: var(--ink); }
+  .p-4 .p-tag { color: var(--blue); }
+  .p-5 { background: linear-gradient(160deg, var(--orange), var(--orange-deep)); color: #fff; }
+  .p-5 .p-tag { color: rgba(255,255,255,0.85); }
+
+  /* ───────── OUTCOMES / SOCIAL PROOF ───────── */
+  .outcomes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .outcome { padding: 44px 28px; border-right: 1px solid var(--line); text-align: left; }
+  .outcome:last-child { border-right: none; }
+  .outcome-num { font-size: 64px; font-weight: 700; letter-spacing: -2.5px; line-height: 1; font-family: var(--serif); font-style: italic; color: var(--orange); }
+  .outcome-label { font-size: 13.5px; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 56px; }
+  .testimonial {
+    padding: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .testimonial:nth-child(2) { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .testimonial:nth-child(2) .t-meta span { color: rgba(255,255,255,0.55); }
+  .t-quote { font-family: var(--serif); font-style: italic; font-size: 21px; line-height: 1.35; letter-spacing: -0.3px; flex: 1; }
+  .t-foot { display: flex; align-items: center; gap: 12px; }
+  .t-avatar { width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 13px; }
+  .t-meta { display: flex; flex-direction: column; }
+  .t-meta strong { font-size: 13.5px; font-weight: 700; }
+  .t-meta span { font-size: 12px; color: var(--muted); }
+
+  /* ───────── CTA ───────── */
+  .cta-sec { padding: 120px 0; text-align: center; position: relative; }
+  .cta-sec .container { position: relative; }
+  .cta-sec h2 { font-size: 88px; line-height: 0.95; letter-spacing: -3px; font-weight: 700; margin: 0 auto 20px; max-width: 900px; }
+  .cta-sec h2 .acc { font-family: var(--serif); font-style: italic; color: var(--orange); font-weight: 400; }
+  .cta-sec p { font-size: 18px; color: var(--muted); margin-bottom: 36px; }
+  .cta-actions { display: flex; gap: 14px; justify-content: center; }
+  .cta-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 40% 40% at 50% 40%, rgba(249,115,22,0.15), transparent 70%),
+      radial-gradient(ellipse 50% 50% at 50% 80%, rgba(29,78,216,0.08), transparent 70%);
+  }
+
+  /* ───────── FOOTER ───────── */
+  footer { background: var(--ink); color: rgba(255,255,255,0.7); padding: 72px 0 36px; }
+  .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; }
+  .foot-brand { font-family: var(--serif); font-style: italic; font-size: 22px; letter-spacing: -0.4px; color: #fff; margin-top: 18px; max-width: 280px; line-height: 1.3; }
+  .foot-col h4 { font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin: 0 0 18px; font-weight: 600; }
+  .foot-col a { display: block; font-size: 14px; padding: 5px 0; color: rgba(255,255,255,0.75); }
+  .foot-col a:hover { color: var(--orange); }
+  .foot-bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: rgba(255,255,255,0.5); }
+
+  /* ───────── Tweaks panel ───────── */
+  .tweaks { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 240px; box-shadow: 0 20px 40px -15px rgba(10,14,26,0.2); display: none; }
+  .tweaks.open { display: block; }
+  .tweaks h3 { margin: 0 0 12px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .tweaks label { display: block; font-size: 11px; color: var(--muted); margin: 12px 0 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+  .tweaks select, .tweaks input { width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; font-family: inherit; }
+
+  /* ───────── Responsive ───────── */
+  @media (max-width: 960px) {
+    .hero-grid, .tutor-grid, .certs-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero h1 { font-size: 46px; letter-spacing: -1.5px; }
+    .hero-visual { height: 440px; }
+    .float-1, .float-2 { display: none; }
+    .sec-head h2 { font-size: 36px; letter-spacing: -1.2px; }
+    .courses-grid { grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: 1fr; grid-template-rows: repeat(5, 260px); }
+    .p-1 { grid-row: auto; }
+    .outcomes-grid { grid-template-columns: repeat(2, 1fr); }
+    .outcome { border-bottom: 1px solid var(--line); }
+    .outcome:nth-child(2n) { border-right: none; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+    .cta-sec h2 { font-size: 48px; letter-spacing: -1.5px; }
+    .nav-links { display: none; }
+    .certs-sec { margin: 0 16px; border-radius: 28px; }
+    .certs-inner { padding: 64px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">S</div>
+      SustainsysAI
+    </a>
+    <div class="nav-links">
+      <a href="#tutor">AI Tutor</a>
+      <a href="#certs">Certifications</a>
+      <a href="#courses">Courses</a>
+      <a href="#projects">Projects</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="btn btn-ghost">Sign in</a>
+      <a href="#" class="btn btn-primary">Start free →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">Now with GPT-5 tutoring</div>
+      <h1>
+        Learn AI<br/>
+        with a <span class="underline">tutor</span><br/>
+        <span class="acc">that never sleeps.</span>
+      </h1>
+      <p class="hero-sub">
+        Master artificial intelligence through 1-on-1 AI coaching, industry-recognized certifications, and real-world projects. Built for the people who'll build what's next.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-orange btn-lg">
+          Start free — no card
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#" class="btn btn-outline btn-lg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg>
+          Watch demo · 2 min
+        </a>
+      </div>
+      <div class="hero-proof">
+        <div class="avatars">
+          <div class="avatar" style="background:#F97316">PS</div>
+          <div class="avatar" style="background:#1D4ED8">JM</div>
+          <div class="avatar" style="background:#8B5CF6">AK</div>
+          <div class="avatar" style="background:#10B981">RT</div>
+          <div class="avatar" style="background:#0A0E1A">+</div>
+        </div>
+        <div class="proof-meta">
+          <div class="proof-stars">★★★★★ <strong style="color:var(--ink);margin-left:4px;">4.9</strong></div>
+          <div style="margin-top:2px;">Trusted by <strong>24,380+ learners</strong> in 92 countries</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Floating streak card -->
+      <div class="float float-1">
+        <div class="f-header"><span class="dot"></span>12 DAY STREAK</div>
+        <div class="f-title">Gradient descent, mastered.</div>
+        <div class="f-meta">+240 XP today</div>
+        <div class="f-progress"><div style="width:68%"></div></div>
+      </div>
+      <!-- Floating cert card -->
+      <div class="float float-2">
+        <div class="f-header" style="color:var(--orange);"><span class="dot" style="background:var(--blue);"></span>CERT EARNED</div>
+        <div class="f-title">AI Practitioner · Associate</div>
+        <div class="f-meta" style="display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Verified on-chain
+        </div>
+      </div>
+
+      <!-- Tutor mock -->
+      <div class="tutor-card">
+        <div class="tutor-head">
+          <div class="tutor-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v4M12 22a7 7 0 01-7-7 7 7 0 0114 0 7 7 0 01-7 7z"/></svg>
+          </div>
+          <div>
+            <div class="tutor-title">AI Tutor</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-top:2px;">Lesson 14 · Gradient Descent</div>
+          </div>
+          <div class="tutor-status">Thinking</div>
+        </div>
+
+        <div class="tutor-chat">
+          <div class="msg u">Explain backpropagation like I'm 12</div>
+          <div class="msg a">Imagine tossing a basketball. Each miss, you nudge your aim. Backprop nudges the math the same way — by <em>how wrong</em> the answer was.</div>
+          <div class="msg viz">
+            <div class="label">Loss curve over 4 training steps</div>
+            <svg viewBox="0 0 320 120">
+              <defs>
+                <linearGradient id="gBowl" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#60A5FA" stop-opacity="0.35"/>
+                  <stop offset="1" stop-color="#60A5FA" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+              <path d="M10 20 Q 160 155 310 20 L 310 120 L 10 120 Z" fill="url(#gBowl)"/>
+              <path d="M10 20 Q 160 155 310 20" stroke="#60A5FA" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="40" cy="44" r="5" fill="#F97316"/>
+              <circle cx="85" cy="70" r="5" fill="#F97316"/>
+              <circle cx="130" cy="88" r="5" fill="#F97316"/>
+              <circle cx="160" cy="93" r="7" fill="#F97316" stroke="#fff" stroke-width="2"/>
+              <text x="40" y="32" font-size="9" fill="rgba(255,255,255,0.6)" text-anchor="middle">start</text>
+              <text x="160" y="112" font-size="9" fill="#A7F3D0" text-anchor="middle" font-weight="600">min loss ✓</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="tutor-input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <div class="ph">Ask anything about this lesson…</div>
+          <div class="send">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO STRIP -->
+<div class="strip">
+  <div class="container strip-inner">
+    <div class="strip-label">Graduates working at</div>
+    <div class="strip-logos">
+      <span style="font-family:var(--serif);font-size:22px;">OpenAI</span>
+      <span style="font-weight:800;letter-spacing:-0.8px;">Anthropic</span>
+      <span style="font-weight:600;letter-spacing:0.5px;">GOOGLE</span>
+      <span style="font-family:var(--serif);font-style:italic;">Meta AI</span>
+      <span style="font-weight:800;">Hugging Face</span>
+      <span style="font-weight:600;letter-spacing:2px;">NVIDIA</span>
+    </div>
+  </div>
+</div>
+
+<!-- AI TUTOR SECTION -->
+<section class="tutor-sec" id="tutor">
+  <div class="container tutor-grid">
+    <div>
+      <div class="eyebrow">The AI Tutor</div>
+      <div class="sec-head" style="margin-bottom:0;">
+        <h2>A tutor that <span class="acc">actually</span> teaches you.</h2>
+        <p>Not just Q&A. Your AI tutor remembers every lesson, adapts to how you learn, and builds visualizations on the fly. It's like pairing with a patient PhD — 24/7, at your pace.</p>
+      </div>
+      <div class="feature-list">
+        <div class="feature active">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div>
+            <div class="feature-title">Conversational explanations</div>
+            <div class="feature-desc">Ask anything — in any language. It adapts to your level.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          </div>
+          <div>
+            <div class="feature-title">Live code & visualizations</div>
+            <div class="feature-desc">Generates interactive charts and runnable code right in the chat.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 22a7 7 0 01-7-7 7 7 0 0114 0 7 7 0 01-7 7z"/></svg>
+          </div>
+          <div>
+            <div class="feature-title">Adaptive quizzing</div>
+            <div class="feature-desc">Finds your weak spots and drills exactly those — spaced repetition, done right.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tutor-demo">
+      <div class="demo-tab" style="position:relative;">● Live · session 247</div>
+      <div class="demo-q">"Show me in Python how gradient descent finds the minimum."</div>
+      <div class="demo-code">
+<span class="c"># Your tutor generated this — tap to run</span>
+<span class="k">def</span> <span class="fn">gradient_descent</span>(start, lr=<span class="n">0.1</span>, steps=<span class="n">20</span>):
+    x = start
+    <span class="k">for</span> _ <span class="k">in</span> <span class="fn">range</span>(steps):
+        grad = <span class="n">2</span> * x    <span class="c"># d/dx of x²</span>
+        x = x - lr * grad
+    <span class="k">return</span> x
+
+<span class="fn">print</span>(<span class="fn">gradient_descent</span>(<span class="n">8.0</span>))   <span class="c"># ≈ 0.09</span>
+      </div>
+      <div class="demo-explain">
+        Each step, we move <strong>opposite</strong> to the gradient — like rolling downhill. The learning rate <span class="mono" style="font-size:12px;color:#FBA774;">lr</span> controls how big the step is.
+      </div>
+      <div class="demo-actions">
+        <div class="demo-chip">Run it</div>
+        <div class="demo-chip">Simpler</div>
+        <div class="demo-chip">Quiz me →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs" style="padding:96px 0;">
+  <div class="certs-sec">
+    <div class="certs-inner">
+      <div class="sec-head" style="max-width:560px;">
+        <div class="eyebrow">Certifications</div>
+        <h2>Three tiers.<br/><span class="acc">One</span> credential employers trust.</h2>
+        <p>Industry-aligned. Proctored. Verifiable on-chain. From Associate to Expert — the clearest ladder in AI education.</p>
+      </div>
+      <div class="certs-grid">
+        <div class="tier-list">
+          <div class="tier">
+            <div class="tier-num" style="color:var(--blue-soft);">01</div>
+            <div class="tier-body">
+              <div class="tier-level">Associate</div>
+              <div class="tier-name">AI Practitioner</div>
+              <div class="tier-meta">8 courses · 90 hours · 1 capstone</div>
+            </div>
+            <svg class="tier-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="tier featured">
+            <div class="tier-num">02</div>
+            <div class="tier-body">
+              <div class="tier-level">⦿ Most popular · Professional</div>
+              <div class="tier-name">AI Developer</div>
+              <div class="tier-meta">12 courses · 140 hours · 2 capstones</div>
+            </div>
+            <svg class="tier-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="tier">
+            <div class="tier-num" style="color:#C4B5FD;">03</div>
+            <div class="tier-body">
+              <div class="tier-level">Expert</div>
+              <div class="tier-name">AI Architect</div>
+              <div class="tier-meta">16 courses · 200 hours · 3 capstones</div>
+            </div>
+            <svg class="tier-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+
+        <div class="cert-preview">
+          <div class="cert">
+            <div class="cert-sticker">◆ Verified</div>
+            <div class="cert-inner">
+              <div class="cert-top">
+                <div class="cert-brand">◆ SUSTAINSYS AI · CERTIFIED</div>
+                <div class="cert-seal">★</div>
+              </div>
+              <div class="cert-award">This certifies that</div>
+              <div class="cert-name">Priya Sharma</div>
+              <div class="cert-for">has successfully completed</div>
+              <div class="cert-title">AI Developer · Professional</div>
+              <div class="cert-foot">
+                <span>CRED #AID-4820-P</span>
+                <span>ON-CHAIN ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+  <div class="container">
+    <div class="courses-head">
+      <div class="sec-head" style="margin-bottom:0;">
+        <div class="eyebrow">The Curriculum</div>
+        <h2>85 courses.<br/>From <span class="acc">fundamentals</span> to frontier.</h2>
+      </div>
+      <div class="pill-nav">
+        <div class="pill active">All</div>
+        <div class="pill">Foundations</div>
+        <div class="pill">Machine Learning</div>
+        <div class="pill">Deep Learning</div>
+        <div class="pill">GenAI</div>
+        <div class="pill">Agents</div>
+      </div>
+    </div>
+
+    <div class="courses-grid">
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/001-ai-intro.png" alt=""/>
+          <div class="course-tag">BEGINNER</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">Foundations</div>
+          <div class="course-title">Introduction to AI</div>
+          <div class="course-meta">
+            <span>18 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.9</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/002-ml.png" alt=""/>
+          <div class="course-tag">BEGINNER</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">Machine Learning</div>
+          <div class="course-title">ML Fundamentals</div>
+          <div class="course-meta">
+            <span>22 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.8</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/003-dl.png" alt=""/>
+          <div class="course-tag">INTERMEDIATE</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">Deep Learning</div>
+          <div class="course-title">Neural Networks</div>
+          <div class="course-meta">
+            <span>26 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.7</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/013-transformers.png" alt=""/>
+          <div class="course-tag" style="background:var(--orange);">ADVANCED</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">GenAI</div>
+          <div class="course-title">Transformers & LLMs</div>
+          <div class="course-meta">
+            <span>24 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.9</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/004-nlp.png" alt=""/>
+          <div class="course-tag">INTERMEDIATE</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">NLP</div>
+          <div class="course-title">Natural Language Processing</div>
+          <div class="course-meta">
+            <span>24 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.8</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/005-cv.png" alt=""/>
+          <div class="course-tag">INTERMEDIATE</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">Computer Vision</div>
+          <div class="course-title">Vision & CNNs</div>
+          <div class="course-meta">
+            <span>20 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.7</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/006-genai.png" alt=""/>
+          <div class="course-tag" style="background:var(--orange);">ADVANCED</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">GenAI</div>
+          <div class="course-title">Generative AI</div>
+          <div class="course-meta">
+            <span>27 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.9</span>
+          </div>
+        </div>
+      </div>
+      <div class="course">
+        <div class="course-img">
+          <img src="assets/courses/014-agents.png" alt=""/>
+          <div class="course-tag" style="background:var(--orange);">ADVANCED</div>
+        </div>
+        <div class="course-body">
+          <div class="course-cat">Agents</div>
+          <div class="course-title">AI Agents & Tools</div>
+          <div class="course-meta">
+            <span>22 lessons</span>
+            <span>·</span>
+            <span class="course-rating">★ 4.8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="courses-foot">
+      <a href="#" class="btn btn-outline btn-lg">Browse all 85 courses →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-sec" id="projects">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow">Real projects</div>
+      <h2>You don't learn AI<br/>by <span class="acc">watching.</span></h2>
+      <p>Every track ships with real-world projects. Build with real datasets. Deploy to real users. Put them in your portfolio.</p>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project p-1">
+        <div>
+          <div class="p-tag" style="color:#FBA774;">◆ CAPSTONE</div>
+          <h3>Build a RAG-powered customer support bot</h3>
+          <p style="color:rgba(255,255,255,0.8);max-width:360px;">Index your company docs, route tickets, handle 10k real queries. Deploy on your own stack.</p>
+        </div>
+        <svg class="viz" viewBox="0 0 300 200" fill="none">
+          <g opacity="0.9">
+            <circle cx="50" cy="100" r="32" fill="#F97316"/>
+            <circle cx="150" cy="60" r="24" fill="#60A5FA"/>
+            <circle cx="150" cy="140" r="24" fill="#60A5FA"/>
+            <circle cx="250" cy="50" r="18" fill="#A7F3D0"/>
+            <circle cx="250" cy="100" r="18" fill="#A7F3D0"/>
+            <circle cx="250" cy="150" r="18" fill="#A7F3D0"/>
+            <path d="M78 100 L128 62M78 100 L128 140M166 58 L234 50M166 66 L234 98M166 130 L234 100M166 140 L234 150" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          </g>
+        </svg>
+        <div class="p-cta">Start project →</div>
+      </div>
+
+      <div class="project p-2">
+        <div>
+          <div class="p-tag">◆ DATA SCIENCE</div>
+          <h3>Predict churn for a real SaaS</h3>
+          <p style="color:var(--muted);">Real anonymized dataset · XGBoost · dashboard.</p>
+        </div>
+        <div class="p-cta" style="color:var(--orange-deep);">Explore →</div>
+      </div>
+
+      <div class="project p-3">
+        <div>
+          <div class="p-tag">◆ COMPUTER VISION</div>
+          <h3>Medical image classifier</h3>
+          <p style="color:rgba(255,255,255,0.75);">Train CNN on 20k X-rays.</p>
+        </div>
+        <div class="p-cta" style="color:#FBA774;">Explore →</div>
+      </div>
+
+      <div class="project p-4">
+        <div>
+          <div class="p-tag">◆ NLP</div>
+          <h3>Fine-tune a small LLM on your own writing</h3>
+          <p style="color:var(--muted);">LoRA · 4-bit quantization · deploy to Hugging Face.</p>
+        </div>
+        <div class="p-cta" style="color:var(--blue);">Explore →</div>
+      </div>
+
+      <div class="project p-5">
+        <div>
+          <div class="p-tag">◆ AGENTS</div>
+          <h3>Ship an autonomous research agent</h3>
+          <p style="color:rgba(255,255,255,0.85);">Tool use · planning · memory.</p>
+        </div>
+        <div class="p-cta">Explore →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section style="padding-bottom:40px;">
+  <div class="container">
+    <div class="sec-head">
+      <div class="eyebrow">Outcomes</div>
+      <h2>Learners don't just finish.<br/><span class="acc">They ship.</span></h2>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome">
+        <div class="outcome-num">92%</div>
+        <div class="outcome-label">of graduates land an AI role or promotion within 6 months.</div>
+      </div>
+      <div class="outcome">
+        <div class="outcome-num">$34k</div>
+        <div class="outcome-label">average salary increase reported by certified alumni.</div>
+      </div>
+      <div class="outcome">
+        <div class="outcome-num">24k+</div>
+        <div class="outcome-label">learners across 92 countries, from first-timers to senior engineers.</div>
+      </div>
+      <div class="outcome">
+        <div class="outcome-num">4.9/5</div>
+        <div class="outcome-label">average tutor rating over 1.2M sessions. (Yes, really.)</div>
+      </div>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="t-quote">"I tried three other platforms before this. The AI tutor is the first one that felt like it actually understood where I was stuck."</div>
+        <div class="t-foot">
+          <div class="t-avatar" style="background:#1D4ED8;">JM</div>
+          <div class="t-meta">
+            <strong>James Morales</strong>
+            <span>ML Engineer · Stripe</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-quote">"The capstone I shipped got me hired. Literally. My manager showed my project in the final interview as reason #1."</div>
+        <div class="t-foot">
+          <div class="t-avatar" style="background:#F97316;">PS</div>
+          <div class="t-meta">
+            <strong>Priya Sharma</strong>
+            <span>AI Developer · Anthropic</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-quote">"It's the first time I've kept a learning streak past 10 days. The tutor makes you want to come back."</div>
+        <div class="t-foot">
+          <div class="t-avatar" style="background:#8B5CF6;">AK</div>
+          <div class="t-meta">
+            <strong>Ana Kovač</strong>
+            <span>PM · building in AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="pricing">
+  <div class="cta-bg"></div>
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;display:inline-flex;">Start free · No credit card</div>
+    <h2>Build what's<br/><span class="acc">next</span>.</h2>
+    <p>Free forever for fundamentals. $29/mo unlocks AI Tutor + certifications. Cancel anytime.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-orange btn-lg">
+        Start learning — free
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#" class="btn btn-outline btn-lg">See pricing</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="color:#fff;">
+          <div class="logo-mark">S</div>
+          SustainsysAI
+        </div>
+        <div class="foot-brand">Learn AI. Get certified. Build what's next.</div>
+      </div>
+      <div class="foot-col">
+        <h4>Learn</h4>
+        <a href="#">Courses</a>
+        <a href="#">AI Tutor</a>
+        <a href="#">Projects</a>
+        <a href="#">Learning paths</a>
+      </div>
+      <div class="foot-col">
+        <h4>Certifications</h4>
+        <a href="#">Practitioner</a>
+        <a href="#">Developer</a>
+        <a href="#">Architect</a>
+        <a href="#">Verify a credential</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">For teams</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#">Blog</a>
+        <a href="#">AI dictionary</a>
+        <a href="#">Community</a>
+        <a href="#">Changelog</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 SustainsysAI · Made for curious humans.</div>
+      <div style="display:flex;gap:20px;">
+        <a href="#" style="color:inherit;">Privacy</a>
+        <a href="#" style="color:inherit;">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- TWEAKS -->
+<div class="tweaks" id="tweaks">
+  <h3>Tweaks</h3>
+  <label>Accent</label>
+  <select id="tAccent">
+    <option value="#F97316">Orange (default)</option>
+    <option value="#8B5CF6">Violet</option>
+    <option value="#10B981">Emerald</option>
+    <option value="#EC4899">Pink</option>
+  </select>
+  <label>Hero headline</label>
+  <select id="tHeadline">
+    <option value="A">Learn AI with a tutor that never sleeps.</option>
+    <option value="B">Stop watching. Start building AI.</option>
+    <option value="C">The last AI course you'll ever need.</option>
+  </select>
+  <label>Radius</label>
+  <select id="tRadius">
+    <option value="12">Sharp (12px)</option>
+    <option value="18" selected>Soft (18px)</option>
+    <option value="28">Pillow (28px)</option>
+  </select>
+</div>
+
+<script>
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "accent": "#F97316",
+  "headline": "A",
+  "radius": 18
+}/*EDITMODE-END*/;
+
+function apply() {
+  document.documentElement.style.setProperty('--orange', TWEAKS.accent);
+  const h1 = document.querySelector('.hero h1');
+  if (h1) {
+    if (TWEAKS.headline === 'A') h1.innerHTML = 'Learn AI<br/>with a <span class="underline">tutor</span><br/><span class="acc">that never sleeps.</span>';
+    if (TWEAKS.headline === 'B') h1.innerHTML = '<span class="acc">Stop watching.</span><br/>Start <span class="underline">building</span><br/>AI.';
+    if (TWEAKS.headline === 'C') h1.innerHTML = 'The <span class="underline">last</span> AI course<br/><span class="acc">you\'ll ever need.</span>';
+  }
+  document.querySelectorAll('.course, .testimonial, .tier, .feature, .float, .tweaks').forEach(el => {
+    el.style.borderRadius = TWEAKS.radius + 'px';
+  });
+}
+apply();
+
+const tweaksEl = document.getElementById('tweaks');
+document.getElementById('tAccent').value = TWEAKS.accent;
+document.getElementById('tHeadline').value = TWEAKS.headline;
+document.getElementById('tRadius').value = TWEAKS.radius;
+
+function onChange(key) {
+  return (e) => {
+    TWEAKS[key] = key === 'radius' ? parseInt(e.target.value) : e.target.value;
+    apply();
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: TWEAKS[key] } }, '*');
+  };
+}
+document.getElementById('tAccent').onchange = onChange('accent');
+document.getElementById('tHeadline').onchange = onChange('headline');
+document.getElementById('tRadius').onchange = onChange('radius');
+
+window.addEventListener('message', (e) => {
+  const d = e.data;
+  if (!d || !d.type) return;
+  if (d.type === '__activate_edit_mode') tweaksEl.classList.add('open');
+  if (d.type === '__deactivate_edit_mode') tweaksEl.classList.remove('open');
+});
+window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+// Pill nav interaction
+document.querySelectorAll('.pill').forEach(p => {
+  p.onclick = () => { document.querySelectorAll('.pill').forEach(x => x.classList.remove('active')); p.classList.add('active'); };
+});
+// Feature list interaction
+document.querySelectorAll('.feature').forEach(f => {
+  f.onclick = () => { document.querySelectorAll('.feature').forEach(x => x.classList.remove('active')); f.classList.add('active'); };
+});
+</script>
+</body>
+</html>

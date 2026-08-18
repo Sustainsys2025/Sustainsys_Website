@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zero-Shot, Few-Shot, and Chain-of-Thought Prompting — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a>
+    <div class="nav-divider"></div><div class="nav-title">Module 8 — Zero-Shot, Few-Shot, and Chain-of-Thought</div><span class="nav-badge">Associate</span><a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar"><div class="sidebar-course-title">AI Practitioner Associate</div>
+<span class="sidebar-section-label">Module 1: Python Foundations</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li><li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Lists, Tuples, Dicts, Sets</a></li><li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions &amp; Reusability</a></li><li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li><li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li><li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li></ul>
+<span class="sidebar-section-label">Module 2: NumPy</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays &amp; Operations</a></li><li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li><li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing &amp; Slicing</a></li><li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li><li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Random &amp; Statistics</a></li><li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Advanced Linear Algebra</a></li></ul>
+<span class="sidebar-section-label">Module 3: Pandas &amp; Data</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module3-lesson1"><span class="sidebar-num">3.1</span> DataFrames Basics</a></li><li><a href="../learn.html?c=associate&l=module3-lesson2"><span class="sidebar-num">3.2</span> Series &amp; DataFrames</a></li><li><a href="../learn.html?c=associate&l=module3-lesson3"><span class="sidebar-num">3.3</span> Data Loading</a></li><li><a href="../learn.html?c=associate&l=module3-lesson4"><span class="sidebar-num">3.4</span> Data Cleaning</a></li><li><a href="../learn.html?c=associate&l=module3-lesson5"><span class="sidebar-num">3.5</span> Filtering &amp; Sorting</a></li><li><a href="../learn.html?c=associate&l=module3-lesson6"><span class="sidebar-num">3.6</span> GroupBy &amp; Aggregation</a></li><li><a href="../learn.html?c=associate&l=module3-lesson7"><span class="sidebar-num">3.7</span> Merging Datasets</a></li></ul>
+<span class="sidebar-section-label">Module 4: Data Visualization</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module4-lesson1"><span class="sidebar-num">4.1</span> Intro to Matplotlib</a></li><li><a href="../learn.html?c=associate&l=module4-lesson2"><span class="sidebar-num">4.2</span> Matplotlib Fundamentals</a></li><li><a href="../learn.html?c=associate&l=module4-lesson3"><span class="sidebar-num">4.3</span> Seaborn Visualization</a></li><li><a href="../learn.html?c=associate&l=module4-lesson4"><span class="sidebar-num">4.4</span> Plotly Interactive</a></li><li><a href="../learn.html?c=associate&l=module4-lesson5"><span class="sidebar-num">4.5</span> EDA &amp; Storytelling</a></li></ul>
+<span class="sidebar-section-label">Module 5: ML Fundamentals</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module5-lesson1"><span class="sidebar-num">5.1</span> What is ML?</a></li><li><a href="../learn.html?c=associate&l=module5-lesson2"><span class="sidebar-num">5.2</span> Linear Regression</a></li><li><a href="../learn.html?c=associate&l=module5-lesson3"><span class="sidebar-num">5.3</span> Logistic Regression</a></li><li><a href="../learn.html?c=associate&l=module5-lesson4"><span class="sidebar-num">5.4</span> Decision Trees</a></li><li><a href="../learn.html?c=associate&l=module5-lesson5"><span class="sidebar-num">5.5</span> Clustering</a></li></ul>
+<span class="sidebar-section-label">Module 6: Model Training</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module6-lesson1"><span class="sidebar-num">6.1</span> Train/Test Splits</a></li><li><a href="../learn.html?c=associate&l=module6-lesson2"><span class="sidebar-num">6.2</span> Classification Metrics</a></li><li><a href="../learn.html?c=associate&l=module6-lesson3"><span class="sidebar-num">6.3</span> Regression Metrics</a></li><li><a href="../learn.html?c=associate&l=module6-lesson4"><span class="sidebar-num">6.4</span> Hyperparameter Tuning</a></li><li><a href="../learn.html?c=associate&l=module6-lesson5"><span class="sidebar-num">6.5</span> Preventing Overfitting</a></li></ul>
+<span class="sidebar-section-label">Module 7: Deep Learning</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module7-lesson1"><span class="sidebar-num">7.1</span> Neural Networks</a></li><li><a href="../learn.html?c=associate&l=module7-lesson2"><span class="sidebar-num">7.2</span> TensorFlow/Keras</a></li><li><a href="../learn.html?c=associate&l=module7-lesson3"><span class="sidebar-num">7.3</span> CNNs</a></li><li><a href="../learn.html?c=associate&l=module7-lesson4"><span class="sidebar-num">7.4</span> RNNs &amp; LSTMs</a></li><li><a href="../learn.html?c=associate&l=module7-lesson5"><span class="sidebar-num">7.5</span> Transfer Learning</a></li></ul>
+<span class="sidebar-section-label">Module 8: Prompt Engineering</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module8-lesson1"><span class="sidebar-num">8.1</span> Intro to Prompting</a></li><li class="active"><a href="../learn.html?c=associate&l=module8-lesson2"><span class="sidebar-num">8.2</span> Zero/Few-Shot &amp; CoT</a></li><li><a href="../learn.html?c=associate&l=module8-lesson3"><span class="sidebar-num">8.3</span> System Prompts</a></li><li><a href="../learn.html?c=associate&l=module8-lesson4"><span class="sidebar-num">8.4</span> Output Formatting</a></li><li><a href="../learn.html?c=associate&l=module8-lesson5"><span class="sidebar-num">8.5</span> Advanced Patterns</a></li></ul>
+<span class="sidebar-section-label">Module 9: LLM Fundamentals</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module9-lesson1"><span class="sidebar-num">9.1</span> How LLMs Work</a></li><li><a href="../learn.html?c=associate&l=module9-lesson2"><span class="sidebar-num">9.2</span> Major LLM Families</a></li><li><a href="../learn.html?c=associate&l=module9-lesson3"><span class="sidebar-num">9.3</span> Tokens &amp; Context</a></li><li><a href="../learn.html?c=associate&l=module9-lesson4"><span class="sidebar-num">9.4</span> Fine-Tuning vs ICL</a></li><li><a href="../learn.html?c=associate&l=module9-lesson5"><span class="sidebar-num">9.5</span> Safety &amp; Limitations</a></li></ul>
+<span class="sidebar-section-label">Module 10: RAG Pipelines</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module10-lesson1"><span class="sidebar-num">10.1</span> What is RAG?</a></li><li><a href="../learn.html?c=associate&l=module10-lesson2"><span class="sidebar-num">10.2</span> Document Chunking</a></li><li><a href="../learn.html?c=associate&l=module10-lesson3"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li><li><a href="../learn.html?c=associate&l=module10-lesson4"><span class="sidebar-num">10.4</span> Building RAG</a></li><li><a href="../learn.html?c=associate&l=module10-lesson5"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li></ul>
+</aside>
+
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="main">
+  <div class="container">
+
+    <section class="hero">
+      <div class="breadcrumb">
+        <a href="index.html">Associate</a><span class="sep">›</span>
+        <a href="#">Module 8</a><span class="sep">›</span>
+        <span>Zero-Shot, Few-Shot, and Chain-of-Thought</span>
+      </div>
+      <span class="hero-eyebrow">Module 8 · Lesson 2</span>
+      <h1>Zero-Shot, Few-Shot, and <span class="accent">Chain-of-Thought</span> Prompting</h1>
+      <p class="hero-sub">Master three fundamental prompting paradigms that enable LLMs to solve problems without fine-tuning. Learn when and how to use zero-shot prompting for immediate results, few-shot prompting with carefully selected examples, and chain-of-thought techniques that unlock complex reasoning capabilities.</p>
+    </section>
+
+    <div class="objectives">
+      <h4>Learning Objectives</h4>
+      <ul>
+        <li>Understand the conceptual foundations and trade-offs of zero-shot, few-shot, and chain-of-thought prompting</li>
+        <li>Apply zero-shot prompting for rapid task execution without example overhead</li>
+        <li>Design high-quality few-shot prompts with examples that guide model behavior effectively</li>
+        <li>Implement chain-of-thought reasoning to improve accuracy on complex reasoning tasks</li>
+        <li>Combine multiple techniques into hybrid prompting strategies for optimal results</li>
+        <li>Build Python applications using the OpenAI API to execute all three paradigms</li>
+        <li>Evaluate and optimize prompts through systematic experimentation and comparison</li>
+      </ul>
+    </div>
+
+    <section class="section" id="zero-shot-fundamentals">
+      <span class="section-label">Foundations</span>
+      <h2>Understanding Zero-Shot Prompting</h2>
+      <p>Zero-shot prompting is the most fundamental interaction mode with language models. You provide a task description without any examples, relying entirely on the model's pre-trained knowledge to generate an appropriate response. Despite its simplicity, zero-shot prompting is surprisingly effective for a wide range of tasks because modern LLMs have learned extensive patterns across diverse domains during pre-training on billions of text tokens.</p>
+
+      <p>The core strength of zero-shot prompting lies in speed and simplicity. You can immediately test hypotheses without investing time in example curation. This makes it ideal for prototyping, exploratory tasks, and one-off analyses. However, performance may suffer on highly specialized tasks, unusual output formats, or problems that require domain-specific knowledge.</p>
+
+      <h3>When Zero-Shot Works Well</h3>
+      <p>Zero-shot prompting shines for tasks the model encountered frequently during training:</p>
+      <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>General Question Answering:</strong> "What is the capital of France?" Zero-shot excels because the model has seen countless geography questions.</li>
+        <li><strong>Text Summarization:</strong> The patterns for condensing text are well-represented in training data. Simple instruction suffices.</li>
+        <li><strong>Sentiment Analysis:</strong> Models learn sentiment patterns extensively. A single instruction often generates good classifications.</li>
+        <li><strong>Basic Translation:</strong> Language translation patterns are abundant in training data, enabling reasonable zero-shot performance.</li>
+        <li><strong>Creative Writing:</strong> The model can generate stories, poems, and creative content from high-level instructions alone.</li>
+      </ul>
+
+      <h3>Basic Zero-Shot Prompt Structure</h3>
+      <p>A zero-shot prompt typically includes three elements: a clear task description, the input to process, and optionally, guidance on output format.</p>
+
+      <pre><code><span class="st">"Task: Classify the sentiment of customer reviews as positive, negative, or neutral."</span>
+<span class="st">"Review: This restaurant has amazing food and fast service!"</span>
+<span class="st">"Sentiment:"</span></code></pre>
+
+      <p>This structure is intentionally minimal. By keeping instructions concise and direct, you avoid confusion and let the model apply its learned knowledge. Here's another example for a more complex task:</p>
+
+      <pre><code><span class="st">"Extract the main subject and key verbs from this sentence."</span>
+<span class="st">"Sentence: The rapidly growing startup has revolutionized"</span>
+<span class="st">"the technology industry through innovative approaches."</span>
+<span class="st">"Subject: startup, Verbs: growing, revolutionized"</span></code></pre>
+
+      <div class="callout">
+        <strong>Design Principle:</strong> In zero-shot prompting, clarity trumps length. One well-phrased sentence beats three confusing paragraphs. Let the model's pre-training do the heavy lifting.
+      </div>
+
+      <h3>Zero-Shot Limitations</h3>
+      <p>Zero-shot prompting struggles in specific scenarios. If your task is niche, requires unusual output formatting, or involves domain jargon the model hasn't seen extensively, zero-shot may underperform. For example, asking a general LLM to classify specialized medical conditions without examples typically produces mediocre results because medical terminology is less common in general text corpora.</p>
+
+      <p>Additionally, without examples, the model has no reference for the exact output format you want. It might provide a classification followed by explanation when you need just the label. This is where few-shot prompting becomes valuable.</p>
+    </section>
+
+    <section class="section" id="few-shot-learning">
+      <span class="section-label">In-Context Learning</span>
+      <h2>Few-Shot Prompting and Example Design</h2>
+      <p>Few-shot prompting represents a major leap in capability and control. By providing 2-5 carefully crafted examples, you demonstrate the exact pattern you want the model to follow. The model then learns this pattern within the context window itself—this is called in-context learning. No weights are updated; instead, the model uses examples as a template for generating the target response.</p>
+
+      <p>Few-shot prompting enables the model to adapt quickly to specialized domains, unique formats, and specific requirements. It's the practical choice for production systems where consistency and accuracy matter. The trade-off is modest: you invest time curating examples in exchange for significantly improved performance.</p>
+
+      <h3>The Science of Example Selection</h3>
+      <p>Research shows that few-shot example quality matters more than quantity. Five bad examples perform worse than two excellent examples. Here are evidence-based principles for example selection:</p>
+
+      <ul style="margin: 1rem 0 1rem 2rem;">
+        <li><strong>Domain Relevance:</strong> Examples should come from the same domain as your task. If classifying medical documents, use medical examples, not restaurant reviews.</li>
+        <li><strong>Diversity:</strong> Ensure examples cover the full range of task variations. Include edge cases, typical cases, and boundary conditions.</li>
+        <li><strong>Correctness:</strong> Every example must be correct. A single incorrect example can significantly degrade performance by teaching the wrong pattern.</li>
+        <li><strong>Consistent Formatting:</strong> Use identical structure for each example. This makes the pattern obvious and easier for the model to replicate.</li>
+        <li><strong>Balanced Coverage:</strong> If classifying into multiple categories, show examples from each category approximately equally.</li>
+      </ul>
+
+      <h3>Constructing a Few-Shot Prompt</h3>
+      <p>Here's a well-structured few-shot prompt for text classification:</p>
+
+      <pre><code><span class="st">"Classify customer support tickets as bug_report, feature_request,"</span>
+<span class="st">"or documentation_issue."</span>
+
+<span class="st">"Example 1:"</span>
+<span class="st">"Ticket: The login button doesn't work on mobile devices."</span>
+<span class="st">"Category: bug_report"</span>
+
+<span class="st">"Example 2:"</span>
+<span class="st">"Ticket: It would be helpful to export reports as PDF."</span>
+<span class="st">"Category: feature_request"</span>
+
+<span class="st">"Example 3:"</span>
+<span class="st">"Ticket: The API docs don't explain rate limiting clearly."</span>
+<span class="st">"Category: documentation_issue"</span>
+
+<span class="st">"Ticket: The app crashes when uploading large files."</span>
+<span class="st">"Category:"</span></code></pre>
+
+      <p>Notice how this structure clearly delineates examples from the actual task. The consistent formatting (Ticket: [input], Category: [label]) creates an obvious pattern that the model can follow.</p>
+
+      <h3>Few-Shot with OpenAI API</h3>
+      <p>Here's how to implement few-shot prompting with Python:</p>
+
+      <pre><code><span class="kw">from</span> <span class="nm">openai</span> <span class="kw">import</span> <span class="nm">OpenAI</span>
+
+<span class="nm">client</span> <span class="op">=</span> <span class="fn">OpenAI</span><span class="op">(</span><span class="va">api_key</span><span class="op">=</span><span class="st">"sk-your-key-here"</span><span class="op">)</span>
+
+<span class="nm">few_shot_prompt</span> <span class="op">=</span> <span class="st">"""Classify emotional tone of customer feedback.
+
+Example 1:
+Feedback: Your support team is fantastic and responsive!
+Tone: positive
+
+Example 2:
+Feedback: Product never works properly. Waste of money.
+Tone: negative
+
+Example 3:
+Feedback: It works but has some issues.
+Tone: neutral
+
+Feedback: The new feature improved my workflow significantly!
+Tone:"""</span>
+
+<span class="nm">response</span> <span class="op">=</span> <span class="nm">client</span><span class="op">.</span><span class="nm">chat</span><span class="op">.</span><span class="nm">completions</span><span class="op">.</span><span class="fn">create</span><span class="op">(</span>
+    <span class="va">model</span><span class="op">=</span><span class="st">"gpt-4"</span><span class="op">,</span>
+    <span class="va">messages</span><span class="op">=</span><span class="op">[</span>
+        <span class="op">{</span><span class="st">"role"</span><span class="op">:</span> <span class="st">"user"</span><span class="op">,</span> <span class="st">"content"</span><span class="op">:</span> <span class="nm">few_shot_prompt</span><span class="op">}</span>
+    <span class="op">],</span>
+    <span class="va">temperature</span><span class="op">=</span><span class="nm">0.0</span><span class="op">,</span>
+    <span class="va">max_tokens</span><span class="op">=</span><span class="nm">50</span>
+<span class="op">)</span>
+
+<span class="fn">print</span><span class="op">(</span><span class="nm">response</span><span class="op">.</span><span class="nm">choices</span><span class="op">[</span><span class="nm">0</span><span class="op">].</span><span class="nm">message</span><span class="op">.</span><span class="nm">content</span><span class="op">)</span></code></pre>
+
+      <div class="callout">
+        <strong>Practical Tip:</strong> Start with 2-3 examples. If performance is insufficient, add one carefully chosen example that represents a failure case. Rarely do you need more than 5 examples; beyond that, you may hit token limits or confuse the model.
+      </div>
+    </section>
+
+    <section class="section" id="chain-of-thought">
+      <span class="section-label">Reasoning Technique</span>
+      <h2>Chain-of-Thought Prompting for Complex Problems</h2>
+      <p>Chain-of-thought (CoT) prompting is a transformative technique that explicitly asks the model to explain its reasoning process step-by-step before providing the final answer. Instead of generating a direct answer, the model articulates intermediate steps—breaking down complex problems into simpler components. This approach not only produces more accurate results on difficult reasoning tasks but also provides interpretability: you can see exactly how the model arrived at its conclusion.</p>
+
+      <p>The power of chain-of-thought lies in a fundamental insight: by forcing intermediate reasoning, the model avoids taking reasoning shortcuts that lead to errors. When you ask a model to "think step by step," it engages a different cognitive pathway that's more deliberate and thorough than direct answering.</p>
+
+      <h3>Zero-Shot Chain-of-Thought</h3>
+      <p>The simplest CoT approach requires no examples. You simply add a prompt like "Let's think step by step" or "Show your reasoning:" to encourage intermediate steps:</p>
+
+      <pre><code><span class="st">"If a car travels 60 km in 2 hours, how far will it travel"</span>
+<span class="st">"in 5 hours at the same speed? Think step by step."</span></code></pre>
+
+      <p>The model responds with something like:</p>
+
+      <pre><code><span class="st">"Let me work through this:
+- Speed = distance / time = 60 km / 2 hours = 30 km/hour
+- Distance in 5 hours = speed × time = 30 km/hour × 5 hours = 150 km
+- Therefore, the car travels 150 km in 5 hours."</span></code></pre>
+
+      <p>This simple phrase triggers a more thorough reasoning process, significantly improving accuracy on math and logic problems.</p>
+
+      <h3>Few-Shot Chain-of-Thought</h3>
+      <p>Few-shot CoT combines examples with reasoning chains. You demonstrate how to solve similar problems with complete step-by-step explanations:</p>
+
+      <pre><code><span class="st">"Solve word problems by showing detailed reasoning."</span>
+
+<span class="st">"Example 1:"</span>
+<span class="st">"Problem: A store has 3 shelves. Each shelf has 12 books."</span>
+<span class="st">"How many books total?"</span>
+<span class="st">"Solution: 3 shelves × 12 books/shelf = 36 books total."</span>
+
+<span class="st">"Example 2:"</span>
+<span class="st">"Problem: Maria buys 4 apples at $2 each and 2 oranges"</span>
+<span class="st">"at $3 each. How much does she spend?"</span>
+<span class="st">"Solution:"</span>
+<span class="st">"- Apples: 4 × $2 = $8"</span>
+<span class="st">"- Oranges: 2 × $3 = $6"</span>
+<span class="st">"- Total: $8 + $6 = $14"</span>
+
+<span class="st">"Problem: A recipe calls for 2 cups of flour for 12 cookies."</span>
+<span class="st">"If I want to make 36 cookies, how much flour do I need?"</span>
+<span class="st">"Solution:"</span></code></pre>
+
+      <div class="callout">
+        <strong>Research Finding:</strong> Studies show that chain-of-thought prompting improves reasoning accuracy by 30-50% on complex arithmetic and logic tasks. The improvement is even larger for harder problems.
+      </div>
+
+      <h3>Chain-of-Thought Implementation</h3>
+      <p>Here's a complete implementation combining few-shot CoT with the OpenAI API:</p>
+
+      <pre><code><span class="kw">from</span> <span class="nm">openai</span> <span class="kw">import</span> <span class="nm">OpenAI</span>
+
+<span class="nm">client</span> <span class="op">=</span> <span class="fn">OpenAI</span><span class="op">(</span><span class="va">api_key</span><span class="op">=</span><span class="st">"sk-your-key-here"</span><span class="op">)</span>
+
+<span class="nm">cot_prompt</span> <span class="op">=</span> <span class="st">"""Solve reasoning problems step by step.
+
+Example 1:
+Problem: If x = 3 and y = 2, what is 2x + y?
+Step 1: Substitute values: 2(3) + 2
+Step 2: Calculate: 6 + 2 = 8
+Answer: 8
+
+Example 2:
+Problem: A bag contains 5 red and 3 blue marbles.
+If you draw 2 marbles without replacement, what's the
+probability both are red?
+Step 1: Total marbles = 8
+Step 2: Ways to pick 2 red = (5/8) × (4/7)
+Step 3: Calculate: 20/56 = 5/14
+Answer: 5/14
+
+Problem: A company has 120 employees. 40% work in sales.
+Of those in sales, 25% are managers. How many sales
+managers does the company have?
+Step 1:"""</span>
+
+<span class="nm">response</span> <span class="op">=</span> <span class="nm">client</span><span class="op">.</span><span class="nm">chat</span><span class="op">.</span><span class="nm">completions</span><span class="op">.</span><span class="fn">create</span><span class="op">(</span>
+    <span class="va">model</span><span class="op">=</span><span class="st">"gpt-4"</span><span class="op">,</span>
+    <span class="va">messages</span><span class="op">=</span><span class="op">[</span>
+        <span class="op">{</span><span class="st">"role"</span><span class="op">:</span> <span class="st">"user"</span><span class="op">,</span> <span class="st">"content"</span><span class="op">:</span> <span class="nm">cot_prompt</span><span class="op">}</span>
+    <span class="op">],</span>
+    <span class="va">temperature</span><span class="op">=</span><span class="nm">0.0</span><span class="op">,</span>
+    <span class="va">max_tokens</span><span class="op">=</span><span class="nm">300</span>
+<span class="op">)</span>
+
+<span class="fn">print</span><span class="op">(</span><span class="nm">response</span><span class="op">.</span><span class="nm">choices</span><span class="op">[</span><span class="nm">0</span><span class="op">].</span><span class="nm">message</span><span class="op">.</span><span class="nm">content</span><span class="op">)</span></code></pre>
+    </section>
+
+    <section class="section" id="comparative-analysis">
+      <span class="section-label">Strategy</span>
+      <h2>Comparing and Combining Techniques</h2>
+      <p>Each prompting paradigm excels in different scenarios. The art of prompt engineering is knowing which to deploy based on your task requirements, resource constraints, and performance targets.</p>
+
+      <h3>Zero-Shot: When to Use</h3>
+      <p>Zero-shot is ideal for initial prototyping, exploratory analysis, and tasks aligned with model training data. Use it when you need quick results with minimal setup. It's your first attempt; if performance is insufficient, then invest in few-shot or CoT.</p>
+
+      <h3>Few-Shot: When to Use</h3>
+      <p>Few-shot becomes essential for specialized domains, non-standard output formats, or production systems requiring consistency. If your task has unique characteristics or strict requirements, curating a few high-quality examples is well worth the effort. Few-shot typically provides 2-4x performance improvement over zero-shot on specialized tasks.</p>
+
+      <h3>Chain-of-Thought: When to Use</h3>
+      <p>CoT excels on reasoning-heavy tasks: math problems, logic puzzles, decision-making, multi-step analysis. If correctness and explanation are critical, CoT is your tool. It adds latency (more tokens generated) but dramatically improves accuracy on complex reasoning.</p>
+
+      <h3>Hybrid Strategies</h3>
+      <p>The most powerful prompts combine multiple techniques. For example, a few-shot chain-of-thought prompt combines guidance through examples with step-by-step reasoning:</p>
+
+      <pre><code><span class="st">"You are a medical diagnostician. Analyze symptoms"</span>
+<span class="st">"and suggest possible conditions. Show reasoning."</span>
+
+<span class="st">"Example 1:"</span>
+<span class="st">"Symptoms: High fever, cough, sore throat"</span>
+<span class="st">"Reasoning: Classic respiratory symptoms, fever suggests"</span>
+<span class="st">"infection. Duration?"</span>
+<span class="st">"Likely conditions: Common cold, flu, strep throat"</span>
+
+<span class="st">"Example 2:"</span>
+<span class="st">"Symptoms: Chest pain, shortness of breath, dizziness"</span>
+<span class="st">"Reasoning: Cardiac symptoms. Urgent evaluation needed."</span>
+<span class="st">"Likely conditions: Angina, myocardial infarction, PE"</span>
+
+<span class="st">"Symptoms: Joint pain, swelling, stiffness"</span>
+<span class="st">"Reasoning:"</span></code></pre>
+
+      <p>This hybrid approach leverages examples for domain guidance and chain-of-thought for thorough reasoning.</p>
+    </section>
+
+    <section class="section" id="practical-system">
+      <span class="section-label">Implementation</span>
+      <h2>Building a Complete Prompting System</h2>
+      <p>Here's a production-ready Python class that implements all three prompting strategies with the OpenAI API:</p>
+
+      <pre><code><span class="kw">from</span> <span class="nm">openai</span> <span class="kw">import</span> <span class="nm">OpenAI</span>
+<span class="kw">from</span> <span class="nm">enum</span> <span class="kw">import</span> <span class="nm">Enum</span>
+
+<span class="kw">class</span> <span class="nm">PromptingStrategy</span><span class="op">(</span><span class="nm">Enum</span><span class="op">):</span>
+    <span class="nm">ZERO_SHOT</span> <span class="op">=</span> <span class="st">"zero_shot"</span>
+    <span class="nm">FEW_SHOT</span> <span class="op">=</span> <span class="st">"few_shot"</span>
+    <span class="nm">CHAIN_OF_THOUGHT</span> <span class="op">=</span> <span class="st">"chain_of_thought"</span>
+    <span class="nm">HYBRID</span> <span class="op">=</span> <span class="st">"hybrid"</span>
+
+<span class="kw">class</span> <span class="nm">TextClassifier</span><span class="op">:</span>
+    <span class="kw">def</span> <span class="fn">__init__</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">api_key</span><span class="op">):</span>
+        <span class="va">self</span><span class="op">.</span><span class="nm">client</span> <span class="op">=</span> <span class="fn">OpenAI</span><span class="op">(</span><span class="va">api_key</span><span class="op">=</span><span class="va">api_key</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">classify</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">text</span><span class="op">,</span>
+                  <span class="va">strategy</span><span class="op">=</span><span class="nm">PromptingStrategy</span><span class="op">.</span><span class="nm">ZERO_SHOT</span><span class="op">):</span>
+        <span class="kw">if</span> <span class="va">strategy</span> <span class="op">==</span> <span class="nm">PromptingStrategy</span><span class="op">.</span><span class="nm">ZERO_SHOT</span><span class="op">:</span>
+            <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_zero_shot</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
+        <span class="kw">elif</span> <span class="va">strategy</span> <span class="op">==</span> <span class="nm">PromptingStrategy</span><span class="op">.</span><span class="nm">FEW_SHOT</span><span class="op">:</span>
+            <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_few_shot</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
+        <span class="kw">elif</span> <span class="va">strategy</span> <span class="op">==</span> <span class="nm">PromptingStrategy</span><span class="op">.</span><span class="nm">CHAIN_OF_THOUGHT</span><span class="op">:</span>
+            <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_cot</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
+        <span class="kw">else</span><span class="op">:</span>
+            <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_hybrid</span><span class="op">(</span><span class="va">text</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">_zero_shot</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">text</span><span class="op">):</span>
+        <span class="nm">prompt</span> <span class="op">=</span> <span class="fn">f</span><span class="st">"""Classify sentiment as positive, negative, or neutral.
+Text: {text}
+Sentiment:"""</span>
+        <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_call_api</span><span class="op">(</span><span class="nm">prompt</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">_few_shot</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">text</span><span class="op">):</span>
+        <span class="nm">prompt</span> <span class="op">=</span> <span class="st">"""Classify sentiment.
+Ex1: Great product! → positive
+Ex2: Terrible experience. → negative
+Ex3: It works okay. → neutral
+Text: """</span> <span class="op">+</span> <span class="nm">text</span> <span class="op">+</span> <span class="st">"""
+Sentiment:"""</span>
+        <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_call_api</span><span class="op">(</span><span class="nm">prompt</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">_cot</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">text</span><span class="op">):</span>
+        <span class="nm">prompt</span> <span class="op">=</span> <span class="fn">f</span><span class="st">"""Analyze sentiment carefully. Show your reasoning.
+Text: {text}
+Analysis: Let me examine the emotional language..."""</span>
+        <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_call_api</span><span class="op">(</span><span class="nm">prompt</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">_hybrid</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">text</span><span class="op">):</span>
+        <span class="nm">prompt</span> <span class="op">=</span> <span class="st">"""Classify sentiment. Show reasoning.
+Ex1: Great service! → positive (positive language)
+Ex2: Terrible! → negative (strong negative words)
+Text: """</span> <span class="op">+</span> <span class="nm">text</span> <span class="op">+</span> <span class="st">"""
+Reasoning:"""</span>
+        <span class="kw">return</span> <span class="va">self</span><span class="op">.</span><span class="fn">_call_api</span><span class="op">(</span><span class="nm">prompt</span><span class="op">)</span>
+
+    <span class="kw">def</span> <span class="fn">_call_api</span><span class="op">(</span><span class="va">self</span><span class="op">,</span> <span class="va">prompt</span><span class="op">):</span>
+        <span class="nm">response</span> <span class="op">=</span> <span class="va">self</span><span class="op">.</span><span class="nm">client</span><span class="op">.</span><span class="nm">chat</span><span class="op">.</span><span class="nm">completions</span><span class="op">.</span><span class="fn">create</span><span class="op">(</span>
+            <span class="va">model</span><span class="op">=</span><span class="st">"gpt-4"</span><span class="op">,</span>
+            <span class="va">messages</span><span class="op">=</span><span class="op">[{</span><span class="st">"role"</span><span class="op">:</span> <span class="st">"user"</span><span class="op">,</span>
+                         <span class="st">"content"</span><span class="op">:</span> <span class="nm">prompt</span><span class="op">}],</span>
+            <span class="va">temperature</span><span class="op">=</span><span class="nm">0.0</span><span class="op">,</span>
+            <span class="va">max_tokens</span><span class="op">=</span><span class="nm">200</span>
+        <span class="op">)</span>
+        <span class="kw">return</span> <span class="nm">response</span><span class="op">.</span><span class="nm">choices</span><span class="op">[</span><span class="nm">0</span><span class="op">].</span><span class="nm">message</span><span class="op">.</span><span class="nm">content</span></code></pre>
+    </section>
+
+    <section class="section" id="optimization">
+      <span class="section-label">Best Practices</span>
+      <h2>Optimizing and Evaluating Prompts</h2>
+      <p>Effective prompt engineering requires systematic evaluation. Don't just assume a prompt works—measure its performance and iterate based on results.</p>
+
+      <h3>Performance Metrics</h3>
+      <p>Define how you'll measure success. For classification, use accuracy, precision, and recall. For generation tasks, use human evaluation or task-specific metrics. Document baseline performance from your zero-shot prompt, then measure improvements as you add examples or reasoning.</p>
+
+      <h3>Iteration Process</h3>
+      <p>Follow this workflow: (1) Start with a simple zero-shot prompt. (2) Measure performance. (3) If unsatisfactory, analyze failures to understand what's missing. (4) Add 2-3 strategically chosen examples targeting failure modes. (5) Re-measure and compare. (6) Continue refining based on results.</p>
+
+      <h3>Example Curation</h3>
+      <p>Don't randomly pick examples. Analyze model failures and select examples that address specific weaknesses. If the model struggles with edge cases, prioritize edge case examples. If output format is wrong, show format examples explicitly.</p>
+
+      <div class="callout">
+        <strong>Professional Practice:</strong> Maintain a prompt versioning system. Document each prompt variant, its performance metrics, and the rationale for changes. This creates institutional knowledge and prevents regression.
+      </div>
+    </section>
+
+    <section class="section" id="exercises">
+      <span class="section-label">Practice</span>
+      <h2>Hands-On Exercises</h2>
+
+      <div class="exercise">
+        <h4>Exercise 1: Zero-Shot Sentiment Analysis</h4>
+        <p>Write a zero-shot prompt for sentiment classification. Test it on 10 diverse text samples (from very positive to very negative). Document accuracy and identify any failure cases. Why did those fail?</p>
+      </div>
+
+      <div class="exercise">
+        <h4>Exercise 2: Few-Shot Example Design</h4>
+        <p>Create a few-shot prompt with 3-4 examples for a task of your choice (entity extraction, intent classification, or content categorization). Carefully curate examples for diversity and quality. Compare performance against your zero-shot baseline.</p>
+      </div>
+
+      <div class="exercise">
+        <h4>Exercise 3: Chain-of-Thought on Math</h4>
+        <p>Build a CoT prompt with 2 example problems and step-by-step solutions for math word problems. Test on 5 new problems. Measure accuracy compared to direct answering. Did reasoning steps improve performance?</p>
+      </div>
+
+      <div class="exercise">
+        <h4>Exercise 4: Comparative Experiment</h4>
+        <p>Implement all three strategies on the same task. Compare on accuracy, token count, and latency. Create a simple summary table showing which approach is best for your task and why.</p>
+      </div>
+
+      <div class="exercise">
+        <h4>Exercise 5: Hybrid Prompt Design</h4>
+        <p>Build a hybrid prompt combining few-shot examples with chain-of-thought reasoning for a complex task. Document how each component contributes to performance improvement.</p>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <h2 class="key-concept-header">Key Takeaways</h2>
+      <div class="key-concept">
+        <h4>Prompting Paradigms</h4>
+        <p>Zero-shot is fast but limited. Few-shot adds precision through examples. Chain-of-thought improves reasoning. Choose based on task requirements.</p>
+      </div>
+      <div class="key-concept">
+        <h4>In-Context Learning</h4>
+        <p>Modern LLMs learn from examples in the context window itself, enabling rapid adaptation without training. This is a fundamental capability enabling few-shot and CoT prompting.</p>
+      </div>
+      <div class="key-concept">
+        <h4>Example Quality Over Quantity</h4>
+        <p>Two excellent examples outperform five mediocre ones. Focus on relevance, diversity, and correctness when curating few-shot examples.</p>
+      </div>
+      <div class="key-concept">
+        <h4>Hybrid Approaches</h4>
+        <p>Combining techniques creates powerful prompts. Few-shot chain-of-thought combines guidance through examples with step-by-step reasoning for maximum effectiveness.</p>
+      </div>
+      <div class="key-concept">
+        <h4>Systematic Evaluation</h4>
+        <p>Measure performance, iterate based on failures, and document improvements. Prompt engineering is experimental work; treat it as such.</p>
+      </div>
+    </section>
+
+    <nav class="lesson-nav">
+      <a href="../learn.html?c=associate&l=module8-lesson1" class="btn-prev">← Previous Lesson</a>
+      <a href="../learn.html?c=associate&l=module8-lesson3" class="btn-next">Next Lesson →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>© 2026 SustainSys.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+
+</body>
+</html>

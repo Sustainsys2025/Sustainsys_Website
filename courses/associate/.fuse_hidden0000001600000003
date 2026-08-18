@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convolutional Neural Networks (CNNs) — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 7 — Convolutional Neural Networks (CNNs)</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Lists, Tuples, Dicts, Sets</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions &amp; Reusability</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy &amp; Scientific Computing</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays &amp; Operations</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing &amp; Slicing</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Random &amp; Statistics</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Advanced Linear Algebra</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3: Pandas &amp; Data</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module3-lesson1"><span class="sidebar-num">3.1</span> DataFrames Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson2"><span class="sidebar-num">3.2</span> Series &amp; DataFrames</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson3"><span class="sidebar-num">3.3</span> Data Loading</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson4"><span class="sidebar-num">3.4</span> Data Cleaning</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson5"><span class="sidebar-num">3.5</span> Filtering &amp; Sorting</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson6"><span class="sidebar-num">3.6</span> GroupBy &amp; Aggregation</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson7"><span class="sidebar-num">3.7</span> Merging Datasets</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 4: Data Visualization</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module4-lesson1"><span class="sidebar-num">4.1</span> Intro to Matplotlib</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson2"><span class="sidebar-num">4.2</span> Matplotlib Fundamentals</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson3"><span class="sidebar-num">4.3</span> Seaborn Visualization</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson4"><span class="sidebar-num">4.4</span> Plotly Interactive</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson5"><span class="sidebar-num">4.5</span> EDA &amp; Storytelling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 5: ML Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module5-lesson1"><span class="sidebar-num">5.1</span> What is ML?</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson2"><span class="sidebar-num">5.2</span> Linear Regression</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson3"><span class="sidebar-num">5.3</span> Logistic Regression</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson4"><span class="sidebar-num">5.4</span> Decision Trees</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson5"><span class="sidebar-num">5.5</span> Clustering</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 6: Model Training</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module6-lesson1"><span class="sidebar-num">6.1</span> Train/Test Splits</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson2"><span class="sidebar-num">6.2</span> Classification Metrics</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson3"><span class="sidebar-num">6.3</span> Regression Metrics</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson4"><span class="sidebar-num">6.4</span> Hyperparameter Tuning</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson5"><span class="sidebar-num">6.5</span> Preventing Overfitting</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 7: Deep Learning</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module7-lesson1"><span class="sidebar-num">7.1</span> Neural Networks</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson2"><span class="sidebar-num">7.2</span> TensorFlow/Keras</a></li>
+    <li class="active"><a href="../learn.html?c=associate&l=module7-lesson3"><span class="sidebar-num">7.3</span> CNNs</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson4"><span class="sidebar-num">7.4</span> RNNs &amp; LSTMs</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson5"><span class="sidebar-num">7.5</span> Transfer Learning</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 8: Prompt Engineering</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module8-lesson1"><span class="sidebar-num">8.1</span> Intro to Prompting</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson2"><span class="sidebar-num">8.2</span> Zero/Few-Shot &amp; CoT</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson3"><span class="sidebar-num">8.3</span> System Prompts</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson4"><span class="sidebar-num">8.4</span> Output Formatting</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson5"><span class="sidebar-num">8.5</span> Advanced Patterns</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 9: LLM Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module9-lesson1"><span class="sidebar-num">9.1</span> How LLMs Work</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson2"><span class="sidebar-num">9.2</span> Major LLM Families</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson3"><span class="sidebar-num">9.3</span> Tokens &amp; Context</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson4"><span class="sidebar-num">9.4</span> Fine-Tuning vs ICL</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson5"><span class="sidebar-num">9.5</span> Safety &amp; Limitations</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 10: RAG Pipelines</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module10-lesson1"><span class="sidebar-num">10.1</span> What is RAG?</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson2"><span class="sidebar-num">10.2</span> Document Chunking</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson3"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson4"><span class="sidebar-num">10.4</span> Building RAG</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson5"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="main">
+  <div class="container">
+
+    <section class="hero">
+      <div class="breadcrumb">
+        <a href="index.html">Associate</a><span class="sep">›</span>
+        <a href="#">Module 7</a><span class="sep">›</span>
+        <span>Convolutional Neural Networks (CNNs)</span>
+      </div>
+      <span class="hero-eyebrow">Module 7 · Lesson 3</span>
+      <h1>Convolutional Neural <span class="accent">Networks (CNNs)</span></h1>
+      <p class="hero-sub">Master the architecture that revolutionized computer vision. Learn convolution operations, pooling, feature extraction, and how to build and train CNNs for image classification, object detection, and other visual tasks.</p>
+    </section>
+
+    <div class="objectives">
+      <h4>Learning Objectives</h4>
+      <ul>
+        <li>Understand how convolution operations extract spatial features</li>
+        <li>Build CNN architectures with Conv2D, MaxPooling, and dense layers</li>
+        <li>Implement classic CNN architectures like LeNet and VGG</li>
+        <li>Apply data augmentation to improve model generalization</li>
+        <li>Use pretrained models and transfer learning with CNNs</li>
+        <li>Visualize learned filters and feature maps</li>
+        <li>Optimize CNNs for speed and accuracy trade-offs</li>
+      </ul>
+    </div>
+
+    <section class="section" id="convolution-fundamentals">
+      <span class="section-label">Fundamentals</span>
+      <h2>Convolution Operations and Spatial Features</h2>
+      <p>Convolution is the core operation of CNNs. A filter (kernel) slides across an image, computing element-wise multiplications with local regions, then summing the results. This extracts spatial features like edges, textures, and shapes. Stacking multiple convolutional layers enables learning increasingly complex features: early layers detect edges, later layers detect objects.</p>
+
+      <p>CNNs exploit three key properties of images: local connectivity (pixels near each other are related), weight sharing (the same filter applies everywhere), and spatial hierarchy (features combine to form larger patterns). These properties reduce parameters compared to fully-connected networks, enabling training on large images with reasonable memory and compute.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong> Convolution performs feature extraction automatically during training. Filters learn to detect patterns that minimize loss. This is far more powerful than hand-crafted features and is why deep learning revolutionized computer vision.
+      </div>
+
+      <h3>Conv2D Layer and Kernel Operations</h3>
+      <p>A Conv2D layer applies multiple filters to input images. Each filter learns to detect different features. Padding adds zeros around image edges to control output dimensions. Stride determines filter step size: stride=1 moves pixel by pixel, stride=2 moves every other pixel.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">import</span> <span class="va">tensorflow</span> <span class="kw">as</span> <span class="va">tf</span>
+<span class="kw">from</span> <span class="va">tensorflow.keras</span> <span class="kw">import</span> <span class="va">layers</span>
+
+<span class="cm"># Basic Conv2D layer</span>
+<span class="va">conv_layer</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(
+    <span class="va">filters</span><span class="op">=</span><span class="nm">32</span>,          <span class="cm"># number of filters</span>
+    <span class="va">kernel_size</span><span class="op">=</span><span class="nm">3</span>,      <span class="cm"># 3x3 filter</span>
+    <span class="va">strides</span><span class="op">=</span><span class="nm">1</span>,          <span class="cm"># stride of 1</span>
+    <span class="va">padding</span><span class="op">=</span><span class="st">'same'</span>,     <span class="cm"># preserve spatial dimensions</span>
+    <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>
+)
+
+<span class="cm"># Conv2D with larger stride</span>
+<span class="va">conv_stride2</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(
+    <span class="va">filters</span><span class="op">=</span><span class="nm">64</span>,
+    <span class="va">kernel_size</span><span class="op">=</span><span class="nm">3</span>,
+    <span class="va">strides</span><span class="op">=</span><span class="nm">2</span>,          <span class="cm"># downsamples by 2x</span>
+    <span class="va">padding</span><span class="op">=</span><span class="st">'valid'</span>    <span class="cm"># no padding</span>
+)</span></code></pre>
+
+      <h3>Pooling and Feature Map Reduction</h3>
+      <p>Pooling layers downsample feature maps, reducing spatial dimensions and computation. Max pooling takes the maximum value in a window (aggressive, preserves sharp features). Average pooling takes the mean (smoother). Pooling also provides translation invariance: small image shifts don't significantly affect the output.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="cm"># Max pooling</span>
+<span class="va">maxpool</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">MaxPooling2D</span>(
+    <span class="va">pool_size</span><span class="op">=</span><span class="nm">2</span>,     <span class="cm"># 2x2 window</span>
+    <span class="va">strides</span><span class="op">=</span><span class="nm">2</span>          <span class="cm"># stride of 2</span>
+)
+
+<span class="cm"># Average pooling</span>
+<span class="va">avgpool</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">AveragePooling2D</span>(<span class="va">pool_size</span><span class="op">=</span><span class="nm">2</span>)
+
+<span class="cm"># Global average pooling (reduces to 1x1)</span>
+<span class="va">global_avgpool</span> <span class="op">=</span> <span class="va">layers</span><span class="op">.</span><span class="fn">GlobalAveragePooling2D</span>()</span></code></pre>
+    </section>
+
+    <section class="section" id="cnn-architectures">
+      <span class="section-label">Architecture Design</span>
+      <h2>Building CNN Models</h2>
+      <p>CNN architectures follow a consistent pattern: alternating convolution and pooling layers progressively extract and downsample features, then dense layers make final predictions. Early layers capture low-level features (edges), middle layers capture textures, and deeper layers capture semantic patterns (objects).</p>
+
+      <h3>Classic CNN Architecture</h3>
+      <p>A typical CNN stacks convolutional blocks, each consisting of Conv2D, activation, pooling, and optional batch normalization. The number of filters typically increases with depth to compensate for smaller spatial dimensions. After feature extraction, global pooling or flattening converts to a vector for classification.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="cm"># Simple CNN for image classification</span>
+<span class="va">model</span> <span class="op">=</span> <span class="va">tf.keras.Sequential</span>([
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(<span class="nm">32</span>, <span class="nm">3</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>, <span class="va">input_shape</span><span class="op">=</span>(<span class="nm">224</span>, <span class="nm">224</span>, <span class="nm">3</span>)),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">MaxPooling2D</span>(<span class="nm">2</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(<span class="nm">64</span>, <span class="nm">3</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">MaxPooling2D</span>(<span class="nm">2</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(<span class="nm">128</span>, <span class="nm">3</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">GlobalAveragePooling2D</span>(),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Dense</span>(<span class="nm">256</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Dropout</span>(<span class="nm">0.5</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Dense</span>(<span class="nm">10</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'softmax'</span>)
+])
+
+<span class="va">model</span><span class="op">.</span><span class="fn">compile</span>(<span class="va">optimizer</span><span class="op">=</span><span class="st">'adam'</span>, <span class="va">loss</span><span class="op">=</span><span class="st">'categorical_crossentropy'</span>, <span class="va">metrics</span><span class="op">=</span>[<span class="st">'accuracy'</span>])</span></code></pre>
+
+      <h3>Data Augmentation for Robustness</h3>
+      <p>Data augmentation creates variations of training images through rotations, flips, zooms, and shifts. This increases dataset diversity, improving generalization. CNNs are translation-invariant by design but not rotation or scale invariant; augmentation helps address these limitations.</p>
+
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="cm"># Data augmentation</span>
+<span class="va">augmentation</span> <span class="op">=</span> <span class="va">tf.keras.Sequential</span>([
+    <span class="va">layers</span><span class="op">.</span><span class="fn">RandomFlip</span>(<span class="st">"horizontal"</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">RandomRotation</span>(<span class="nm">0.2</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">RandomZoom</span>(<span class="nm">0.2</span>),
+])
+
+<span class="cm"># Apply to dataset</span>
+<span class="va">train_data</span> <span class="op">=</span> <span class="va">train_images</span><span class="op">.</span><span class="fn">map</span>(<span class="kw">lambda</span> <span class="va">x</span>: (<span class="va">augmentation</span>(<span class="va">x</span>), <span class="va">x</span>))
+
+<span class="cm"># Alternative: Augmentation in training pipeline</span>
+<span class="va">model</span> <span class="op">=</span> <span class="va">tf.keras.Sequential</span>([
+    <span class="va">layers</span><span class="op">.</span><span class="fn">RandomFlip</span>(<span class="st">"horizontal"</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">RandomRotation</span>(<span class="nm">0.2</span>),
+    <span class="va">layers</span><span class="op">.</span><span class="fn">Conv2D</span>(<span class="nm">32</span>, <span class="nm">3</span>, <span class="va">activation</span><span class="op">=</span><span class="st">'relu'</span>),
+    <span class="cm"># ... rest of model</span>
+])</span></code></pre>
+    </section>
+
+    <section class="section" id="exercises">
+      <span class="section-label">Practice</span>
+      <h2>Exercises and Challenges</h2>
+
+      <h3>Exercise 1: CIFAR-10 Classification</h3>
+      <p>Build a CNN from scratch to classify CIFAR-10 images (10 classes, 32x32 pixels). Implement data augmentation and achieve at least 80% accuracy. Visualize learned filters in early layers.</p>
+
+      <h3>Exercise 2: Visualize Feature Maps</h3>
+      <p>Train a CNN on MNIST. Then, extract and visualize feature maps from different layers. Compare early layer filters (simple patterns) to later layer filters (complex patterns).</p>
+
+      <h3>Exercise 3: Transfer Learning Comparison</h3>
+      <p>Train a CNN from scratch and compare with a pretrained VGG16 model on the same dataset. Measure accuracy and training time for both approaches.</p>
+    </section>
+
+    <section class="section" id="key-takeaways">
+      <span class="section-label">Summary</span>
+      <h2>Key Takeaways</h2>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-card">
+          <h4>Convolution Operation</h4>
+          <p>Filters slide across images extracting spatial features. Weight sharing reduces parameters. Multiple filters in each layer extract different feature types.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Pooling Layers</h4>
+          <p>Max pooling preserves sharp features and provides translation invariance. Average pooling is smoother. Global pooling reduces to single values per channel.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>CNN Architecture</h4>
+          <p>Stack convolutional blocks with increasing filter counts. Use pooling to downsample. Follow with dense layers for classification. Add batch norm and dropout for regularization.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Data Augmentation</h4>
+          <p>Artificially expand training data through rotations, flips, and zooms. Essential for improving generalization with limited data.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Feature Hierarchy</h4>
+          <p>Early layers detect simple features (edges). Middle layers detect textures. Deep layers detect semantic patterns. This hierarchy emerges automatically.</p>
+        </div>
+        <div class="takeaway-card">
+          <h4>Transfer Learning</h4>
+          <p>Pretrained CNNs on ImageNet transfer well to new tasks. Freeze early layers (generic features) and fine-tune later layers (task-specific) for best results.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="lesson-nav">
+    <a href="../learn.html?c=associate&l=module7-lesson2" class="nav-prev">← Previous: TensorFlow/Keras</a>
+    <a href="index.html" class="nav-home">Course Home</a>
+    <a href="../learn.html?c=associate&l=module7-lesson4" class="nav-next">Next: RNNs & LSTMs →</a>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+
+</body>
+</html>

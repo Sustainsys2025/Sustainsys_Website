@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentors — SustainSys AI Academy</title>
+<meta name="description" content="Book 1:1 sessions with senior AI practitioners from DeepMind, Anthropic, Stripe, OpenAI and more.">
+<link rel="icon" type="image/svg+xml" href="./assets/sustainsys-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/css/nav.css">
+<link rel="stylesheet" href="assets/css/journey.css">
+<style>
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+  .filter-chip {
+    padding: 6px 14px;
+    background: #fff;
+    border: 1px solid var(--j-line);
+    border-radius: 999px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--j-text);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-chip:hover { border-color: var(--j-blue); color: var(--j-blue); }
+  .filter-chip.active {
+    background: var(--j-blue);
+    color: #fff;
+    border-color: var(--j-blue);
+  }
+  .mentor-card {
+    background: #fff;
+    border: 1px solid var(--j-line);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.25s var(--j-ease);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .mentor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -10px rgba(26, 58, 107, 0.15);
+    border-color: rgba(26, 58, 107, 0.2);
+  }
+  .mentor-banner {
+    height: 70px;
+    background: linear-gradient(135deg, #1A3A6B, #A4421F);
+    position: relative;
+  }
+  .mentor-card.b1 .mentor-banner { background: linear-gradient(135deg, #1A3A6B, #2F548A); }
+  .mentor-card.b2 .mentor-banner { background: linear-gradient(135deg, #A4421F, #C0522F); }
+  .mentor-card.b3 .mentor-banner { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+  .mentor-card.b4 .mentor-banner { background: linear-gradient(135deg, #16a34a, #4ade80); }
+  .mentor-card.b5 .mentor-banner { background: linear-gradient(135deg, #0f172a, #475569); }
+  .mentor-banner .availability {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.96);
+    color: var(--j-green);
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .mentor-banner .availability::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--j-green);
+    border-radius: 50%;
+  }
+  .mentor-banner .availability.next { color: var(--j-orange); }
+  .mentor-banner .availability.next::before { background: var(--j-orange); }
+  .mentor-avatar-lg {
+    position: absolute;
+    bottom: -28px;
+    left: 18px;
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    border: 3px solid #fff;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #1A3A6B, #A4421F);
+  }
+  .mentor-body {
+    padding: 2rem 1.2rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .mentor-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--j-ink);
+    margin: 0;
+  }
+  .mentor-role {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: var(--j-muted);
+    margin: 2px 0 0.7rem;
+  }
+  .mentor-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.9rem;
+  }
+  .mentor-tag {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--j-blue-50);
+    color: var(--j-blue);
+    border: 1px solid var(--j-blue-100);
+  }
+  .mentor-tag.orange { background: var(--j-orange-50); color: var(--j-orange); border-color: var(--j-orange-100); }
+  .mentor-tag.green  { background: var(--j-green-50);  color: var(--j-green);  border-color: var(--j-green-200); }
+  .mentor-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 0.9rem;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.76rem;
+    color: var(--j-text);
+  }
+  .mentor-rating .stars { color: #f59e0b; letter-spacing: 1px; }
+  .mentor-meta-row {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--j-line-soft);
+    margin-top: auto;
+  }
+  .mentor-meta-row .item {
+    text-align: center;
+    flex: 1;
+  }
+  .mentor-meta-row .v {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--j-ink);
+  }
+  .mentor-meta-row .l {
+    font-size: 0.66rem;
+    color: var(--j-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .mentor-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 0.9rem;
+  }
+  .mentor-actions .j-btn { flex: 1; justify-content: center; }
+  /* Booking drawer calendar */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-day-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--j-muted);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px 0;
+  }
+  .cal-day {
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid var(--j-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--j-ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+  .cal-day:hover:not(.disabled) {
+    border-color: var(--j-blue);
+    color: var(--j-blue);
+  }
+  .cal-day.has-slots::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px; height: 4px;
+    background: var(--j-orange);
+    border-radius: 50%;
+  }
+  .cal-day.selected {
+    background: var(--j-blue);
+    color: #fff;
+    border-color: var(--j-blue);
+  }
+  .cal-day.selected::after { background: #fff; }
+  .cal-day.disabled {
+    color: #cbd5e1;
+    cursor: not-allowed;
+  }
+  .cal-day.today {
+    border-color: var(--j-orange);
+    font-weight: 700;
+  }
+  .timeslot {
+    padding: 8px 10px;
+    background: #fff;
+    border: 1px solid var(--j-line);
+    border-radius: 8px;
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--j-ink);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .timeslot:hover { border-color: var(--j-blue); color: var(--j-blue); }
+  .timeslot.selected {
+    background: var(--j-blue-50);
+    border-color: var(--j-blue);
+    color: var(--j-blue);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-container">
+    <a class="logo" href="index.html" aria-label="SustainSys Home">
+      <video id="logoVideo" autoplay loop muted playsinline preload="auto" width="280" height="72" disablePictureInPicture>
+        <source src="Sustainsys_Logo.mp4" type="video/mp4">
+      </video>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="projects.html" class="projects-highlight">Projects<span class="nav-star" style="color:#A4421F;">&#9733;</span></a></li>
+      <li><a href="ai-compliance-governance.html" class="compliance-highlight">AI Compliance</a></li>
+      <li><a href="job-openings.html">Careers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="ai-learn.html" class="ai-academy active">AI Academy<span class="academy-badge">Learn</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="journey-topbar">
+  <div class="journey-topbar-inner">
+    <div class="journey-topbar-nav">
+      <a href="journey.html" class="journey-topbar-link">Journey</a>
+      <a href="journey-roadmap.html" class="journey-topbar-link">Roadmap</a>
+      <a href="journey-skill-gap.html" class="journey-topbar-link">Skill Gap</a>
+      <a href="journey-curriculum.html" class="journey-topbar-link">Curriculum</a>
+      <a href="journey-mentors.html" class="journey-topbar-link active"><span class="dot"></span> Mentors</a>
+      <a href="journey-messages.html" class="journey-topbar-link">Messages</a>
+      <a href="journey-interview-prep.html" class="journey-topbar-link">Interview Prep</a>
+    </div>
+    <div class="journey-topbar-right">
+      <a href="ai-learn.html" class="journey-topbar-help">AI Academy</a>
+      <div class="journey-topbar-avatar" id="journeyAvatar" title="Your account">S</div>
+    </div>
+  </div>
+</div>
+
+<header class="journey-hero">
+  <div class="journey-hero-inner">
+    <div>
+      <span class="j-eyebrow">Mentors</span>
+      <h1>14 senior practitioners. <span class="accent">Hand-picked for your role.</span></h1>
+      <p>From DeepMind, Stripe, OpenAI, Anthropic and JP Morgan. Free intro session · 30 min · then choose your cadence.</p>
+    </div>
+    <div class="j-search" style="min-width: 320px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="j-input" placeholder="Search by name, company, expertise…">
+    </div>
+  </div>
+</header>
+
+<main class="journey-page">
+  <div class="journey-container">
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <span class="filter-chip active">All</span>
+      <span class="filter-chip">Top match for me</span>
+      <span class="filter-chip">Available this week</span>
+      <span class="filter-chip">GenAI</span>
+      <span class="filter-chip">MLOps</span>
+      <span class="filter-chip">System design</span>
+      <span class="filter-chip">Interview prep</span>
+      <span class="filter-chip">Career &amp; counselling</span>
+      <span class="j-spacer"></span>
+      <select class="j-select" style="width:auto; max-width:200px;">
+        <option>Sort by · Best match</option>
+        <option>Earliest availability</option>
+        <option>Highest rated</option>
+        <option>Most sessions</option>
+      </select>
+    </div>
+
+    <!-- Mentor grid -->
+    <div class="journey-grid cols-3">
+
+      <!-- Priya -->
+      <div class="mentor-card b1">
+        <div class="mentor-banner">
+          <span class="availability">Avail today</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#1A3A6B,#2F548A);">PR</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Priya Raman</h3>
+          <div class="mentor-role">Principal AI Architect · DeepMind</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">AI Architecture</span>
+            <span class="mentor-tag orange">RAG</span>
+            <span class="mentor-tag">System design</span>
+            <span class="mentor-tag green">93% match</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">4.9</strong>
+            <span class="j-muted">· 142 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£120</div><div class="l">/ 30 min</div></div>
+            <div class="item"><div class="v">14</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jordan -->
+      <div class="mentor-card b2">
+        <div class="mentor-banner">
+          <span class="availability next">Next: Tue</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#A4421F,#C0522F);">JK</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Jordan Kim</h3>
+          <div class="mentor-role">Staff GenAI Engineer · Stripe</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag orange">GenAI</span>
+            <span class="mentor-tag">Agents</span>
+            <span class="mentor-tag">Mock interviews</span>
+            <span class="mentor-tag green">88% match</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">4.9</strong>
+            <span class="j-muted">· 89 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£95</div><div class="l">/ 30 min</div></div>
+            <div class="item"><div class="v">9</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amelia -->
+      <div class="mentor-card b3">
+        <div class="mentor-banner">
+          <span class="availability">Avail today</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">AS</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Amelia Soares</h3>
+          <div class="mentor-role">Senior MLOps Engineer · Anthropic</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">MLOps</span>
+            <span class="mentor-tag">CI/CD</span>
+            <span class="mentor-tag orange">Production AI</span>
+            <span class="mentor-tag green">85% match</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">4.8</strong>
+            <span class="j-muted">· 67 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£110</div><div class="l">/ 30 min</div></div>
+            <div class="item"><div class="v">7</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marcus -->
+      <div class="mentor-card b4">
+        <div class="mentor-banner">
+          <span class="availability">Avail today</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#16a34a,#4ade80);">MT</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Marcus Tan</h3>
+          <div class="mentor-role">ML Engineering Lead · OpenAI</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">ML Eng</span>
+            <span class="mentor-tag">Distributed</span>
+            <span class="mentor-tag orange">Eval</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">5.0</strong>
+            <span class="j-muted">· 53 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£140</div><div class="l">/ 30 min</div></div>
+            <div class="item"><div class="v">5</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emma -->
+      <div class="mentor-card b5">
+        <div class="mentor-banner">
+          <span class="availability next">Next: Mon</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#0f172a,#475569);">EC</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Emma Chen</h3>
+          <div class="mentor-role">Head of AI Careers · SustainSys (counsellor)</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">Counselling</span>
+            <span class="mentor-tag orange">Career strategy</span>
+            <span class="mentor-tag green">Free</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">4.9</strong>
+            <span class="j-muted">· 312 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£0</div><div class="l">/ session</div></div>
+            <div class="item"><div class="v">24</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raj -->
+      <div class="mentor-card b1">
+        <div class="mentor-banner">
+          <span class="availability next">Next: Thu</span>
+          <div class="mentor-avatar-lg" style="background:linear-gradient(135deg,#1A3A6B,#7c3aed);">RP</div>
+        </div>
+        <div class="mentor-body">
+          <h3 class="mentor-name">Raj Patel</h3>
+          <div class="mentor-role">AI Solutions Architect · JP Morgan</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">System design</span>
+            <span class="mentor-tag">FinTech AI</span>
+            <span class="mentor-tag orange">Compliance</span>
+          </div>
+          <div class="mentor-rating">
+            <span class="stars">★★★★★</span>
+            <strong style="color:var(--j-ink);">4.7</strong>
+            <span class="j-muted">· 41 sessions</span>
+          </div>
+          <div class="mentor-meta-row">
+            <div class="item"><div class="v">£0</div><div class="l">Intro</div></div>
+            <div class="item"><div class="v">£100</div><div class="l">/ 30 min</div></div>
+            <div class="item"><div class="v">6</div><div class="l">Mentees</div></div>
+          </div>
+          <div class="mentor-actions">
+            <button class="j-btn j-btn-soft j-btn-sm" data-drawer-open="bookDrawer">Profile</button>
+            <button class="j-btn j-btn-primary j-btn-sm" data-drawer-open="bookDrawer">Book →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Past sessions -->
+    <div class="j-card" style="margin-top:1.5rem;">
+      <div class="j-card-head">
+        <div>
+          <h3 class="j-card-title">Your past sessions</h3>
+          <p class="j-card-subtitle">3 sessions · 95 min mentoring this month</p>
+        </div>
+        <a href="#" class="j-btn j-btn-soft j-btn-sm">Export →</a>
+      </div>
+      <div class="j-stack" style="gap:0.6rem;">
+        <div class="j-flex" style="padding: 0.55rem; border-radius: 10px; background: var(--j-surface-soft);">
+          <div class="j-avatar blue">PR</div>
+          <div style="flex:1;">
+            <div class="j-row" style="margin-bottom: 2px;">
+              <strong style="font-family:'DM Sans',sans-serif; font-size:0.86rem; color:var(--j-ink);">Priya Raman</strong>
+              <span class="j-muted">12 May · 4:00 PM</span>
+            </div>
+            <div class="j-muted">Skill-gap intro · 30 min · with mentor notes</div>
+          </div>
+          <a href="#" class="j-btn j-btn-ghost j-btn-sm">Notes</a>
+        </div>
+        <div class="j-flex" style="padding: 0.55rem; border-radius: 10px; background: var(--j-surface-soft);">
+          <div class="j-avatar orange">JK</div>
+          <div style="flex:1;">
+            <div class="j-row" style="margin-bottom: 2px;">
+              <strong style="font-family:'DM Sans',sans-serif; font-size:0.86rem; color:var(--j-ink);">Jordan Kim</strong>
+              <span class="j-muted">5 May · 6:00 PM</span>
+            </div>
+            <div class="j-muted">GenAI architecture review · 45 min</div>
+          </div>
+          <a href="#" class="j-btn j-btn-ghost j-btn-sm">Notes</a>
+        </div>
+        <div class="j-flex" style="padding: 0.55rem; border-radius: 10px; background: var(--j-surface-soft);">
+          <div class="j-avatar" style="background: linear-gradient(135deg, #0f172a, #475569);">EC</div>
+          <div style="flex:1;">
+            <div class="j-row" style="margin-bottom: 2px;">
+              <strong style="font-family:'DM Sans',sans-serif; font-size:0.86rem; color:var(--j-ink);">Emma Chen · Counsellor</strong>
+              <span class="j-muted">28 Apr · 11:00 AM</span>
+            </div>
+            <div class="j-muted">Career strategy · 30 min</div>
+          </div>
+          <a href="#" class="j-btn j-btn-ghost j-btn-sm">Notes</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Booking drawer -->
+<div class="j-drawer-backdrop"></div>
+<aside class="j-drawer" id="bookDrawer">
+  <div class="j-drawer-head">
+    <div class="j-flex">
+      <div class="j-avatar blue lg">PR</div>
+      <div>
+        <h3 style="font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--j-ink); margin:0;">Priya Raman</h3>
+        <div class="j-muted j-text-sm">Principal AI Architect · DeepMind</div>
+      </div>
+    </div>
+    <button class="j-drawer-close" data-drawer-close="bookDrawer" aria-label="Close">✕</button>
+  </div>
+  <div class="j-drawer-body">
+
+    <p style="font-size:0.86rem; color:var(--j-text); line-height:1.6;">
+      Priya leads architecture reviews for production AI systems at DeepMind. She specialises in helping engineers transition into architect roles — particularly the system-design interview rounds at large labs and FinTech.
+    </p>
+
+    <div style="display:flex; gap:14px; padding: 0.9rem; background: var(--j-surface-soft); border-radius: 12px; margin: 1rem 0;">
+      <div style="flex:1; text-align:center;">
+        <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.1rem; color:var(--j-ink);">142</div>
+        <div class="j-muted" style="font-size:0.7rem;">Sessions</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.1rem; color:var(--j-ink);">4.9 ★</div>
+        <div class="j-muted" style="font-size:0.7rem;">Rating</div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.1rem; color:var(--j-ink);">93%</div>
+        <div class="j-muted" style="font-size:0.7rem;">Match to you</div>
+      </div>
+    </div>
+
+    <!-- Session type -->
+    <div style="margin-bottom: 1rem;">
+      <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.85rem; color:var(--j-ink); margin-bottom: 0.5rem;">Choose session</div>
+      <div class="j-stack" style="gap:0.4rem;">
+        <label style="display:flex; align-items:center; gap:10px; padding:0.7rem; border:1.5px solid var(--j-blue); background: var(--j-blue-50); border-radius:10px; cursor:pointer;">
+          <input type="radio" name="sessionType" checked>
+          <div style="flex:1;">
+            <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.86rem; color:var(--j-ink);">Free 30-min intro</div>
+            <div class="j-muted j-text-sm">Get to know each other · figure out fit</div>
+          </div>
+          <strong style="color:var(--j-blue);">£0</strong>
+        </label>
+        <label style="display:flex; align-items:center; gap:10px; padding:0.7rem; border:1px solid var(--j-line); border-radius:10px; cursor:pointer;">
+          <input type="radio" name="sessionType">
+          <div style="flex:1;">
+            <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.86rem; color:var(--j-ink);">Skill-gap deep dive · 30 min</div>
+            <div class="j-muted j-text-sm">Review your audit · plan the 90 days</div>
+          </div>
+          <strong style="color:var(--j-ink);">£120</strong>
+        </label>
+        <label style="display:flex; align-items:center; gap:10px; padding:0.7rem; border:1px solid var(--j-line); border-radius:10px; cursor:pointer;">
+          <input type="radio" name="sessionType">
+          <div style="flex:1;">
+            <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.86rem; color:var(--j-ink);">Architect mock interview · 60 min</div>
+            <div class="j-muted j-text-sm">Full system design rehearsal · written feedback</div>
+          </div>
+          <strong style="color:var(--j-ink);">£220</strong>
+        </label>
+      </div>
+    </div>
+
+    <!-- Calendar -->
+    <div style="margin-bottom: 1rem;">
+      <div class="j-row" style="margin-bottom: 0.5rem;">
+        <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.85rem; color:var(--j-ink);">May 2026</div>
+        <div style="display:flex; gap:4px;">
+          <button class="j-btn j-btn-soft j-btn-sm j-btn-icon">‹</button>
+          <button class="j-btn j-btn-soft j-btn-sm j-btn-icon">›</button>
+        </div>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-day-label">Mon</div>
+        <div class="cal-day-label">Tue</div>
+        <div class="cal-day-label">Wed</div>
+        <div class="cal-day-label">Thu</div>
+        <div class="cal-day-label">Fri</div>
+        <div class="cal-day-label">Sat</div>
+        <div class="cal-day-label">Sun</div>
+
+        <div class="cal-day disabled">11</div>
+        <div class="cal-day disabled">12</div>
+        <div class="cal-day disabled">13</div>
+        <div class="cal-day disabled">14</div>
+        <div class="cal-day disabled">15</div>
+        <div class="cal-day disabled">16</div>
+        <div class="cal-day disabled">17</div>
+
+        <div class="cal-day disabled">18</div>
+        <div class="cal-day disabled">19</div>
+        <div class="cal-day today">20</div>
+        <div class="cal-day has-slots selected">21</div>
+        <div class="cal-day has-slots">22</div>
+        <div class="cal-day">23</div>
+        <div class="cal-day">24</div>
+
+        <div class="cal-day has-slots">25</div>
+        <div class="cal-day has-slots">26</div>
+        <div class="cal-day has-slots">27</div>
+        <div class="cal-day has-slots">28</div>
+        <div class="cal-day has-slots">29</div>
+        <div class="cal-day">30</div>
+        <div class="cal-day">31</div>
+      </div>
+    </div>
+
+    <!-- Time slots -->
+    <div style="margin-bottom: 1rem;">
+      <div style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.85rem; color:var(--j-ink); margin-bottom: 0.5rem;">Available on <span style="color:var(--j-blue);">Thursday 21 May</span> · London time</div>
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+        <div class="timeslot">09:30</div>
+        <div class="timeslot">11:00</div>
+        <div class="timeslot">13:30</div>
+        <div class="timeslot selected">16:00</div>
+        <div class="timeslot">17:30</div>
+        <div class="timeslot">19:00</div>
+      </div>
+    </div>
+
+    <!-- Agenda -->
+    <div style="margin-bottom: 1rem;">
+      <label style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.85rem; color:var(--j-ink); display:block; margin-bottom: 0.4rem;">What would you like to focus on?</label>
+      <textarea class="j-textarea" rows="3" placeholder="I want to focus on closing my MLOps gap — particularly CI/CD for models. I'd also like to walk through my RAG project architecture if there's time."></textarea>
+    </div>
+
+    <!-- Summary -->
+    <div class="j-card" style="background: var(--j-surface-soft); padding: 0.85rem 1rem; margin-bottom: 1rem;">
+      <div class="j-row" style="margin-bottom: 4px;"><span class="j-muted">Session</span><strong style="font-size:0.82rem; color:var(--j-ink);">Free 30-min intro</strong></div>
+      <div class="j-row" style="margin-bottom: 4px;"><span class="j-muted">When</span><strong style="font-size:0.82rem; color:var(--j-ink);">Thu 21 May · 4:00 PM BST</strong></div>
+      <div class="j-row" style="margin-bottom: 4px;"><span class="j-muted">Where</span><strong style="font-size:0.82rem; color:var(--j-ink);">Google Meet · link emailed</strong></div>
+      <hr class="j-divider" style="margin:0.6rem 0;">
+      <div class="j-row"><span class="j-muted">Total</span><strong style="font-size:1.1rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">£0.00</strong></div>
+    </div>
+
+    <button class="j-btn j-btn-primary j-btn-lg" style="width:100%; justify-content:center;" onclick="journeyToast('Booked! Confirmation emailed.', { kind: 'success' }); JourneyDrawer.close('bookDrawer');">Confirm booking →</button>
+    <p class="j-muted" style="text-align:center; margin-top:0.6rem; font-size:0.72rem;">Free cancellation up to 24 hr before your session.</p>
+
+  </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="courses/assets/supabase-auth.js"></script>
+<script src="assets/js/journey.js"></script>
+<script>
+  // Calendar day select
+  document.querySelectorAll('.cal-day:not(.disabled)').forEach(d => {
+    d.addEventListener('click', () => {
+      document.querySelectorAll('.cal-day.selected').forEach(s => s.classList.remove('selected'));
+      d.classList.add('selected');
+    });
+  });
+  // Time slot select
+  document.querySelectorAll('.timeslot').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.timeslot.selected').forEach(s => s.classList.remove('selected'));
+      t.classList.add('selected');
+    });
+  });
+  // Filter chips
+  document.querySelectorAll('.filter-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9.1 How Large Language Models Work — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head><body>
+<div class="progress-circle-wrap" title="Page progress"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div>
+<nav class="topnav"><div class="topnav-inner">
+<a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a>
+<div class="nav-divider"></div><div class="nav-title">Module 9 — How Large Language Models Work</div><span class="nav-badge">Associate</span><a href="index.html" class="nav-home-link">← Course Home</a>
+</div></nav>
+<aside class="sidebar"><div class="sidebar-course-title">AI Practitioner Associate</div>
+<span class="sidebar-section-label">Module 1: Python Foundations</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li><li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Lists, Tuples, Dicts, Sets</a></li><li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions &amp; Reusability</a></li><li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li><li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li><li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li></ul>
+<span class="sidebar-section-label">Module 8: Prompt Engineering</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module8-lesson1"><span class="sidebar-num">8.1</span> Intro to Prompting</a></li><li><a href="../learn.html?c=associate&l=module8-lesson2"><span class="sidebar-num">8.2</span> Zero/Few-Shot &amp; CoT</a></li><li><a href="../learn.html?c=associate&l=module8-lesson3"><span class="sidebar-num">8.3</span> System Prompts</a></li><li><a href="../learn.html?c=associate&l=module8-lesson4"><span class="sidebar-num">8.4</span> Output Formatting</a></li><li><a href="../learn.html?c=associate&l=module8-lesson5"><span class="sidebar-num">8.5</span> Advanced Patterns</a></li></ul>
+<span class="sidebar-section-label">Module 9: LLM Fundamentals</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module9-lesson1" class="active"><span class="sidebar-num">9.1</span> How LLMs Work</a></li><li><a href="../learn.html?c=associate&l=module9-lesson2"><span class="sidebar-num">9.2</span> Major LLM Families</a></li><li><a href="../learn.html?c=associate&l=module9-lesson3"><span class="sidebar-num">9.3</span> Tokens &amp; Context</a></li><li><a href="../learn.html?c=associate&l=module9-lesson4"><span class="sidebar-num">9.4</span> Fine-Tuning vs ICL</a></li><li><a href="../learn.html?c=associate&l=module9-lesson5"><span class="sidebar-num">9.5</span> Safety &amp; Limitations</a></li></ul>
+<span class="sidebar-section-label">Module 10: RAG Pipelines</span><ul class="sidebar-nav"><li><a href="../learn.html?c=associate&l=module10-lesson1"><span class="sidebar-num">10.1</span> What is RAG?</a></li><li><a href="../learn.html?c=associate&l=module10-lesson2"><span class="sidebar-num">10.2</span> Document Chunking</a></li><li><a href="../learn.html?c=associate&l=module10-lesson3"><span class="sidebar-num">10.3</span> Embeddings &amp; Vectors</a></li><li><a href="../learn.html?c=associate&l=module10-lesson4"><span class="sidebar-num">10.4</span> Building RAG</a></li><li><a href="../learn.html?c=associate&l=module10-lesson5"><span class="sidebar-num">10.5</span> RAG Evaluation</a></li></ul>
+</aside>
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+<main class="main"><div class="container">
+<section class="hero"><div class="breadcrumb"><a href="index.html">Associate</a><span class="sep">›</span><a href="#">Module 9</a><span class="sep">›</span><span>How LLMs Work</span></div><span class="hero-eyebrow">Module 9 · Lesson 1</span><h1>How Large Language Models Work</h1><p class="hero-sub">Understand the fundamental architecture and mechanics of Large Language Models. Learn how neural networks, transformers, and attention mechanisms work together to predict text tokens. Build intuition about what happens inside the black box from input to output generation.</p></section>
+
+<div class="objectives"><h4>Learning Objectives</h4><ul><li>Understand the transformer architecture and why it revolutionized NLP</li><li>Explain how attention mechanisms allow models to focus on relevant information</li><li>Understand tokenization and how text is converted to numerical representations</li><li>Learn the training process: next-token prediction and backpropagation</li><li>Understand decoding strategies and how models generate text sequentially</li><li>Develop intuition about model scaling and emergent capabilities</li></ul></div>
+
+<section class="section" id="transformer-arch"><span class="section-label">Architecture</span><h2>The Transformer Architecture</h2><p>LLMs are built on the transformer architecture, introduced in 2017 in the paper "Attention is All You Need". Unlike previous approaches (RNNs, LSTMs), transformers process entire sequences in parallel, making them efficient and scalable. A transformer takes text as input, processes it through multiple layers of neural networks, and outputs probabilities for the next token.</p>
+
+<svg viewBox="0 0 800 500" style="width:100%; max-width:700px; margin:20px auto; display:block;">
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#333"/></marker></defs>
+  <rect x="20" y="20" width="120" height="80" fill="#e8f4f8" stroke="#333" stroke-width="2" rx="4"/>
+  <text x="80" y="65" text-anchor="middle" font-weight="bold" font-size="14">Input Text</text>
+  <arrow x1="140" y1="60" x2="200" y2="60" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="200" y="20" width="120" height="80" fill="#fff4e6" stroke="#333" stroke-width="2" rx="4"/>
+  <text x="260" y="50" text-anchor="middle" font-weight="bold" font-size="14">Token</text>
+  <text x="260" y="70" text-anchor="middle" font-weight="bold" font-size="14">Embedding</text>
+  <arrow x1="320" y1="60" x2="380" y2="60" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <g>
+    <rect x="380" y="20" width="120" height="80" fill="#e8f8e8" stroke="#333" stroke-width="2" rx="4"/>
+    <text x="440" y="50" text-anchor="middle" font-weight="bold" font-size="14">Transformer</text>
+    <text x="440" y="70" text-anchor="middle" font-weight="bold" font-size="14">Layers (N×)</text>
+  </g>
+  <arrow x1="500" y1="60" x2="560" y2="60" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="560" y="20" width="120" height="80" fill="#f4e8f8" stroke="#333" stroke-width="2" rx="4"/>
+  <text x="620" y="50" text-anchor="middle" font-weight="bold" font-size="14">Probability</text>
+  <text x="620" y="70" text-anchor="middle" font-weight="bold" font-size="14">Distribution</text>
+  <text x="400" y="150" text-anchor="middle" font-size="12" font-weight="bold">Transformer Pipeline</text>
+</svg>
+
+<div class="key-concept"><strong>Key Concept:</strong> Modern LLMs like GPT are built on transformers. They're trained to predict the next token given previous tokens—a simple task that emerges into remarkable language understanding.</div>
+
+<section class="section" id="attention"><span class="section-label">Attention Mechanism</span><h2>Understanding Attention</h2><p>Attention is the core mechanism that makes transformers powerful. It allows the model to weigh the importance of different tokens when processing each position. When predicting a token, attention computes a weighted sum over all previous tokens, focusing more on relevant ones.</p>
+
+<p>Mathematically, attention computes three things from the input: Queries (Q), Keys (K), and Values (V). For each position, the model computes how much attention to pay to each other position using a similarity score (Q·K/√d), then uses this to create a weighted average of values.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+
+<span class="cm"># Simplified attention mechanism visualization</span>
+<span class="kw">def</span> <span class="fn">simplified_attention</span>(<span class="va">queries</span>, <span class="va">keys</span>, <span class="va">values</span>):
+    <span class="st">"""Compute attention weights and outputs."""</span>
+
+    <span class="cm"># Compute attention scores: Q @ K^T / sqrt(d)</span>
+    <span class="va">d</span> <span class="op">=</span> <span class="va">queries</span>.<span class="fn">shape</span>[<span class="op">-</span><span class="nm">1</span>]
+    <span class="va">scores</span> <span class="op">=</span> <span class="va">queries</span> <span class="op">@</span> <span class="va">keys</span>.<span class="fn">T</span> <span class="op">/</span> <span class="fn">np</span>.<span class="fn">sqrt</span>(<span class="va">d</span>)
+
+    <span class="cm"># Apply softmax to get weights (0-1, sum to 1)</span>
+    <span class="va">weights</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">exp</span>(<span class="va">scores</span>) <span class="op">/</span> <span class="fn">np</span>.<span class="fn">exp</span>(<span class="va">scores</span>).<span class="fn">sum</span>(<span class="va">axis</span><span class="op">=</span><span class="nm">1</span>, <span class="va">keepdims</span><span class="op">=</span><span class="kw">True</span>)
+
+    <span class="cm"># Compute output as weighted sum of values</span>
+    <span class="va">output</span> <span class="op">=</span> <span class="va">weights</span> <span class="op">@</span> <span class="va">values</span>
+
+    <span class="kw">return</span> <span class="va">output</span>, <span class="va">weights</span>
+
+<span class="cm"># Attention visualization</span>
+<span class="cm"># Input: "The cat sat on the mat"</span>
+<span class="va">queries</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">6</span>, <span class="nm">64</span>)  <span class="cm"># 6 tokens, 64-dim embeddings</span>
+<span class="va">keys</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">6</span>, <span class="nm">64</span>)
+<span class="va">values</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">6</span>, <span class="nm">64</span>)
+
+<span class="va">output</span>, <span class="va">attention_weights</span> <span class="op">=</span> <span class="fn">simplified_attention</span>(<span class="va">queries</span>, <span class="va">keys</span>, <span class="va">values</span>)
+
+<span class="cm"># attention_weights[i,j] shows how much token i attends to token j</span>
+<span class="fn">print</span>(<span class="st">f"Attention weights shape: {attention_weights.shape}"</span>)
+<span class="fn">print</span>(<span class="st">f"Row 3 (attending to all tokens): {attention_weights[3]}"</span>)</code></pre>
+
+<div class="callout-box tip"><strong>Intuition:</strong> When predicting "mat" after "The cat sat on the", attention weights help the model focus more on "cat" and "on" (relevant context) than "the" (less informative).</div>
+
+<section class="section" id="training"><span class="section-label">Learning Process</span><h2>Training: Next-Token Prediction</h2><p>LLMs learn through a simple self-supervised task: predict the next token given all previous tokens. This is called language modeling. During training, the model sees massive amounts of text and learns to minimize the difference between predicted and actual next tokens.</p>
+
+<p>The training process uses backpropagation to update billions of parameters. Through this process, the model learns grammar, facts, reasoning patterns, and how to represent concepts—all from just the next-token prediction task.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Simplified training loop for next-token prediction</span>
+<span class="kw">def</span> <span class="fn">training_step</span>(<span class="va">text_sequence</span>, <span class="va">model</span>, <span class="va">loss_fn</span>):
+    <span class="st">"""One step of language model training."""</span>
+
+    <span class="cm"># Input: all tokens except the last one</span>
+    <span class="va">input_tokens</span> <span class="op">=</span> <span class="va">text_sequence</span>[:<span class="op">-</span><span class="nm">1</span>]
+
+    <span class="cm"># Target: all tokens except the first one (shifted by 1)</span>
+    <span class="va">target_tokens</span> <span class="op">=</span> <span class="va">text_sequence</span>[<span class="nm">1</span>:]
+
+    <span class="cm"># Forward pass: predict next tokens</span>
+    <span class="va">predictions</span> <span class="op">=</span> <span class="va">model</span>(<span class="va">input_tokens</span>)
+
+    <span class="cm"># Compute loss (difference between predictions and targets)</span>
+    <span class="va">loss</span> <span class="op">=</span> <span class="fn">loss_fn</span>(<span class="va">predictions</span>, <span class="va">target_tokens</span>)
+
+    <span class="cm"># Backward pass: compute gradients</span>
+    <span class="va">gradients</span> <span class="op">=</span> <span class="va">loss</span>.<span class="fn">backward</span>()
+
+    <span class="cm"># Update parameters</span>
+    <span class="va">model</span>.<span class="fn">update_parameters</span>(<span class="va">gradients</span>)
+
+    <span class="kw">return</span> <span class="va">loss</span>.<span class="fn">value</span>()
+
+<span class="cm"># On a real dataset with trillions of tokens, this process learns language understanding</span></code></pre>
+
+<section class="section" id="inference"><span class="section-label">Text Generation</span><h2>Inference and Text Generation</h2><p>Once trained, LLMs generate text by repeatedly predicting the next token. Given a prompt, the model computes probabilities for all possible next tokens and samples from that distribution. Each new token becomes part of the context for predicting the next one.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div><pre><code><span class="cm"># Simplified text generation process</span>
+<span class="kw">def</span> <span class="fn">generate_text</span>(<span class="va">prompt</span>, <span class="va">model</span>, <span class="va">max_tokens</span><span class="op">=</span><span class="nm">100</span>):
+    <span class="st">"""Generate text autoregressively, one token at a time."""</span>
+
+    <span class="va">generated</span> <span class="op">=</span> <span class="va">prompt</span>
+
+    <span class="kw">for</span> <span class="va">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">max_tokens</span>):
+        <span class="cm"># Get model's prediction for next token</span>
+        <span class="va">logits</span> <span class="op">=</span> <span class="va">model</span>(<span class="va">generated</span>)  <span class="cm"># Output probabilities</span>
+
+        <span class="cm"># Sample from distribution (with temperature control)</span>
+        <span class="va">next_token</span> <span class="op">=</span> <span class="fn">sample_from_distribution</span>(<span class="va">logits</span>, <span class="va">temperature</span><span class="op">=</span><span class="nm">0.7</span>)
+
+        <span class="cm"># Add to generated text</span>
+        <span class="va">generated</span> <span class="op">+=</span> <span class="va">next_token</span>
+
+        <span class="cm"># Stop if model generates end-of-text token</span>
+        <span class="kw">if</span> <span class="va">next_token</span> <span class="op">==</span> <span class="st">"&lt;END&gt;"</span>:
+            <span class="kw">break</span>
+
+    <span class="kw">return</span> <span class="va">generated</span>
+
+<span class="cm"># Generation strategies:</span>
+<span class="cm"># - Greedy: always pick highest probability (deterministic)</span>
+<span class="cm"># - Top-K: sample from K most likely tokens</span>
+<span class="cm"># - Top-P (nucleus): sample from tokens with cumulative prob > P</span>
+<span class="cm"># - Temperature: lower = more confident/deterministic</span></code></pre>
+
+<section class="section" id="scaling"><span class="section-label">Model Scaling</span><h2>Scaling Laws and Emergent Capabilities</h2><p>A remarkable discovery: as models get larger (more parameters, more training data, more compute), their capabilities don't just improve linearly—they improve in predictable ways following scaling laws. Even more surprising: certain abilities like few-shot learning and reasoning emerge suddenly at larger scales, without being explicitly programmed.</p>
+
+<svg viewBox="0 0 900 350" style="width:100%; max-width:600px; margin:20px auto; display:block;">
+  <g><text x="50" y="30" font-weight="bold" font-size="14">Scaling Laws in LLMs</text>
+  <line x1="50" y1="50" x2="50" y2="300" stroke="#333" stroke-width="2"/>
+  <line x1="50" y1="300" x2="650" y2="300" stroke="#333" stroke-width="2"/>
+  <text x="30" y="320" font-size="12">Loss</text>
+  <text x="620" y="320" font-size="12">Compute</text>
+  <path d="M 100 250 Q 250 150 400 80 T 600 20" stroke="#22447A" stroke-width="3" fill="none"/>
+  <text x="450" y="100" font-size="11">Performance improves</text>
+  <text x="450" y="115" font-size="11">predictably with scale</text>
+  <circle cx="300" cy="180" r="25" fill="none" stroke="#dc2626" stroke-width="2"/>
+  <text x="310" y="195" font-size="10" fill="#dc2626">Emergent</text>
+  <text x="310" y="210" font-size="10" fill="#dc2626">abilities</text></g>
+</svg>
+
+<div class="compare-grid"><div class="compare-item"><div class="compare-title">Small Models</div><div class="compare-content">Good at pattern matching. Limited reasoning and few-shot ability.</div></div><div class="compare-item"><div class="compare-title">Medium Models</div><div class="compare-content">Basic reasoning, in-context learning, some generalization.</div></div><div class="compare-item"><div class="compare-title">Large Models</div><div class="compare-content">Complex reasoning, strong few-shot, emergent abilities appear.</div></div></div>
+
+<section class="section" id="limitations"><span class="section-label">Understanding Limitations</span><h2>Fundamental Limitations</h2><p>Despite their power, LLMs have fundamental limitations worth understanding: they're "next-token predictors" at heart, not reasoning engines. They don't maintain persistent memory, struggle with precise arithmetic, and can confidently produce false information (hallucination).</p>
+
+<div class="callout-box warning"><strong>Important:</strong> LLMs excel at pattern continuation and reasoning approximation, but they don't access real-time information or execute code. They predict statistically likely continuations, which sometimes aligns with truth and sometimes doesn't.</div>
+
+<section class="section" id="summary"><span class="section-label">Summary</span><h2>Key Takeaways</h2><ul><li><strong>Transformer Architecture:</strong> Process sequences in parallel using attention. This enables efficient training of very large models.</li><li><strong>Attention Mechanism:</strong> Allows models to weight importance of different tokens. Core to understanding what makes transformers powerful.</li><li><strong>Next-Token Prediction:</strong> Simple training task that, at scale, leads to language understanding, reasoning, and factual knowledge.</li><li><strong>Autoregressive Generation:</strong> Text is generated one token at a time, with each token conditioned on previous ones.</li><li><strong>Scaling Laws:</strong> Performance improves predictably with model size. Emergent abilities appear at scale thresholds.</li><li><strong>Limitations:</strong> Next-token predictors, not reasoning systems. Subject to hallucination and knowledge cutoff.</li></ul></div>
+
+<div class="nav-buttons"><a href="../learn.html?c=associate&l=module8-lesson5" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a><a href="../learn.html?c=associate&l=module9-lesson2" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a></div>
+</div></main>
+
+<footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>© 2026 SustainSys.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script></body></html>

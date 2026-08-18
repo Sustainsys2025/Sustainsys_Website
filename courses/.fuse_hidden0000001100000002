@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Certifications — SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/course-styles.css">
+<style>
+.main{margin-left:0;margin-top:58px}
+
+/* ── Loading state ── */
+.cert-loading {
+  display:flex; align-items:center; justify-content:center;
+  min-height:60vh; flex-direction:column; gap:1rem;
+}
+.cert-loading .spinner {
+  width:36px; height:36px; border:3px solid #e2e8f0;
+  border-top-color:#1A3A6B; border-radius:50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── User bar ── */
+.user-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1rem 0; margin-bottom:1rem;
+}
+.user-bar .user-info {
+  display:flex; align-items:center; gap:0.75rem;
+}
+.user-bar .avatar {
+  width:40px; height:40px; border-radius:50%;
+  background:linear-gradient(135deg,#1A3A6B,#A4421F);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:700; font-size:0.95rem;
+  font-family:'DM Sans',sans-serif;
+}
+.user-bar .user-name {
+  font-family:'DM Sans',sans-serif; font-weight:600;
+  color:#0f172a; font-size:0.95rem;
+}
+.user-bar .user-email {
+  font-size:0.78rem; color:#7A756B;
+}
+.user-bar .sign-out-btn {
+  font-family:'DM Sans',sans-serif; font-size:0.8rem;
+  font-weight:600; color:#7A756B; background:none;
+  border:1px solid #e2e8f0; border-radius:6px;
+  padding:0.4rem 1rem; cursor:pointer; transition:all 0.2s;
+}
+.user-bar .sign-out-btn:hover {
+  color:#dc2626; border-color:#dc2626;
+}
+
+/* ── Course card states ── */
+.course-card-link { position:relative; display:block; }
+
+.course-card-link.locked {
+  pointer-events:none; opacity:0.55; filter:grayscale(0.3);
+}
+.course-card-link.locked .course-card-body::after {
+  content:''; position:absolute; inset:0; border-radius:inherit;
+  background:rgba(255,255,255,0.4);
+}
+
+.card-enrollment-status {
+  display:flex; align-items:center; gap:0.5rem;
+  margin-top:0.8rem; padding-top:0.8rem;
+  border-top:1px solid rgba(0,0,0,0.06);
+  font-family:'DM Sans',sans-serif; font-size:0.8rem;
+}
+.card-enrollment-status .status-dot {
+  width:8px; height:8px; border-radius:50%; flex-shrink:0;
+}
+.card-enrollment-status .status-dot.active { background:#16a34a; }
+.card-enrollment-status .status-dot.completed { background:#1A3A6B; }
+.card-enrollment-status .status-dot.locked { background:#94a3b8; }
+.card-enrollment-status .status-text { color:#334155; font-weight:500; }
+.card-enrollment-status .progress-text { margin-left:auto; color:#7A756B; font-size:0.75rem; }
+
+.enroll-btn {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  margin-top:0.8rem; padding:0.5rem 1.2rem;
+  background:#A4421F; color:#fff; border:none; border-radius:8px;
+  font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
+  cursor:pointer; transition:background 0.2s;
+}
+.enroll-btn:hover { background:#7F3117; }
+.enroll-btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+.lock-badge {
+  position:absolute; top:1rem; right:1rem; z-index:2;
+  background:rgba(15,23,42,0.7); color:#fff;
+  font-family:'DM Sans',sans-serif; font-size:0.7rem;
+  font-weight:600; padding:0.3rem 0.7rem; border-radius:6px;
+  display:flex; align-items:center; gap:0.35rem;
+  backdrop-filter:blur(4px);
+}
+.lock-badge svg { width:12px; height:12px; }
+
+/* ── Progress bar in card ── */
+.card-progress-bar {
+  height:4px; background:#e2e8f0; border-radius:2px;
+  margin-top:0.5rem; overflow:hidden;
+}
+.card-progress-bar .fill {
+  height:100%; border-radius:2px; transition:width 0.3s;
+}
+.card-progress-bar .fill.active { background:#16a34a; }
+.card-progress-bar .fill.completed { background:#1A3A6B; }
+
+/* ── Flagship certification banner card ── */
+.flagship-cert-wrap {
+  grid-column: 1 / -1;
+  background: linear-gradient(160deg, #1e3a5f 0%, #2a4a7a 40%, #1a5c5a 70%, #1e3a5f 100%);
+  border-radius: 18px;
+  padding: 2.25rem 2.25rem 1.75rem;
+  color: #f4f1ea;
+  border: 1px solid rgba(20,184,166,0.25);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(15,42,75,0.18);
+}
+.flagship-cert-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 15% 30%, rgba(20,184,166,0.18), transparent 55%),
+              radial-gradient(ellipse at 85% 70%, rgba(192,82,47,0.14), transparent 55%);
+  pointer-events: none;
+}
+.flagship-cert-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+.flagship-cert-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #14b8a6;
+  margin-bottom: 0.85rem;
+}
+.flagship-cert-eyebrow .dot {
+  width: 8px; height: 8px;
+  background: #f59e0b; border-radius: 50%;
+  box-shadow: 0 0 12px #f59e0b;
+}
+.flagship-cert-eyebrow .new-pill {
+  background: rgba(245,158,11,0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.35);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  margin-left: 6px;
+}
+.flagship-cert-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(1.75rem, 3.4vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin: 0 0 0.85rem;
+  color: #f4f1ea;
+}
+.flagship-cert-title em {
+  font-style: italic;
+  color: #14b8a6;
+}
+.flagship-cert-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #c9d0db;
+  margin: 0 0 1.25rem;
+  max-width: 560px;
+}
+.flagship-cert-stats {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  padding: 0.9rem 0 0.2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 1.1rem;
+}
+.flagship-cert-stats .stat-val {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.3rem;
+  color: #f4f1ea;
+  line-height: 1.1;
+}
+.flagship-cert-stats .stat-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8a93a7;
+  margin-top: 3px;
+}
+.flagship-cert-modules {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 1.25rem;
+}
+.flagship-cert-modules .mod {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  color: #c9d0db;
+  border: 1px solid rgba(255,255,255,0.08);
+  letter-spacing: 0.3px;
+}
+.flagship-cert-modules .mod.highlight {
+  background: rgba(190,18,60,0.18);
+  color: #fb7185;
+  border-color: rgba(190,18,60,0.35);
+}
+.flagship-cert-modules .mod.capstone {
+  background: rgba(245,158,11,0.14);
+  color: #fbbf24;
+  border-color: rgba(245,158,11,0.28);
+}
+.flagship-cert-actions {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+}
+.flagship-cert-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.flagship-cert-btn.primary {
+  background: #f59e0b;
+  color: #1e3a5f;
+  box-shadow: 0 4px 14px rgba(245,158,11,0.35);
+}
+.flagship-cert-btn.primary:hover {
+  background: #fbbf24;
+  transform: translateY(-1px);
+}
+.flagship-cert-btn.outline {
+  background: transparent;
+  color: #14b8a6;
+  border: 1px solid rgba(20,184,166,0.45);
+}
+.flagship-cert-btn.outline:hover {
+  background: rgba(20,184,166,0.1);
+  border-color: #14b8a6;
+}
+.flagship-cert-side {
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1.25rem 1.4rem;
+  backdrop-filter: blur(4px);
+}
+.flagship-cert-side .price {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2.25rem;
+  color: #f4f1ea;
+  line-height: 1;
+}
+.flagship-cert-side .price-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8a93a7;
+  margin-top: 4px;
+}
+.flagship-cert-side .price-sub {
+  color: #c9d0db;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  margin: 0.65rem 0 1.1rem;
+  line-height: 1.4;
+}
+.flagship-cert-side .access-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Inter', sans-serif; font-size: 0.72rem;
+  font-weight: 600; color: #94a3b8;
+  margin-top: 0.85rem;
+}
+.flagship-cert-side .access-status .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #94a3b8;
+}
+.flagship-cert-side .access-status.active .dot { background: #14b8a6; }
+.flagship-cert-side .access-status.active { color: #14b8a6; }
+
+/* Section heading between flagship and tracks */
+.tracks-heading {
+  grid-column: 1 / -1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #7A756B;
+  margin: 0.5rem 0 -0.5rem;
+  display: flex; align-items: center; gap: 12px;
+}
+.tracks-heading::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #cbd5e1, transparent);
+}
+
+@media (max-width: 820px) {
+  .flagship-cert-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+  .flagship-cert-wrap { padding: 1.75rem 1.5rem 1.5rem; }
+  .flagship-cert-side { padding: 1.1rem 1.2rem; }
+  #courseGrid { grid-template-columns: 1fr !important; }
+}
+@media (min-width: 821px) and (max-width: 1023px) {
+  #courseGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">AI Academy — My Certifications</div>
+    <a href="../ai-learn.html" class="nav-home-link">AI Academy</a>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="container" style="max-width:1100px">
+
+    <!-- Loading state -->
+    <div class="cert-loading" id="certLoading">
+      <div class="spinner"></div>
+      <span style="color:#7A756B;font-size:0.9rem;">Loading your certifications...</span>
+    </div>
+
+    <!-- Main content (hidden until auth check passes) -->
+    <div id="certContent" style="display:none">
+
+      <!-- User bar -->
+      <div class="user-bar" id="userBar"></div>
+
+      <!-- Hero -->
+      <section class="course-hero" style="background:none;border:none;padding:2rem 0 2rem;text-align:center">
+        <span class="hero-eyebrow" style="margin:0 auto 1.5rem">4 Certification Programs · 460 Hours</span>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);margin-bottom:1rem">My <span class="accent">Certifications</span></h1>
+        <p class="hero-sub" style="max-width:650px;margin:0 auto 1rem;text-align:center">Your certification programs. Purchase individual courses or get the All-Access subscription.</p>
+        <p id="enrollmentSummary" style="color:#7A756B;font-size:0.85rem;"></p>
+      </section>
+
+      <!-- Course Cards -->
+      <div id="courseGrid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;margin:0 0 4rem">
+
+        <!-- ═══ Flagship Certification (full width, top) ═══ -->
+        <div class="course-card-wrap flagship-cert-wrap" data-course-id="governance" data-course-type="certification">
+          <div class="flagship-cert-inner">
+            <div>
+              <div class="flagship-cert-eyebrow">
+                <span class="dot"></span>
+                Flagship Certification · 2026 Edition
+                <span class="new-pill">NEW</span>
+              </div>
+              <h2 class="flagship-cert-title">AI Governance, Risk &amp; <em>Safety</em></h2>
+              <p class="flagship-cert-desc">A practitioner-grade certification for the people who actually run AI safely in organisations. Twelve weeks of instructor-led teaching covering EU AI Act, ISO 42001, NIST AI RMF, AI risk &amp; safety engineering — with a dedicated module on Agentic AI Governance.</p>
+
+              <div class="flagship-cert-stats">
+                <div>
+                  <div class="stat-val">12 weeks</div>
+                  <div class="stat-lbl">Duration</div>
+                </div>
+                <div>
+                  <div class="stat-val">50 hours</div>
+                  <div class="stat-lbl">Live teaching</div>
+                </div>
+                <div>
+                  <div class="stat-val">7 + Capstone</div>
+                  <div class="stat-lbl">Modules</div>
+                </div>
+                <div>
+                  <div class="stat-val">Proctored</div>
+                  <div class="stat-lbl">Exam + Panel</div>
+                </div>
+              </div>
+
+              <div class="flagship-cert-modules">
+                <span class="mod">M1 · Foundations</span>
+                <span class="mod">M2 · Regulation</span>
+                <span class="mod">M3 · Risk &amp; Safety</span>
+                <span class="mod highlight">M4 · AI Agents ◆</span>
+                <span class="mod">M5 · Framework</span>
+                <span class="mod">M6 · GRC Practice</span>
+                <span class="mod capstone">M7 · Capstone ◆</span>
+              </div>
+
+              <div class="flagship-cert-actions">
+                <a href="../ai-grs-curriculum.html" class="flagship-cert-btn outline">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  View Full Curriculum
+                </a>
+                <a href="../contact.html" class="flagship-cert-btn outline" style="color:#c9d0db;border-color:rgba(255,255,255,0.18);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Enquire
+                </a>
+              </div>
+            </div>
+
+            <div class="flagship-cert-side">
+              <div class="price">£199</div>
+              <div class="price-lbl">One-time · Cohort enrolment</div>
+              <div class="price-sub">Includes 50 live instructor-led hours, capstone portfolio, proctored exam &amp; panel defence.</div>
+              <button class="flagship-cert-btn primary" id="flagship-enroll-btn" style="width:100%;justify-content:center;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4-7M7 13l-2.3 4.3a1 1 0 0 0 .9 1.5H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+                <span id="flagship-enroll-label">Join Now — £199</span>
+              </button>
+              <div class="access-status" id="status-governance">
+                <span class="dot"></span>
+                <span class="text">Not purchased</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ Practitioner tracks heading ═══ -->
+        <div class="tracks-heading">Practitioner Tracks · Self-paced</div>
+
+        <!-- Associate -->
+        <div class="course-card-wrap" data-course-id="associate" data-course-type="certification">
+          <a href="associate/index.html" class="course-card-link" id="card-associate">
+            <div class="lock-badge" id="lock-associate" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#36cfc9,#5eddd8)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#36cfc9;background:rgba(54,207,201,0.1);border-color:rgba(54,207,201,0.3)">Associate</span>
+              <h3>AI Practitioner Associate</h3>
+              <p>Begin your AI journey with Python, data science, machine learning basics, and introduction to large language models and RAG pipelines.</p>
+              <div class="course-card-stats">
+                <div><strong>90</strong><span>Hours</span></div>
+                <div><strong>10</strong><span>Modules</span></div>
+                <div><strong>54</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>Python</span><span>NumPy</span><span>Pandas</span><span>ML</span><span>Deep Learning</span><span>LLMs</span><span>RAG</span>
+              </div>
+              <div class="card-enrollment-status" id="status-associate"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-associate"></div>
+        </div>
+
+        <!-- Advanced -->
+        <div class="course-card-wrap" data-course-id="advanced" data-course-type="certification">
+          <a href="advanced/index.html" class="course-card-link" id="card-advanced">
+            <div class="lock-badge" id="lock-advanced" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#9d4edd,#b57bee)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#9d4edd;background:rgba(157,78,221,0.1);border-color:rgba(157,78,221,0.3)">Advanced</span>
+              <h3>AI Practitioner Advanced</h3>
+              <p>Build production-ready AI systems with advanced RAG, chatbots, cloud deployment, fine-tuning, and evaluation methodologies.</p>
+              <div class="course-card-stats">
+                <div><strong>140</strong><span>Hours</span></div>
+                <div><strong>12</strong><span>Modules</span></div>
+                <div><strong>64</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>LLM APIs</span><span>Chatbots</span><span>RAG</span><span>FastAPI</span><span>AWS</span><span>Azure</span><span>Fine-Tuning</span>
+              </div>
+              <div class="card-enrollment-status" id="status-advanced"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-advanced"></div>
+        </div>
+
+        <!-- Architect -->
+        <div class="course-card-wrap" data-course-id="architect" data-course-type="certification">
+          <a href="architect/index.html" class="course-card-link" id="card-architect">
+            <div class="lock-badge" id="lock-architect" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Not Enrolled
+            </div>
+            <div class="course-card-accent" style="background:linear-gradient(135deg,#00f0ff,#36cfc9)"></div>
+            <div class="course-card-body">
+              <span class="course-card-badge" style="color:#00f0ff;background:rgba(0,240,255,0.1);border-color:rgba(0,240,255,0.3)">Architect</span>
+              <h3>AI Solution Architect</h3>
+              <p>Design enterprise-scale AI solutions with advanced architectures, MLOps, CI/CD, security, governance, and industry-leading practices.</p>
+              <div class="course-card-stats">
+                <div><strong>180</strong><span>Hours</span></div>
+                <div><strong>13</strong><span>Modules</span></div>
+                <div><strong>71</strong><span>Lessons</span></div>
+              </div>
+              <div class="course-card-topics">
+                <span>System Design</span><span>RAG</span><span>Agents</span><span>MLOps</span><span>K8s</span><span>Security</span><span>Enterprise</span>
+              </div>
+              <div class="card-enrollment-status" id="status-architect"></div>
+            </div>
+          </a>
+          <div style="padding:0 1.2rem 1rem" id="action-architect"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<!-- Supabase SDK + shared auth + Stripe -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="assets/stripe-checkout.js"></script>
+
+<script>
+(async function certGate() {
+  const LOGIN_URL = '../ai-learn.html#/login';
+  const COURSE_IDS = ['associate', 'advanced', 'architect', 'governance'];
+  const TOTAL_COURSES = COURSE_IDS.length;
+
+  /* ── 1. Auth check ── */
+  const session = await supaGetSession();
+  if (!session) {
+    window.location.href = LOGIN_URL;
+    return;
+  }
+
+  const user = session.user;
+  const meta = user.user_metadata || {};
+  const firstName = meta.first_name || user.email.split('@')[0];
+  const lastName = meta.last_name || '';
+  const displayName = `${firstName} ${lastName}`.trim() || user.email;
+  const initials = `${(firstName[0] || '').toUpperCase()}${(lastName[0] || '').toUpperCase()}` || user.email[0].toUpperCase();
+
+  /* ── 2. Render user bar ── */
+  document.getElementById('userBar').innerHTML = `
+    <div class="user-info">
+      <div class="avatar">${initials}</div>
+      <div>
+        <div class="user-name">${displayName}</div>
+        <div class="user-email">${user.email}</div>
+      </div>
+    </div>
+    <button class="sign-out-btn" id="signOutBtn">Sign Out</button>
+  `;
+
+  document.getElementById('signOutBtn').addEventListener('click', async () => {
+    await supaSignOut();
+    window.location.href = LOGIN_URL;
+  });
+
+  /* ── 3. Fetch entitlements (paid access) and enrollments (progress) ── */
+  const accessMap = await supaGetAccessMap();
+  const enrollments = await supaGetEnrollments();
+  const enrolledMap = {};
+  enrollments.forEach(e => { enrolledMap[e.item_id] = e; });
+
+  // Count courses user has paid access to
+  let accessCount = 0;
+  if (accessMap.hasAllAccess) {
+    accessCount = TOTAL_COURSES;
+  } else {
+    COURSE_IDS.forEach(id => {
+      const productId = COURSE_TO_PRODUCT[id];
+      if (productId && accessMap.certifications.has(productId)) accessCount++;
+    });
+  }
+
+  document.getElementById('enrollmentSummary').textContent =
+    accessCount > 0
+      ? `You have access to ${accessCount} of ${TOTAL_COURSES} certification programs.`
+      : `Purchase a certification below to get started, or get the All-Access subscription for all ${TOTAL_COURSES}.`;
+
+  /* ── 4. Update cards based on entitlement + enrollment ── */
+  // The flagship governance card uses its own layout — handled separately below.
+  const STANDARD_CARDS = COURSE_IDS.filter(id => id !== 'governance');
+  STANDARD_CARDS.forEach(courseId => {
+    const card = document.getElementById(`card-${courseId}`);
+    const lockBadge = document.getElementById(`lock-${courseId}`);
+    const statusEl = document.getElementById(`status-${courseId}`);
+    const actionEl = document.getElementById(`action-${courseId}`);
+    const enrollment = enrolledMap[courseId];
+
+    // Check if user has paid access
+    const productId = COURSE_TO_PRODUCT[courseId];
+    const hasPaidAccess = accessMap.hasAllAccess || (productId && accessMap.certifications.has(productId));
+
+    if (hasPaidAccess) {
+      // Has paid access — card is unlocked
+      card.classList.remove('locked');
+      lockBadge.style.display = 'none';
+
+      if (enrollment) {
+        const isCompleted = enrollment.status === 'completed';
+        const progress = enrollment.progress || 0;
+
+        statusEl.innerHTML = `
+          <span class="status-dot ${isCompleted ? 'completed' : 'active'}"></span>
+          <span class="status-text">${isCompleted ? 'Completed' : 'In Progress'}</span>
+          <span class="progress-text">${progress}% complete</span>
+        `;
+
+        if (!isCompleted) {
+          statusEl.innerHTML += `
+            <div class="card-progress-bar" style="width:100%;margin-top:0.5rem">
+              <div class="fill active" style="width:${progress}%"></div>
+            </div>`;
+        }
+
+        const cta = card.querySelector('.course-card-cta');
+        if (cta) {
+          cta.innerHTML = isCompleted
+            ? 'Review Course <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
+            : 'Continue Learning <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+        }
+      } else {
+        // Paid but not yet enrolled — auto-enroll for progress tracking
+        statusEl.innerHTML = `
+          <span class="status-dot active"></span>
+          <span class="status-text" style="color:#16a34a">Access Granted</span>
+        `;
+        // Auto-enroll in the background
+        supaEnroll(courseId, 'certification').catch(() => {});
+      }
+    } else {
+      // No paid access — show pricing & checkout button
+      card.classList.add('locked');
+      lockBadge.style.display = 'flex';
+      lockBadge.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        ${getCoursePrice(courseId)}
+      `;
+
+      statusEl.innerHTML = `
+        <span class="status-dot locked"></span>
+        <span class="status-text" style="color:#94a3b8">Not Purchased</span>
+        <span class="progress-text">${getCoursePrice(courseId)}</span>
+      `;
+
+      // Add checkout button
+      actionEl.innerHTML = `
+        <button class="enroll-btn" data-course="${courseId}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4-7M7 13l-2.3 4.3a1 1 0 0 0 .9 1.5H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+          Get Access — ${getCoursePrice(courseId)}
+        </button>
+      `;
+
+      actionEl.querySelector('.enroll-btn').addEventListener('click', async function() {
+        this.disabled = true;
+        this.textContent = 'Redirecting to checkout...';
+        try {
+          await startCourseCheckout(courseId);
+        } catch (err) {
+          console.error('Checkout error:', err);
+          this.disabled = false;
+          this.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4-7M7 13l-2.3 4.3a1 1 0 0 0 .9 1.5H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+            Get Access — ${getCoursePrice(courseId)}`;
+          alert('Checkout failed. Please try again.');
+        }
+      });
+    }
+  });
+
+  /* ── 4b. Flagship Governance card update ── */
+  (function updateFlagship() {
+    const courseId = 'governance';
+    const productId = COURSE_TO_PRODUCT[courseId];
+    const hasPaidAccess = accessMap.hasAllAccess || (productId && accessMap.certifications.has(productId));
+    const enrollment = enrolledMap[courseId];
+    const statusEl = document.getElementById('status-governance');
+    const enrollBtn = document.getElementById('flagship-enroll-btn');
+    const enrollLabel = document.getElementById('flagship-enroll-label');
+
+    if (hasPaidAccess) {
+      statusEl.classList.add('active');
+      statusEl.querySelector('.text').textContent = enrollment && enrollment.status === 'completed'
+        ? 'Completed'
+        : (enrollment ? `Enrolled · ${enrollment.progress || 0}% complete` : 'Access granted');
+      enrollLabel.textContent = 'Go to Learning Dashboard';
+      enrollBtn.addEventListener('click', () => {
+        window.location.href = 'governance/index.html';
+      });
+      if (!enrollment) {
+        supaEnroll(courseId, 'certification').catch(() => {});
+      }
+    } else {
+      enrollBtn.addEventListener('click', async function() {
+        this.disabled = true;
+        enrollLabel.textContent = 'Redirecting to checkout...';
+        try {
+          await startCourseCheckout(courseId);
+        } catch (err) {
+          console.error('Checkout error:', err);
+          this.disabled = false;
+          enrollLabel.textContent = 'Join Now — £199';
+          alert('Checkout failed. Please try again.');
+        }
+      });
+    }
+  })();
+
+  /* ── 5. Show content, hide loading ── */
+  document.getElementById('certLoading').style.display = 'none';
+  document.getElementById('certContent').style.display = 'block';
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.2 Lists, Tuples, Dictionaries & Sets — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 1 — Lists, Tuples, Dictionaries &amp; Sets</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2" class="active"><span class="sidebar-num">1.2</span> Lists, Tuples, Dicts, Sets</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions &amp; Reusability</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy &amp; Scientific Computing</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays &amp; Operations</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing &amp; Slicing</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Random &amp; Statistics</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Advanced Linear Algebra</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3-10: Other Modules</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module3-lesson1"><span class="sidebar-num">3.1</span> Pandas Intro</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Associate</a><span class="sep">›</span>
+    <span>Module 1</span><span class="sep">›</span>
+    <span>Collections</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 1 · Lesson 2</span>
+    <span class="difficulty-badge beginner">Beginner</span>
+  </div>
+  <h1>Lists, Tuples, Dictionaries &amp; <span class="accent">Sets</span></h1>
+  <p class="hero-sub">Master Python's collection types that form the foundation of all data processing. You will learn when to use each structure, how to manipulate them efficiently, and how they map to data structures in NumPy and Pandas.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~30 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      5 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      4 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>Learning Objectives</h4>
+  <ul>
+    <li>Understand lists as ordered, mutable sequences and their essential methods</li>
+    <li>Use tuples for immutable, fixed-size data collections and performance benefits</li>
+    <li>Work with dictionaries for key-value storage and fast lookups</li>
+    <li>Use sets for membership testing, deduplication, and mathematical operations</li>
+    <li>Choose the right collection type for each data processing task</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>Prerequisites</h4>
+  <ul>
+    <li>Completion of Lesson 1.1 (Variables, Data Types & Type Conversion)</li>
+    <li>Understanding of Python variables and basic data types</li>
+    <li>Access to a Python interpreter or Google Colab</li>
+  </ul>
+</div>
+
+<section class="section reveal" id="lists">
+  <span class="section-label">Core Concepts</span>
+  <h2>Lists: Ordered and Mutable Collections</h2>
+
+  <p>A list is an ordered collection of items enclosed in square brackets. Lists are the most flexible collection type in Python — they can contain any mix of types, grow or shrink dynamically, and support powerful manipulation methods. Think of a list like a playlist on your phone: items have a specific order (index), you can add or remove songs, and you can rearrange them.</p>
+
+  <p>Lists are mutable, meaning you can change their contents in place. This makes them efficient for building datasets incrementally, which is common in data preprocessing pipelines. However, this mutability also means you need to be careful about modifying lists inside functions or loops — unexpected side effects are a source of bugs.</p>
+
+  <div class="analogy">
+    <h4>Think of It This Way</h4>
+    <p>A list is like a shopping list on paper. You can add items, cross them out, rearrange the order, and see exactly how many items you have. Tuples (which we will see next) are like a recipe ingredient list that is printed in a cookbook — you can read it, but you cannot change it. Sets are like a unique list where no item can appear twice — useful for tracking membership.</p>
+  </div>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Creating lists</span>
+<span class="va">features</span> <span class="op">=</span> [<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>]  <span class="cm"># int list</span>
+<span class="va">labels</span> <span class="op">=</span> [<span class="st">"cat"</span>, <span class="st">"dog"</span>, <span class="st">"bird"</span>]
+<span class="va">mixed</span> <span class="op">=</span> [<span class="nm">1</span>, <span class="st">"text"</span>, <span class="nm">3.14</span>, <span class="kw">True</span>]
+<span class="va">empty</span> <span class="op">=</span> []
+
+<span class="cm"># Accessing elements by index (0-based)</span>
+<span class="fn">print</span>(<span class="va">features</span>[<span class="nm">0</span>])     <span class="cm"># 1</span>
+<span class="fn">print</span>(<span class="va">features</span>[<span class="op">-</span><span class="nm">1</span>])    <span class="cm"># 3 — last element</span>
+
+<span class="cm"># Modifying lists</span>
+<span class="va">features</span>[<span class="nm">0</span>] <span class="op">=</span> <span class="nm">10</span>      <span class="cm"># change first element</span>
+<span class="va">features</span>.<span class="fn">append</span>(<span class="nm">4</span>)    <span class="cm"># add to end</span>
+<span class="va">features</span>.<span class="fn">extend</span>([<span class="nm">5</span>, <span class="nm">6</span>])  <span class="cm"># add multiple</span>
+<span class="va">features</span>.<span class="fn">insert</span>(<span class="nm">1</span>, <span class="nm">99</span>)  <span class="cm"># insert at index 1</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We create lists with different types of elements. Lists use zero-based indexing, so the first element is at index 0. Negative indices count from the end: index -1 is the last element, -2 is second-to-last, etc. We modify the list using common methods: <code>append()</code> adds one item, <code>extend()</code> adds multiple items, and <code>insert()</code> adds at a specific position.</p>
+  </div>
+
+  <h3>Essential List Methods for AI</h3>
+  <p>Lists have many useful methods. The most important for AI work are: <code>append()</code> for adding items, <code>remove()</code> for deleting by value, <code>sort()</code> for ordering, <code>len()</code> for counting, and slicing with <code>[start:stop:step]</code> for extracting subsequences.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Slicing lists</span>
+<span class="va">scores</span> <span class="op">=</span> [<span class="nm">85</span>, <span class="nm">90</span>, <span class="nm">78</span>, <span class="nm">95</span>, <span class="nm">88</span>]
+<span class="fn">print</span>(<span class="va">scores</span>[<span class="nm">1</span>:<span class="nm">4</span>])      <span class="cm"># [90, 78, 95] — index 1 to 3</span>
+<span class="fn">print</span>(<span class="va">scores</span>[:<span class="nm">2</span>])       <span class="cm"># [85, 90] — first 2</span>
+<span class="fn">print</span>(<span class="va">scores</span>[<span class="nm">2</span>:])       <span class="cm"># [78, 95, 88] — from index 2 on</span>
+<span class="fn">print</span>(<span class="va">scores</span>[::2])      <span class="cm"># [85, 78, 88] — every 2nd item</span>
+
+<span class="cm"># Common operations</span>
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="va">scores</span>))          <span class="cm"># 5</span>
+<span class="fn">print</span>(<span class="fn">max</span>(<span class="va">scores</span>))         <span class="cm"># 95</span>
+<span class="fn">print</span>(<span class="fn">min</span>(<span class="va">scores</span>))         <span class="cm"># 78</span>
+<span class="fn">print</span>(<span class="fn">sum</span>(<span class="va">scores</span>))         <span class="cm"># 436</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We demonstrate list slicing, which is a fundamental technique in data processing. The syntax <code>[start:stop:step]</code> extracts a portion of the list. Note that the stop index is exclusive (not included). We also show built-in functions like <code>len()</code>, <code>max()</code>, <code>min()</code>, and <code>sum()</code>, which operate on any sequence.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>Lists are ordered, mutable sequences containing any types of elements</li>
+      <li>Use zero-based indexing and negative indices to access from the end</li>
+      <li>Use slicing <code>[start:stop:step]</code> to extract subsequences</li>
+      <li>Essential methods: <code>append()</code>, <code>extend()</code>, <code>remove()</code>, <code>sort()</code></li>
+    </ul>
+  </div>
+
+  <div class="quiz-box">
+    <h4>Test Your Understanding</h4>
+    <div class="quiz-question" data-correct="1">
+      <p>What does <code>[1, 2, 3, 4, 5][1:4]</code> return?</p>
+      <ul class="quiz-options">
+        <li>A) [1, 2, 3]</li>
+        <li>B) [2, 3, 4]</li>
+        <li>C) [2, 3, 4, 5]</li>
+        <li>D) [1, 2, 3, 4, 5]</li>
+      </ul>
+      <div class="quiz-answer">Slicing [start:stop] includes index start but excludes index stop. So [1:4] returns elements at indices 1, 2, and 3, which is [2, 3, 4].</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="tuples">
+  <span class="section-label">Core Concepts</span>
+  <h2>Tuples: Immutable and Hashable</h2>
+
+  <p>A tuple is an ordered collection enclosed in parentheses. Unlike lists, tuples are immutable — you cannot change, add, or remove elements after creation. This immutability makes tuples safer for protecting data and faster for lookup operations. Tuples are also hashable, meaning they can be used as dictionary keys or stored in sets, unlike lists.</p>
+
+  <p>In AI work, tuples are useful for fixed data like image dimensions (height, width, channels), model shape specifications, or return values from functions. They are also used extensively in pandas for indexing and in NumPy for array shapes.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Creating tuples</span>
+<span class="va">dimensions</span> <span class="op">=</span> (<span class="nm">28</span>, <span class="nm">28</span>, <span class="nm">1</span>)  <span class="cm"># image shape</span>
+<span class="va">coords</span> <span class="op">=</span> (<span class="nm">10</span>, <span class="nm">20</span>)              <span class="cm"># 2D coordinates</span>
+<span class="va">single</span> <span class="op">=</span> (<span class="nm">42</span>,)                <span class="cm"># note the comma!</span>
+<span class="va">empty</span> <span class="op">=</span> ()
+
+<span class="cm"># Accessing elements (same as lists)</span>
+<span class="fn">print</span>(<span class="va">dimensions</span>[<span class="nm">0</span>])    <span class="cm"># 28</span>
+<span class="fn">print</span>(<span class="va">dimensions</span>[<span class="op">-</span><span class="nm">1</span>])   <span class="cm"># 1</span>
+
+<span class="cm"># Immutability — this will raise an error</span>
+<span class="cm"># dimensions[0] = 32  # TypeError!  Cannot assign to tuple</span>
+
+<span class="cm"># Use tuples as dictionary keys</span>
+<span class="va">image_cache</span> <span class="op">=</span> {}
+<span class="va">image_cache</span>[<span class="va">dimensions</span>] <span class="op">=</span> <span class="st">"image_data"</span>  <span class="cm"># tuples are hashable</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We create tuples for fixed data structures common in AI. Note the critical syntax: a single-element tuple requires a trailing comma <code>(42,)</code> — without it, <code>(42)</code> is just a number in parentheses. We show that tuples are immutable (trying to modify raises TypeError) but can be used as dictionary keys because they are hashable.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>Tuples are ordered, immutable sequences enclosed in parentheses</li>
+      <li>Use tuples for fixed data like shapes, dimensions, and function returns</li>
+      <li>Tuples are hashable — they can be dictionary keys or set members</li>
+      <li>Immutability prevents accidental modification and enables optimizations</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="dictionaries">
+  <span class="section-label">Core Concepts</span>
+  <h2>Dictionaries: Key-Value Storage</h2>
+
+  <p>A dictionary stores data as key-value pairs enclosed in curly braces. Dictionaries are unordered (in Python 3.7+, they maintain insertion order for convenience), mutable, and incredibly efficient for lookups. Any hashable object can be a key — strings, numbers, tuples — but lists and dictionaries cannot (they are not hashable).</p>
+
+  <p>Dictionaries are fundamental in data processing pipelines. You use them to map feature names to their indices, store configuration parameters, parse JSON data from APIs, and cache results. They are also the foundation of Pandas DataFrames under the hood.</p>
+
+  <div class="analogy">
+    <h4>Think of It This Way</h4>
+    <p>A dictionary is like a phonebook or contact list: you look up a person's name (the key) to find their phone number (the value). With a list, you would have to scan through every entry until you find the right name. With a dictionary, the lookup is instantaneous.</p>
+  </div>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Creating dictionaries</span>
+<span class="va">config</span> <span class="op">=</span> {<span class="st">"learning_rate"</span>: <span class="nm">0.001</span>, <span class="st">"batch_size"</span>: <span class="nm">32</span>}
+<span class="va">model_params</span> <span class="op">=</span> {<span class="st">"layers"</span>: <span class="nm">5</span>, <span class="st">"activation"</span>: <span class="st">"relu"</span>}
+<span class="va">empty_dict</span> <span class="op">=</span> {}
+
+<span class="cm"># Accessing values</span>
+<span class="fn">print</span>(<span class="va">config</span>[<span class="st">"learning_rate"</span>])  <span class="cm"># 0.001</span>
+
+<span class="cm"># Adding and modifying</span>
+<span class="va">config</span>[<span class="st">"epochs"</span>] <span class="op">=</span> <span class="nm">100</span>  <span class="cm"># add new key</span>
+<span class="va">config</span>[<span class="st">"learning_rate"</span>] <span class="op">=</span> <span class="nm">0.01</span>  <span class="cm"># modify</span>
+
+<span class="cm"># Safe access with .get()</span>
+<span class="fn">print</span>(<span class="va">config</span>.<span class="fn">get</span>(<span class="st">"dropout"</span>, <span class="nm">0.5</span>))  <span class="cm"># returns 0.5 if missing</span>
+
+<span class="cm"># Iterate over keys and values</span>
+<span class="kw">for</span> <span class="va">key</span>, <span class="va">value</span> <span class="kw">in</span> <span class="va">config</span>.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="st">f"</span>{<span class="va">key</span>}<span class="st">: </span>{<span class="va">value</span>}<span class="st">"</span>)</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We create dictionaries for storing configuration and parameters. Accessing with <code>config[key]</code> raises KeyError if the key doesn't exist. The safer <code>.get(key, default)</code> method returns the default value if missing. We iterate over key-value pairs using <code>.items()</code>, which is the standard pattern for processing dictionaries.</p>
+  </div>
+
+  <div class="why-matters">
+    <h4>Why This Matters</h4>
+    <p><strong>In Data Processing:</strong> JSON APIs return dictionaries. CSV data is loaded into dictionaries before conversion to Pandas. Machine learning configurations are dictionaries. Mastering dictionaries is essential for working with real-world data.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>Dictionaries map keys to values using <code>{key: value}</code> syntax</li>
+      <li>Keys must be hashable (str, int, tuple); values can be any type</li>
+      <li>Use <code>.get(key, default)</code> for safe access; raises KeyError otherwise</li>
+      <li>Iterate with <code>.items()</code>, <code>.keys()</code>, or <code>.values()</code></li>
+    </ul>
+  </div>
+
+  <div class="quiz-box">
+    <h4>Test Your Understanding</h4>
+    <div class="quiz-question" data-correct="2">
+      <p>What does <code>{"a": 1}.get("b", 0)</code> return?</p>
+      <ul class="quiz-options">
+        <li>A) KeyError: 'b'</li>
+        <li>B) None</li>
+        <li>C) 0</li>
+        <li>D) "b"</li>
+      </ul>
+      <div class="quiz-answer">The <code>.get()</code> method safely returns a default value (0) if the key ('b') is not found, instead of raising an error.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="sets">
+  <span class="section-label">Core Concepts</span>
+  <h2>Sets: Unique Elements and Fast Membership Tests</h2>
+
+  <p>A set is an unordered collection of unique elements. Sets are extremely useful for deduplication, membership testing (is this item in the set?), and mathematical operations like union and intersection. Sets cannot contain duplicates — if you add the same element twice, it appears only once.</p>
+
+  <p>In AI, sets are useful for finding unique class labels, removing duplicate samples, tracking which IDs have been processed, and checking if a value exists in a collection (much faster than checking a list).</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Creating sets</span>
+<span class="va">classes</span> <span class="op">=</span> {<span class="st">"cat"</span>, <span class="st">"dog"</span>, <span class="st">"bird"</span>}
+<span class="va">unique_ids</span> <span class="op">=</span> <span class="fn">set</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">3</span>, <span class="nm">3</span>])  <span class="cm"># {1, 2, 3}</span>
+<span class="va">empty_set</span> <span class="op">=</span> <span class="fn">set</span>()  <span class="cm"># note: {} is empty dict, not set</span>
+
+<span class="cm"># Membership testing (very fast)</span>
+<span class="kw">if</span> <span class="st">"cat"</span> <span class="kw">in</span> <span class="va">classes</span>:
+    <span class="fn">print</span>(<span class="st">"Cat found"</span>)
+
+<span class="cm"># Set operations</span>
+<span class="va">set_a</span> <span class="op">=</span> {<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>}
+<span class="va">set_b</span> <span class="op">=</span> {<span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>}
+<span class="fn">print</span>(<span class="va">set_a</span> <span class="op">|</span> <span class="va">set_b</span>)  <span class="cm"># {1, 2, 3, 4} — union</span>
+<span class="fn">print</span>(<span class="va">set_a</span> <span class="op">&</span> <span class="va">set_b</span>)  <span class="cm"># {2, 3} — intersection</span>
+<span class="fn">print</span>(<span class="va">set_a</span> <span class="op">-</span> <span class="va">set_b</span>)  <span class="cm"># {1} — difference</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We create sets using curly braces or the <code>set()</code> function. Note that <code>{}</code> creates an empty dictionary; use <code>set()</code> for an empty set. Sets automatically remove duplicates: converting <code>[1, 2, 2, 3, 3, 3]</code> to a set yields <code>{1, 2, 3}</code>. Membership testing with <code>in</code> is O(1) on average, making it much faster than checking a list. We show set operations (union |, intersection &, difference -) which are useful for comparing collections.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>Sets are unordered, unique collections of hashable elements</li>
+      <li>Use <code>set()</code> to create an empty set, not <code>{}</code></li>
+      <li>Membership testing (<code>in</code>) is O(1) — much faster than lists</li>
+      <li>Set operations: union |, intersection &, difference -, symmetric_difference ^</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="choosing-collections">
+  <span class="section-label">Best Practices</span>
+  <h2>Choosing the Right Collection</h2>
+
+  <p>Each collection type has strengths and trade-offs. Lists are flexible and ordered but slower for membership testing. Tuples are immutable and hashable but fixed-size. Dictionaries have fast lookups by key but maintain insertion order (Python 3.7+). Sets are fast for membership and deduplication but unordered and cannot contain duplicates.</p>
+
+  <p>Choosing the right collection type is crucial for both code correctness and performance. A list is appropriate when you need to maintain order and modify items. A tuple is better when you need immutability and want to use the collection as a dictionary key or set element. A dictionary is essential when you need fast lookups by arbitrary keys. A set is the perfect choice when you need to test membership quickly or remove duplicates.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Collection Types Comprehensive Comparison</div>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h5>Lists</h5>
+        <p>Ordered, mutable, flexible.</p>
+        <ul>
+          <li>Use for: dynamic data, sequences, stacks</li>
+          <li>Lookup by index: O(1) fast</li>
+          <li>Membership test: O(n) slow</li>
+          <li>Hashable: No</li>
+          <li>Common methods: append, extend, insert, remove, pop, sort</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Tuples</h5>
+        <p>Ordered, immutable, fixed.</p>
+        <ul>
+          <li>Use for: fixed data, dictionary keys, function returns</li>
+          <li>Lookup by index: O(1) fast</li>
+          <li>Membership test: O(n) slow</li>
+          <li>Hashable: Yes</li>
+          <li>Cannot be modified after creation</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Dictionaries</h5>
+        <p>Key-value pairs, fast lookup.</p>
+        <ul>
+          <li>Use for: mappings, configs, caches, lookups</li>
+          <li>Lookup by key: O(1) fast (average)</li>
+          <li>Iteration: O(n)</li>
+          <li>Hashable: No (but keys must be)</li>
+          <li>Maintains insertion order (Python 3.7+)</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Sets</h5>
+        <p>Unique elements, no order.</p>
+        <ul>
+          <li>Use for: deduplication, membership, set operations</li>
+          <li>Membership test: O(1) fast (average)</li>
+          <li>Add/Remove: O(1) fast (average)</li>
+          <li>Hashable: No (elements must be)</li>
+          <li>Common operations: union, intersection, difference</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Performance Considerations and Use Cases</h3>
+  <p>When processing large datasets in AI applications, collection performance matters. If you need to frequently check whether a value exists in your collection, use a set (O(1)) rather than a list (O(n)). If you need fast lookups by key, always use a dictionary instead of iterating through lists of tuples. For fixed-size data like image dimensions or coordinates, tuples are both more semantically appropriate and prevent accidental modification.</p>
+
+  <p>In machine learning pipelines, you will often mix collection types: lists for sequences of samples, dictionaries for mapping feature names to indices, tuples for fixed shape specifications, and sets for tracking processed IDs or unique classes. Understanding how to combine these effectively is essential.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Real-world example: combining collection types</span>
+<span class="va">dataset</span> <span class="op">=</span> {
+    <span class="st">"features"</span>: [[<span class="nm">1</span>, <span class="nm">2</span>], [<span class="nm">3</span>, <span class="nm">4</span>], [<span class="nm">5</span>, <span class="nm">6</span>]],  <span class="cm"># list of lists</span>
+    <span class="st">"labels"</span>: [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>],           <span class="cm"># list of strings</span>
+    <span class="st">"shape"</span>: (<span class="nm">3</span>, <span class="nm">2</span>),                      <span class="cm"># tuple (immutable)</span>
+    <span class="st">"classes"</span>: {<span class="st">"A"</span>, <span class="st">"B"</span>}              <span class="cm"># set (unique values)</span>
+}
+
+<span class="cm"># Fast lookup of feature names</span>
+<span class="va">feature_index</span> <span class="op">=</span> {
+    <span class="st">"age"</span>: <span class="nm">0</span>,
+    <span class="st">"income"</span>: <span class="nm">1</span>,
+    <span class="st">"credit_score"</span>: <span class="nm">2</span>
+}  <span class="cm"># O(1) lookup instead of O(n)</span>
+
+<span class="cm"># Track which samples have been processed</span>
+<span class="va">processed_ids</span> <span class="op">=</span> <span class="fn">set</span>()  <span class="cm"># fast membership test</span>
+<span class="kw">for</span> <span class="va">sample_id</span> <span class="kw">in</span> <span class="va">new_ids</span>:
+    <span class="kw">if</span> <span class="va">sample_id</span> <span class="kw">not</span> <span class="kw">in</span> <span class="va">processed_ids</span>:  <span class="cm"># O(1) check</span>
+        <span class="va">processed_ids</span>.<span class="fn">add</span>(<span class="va">sample_id</span>)</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We demonstrate a realistic scenario combining all four collection types. The dictionary stores a dataset with mixed structures. The feature_index dictionary enables O(1) feature lookup instead of searching through a list. The set efficiently tracks processed IDs with constant-time membership testing. This pattern is common in real ML pipelines for efficient data handling.</p>
+  </div>
+
+  <div class="why-matters">
+    <h4>Why This Matters</h4>
+    <p><strong>In Data Processing:</strong> Using the right collection type can mean the difference between a pipeline that runs in seconds versus one that runs for hours. When processing millions of samples, the O(1) lookup of a dictionary or set can save hours of computation compared to O(n) list searches.</p>
+    <p><strong>In Code Clarity:</strong> Using the appropriate collection type also makes your code more readable. Someone reading <code>processed_ids.add(id)</code> immediately understands you are tracking unique IDs. Using a list would be semantically incorrect and confusing.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>List: ordered, mutable, flexible; O(1) index lookup, O(n) membership; use for sequences</li>
+      <li>Tuple: ordered, immutable, hashable; O(1) index lookup; use for fixed data and keys</li>
+      <li>Dictionary: key-value pairs, O(1) average key lookup; use for mappings and fast access</li>
+      <li>Set: unique elements, O(1) average membership; use for deduplication and set operations</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<hr class="section-divider">
+
+<section class="section reveal" id="nested-collections">
+  <span class="section-label">Advanced Patterns</span>
+  <h2>Nested Collections and Real-World Patterns</h2>
+
+  <p>In real AI projects, you rarely work with simple collections. Instead, you combine them: lists of dictionaries (common for structured data), dictionaries of lists (common for datasets), and tuples as keys (for caching). Understanding how to work with nested structures is essential for data processing.</p>
+
+  <p>Pandas DataFrames internally use dictionaries of Series (which are list-like), so understanding how to manipulate nested Python collections helps you work effectively with Pandas. Similarly, JSON data from APIs arrives as nested dictionaries and lists that you need to parse and manipulate.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># List of dictionaries — common data format</span>
+<span class="va">students</span> <span class="op">=</span> [
+    {<span class="st">"name"</span>: <span class="st">"Alice"</span>, <span class="st">"grade"</span>: <span class="nm">95</span>, <span class="st">"courses"</span>: [<span class="st">"ML"</span>, <span class="st">"DL"</span>]},
+    {<span class="st">"name"</span>: <span class="st">"Bob"</span>, <span class="st">"grade"</span>: <span class="nm">87</span>, <span class="st">"courses"</span>: [<span class="st">"ML"</span>, <span class="st">"NLP"</span>]},
+]
+
+<span class="cm"># Access nested data</span>
+<span class="fn">print</span>(<span class="va">students</span>[<span class="nm">0</span>][<span class="st">"name"</span>])  <span class="cm"># Alice</span>
+<span class="fn">print</span>(<span class="va">students</span>[<span class="nm">0</span>][<span class="st">"courses"</span>][<span class="nm">0</span>])  <span class="cm"># ML</span>
+
+<span class="cm"># Dictionary of lists — common for multi-dimensional data</span>
+<span class="va">data</span> <span class="op">=</span> {
+    <span class="st">"age"</span>: [<span class="nm">25</span>, <span class="nm">30</span>, <span class="nm">35</span>],
+    <span class="st">"income"</span>: [<span class="nm">50000</span>, <span class="nm">60000</span>, <span class="nm">75000</span>],
+    <span class="st">"employed"</span>: [<span class="kw">True</span>, <span class="kw">True</span>, <span class="kw">False</span>]
+}
+
+<span class="cm"># Iterate through columns efficiently</span>
+<span class="kw">for</span> <span class="va">column_name</span>, <span class="va">column_values</span> <span class="kw">in</span> <span class="va">data</span>.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="st">f"</span>{<span class="va">column_name</span>}<span class="st">: </span>{<span class="fn">len</span>(<span class="va">column_values</span>)}<span class="st"> samples"</span>)</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We show two fundamental patterns. The list of dictionaries is how most structured data arrives from APIs and databases — each dictionary represents a record with named fields. The dictionary of lists is the column-oriented format used internally by Pandas and excellent for statistical operations. Being able to convert between these formats and navigate them is essential.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>Key Takeaways</h4>
+    <ul>
+      <li>List of dictionaries: each element is a record with named fields (row-oriented)</li>
+      <li>Dictionary of lists: each value is a column of data (column-oriented)</li>
+      <li>Use appropriate indexing: <code>data[row][column]</code> for list-of-dicts, <code>data[column][row]</code> for dict-of-lists</li>
+      <li>Understand these patterns to transition smoothly to Pandas and NumPy</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+
+  <div class="exercise">
+    <h4>Exercise 1: Building a Dataset in Lists</h4>
+    <p>Create a simple dataset using lists and perform operations:</p>
+    <ol>
+      <li>Create three lists: <code>ids = [1, 2, 3]</code>, <code>features = [[0.1, 0.2], [0.3, 0.4], [0.5, 0.6]]</code>, <code>labels = ["A", "B", "A"]</code></li>
+      <li>Access the first feature vector using indexing</li>
+      <li>Append a new sample to each list</li>
+      <li>Create a tuple for the first sample: <code>(id, features, label)</code></li>
+      <li>Print the length and contents of each list</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2: Configuration Management with Dicts</h4>
+    <p>Build a model configuration using dictionaries:</p>
+    <ol>
+      <li>Create a dictionary with model hyperparameters (learning_rate, batch_size, epochs)</li>
+      <li>Safely access parameters that might not exist using <code>.get()</code></li>
+      <li>Update multiple parameters in the configuration</li>
+      <li>Print all key-value pairs in a formatted way</li>
+      <li>Add a nested dictionary for layer-specific parameters</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3: Data Deduplication with Sets</h4>
+    <p>Use sets for deduplication and membership testing:</p>
+    <ol>
+      <li>Create a list with duplicate class labels: <code>["cat", "dog", "cat", "bird", "dog"]</code></li>
+      <li>Convert to a set to find unique classes</li>
+      <li>Test membership: does the set contain "fish"?</li>
+      <li>Find the difference between two sets of class labels</li>
+      <li>Find the intersection of multiple sets</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4: Working with Nested Collections</h4>
+    <p>Combine multiple collection types in realistic scenarios:</p>
+    <ol>
+      <li>Create a dictionary where keys are image dimensions (tuples) and values are feature lists</li>
+      <li>Access a specific image's features using tuple indexing</li>
+      <li>Check if an image dimension tuple exists in the dictionary</li>
+      <li>Iterate and print all entries with descriptive formatting</li>
+      <li>Add new images and update existing ones</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5: Processing Student Records</h4>
+    <p>Work with a realistic list-of-dictionaries structure:</p>
+    <ol>
+      <li>Create a list of student records, each with name, grade, and courses (list)</li>
+      <li>Extract all student names into a separate list</li>
+      <li>Find students with grade above 90</li>
+      <li>Find all unique courses across all students (using set operations)</li>
+      <li>Create a grade distribution dictionary (grade ranges as keys, counts as values)</li>
+    </ol>
+  </div>
+</section>
+
+<div class="next-preview reveal">
+  <h4>Up Next: Lesson 1.3</h4>
+  <p><strong>Functions and Code Reusability</strong> — Collections become powerful when combined with functions. The next lesson teaches you how to write reusable functions that process collections, handle edge cases, and form the foundation of any AI project.</p>
+</div>
+
+<div class="nav-buttons">
+  <a href="../learn.html?c=associate&l=module1-lesson1" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous: Variables</a>
+  <a href="../learn.html?c=associate&l=module1-lesson3" class="nav-btn next">Next: Functions <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

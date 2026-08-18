@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.6 Advanced Linear Algebra Operations — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 2 — Advanced Linear Algebra Operations</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Collections</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Random &amp; Stats</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6" class="active"><span class="sidebar-num">2.6</span> Advanced LA</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Associate</a><span class="sep">›</span>
+    <span>Module 2</span><span class="sep">›</span>
+    <span>Advanced Linear Algebra</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 2 · Lesson 6</span>
+    <span class="difficulty-badge advanced">Advanced</span>
+  </div>
+  <h1>Advanced Linear Algebra <span class="accent">Operations</span></h1>
+  <p class="hero-sub">Master matrix decompositions and factorizations that underpin modern machine learning. Learn eigenvalue decomposition, QR factorization, and singular value decomposition. These techniques are essential for PCA, dimensionality reduction, and understanding matrix structure.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~34 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      6 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      3 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Understand eigenvalue decomposition and its applications</li>
+    <li>Compute QR factorization for orthogonal transformations</li>
+    <li>Master singular value decomposition (SVD) and its uses</li>
+    <li>Apply matrix decompositions to dimensionality reduction</li>
+    <li>Implement principal component analysis (PCA) using SVD</li>
+    <li>Understand rank, condition number, and matrix properties</li>
+    <li>Debug numerical stability issues in decompositions</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Completion of all Module 2 lessons (NumPy fundamentals)</li>
+    <li>Strong understanding of eigenvalues and eigenvectors from Lesson 2.2</li>
+    <li>Familiarity with matrix properties and transformations</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="eigenvalue-decomposition">
+  <span class="section-label">Fundamentals</span>
+  <h2>Eigenvalue Decomposition and Diagonalization</h2>
+
+  <p>Eigenvalue decomposition reveals the structure of a matrix. For symmetric matrices (common in AI), it provides an orthogonal basis where the matrix becomes diagonal. This is the foundation for PCA, spectral clustering, and understanding dynamical systems.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Imagine a transformation that stretches space. Eigenvalues tell you how much stretching happens along each principal direction (eigenvector). A diagonal matrix is the simplest form—stretching happens only along the axes, no rotation. Eigenvalue decomposition finds this simplest representation.</p>
+  </div>
+
+  <h3>Computing and Using Eigenvalue Decomposition</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Eigenvalue decomposition</span>
+<span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+
+<span class="cm"># Create a symmetric matrix (guaranteed real eigenvalues)</span>
+<span class="va">A</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">4</span>, <span class="nm">1</span>], [<span class="nm">1</span>, <span class="nm">3</span>]])
+
+<span class="cm"># Eigenvalue decomposition: A = Q * Lambda * Q^T</span>
+<span class="va">eigenvalues</span>, <span class="va">Q</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">eigh</span>(<span class="va">A</span>)  <span class="cm"># eigh for symmetric matrices</span>
+
+<span class="cm"># Q contains eigenvectors as columns</span>
+<span class="cm"># eigenvalues are the diagonal elements</span>
+
+<span class="cm"># Reconstruct original matrix</span>
+<span class="va">Lambda</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">diag</span>(<span class="va">eigenvalues</span>)
+<span class="va">A_reconstructed</span> <span class="op">=</span> <span class="va">Q</span> <span class="op">@</span> <span class="va">Lambda</span> <span class="op">@</span> <span class="va">Q</span>.<span class="fn">T</span>
+
+<span class="fn">print</span>(<span class="st">"Original A:"</span>)
+<span class="fn">print</span>(<span class="va">A</span>)
+<span class="fn">print</span>(<span class="st">"Reconstructed A:"</span>)
+<span class="fn">print</span>(<span class="va">A_reconstructed</span>)
+<span class="fn">print</span>(<span class="st">"Match:"</span>, <span class="fn">np</span>.<span class="fn">allclose</span>(<span class="va">A</span>, <span class="va">A_reconstructed</span>))</code></pre>
+
+  <h3>Application: Power Iteration for Dominant Eigenvalue</h3>
+
+  <p>The dominant eigenvalue (largest absolute value) is crucial for understanding matrix behavior. Power iteration is a simple method to compute it without full decomposition.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Power iteration to find dominant eigenvalue</span>
+<span class="va">A</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">4</span>, <span class="nm">1</span>], [<span class="nm">1</span>, <span class="nm">3</span>]])
+
+<span class="cm"># Start with random vector</span>
+<span class="va">v</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">2</span>)
+<span class="va">v</span> <span class="op">=</span> <span class="va">v</span> <span class="op">/</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">norm</span>(<span class="va">v</span>)
+
+<span class="cm"># Iterate: v <- A @ v / ||A @ v||</span>
+<span class="kw">for</span> <span class="va">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">10</span>):
+    <span class="va">v</span> <span class="op">=</span> <span class="va">A</span> <span class="op">@</span> <span class="va">v</span>
+    <span class="va">v</span> <span class="op">=</span> <span class="va">v</span> <span class="op">/</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">norm</span>(<span class="va">v</span>)
+
+<span class="cm"># Dominant eigenvalue</span>
+<span class="va">dominant_eigenvalue</span> <span class="op">=</span> <span class="va">v</span> <span class="op">@</span> (<span class="va">A</span> <span class="op">@</span> <span class="va">v</span>)
+
+<span class="fn">print</span>(<span class="st">f"Dominant eigenvalue: {dominant_eigenvalue:.4f}"</span>)
+<span class="cm"># Compare with full eigenvalue decomposition</span>
+<span class="va">true_dominant</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">max</span>(<span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">eigvals</span>(<span class="va">A</span>))
+<span class="fn">print</span>(<span class="st">f"True dominant eigenvalue: {true_dominant:.4f}"</span>)</code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Eigenvalue decomposition diagonalizes symmetric matrices</li>
+      <li>Eigenvalues reveal scaling; eigenvectors reveal directions</li>
+      <li>Use eigh for symmetric matrices (faster, guaranteed real eigenvalues)</li>
+      <li>Dominant eigenvalue determines matrix growth rate</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="svd">
+  <span class="section-label">Core Concept</span>
+  <h2>Singular Value Decomposition (SVD)</h2>
+
+  <p>SVD is the most important matrix decomposition in machine learning. Every matrix (square or rectangular) has an SVD. It reveals the fundamental structure: directions of maximum variation and their magnitudes.</p>
+
+  <h3>SVD Formula and Interpretation</h3>
+
+  <p>Any matrix A can be written as: A = U * Σ * V^T, where U and V are orthogonal, and Σ is diagonal.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Singular Value Decomposition</span>
+<span class="va">A</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+                [<span class="nm">0</span>, <span class="nm">2</span>, <span class="nm">0</span>]])  <span class="cm"># Shape: (2, 3)</span>
+
+<span class="cm"># SVD: A = U @ diag(s) @ V.T</span>
+<span class="va">U</span>, <span class="va">s</span>, <span class="va">Vt</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">svd</span>(<span class="va">A</span>)
+
+<span class="fn">print</span>(<span class="st">f"U shape: {U.shape}"</span>)          <span class="cm"># (2, 2)</span>
+<span class="fn">print</span>(<span class="st">f"Singular values: {s}"</span>)       <span class="cm"># [2., 1.]</span>
+<span class="fn">print</span>(<span class="st">f"V^T shape: {Vt.shape}"</span>)       <span class="cm"># (3, 3) or (2, 3) with full=False</span>
+
+<span class="cm"># Reconstruct (with full=False)</span>
+<span class="va">U_reduced</span>, <span class="va">s</span>, <span class="va">Vt_reduced</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">svd</span>(<span class="va">A</span>, <span class="va">full_matrices</span><span class="op">=</span><span class="kw">False</span>)
+<span class="va">A_reconstructed</span> <span class="op">=</span> <span class="va">U_reduced</span> <span class="op">@</span> <span class="fn">np</span>.<span class="fn">diag</span>(<span class="va">s</span>) <span class="op">@</span> <span class="va">Vt_reduced</span>
+<span class="fn">print</span>(<span class="st">"Match:"</span>, <span class="fn">np</span>.<span class="fn">allclose</span>(<span class="va">A</span>, <span class="va">A_reconstructed</span>))</code></pre>
+
+  <h3>Application: Principal Component Analysis (PCA)</h3>
+
+  <p>PCA reduces dimensionality while preserving variance. SVD is the efficient way to implement it.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># PCA using SVD</span>
+<span class="cm"># Data: (n_samples, n_features)</span>
+<span class="va">X</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">100</span>, <span class="nm">10</span>)
+
+<span class="cm"># Center the data (mean = 0)</span>
+<span class="va">X_centered</span> <span class="op">=</span> <span class="va">X</span> <span class="op">-</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">X</span>, <span class="va">axis</span><span class="op">=</span><span class="nm">0</span>)
+
+<span class="cm"># SVD of centered data</span>
+<span class="va">U</span>, <span class="va">s</span>, <span class="va">Vt</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">svd</span>(<span class="va">X_centered</span>, <span class="va">full_matrices</span><span class="op">=</span><span class="kw">False</span>)
+
+<span class="cm"># Singular values relate to variance</span>
+<span class="va">variance</span> <span class="op">=</span> (<span class="va">s</span> <span class="op">**</span> <span class="nm">2</span>) <span class="op">/</span> (<span class="fn">len</span>(<span class="va">X</span>) <span class="op">-</span> <span class="nm">1</span>)
+<span class="va">variance_explained</span> <span class="op">=</span> <span class="va">variance</span> <span class="op">/</span> <span class="fn">np</span>.<span class="fn">sum</span>(<span class="va">variance</span>)
+
+<span class="cm"># Keep first k components explaining 95% of variance</span>
+<span class="va">k</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">argmax</span>(<span class="fn">np</span>.<span class="fn">cumsum</span>(<span class="va">variance_explained</span>) <span class="op">></span> <span class="nm">0.95</span>) <span class="op">+</span> <span class="nm">1</span>
+<span class="va">components</span> <span class="op">=</span> <span class="va">Vt</span>[:<span class="va">k</span>, :]  <span class="cm"># Principal components (k, n_features)</span>
+
+<span class="cm"># Project to PCA space (reduce dimensions)</span>
+<span class="va">X_pca</span> <span class="op">=</span> <span class="va">X_centered</span> <span class="op">@</span> <span class="va">components</span>.<span class="fn">T</span>  <span class="cm"># Shape: (100, k)</span>
+
+<span class="fn">print</span>(<span class="st">f"Original shape: {X.shape}"</span>)
+<span class="fn">print</span>(<span class="st">f"Reduced shape: {X_pca.shape}"</span>)
+<span class="fn">print</span>(<span class="st">f"Variance explained: {np.sum(variance_explained[:k]):.2%}"</span>)</code></pre>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Machine Learning:</strong> SVD is the foundation for dimensionality reduction, data compression, and feature extraction. Many algorithms (PCA, recommender systems, topic modeling) rely on SVD.</p>
+    <p><strong>In Numerical Computing:</strong> Singular values reveal matrix rank and condition number—critical for understanding numerical stability of algorithms.</p>
+    <p><strong>In Signal Processing:</strong> SVD separates signal from noise by thresholding small singular values.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>SVD works on any matrix (square or rectangular)</li>
+      <li>Singular values are always non-negative and ordered descending</li>
+      <li>First k singular values/vectors capture most data variance</li>
+      <li>Use SVD for PCA, compression, and rank estimation</li>
+      <li>Use full_matrices=False for efficiency with tall/wide matrices</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="qr-factorization">
+  <span class="section-label">Advanced</span>
+  <h2>QR Factorization and Orthogonal Matrices</h2>
+
+  <p>QR factorization decomposes a matrix into an orthogonal matrix (Q) and an upper triangular matrix (R). It's efficient for solving least-squares problems and orthogonalizing vectors.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># QR factorization</span>
+<span class="va">A</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">2</span>], [<span class="nm">3</span>, <span class="nm">4</span>], [<span class="nm">5</span>, <span class="nm">6</span>]])  <span class="cm"># Shape: (3, 2)</span>
+
+<span class="cm"># QR: A = Q @ R</span>
+<span class="cm"># Q: orthogonal (m, m) or (m, n) with mode='reduced'</span>
+<span class="cm"># R: upper triangular (m, n) or (n, n) with mode='reduced'</span>
+<span class="va">Q</span>, <span class="va">R</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">qr</span>(<span class="va">A</span>, <span class="va">mode</span><span class="op">=</span><span class="st">'reduced'</span>)
+
+<span class="cm"># Q is orthogonal: Q.T @ Q = I</span>
+<span class="fn">print</span>(<span class="st">"Q.T @ Q:"</span>)
+<span class="fn">print</span>(<span class="fn">np</span>.<span class="fn">allclose</span>(<span class="va">Q</span>.<span class="fn">T</span> <span class="op">@</span> <span class="va">Q</span>, <span class="fn">np</span>.<span class="fn">eye</span>(<span class="nm">2</span>)))  <span class="cm"># True</span>
+
+<span class="cm"># Reconstruct A</span>
+<span class="va">A_reconstructed</span> <span class="op">=</span> <span class="va">Q</span> <span class="op">@</span> <span class="va">R</span>
+<span class="fn">print</span>(<span class="st">"Reconstruction match:"</span>, <span class="fn">np</span>.<span class="fn">allclose</span>(<span class="va">A</span>, <span class="va">A_reconstructed</span>))</code></pre>
+
+  <h3>Application: Solving Least Squares with QR</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Solving Ax = b using QR factorization</span>
+<span class="va">A</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">0</span>], [<span class="nm">1</span>, <span class="nm">1</span>], [<span class="nm">1</span>, <span class="nm">2</span>]])
+<span class="va">b</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">6</span>, <span class="nm">0</span>, <span class="nm">0</span>])
+
+<span class="va">Q</span>, <span class="va">R</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">qr</span>(<span class="va">A</span>, <span class="va">mode</span><span class="op">=</span><span class="st">'reduced'</span>)
+
+<span class="cm"># Solve Rx = Q^T b (more stable than using A directly)</span>
+<span class="va">x</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">solve</span>(<span class="va">R</span>, <span class="va">Q</span>.<span class="fn">T</span> <span class="op">@</span> <span class="va">b</span>)</code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>QR factorization produces orthogonal matrix Q and triangular matrix R</li>
+      <li>More numerically stable than solving A directly</li>
+      <li>Useful for orthogonalizing column vectors</li>
+      <li>Q.T @ Q = I (orthonormal columns)</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="matrix-properties">
+  <span class="section-label">Advanced Topics</span>
+  <h2>Matrix Rank, Condition Number, and Numerical Stability</h2>
+
+  <p>Understanding matrix properties helps diagnose and fix numerical issues in algorithms.</p>
+
+  <h3>Rank and Effective Rank</h3>
+
+  <p>Rank tells you the dimensionality of the matrix's column space—how many independent columns it has.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Matrix rank</span>
+<span class="va">A_full_rank</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">0</span>], [<span class="nm">0</span>, <span class="nm">1</span>]])      <span class="cm"># Rank 2</span>
+<span class="va">A_low_rank</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">2</span>], [<span class="nm">2</span>, <span class="nm">4</span>]])      <span class="cm"># Rank 1 (2nd row = 2 * 1st row)</span>
+
+<span class="fn">print</span>(<span class="st">f"Rank full: {np.linalg.matrix_rank(A_full_rank)}"</span>)  <span class="cm"># 2</span>
+<span class="fn">print</span>(<span class="st">f"Rank low: {np.linalg.matrix_rank(A_low_rank)}"</span>)    <span class="cm"># 1</span>
+
+<span class="cm"># Effective rank from SVD: number of singular values > threshold</span>
+<span class="va">s</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">svd</span>(<span class="va">A_low_rank</span>, <span class="va">compute_uv</span><span class="op">=</span><span class="kw">False</span>)
+<span class="fn">print</span>(<span class="st">f"Singular values: {s}"</span>)  <span class="cm"># [4.472... 0. ] or close to zero</span></code></pre>
+
+  <h3>Condition Number: Measuring Numerical Stability</h3>
+
+  <p>Condition number measures sensitivity to perturbations. Large condition numbers indicate ill-posed problems.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Condition number (ratio of largest to smallest singular value)</span>
+<span class="va">A_well_conditioned</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">eye</span>(<span class="nm">2</span>)
+<span class="va">A_ill_conditioned</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1e10</span>, <span class="nm">1</span>], [<span class="nm">1</span>, <span class="nm">1e-10</span>]])
+
+<span class="va">cond1</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">cond</span>(<span class="va">A_well_conditioned</span>)
+<span class="va">cond2</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">linalg</span>.<span class="fn">cond</span>(<span class="va">A_ill_conditioned</span>)
+
+<span class="fn">print</span>(<span class="st">f"Well-conditioned: {cond1:.2f}"</span>)      <span class="cm"># ~1.0 (good)</span>
+<span class="fn">print</span>(<span class="st">f"Ill-conditioned: {cond2:.2e}"</span>)   <span class="cm"># Very large (bad)</span>
+
+<span class="cm"># Rule of thumb: 10^16 / condition_number ≈ precision loss</span></code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Rank reveals linear dependencies in columns</li>
+      <li>Low-rank matrices can be approximated with fewer dimensions</li>
+      <li>Condition number measures numerical stability (prefer cond ≈ 1)</li>
+      <li>Large condition numbers cause precision loss in computations</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Eigenvalue Decomposition</h4>
+    <p>Create a 4x4 symmetric matrix. Compute its eigenvalue decomposition. Reconstruct the matrix from eigenvalues and eigenvectors. Verify reconstruction accuracy.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: PCA Implementation</h4>
+    <p>Load or generate a (200, 50) dataset. Center it. Compute SVD. Determine how many components are needed for 95% variance. Project to reduced dimensions. Verify variance explained.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Condition Number Analysis</h4>
+    <p>Create matrices with condition numbers 1, 100, and 1e10. Solve Ax=b with perturbations in b. How does solution accuracy degrade with condition number?</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<div class="next-preview reveal">
+  <h4>📍 Module Completion</h4>
+  <p>You have completed Module 2: NumPy & Scientific Computing. You now understand arrays, linear algebra, indexing, broadcasting, statistics, and advanced decompositions. These foundations enable you to work effectively with data and implement machine learning algorithms. The next modules build on these skills with pandas for data manipulation, scikit-learn for machine learning, and TensorFlow/PyTorch for deep learning.</p>
+</div>
+
+<div class="nav-buttons">
+  <a href="../learn.html?c=associate&l=module2-lesson5" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+  <a href="index.html" class="nav-btn next">Back to Course <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

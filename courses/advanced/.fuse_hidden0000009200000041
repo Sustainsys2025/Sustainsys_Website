@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hybrid Systems — AI Practitioner Advanced | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body class="lesson">
+<div class="progress-circle-wrap"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div>
+<nav class="topnav"><div class="topnav-inner">
+<a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a>
+<div class="nav-divider"></div>
+<div class="nav-title">Module 6 — Hybrid Systems</div>
+<span class="nav-badge">Advanced</span>
+<a href="index.html" class="nav-home-link">← Course Home</a>
+</div></nav>
+<main class="main"><div class="container">
+<section class="hero">
+<span class="hero-eyebrow">Module 6.3</span>
+<h1>Hybrid Systems</h1>
+<p class="hero-sub">Combining Approaches: Comprehensive guide with production patterns and implementation strategies</p>
+</section>
+<div class="objectives"><h4>Learning Objectives</h4><ul>
+<li>Master theoretical foundations and design principles</li>
+<li>Implement production-grade solutions with real data</li>
+<li>Understand critical trade-offs and when to apply each approach</li>
+<li>Build systems that scale from prototypes to millions of users</li>
+<li>Design for reliability, cost efficiency, and maintainability</li>
+<li>Monitor, debug, and continuously improve deployed systems</li>
+<li>Apply lessons from production failures and successes</li>
+</ul></div>
+
+<section class="section" id="overview">
+<h2>Module Overview</h2>
+<p>This lesson explores hybrid systems in depth with both theory and practical patterns. We combine foundational concepts with real-world implementation strategies used in production systems.</p>
+
+<p>Key themes:</p>
+<ul>
+<li><strong>Pragmatism:</strong> Techniques that work with real constraints and real data</li>
+<li><strong>Progressive optimization:</strong> Start simple, measure, optimize bottlenecks based on data</li>
+<li><strong>Resilience:</strong> Systems designed to handle failures gracefully</li>
+<li><strong>Trade-offs:</strong> Speed vs. cost vs. accuracy vs. complexity</li>
+<li><strong>Observability:</strong> Monitoring and debugging capabilities built in</li>
+</ul>
+
+<div class="callout tip">
+<strong>Learning Strategy:</strong> Don't just read code examples—understand the reasoning. Why use this architecture? What problem does it solve? What trade-offs does it involve?
+</div>
+
+<h3>Prerequisites</h3>
+<p>Familiarity with basic Python, HTTP APIs, and fundamental system design concepts recommended.</p>
+</section>
+
+<section class="section" id="fundamentals">
+<h2>Core Concepts and Theory</h2>
+<p>Systems live at the intersection of multiple competing concerns. Understanding this trade-off space is essential to good architecture.</p>
+
+<h3>The Core Trade-Off Space</h3>
+<p>Every system balances:</p>
+<ul>
+<li><strong>Speed (Latency):</strong> How fast can we respond?</li>
+<li><strong>Cost:</strong> How much does each operation cost?</li>
+<li><strong>Quality:</strong> How good is the output?</li>
+<li><strong>Reliability:</strong> How often does it work correctly?</li>
+<li><strong>Maintainability:</strong> Can the team understand and modify it?</li>
+</ul>
+
+<p>Different domains prioritize differently:</p>
+<ul>
+<li><strong>High-frequency trading:</strong> Speed is paramount (microseconds)</li>
+<li><strong>Social media platforms:</strong> Cost and scale matter most</li>
+<li><strong>Healthcare systems:</strong> Reliability and accuracy matter most</li>
+<li><strong>Conversational AI:</strong> Quality and cost; speed acceptable at 1-2s latency</li>
+</ul>
+
+<h3>System Bottlenecks</h3>
+<p>Systems constrained by bottlenecks. Common types:</p>
+<ul>
+<li><strong>I/O bound:</strong> Waiting on network, database, APIs (80% of systems)</li>
+<li><strong>Compute bound:</strong> CPU-intensive operations</li>
+<li><strong>Memory bound:</strong> Working with massive datasets</li>
+<li><strong>Database:</strong> Query throughput or latency limits</li>
+</ul>
+
+<p>Solutions differ by bottleneck type:</p>
+<ul>
+<li>I/O bound → async I/O, concurrency, caching</li>
+<li>Compute bound → batching, cheaper models, GPUs</li>
+<li>Memory bound → streaming, partitioning</li>
+<li>Database → indexing, denormalization, caching</li>
+</ul>
+
+<div class="callout warning">
+<strong>Key Insight:</strong> Optimizing code performance when bottleneck is I/O is useless. Your 10x faster code still waits on network calls. Profile first.
+</div>
+
+<h3>Measurement and Monitoring</h3>
+<p>Measure continuously from day one:</p>
+<ul>
+<li><strong>Latency:</strong> p50, p95, p99 (not just average)</li>
+<li><strong>Throughput:</strong> Requests per second</li>
+<li><strong>Cost:</strong> Per request, per user, per day</li>
+<li><strong>Error rate:</strong> Percentage of failed requests</li>
+<li><strong>Quality:</strong> Task success rate, business metrics</li>
+</ul>
+
+<p>On day 50 when production breaks, historical data enables effective debugging.</p>
+</section>
+
+<section class="section" id="architecture-patterns">
+<h2>Architecture Patterns</h2>
+
+<h3>Pattern 1: Synchronous Pipeline</h3>
+<p><strong>Structure:</strong> Request in → process sequentially → return response</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">handle_request</span>(<span class="va">input_data</span>):
+    <span class="va">s1</span> <span class="op">=</span> <span class="fn">step1_preprocess</span>(<span class="va">input_data</span>)
+    <span class="va">s2</span> <span class="op">=</span> <span class="fn">step2_process</span>(<span class="va">s1</span>)
+    <span class="va">s3</span> <span class="op">=</span> <span class="fn">step3_postprocess</span>(<span class="va">s2</span>)
+    <span class="kw">return</span> <span class="va">s3</span></code></pre>
+
+<p><strong>When to use:</strong> Prototypes, batch processing, single-user apps, total time under 500ms</p>
+
+<p><strong>Pros:</strong> Simplest to implement, easiest to debug, perfect for learning</p>
+
+<p><strong>Cons:</strong> One slow step blocks everything, no concurrency, poor fault isolation, doesn't scale</p>
+
+<p><strong>Scaling limit:</strong> ~100 requests/second on modest hardware if each takes 100ms</p>
+
+<h3>Pattern 2: Asynchronous with Queues</h3>
+<p><strong>Structure:</strong> Request → queue → workers process → response available later</p>
+
+<p>Technologies: RabbitMQ, Kafka, AWS SQS, GCP Pub/Sub</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">handle_request_async</span>(<span class="va">user_input</span>):
+    <span class="cm"># Return immediately, process in background</span>
+    <span class="va">job_id</span> <span class="op">=</span> <span class="fn">uuid</span>.<span class="fn">uuid4</span>()
+    <span class="va">queue</span>.<span class="fn">put</span>({<span class="st">"id"</span>: <span class="va">job_id</span>, <span class="st">"data"</span>: <span class="va">user_input</span>})
+    <span class="kw">return</span> {<span class="st">"job_id"</span>: <span class="va">job_id</span>}
+
+<span class="cm"># Separate worker process</span>
+<span class="kw">while</span> <span class="bi">True</span>:
+    <span class="va">job</span> <span class="op">=</span> <span class="va">queue</span>.<span class="fn">get</span>()
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">process</span>(<span class="va">job</span>[<span class="st">"data"</span>])
+    <span class="va">cache</span>[<span class="va">job</span>[<span class="st">"id"</span>]] <span class="op">=</span> <span class="va">result</span></code></pre>
+
+<p><strong>When to use:</strong> High volume (1K+ req/s), spiky traffic, long operations, independent scaling needed</p>
+
+<p><strong>Pros:</strong> Handles concurrency, fault isolation, easy to scale workers, supports retries</p>
+
+<p><strong>Cons:</strong> Added latency, more infrastructure, harder to debug, eventual consistency</p>
+
+<p><strong>Scaling limit:</strong> Thousands to millions depending on infrastructure</p>
+
+<h3>Pattern 3: Caching Layer</h3>
+<p><strong>Structure:</strong> Check cache → hit return quickly → miss compute and cache</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">def</span> <span class="fn">with_cache</span>(<span class="va">key</span>):
+    <span class="cm"># Check cache</span>
+    <span class="va">cached</span> <span class="op">=</span> <span class="va">cache</span>.<span class="fn">get</span>(<span class="va">key</span>)
+    <span class="kw">if</span> <span class="va">cached</span>: <span class="kw">return</span> <span class="va">cached</span>
+
+    <span class="cm"># Miss: compute</span>
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">expensive_operation</span>(<span class="va">key</span>)
+
+    <span class="cm"># Store with TTL</span>
+    <span class="va">cache</span>.<span class="fn">setex</span>(<span class="va">key</span>, <span class="nm">3600</span>, <span class="va">result</span>)
+    <span class="kw">return</span> <span class="va">result</span></code></pre>
+
+<p><strong>When to use:</strong> Repeated queries, expensive computations, acceptable staleness</p>
+
+<p><strong>Pros:</strong> 10-100x performance, reduced load, cost savings</p>
+
+<p><strong>Cons:</strong> Cache invalidation complexity, stale data, added infrastructure</p>
+
+<p><strong>Rule of thumb:</strong> Cache hit rate should exceed 80% to justify complexity</p>
+
+<h3>Pattern 4: Model Ensemble</h3>
+<p><strong>Structure:</strong> Route requests based on complexity or requirements</p>
+
+<p>Example: simple queries to GPT-3.5 (fast, cheap), complex queries to GPT-4 (slow, accurate)</p>
+
+<p><strong>When to use:</strong> Cost/quality trade-offs, A/B testing, fallback paths</p>
+
+<p><strong>Pros:</strong> Flexible optimization, easy fallbacks, safe testing</p>
+
+<p><strong>Cons:</strong> Routing logic adds complexity, inconsistent experience</p>
+</section>
+
+<section class="section" id="optimization">
+<h2>Optimization Hierarchy</h2>
+<p><strong>Always profile before optimizing.</strong> Measure where time actually goes.</p>
+
+<p>Optimization levels (typical speedups):</p>
+<ol>
+<li><strong>Caching:</strong> 10-100x (avoid repeated work)</li>
+<li><strong>Batching:</strong> 5-50x (process multiple items together)</li>
+<li><strong>Async I/O:</strong> 2-10x (don't block on I/O)</li>
+<li><strong>Cheaper alternatives:</strong> 10-100x (faster models, approximations)</li>
+<li><strong>Algorithm improvements:</strong> Depends on complexity class</li>
+</ol>
+
+<p>Key metrics to track after optimization:</p>
+<ul>
+<li>Latency (p50, p95, p99)</li>
+<li>Throughput (requests/second)</li>
+<li>Cost (per operation)</li>
+<li>Quality (success rate, accuracy)</li>
+</ul>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="code-lang">Python</button></div>
+<pre><code><span class="kw">import</span> <span class="im">time</span>
+<span class="kw">import</span> <span class="im">statistics</span>
+
+<span class="kw">def</span> <span class="fn">benchmark</span>(<span class="va">func</span>, <span class="va">iterations</span><span class="op">=</span><span class="nm">100</span>):
+    <span class="st">"""Benchmark before/after optimization"""</span>
+    <span class="va">times</span> <span class="op">=</span> []
+    <span class="kw">for</span> <span class="va">_</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">iterations</span>):
+        <span class="va">start</span> <span class="op">=</span> <span class="fn">time</span>.<span class="fn">time</span>()
+        <span class="fn">func</span>()
+        <span class="va">times</span>.<span class="fn">append</span>((<span class="fn">time</span>.<span class="fn">time</span>() <span class="op">-</span> <span class="va">start</span>) <span class="op">*</span> <span class="nm">1000</span>)
+
+    <span class="kw">return</span> {
+        <span class="st">"p50"</span>: <span class="fn">statistics</span>.<span class="fn">median</span>(<span class="va">times</span>),
+        <span class="st">"p95"</span>: <span class="fn">sorted</span>(<span class="va">times</span>)[<span class="nm">95</span>],
+        <span class="st">"p99"</span>: <span class="fn">sorted</span>(<span class="va">times</span>)[<span class="nm">99</span>],
+    }</code></pre>
+</section>
+
+<section class="section" id="testing">
+<h2>Testing for Production</h2>
+
+<p>Test types serve different purposes:</p>
+<ul>
+<li><strong>Unit tests:</strong> Components in isolation, fast, catch obvious bugs</li>
+<li><strong>Integration tests:</strong> Components together, slower, catch interaction bugs</li>
+<li><strong>Performance tests:</strong> Meets latency/throughput SLAs</li>
+<li><strong>Quality tests:</strong> Output meets requirements</li>
+<li><strong>Smoke tests:</strong> Quick system health checks</li>
+</ul>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="im">unittest</span>
+
+<span class="kw">class</span> <span class="fn">TestComponent</span>(<span class="im">unittest</span>.<span class="im">TestCase</span>):
+    <span class="kw">def</span> <span class="fn">test_happy_path</span>(<span class="va">self</span>):
+        <span class="st">"""Normal operation"""</span>
+        <span class="va">r</span> <span class="op">=</span> <span class="fn">process</span>(<span class="st">"input"</span>)
+        <span class="va">self</span>.<span class="fn">assertIsNotNone</span>(<span class="va">r</span>)
+
+    <span class="kw">def</span> <span class="fn">test_edge_cases</span>(<span class="va">self</span>):
+        <span class="st">"""Boundaries: empty, huge, special"""</span>
+        <span class="fn">process</span>(<span class="st">""</span>)
+        <span class="fn">process</span>(<span class="st">"x"</span> <span class="op">*</span> <span class="nm">1000000</span>)
+
+    <span class="kw">def</span> <span class="fn">test_errors</span>(<span class="va">self</span>):
+        <span class="st">"""Failure modes"""</span>
+        <span class="kw">with</span> <span class="va">self</span>.<span class="fn">assertRaises</span>(<span class="fn">ValueError</span>):
+            <span class="fn">process</span>(<span class="bi">None</span>)</code></pre>
+</section>
+
+<section class="section" id="exercises">
+<h2>Exercises</h2>
+
+<ol>
+<li><strong>Architecture Design:</strong> Design system handling 1000 req/sec with 100ms SLA. Identify bottlenecks.</li>
+<li><strong>Implementation:</strong> Build a component with metrics and error handling. Write tests.</li>
+<li><strong>Profiling:</strong> Find bottleneck in existing system. Implement optimization. Measure improvement.</li>
+<li><strong>Testing:</strong> Write unit, integration, performance tests. Set success criteria.</li>
+<li><strong>Monitoring:</strong> Set up logging, dashboards, alerts for production system.</li>
+</ol>
+</section>
+
+<div class="key-takeaways">
+<h3>Key Takeaways</h3>
+<ul>
+<li>Choose architecture matching constraints, not perfect abstraction</li>
+<li>Measurement is essential: profile first, optimize second</li>
+<li>Different bottlenecks need different solutions</li>
+<li>Reliability beats speed: slow that works beats fast that breaks</li>
+<li>Composable components enable testing and scaling</li>
+<li>Monitoring is non-optional for production systems</li>
+<li>Start simple, add complexity only when justified by data</li>
+</ul>
+</div>
+
+
+
+<section class="section" id="real-world-example">
+<h2>Real-World Implementation Example</h2>
+<p>Let's explore how these concepts come together in a real production system. This example demonstrates architecture patterns, optimization strategies, and monitoring approaches for a system handling thousands of requests per second.</p>
+
+<h3>Case Study: Production Chatbot System</h3>
+<p>A customer service chatbot handling 500 requests/second with 2-second SLA.</p>
+
+<h3>Architecture Evolution</h3>
+<p><strong>v1 (Prototype):</strong> Synchronous pipeline. Simple. Breaks at 50 req/sec.</p>
+<p><strong>v2 (Early production):</strong> Added async queuing. Scales to 500 req/sec. But costs are high—full history added $5K/month.</p>
+<p><strong>v3 (Optimized):</strong> Sliding window memory + caching. Costs down to $1K/month, latency improved due to cache hits.</p>
+<p><strong>v4 (Advanced):</strong> Model ensemble + semantic memory. Route simple queries (70%) to fast model (saves 60%), complex queries (30%) to accurate model.</p>
+
+<h3>Monitoring Dashboard</h3>
+<p>Key metrics tracked:</p>
+<ul>
+<li>Request latency (p50, p95, p99)</li>
+<li>Cache hit rate (target: 75%+)</li>
+<li>Token consumption (cost control)</li>
+<li>Error rate (SLA tracking)</li>
+<li>Quality metrics (user satisfaction)</li>
+</ul>
+
+<h3>Cost Analysis</h3>
+<p>Optimization impact over 6 months:</p>
+<ul>
+<li>Month 1: $15,000 (synchronous, no optimization)</li>
+<li>Month 2: $12,000 (added async, but memory costs high)</li>
+<li>Month 3: $6,000 (sliding window + caching)</li>
+<li>Month 4-6: $4,000 (model ensemble, semantic memory)</li>
+</ul>
+
+<p>Key insight: most savings came from architecture choices, not code optimization. Choosing the right pattern matters more than optimizing the wrong pattern.</p>
+</section>
+
+<section class="section" id="failure-modes">
+<h2>Common Failure Modes and Solutions</h2>
+<p>Systems fail in predictable ways. Understanding these patterns helps you design robust systems.</p>
+
+<h3>Failure Mode 1: Memory Leak</h3>
+<p><strong>Symptom:</strong> System works fine then gradually slows down over hours/days.</p>
+<p><strong>Cause:</strong> Conversation history accumulates without cleanup. After 1000s of conversations, memory fills up.</p>
+<p><strong>Solution:</strong> Implement conversation TTL. Delete old sessions automatically. Monitor memory usage.</p>
+
+<h3>Failure Mode 2: Cascade Failure</h3>
+<p><strong>Symptom:</strong> One component slows down. Everything slows down. System becomes unavailable.</p>
+<p><strong>Cause:</strong> Synchronous pipeline—if API latency increases, request pile up. All requests block.</p>
+<p><strong>Solution:</strong> Async architecture with timeouts. If API slow, fail fast rather than block. Circuit breakers to stop cascading failures.</p>
+
+<h3>Failure Mode 3: Cost Explosion</h3>
+<p><strong>Symptom:</strong> API costs suddenly spike to $50K+/month.</p>
+<p><strong>Cause:</strong> Full conversation history added by mistake. Each user's history grows to 100+ messages. At GPT-4 prices, this is expensive.</p>
+<p><strong>Solution:</strong> Implement cost monitoring. Alert if daily spend exceeds threshold. Always design memory to be bounded.</p>
+
+<h3>Failure Mode 4: Hallucination Drift</h3>
+<p><strong>Symptom:</strong> Early in conversation chatbot is accurate. After 20+ turns, it starts confabulating or contradicting itself.</p>
+<p><strong>Cause:</strong> Full history creates context too long for model to track. Model invents plausible-sounding but false details to fit context.</p>
+<p><strong>Solution:</strong> Summarize history (keep only recent + summary). Use semantic memory instead of full history. Add fact-checking layer.</p>
+</section>
+
+<section class="section" id="advanced-patterns">
+<h2>Advanced Optimization Patterns</h2>
+<p>Once basics are solid, these patterns enable next-level optimization:</p>
+
+<h3>Pattern: Adaptive Routing</h3>
+<p>Route requests based on real-time system state:</p>
+<ul>
+<li>If queue depth > threshold: use faster model</li>
+<li>If latency > SLA: cache aggressively</li>
+<li>If error rate high: use safer, more conservative model</li>
+</ul>
+
+<h3>Pattern: Progressive Enhancement</h3>
+<p>Return quick approximation immediately, then improve in background:</p>
+<ul>
+<li>User gets answer in 200ms (cached or simple model)</li>
+<li>System computes better answer in background</li>
+<li>When user asks follow-up, provide improved version</li>
+</ul>
+
+<h3>Pattern: Fallback Chain</h3>
+<p>Multiple fallback options in order:</p>
+<ul>
+<li>Try cache (instant if hit)</li>
+<li>Try local model (fast, less accurate)</li>
+<li>Try API model (slow, accurate)</li>
+<li>Return error if all fail</li>
+</ul>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">async</span> <span class="kw">def</span> <span class="fn">fallback_chain</span>(<span class="va">query</span>):
+    <span class="cm"># Try each option in order</span>
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_cache</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_local_model</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="va">result</span> <span class="op">=</span> <span class="fn">try_api_model</span>(<span class="va">query</span>)
+    <span class="kw">if</span> <span class="va">result</span>: <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="kw">raise</span> <span class="fn">Exception</span>(<span class="st">"All options failed"</span>)</code></pre>
+</section>
+
+<section class="section" id="production-checklist">
+<h2>Production Readiness Checklist</h2>
+<p>Before deploying to production, ensure your system is ready:</p>
+
+<h3>Architecture</h3>
+<ul>
+<li>- [ ] Bottlenecks identified and addressed</li>
+<li>- [ ] Graceful degradation: system doesn't fully fail when components slow</li>
+<li>- [ ] Retry logic with exponential backoff</li>
+<li>- [ ] Circuit breakers to prevent cascade failures</li>
+</ul>
+
+<h3>Monitoring and Observability</h3>
+<ul>
+<li>- [ ] Latency metrics collected (p50, p95, p99)</li>
+<li>- [ ] Error rate monitored and alerted on</li>
+<li>- [ ] Cost tracked per user, per day, per request</li>
+<li>- [ ] Quality metrics logged (task success, user satisfaction)</li>
+<li>- [ ] Dashboards for operations team</li>
+</ul>
+
+<h3>Testing</h3>
+<ul>
+<li>- [ ] Unit tests for components</li>
+<li>- [ ] Integration tests for workflows</li>
+<li>- [ ] Performance tests meeting SLA targets</li>
+<li>- [ ] Load tests at 2-3x expected peak</li>
+<li>- [ ] Chaos engineering tests (simulate failures)</li>
+</ul>
+
+<h3>Operations</h3>
+<ul>
+<li>- [ ] Runbook documenting common issues and fixes</li>
+<li>- [ ] On-call rotation and alerting strategy</li>
+<li>- [ ] Rollback procedure for bad deployments</li>
+<li>- [ ] Data retention and privacy policies</li>
+<li>- [ ] Compliance (GDPR, HIPAA, etc. if applicable)</li>
+</ul>
+
+<h3>Capacity</h3>
+<ul>
+<li>- [ ] Load testing shows system handles 2-3x peak traffic</li>
+<li>- [ ] Database replicated for high availability</li>
+<li>- [ ] API rate limits and quotas configured</li>
+<li>- [ ]Budget for growth: estimated costs at 2x current traffic</li>
+</ul>
+</section>
+
+<section class="section" id="conclusion">
+<h2>Bringing It All Together</h2>
+<p>Building production systems is about balancing competing concerns:</p>
+<ul>
+<li>Speed vs. cost vs. reliability</li>
+<li>Simplicity vs. feature completeness</li>
+<li>Immediate needs vs. future growth</li>
+</ul>
+
+<p>Start simple. Measure. Optimize based on data. Add complexity only when justified.</p>
+
+<p>The best systems aren't the cleverest—they're the ones the team understands, can debug, and can improve incrementally.</p>
+
+<p>As you gain experience, you develop intuition for these trade-offs. When you're new, trust the data, not your intuition. Measure first, optimize second.</p>
+</section>
+
+
+<section class="section" id="deep-dive-implementation">
+<h2>Deep Dive: Implementation Details and Patterns</h2>
+<p>Moving beyond basic concepts, this section explores the implementation details that make the difference between a prototype and production-ready systems. Understanding these patterns enables you to build systems that are robust, maintainable, and easy to debug.</p>
+
+<h3>Composite Pattern for Complex Pipelines</h3>
+<p>As systems grow, simple linear pipelines become insufficient. The composite pattern allows building complex workflows from simple components:</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">from</span> <span class="im">abc</span> <span class="kw">import</span> <span class="im">ABC</span>, <span class="im">abstractmethod</span>
+<span class="kw">from</span> <span class="im">typing</span> <span class="kw">import</span> <span class="im">List</span>
+
+<span class="kw">class</span> <span class="fn">WorkflowNode</span>(<span class="va">ABC</span>):
+    <span class="kw">@abstractmethod</span>
+    <span class="kw">def</span> <span class="fn">execute</span>(<span class="va">self</span>, <span class="va">data</span>):
+        <span class="kw">pass</span>
+
+<span class="kw">class</span> <span class="fn">SerialWorkflow</span>(<span class="va">WorkflowNode</span>):
+    <span class="st">"""Execute nodes sequentially"""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="va">self</span>):
+        <span class="va">self</span>.<span class="va">nodes</span>: <span class="im">List</span>[<span class="va">WorkflowNode</span>] <span class="op">=</span> []
+
+    <span class="kw">def</span> <span class="fn">add_node</span>(<span class="va">self</span>, <span class="va">node</span>):
+        <span class="va">self</span>.<span class="va">nodes</span>.<span class="fn">append</span>(<span class="va">node</span>)
+
+    <span class="kw">def</span> <span class="fn">execute</span>(<span class="va">self</span>, <span class="va">data</span>):
+        <span class="va">result</span> <span class="op">=</span> <span class="va">data</span>
+        <span class="kw">for</span> <span class="va">node</span> <span class="kw">in</span> <span class="va">self</span>.<span class="va">nodes</span>:
+            <span class="va">result</span> <span class="op">=</span> <span class="va">node</span>.<span class="fn">execute</span>(<span class="va">result</span>)
+        <span class="kw">return</span> <span class="va">result</span>
+
+<span class="kw">class</span> <span class="fn">ParallelWorkflow</span>(<span class="va">WorkflowNode</span>):
+    <span class="st">"""Execute nodes in parallel, combine results"""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="va">self</span>):
+        <span class="va">self</span>.<span class="va">nodes</span>: <span class="im">List</span>[<span class="va">WorkflowNode</span>] <span class="op">=</span> []
+
+    <span class="kw">def</span> <span class="fn">add_node</span>(<span class="va">self</span>, <span class="va">node</span>):
+        <span class="va">self</span>.<span class="va">nodes</span>.<span class="fn">append</span>(<span class="va">node</span>)
+
+    <span class="kw">def</span> <span class="fn">execute</span>(<span class="va">self</span>, <span class="va">data</span>):
+        <span class="cm"># Execute all nodes, return list of results</span>
+        <span class="kw">import</span> <span class="im">concurrent</span>.<span class="im">futures</span>
+        <span class="kw">with</span> <span class="fn">concurrent</span>.<span class="fn">futures</span>.<span class="fn">ThreadPoolExecutor</span>() <span class="kw">as</span> <span class="va">executor</span>:
+            <span class="va">futures</span> <span class="op">=</span> [<span class="va">executor</span>.<span class="fn">submit</span>(<span class="va">n</span>.<span class="fn">execute</span>, <span class="va">data</span>) <span class="kw">for</span> <span class="va">n</span> <span class="kw">in</span> <span class="va">self</span>.<span class="va">nodes</span>]
+            <span class="kw">return</span> [<span class="va">f</span>.<span class="fn">result</span>() <span class="kw">for</span> <span class="va">f</span> <span class="kw">in</span> <span class="va">futures</span>]</code></pre>
+
+<p>This pattern enables building complex workflows without code duplication. A conditional workflow is just another node type.</p>
+
+<h3>Error Handling and Retry Strategies</h3>
+<p>Production systems fail. Good error handling is essential:</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="im">time</span>
+<span class="kw">from</span> <span class="im">functools</span> <span class="kw">import</span> <span class="im">wraps</span>
+
+<span class="kw">def</span> <span class="fn">retry_with_backoff</span>(<span class="va">max_attempts</span><span class="op">=</span><span class="nm">3</span>, <span class="va">base_delay</span><span class="op">=</span><span class="nm">1</span>):
+    <span class="st">"""Decorator for exponential backoff retry"""</span>
+    <span class="kw">def</span> <span class="fn">decorator</span>(<span class="va">func</span>):
+        <span class="kw">@wraps</span>(<span class="va">func</span>)
+        <span class="kw">def</span> <span class="fn">wrapper</span>(<span class="op">*</span><span class="va">args</span>, <span class="op">**</span><span class="va">kwargs</span>):
+            <span class="kw">for</span> <span class="va">attempt</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">max_attempts</span>):
+                <span class="kw">try</span>:
+                    <span class="kw">return</span> <span class="fn">func</span>(<span class="op">*</span><span class="va">args</span>, <span class="op">**</span><span class="va">kwargs</span>)
+                <span class="kw">except</span> <span class="fn">Exception</span> <span class="kw">as</span> <span class="va">e</span>:
+                    <span class="kw">if</span> <span class="va">attempt</span> <span class="op">==</span> <span class="va">max_attempts</span> <span class="op">-</span> <span class="nm">1</span>:
+                        <span class="kw">raise</span>
+                    <span class="va">delay</span> <span class="op">=</span> <span class="va">base_delay</span> <span class="op">*</span> (<span class="nm">2</span> <span class="op">**</span> <span class="va">attempt</span>)
+                    <span class="fn">time</span>.<span class="fn">sleep</span>(<span class="va">delay</span>)
+        <span class="kw">return</span> <span class="fn">wrapper</span>
+    <span class="kw">return</span> <span class="fn">decorator</span></code></pre>
+
+<h3>Observability and Metrics</h3>
+<p>Good metrics enable debugging and optimization. Key principles:</p>
+<ul>
+<li>Measure at component boundaries (before and after each step)</li>
+<li>Include context in metrics (user_id, request_id for tracing)</li>
+<li>Track both happy path and error cases</li>
+<li>Use percentiles (p95, p99) not just averages</li>
+</ul>
+</section>
+
+<section class="section" id="performance-profiling-guide">
+<h2>Performance Profiling and Optimization Guide</h2>
+<p>The most important tool in optimization is measurement. This section provides practical profiling techniques.</p>
+
+<h3>Step 1: Identify the Bottleneck</h3>
+<p>Every component has latency. Which is slowest?</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="im">time</span>
+
+<span class="kw">class</span> <span class="fn">TimedComponent</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="va">self</span>, <span class="va">name</span>):
+        <span class="va">self</span>.<span class="va">name</span> <span class="op">=</span> <span class="va">name</span>
+        <span class="va">self</span>.<span class="va">total_time</span> <span class="op">=</span> <span class="nm">0</span>
+        <span class="va">self</span>.<span class="va">call_count</span> <span class="op">=</span> <span class="nm">0</span>
+
+    <span class="kw">def</span> <span class="fn">process</span>(<span class="va">self</span>, <span class="va">data</span>):
+        <span class="va">start</span> <span class="op">=</span> <span class="fn">time</span>.<span class="fn">time</span>()
+        <span class="va">result</span> <span class="op">=</span> <span class="va">self</span>.<span class="fn">_process_impl</span>(<span class="va">data</span>)
+        <span class="va">self</span>.<span class="va">total_time</span> <span class="op">+=</span> <span class="fn">time</span>.<span class="fn">time</span>() <span class="op">-</span> <span class="va">start</span>
+        <span class="va">self</span>.<span class="va">call_count</span> <span class="op">+=</span> <span class="nm">1</span>
+        <span class="kw">return</span> <span class="va">result</span>
+
+    <span class="kw">def</span> <span class="fn">avg_latency_ms</span>(<span class="va">self</span>):
+        <span class="kw">return</span> (<span class="va">self</span>.<span class="va">total_time</span> <span class="op">*</span> <span class="nm">1000</span>) <span class="op">/</span> <span class="fn">max</span>(<span class="va">self</span>.<span class="va">call_count</span>, <span class="nm">1</span>)
+
+    <span class="kw">def</span> <span class="fn">_process_impl</span>(<span class="va">self</span>, <span class="va">data</span>):
+        <span class="cm"># Implement in subclass</span>
+        <span class="kw">pass</span></code></pre>
+
+<h3>Step 2: Understand the Root Cause</h3>
+<p>Why is this component slow?</p>
+<ul>
+<li>Waiting on I/O? Profile I/O operations</li>
+<li>CPU-intensive? Use Python profilers (cProfile, line_profiler)</li>
+<li>Memory pressure? Track memory allocation</li>
+<li>Algorithm complexity? Analyze algorithmic cost</li>
+</ul>
+
+<h3>Step 3: Apply Optimization</h3>
+<p>Choose optimization matching root cause:</p>
+<ul>
+<li>I/O wait → async, concurrency, caching</li>
+<li>CPU cost → cheaper algorithm, vectorization, compilation</li>
+<li>Memory → streaming, approximation, data structure improvement</li>
+<li>Algorithm → different approach, early termination</li>
+</ul>
+
+<h3>Step 4: Measure Impact</h3>
+<p>Always measure before and after. Sometimes optimizations help, sometimes they don't.</p>
+</section>
+
+<section class="section" id="system-design-principles">
+<h2>System Design Principles for AI Applications</h2>
+
+<h3>Principle 1: Fail Fast and Safe</h3>
+<p>Bad latency is better than wrong answer. If system can't compute correct answer quickly, return error and try different approach.</p>
+
+<h3>Principle 2: Progressive Enhancement</h3>
+<p>Return quick approximation immediately, improve in background. Example:</p>
+<ul>
+<li>First response (50ms): cached result or simple model</li>
+<li>Second response (2s): more accurate computation</li>
+<li>Third response (10s): very accurate but slow computation</li>
+</ul>
+
+<h3>Principle 3: Embrace Diversity</h3>
+<p>Different models for different tasks. Don't use GPT-4 for everything if GPT-3.5 suffices. Cost/quality spectrum:</p>
+<ul>
+<li>Fast/cheap: classification, simple Q&A</li>
+<li>Medium: reasoning, moderate complexity</li>
+<li>Slow/accurate: complex reasoning, high accuracy needed</li>
+</ul>
+
+<h3>Principle 4: Observability First</h3>
+<p>Design systems with measurement built in. Logging, metrics, tracing are not afterthoughts—they're fundamental.</p>
+</section>
+
+<section class="section" id="cost-control-strategies">
+<h2>Cost Control and Budgeting Strategies</h2>
+
+<h3>Strategy 1: Request Filtering</h3>
+<p>Not all requests need expensive processing:</p>
+<ul>
+<li>Requests with low complexity → use fast model</li>
+<li>Requests matching known patterns → use cache</li>
+<li>Requests outside domain → reject early</li>
+</ul>
+
+<h3>Strategy 2: Approximation Layers</h3>
+<p>Return approximate answer fast, better answer slowly:</p>
+<ul>
+<li>Summarize large documents before full processing</li>
+<li>Use rule-based system before ML</li>
+<li>Use embedding search before reading full documents</li>
+</ul>
+
+<h3>Strategy 3: Capacity Planning</h3>
+<p>Budget constraints force choices:</p>
+<ul>
+<li>Limited budget? Use cheaper models, more caching</li>
+<li>High latency acceptable? Batch more requests</li>
+<li>High accuracy needed? Accept higher cost</li>
+</ul>
+
+<h3>Strategy 4: Cost Monitoring and Alerts</h3>
+<p>Track spending in real time. Alert when costs exceed expectations. Common triggers:</p>
+<ul>
+<li>Cost spike (5x normal)</li>
+<li>Cost per user increases</li>
+<li>Daily spend exceeding budget</li>
+</ul>
+</section>
+
+<section class="section" id="conclusion-synthesis">
+<h2>Bringing It All Together</h2>
+<p>The most successful AI systems combine these principles:</p>
+
+<p><strong>1. Start Simple:</strong> Synchronous pipeline, full history, single model. Works for prototypes.</p>
+
+<p><strong>2. Measure Everything:</strong> Latency, throughput, cost, quality. Data drives decisions.</p>
+
+<p><strong>3. Optimize Based on Data:</strong> If latency is bottleneck, add async. If cost is bottleneck, add caching or use cheaper models. If quality is bottleneck, use better models or more context.</p>
+
+<p><strong>4. Scale Incrementally:</strong> Add complexity only when metrics justify it. Each optimization has maintenance cost.</p>
+
+<p><strong>5. Design for Operations:</strong> Monitoring, alerts, dashboards, runbooks. Production systems need ongoing care.</p>
+
+<p>The path forward is continuous improvement. Start where you are, measure what matters, optimize bottlenecks, repeat. Systems improve over time as you gain understanding of user behavior and system characteristics.</p>
+</section>
+<div class="nav-buttons">
+<a href="../learn.html?c=advanced&l=module3-lesson3" class="nav-btn prev">Previous</a>
+<a href="../learn.html?c=advanced&l=module3-lesson5" class="nav-btn next">Next</a>
+</div>
+</div></main>
+<footer><div class="container">
+<div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div>
+<p>© 2026 SustainSys. All rights reserved.</p>
+<p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'advanced';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body></html>

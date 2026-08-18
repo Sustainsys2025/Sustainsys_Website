@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.4 Multi-Agent Systems and Tool Orchestration — AI Solution Architect | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 4 — Multi-Agent Systems</div>
+    <span class="nav-badge">Architect</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Solution Architect</div>
+  <span class="sidebar-section-label">Module 1: AI System Design</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module1-lesson1"><span class="sidebar-num">1.1</span> Design Thinking</a></li>
+    <li><a href="../learn.html?c=architect&l=module1-lesson2"><span class="sidebar-num">1.2</span> Architecture</a></li>
+    <li><a href="../learn.html?c=architect&l=module1-lesson3"><span class="sidebar-num">1.3</span> Scalability</a></li>
+    <li><a href="../learn.html?c=architect&l=module1-lesson4"><span class="sidebar-num">1.4</span> Reliability</a></li>
+    <li><a href="../learn.html?c=architect&l=module1-lesson5"><span class="sidebar-num">1.5</span> Cost</a></li>
+    <li><a href="../learn.html?c=architect&l=module1-lesson6"><span class="sidebar-num">1.6</span> Docs</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: RAG</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module2-lesson1"><span class="sidebar-num">2.1</span> Multi-Step</a></li>
+    <li><a href="../learn.html?c=architect&l=module2-lesson2"><span class="sidebar-num">2.2</span> Graph</a></li>
+    <li><a href="../learn.html?c=architect&l=module2-lesson3"><span class="sidebar-num">2.3</span> Corrective</a></li>
+    <li><a href="../learn.html?c=architect&l=module2-lesson4"><span class="sidebar-num">2.4</span> Graph Adv</a></li>
+    <li><a href="../learn.html?c=architect&l=module2-lesson5"><span class="sidebar-num">2.5</span> Self-RAG</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3: Vector DB</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module3-lesson1"><span class="sidebar-num">3.1</span> Comparison</a></li>
+    <li><a href="../learn.html?c=architect&l=module3-lesson2"><span class="sidebar-num">3.2</span> Qdrant</a></li>
+    <li><a href="../learn.html?c=architect&l=module3-lesson3"><span class="sidebar-num">3.3</span> Qdrant Tuning</a></li>
+    <li><a href="../learn.html?c=architect&l=module3-lesson4"><span class="sidebar-num">3.4</span> Weaviate</a></li>
+    <li><a href="../learn.html?c=architect&l=module3-lesson5"><span class="sidebar-num">3.5</span> Pinecone</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 4: Orchestration</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module4-lesson1"><span class="sidebar-num">4.1</span> LangChain</a></li>
+    <li><a href="../learn.html?c=architect&l=module4-lesson2"><span class="sidebar-num">4.2</span> Advanced</a></li>
+    <li><a href="../learn.html?c=architect&l=module4-lesson3"><span class="sidebar-num">4.3</span> LlamaIndex</a></li>
+    <li><a href="../learn.html?c=architect&l=module4-lesson4"><span class="sidebar-num">4.4</span> Multi-Agent</a></li>
+    <li><a href="../learn.html?c=architect&l=module4-lesson5"><span class="sidebar-num">4.5</span> Frameworks</a></li>
+    <li><a href="../learn.html?c=architect&l=module4-lesson6"><span class="sidebar-num">4.6</span> Planning</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Architect</a><span class="sep">›</span>
+    <span>Multi-Agent</span><span class="sep">›</span>
+    <span>Multi-Agent Systems</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">4.4 Multi-Agent Systems and Tool Orchestration</span>
+    <span class="difficulty-badge advanced">Advanced</span>
+  </div>
+  <h1>Multi-Agent Systems and <span class="accent">Tool Orchestration</span></h1>
+  <p class="hero-sub">Design and build multi-agent AI systems that can coordinate, communicate, and collaborate to solve complex problems. Learn about agent communication patterns, conflict resolution, and distributed reasoning.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~48 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      4 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      3 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Master the core concepts and frameworks covered in this lesson</li>
+    <li>Apply practical patterns to real-world AI system design</li>
+    <li>Understand tradeoffs and best practices in production environments</li>
+    <li>Build systems that are scalable, reliable, and maintainable</li>
+    <li>Contribute to production AI systems with architectural knowledge</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Experience with at least one production AI system deployment</li>
+    <li>Familiarity with distributed systems or cloud architecture concepts</li>
+    <li>Understanding of machine learning model lifecycle</li>
+  </ul>
+</div>
+
+<section class="section reveal" id="foundations">
+  <span class="section-label">Foundations</span>
+  <h2>Core Concepts and Principles</h2>
+  <p>Understanding the fundamental principles of multi-agent systems is essential for building robust AI systems that scale. This lesson explores the architectural decisions, design patterns, and best practices that separate production-grade systems from experimental prototypes.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Building an AI system without understanding architectural principles is like constructing a building without considering load distribution, material strength, and environmental factors. The structure might work in ideal conditions, but it will fail under real-world stress. Architecture ensures your system remains operational, efficient, and maintainable.</p>
+  </div>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Architecture Decision Framework</div>
+    <svg viewBox="0 0 800 280" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <rect x="40" y="30" width="700" height="240" rx="12" fill="rgba(54,207,201,0.02)" stroke="rgba(54,207,201,0.1)"/>
+      <rect x="60" y="50" width="220" height="80" rx="8" fill="rgba(54,207,201,0.1)" stroke="#1A3A6B" stroke-width="1.5"/>
+      <text x="170" y="72" text-anchor="middle" font-size="11" font-weight="700" fill="#1A3A6B">Functional Requirements</text>
+      <text x="170" y="95" text-anchor="middle" font-size="9" fill="#7A756B">What must the system do?</text>
+      <text x="170" y="115" text-anchor="middle" font-size="9" fill="#7A756B">Use cases, features, users</text>
+
+      <rect x="340" y="50" width="220" height="80" rx="8" fill="rgba(157,78,221,0.1)" stroke="#A4421F" stroke-width="1.5"/>
+      <text x="450" y="72" text-anchor="middle" font-size="11" font-weight="700" fill="#A4421F">Non-Functional Requirements</text>
+      <text x="450" y="95" text-anchor="middle" font-size="9" fill="#7A756B">How well must it do it?</text>
+      <text x="450" y="115" text-anchor="middle" font-size="9" fill="#7A756B">Performance, reliability, cost</text>
+
+      <rect x="620" y="50" width="100" height="80" rx="8" fill="rgba(6,255,165,0.1)" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="670" y="72" text-anchor="middle" font-size="11" font-weight="700" fill="#16a34a">Design</text>
+      <text x="670" y="95" text-anchor="middle" font-size="9" fill="#7A756B">Architecture</text>
+      <text x="670" y="115" text-anchor="middle" font-size="9" fill="#7A756B">patterns</text>
+
+      <rect x="60" y="160" width="660" height="100" rx="8" fill="rgba(54,207,201,0.04)" stroke="rgba(54,207,201,0.12)"/>
+      <text x="390" y="180" text-anchor="middle" font-size="10" font-weight="600" fill="#1A3A6B">The Architecture Process</text>
+      <text x="80" y="205" font-size="9" fill="#7A756B">1. Identify functional requirements: What problems does the system solve?</text>
+      <text x="80" y="223" font-size="9" fill="#7A756B">2. Define non-functional requirements: Performance, latency, availability targets</text>
+      <text x="80" y="241" font-size="9" fill="#7A756B">3. Select patterns: Choose architectural patterns that satisfy both requirement sets</text>
+    </svg>
+  </div>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Startups:</strong> Choosing the right architecture early saves months of refactoring when you scale from 100 to 1 million users. The architecture decision costs very little upfront but pays dividends over time.</p>
+    <p><strong>In Enterprise:</strong> Architecture becomes a compliance and governance issue. Your system must not only perform well but also be auditable, secure, and maintainable by teams that may change over time.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Architecture decisions should be driven by both functional and non-functional requirements</li>
+      <li>There is no one-size-fits-all architecture; tradeoffs must be made consciously</li>
+      <li>Document your architecture decisions and the rationale behind them</li>
+      <li>Revisit architectural decisions as requirements change and systems grow</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="patterns">
+  <span class="section-label">Core Concepts</span>
+  <h2>Design Patterns and Best Practices</h2>
+
+  <p>Production AI systems follow established design patterns that have proven effective across different use cases and scales. Understanding these patterns helps you make informed architectural decisions and avoid common pitfalls.</p>
+
+  <div class="code-header"><span class="code-lang">Architecture Pattern</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Pattern: Circuit Breaker for Resilience</span>
+<span class="kw">class</span> <span class="va">CircuitBreaker</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="va">self</span>, <span class="va">threshold</span><span class="op">=</span><span class="nm">5</span>):
+        <span class="va">self</span>.<span class="va">failures</span> <span class="op">=</span> <span class="nm">0</span>
+        <span class="va">self</span>.<span class="va">threshold</span> <span class="op">=</span> <span class="va">threshold</span>
+    
+    <span class="kw">def</span> <span class="fn">call</span>(<span class="va">self</span>, <span class="va">func</span>):
+        <span class="kw">if</span> <span class="va">self</span>.<span class="va">failures</span> <span class="op">></span> <span class="va">self</span>.<span class="va">threshold</span>:
+            <span class="kw">raise</span> <span class="st">"Circuit open"</span>
+        <span class="kw">try</span>:
+            <span class="kw">return</span> <span class="fn">func</span>()
+        <span class="kw">except</span>:
+            <span class="va">self</span>.<span class="va">failures</span> <span class="op">+=</span> <span class="nm">1</span></code></pre>
+  <div class="code-explain">
+    <p><strong>Why this pattern:</strong> Circuit breakers prevent cascading failures by stopping requests to failing services. Once a threshold is reached, the circuit "opens" and requests fail fast rather than waiting for timeouts.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Design patterns are proven solutions to recurring architectural problems</li>
+      <li>Understanding patterns helps you make consistent, informed decisions</li>
+      <li>Always adapt patterns to your specific context and requirements</li>
+      <li>Document which patterns you use and why you chose them</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="implementation">
+  <span class="section-label">Practice</span>
+  <h2>Implementation and Optimization</h2>
+
+  <p>Understanding principles and patterns is essential, but execution separates good architectures from great ones. This section focuses on practical implementation strategies and optimization techniques used in production systems.</p>
+
+  <p>The best architectures are those that can evolve as your system grows and requirements change. Build for flexibility, monitor relentlessly, and iterate based on real-world data.</p>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Monitor your system metrics obsessively—data should drive architectural decisions</li>
+      <li>Build in flexibility for future changes; avoid rigid designs</li>
+      <li>Test your architecture under realistic conditions before production</li>
+      <li>Have a rollback plan for every architectural change</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Requirement Analysis</h4>
+    <p>Take a real-world AI use case you know well. List its functional and non-functional requirements. Which requirements drive your architectural decisions?</p>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Pattern Selection</h4>
+    <p>For your use case, identify which design patterns would be most appropriate. Justify your choices based on the requirements you identified.</p>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Architecture Diagram</h4>
+    <p>Create a high-level architecture diagram for your system. Make clear which components are responsible for functional requirements and which address non-functional requirements.</p>
+  </div>
+</section>
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson Agent Frameworks</h4>
+  <p><strong>Agent Frameworks</strong> — Continue building your architectural expertise. In the next lesson, you will dive deeper into specific patterns and learn how they apply to even more complex scenarios.</p>
+</div>
+
+
+<hr class="section-divider">
+
+<section class="section reveal" id="advanced-topics">
+  <span class="section-label">Advanced</span>
+  <h2>Advanced Techniques and Optimization Strategies</h2>
+
+  <p>As your systems mature, you'll encounter challenges that require deeper expertise. This section covers advanced patterns used by organizations running massive-scale AI systems.</p>
+
+  <div class="code-header"><span class="code-lang">YAML</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Example configuration for production deployments</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-system-config
+data:
+  enable_observability: <span class="st">"true"</span>
+  metric_interval: <span class="st">"30s"</span>
+  alert_threshold: <span class="st">"95"</span>
+  enable_tracing: <span class="st">"true"</span>
+  sampling_rate: <span class="st">"0.1"</span>
+  log_level: <span class="st">"INFO"</span>
+  retention_days: <span class="st">"30"</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> Production configurations define behavior across all environments. Sampling rate controls what percentage of traces are recorded. Alert thresholds should be tuned to your SLOs, not arbitrary values. Log retention balances compliance requirements with storage costs.</p>
+  </div>
+
+  <p><strong>Challenge 1: Scaling Observability</strong> — When you have thousands of services generating millions of metrics per second, storage becomes expensive. Solutions include better compression, sampling strategies, and tiered storage.</p>
+
+  <p><strong>Challenge 2: Cost Management</strong> — Cloud observability services charge per metric, per log line, and per trace. Large-scale systems can spend hundreds of thousands per month. Effective cardinality management and sampling strategies are essential.</p>
+
+  <p><strong>Challenge 3: Alert Tuning</strong> — Too many alerts cause alert fatigue. Too few and you miss real issues. The solution is iterative tuning based on incident analysis: when incidents occur, tune alerts to catch them; when false alerts fire, adjust thresholds.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Observability Scaling Patterns</div>
+    <svg viewBox="0 0 800 240" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <text x="400" y="25" text-anchor="middle" fill="#1A3A6B" font-size="12" font-weight="700">Scaling Observability as Systems Grow</text>
+
+      <!-- Stage 1 -->
+      <rect x="40" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#1A3A6B" stroke-width="1.5"/>
+      <text x="120" y="75" text-anchor="middle" fill="#1A3A6B" font-size="11" font-weight="700">Stage 1: Single Service</text>
+      <text x="60" y="100" fill="#7A756B" font-size="8">• Few metrics</text>
+      <text x="60" y="118" fill="#7A756B" font-size="8">• Local Prometheus</text>
+      <text x="60" y="136" fill="#7A756B" font-size="8">• 1-3 dashboards</text>
+      <text x="60" y="154" fill="#7A756B" font-size="8">• Manual alerts</text>
+      <text x="120" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 1-5</text>
+
+      <!-- Stage 2 -->
+      <rect x="230" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#A4421F" stroke-width="1.5"/>
+      <text x="310" y="75" text-anchor="middle" fill="#A4421F" font-size="11" font-weight="700">Stage 2: Multi-Service</text>
+      <text x="250" y="100" fill="#7A756B" font-size="8">• Hundreds of metrics</text>
+      <text x="250" y="118" fill="#7A756B" font-size="8">• Federated Prometheus</text>
+      <text x="250" y="136" fill="#7A756B" font-size="8">• 5-10 dashboards</text>
+      <text x="250" y="154" fill="#7A756B" font-size="8">• Alertmanager</text>
+      <text x="310" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 5-20</text>
+
+      <!-- Stage 3 -->
+      <rect x="420" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="500" y="75" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">Stage 3: Platform</text>
+      <text x="440" y="100" fill="#7A756B" font-size="8">• Millions of metrics</text>
+      <text x="440" y="118" fill="#7A756B" font-size="8">• Thanos/VictoriaMetrics</text>
+      <text x="440" y="136" fill="#7A756B" font-size="8">• 20+ dashboards</text>
+      <text x="440" y="154" fill="#7A756B" font-size="8">• ML-based alerts</text>
+      <text x="500" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 20-100</text>
+
+      <!-- Stage 4 -->
+      <rect x="610" y="50" width="150" height="170" rx="6" fill="#f1f5f9" stroke="#C0522F" stroke-width="2"/>
+      <text x="685" y="75" text-anchor="middle" fill="#C0522F" font-size="11" font-weight="700">Stage 4: Enterprise</text>
+      <text x="630" y="100" fill="#7A756B" font-size="8">• Billions of metrics</text>
+      <text x="630" y="118" fill="#7A756B" font-size="8">• Multi-region setup</text>
+      <text x="630" y="136" fill="#7A756B" font-size="8">• 100+ dashboards</text>
+      <text x="630" y="154" fill="#7A756B" font-size="8">• AIOps integration</text>
+      <text x="685" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 100+</text>
+    </svg>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Observability complexity scales with system size—plan for growth from day one</li>
+      <li>Cardinality management and sampling strategies are critical at scale</li>
+      <li>Alert tuning is an ongoing process based on incident analysis</li>
+      <li>Cost management requires continuous optimization of what you measure</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises and Case Studies</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Design Your Observability Stack</h4>
+    <p>Design a complete observability solution for an AI system with these characteristics:</p>
+    <ul>
+      <li>Three ML models serving different prediction tasks</li>
+      <li>Distributed across three regions (US, EU, Asia)</li>
+      <li>Peak load of 100K predictions per second</li>
+      <li>SLO: 99.9% availability, p99 latency < 100ms, accuracy > 92%</li>
+    </ul>
+    <p><strong>What to include:</strong> Metrics to track, dashboard layouts, alerting thresholds, log aggregation strategy, trace sampling rate, and cost estimates.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Incident Analysis</h4>
+    <p>Analyze this incident: Your fraud detection model's accuracy dropped to 87% overnight, but infrastructure metrics were normal.</p>
+    <p><strong>Tasks:</strong></p>
+    <ul>
+      <li>What metric would have detected this issue?</li>
+      <li>What logs would help root-cause it?</li>
+      <li>What trace data would be useful?</li>
+      <li>How would you prevent this in the future?</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Cost Optimization</h4>
+    <p>Your observability bill is \$50,000/month. You've identified that 80% comes from high-cardinality metrics. Design a plan to reduce costs by 50% without losing visibility into critical issues.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="summary">
+  <span class="section-label">Wrap-Up</span>
+  <h2>Summary and Key Takeaways</h2>
+
+  <p>In this lesson, you've learned the foundations of building observability systems that enable production excellence. The core principles:</p>
+
+  <ul>
+    <li><strong>Observability is Architectural</strong> — Design it in from day one; retrofitting is expensive and incomplete</li>
+    <li><strong>Three Pillars Enable Root-Cause Analysis</strong> — Metrics show trends, logs show details, traces show flows</li>
+    <li><strong>AI Systems Need AI-Specific Metrics</strong> — Model accuracy, confidence, data drift are as important as infrastructure metrics</li>
+    <li><strong>Start Simple, Scale Deliberately</strong> — Begin with essential metrics and dashboards; expand based on needs</li>
+    <li><strong>Close the Feedback Loop</strong> — Incidents should drive observability improvements; use postmortems to iterate</li>
+  </ul>
+
+  <p>Production AI systems require continuous attention to observability. The teams that excel at observability respond faster to incidents, ship features confidently, and build systems that customers trust.</p>
+
+  <div class="quiz-box">
+    <h4>🧪 Final Understanding Check</h4>
+    <div class="quiz-question" data-correct="3">
+      <p>You're building a new AI service. When should you design your observability strategy?</p>
+      <ul class="quiz-options">
+        <li>A) After the MVP is ready to ship</li>
+        <li>B) When the first incident occurs</li>
+        <li>C) When you move to production</li>
+        <li>D) During the architectural design phase, before implementation</li>
+      </ul>
+      <div class="quiz-answer">The answer is D. Observability must be designed alongside architecture, not bolted on afterward. During design, you decide what's critical to measure, how you'll aggregate data, and how you'll alert. Building observability from day one is cheaper and more effective than retrofitting it later.</div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-buttons">
+  <a href="../learn.html?c=architect&l=module4-lesson3" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous: LlamaIndex</a>
+  <a href="../learn.html?c=architect&l=module4-lesson5" class="nav-btn next">Next: Agent Frameworks <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'architect';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

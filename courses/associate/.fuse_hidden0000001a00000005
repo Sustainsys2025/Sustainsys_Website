@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluation Metrics for Classification — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<!-- Progress -->
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36">
+    <circle class="progress-circle-track" cx="18" cy="18" r="15"/>
+    <circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/>
+  </svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<!-- Nav -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 6 — Evaluation Metrics for Classification</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<!-- Sidebar with full module TOC -->
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: AI Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> Lesson 5</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Lesson 6</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: Building with LLMs</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Lesson 5</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Lesson 6</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 3: Practical AI Applications</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module3-lesson1"><span class="sidebar-num">3.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson2"><span class="sidebar-num">3.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson3"><span class="sidebar-num">3.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson4"><span class="sidebar-num">3.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson5"><span class="sidebar-num">3.5</span> Lesson 5</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson6"><span class="sidebar-num">3.6</span> Lesson 6</a></li>
+    <li><a href="../learn.html?c=associate&l=module3-lesson7"><span class="sidebar-num">3.7</span> Lesson 7</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 4: Data Preparation and Feature Engineering</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module4-lesson1"><span class="sidebar-num">4.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson2"><span class="sidebar-num">4.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson3"><span class="sidebar-num">4.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson4"><span class="sidebar-num">4.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module4-lesson5"><span class="sidebar-num">4.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 5: Model Training Basics</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module5-lesson1"><span class="sidebar-num">5.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson2"><span class="sidebar-num">5.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson3"><span class="sidebar-num">5.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson4"><span class="sidebar-num">5.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module5-lesson5"><span class="sidebar-num">5.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 6: Evaluation and Optimization</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module6-lesson1"><span class="sidebar-num">6.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson2"><span class="sidebar-num">6.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson3"><span class="sidebar-num">6.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson4"><span class="sidebar-num">6.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module6-lesson5"><span class="sidebar-num">6.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 7: Deployment and Integration</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module7-lesson1"><span class="sidebar-num">7.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson2"><span class="sidebar-num">7.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson3"><span class="sidebar-num">7.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson4"><span class="sidebar-num">7.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module7-lesson5"><span class="sidebar-num">7.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 8: Real-World Case Studies</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module8-lesson1"><span class="sidebar-num">8.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson2"><span class="sidebar-num">8.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson3"><span class="sidebar-num">8.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson4"><span class="sidebar-num">8.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module8-lesson5"><span class="sidebar-num">8.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 9: Responsible AI</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module9-lesson1"><span class="sidebar-num">9.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson2"><span class="sidebar-num">9.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson3"><span class="sidebar-num">9.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson4"><span class="sidebar-num">9.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module9-lesson5"><span class="sidebar-num">9.5</span> Lesson 5</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 10: Advanced Applications</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module10-lesson1"><span class="sidebar-num">10.1</span> Lesson 1</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson2"><span class="sidebar-num">10.2</span> Lesson 2</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson3"><span class="sidebar-num">10.3</span> Lesson 3</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson4"><span class="sidebar-num">10.4</span> Lesson 4</a></li>
+    <li><a href="../learn.html?c=associate&l=module10-lesson5"><span class="sidebar-num">10.5</span> Lesson 5</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="container">
+    <section class="hero">
+      <div class="breadcrumb">
+        <a href="index.html">Associate</a><span class="sep">›</span>
+        <a href="#">Module 6</a><span class="sep">›</span>
+        <span>Evaluation Metrics for Classification</span>
+      </div>
+      <span class="hero-eyebrow">Module 6 · Lesson 2</span>
+      <h1>Evaluation Metrics for <span class="accent">Classification</span></h1>
+      <p class="hero-sub">Master the essential metrics for evaluating classifier performance beyond simple accuracy, understanding precision, recall, F1-score, and ROC curves.</p>
+    </section>
+
+    <!-- Learning Objectives -->
+    <div class="objectives">
+      <h4>Learning Objectives</h4>
+      <ul>
+        <li>Understand when accuracy is misleading and what to use instead</li>
+        <li>Calculate and interpret precision, recall, and F1-score</li>
+        <li>Build and interpret confusion matrices</li>
+        <li>Use ROC curves and AUC for threshold optimization</li>
+        <li>Select appropriate metrics based on business requirements</li>
+      </ul>
+    </div>
+
+    <!-- Beyond Accuracy -->
+    <section class="section" id="beyond-accuracy">
+      <span class="section-label">Foundation Concepts</span>
+      <h2>Why Accuracy Alone is Dangerous</h2>
+      <p>Imagine you're building a fraud detection system. Your dataset contains 10,000 transactions: 9,950 legitimate (99.5%) and only 50 fraudulent (0.5%). A naive classifier that predicts every transaction as legitimate achieves 99.5% accuracy. Yet it catches zero fraudulent transactions. In this context, accuracy is a useless metric.</p>
+
+      <p>This is the fundamental flaw of accuracy: it treats all correct predictions equally, regardless of which class they belong to. In imbalanced classification problems (fraud, disease diagnosis, churn prediction), accuracy hides poor performance on the minority class, which is often the most important class to identify correctly.</p>
+
+      <div class="callout warning">
+        <strong>Critical Rule:</strong> Never rely on accuracy alone for classification evaluation. Always examine metrics broken down by class, especially when classes are imbalanced.
+      </div>
+
+      <div class="diagram">
+        <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+
+          <!-- Title -->
+          <text x="300" y="25" font-size="12" font-weight="600" text-anchor="middle" fill="#1f2937">Confusion Matrix: The Foundation of Classification Metrics</text>
+
+          <!-- Confusion Matrix -->
+          <g>
+            <!-- Column headers -->
+            <text x="200" y="65" font-size="12" font-weight="600" text-anchor="middle" fill="#4b5563">Predicted Negative</text>
+            <text x="380" y="65" font-size="12" font-weight="600" text-anchor="middle" fill="#4b5563">Predicted Positive</text>
+
+            <!-- Row headers -->
+            <text x="90" y="120" font-size="12" font-weight="600" text-anchor="end" fill="#4b5563">Actually Negative:</text>
+            <text x="90" y="200" font-size="12" font-weight="600" text-anchor="end" fill="#4b5563">Actually Positive:</text>
+
+            <!-- True Negatives -->
+            <rect x="150" y="100" width="100" height="60" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="2" rx="4"/>
+            <text x="200" y="128" font-size="14" font-weight="600" text-anchor="middle" fill="#059669">TN</text>
+            <text x="200" y="145" font-size="11" text-anchor="middle" fill="#059669">True</text>
+            <text x="200" y="158" font-size="11" text-anchor="middle" fill="#059669">Negative</text>
+
+            <!-- False Positives -->
+            <rect x="290" y="100" width="100" height="60" fill="#ef4444" opacity="0.2" stroke="#ef4444" stroke-width="2" rx="4"/>
+            <text x="340" y="128" font-size="14" font-weight="600" text-anchor="middle" fill="#dc2626">FP</text>
+            <text x="340" y="145" font-size="11" text-anchor="middle" fill="#dc2626">False</text>
+            <text x="340" y="158" font-size="11" text-anchor="middle" fill="#dc2626">Positive</text>
+
+            <!-- False Negatives -->
+            <rect x="150" y="180" width="100" height="60" fill="#ef4444" opacity="0.2" stroke="#ef4444" stroke-width="2" rx="4"/>
+            <text x="200" y="208" font-size="14" font-weight="600" text-anchor="middle" fill="#dc2626">FN</text>
+            <text x="200" y="225" font-size="11" text-anchor="middle" fill="#dc2626">False</text>
+            <text x="200" y="238" font-size="11" text-anchor="middle" fill="#dc2626">Negative</text>
+
+            <!-- True Positives -->
+            <rect x="290" y="180" width="100" height="60" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="2" rx="4"/>
+            <text x="340" y="208" font-size="14" font-weight="600" text-anchor="middle" fill="#059669">TP</text>
+            <text x="340" y="225" font-size="11" text-anchor="middle" fill="#059669">True</text>
+            <text x="340" y="238" font-size="11" text-anchor="middle" fill="#059669">Positive</text>
+          </g>
+
+          <!-- Metrics definitions -->
+          <g>
+            <rect x="50" y="270" width="500" height="70" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="1" rx="4"/>
+
+            <text x="70" y="290" font-size="11" font-weight="600" fill="#1f2937">Precision = TP / (TP + FP)</text>
+            <text x="70" y="305" font-size="10" fill="#4b5563">Of positive predictions, how many were correct?</text>
+
+            <text x="70" y="325" font-size="11" font-weight="600" fill="#1f2937">Recall = TP / (TP + FN)</text>
+            <text x="70" y="340" font-size="10" fill="#4b5563">Of actual positives, how many did we catch?</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Precision and Recall -->
+    <section class="section" id="precision-recall">
+      <span class="section-label">Core Metrics</span>
+      <h2>Precision and Recall: The Precision-Recall Tradeoff</h2>
+      <p><strong>Precision:</strong> Of all the positive predictions your model made, how many were actually correct? High precision means few false positives. Use precision when false positives are costly (spam detection, credit card fraud where false positives upset customers).</p>
+
+      <p><strong>Recall:</strong> Of all the actual positive cases in the data, how many did your model correctly identify? High recall means few false negatives. Use recall when false negatives are costly (disease diagnosis, where missing a sick patient is dangerous).</p>
+
+      <p>There's always a tradeoff: you can increase recall by predicting more positives, but this typically decreases precision. The threshold you choose determines this tradeoff. Different business contexts require different thresholds.</p>
+
+      <h3>Computing and Interpreting Metrics</h3>
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">metrics</span> <span class="kw">import</span> <span class="fn">confusion_matrix</span>, <span class="fn">precision_score</span>, <span class="fn">recall_score</span>, <span class="fn">f1_score</span>
+<span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+
+<span class="cm"># Example: Cancer diagnosis classifier</span>
+<span class="va">y_true</span> <span class="op">=</span> <span class="bi">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>])
+<span class="va">y_pred</span> <span class="op">=</span> <span class="bi">np</span>.<span class="fn">array</span>([<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">0</span>])
+
+<span class="cm"># Confusion matrix</span>
+<span class="va">cm</span> <span class="op">=</span> <span class="fn">confusion_matrix</span>(<span class="va">y_true</span>, <span class="va">y_pred</span>)
+<span class="cm"># [[5, 1],   -> 5 TN, 1 FP</span>
+<span class="cm">#  [1, 3]]   -> 1 FN, 3 TP</span>
+
+<span class="va">tn</span>, <span class="va">fp</span>, <span class="va">fn</span>, <span class="va">tp</span> <span class="op">=</span> <span class="va">cm</span>.<span class="fn">ravel</span>()
+
+<span class="cm"># Calculate metrics</span>
+<span class="va">precision</span> <span class="op">=</span> <span class="va">tp</span> <span class="op">/</span> (<span class="va">tp</span> <span class="op">+</span> <span class="va">fp</span>)  <span class="cm"># 3 / (3 + 1) = 0.75</span>
+<span class="va">recall</span> <span class="op">=</span> <span class="va">tp</span> <span class="op">/</span> (<span class="va">tp</span> <span class="op">+</span> <span class="va">fn</span>)    <span class="cm"># 3 / (3 + 1) = 0.75</span>
+
+<span class="cm"># Using scikit-learn functions</span>
+<span class="bi">print</span>(<span class="st">f"Precision: {precision_score(y_true, y_pred):.3f}"</span>)
+<span class="bi">print</span>(<span class="st">f"Recall: {recall_score(y_true, y_pred):.3f}"</span>)
+<span class="bi">print</span>(<span class="st">f"F1-Score: {f1_score(y_true, y_pred):.3f}"</span>)</code></pre>
+
+      <div class="callout tip">
+        <strong>When to prioritize each metric:</strong>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li><strong>High Precision:</strong> Spam detection, ad recommendation (false positives annoy users)</li>
+          <li><strong>High Recall:</strong> Disease diagnosis, anomaly detection (false negatives are dangerous)</li>
+          <li><strong>Balanced:</strong> Most general applications use F1-score or precision-recall curves</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- F1-Score -->
+    <section class="section" id="f1-score">
+      <span class="section-label">Core Metrics</span>
+      <h2>F1-Score: Harmonic Mean of Precision and Recall</h2>
+      <p>The F1-score is the harmonic mean of precision and recall, ranging from 0 to 1 (higher is better). It's useful when you want a single metric that balances both concerns and don't know which is more important.</p>
+
+      <p>The formula is: F1 = 2 × (precision × recall) / (precision + recall)</p>
+
+      <p>The harmonic mean is used rather than simple averaging because it heavily penalizes extreme imbalances. If precision is 0.90 and recall is 0.10, the arithmetic mean is 0.50, but the F1-score is only 0.18, correctly reflecting that the model is actually terrible at recall.</p>
+
+      <h3>Weighted F1 for Imbalanced Data</h3>
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">metrics</span> <span class="kw">import</span> <span class="fn">classification_report</span>
+<span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">datasets</span> <span class="kw">import</span> <span class="fn">load_breast_cancer</span>
+<span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">ensemble</span> <span class="kw">import</span> <span class="fn">RandomForestClassifier</span>
+<span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">model_selection</span> <span class="kw">import</span> <span class="fn">train_test_split</span>
+
+<span class="cm"># Load dataset</span>
+<span class="va">X</span>, <span class="va">y</span> <span class="op">=</span> <span class="fn">load_breast_cancer</span>(<span class="dt">return_X_y</span><span class="op">=</span><span class="st">True</span>)
+<span class="va">X_train</span>, <span class="va">X_test</span>, <span class="va">y_train</span>, <span class="va">y_test</span> <span class="op">=</span> <span class="fn">train_test_split</span>(<span class="va">X</span>, <span class="va">y</span>, <span class="dt">test_size</span><span class="op">=</span><span class="nm">0.2</span>)
+
+<span class="cm"># Train model</span>
+<span class="va">model</span> <span class="op">=</span> <span class="fn">RandomForestClassifier</span>()
+<span class="va">model</span>.<span class="fn">fit</span>(<span class="va">X_train</span>, <span class="va">y_train</span>)
+<span class="va">y_pred</span> <span class="op">=</span> <span class="va">model</span>.<span class="fn">predict</span>(<span class="va">X_test</span>)
+
+<span class="cm"># Detailed classification report with F1-score</span>
+<span class="bi">print</span>(<span class="fn">classification_report</span>(<span class="va">y_test</span>, <span class="va">y_pred</span>))
+<span class="cm"># Output includes precision, recall, F1-score for each class</span>
+<span class="cm"># and weighted F1-score considering class imbalance</span></code></pre>
+    </section>
+
+    <!-- ROC and AUC -->
+    <section class="section" id="roc-auc">
+      <span class="section-label">Advanced Metrics</span>
+      <h2>ROC Curves and AUC: Understanding Classification Thresholds</h2>
+      <p>ROC (Receiver Operating Characteristic) curves visualize the tradeoff between True Positive Rate and False Positive Rate across all possible classification thresholds. This is powerful because most classifiers don't just predict "yes" or "no"—they produce probability scores.</p>
+
+      <p>The AUC (Area Under the Curve) is a single number (0-1) summarizing the entire ROC curve: 1.0 = perfect classifier, 0.5 = random classifier, 0.0 = inverted classifier. AUC is particularly useful for imbalanced datasets because it's threshold-independent and evaluates the model's ability to rank positive cases above negative cases.</p>
+
+      <h3>Plotting ROC Curves</h3>
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">metrics</span> <span class="kw">import</span> <span class="fn">roc_curve</span>, <span class="fn">auc</span>
+<span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">linear_model</span> <span class="kw">import</span> <span class="fn">LogisticRegression</span>
+<span class="kw">import</span> <span class="im">matplotlib</span>.<span class="im">pyplot</span> <span class="kw">as</span> <span class="im">plt</span>
+
+<span class="cm"># Train model that outputs probabilities</span>
+<span class="va">model</span> <span class="op">=</span> <span class="fn">LogisticRegression</span>()
+<span class="va">model</span>.<span class="fn">fit</span>(<span class="va">X_train</span>, <span class="va">y_train</span>)
+
+<span class="cm"># Get probability predictions</span>
+<span class="va">y_proba</span> <span class="op">=</span> <span class="va">model</span>.<span class="fn">predict_proba</span>(<span class="va">X_test</span>)[<span class="op">:</span>, <span class="nm">1</span>]
+
+<span class="cm"># Calculate ROC curve</span>
+<span class="va">fpr</span>, <span class="va">tpr</span>, <span class="va">thresholds</span> <span class="op">=</span> <span class="fn">roc_curve</span>(<span class="va">y_test</span>, <span class="va">y_proba</span>)
+<span class="va">roc_auc</span> <span class="op">=</span> <span class="fn">auc</span>(<span class="va">fpr</span>, <span class="va">tpr</span>)
+
+<span class="cm"># Plot</span>
+<span class="im">plt</span>.<span class="fn">plot</span>(<span class="va">fpr</span>, <span class="va">tpr</span>, <span class="dt">label</span><span class="op">=</span><span class="st">f'ROC (AUC = {roc_auc:.3f})'</span>)
+<span class="im">plt</span>.<span class="fn">plot</span>([<span class="nm">0</span>, <span class="nm">1</span>], [<span class="nm">0</span>, <span class="nm">1</span>], <span class="st">'--'</span>, <span class="dt">label</span><span class="op">=</span><span class="st">'Random'</span>)
+<span class="im">plt</span>.<span class="fn">xlabel</span>(<span class="st">'False Positive Rate'</span>)
+<span class="im">plt</span>.<span class="fn">ylabel</span>(<span class="st">'True Positive Rate'</span>)
+<span class="im">plt</span>.<span class="fn">legend</span>()
+<span class="im">plt</span>.<span class="fn">show</span>()</code></pre>
+
+      <div class="callout tip">
+        <strong>When to use AUC:</strong> ROC-AUC is ideal for imbalanced classification and when comparing models across different thresholds. It's more informative than accuracy, precision, or recall alone for evaluating ranking ability.
+      </div>
+    </section>
+
+    <!-- Choosing Metrics -->
+    <section class="section" id="choosing-metrics">
+      <span class="section-label">Practical Application</span>
+      <h2>Choosing the Right Metrics for Your Problem</h2>
+
+      <h3>Email Spam Classification</h3>
+      <p><strong>Business impact of errors:</strong> False positives (marking legitimate email as spam) are extremely costly—users lose important messages. False negatives (missing spam) are annoying but less critical.</p>
+      <p><strong>Recommended metrics:</strong> High precision, acceptable recall. Monitor precision-recall curve. Use threshold optimization to maximize precision while maintaining reasonable recall.</p>
+
+      <h3>Credit Card Fraud Detection</h3>
+      <p><strong>Business impact:</strong> False negatives (missed fraud) are very costly. False positives (flagging legitimate transactions) are acceptable—security teams can quickly investigate.</p>
+      <p><strong>Recommended metrics:</strong> High recall with reasonable precision. Use ROC-AUC to evaluate and optimize threshold.</p>
+
+      <h3>Medical Diagnosis</h3>
+      <p><strong>Business impact:</strong> False negatives (missing disease) can be life-threatening. False positives lead to unnecessary treatment but can be confirmed with further tests.</p>
+      <p><strong>Recommended metrics:</strong> Very high recall (prioritize catching all true cases). Evaluate sensitivity-specificity, use precision-recall curve to understand tradeoffs.</p>
+
+      <h3>Product Recommendation</h3>
+      <p><strong>Business impact:</strong> Both false positives (recommending wrong items) and false negatives (missing good recommendations) harm user experience equally.</p>
+      <p><strong>Recommended metrics:</strong> Balanced metrics. F1-score or macro-averaged precision/recall is appropriate.</p>
+    </section>
+
+    <!-- Real-World Workflow -->
+    <section class="section" id="workflow">
+      <span class="section-label">Real-World Application</span>
+      <h2>Complete Evaluation Workflow</h2>
+      <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+      <pre><code><span class="kw">from</span> <span class="im">sklearn</span>.<span class="im">metrics</span> <span class="kw">import</span> <span class="fn">confusion_matrix</span>, <span class="fn">classification_report</span>, <span class="fn">roc_auc_score</span>
+
+<span class="cm"># Complete evaluation function</span>
+<span class="kw">def</span> <span class="fn">evaluate_classifier</span>(<span class="va">y_true</span>, <span class="va">y_pred</span>, <span class="va">y_proba</span><span class="op">=</span><span class="st">None</span>):
+    <span class="st">"""Comprehensive classification evaluation"""</span>
+    <span class="bi">print</span>(<span class="st">"=== CONFUSION MATRIX ==="</span>)
+    <span class="va">cm</span> <span class="op">=</span> <span class="fn">confusion_matrix</span>(<span class="va">y_true</span>, <span class="va">y_pred</span>)
+    <span class="bi">print</span>(<span class="va">cm</span>)
+
+    <span class="bi">print</span>(<span class="st">"\n=== CLASSIFICATION REPORT ==="</span>)
+    <span class="bi">print</span>(<span class="fn">classification_report</span>(<span class="va">y_true</span>, <span class="va">y_pred</span>))
+
+    <span class="kw">if</span> <span class="va">y_proba</span> <span class="kw">is</span> <span class="st">not</span> <span class="st">None</span>:
+        <span class="va">auc</span> <span class="op">=</span> <span class="fn">roc_auc_score</span>(<span class="va">y_true</span>, <span class="va">y_proba</span>)
+        <span class="bi">print</span>(<span class="st">f"\n=== ROC-AUC ==="</span>)
+        <span class="bi">print</span>(<span class="st">f"AUC: {auc:.3f}"</span>)
+
+<span class="cm"># Usage</span>
+<span class="fn">evaluate_classifier</span>(<span class="va">y_test</span>, <span class="va">y_pred</span>, <span class="va">y_proba</span>)</code></pre>
+    </section>
+
+    <!-- Exercises -->
+    <section class="section" id="exercises">
+      <span class="section-label">Practice</span>
+      <h2>Exercises</h2>
+
+      <h3>Exercise 1: Confusion Matrix Interpretation</h3>
+      <p>Given a confusion matrix with TN=85, FP=10, FN=5, TP=100, calculate precision, recall, and F1-score by hand. Then verify with scikit-learn.</p>
+
+      <h3>Exercise 2: Threshold Optimization</h3>
+      <p>Train a logistic regression model on an imbalanced dataset. Plot the ROC curve and precision-recall curve. Experiment with different probability thresholds and show how it affects precision and recall tradeoffs.</p>
+
+      <h3>Exercise 3: Metric Selection</h3>
+      <p>For three different scenarios (spam detection, rare disease diagnosis, product recommendation), write a brief justification for which metric(s) you'd prioritize and why.</p>
+    </section>
+
+    <!-- Key Takeaways -->
+    <section class="section" id="takeaways">
+      <span class="section-label">Summary</span>
+      <h2>Key Takeaways</h2>
+      <ul>
+        <li><strong>Accuracy is dangerous on imbalanced data</strong> — always use class-aware metrics like precision, recall, and F1</li>
+        <li><strong>Precision vs Recall is a fundamental tradeoff</strong> — choose based on which error is more costly in your domain</li>
+        <li><strong>ROC-AUC for ranking ability</strong> — use to evaluate how well your model separates positive and negative cases</li>
+        <li><strong>Context matters</strong> — the "best" metric depends entirely on your business requirements and the cost of different errors</li>
+        <li><strong>Always use confusion matrix visualization</strong> — it provides immediate intuition about your model's performance</li>
+      </ul>
+    </section>
+
+    <!-- Nav buttons -->
+    <div class="nav-buttons">
+      <a href="../learn.html?c=associate&l=module6-lesson1" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+      <a href="../learn.html?c=associate&l=module6-lesson3" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>© 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

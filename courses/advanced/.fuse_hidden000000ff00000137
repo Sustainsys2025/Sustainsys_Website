@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 for ML Data Pipelines — AI Practitioner Advanced | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body class="lesson">
+<div class="progress-circle-wrap"><svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg><div class="progress-circle-label" id="progressLabel">0%</div></div>
+<nav class="topnav"><div class="topnav-inner">
+<a href="https://sustainsys.co.uk" class="nav-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img"><div class="nav-logo-text">Sustain<span>Sys</span></div></a>
+<div class="nav-divider"></div>
+<div class="nav-title">Module 8 — AWS AI/ML Ecosystem</div>
+<span class="nav-badge">Advanced</span>
+<a href="index.html" class="nav-home-link">← Course Home</a>
+</div></nav>
+<main class="main"><div class="container">
+
+<section class="hero">
+<span class="hero-eyebrow">Module 8.4</span>
+<h1>S3 for ML Data Pipelines</h1>
+<p class="hero-sub">Designing scalable, cost-effective data storage and access patterns for machine learning workloads at scale</p>
+</section>
+
+<div class="objectives"><h4>Learning Objectives</h4><ul>
+<li>Design S3 bucket structures optimized for ML data access patterns</li>
+<li>Master object storage fundamentals and performance characteristics</li>
+<li>Implement cost optimization through storage classes and lifecycle policies</li>
+<li>Build reliable data pipelines with versioning, replication, and disaster recovery</li>
+<li>Optimize data access patterns for training and inference workloads</li>
+<li>Integrate S3 with SageMaker, Lambda, and other ML services efficiently</li>
+<li>Monitor and troubleshoot data pipeline performance and costs</li>
+</ul></div>
+
+<section class="section" id="overview">
+<h2>S3 as ML Data Infrastructure</h2>
+<p>Amazon S3 (Simple Storage Service) is the foundation of most AWS data infrastructure. For ML workloads, S3 serves multiple critical roles: raw data storage, training data repository, model artifact storage, prediction output storage, and data lake foundation. Understanding S3 deeply is essential for building efficient ML systems.</p>
+
+<p>S3's scale is remarkable: 100 trillion objects stored, 6.2M requests/second capacity. This scale comes with complexity—developers must understand storage classes, partitioning strategies, and access patterns to optimize for both cost and performance.</p>
+
+<div class="callout tip">
+<strong>Key Insight:</strong> S3 costs scale with storage volume and request count. A typical ML company spends 30-40% of cloud budget on S3. Optimization at the S3 layer has outsized impact on overall economics.
+</div>
+
+</section>
+
+<section class="section" id="architecture">
+<h2>S3 Architecture and Access Patterns</h2>
+
+<h3>Understanding S3 Fundamentals</h3>
+<p>S3 is an object store, not a filesystem. Objects consist of key (path), data (up to 5TB), and metadata. Keys are flat—folder structure is an illusion created by key naming (e.g., "data/2024/01/file.csv" looks like a folder but is just a key string).</p>
+
+<p><strong>Key performance characteristics:</strong> Eventual consistency for read-after-write (milliseconds), unlimited object count per bucket, 3,500 PUT/DELETE requests/second per prefix, 5,500 GET requests/second per prefix. Understanding prefix-based rate limiting is critical when designing data structures.</p>
+
+<p><strong>Common mistake:</strong> Using timestamps as the first part of keys (e.g., "2024-01-15-data-part-1.csv") creates a "hot prefix" since all recent writes go to the same prefix, hitting rate limits. Solution: randomize the prefix or use UUID-based partitioning.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="nm">boto3</span>
+<span class="kw">import</span> <span class="nm">uuid</span>
+
+<span class="va">s3</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span>(<span class="st">'s3'</span>)
+
+<span class="cm"># BAD: Hot prefix from timestamp ordering</span>
+<span class="va">bad_key</span> <span class="op">=</span> <span class="st">f"2024-01-15/batch-123-part-001.parquet"</span>
+
+<span class="cm"># GOOD: Random prefix distributes write load</span>
+<span class="va">random_prefix</span> <span class="op">=</span> <span class="nm">uuid</span>.<span class="fn">uuid4</span>().<span class="nm">hex</span>[:<span class="nm">4</span>]
+<span class="va">good_key</span> <span class="op">=</span> <span class="st">f"data/{random_prefix}/2024-01-15/batch-123-part-001.parquet"</span>
+
+<span class="cm"># Write with metadata</span>
+<span class="va">s3</span>.<span class="fn">put_object</span>(
+    <span class="st">Bucket</span><span class="op">=</span><span class="st">'ml-data-bucket'</span>,
+    <span class="st">Key</span><span class="op">=</span><span class="va">good_key</span>,
+    <span class="st">Body</span><span class="op">=</span><span class="va">data_bytes</span>,
+    <span class="st">Metadata</span><span class="op">=</span>{
+        <span class="st">'dataset'</span>: <span class="st">'training'</span>,
+        <span class="st">'version'</span>: <span class="st">'2'</span>,
+        <span class="st">'source'</span>: <span class="st">'etl-pipeline'</span>
+    },
+    <span class="st">ServerSideEncryption</span><span class="op">=</span><span class="st">'AES256'</span>
+)</code></pre>
+
+<h3>Storage Class Selection</h3>
+<p>S3 offers multiple storage classes with different costs and access characteristics. Selecting the right class for each dataset type dramatically impacts costs.</p>
+
+<ul>
+<li><strong>S3 Standard:</strong> $0.023/GB/month, millisecond access, for active data. Use for training data currently in use, recent predictions, frequently accessed models.</li>
+<li><strong>S3 Standard-IA (Infrequent Access):</strong> $0.0125/GB/month but $0.01 per GB retrieved, minimum 30-day storage. Use for older datasets, historical analysis, backup data.</li>
+<li><strong>S3 Intelligent-Tiering:</strong> $0.0125/GB/month with automatic tier movement, no retrieval fees. Best for unpredictable access patterns. Moves data between Standard and IA based on usage.</li>
+<li><strong>S3 Glacier Instant:</strong> $0.004/GB/month but requires 90-day minimum, retrieval fees. Archive old models and historical datasets.</li>
+</ul>
+
+<p><strong>Cost optimization example:</strong> A dataset with 1TB Standard costs $23/month. Moving 80% to Standard-IA after 30 days: 200GB Standard ($4.60) + 800GB IA ($10) + retrieval fees ($8 if retrieved monthly) = $22.60/month. Glacier Instant for data touched < quarterly: 200TB costs $800/month vs. $4,600 in Standard.</p>
+
+<h3>Lifecycle Policies</h3>
+<p>Implement lifecycle policies to automatically transition objects between storage classes, reducing ongoing costs without manual intervention.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="nm">boto3</span>
+<span class="kw">import</span> <span class="nm">json</span>
+
+<span class="va">s3</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span>(<span class="st">'s3'</span>)
+
+<span class="cm"># Lifecycle policy: Standard -> IA -> Glacier -> Delete</span>
+<span class="va">lifecycle_policy</span> <span class="op">=</span> {
+    <span class="st">'Rules'</span>: [
+        {
+            <span class="st">'Id'</span>: <span class="st">'archive-old-training-data'</span>,
+            <span class="st">'Status'</span>: <span class="st">'Enabled'</span>,
+            <span class="st">'Filter'</span>: {<span class="st">'Prefix'</span>: <span class="st">'training-data/'</span>},
+            <span class="st">'Transitions'</span>: [
+                {<span class="st">'Days'</span>: <span class="nm">30</span>, <span class="st">'StorageClass'</span>: <span class="st">'STANDARD_IA'</span>},
+                {<span class="st">'Days'</span>: <span class="nm">90</span>, <span class="st">'StorageClass'</span>: <span class="st">'GLACIER_IR'</span>},
+                {<span class="st">'Days'</span>: <span class="nm">365</span>, <span class="st">'StorageClass'</span>: <span class="st">'DEEP_ARCHIVE'</span>}
+            ],
+            <span class="st">'Expiration'</span>: {<span class="st">'Days'</span>: <span class="nm">2555</span>}
+        }
+    ]
+}
+
+<span class="va">s3</span>.<span class="fn">put_bucket_lifecycle_configuration</span>(
+    <span class="st">Bucket</span><span class="op">=</span><span class="st">'ml-data-bucket'</span>,
+    <span class="st">LifecycleConfiguration</span><span class="op">=</span><span class="va">lifecycle_policy</span>
+)</code></pre>
+
+</section>
+
+<section class="section" id="data-organization">
+<h2>Data Organization Strategies for ML</h2>
+
+<h3>Partitioning for Performance</h3>
+<p>Organize data with access patterns in mind. Partition by date, source, or category to enable efficient queries. SageMaker and Athena can exploit partition structures for faster data access.</p>
+
+<p><strong>Recommended bucket structure:</strong> Separate prefixes for raw data, processed data, training datasets, model artifacts, and predictions. Use date-based partitioning within each prefix to enable selective access.</p>
+
+<h3>Data Format Selection</h3>
+<p>Choose formats based on access patterns and compute engines. Parquet is columnar format, excellent for analytical queries and ML training—compresses 50-80% smaller than CSV. Use for training data. CSV is universal and human-readable for small datasets. TFRecord is TensorFlow's native format, optimized for deep learning. Avro supports schema evolution.</p>
+
+<p><strong>Cost implication:</strong> Parquet files are 3-5x smaller than CSV, reducing storage costs and transfer time. For 100GB dataset: CSV costs $2.30/month in Standard, Parquet costs $0.50/month. Per-request costs drop proportionally.</p>
+
+<h3>Versioning and Reproducibility</h3>
+<p>Version everything: data, preprocessing code, model artifacts. Track lineage from raw data through transformations to final model. Implement manifests that document dataset source, transformations applied, and creation date.</p>
+
+<div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+<pre><code><span class="kw">import</span> <span class="nm">hashlib</span>
+<span class="kw">import</span> <span class="nm">boto3</span>
+
+<span class="kw">def</span> <span class="fn">upload_versioned_dataset</span>(<span class="va">bucket</span>, <span class="va">data_path</span>, <span class="va">dataset_name</span>):
+    <span class="cm"># Calculate data hash for version tracking</span>
+    <span class="va">with_file</span> <span class="op">=</span> <span class="fn">open</span>(<span class="va">data_path</span>, <span class="st">'rb'</span>)
+    <span class="va">file_hash</span> <span class="op">=</span> <span class="nm">hashlib</span>.<span class="fn">md5</span>(<span class="va">with_file</span>.<span class="fn">read</span>()).<span class="fn">hexdigest</span>()
+    <span class="va">with_file</span>.<span class="fn">close</span>()
+
+    <span class="va">s3</span> <span class="op">=</span> <span class="nm">boto3</span>.<span class="fn">client</span>(<span class="st">'s3'</span>)
+    <span class="va">s3_key</span> <span class="op">=</span> <span class="st">f"datasets/{dataset_name}/v-{file_hash[:8]}/data.parquet"</span>
+    <span class="va">s3</span>.<span class="fn">upload_file</span>(<span class="va">data_path</span>, <span class="va">bucket</span>, <span class="va">s3_key</span>)
+
+    <span class="kw">return</span> <span class="va">s3_key</span></code></pre>
+
+</section>
+
+<section class="section" id="integration">
+<h2>Integration with ML Services</h2>
+
+<h3>SageMaker Training Integration</h3>
+<p>SageMaker can read training data directly from S3. Optimize by storing data in Parquet format with appropriate partitioning. SageMaker's Pipe mode streams data from S3 rather than downloading completely, reducing storage requirements on compute instances. For datasets under 100GB, use File mode (download all). For larger datasets, use Pipe mode (stream on-demand)—enables cost savings despite additional network I/O.</p>
+
+<h3>Lambda for Data Access</h3>
+<p>Lambda can read from S3 for inference pipelines. Key considerations: function memory determines concurrent read parallelism, package size limits (250MB zipped), timeout (15 minutes). For large model artifacts, store in S3 and download during function initialization (cached in /tmp).</p>
+
+<h3>Athena for Data Exploration</h3>
+<p>Athena enables SQL queries directly on S3 data without loading to a database. Partition-aware queries only scan relevant data, reducing cost dramatically. Querying 100TB dataset for specific date: unpartitioned scan costs $512.50 (100TB × $0.005/TB). Partitioned by date, querying 1TB costs $5. Proper partitioning reduces query cost 100x.</p>
+
+</section>
+
+<section class="section" id="security-reliability">
+<h2>Security and Reliability</h2>
+
+<h3>Encryption and Access Control</h3>
+<p>S3 supports server-side encryption (SSE-S3, SSE-KMS) and client-side encryption. For sensitive data, use SSE-KMS with customer-managed keys for audit trails. Performance impact: negligible for throughput, adds 1-2ms latency. Use bucket policies and IAM roles to restrict access. Implement least-privilege: ML training jobs only need read access to training data, write access to output paths.</p>
+
+<h3>Replication and Disaster Recovery</h3>
+<p>Enable versioning and cross-region replication for critical datasets. Replication is asynchronous but typically completes within seconds. Cost: storage for replicas plus replication requests ($0.02 per 1,000 requests). For critical datasets, maintain multiple copies across regions.</p>
+
+</section>
+
+
+<section class="section" id="advanced-topics">
+<h2>Advanced Topics and Deep Dives</h2>
+
+<h3>Multi-Region Data Replication Strategies</h3>
+<p>For global systems, replicating data across regions ensures availability and reduces latency. AWS Cross-Region Replication (CRR) automatically copies objects to another region. Critical decisions: which regions, replication lag tolerance, cost (doubles storage).</p>
+
+<p><strong>Strategy 1: Full Replication:</strong> All data in all regions. Highest cost but lowest latency from any region. Use for critical datasets.</p>
+
+<p><strong>Strategy 2: Selective Replication:</strong> Replicate only critical datasets (model artifacts, frequently accessed training data). Accept latency for historical data.</p>
+
+<p><strong>Strategy 3: Predictive Replication:</strong> Replicate data to region before it's needed (e.g., EU region on EU holidays when traffic increases).</p>
+
+<h3>Data Lake Architecture for ML</h3>
+<p>Data lakes centralize all organization data in S3. ML teams access raw data, create processed datasets, store outputs. Challenges: organizing massive data, preventing quality degradation, managing metadata, controlling costs.</p>
+
+<p><strong>Medallion Architecture:</strong> Bronze (raw data), Silver (cleaned/processed), Gold (business-ready). Each layer has different access patterns, storage classes, retention policies. Bronze uses S3 Standard-IA (inexpensive), Gold uses Standard (high availability).</p>
+
+<h3>Data Pipeline Orchestration</h3>
+<p>ML data pipelines involve multiple steps: ingest, validate, transform, prepare, store. Orchestration tools (AWS Step Functions, Apache Airflow) manage dependencies and handle failures.</p>
+
+<p><strong>Pipeline Design:</strong> Each step is idempotent (can be re-run safely), produces versioned outputs, has monitoring and alerting. Failed steps trigger alerts and can be retried.</p>
+
+<h3>Cost Analysis and Optimization</h3>
+<p>Track costs by dataset, by purpose, by retention period. Identify expensive datasets. Challenge: is 10TB legacy dataset worth $230/month? Archive if accessed < quarterly.</p>
+
+<p><strong>Cost Optimization Opportunities:</strong> Move cold data to cheaper storage, delete duplicates, compress efficiently, deduplicate across versions, implement usage-based retention (auto-delete old versions).</p>
+
+<h3>Data Quality and Validation</h3>
+<p>Poor data creates poor models. Monitor data quality: distribution changes (data drift), missing values, outliers, schema violations. Automated validation catches issues early.</p>
+
+<p><strong>Validation Approaches:</strong> Schema validation (expected columns, types), value validation (within expected ranges), distribution validation (compare to baseline), anomaly detection (statistical outliers).</p>
+
+<h3>Metadata Management</h3>
+<p>Tracking data lineage is critical: where did this dataset come from? What transformations were applied? Who produced it? When? Which datasets depend on it? Metadata answers these questions.</p>
+
+<p><strong>Metadata Strategies:</strong> Manifests (JSON files listing dataset contents), tagging (label datasets by purpose, owner), data catalogs (searchable registry of all datasets), lineage graphs (show data dependencies).</p>
+</section>
+
+
+<section class="section" id="exercises">
+<h2>Hands-On Exercises</h2>
+
+<div class="exercise">
+<h4>Exercise 1: Bucket Structure Design</h4>
+<p>Design an S3 bucket structure for a complete ML pipeline: raw data ingestion, training data, model artifacts, predictions. Implement lifecycle policies and calculate estimated monthly costs.</p>
+</div>
+
+<div class="exercise">
+<h4>Exercise 2: Data Format Optimization</h4>
+<p>Convert 10GB CSV dataset to Parquet, measure file size and query performance with Athena. Calculate storage and query cost reduction.</p>
+</div>
+
+<div class="exercise">
+<h4>Exercise 3: Versioning Implementation</h4>
+<p>Implement data versioning with manifests. Build utility tracking dataset transformations and generating reproducibility reports.</p>
+</div>
+
+<div class="exercise">
+<h4>Exercise 4: Cost Analysis</h4>
+<p>Analyze a multi-month S3 bill for an ML project. Identify optimization opportunities. Estimate cost reduction potential.</p>
+</div>
+
+</section>
+
+<section class="section" id="case-studies">
+<h2>Real-World Implementations</h2>
+
+<h3>Real-World Implementation Case Studies</h3>
+
+<p><strong>Case Study: ML Training Data Pipeline at Scale</strong></p>
+<p>A computer vision company processes 100M images daily for model training. Initial approach: upload all to S3 Standard, train on all data. Problem: S3 costs $2.3M/year, training takes weeks. Solution: implemented tiered approach. Raw images in Standard-IA ($1.15M/year). Active training datasets in Standard (versioned, immutable). Old training runs archived to Glacier ($100K/year). Implemented automated lifecycle policies. Result: 50% cost reduction, faster training through better organization.</p>
+
+<p><strong>Case Study: Multi-Region Disaster Recovery</strong></p>
+<p>A financial services company required disaster recovery: RPO of 1 hour, RTO of 4 hours. Solution: enabled cross-region replication to backup region with 1-hour lag. Automated failover scripts in both regions. Tested failover monthly. Cost: 50% more storage for replicas. Benefit: survived two regional outages with minimal disruption. Worth the cost for mission-critical operations.</p>
+
+<p><strong>Case Study: Cost Optimization Through Intelligence</strong></p>
+<p>A startup's S3 bill grew from $100/month to $10K/month as they scaled. Analysis: 60% of storage was old model artifacts never accessed. Solution: implemented metadata tagging, automated deletion of artifacts older than 90 days unless explicitly tagged "keep". Deleted 50TB of dead data. Implemented archive-to-Glacier for models older than 30 days. Final bill: $2K/month (20% of peak). Same functionality, massive cost reduction through intelligent deletion.</p>
+
+</section>
+
+<h3>Performance Optimization Techniques</h3>
+<p>Once you understand your data pipelines, focus on optimization. Every percentage point of efficiency improvement saves money at scale.</p>
+
+<p><strong>Optimization Strategy 1: Compression:</strong> Use Parquet with Snappy compression (50-80% reduction vs. CSV). Reduces storage costs, transfer time, and training time. Minimal CPU overhead for decompression.</p>
+
+<p><strong>Optimization Strategy 2: Intelligent Partitioning:</strong> Partition by date, source, category. SageMaker and Athena can skip irrelevant partitions. Querying single day instead of all data is 100x faster.</p>
+
+<p><strong>Optimization Strategy 3: Caching Layers:</strong> Cache frequently accessed datasets (embedding lookups, reference data) in memory or fast storage. Reduces S3 requests and network bandwidth.</p>
+
+<p><strong>Optimization Strategy 4: Batch Operations:</strong> Batch multiple operations together. Reading 1000 small files is slower than 1 large file. Batch write operations to reduce API calls.</p>
+
+<h3>Troubleshooting Common Issues</h3>
+<p>Production data pipelines encounter issues. Understanding common problems enables faster debugging and resolution.</p>
+
+<p><strong>Issue 1: S3 Rate Limiting:</strong> Symptoms: occasional 503 Service Unavailable errors. Cause: exceeding 3,500 PUT/DELETE or 5,500 GET per second per prefix. Solution: randomize prefix, implement exponential backoff, contact AWS for quota increase.</p>
+
+<p><strong>Issue 2: Data Corruption:</strong> Symptoms: sporadic training failures, model outputs change unexpectedly. Cause: uploading incomplete files, network interruptions. Solution: implement checksums (MD5, SHA256), verify before using, implement transaction-like behavior (write to temp, move on success).</p>
+
+<p><strong>Issue 3: Cost Explosions:</strong> Symptoms: unexpected bill spike. Cause: inefficient code generating millions of API requests, forgot lifecycle policy expiration, replication enabled without realizing. Solution: set cost alerts, review bucket replication settings, analyze access patterns.</p>
+
+
+<div class="key-takeaways">
+<h3>Key Takeaways</h3>
+<ul>
+<li><strong>S3 is Foundational:</strong> Well-designed S3 structure enables efficient ML pipelines across all downstream services</li>
+<li><strong>Partitioning Matters:</strong> Proper key structure enables selective data access, reducing costs and latency</li>
+<li><strong>Storage Class Selection is Critical:</strong> Active training data in Standard, archived data in Glacier—correct choices reduce costs 50-70%</li>
+<li><strong>Format Selection Impacts Economics:</strong> Parquet vs. CSV is 3-5x cost difference for large datasets</li>
+<li><strong>Versioning Enables Reproducibility:</strong> Hash-based versioning ensures datasets are immutable and reproducible</li>
+<li><strong>Lifecycle Automation is Essential:</strong> Automatic transitions between storage classes prevent manual cost management failures</li>
+<li><strong>Measure Everything:</strong> Use S3 Analytics and CloudWatch metrics to identify optimization opportunities</li>
+</ul>
+</div>
+
+<div class="nav-buttons">
+<a href="../learn.html?c=advanced&l=module8-lesson3" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+<a href="../learn.html?c=advanced&l=module8-lesson5" class="nav-btn next">Next <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+<footer><div class="container"><div class="footer-logo"><img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img"><div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div></div><p>© 2026 SustainSys. All rights reserved.</p><p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p></div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'advanced';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

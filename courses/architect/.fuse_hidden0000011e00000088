@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5.1 MLOps Fundamentals Overview — AI Solution Architect | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 5 — MLOps Fundamentals Overview</div>
+    <span class="nav-badge">Architect</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Solution Architect</div>
+  <span class="sidebar-section-label">Module 5: MLOps Fundamentals</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module5-lesson1" class="active"><span class="sidebar-num">5.1</span> MLOps Overview</a></li>
+    <li><a href="../learn.html?c=architect&l=module5-lesson2"><span class="sidebar-num">5.2</span> Experiment Tracking</a></li>
+    <li><a href="../learn.html?c=architect&l=module5-lesson3"><span class="sidebar-num">5.3</span> Data Versioning</a></li>
+    <li><a href="../learn.html?c=architect&l=module5-lesson4"><span class="sidebar-num">5.4</span> Feature Stores</a></li>
+    <li><a href="../learn.html?c=architect&l=module5-lesson5"><span class="sidebar-num">5.5</span> Model Governance</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 6: LLMOps & Prompt Mgmt</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module6-lesson1"><span class="sidebar-num">6.1</span> LLMOps Overview</a></li>
+    <li><a href="../learn.html?c=architect&l=module6-lesson2"><span class="sidebar-num">6.2</span> Prompt Versioning</a></li>
+    <li><a href="../learn.html?c=architect&l=module6-lesson3"><span class="sidebar-num">6.3</span> Cost Tracking</a></li>
+    <li><a href="../learn.html?c=architect&l=module6-lesson4"><span class="sidebar-num">6.4</span> Latency Optimization</a></li>
+    <li><a href="../learn.html?c=architect&l=module6-lesson5"><span class="sidebar-num">6.5</span> LLM Guardrails</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 7: CI/CD for AI</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module7-lesson1"><span class="sidebar-num">7.1</span> CI/CD Overview</a></li>
+    <li><a href="../learn.html?c=architect&l=module7-lesson2"><span class="sidebar-num">7.2</span> Model Validation</a></li>
+    <li><a href="../learn.html?c=architect&l=module7-lesson3"><span class="sidebar-num">7.3</span> Deployment Pipelines</a></li>
+    <li><a href="../learn.html?c=architect&l=module7-lesson4"><span class="sidebar-num">7.4</span> Rollback & Incidents</a></li>
+    <li><a href="../learn.html?c=architect&l=module7-lesson5"><span class="sidebar-num">7.5</span> Testing ML Models</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 8: Container Orchestration</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module8-lesson1"><span class="sidebar-num">8.1</span> Orchestration Overview</a></li>
+    <li><a href="../learn.html?c=architect&l=module8-lesson2"><span class="sidebar-num">8.2</span> Kubernetes for ML</a></li>
+    <li><a href="../learn.html?c=architect&l=module8-lesson3"><span class="sidebar-num">8.3</span> Container Optimization</a></li>
+    <li><a href="../learn.html?c=architect&l=module8-lesson4"><span class="sidebar-num">8.4</span> Helm Charts</a></li>
+    <li><a href="../learn.html?c=architect&l=module8-lesson5"><span class="sidebar-num">8.5</span> Service Mesh</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 9: Serverless AI</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=architect&l=module9-lesson1"><span class="sidebar-num">9.1</span> Serverless Overview</a></li>
+    <li><a href="../learn.html?c=architect&l=module9-lesson2"><span class="sidebar-num">9.2</span> AWS Lambda</a></li>
+    <li><a href="../learn.html?c=architect&l=module9-lesson3"><span class="sidebar-num">9.3</span> Azure Functions</a></li>
+    <li><a href="../learn.html?c=architect&l=module9-lesson4"><span class="sidebar-num">9.4</span> Model Inference</a></li>
+    <li><a href="../learn.html?c=architect&l=module9-lesson5"><span class="sidebar-num">9.5</span> Function Orchestration</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb"><a href="../index.html">Courses</a><span class="sep">›</span><a href="index.html">Architect</a><span class="sep">›</span><span>Module 5</span><span class="sep">›</span><span>MLOps Fundamentals</span></div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 5 · Lesson 1</span>
+    <span class="difficulty-badge advanced">Advanced</span>
+  </div>
+  <h1>MLOps <span class="accent">Fundamentals Overview</span></h1>
+  <p class="hero-sub">Understand the core principles, tools, and workflows that enable machine learning operations at scale. This lesson establishes the foundation for reproducible, governed, and production-ready AI systems.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~35 minutes</div>
+    <div class="hero-meta-item"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>5 sections</div>
+    <div class="hero-meta-item"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>4 exercises</div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Define MLOps and its role in bridging ML development and production</li>
+    <li>Understand the MLOps lifecycle from experimentation through deployment</li>
+    <li>Identify key MLOps tools and their purposes in a modern ML stack</li>
+    <li>Design scalable ML systems with reproducibility and governance in mind</li>
+    <li>Recognize common MLOps challenges and industry best practices</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Strong foundational knowledge of machine learning concepts</li>
+    <li>Familiarity with Python, model training, and evaluation metrics</li>
+    <li>Understanding of containerization (Docker) and basic cloud concepts</li>
+    <li>Experience with Git version control and CI/CD principles</li>
+  </ul>
+</div>
+
+<section class="section reveal" id="what-is-mlops">
+  <span class="section-label">Fundamentals</span>
+  <h2>What Is MLOps?</h2>
+
+  <p>Machine Learning Operations (MLOps) is a set of practices, tools, and cultural norms that bridges the gap between machine learning development and production operations. If DevOps brought discipline to software deployment, MLOps brings the same rigor to machine learning systems — ensuring that models are reproducible, testable, monitorable, and updatable at enterprise scale.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Consider a traditional manufacturing plant versus a smart factory. A traditional plant is run by humans following procedures. A smart factory has sensors, automated quality checks, and self-adjusting machinery. MLOps is the operational framework that turns ad-hoc model development into a smart, self-monitoring system where experiments are tracked, data is versioned, models are validated automatically, and issues are detected before they impact users.</p>
+  </div>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">The MLOps Lifecycle: From Idea to Production</div>
+    <svg viewBox="0 0 800 280" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <defs><marker id="arr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1A3A6B"/></marker></defs>
+      <rect x="30" y="50" width="130" height="80" rx="10" fill="#f1f5f9" stroke="#1A3A6B" stroke-width="2"/><text x="95" y="78" text-anchor="middle" fill="#1A3A6B" font-size="11" font-weight="700">1. IDEATION</text><text x="95" y="115" text-anchor="middle" fill="#7A756B" font-size="9">Problem definition</text><line x1="160" y1="90" x2="200" y2="90" stroke="#1A3A6B" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="210" y="50" width="130" height="80" rx="10" fill="#f1f5f9" stroke="#A4421F" stroke-width="2"/><text x="275" y="78" text-anchor="middle" fill="#A4421F" font-size="11" font-weight="700">2. EXPERIMENT</text><text x="275" y="115" text-anchor="middle" fill="#7A756B" font-size="9">Model training</text><line x1="340" y1="90" x2="380" y2="90" stroke="#1A3A6B" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="390" y="50" width="130" height="80" rx="10" fill="#f1f5f9" stroke="#16a34a" stroke-width="2"/><text x="455" y="78" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">3. VALIDATE</text><text x="455" y="115" text-anchor="middle" fill="#7A756B" font-size="9">QA &amp; review</text><line x1="520" y1="90" x2="560" y2="90" stroke="#1A3A6B" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="570" y="50" width="130" height="80" rx="10" fill="#f1f5f9" stroke="#C0522F" stroke-width="2"/><text x="635" y="78" text-anchor="middle" fill="#C0522F" font-size="11" font-weight="700">4. DEPLOY</text><text x="635" y="115" text-anchor="middle" fill="#7A756B" font-size="9">Production</text><line x1="700" y1="90" x2="740" y2="90" stroke="#1A3A6B" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="750" y="50" width="30" height="80" rx="10" fill="#f1f5f9" stroke="#e946ef" stroke-width="2"/>
+      <rect x="30" y="160" width="750" height="100" rx="8" fill="rgba(54,207,201,0.04)" stroke="rgba(54,207,201,0.1)"/>
+      <text x="50" y="190" fill="#1A3A6B" font-size="11" font-weight="600">Enablers: Experiment tracking (MLflow) | Data versioning (DVC) | Model registry | CI/CD pipelines | Orchestration</text>
+    </svg>
+  </div>
+
+  <p>The MLOps lifecycle is circular: monitor production models, detect drift, return to experimentation, validate improvements, and redeploy. This continuous cycle is where MLOps truly adds value. Unlike traditional software, ML models must continuously adapt to changing data and requirements.</p>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>MLOps bridges the gap between ML development and production operations</li>
+      <li>The MLOps lifecycle is iterative: ideation → experiment → validate → deploy → monitor</li>
+      <li>Reproducibility and governance are foundational to enterprise ML systems</li>
+      <li>Data and model versioning are as critical as code versioning in MLOps</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="mlops-stack">
+  <span class="section-label">Architecture</span>
+  <h2>The MLOps Stack: Tools & Components</h2>
+
+  <p>A modern MLOps platform requires multiple layers: data infrastructure, experiment tracking, model management, CI/CD automation, deployment orchestration, and monitoring. No single tool solves all problems — successful MLOps is about choosing the right tools and integrating them coherently.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Typical MLOps Architecture Stack</div>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h5>Data Layer</h5>
+        <p>Storage, versioning, lineage for training data and features.</p>
+        <ul>
+          <li><code>DVC</code> — data versioning</li>
+          <li><code>Feast</code> — feature store</li>
+          <li><code>Delta Lake</code> — ACID transactions</li>
+          <li><code>Great Expectations</code> — validation</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Experiment Layer</h5>
+        <p>Track parameters, metrics, artifacts from training runs.</p>
+        <ul>
+          <li><code>MLflow</code> — tracking &amp; registry</li>
+          <li><code>Weights &amp; Biases</code> — collaboration</li>
+          <li><code>Neptune</code> — ML metadata</li>
+          <li><code>Kubeflow</code> — orchestration</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Deployment Layer</h5>
+        <p>Containerization, orchestration, serving infrastructure.</p>
+        <ul>
+          <li><code>Docker</code> — containerization</li>
+          <li><code>Kubernetes</code> — orchestration</li>
+          <li><code>BentoML</code> — serving</li>
+          <li><code>Seldon</code> — deployment</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>Monitoring Layer</h5>
+        <p>Track model performance, drift, system health in production.</p>
+        <ul>
+          <li><code>Prometheus</code> — metrics</li>
+          <li><code>Grafana</code> — dashboards</li>
+          <li><code>WhyLabs</code> — monitoring</li>
+          <li><code>Arize</code> — observability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Integration Patterns</h3>
+  <p>Power emerges when layers communicate: data engineer loads new data (DVC tracked), data scientist experiments (MLflow tracked), validates via CI/CD, deploys via Kubernetes, monitors in Grafana. When drift is detected, the cycle repeats.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># MLflow integration for experiment tracking</span>
+<span class="kw">import</span> <span class="im">mlflow</span>
+<span class="kw">from</span> <span class="im">sklearn.ensemble</span> <span class="kw">import</span> <span class="bi">RandomForestClassifier</span>
+
+<span class="kw">with</span> <span class="fn">mlflow.start_run</span>():
+    <span class="cm"># Log hyperparameters</span>
+    <span class="fn">mlflow.log_params</span>({<span class="st">"n_estimators"</span>: <span class="nm">100</span>, <span class="st">"max_depth"</span>: <span class="nm">10</span>})
+
+    <span class="va">model</span> <span class="op">=</span> <span class="bi">RandomForestClassifier</span>(<span class="nm">100</span>)
+    <span class="va">model</span>.<span class="fn">fit</span>(<span class="va">X_train</span>, <span class="va">y_train</span>)
+
+    <span class="cm"># Log metrics</span>
+    <span class="va">accuracy</span> <span class="op">=</span> <span class="va">model</span>.<span class="fn">score</span>(<span class="va">X_test</span>, <span class="va">y_test</span>)
+    <span class="fn">mlflow.log_metric</span>(<span class="st">"accuracy"</span>, <span class="va">accuracy</span>)
+
+    <span class="cm"># Log model artifact</span>
+    <span class="fn">mlflow.sklearn.log_model</span>(<span class="va">model</span>, <span class="st">"model"</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> MLflow captures the entire experiment lifecycle. We log hyperparameters before training, metrics after training, and the model artifact itself. This creates a complete audit trail: trace any production model back to exactly which data, code version, and hyperparameters created it.</p>
+  </div>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Regulated Industries:</strong> Financial and healthcare organizations face strict compliance requirements. MLOps audit trails prove that models were trained on approved data, validated by appropriate stakeholders, and monitored for drift.</p>
+    <p><strong>In Fast-Moving Teams:</strong> Without centralized tracking, models get lost, results aren't reproducible, and teams can't collaborate effectively. A unified MLOps platform is essential for team productivity.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="challenges">
+  <span class="section-label">Practical Insights</span>
+  <h2>Common MLOps Challenges & Solutions</h2>
+
+  <p>Building production ML systems is hard. Data quality issues that seem minor during development become critical in production. Models that work on Tuesday might fail on Wednesday due to data drift. Teams struggle with reproducibility: "I can't recreate the model I trained last month."</p>
+
+  <h3>Challenge 1: Reproducibility</h3>
+  <p><strong>Problem:</strong> Experiments fail to reproduce because of missing dependencies, different random seeds, or undocumented preprocessing.</p>
+  <p><strong>Solution:</strong> Version everything: code (Git), data (DVC), environment (Docker), parameters (MLflow). Use deterministic seeds and document transformations in code.</p>
+
+  <h3>Challenge 2: Data Quality & Drift</h3>
+  <p><strong>Problem:</strong> Models fail when production data has missing values, outliers, or distribution shifts. You don't realize until users complain.</p>
+  <p><strong>Solution:</strong> Implement data validation at every stage. Monitor incoming data distributions continuously. Set up automated alerts for drift and performance degradation.</p>
+
+  <h3>Challenge 3: Model Governance</h3>
+  <p><strong>Problem:</strong> Nobody knows who trained a model, when, with what data, or whether it passed validation. Multiple versions exist on different machines.</p>
+  <p><strong>Solution:</strong> Use a centralized model registry (MLflow, SageMaker). Tag models with metadata. Implement approval workflows before production deployment.</p>
+
+  <h3>Challenge 4: Integration & Operationalization</h3>
+  <p><strong>Problem:</strong> Data scientists develop in Jupyter notebooks. Moving to production requires manual rewriting by engineers, introducing bugs and delays.</p>
+  <p><strong>Solution:</strong> Use reproducible, framework-agnostic formats. Write models as pipelines with clear interfaces. Use orchestration (Airflow, Kubeflow) to automate workflows.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">MLOps Best Practices Reference</div>
+    <div class="stages">
+      <div class="stage-card"><div class="stage-num">1</div><div class="stage-content"><h4>Version Everything</h4><p>Track code, data, models, configurations. Git for code, DVC for files, MLflow for parameters. Reproducibility depends on complete versioning.</p></div></div>
+      <div class="stage-card"><div class="stage-num">2</div><div class="stage-content"><h4>Automate Testing</h4><p>Unit tests for data transformations, schema validation, model output bounds, integration tests for full pipeline. Catch bugs before production.</p></div></div>
+      <div class="stage-card"><div class="stage-num">3</div><div class="stage-content"><h4>Monitor Everything</h4><p>Metrics (accuracy, latency), infrastructure (CPU, memory), data (drift, quality). Automated alerts trigger retraining or investigation before user impact.</p></div></div>
+      <div class="stage-card"><div class="stage-num">4</div><div class="stage-content"><h4>Use Containers</h4><p>Docker ensures experiments run identically in development and production. No more "it works on my machine" problems. Essential for reproducibility and scaling.</p></div></div>
+      <div class="stage-card"><div class="stage-num">5</div><div class="stage-content"><h4>Implement CI/CD</h4><p>Automated pipelines test code, validate data, train and evaluate models, deploy on success. Reduces manual errors and accelerates iteration cycles.</p></div></div>
+    </div>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Reproducibility requires versioning code, data, environment, and parameters</li>
+      <li>Data quality and drift are production's biggest challenges — monitor proactively</li>
+      <li>Model governance ensures accountability and enables rollback if needed</li>
+      <li>Automation bridges the gap between experimentation and production operations</li>
+      <li>Culture matters: successful MLOps requires data and engineering team collaboration</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="getting-started">
+  <span class="section-label">Next Steps</span>
+  <h2>Building Your First MLOps Project</h2>
+
+  <p>Starting with MLOps doesn't require massive infrastructure investment. Begin with core practices: version your code, track experiments, validate data, and containerize your model. As your system grows and organizational maturity increases, add orchestration, feature platforms, and advanced monitoring.</p>
+
+  <h3>Minimal Viable MLOps Setup</h3>
+  <ul>
+    <li><strong>Git</strong> — version control for code and configurations</li>
+    <li><strong>MLflow</strong> — experiment tracking and model registry</li>
+    <li><strong>Docker</strong> — ensure reproducible environments</li>
+    <li><strong>Great Expectations</strong> — validate data quality</li>
+    <li><strong>Pytest</strong> — unit and integration tests</li>
+    <li><strong>GitHub Actions or GitLab CI</strong> — simple CI/CD automation</li>
+  </ul>
+
+  <p>This minimal setup costs almost nothing but establishes reproducibility and governance. As team size and model complexity grow, add feature stores, distributed training, real-time serving, and sophisticated monitoring. The journey to mature MLOps is incremental, not a big bang.</p>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>MLOps maturity grows incrementally — start with core practices</li>
+      <li>Minimal viable setup: Git, MLflow, Docker, data validation, testing, CI/CD</li>
+      <li>Scale complexity as organizational needs and team size grow</li>
+      <li>Culture and processes matter as much as tools in MLOps adoption</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+  <div class="exercise">
+    <h4>🔬 Exercise 1: MLOps Tool Audit</h4>
+    <p>Research and map your organization's current tools against the MLOps stack. Identify gaps in experiment tracking, data versioning, and deployment orchestration. Document which tools would provide the highest value to implement next.</p>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Design Reproducibility</h4>
+    <p>Take an existing model training script and identify all non-reproducible elements: hardcoded paths, missing environment specs, random seeds, preprocessing outside version control. Design solutions for each.</p>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Create a Model Card</h4>
+    <p>Document a production model using the Model Card format: intended use, architecture, training data, metrics, limitations, ethical considerations. This is the governance foundation MLOps requires.</p>
+  </div>
+  <div class="exercise">
+    <h4>🔬 Exercise 4: Draft a Deployment Strategy</h4>
+    <p>Design a deployment strategy: canary rollout percentage, monitoring metrics, rollback triggers, approval gates. Think through how you'd catch issues before they affect users.</p>
+  </div>
+</section>
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson 5.2</h4>
+  <p><strong>Experiment Tracking and Model Versioning with MLflow</strong> — Now that you understand MLOps principles, we'll dive deep into MLflow, the industry-standard tool for tracking experiments, versioning models, and managing the complete ML lifecycle. You'll learn to instrument your training code, compare experiments, and build reproducible ML workflows.</p>
+</div>
+
+
+<hr class="section-divider">
+
+<section class="section reveal" id="advanced-topics">
+  <span class="section-label">Advanced</span>
+  <h2>Advanced Techniques and Optimization Strategies</h2>
+
+  <p>As your systems mature, you'll encounter challenges that require deeper expertise. This section covers advanced patterns used by organizations running massive-scale AI systems.</p>
+
+  <div class="code-header"><span class="code-lang">YAML</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Example configuration for production deployments</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-system-config
+data:
+  enable_observability: <span class="st">"true"</span>
+  metric_interval: <span class="st">"30s"</span>
+  alert_threshold: <span class="st">"95"</span>
+  enable_tracing: <span class="st">"true"</span>
+  sampling_rate: <span class="st">"0.1"</span>
+  log_level: <span class="st">"INFO"</span>
+  retention_days: <span class="st">"30"</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> Production configurations define behavior across all environments. Sampling rate controls what percentage of traces are recorded. Alert thresholds should be tuned to your SLOs, not arbitrary values. Log retention balances compliance requirements with storage costs.</p>
+  </div>
+
+  <p><strong>Challenge 1: Scaling Observability</strong> — When you have thousands of services generating millions of metrics per second, storage becomes expensive. Solutions include better compression, sampling strategies, and tiered storage.</p>
+
+  <p><strong>Challenge 2: Cost Management</strong> — Cloud observability services charge per metric, per log line, and per trace. Large-scale systems can spend hundreds of thousands per month. Effective cardinality management and sampling strategies are essential.</p>
+
+  <p><strong>Challenge 3: Alert Tuning</strong> — Too many alerts cause alert fatigue. Too few and you miss real issues. The solution is iterative tuning based on incident analysis: when incidents occur, tune alerts to catch them; when false alerts fire, adjust thresholds.</p>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Observability Scaling Patterns</div>
+    <svg viewBox="0 0 800 240" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <text x="400" y="25" text-anchor="middle" fill="#1A3A6B" font-size="12" font-weight="700">Scaling Observability as Systems Grow</text>
+
+      <!-- Stage 1 -->
+      <rect x="40" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#1A3A6B" stroke-width="1.5"/>
+      <text x="120" y="75" text-anchor="middle" fill="#1A3A6B" font-size="11" font-weight="700">Stage 1: Single Service</text>
+      <text x="60" y="100" fill="#7A756B" font-size="8">• Few metrics</text>
+      <text x="60" y="118" fill="#7A756B" font-size="8">• Local Prometheus</text>
+      <text x="60" y="136" fill="#7A756B" font-size="8">• 1-3 dashboards</text>
+      <text x="60" y="154" fill="#7A756B" font-size="8">• Manual alerts</text>
+      <text x="120" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 1-5</text>
+
+      <!-- Stage 2 -->
+      <rect x="230" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#A4421F" stroke-width="1.5"/>
+      <text x="310" y="75" text-anchor="middle" fill="#A4421F" font-size="11" font-weight="700">Stage 2: Multi-Service</text>
+      <text x="250" y="100" fill="#7A756B" font-size="8">• Hundreds of metrics</text>
+      <text x="250" y="118" fill="#7A756B" font-size="8">• Federated Prometheus</text>
+      <text x="250" y="136" fill="#7A756B" font-size="8">• 5-10 dashboards</text>
+      <text x="250" y="154" fill="#7A756B" font-size="8">• Alertmanager</text>
+      <text x="310" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 5-20</text>
+
+      <!-- Stage 3 -->
+      <rect x="420" y="50" width="160" height="170" rx="6" fill="#f1f5f9" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="500" y="75" text-anchor="middle" fill="#16a34a" font-size="11" font-weight="700">Stage 3: Platform</text>
+      <text x="440" y="100" fill="#7A756B" font-size="8">• Millions of metrics</text>
+      <text x="440" y="118" fill="#7A756B" font-size="8">• Thanos/VictoriaMetrics</text>
+      <text x="440" y="136" fill="#7A756B" font-size="8">• 20+ dashboards</text>
+      <text x="440" y="154" fill="#7A756B" font-size="8">• ML-based alerts</text>
+      <text x="500" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 20-100</text>
+
+      <!-- Stage 4 -->
+      <rect x="610" y="50" width="150" height="170" rx="6" fill="#f1f5f9" stroke="#C0522F" stroke-width="2"/>
+      <text x="685" y="75" text-anchor="middle" fill="#C0522F" font-size="11" font-weight="700">Stage 4: Enterprise</text>
+      <text x="630" y="100" fill="#7A756B" font-size="8">• Billions of metrics</text>
+      <text x="630" y="118" fill="#7A756B" font-size="8">• Multi-region setup</text>
+      <text x="630" y="136" fill="#7A756B" font-size="8">• 100+ dashboards</text>
+      <text x="630" y="154" fill="#7A756B" font-size="8">• AIOps integration</text>
+      <text x="685" y="200" text-anchor="middle" fill="#94a3b8" font-size="8">Teams: 100+</text>
+    </svg>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Observability complexity scales with system size—plan for growth from day one</li>
+      <li>Cardinality management and sampling strategies are critical at scale</li>
+      <li>Alert tuning is an ongoing process based on incident analysis</li>
+      <li>Cost management requires continuous optimization of what you measure</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises and Case Studies</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Design Your Observability Stack</h4>
+    <p>Design a complete observability solution for an AI system with these characteristics:</p>
+    <ul>
+      <li>Three ML models serving different prediction tasks</li>
+      <li>Distributed across three regions (US, EU, Asia)</li>
+      <li>Peak load of 100K predictions per second</li>
+      <li>SLO: 99.9% availability, p99 latency < 100ms, accuracy > 92%</li>
+    </ul>
+    <p><strong>What to include:</strong> Metrics to track, dashboard layouts, alerting thresholds, log aggregation strategy, trace sampling rate, and cost estimates.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Incident Analysis</h4>
+    <p>Analyze this incident: Your fraud detection model's accuracy dropped to 87% overnight, but infrastructure metrics were normal.</p>
+    <p><strong>Tasks:</strong></p>
+    <ul>
+      <li>What metric would have detected this issue?</li>
+      <li>What logs would help root-cause it?</li>
+      <li>What trace data would be useful?</li>
+      <li>How would you prevent this in the future?</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Cost Optimization</h4>
+    <p>Your observability bill is \$50,000/month. You've identified that 80% comes from high-cardinality metrics. Design a plan to reduce costs by 50% without losing visibility into critical issues.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="summary">
+  <span class="section-label">Wrap-Up</span>
+  <h2>Summary and Key Takeaways</h2>
+
+  <p>In this lesson, you've learned the foundations of building observability systems that enable production excellence. The core principles:</p>
+
+  <ul>
+    <li><strong>Observability is Architectural</strong> — Design it in from day one; retrofitting is expensive and incomplete</li>
+    <li><strong>Three Pillars Enable Root-Cause Analysis</strong> — Metrics show trends, logs show details, traces show flows</li>
+    <li><strong>AI Systems Need AI-Specific Metrics</strong> — Model accuracy, confidence, data drift are as important as infrastructure metrics</li>
+    <li><strong>Start Simple, Scale Deliberately</strong> — Begin with essential metrics and dashboards; expand based on needs</li>
+    <li><strong>Close the Feedback Loop</strong> — Incidents should drive observability improvements; use postmortems to iterate</li>
+  </ul>
+
+  <p>Production AI systems require continuous attention to observability. The teams that excel at observability respond faster to incidents, ship features confidently, and build systems that customers trust.</p>
+
+  <div class="quiz-box">
+    <h4>🧪 Final Understanding Check</h4>
+    <div class="quiz-question" data-correct="3">
+      <p>You're building a new AI service. When should you design your observability strategy?</p>
+      <ul class="quiz-options">
+        <li>A) After the MVP is ready to ship</li>
+        <li>B) When the first incident occurs</li>
+        <li>C) When you move to production</li>
+        <li>D) During the architectural design phase, before implementation</li>
+      </ul>
+      <div class="quiz-answer">The answer is D. Observability must be designed alongside architecture, not bolted on afterward. During design, you decide what's critical to measure, how you'll aggregate data, and how you'll alert. Building observability from day one is cheaper and more effective than retrofitting it later.</div>
+    </div>
+  </div>
+</section>
+
+<div class="nav-buttons">
+  <span></span>
+  <a href="../learn.html?c=architect&l=module5-lesson2" class="nav-btn next">Next: Experiment Tracking <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'architect';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

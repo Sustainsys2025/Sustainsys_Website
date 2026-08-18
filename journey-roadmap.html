@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Career Pathfinder — SustainSys AI Academy</title>
+<meta name="description" content="Explore 8 in-demand AI career paths with detailed roadmaps, salary ranges, market demand and missing competencies tailored to your profile.">
+<meta name="theme-color" content="#1A3A6B">
+<link rel="icon" type="image/svg+xml" href="./assets/sustainsys-logo.svg">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/css/nav.css">
+<link rel="stylesheet" href="assets/css/journey.css">
+<style>
+  .path-card {
+    background: #fff;
+    border: 1px solid var(--j-line);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.25s var(--j-ease);
+  }
+  .path-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(26,58,107,0.12);
+    border-color: rgba(26,58,107,0.25);
+  }
+  .path-card.featured {
+    border-color: rgba(164,66,31,0.45);
+    box-shadow: 0 10px 30px -10px rgba(164,66,31,0.20);
+  }
+  .path-card-top { height: 5px; background: linear-gradient(90deg, #1A3A6B, #2F548A); }
+  .path-card.orange .path-card-top  { background: linear-gradient(90deg, #A4421F, #C0522F); }
+  .path-card.green  .path-card-top  { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .path-card.violet .path-card-top  { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .path-card-body { padding: 1.4rem; display: flex; flex-direction: column; flex: 1; }
+  .path-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .path-card h3 {
+    font-family: 'Fraunces', 'DM Serif Display', Georgia, serif;
+    font-size: 1.25rem;
+    color: var(--j-ink);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .path-card .role-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--j-blue-50);
+    color: var(--j-blue);
+    border: 1px solid var(--j-blue-100);
+    flex-shrink: 0;
+  }
+  .path-card.orange .role-icon { background: var(--j-orange-50); color: var(--j-orange); border-color: var(--j-orange-100); }
+  .path-card.green  .role-icon { background: var(--j-green-50);  color: var(--j-green);  border-color: var(--j-green-200); }
+  .path-card.violet .role-icon { background: #f5f3ff; color: #7c3aed; border-color: #ede9fe; }
+  .path-card p.desc {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--j-text);
+    margin: 0.4rem 0 0.9rem;
+    line-height: 1.55;
+    min-height: 60px;
+  }
+  .path-card-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--j-line-soft);
+    border-bottom: 1px solid var(--j-line-soft);
+    margin-bottom: 0.85rem;
+  }
+  .path-meta-label {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--j-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .path-meta-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--j-ink);
+    margin-top: 1px;
+  }
+  .path-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.9rem;
+  }
+  .path-skill {
+    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--j-surface-soft);
+    color: var(--j-text);
+    border: 1px solid var(--j-line);
+  }
+  .path-skill.missing {
+    background: var(--j-orange-50);
+    color: var(--j-orange);
+    border-color: var(--j-orange-100);
+  }
+  .path-fit {
+    margin: 0.4rem 0 0.9rem;
+  }
+  .path-fit-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+  .path-fit-label { font-size: 0.72rem; color: var(--j-muted); font-weight: 500; }
+  .path-fit-score { font-size: 0.78rem; color: var(--j-ink); font-weight: 700; }
+  .path-card-foot {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .demand-bars { display: inline-flex; gap: 2px; }
+  .demand-bars i {
+    width: 4px;
+    background: var(--j-line);
+    border-radius: 1px;
+  }
+  .demand-bars i.on { background: var(--j-green); }
+  .demand-bars i:nth-child(1) { height: 6px; }
+  .demand-bars i:nth-child(2) { height: 9px; }
+  .demand-bars i:nth-child(3) { height: 12px; }
+  .demand-bars i:nth-child(4) { height: 15px; }
+  /* Salary section */
+  .salary-bar-wrap { height: 8px; background: var(--j-line-soft); border-radius:999px; position:relative; }
+  .salary-bar { position:absolute; top:0; bottom:0; background: linear-gradient(90deg, #1A3A6B, #A4421F); border-radius: 999px; }
+  .salary-row { padding: 0.6rem 0; border-bottom: 1px solid var(--j-line-soft); }
+  .salary-row:last-child { border-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- ══════ MAIN NAV ══════ -->
+<nav>
+  <div class="nav-container">
+    <a class="logo" href="index.html" aria-label="SustainSys Home">
+      <video id="logoVideo" autoplay loop muted playsinline preload="auto" width="280" height="72" disablePictureInPicture>
+        <source src="Sustainsys_Logo.mp4" type="video/mp4">
+      </video>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="projects.html" class="projects-highlight">Projects<span class="nav-star" style="color:#A4421F;">&#9733;</span></a></li>
+      <li><a href="ai-compliance-governance.html" class="compliance-highlight">AI Compliance</a></li>
+      <li><a href="job-openings.html">Careers</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="ai-learn.html" class="ai-academy active">AI Academy<span class="academy-badge">Learn</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="journey-topbar">
+  <div class="journey-topbar-inner">
+    <div class="journey-topbar-nav">
+      <a href="journey.html" class="journey-topbar-link">Journey</a>
+      <a href="journey-roadmap.html" class="journey-topbar-link active"><span class="dot"></span> Roadmap</a>
+      <a href="journey-skill-gap.html" class="journey-topbar-link">Skill Gap</a>
+      <a href="journey-curriculum.html" class="journey-topbar-link">Curriculum</a>
+      <a href="journey-mentors.html" class="journey-topbar-link">Mentors</a>
+      <a href="journey-messages.html" class="journey-topbar-link">Messages</a>
+      <a href="journey-interview-prep.html" class="journey-topbar-link">Interview Prep</a>
+    </div>
+    <div class="journey-topbar-right">
+      <a href="ai-learn.html" class="journey-topbar-help">AI Academy</a>
+      <div class="journey-topbar-avatar" id="journeyAvatar" title="Your account">S</div>
+    </div>
+  </div>
+</div>
+
+<header class="journey-hero">
+  <div class="journey-hero-inner">
+    <div>
+      <span class="j-eyebrow">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        AI Career Pathfinder
+      </span>
+      <h1>Eight paths. <span class="accent">One built for you.</span></h1>
+      <p>We've ranked each path against your CV and goals. <strong style="color:var(--j-ink);">AI Solutions Architect</strong> is your top-fit, but you have real optionality — open any card to compare.</p>
+    </div>
+    <div class="j-tabs">
+      <button class="j-tab active">All paths</button>
+      <button class="j-tab">My top 3</button>
+      <button class="j-tab">Saved</button>
+    </div>
+  </div>
+</header>
+
+<main class="journey-page">
+  <div class="journey-container">
+
+    <!-- Featured: top-fit path -->
+    <div class="path-card orange featured" style="margin-bottom:1.5rem;">
+      <div class="path-card-top"></div>
+      <div class="path-card-body" style="padding:1.6rem 1.8rem;">
+        <div style="display:grid; grid-template-columns: 1fr 320px; gap:2rem; align-items:start;">
+          <div>
+            <div style="display:flex; gap:8px; align-items:center; margin-bottom:0.5rem;">
+              <span class="j-badge j-badge-orange"><span class="dot"></span>Top fit · 94% match</span>
+              <span class="j-badge j-badge-green">High demand</span>
+              <span class="j-badge j-badge-blue">UK · EU · US</span>
+            </div>
+            <div class="path-card-head">
+              <h3 style="font-size:1.6rem;">AI Solutions Architect</h3>
+              <div class="role-icon" style="width:48px; height:48px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-5h-2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              </div>
+            </div>
+            <p class="desc" style="font-size:0.92rem; min-height:auto;">
+              Designs end-to-end AI systems — picks models, retrieval, evaluation and deployment patterns — and translates them into something a CTO can sign off on. Strongest fit for engineers who can think across stacks.
+            </p>
+
+            <div class="path-fit">
+              <div class="path-fit-row"><span class="path-fit-label">Skills you already have</span><span class="path-fit-score">12 of 14</span></div>
+              <div class="j-progress thick"><span style="width:86%"></span></div>
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem;">
+              <span class="path-skill">Python ✓</span>
+              <span class="path-skill">System design ✓</span>
+              <span class="path-skill">Cloud ✓</span>
+              <span class="path-skill">RAG ✓</span>
+              <span class="path-skill missing">MLOps</span>
+              <span class="path-skill missing">Distributed training</span>
+              <span class="path-skill">Stakeholder ✓</span>
+              <span class="path-skill">Eval rigour ✓</span>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+              <a href="journey-skill-gap.html" class="j-btn j-btn-primary">Continue this path →</a>
+              <a href="#salary" class="j-btn j-btn-ghost">Salary detail</a>
+              <button class="j-btn j-btn-soft" data-drawer-open="archDrawer">Full roadmap</button>
+            </div>
+          </div>
+
+          <div class="j-card" style="background: var(--j-surface-soft); border-color: var(--j-line); padding: 1.1rem 1.2rem;">
+            <div style="font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--j-muted); margin-bottom:0.6rem;">Path at a glance</div>
+            <div class="path-card-meta" style="border:0; padding:0; margin:0; grid-template-columns: 1fr; gap:0.7rem;">
+              <div>
+                <div class="path-meta-label">Timeline</div>
+                <div class="path-meta-value">14 weeks · 7–10 h/wk</div>
+              </div>
+              <div>
+                <div class="path-meta-label">Salary (UK, mid)</div>
+                <div class="path-meta-value">£85k – £140k</div>
+              </div>
+              <div>
+                <div class="path-meta-label">Market demand</div>
+                <div class="path-meta-value" style="display:flex; align-items:center; gap:8px;">
+                  <span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+                  Very high
+                </div>
+              </div>
+              <div>
+                <div class="path-meta-label">Open roles (UK)</div>
+                <div class="path-meta-value">340+ this month</div>
+              </div>
+              <div>
+                <div class="path-meta-label">Career mobility</div>
+                <div class="path-meta-value">→ Principal AI / VP AI</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 path grid -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.9rem;">
+      <h2 style="font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--j-ink); margin:0;">Other strong paths for you</h2>
+      <span class="j-muted">Ranked by fit</span>
+    </div>
+
+    <div class="journey-grid cols-3">
+
+      <!-- AI Engineer -->
+      <div class="path-card">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>AI Engineer</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+          </div>
+          <p class="desc">Build, ship and maintain AI-powered features — chatbots, RAG apps, agents, embedded LLMs.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">88%</span></div>
+            <div class="j-progress thin"><span style="width:88%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">10–14 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£70–110k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span> Very high</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">2 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">Python ✓</span>
+            <span class="path-skill">LLM APIs ✓</span>
+            <span class="path-skill missing">LangGraph</span>
+            <span class="path-skill missing">Eval</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ML Engineer -->
+      <div class="path-card">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>ML Engineer</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+          </div>
+          <p class="desc">Productionise ML models — training pipelines, distributed compute, deployment, monitoring at scale.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">76%</span></div>
+            <div class="j-progress thin"><span style="width:76%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">16–20 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£90–140k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span> High</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">4 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">PyTorch ✓</span>
+            <span class="path-skill missing">DDP / FSDP</span>
+            <span class="path-skill missing">Kubeflow</span>
+            <span class="path-skill missing">Model registry</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GenAI Engineer -->
+      <div class="path-card orange">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>GenAI Engineer</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg>
+            </div>
+          </div>
+          <p class="desc">Specialist in LLMs, agents, RAG, fine-tuning and evaluation — the role hiring fastest in 2025–26.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">82%</span></div>
+            <div class="j-progress thin"><span style="width:82%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">12 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£95–160k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span> Surging</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">3 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">RAG ✓</span>
+            <span class="path-skill">LLM APIs ✓</span>
+            <span class="path-skill missing">Agents</span>
+            <span class="path-skill missing">Fine-tuning</span>
+            <span class="path-skill missing">Eval</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Scientist -->
+      <div class="path-card green">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>Data Scientist</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            </div>
+          </div>
+          <p class="desc">Bridge analytics and ML — frame business questions, run experiments, build predictive models.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">71%</span></div>
+            <div class="j-progress thin"><span style="width:71%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">14 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£65–110k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span> High</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">3 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">Python ✓</span>
+            <span class="path-skill">Stats ✓</span>
+            <span class="path-skill missing">Causal inf.</span>
+            <span class="path-skill missing">A/B testing</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MLOps Engineer -->
+      <div class="path-card green">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>MLOps Engineer</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <p class="desc">Own model lifecycle — CI/CD, registries, drift detection, observability and rollback.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">68%</span></div>
+            <div class="j-progress thin"><span style="width:68%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">12–16 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£80–130k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span> High</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">5 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">Cloud ✓</span>
+            <span class="path-skill missing">MLflow</span>
+            <span class="path-skill missing">Kubeflow</span>
+            <span class="path-skill missing">Drift</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Product Manager -->
+      <div class="path-card violet">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>AI Product Manager</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-7m7 5h-7m7 5h-7M5 7h.01M5 12h.01M5 17h.01"/></svg>
+            </div>
+          </div>
+          <p class="desc">Drive AI product strategy — define metrics, scope features, balance model behaviour vs. UX.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">64%</span></div>
+            <div class="j-progress thin"><span style="width:64%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">10–12 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£85–145k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span> High</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">4 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">Comms ✓</span>
+            <span class="path-skill">Product ✓</span>
+            <span class="path-skill missing">AI metrics</span>
+            <span class="path-skill missing">Eval design</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Researcher -->
+      <div class="path-card violet">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>AI Researcher</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+          </div>
+          <p class="desc">Push the boundary — novel architectures, fine-tuning regimes, evaluation methods.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">52%</span></div>
+            <div class="j-progress thin"><span style="width:52%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">24+ wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£110–220k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i></i><i></i></span> Selective</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">6 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill missing">Publications</span>
+            <span class="path-skill missing">PhD-level math</span>
+            <span class="path-skill missing">CUDA</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applied / Agent Engineer -->
+      <div class="path-card orange">
+        <div class="path-card-top"></div>
+        <div class="path-card-body">
+          <div class="path-card-head">
+            <h3>Agent Engineer</h3>
+            <div class="role-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+            </div>
+          </div>
+          <p class="desc">Specialised in multi-agent orchestration, tool use, planning loops — the frontier 2026 role.</p>
+          <div class="path-fit">
+            <div class="path-fit-row"><span class="path-fit-label">Fit</span><span class="path-fit-score">78%</span></div>
+            <div class="j-progress thin"><span style="width:78%"></span></div>
+          </div>
+          <div class="path-card-meta">
+            <div><div class="path-meta-label">Timeline</div><div class="path-meta-value">10–14 wk</div></div>
+            <div><div class="path-meta-label">Salary UK</div><div class="path-meta-value">£100–170k</div></div>
+            <div><div class="path-meta-label">Demand</div><div class="path-meta-value"><span class="demand-bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span> Surging</div></div>
+            <div><div class="path-meta-label">Missing</div><div class="path-meta-value">3 skills</div></div>
+          </div>
+          <div class="path-skills">
+            <span class="path-skill">LLM ✓</span>
+            <span class="path-skill missing">Planning</span>
+            <span class="path-skill missing">Memory</span>
+            <span class="path-skill missing">Tool use</span>
+          </div>
+          <div class="path-card-foot">
+            <a href="#" class="j-btn j-btn-soft j-btn-sm">View roadmap</a>
+            <a href="#" class="j-btn j-btn-ghost j-btn-sm">Save</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Salary deep-dive ─── -->
+    <div class="j-card" id="salary" style="margin-top:1.5rem;">
+      <div class="j-card-head" style="margin-bottom:0.8rem;">
+        <div>
+          <span class="j-eyebrow blue">Live market data</span>
+          <h3 class="j-card-title" style="margin-top:0.5rem;">Salary by path — UK, 2026</h3>
+          <p class="j-card-subtitle">Sources: LinkedIn, Levels.fyi, Otta, AIcareers Index · refreshed weekly.</p>
+        </div>
+        <div class="j-tabs">
+          <button class="j-tab active">UK</button>
+          <button class="j-tab">EU</button>
+          <button class="j-tab">US</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">AI Solutions Architect</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£85k – £140k</strong> £220k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:14%; right:31%;"></span></div>
+        </div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">GenAI Engineer</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£95k – £160k</strong> £220k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:22%; right:27%;"></span></div>
+        </div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">ML Engineer</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£90k – £140k</strong> £220k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:19%; right:31%;"></span></div>
+        </div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">AI Engineer</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£70k – £110k</strong> £220k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:6%; right:50%;"></span></div>
+        </div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">Data Scientist</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£65k – £110k</strong> £220k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:3%; right:50%;"></span></div>
+        </div>
+        <div class="salary-row">
+          <div class="j-row" style="margin-bottom:6px;">
+            <strong style="font-size:0.86rem; color:var(--j-ink); font-family:'DM Sans',sans-serif;">AI Researcher</strong>
+            <span class="j-text-sm j-muted">£60k <strong style="color:var(--j-ink);">£110k – £220k</strong> £350k</span>
+          </div>
+          <div class="salary-bar-wrap"><span class="salary-bar" style="left:31%; right:0%;"></span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Architecture drawer -->
+<div class="j-drawer-backdrop"></div>
+<aside class="j-drawer" id="archDrawer" aria-hidden="true">
+  <div class="j-drawer-head">
+    <div>
+      <span class="j-badge j-badge-orange">Top-fit path</span>
+      <h3 style="font-family:'DM Serif Display',serif; font-size:1.3rem; margin:0.4rem 0 0; color:var(--j-ink);">AI Solutions Architect — full roadmap</h3>
+    </div>
+    <button class="j-drawer-close" data-drawer-close="archDrawer" aria-label="Close">✕</button>
+  </div>
+  <div class="j-drawer-body">
+
+    <p class="j-muted" style="font-size:0.82rem; line-height:1.6; margin-top:0;">
+      A 14-week pathway specifically built for engineers transitioning into AI architecture. Modules adapt as your skill audit changes.
+    </p>
+
+    <div class="j-roadmap j-mt-2">
+      <div class="j-roadmap-item done">
+        <div class="j-roadmap-node">1</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">Career pathfinder · ✓ done</p>
+          <p class="j-roadmap-meta">Target role set · CV uploaded</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item current">
+        <div class="j-roadmap-node">2</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">Skill-gap audit <span class="j-badge j-badge-orange">In progress</span></p>
+          <p class="j-roadmap-meta">8 dims · 30/60/90 plan generated</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item">
+        <div class="j-roadmap-node">3</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">RAG architecture mastery</p>
+          <p class="j-roadmap-meta">Weeks 3–4 · 1 capstone project</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item">
+        <div class="j-roadmap-node">4</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">MLOps for architects</p>
+          <p class="j-roadmap-meta">Weeks 5–6 · CI/CD + registry</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item">
+        <div class="j-roadmap-node">5</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">Distributed training &amp; cost</p>
+          <p class="j-roadmap-meta">Weeks 7–8 · architect-level drills</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item">
+        <div class="j-roadmap-node">6</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">System design rehearsal</p>
+          <p class="j-roadmap-meta">Weeks 9–10 · mentor-graded</p>
+        </div>
+      </div>
+      <div class="j-roadmap-item">
+        <div class="j-roadmap-node">7</div>
+        <div class="j-roadmap-body">
+          <p class="j-roadmap-title">Interview &amp; placement prep</p>
+          <p class="j-roadmap-meta">Weeks 11–14 · live applications</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="journey-curriculum.html" class="j-btn j-btn-primary j-btn-lg" style="width:100%; justify-content:center; margin-top:1.2rem;">Open the curriculum →</a>
+  </div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="courses/assets/supabase-auth.js"></script>
+<script src="assets/js/journey.js"></script>
+
+</body>
+</html>

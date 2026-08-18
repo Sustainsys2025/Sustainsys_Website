@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.3 Functions and Code Reusability — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 1 — Functions and Code Reusability</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Collections</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3" class="active"><span class="sidebar-num">1.3</span> Functions</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5"><span class="sidebar-num">2.5</span> Random &amp; Stats</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Advanced LA</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Associate</a><span class="sep">›</span>
+    <span>Module 1</span><span class="sep">›</span>
+    <span>Functions and Code Reusability</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 1 · Lesson 3</span>
+    <span class="difficulty-badge intermediate">Intermediate</span>
+  </div>
+  <h1>Functions and <span class="accent">Code Reusability</span></h1>
+  <p class="hero-sub">Master function definition, parameters, return values, and scope. Learn how to write DRY (Don't Repeat Yourself) code that AI teams use in production systems. Functions are the bridge between procedural scripts and professional software engineering.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~32 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      6 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      4 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Understand why functions are essential for maintainable, scalable code</li>
+    <li>Define functions with parameters, defaults, and return values</li>
+    <li>Master Python scope rules: local, global, and nonlocal variables</li>
+    <li>Use function annotations and docstrings for clarity and documentation</li>
+    <li>Apply functional patterns used in modern AI frameworks and libraries</li>
+    <li>Write reusable utility functions for data processing pipelines</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Completion of lessons 1.1 and 1.2 (Variables, Data Types, Collections)</li>
+    <li>Solid understanding of control flow (if/else, loops)</li>
+    <li>Familiarity with Python syntax and basic script execution</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="why-functions">
+  <span class="section-label">Fundamentals</span>
+  <h2>Why Functions Matter</h2>
+
+  <p>In the real world, you will never write a single script that solves an entire problem. Professional AI systems are composed of hundreds or thousands of functions, each doing one thing exceptionally well. Functions are the building blocks that allow you to:</p>
+
+  <ul>
+    <li><strong>Eliminate Repetition:</strong> Write code once, use it everywhere. If you copy-paste code three times, that is a sign you need a function.</li>
+    <li><strong>Enable Collaboration:</strong> When your function has a clear interface (inputs and outputs), teammates can use your code without understanding the implementation details.</li>
+    <li><strong>Simplify Testing:</strong> Isolated functions are easy to test. You can verify each function works correctly before integrating it into a larger system.</li>
+    <li><strong>Facilitate Debugging:</strong> When something breaks, functions help you isolate the problem. Is it the data, the logic, or the output format? Functions answer these questions.</li>
+  </ul>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>A function is like a recipe. The ingredients are your inputs (parameters). The cooking instructions are your code. The finished dish is your output (return value). When you need the same dish again, you don't rewrite the recipe — you just follow it again. In code, this is called DRY: Don't Repeat Yourself.</p>
+  </div>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">From Script to Function: The DRY Principle</div>
+    <svg viewBox="0 0 800 300" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <defs>
+        <marker id="arr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1A3A6B"/></marker>
+      </defs>
+      <!-- WET Code -->
+      <rect x="20" y="20" width="320" height="250" rx="8" fill="#f1f5f9" stroke="#dc2626" stroke-width="2"/>
+      <text x="40" y="45" fill="#ff006e" font-size="11" font-weight="700">❌ WET Code (Write Everything Twice)</text>
+      <text x="40" y="70" fill="#7A756B" font-size="10">Repetitive, error-prone:</text>
+      <text x="40" y="90" fill="#a6e3a1" font-size="9" font-family="monospace">score1 = 95</text>
+      <text x="40" y="108" fill="#a6e3a1" font-size="9" font-family="monospace">total1 = score1 * 0.8</text>
+      <text x="40" y="126" fill="#a6e3a1" font-size="9" font-family="monospace">curved1 = total1 + 10</text>
+      <text x="40" y="150" fill="#a6e3a1" font-size="9" font-family="monospace">score2 = 87</text>
+      <text x="40" y="168" fill="#a6e3a1" font-size="9" font-family="monospace">total2 = score2 * 0.8</text>
+      <text x="40" y="186" fill="#a6e3a1" font-size="9" font-family="monospace">curved2 = total2 + 10</text>
+      <text x="40" y="210" fill="#94a3b8" font-size="9">Fixed bug? Update 3 places.</text>
+      <text x="40" y="228" fill="#94a3b8" font-size="9">New logic? Duplicate work.</text>
+      <text x="40" y="246" fill="#94a3b8" font-size="9">Risk: inconsistencies.</text>
+
+      <!-- Arrow -->
+      <line x1="360" y1="145" x2="420" y2="145" stroke="#1A3A6B" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="375" y="135" fill="#1A3A6B" font-size="9" font-weight="600">REFACTOR</text>
+
+      <!-- DRY Code -->
+      <rect x="460" y="20" width="320" height="250" rx="8" fill="#f1f5f9" stroke="#16a34a" stroke-width="2"/>
+      <text x="480" y="45" fill="#16a34a" font-size="11" font-weight="700">✅ DRY Code (Define Once, Reuse)</text>
+      <text x="480" y="70" fill="#7A756B" font-size="10">Clean, maintainable:</text>
+      <text x="480" y="90" fill="#a6e3a1" font-size="9" font-family="monospace">def curve_grade(score):</text>
+      <text x="480" y="108" fill="#a6e3a1" font-size="9" font-family="monospace">  total = score * 0.8</text>
+      <text x="480" y="126" fill="#a6e3a1" font-size="9" font-family="monospace">  return total + 10</text>
+      <text x="480" y="150" fill="#a6e3a1" font-size="9" font-family="monospace">curved1 = curve_grade(95)</text>
+      <text x="480" y="168" fill="#a6e3a1" font-size="9" font-family="monospace">curved2 = curve_grade(87)</text>
+      <text x="480" y="200" fill="#16a34a" font-size="9" font-weight="600">Benefits:</text>
+      <text x="480" y="220" fill="#94a3b8" font-size="9">• Single point of change</text>
+      <text x="480" y="238" fill="#94a3b8" font-size="9">• Consistent behavior</text>
+      <text x="480" y="256" fill="#94a3b8" font-size="9">• Self-documenting</text>
+    </svg>
+  </div>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In ML Pipelines:</strong> You will preprocess data the same way for training, validation, and inference. Writing it once as a function ensures consistency across all stages. When you discover a bug in preprocessing, you fix one function, not three.</p>
+    <p><strong>In Team Projects:</strong> When your colleague needs a utility to normalize features, they don't rewrite it — they call your function. This accelerates development and prevents bugs from inconsistent implementations.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Functions eliminate code duplication and reduce maintenance burden</li>
+      <li>One function = one clear responsibility, tested once, used everywhere</li>
+      <li>DRY principle: if code is repeated, encapsulate it in a function</li>
+      <li>Functions make code more readable and easier to reason about</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="function-basics">
+  <span class="section-label">Core Concepts</span>
+  <h2>Function Definition and Syntax</h2>
+
+  <p>A Python function is defined using the <code>def</code> keyword. The basic structure is simple: specify inputs (parameters), describe what the function does (body), and specify outputs (return statement). Let us break this down:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Basic function structure</span>
+<span class="kw">def</span> <span class="fn">calculate_accuracy</span>(<span class="va">correct</span>, <span class="va">total</span>):
+    <span class="st">"""Calculate classification accuracy.
+
+    Args:
+        correct (int): Number of correct predictions
+        total (int): Total number of predictions
+
+    Returns:
+        float: Accuracy as a decimal (0.0 to 1.0)
+    """</span>
+    <span class="va">accuracy</span> <span class="op">=</span> <span class="va">correct</span> <span class="op">/</span> <span class="va">total</span>
+    <span class="kw">return</span> <span class="va">accuracy</span>
+
+<span class="cm"># Call the function with arguments</span>
+<span class="va">acc</span> <span class="op">=</span> <span class="fn">calculate_accuracy</span>(<span class="nm">950</span>, <span class="nm">1000</span>)
+<span class="fn">print</span>(<span class="st">f"Model accuracy: </span>{<span class="va">acc</span>:.1%}<span class="st">"</span>)  <span class="cm"># Model accuracy: 95.0%</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> We define a function named <code>calculate_accuracy</code> that takes two parameters: <code>correct</code> and <code>total</code>. The docstring (triple-quoted string) explains what the function does, its parameters, and return value. Inside the function, we calculate the accuracy and return it. When we call the function with arguments, Python executes the body and returns the result.</p>
+  </div>
+
+  <h3>Parameters vs Arguments</h3>
+  <p>These terms are often confused, but they have distinct meanings:</p>
+
+  <ul>
+    <li><strong>Parameters:</strong> The variable names in the function definition (e.g., <code>correct</code> and <code>total</code> in the example above)</li>
+    <li><strong>Arguments:</strong> The actual values you pass when calling the function (e.g., <code>950</code> and <code>1000</code> in the example above)</li>
+  </ul>
+
+  <h3>Default Parameters</h3>
+  <p>Functions often have sensible default values. Instead of forcing callers to specify every parameter, you can provide defaults:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="kw">def</span> <span class="fn">normalize_data</span>(<span class="va">data</span>, <span class="va">mean</span><span class="op">=</span><span class="nm">0</span>, <span class="va">std</span><span class="op">=</span><span class="nm">1</span>):
+    <span class="st">"""Normalize data using z-score normalization.
+
+    Args:
+        data (list): Values to normalize
+        mean (float): Target mean (default: 0)
+        std (float): Target standard deviation (default: 1)
+    """</span>
+    <span class="kw">return</span> [(<span class="va">x</span> <span class="op">-</span> <span class="va">mean</span>) <span class="op">/</span> <span class="va">std</span> <span class="kw">for</span> <span class="va">x</span> <span class="kw">in</span> <span class="va">data</span>]
+
+<span class="cm"># Call with defaults</span>
+<span class="va">normalized</span> <span class="op">=</span> <span class="fn">normalize_data</span>([<span class="nm">10</span>, <span class="nm">20</span>, <span class="nm">30</span>])
+
+<span class="cm"># Call with custom values</span>
+<span class="va">normalized</span> <span class="op">=</span> <span class="fn">normalize_data</span>([<span class="nm">10</span>, <span class="nm">20</span>, <span class="nm">30</span>], <span class="va">mean</span><span class="op">=</span><span class="nm">50</span>, <span class="va">std</span><span class="op">=</span><span class="nm">10</span>)</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> The function <code>normalize_data</code> has default values for <code>mean</code> and <code>std</code>. If you don't specify them, Python uses the defaults (0 and 1). If you do specify them, your values override the defaults. This flexibility makes your functions powerful without requiring callers to remember every parameter.</p>
+  </div>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Function Anatomy</div>
+    <svg viewBox="0 0 800 350" style="width:100%;max-width:800px;margin:0 auto;display:block">
+      <!-- Title -->
+      <text x="400" y="30" text-anchor="middle" fill="#1A3A6B" font-size="12" font-weight="700">Dissecting a Python Function</text>
+
+      <!-- Code Block -->
+      <rect x="40" y="50" width="720" height="120" rx="8" fill="#0d1117" stroke="#1A3A6B" stroke-width="1.5"/>
+      <text x="60" y="75" fill="#a6e3a1" font-size="11" font-family="monospace">def predict_label(features, threshold=0.5, verbose=False):</text>
+      <text x="60" y="95" fill="#a6e3a1" font-size="11" font-family="monospace">    """Make a prediction based on features."""</text>
+      <text x="60" y="115" fill="#a6e3a1" font-size="11" font-family="monospace">    score = sum(features) / len(features)</text>
+      <text x="60" y="135" fill="#a6e3a1" font-size="11" font-family="monospace">    return "Yes" if score > threshold else "No"</text>
+      <text x="60" y="155" fill="#a6e3a1" font-size="11" font-family="monospace"></text>
+
+      <!-- Annotations -->
+      <!-- def keyword -->
+      <line x1="60" y1="75" x2="60" y2="200" stroke="#A4421F" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="20" y="200" width="100" height="50" rx="4" fill="#A4421F" opacity="0.15" stroke="#A4421F" stroke-width="1"/>
+      <text x="70" y="220" text-anchor="middle" fill="#A4421F" font-size="9" font-weight="600">Keyword</text>
+      <text x="70" y="235" text-anchor="middle" fill="#7A756B" font-size="8">Starts every</text>
+      <text x="70" y="245" text-anchor="middle" fill="#7A756B" font-size="8">function def.</text>
+
+      <!-- Function name -->
+      <line x1="143" y1="75" x2="143" y2="200" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="113" y="200" width="60" height="50" rx="4" fill="#16a34a" opacity="0.15" stroke="#16a34a" stroke-width="1"/>
+      <text x="143" text-anchor="middle" fill="#16a34a" font-size="9" font-weight="600">y="220"</text>
+      <text x="143" y="235" text-anchor="middle" fill="#7A756B" font-size="8">Descriptive,</text>
+      <text x="143" y="245" text-anchor="middle" fill="#7A756B" font-size="8">snake_case</text>
+
+      <!-- Parameters -->
+      <line x1="200" y1="75" x2="250" y2="200" stroke="#C0522F" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="220" y="200" width="80" height="50" rx="4" fill="#C0522F" opacity="0.15" stroke="#C0522F" stroke-width="1"/>
+      <text x="260" y="220" text-anchor="middle" fill="#C0522F" font-size="9" font-weight="600">Parameters</text>
+      <text x="260" y="235" text-anchor="middle" fill="#7A756B" font-size="8">Inputs the</text>
+      <text x="260" y="245" text-anchor="middle" fill="#7A756B" font-size="8">function needs</text>
+
+      <!-- Default values -->
+      <line x1="380" y1="75" x2="430" y2="200" stroke="#cba6f7" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="400" y="200" width="80" height="50" rx="4" fill="#cba6f7" opacity="0.15" stroke="#cba6f7" stroke-width="1"/>
+      <text x="440" y="220" text-anchor="middle" fill="#cba6f7" font-size="9" font-weight="600">Defaults</text>
+      <text x="440" y="235" text-anchor="middle" fill="#7A756B" font-size="8">Optional,</text>
+      <text x="440" y="245" text-anchor="middle" fill="#7A756B" font-size="8">can omit</text>
+
+      <!-- Docstring -->
+      <line x1="300" y1="95" x2="550" y2="280" stroke="#1A3A6B" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="500" y="270" width="110" height="50" rx="4" fill="#1A3A6B" opacity="0.15" stroke="#1A3A6B" stroke-width="1"/>
+      <text x="555" y="290" text-anchor="middle" fill="#1A3A6B" font-size="9" font-weight="600">Docstring</text>
+      <text x="555" y="305" text-anchor="middle" fill="#7A756B" font-size="8">Explains purpose</text>
+      <text x="555" y="315" text-anchor="middle" fill="#7A756B" font-size="8">& parameters</text>
+
+      <!-- Return statement -->
+      <line x1="450" y1="135" x2="600" y2="280" stroke="#89b4fa" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <rect x="620" y="270" width="100" height="50" rx="4" fill="#89b4fa" opacity="0.15" stroke="#89b4fa" stroke-width="1"/>
+      <text x="670" y="290" text-anchor="middle" fill="#89b4fa" font-size="9" font-weight="600">Return Value</text>
+      <text x="670" y="305" text-anchor="middle" fill="#7A756B" font-size="8">What the function</text>
+      <text x="670" y="315" text-anchor="middle" fill="#7A756B" font-size="8">sends back</text>
+    </svg>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Functions use <code>def</code>, a name, parameters, and a body</li>
+      <li>Use docstrings to document your functions — this is not optional in production code</li>
+      <li>Parameters without defaults must come before parameters with defaults</li>
+      <li>The <code>return</code> statement specifies what the function sends back to the caller</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="scope">
+  <span class="section-label">Advanced Concepts</span>
+  <h2>Understanding Variable Scope</h2>
+
+  <p>One of the most common bugs in Python comes from misunderstanding scope. Scope determines which parts of your code can access a variable. In Python, there are four scope levels, remembered by the acronym <strong>LEGB</strong>:</p>
+
+  <ul>
+    <li><strong>Local (L):</strong> Variables inside the current function</li>
+    <li><strong>Enclosing (E):</strong> Variables in outer functions (for nested functions)</li>
+    <li><strong>Global (G):</strong> Variables defined at the module level</li>
+    <li><strong>Built-in (B):</strong> Python's built-in functions and constants like <code>len()</code>, <code>print()</code>, <code>True</code></li>
+  </ul>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Imagine a house with rooms. Variables in your bedroom (local) are only accessible to you in that room. Variables in the living room (global) are accessible to everyone in the house. If you try to access something from the kitchen when you're in your bedroom, you have to go get it — and you can't borrow it without permission.</p>
+  </div>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Global scope</span>
+<span class="va">model_name</span> <span class="op">=</span> <span class="st">"ResNet50"</span>
+
+<span class="kw">def</span> <span class="fn">train_model</span>():
+    <span class="cm"># Local scope</span>
+    <span class="va">learning_rate</span> <span class="op">=</span> <span class="nm">0.001</span>
+    <span class="fn">print</span>(<span class="va">model_name</span>)          <span class="cm"># OK: can access global</span>
+    <span class="fn">print</span>(<span class="va">learning_rate</span>)    <span class="cm"># OK: it's local</span>
+
+<span class="fn">train_model</span>()
+<span class="fn">print</span>(<span class="va">learning_rate</span>)      <span class="cm"># ERROR: learning_rate is local to train_model()</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> <code>model_name</code> is global, so any function can see it. <code>learning_rate</code> is defined inside <code>train_model()</code>, making it local to that function. Once the function returns, the local variable is gone. Trying to access it outside causes a <code>NameError</code>.</p>
+  </div>
+
+  <h3>Modifying Global Variables</h3>
+  <p>If you want to modify a global variable from inside a function, use the <code>global</code> keyword:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="va">epoch</span> <span class="op">=</span> <span class="nm">0</span>
+
+<span class="kw">def</span> <span class="fn">train_step</span>():
+    <span class="kw">global</span> <span class="va">epoch</span>
+    <span class="va">epoch</span> <span class="op">+=</span> <span class="nm">1</span>
+    <span class="fn">print</span>(<span class="st">f"Epoch </span>{<span class="va">epoch</span>}<span class="st">"</span>)
+
+<span class="fn">train_step</span>()  <span class="cm"># Epoch 1</span>
+<span class="fn">train_step</span>()  <span class="cm"># Epoch 2</span>
+<span class="fn">print</span>(<span class="va">epoch</span>)   <span class="cm"># 2</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> The <code>global</code> keyword tells Python that we want to modify the global <code>epoch</code> variable, not create a local one. Without this keyword, Python would create a new local variable instead. Notice how the global <code>epoch</code> actually increases with each call.</p>
+  </div>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In ML Training Loops:</strong> Global variables that track training state (epoch, step, best loss) can become confusing and error-prone. Best practice: avoid relying on global state. Instead, return values or use classes to encapsulate state. This makes code more testable and predictable.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Python resolves names using LEGB scope: Local → Enclosing → Global → Built-in</li>
+      <li>Variables defined in a function are local to that function</li>
+      <li>Use <code>global</code> keyword only when absolutely necessary — prefer returning values instead</li>
+      <li>Minimizing global state makes code easier to test and debug</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="advanced-patterns">
+  <span class="section-label">Best Practices</span>
+  <h2>Advanced Patterns and Documentation</h2>
+
+  <p>Production AI code goes beyond basic functions. You need to handle edge cases, document assumptions, and use patterns that make code robust and maintainable. This section covers practices used in professional codebases.</p>
+
+  <h3>Type Hints</h3>
+  <p>Type hints tell readers (and tools) what types your function expects and returns. This catches bugs early:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="kw">def</span> <span class="fn">compute_metrics</span>(<span class="va">predictions</span>: <span class="fn">list</span>[<span class="fn">float</span>], <span class="va">targets</span>: <span class="fn">list</span>[<span class="fn">int</span>]) <span class="op">-></span> <span class="fn">dict</span>:
+    <span class="st">"""Calculate precision, recall, and F1 score.
+
+    Args:
+        predictions: Model output probabilities [0, 1]
+        targets: Ground truth labels [0, 1]
+
+    Returns:
+        Dictionary with 'precision', 'recall', 'f1' keys
+    """</span>
+    <span class="cm"># Implementation here</span>
+    <span class="kw">return</span> {<span class="st">"precision"</span>: <span class="nm">0.92</span>, <span class="st">"recall"</span>: <span class="nm">0.89</span>, <span class="st">"f1"</span>: <span class="nm">0.90</span>}</code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> Type hints use colons for parameters and <code>-></code> for the return type. They don't enforce types at runtime in Python 3.9, but they make code clearer and allow static analysis tools to catch bugs before you run your code.</p>
+  </div>
+
+  <h3>Input Validation</h3>
+  <p>Production code validates inputs to fail early with clear error messages:</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="kw">def</span> <span class="fn">train_model</span>(<span class="va">epochs</span>: <span class="fn">int</span>, <span class="va">learning_rate</span>: <span class="fn">float</span>) <span class="op">-></span> <span class="kw">None</span>:
+    <span class="cm"># Validate inputs</span>
+    <span class="kw">if</span> <span class="va">epochs</span> <span class="op"><=</span> <span class="nm">0</span>:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="st">"epochs must be positive"</span>)
+    <span class="kw">if</span> <span class="kw">not</span> (<span class="nm">0</span> <span class="op"><</span> <span class="va">learning_rate</span> <span class="op"><</span> <span class="nm">1</span>):
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="st">"learning_rate must be between 0 and 1"</span>)
+
+    <span class="cm"># Safe to proceed — inputs are valid</span>
+    <span class="va">results</span> <span class="op">=</span> []
+    <span class="kw">for</span> <span class="va">epoch</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="va">epochs</span>):
+        <span class="cm"># Training logic</span>
+        <span class="va">loss</span> <span class="op">=</span> <span class="nm">0.5</span> <span class="op">/</span> (<span class="va">epoch</span> <span class="op">+</span> <span class="nm">1</span>)
+        <span class="va">results</span>.<span class="fn">append</span>(<span class="va">loss</span>)
+    <span class="kw">return</span> <span class="va">results</span></code></pre>
+  <div class="code-explain">
+    <p><strong>What is happening here:</strong> Before executing the function body, we validate that epochs is positive and learning_rate is in the valid range. If validation fails, we raise an exception with a clear message. This catches bugs immediately, rather than letting bad data corrupt your model.</p>
+  </div>
+
+  <div class="infographic reveal">
+    <div class="infographic-title">Production Function Checklist</div>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h5>✅ Good Production Code</h5>
+        <ul>
+          <li>Clear function name describing what it does</li>
+          <li>Docstring with Args, Returns, Raises sections</li>
+          <li>Type hints for all parameters and return</li>
+          <li>Input validation with clear error messages</li>
+          <li>Handles edge cases (empty inputs, None, etc.)</li>
+          <li>Returns consistently typed values</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h5>❌ Problematic Code</h5>
+        <ul>
+          <li>Vague names like <code>process()</code> or <code>helper()</code></li>
+          <li>No docstring or outdated docstring</li>
+          <li>No type hints</li>
+          <li>Assumes inputs are valid, crashes on bad data</li>
+          <li>Doesn't handle edge cases</li>
+          <li>Return type varies (sometimes list, sometimes None)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Type hints document expected types and enable static analysis</li>
+      <li>Validate inputs early with clear, informative error messages</li>
+      <li>Write comprehensive docstrings following standard format</li>
+      <li>Handle edge cases (empty, None, out-of-range values) gracefully</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Data Processing Function</h4>
+    <p>Write a function that preprocesses raw numeric data for ML training:</p>
+    <ol>
+      <li>Create a function <code>normalize_features(data, min_val=0, max_val=1)</code></li>
+      <li>It should accept a list of numbers and scale them to [min_val, max_val] range</li>
+      <li>Add input validation: ensure data is not empty and min_val < max_val</li>
+      <li>Include a comprehensive docstring with type hints</li>
+      <li>Test with different inputs: [1, 2, 3, 4, 5] scaled to [0, 1] and [-1, 1]</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Model Evaluation Suite</h4>
+    <p>Create a set of related functions for evaluating classification models:</p>
+    <ol>
+      <li>Write <code>compute_confusion_matrix(predictions, targets)</code></li>
+      <li>Write <code>compute_accuracy(cm)</code> using your confusion matrix</li>
+      <li>Write <code>compute_precision(cm)</code> and <code>compute_recall(cm)</code></li>
+      <li>Use proper type hints and docstrings throughout</li>
+      <li>Test on a sample: predictions = [0, 1, 1, 0, 1], targets = [0, 1, 0, 0, 1]</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Scope Debugging Challenge</h4>
+    <p>Debug a function with scope issues:</p>
+    <ol>
+      <li>Given a function that tries to modify a global counter but fails</li>
+      <li>Identify the scope issue</li>
+      <li>Fix it properly (using either <code>global</code> or better yet, returning values)</li>
+      <li>Refactor to avoid global state altogether</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 4: Production-Ready Function</h4>
+    <p>Take a simple function and make it production-ready:</p>
+    <ol>
+      <li>Start with: <code>def process(x): return x * 2 + 5</code></li>
+      <li>Add meaningful name, parameters, return type hints</li>
+      <li>Write comprehensive docstring</li>
+      <li>Add input validation</li>
+      <li>Handle edge cases (what if x is None? Negative? Not numeric?)</li>
+    </ol>
+  </div>
+</section>
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson 1.4</h4>
+  <p><strong>Object-Oriented Programming Basics</strong> — Functions are fundamental, but for larger systems, you need to organize functions and data together. The next lesson introduces classes and objects, taking your architectural thinking to the next level.</p>
+</div>
+
+<div class="nav-buttons">
+  <a href="../learn.html?c=associate&l=module1-lesson2" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous: Collections</a>
+  <a href="../learn.html?c=associate&l=module1-lesson4" class="nav-btn next">Next: OOP Basics <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>

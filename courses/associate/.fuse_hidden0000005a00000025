@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2.5 Random Numbers and Statistical Functions — AI Practitioner Associate | SustainSys AI Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=Instrument+Serif:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=JetBrains+Mono:wght@400;500https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Serif+Display:ital@0;1https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapfamily=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swapdisplay=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/course-styles.css">
+</head>
+<body>
+
+<div class="progress-circle-wrap" title="Page progress">
+  <svg viewBox="0 0 36 36"><circle class="progress-circle-track" cx="18" cy="18" r="15"/><circle class="progress-circle-fill" cx="18" cy="18" r="15" id="progressCircle"/></svg>
+  <div class="progress-circle-label" id="progressLabel">0%</div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="https://sustainsys.co.uk" class="nav-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="nav-logo-img">
+      <div class="nav-logo-text">Sustain<span>Sys</span></div>
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-title">Module 2 — Random Numbers and Statistical Functions</div>
+    <span class="nav-badge">Associate</span>
+    <a href="index.html" class="nav-home-link">← Course Home</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-course-title">AI Practitioner Associate</div>
+  <span class="sidebar-section-label">Module 1: Python Foundations</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module1-lesson1"><span class="sidebar-num">1.1</span> Variables &amp; Data Types</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson2"><span class="sidebar-num">1.2</span> Collections</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson3"><span class="sidebar-num">1.3</span> Functions</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson4"><span class="sidebar-num">1.4</span> OOP Basics</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson5"><span class="sidebar-num">1.5</span> File I/O</a></li>
+    <li><a href="../learn.html?c=associate&l=module1-lesson6"><span class="sidebar-num">1.6</span> Exception Handling</a></li>
+  </ul>
+  <span class="sidebar-section-label">Module 2: NumPy</span>
+  <ul class="sidebar-nav">
+    <li><a href="../learn.html?c=associate&l=module2-lesson1"><span class="sidebar-num">2.1</span> Arrays</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson2"><span class="sidebar-num">2.2</span> Linear Algebra</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson3"><span class="sidebar-num">2.3</span> Indexing</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson4"><span class="sidebar-num">2.4</span> Broadcasting</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson5" class="active"><span class="sidebar-num">2.5</span> Random &amp; Stats</a></li>
+    <li><a href="../learn.html?c=associate&l=module2-lesson6"><span class="sidebar-num">2.6</span> Advanced LA</a></li>
+  </ul>
+</aside>
+
+<button class="sidebar-toggle">☰</button>
+
+<main class="main"><div class="container">
+
+<section class="hero">
+  <div class="breadcrumb">
+    <a href="../../index.html">Courses</a><span class="sep">›</span>
+    <a href="index.html">Associate</a><span class="sep">›</span>
+    <span>Module 2</span><span class="sep">›</span>
+    <span>Random &amp; Statistics</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1.2rem;flex-wrap:wrap">
+    <span class="hero-eyebrow">Module 2 · Lesson 5</span>
+    <span class="difficulty-badge beginner">Beginner</span>
+  </div>
+  <h1>Random Numbers &amp; <span class="accent">Statistical Functions</span></h1>
+  <p class="hero-sub">Master random number generation and statistical analysis. Learn probability distributions, sampling strategies, and computing descriptive statistics. These tools are essential for data exploration, synthetic data generation, and stochastic algorithms.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      ~26 minutes
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      5 sections
+    </div>
+    <div class="hero-meta-item">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      5 exercises
+    </div>
+  </div>
+</section>
+
+<div class="objectives reveal">
+  <h4>🎯 Learning Objectives</h4>
+  <ul>
+    <li>Generate random numbers from various probability distributions</li>
+    <li>Understand seeding for reproducible randomness</li>
+    <li>Use random sampling for data exploration and train/test splitting</li>
+    <li>Compute descriptive statistics efficiently</li>
+    <li>Understand correlation and covariance between variables</li>
+    <li>Apply statistical functions to data analysis and machine learning</li>
+    <li>Handle statistical edge cases and numerical stability</li>
+  </ul>
+</div>
+
+<div class="prerequisites reveal">
+  <h4>📋 Prerequisites</h4>
+  <ul>
+    <li>Completion of Module 2.1-2.4 (NumPy fundamentals)</li>
+    <li>Basic understanding of probability and statistics</li>
+    <li>Familiarity with statistical concepts: mean, variance, standard deviation</li>
+  </ul>
+</div>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="random-generation">
+  <span class="section-label">Fundamentals</span>
+  <h2>Random Number Generation and Distributions</h2>
+
+  <p>Random number generation is fundamental to machine learning. You need it for initializing neural network weights, creating synthetic data, implementing stochastic algorithms, and validating models with randomized tests. Understanding how to generate random numbers from different distributions is essential.</p>
+
+  <div class="analogy">
+    <h4>💡 Think of It This Way</h4>
+    <p>Imagine you have a spinner labeled with numbers. The probability of landing on each number follows a distribution. NumPy's random functions simulate spinning different types of spinners—uniform (all numbers equally likely), normal (most spins near the center), etc.</p>
+  </div>
+
+  <h3>Basic Random Number Generation</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Random number generation</span>
+<span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+
+<span class="cm"># Set seed for reproducibility (ALWAYS do this in production!)</span>
+<span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">seed</span>(<span class="nm">42</span>)
+
+<span class="cm"># Uniform distribution [0, 1)</span>
+<span class="va">uniform</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">random</span>(<span class="nm">5</span>)       <span class="cm"># [0.37..., 0.95..., ...]</span>
+
+<span class="cm"># Normal (Gaussian) distribution</span>
+<span class="va">normal</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">1000</span>)   <span class="cm"># mean=0, std=1</span>
+
+<span class="cm"># Integer random values [0, 10)</span>
+<span class="va">integers</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randint</span>(<span class="nm">0</span>, <span class="nm">10</span>, <span class="nm">5</span>)  <span class="cm"># [3, 7, 2, ...]</span>
+
+<span class="cm"># Shuffling</span>
+<span class="va">arr</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">arange</span>(<span class="nm">10</span>)
+<span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">shuffle</span>(<span class="va">arr</span>)  <span class="cm"># In-place shuffle</span>
+
+<span class="cm"># Sampling without replacement</span>
+<span class="va">sample</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">choice</span>(<span class="fn">np</span>.<span class="fn">arange</span>(<span class="nm">10</span>), <span class="nm">5</span>, <span class="va">replace</span><span class="op">=</span><span class="kw">False</span>)</code></pre>
+
+  <h3>Probability Distributions</h3>
+
+  <p>Different distributions model different phenomena. Choose the right distribution for your data generation or hypothesis testing.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Common probability distributions</span>
+
+<span class="cm"># Exponential (waiting times, lifetimes)</span>
+<span class="va">exponential</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">exponential</span>(<span class="va">scale</span><span class="op">=</span><span class="nm">2.0</span>, <span class="va">size</span><span class="op">=</span><span class="nm">1000</span>)
+
+<span class="cm"># Poisson (counts of events)</span>
+<span class="va">poisson</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">poisson</span>(<span class="va">lam</span><span class="op">=</span><span class="nm">3</span>, <span class="va">size</span><span class="op">=</span><span class="nm">1000</span>)
+
+<span class="cm"># Binomial (successes in n trials)</span>
+<span class="va">binomial</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">binomial</span>(<span class="va">n</span><span class="op">=</span><span class="nm">10</span>, <span class="va">p</span><span class="op">=</span><span class="nm">0.5</span>, <span class="va">size</span><span class="op">=</span><span class="nm">1000</span>)
+
+<span class="cm"># Beta (proportions, probabilities)</span>
+<span class="va">beta</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">beta</span>(<span class="va">a</span><span class="op">=</span><span class="nm">2</span>, <span class="va">b</span><span class="op">=</span><span class="nm">5</span>, <span class="va">size</span><span class="op">=</span><span class="nm">1000</span>)</code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Always set a seed for reproducibility in production code</li>
+      <li>Normal distribution (randn) is most common for continuous data</li>
+      <li>Uniform (random) for unbiased sampling</li>
+      <li>Match distribution to your problem domain and data generation process</li>
+      <li>Use randint for discrete values, choice for categorical sampling</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="statistical-functions">
+  <span class="section-label">Core Functions</span>
+  <h2>Descriptive Statistics and Analysis</h2>
+
+  <p>NumPy provides efficient functions for computing statistics across arrays. The axis parameter is crucial—it determines whether you compute statistics across all data or within specific dimensions.</p>
+
+  <h3>Computing Summary Statistics</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Descriptive statistics</span>
+<span class="va">data</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([[<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>], [<span class="nm">4</span>, <span class="nm">5</span>, <span class="nm">6</span>]])  <span class="cm"># Shape: (2, 3)</span>
+
+<span class="cm"># Global statistics (across all elements)</span>
+<span class="va">mean_all</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">data</span>)           <span class="cm"># 3.5</span>
+<span class="va">std_all</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">std</span>(<span class="va">data</span>)            <span class="cm"># 1.707...</span>
+
+<span class="cm"># Per-column statistics (axis=0 reduces rows)</span>
+<span class="va">mean_cols</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">data</span>, <span class="va">axis</span><span class="op">=</span><span class="nm">0</span>)    <span class="cm"># [2.5, 3.5, 4.5]</span>
+
+<span class="cm"># Per-row statistics (axis=1 reduces columns)</span>
+<span class="va">mean_rows</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">data</span>, <span class="va">axis</span><span class="op">=</span><span class="nm">1</span>)    <span class="cm"># [2, 5]</span>
+
+<span class="cm"># Other statistics</span>
+<span class="va">min_val</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">min</span>(<span class="va">data</span>)              <span class="cm"># 1</span>
+<span class="va">max_val</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">max</span>(<span class="va">data</span>)              <span class="cm"># 6</span>
+<span class="va">median</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">median</span>(<span class="va">data</span>)          <span class="cm"># 3.5</span>
+<span class="va">var</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">var</span>(<span class="va">data</span>)                <span class="cm"># 2.916... (std^2)</span>
+<span class="va">quantile</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">percentile</span>(<span class="va">data</span>, <span class="nm">75</span>) <span class="cm"># 75th percentile</span></code></pre>
+
+  <h3>Correlation and Covariance</h3>
+
+  <p>Understand relationships between variables. Correlation measures linear association; covariance measures joint variability.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Correlation and covariance</span>
+<span class="va">x</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">100</span>)
+<span class="va">y</span> <span class="op">=</span> <span class="nm">2</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">100</span>) <span class="cm"># y strongly related to x</span>
+
+<span class="cm"># Pearson correlation coefficient</span>
+<span class="va">correlation</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">corrcoef</span>(<span class="va">x</span>, <span class="va">y</span>)[<span class="nm">0</span>, <span class="nm">1</span>]  <span class="cm"># ~0.89 (strong positive)</span>
+
+<span class="cm"># Covariance matrix</span>
+<span class="va">cov_matrix</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">cov</span>(<span class="va">x</span>, <span class="va">y</span>)
+<span class="cm"># [[var(x), cov(x,y)],</span>
+<span class="cm">#  [cov(x,y), var(y)]]</span>
+
+<span class="cm"># Multi-variate correlation</span>
+<span class="va">data_matrix</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">100</span>, <span class="nm">5</span>)  <span class="cm"># 100 samples, 5 features</span>
+<span class="va">correlation_matrix</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">corrcoef</span>(<span class="va">data_matrix</span>.<span class="fn">T</span>)  <span class="cm"># (5, 5) correlation matrix</span></code></pre>
+
+  <div class="why-matters">
+    <h4>🌍 Why This Matters</h4>
+    <p><strong>In Exploratory Data Analysis:</strong> Computing statistics quickly reveals data patterns. Missing values, outliers, and skewness become visible through summary statistics.</p>
+    <p><strong>In Feature Engineering:</strong> Correlation reveals which variables are redundant. High correlation suggests potential multicollinearity in regression.</p>
+    <p><strong>In Hypothesis Testing:</strong> Statistics enable statistical inference and validation of assumptions underlying machine learning models.</p>
+  </div>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Use axis parameter to control dimensionality of statistical results</li>
+      <li>Correlation and covariance reveal variable relationships</li>
+      <li>Median is robust to outliers; use for skewed data</li>
+      <li>Standard deviation measures spread; variance is std^2</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="advanced-stats">
+  <span class="section-label">Advanced Techniques</span>
+  <h2>Statistical Edge Cases and Numerical Stability</h2>
+
+  <p>Real data is messy. Understanding edge cases prevents silent bugs and incorrect conclusions.</p>
+
+  <h3>Handling Missing Data</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Handling missing data (NaN)</span>
+<span class="va">data_with_nan</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="fn">np</span>.<span class="fn">nan</span>, <span class="nm">4</span>, <span class="nm">5</span>])
+
+<span class="cm"># Regular mean includes NaN → result is NaN</span>
+<span class="va">mean_with_nan</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">data_with_nan</span>)  <span class="cm"># nan</span>
+
+<span class="cm"># Use nanmean to skip NaN values</span>
+<span class="va">mean_skip_nan</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">nanmean</span>(<span class="va">data_with_nan</span>)  <span class="cm"># 3.0</span>
+
+<span class="cm"># Other nan-aware functions: nanstd, nanmedian, nanmin, nanmax</span></code></pre>
+
+  <h3>Weighted Statistics</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Weighted statistics</span>
+<span class="va">values</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>])
+<span class="va">weights</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>])
+
+<span class="cm"># Weighted mean: (1*1 + 2*2 + 3*3) / (1+2+3) = 14/6 = 2.33</span>
+<span class="va">weighted_mean</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">average</span>(<span class="va">values</span>, <span class="va">weights</span><span class="op">=</span><span class="va">weights</span>)</code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>NaN propagates through calculations—use nan-aware functions</li>
+      <li>Weighted statistics account for importance or frequency of samples</li>
+      <li>Always check for outliers before computing statistics</li>
+      <li>Consider robust statistics (median, IQR) for skewed data</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="exercises">
+  <span class="section-label">Practice</span>
+  <h2>Hands-On Exercises</h2>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 1: Seeded Reproducibility</h4>
+    <p>Generate a (10, 5) array of random normal numbers with seed 42. Generate it again with the same seed. Verify they're identical.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 2: Statistics Across Axes</h4>
+    <p>Create a (20, 15) array of random data. Compute mean, std, min, max: (a) across all elements, (b) per column, (c) per row. Verify shapes make sense.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 3: Correlation Detection</h4>
+    <p>Generate x (100 values). Create y = 3*x + noise. Compute correlation. Do the same with unrelated x and z. Compare correlations.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 4: Missing Data Handling</h4>
+    <p>Create an array with some NaN values. Show how regular mean fails, then use nanmean. Count non-NaN values using np.isnan.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🔬 Exercise 5: Distribution Comparison</h4>
+    <p>Generate 1000 samples from normal and uniform distributions. Compute their mean, std, and quantiles. Why do they differ?</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="outlier-detection">
+  <span class="section-label">Statistical Techniques</span>
+  <h2>Outlier Detection Using Statistics</h2>
+
+  <p>Real datasets contain outliers—values that don't fit the main pattern. Detecting and handling outliers is a critical data cleaning task. Statistical methods enable automated outlier detection.</p>
+
+  <h3>IQR Method (Interquartile Range)</h3>
+
+  <p>The IQR method identifies outliers as values beyond 1.5 × IQR from the quartiles. It is robust to extreme values and works with any distribution shape.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Outlier detection with IQR</span>
+<span class="va">data</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">array</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>, <span class="nm">5</span>, <span class="nm">100</span>, <span class="nm">200</span>])  <span class="cm"># 100, 200 are outliers</span>
+
+<span class="va">Q1</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">percentile</span>(<span class="va">data</span>, <span class="nm">25</span>)
+<span class="va">Q3</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">percentile</span>(<span class="va">data</span>, <span class="nm">75</span>)
+<span class="va">IQR</span> <span class="op">=</span> <span class="va">Q3</span> <span class="op">-</span> <span class="va">Q1</span>
+
+<span class="va">lower_bound</span> <span class="op">=</span> <span class="va">Q1</span> <span class="op">-</span> <span class="nm">1.5</span> <span class="op">*</span> <span class="va">IQR</span>
+<span class="va">upper_bound</span> <span class="op">=</span> <span class="va">Q3</span> <span class="op">+</span> <span class="nm">1.5</span> <span class="op">*</span> <span class="va">IQR</span>
+
+<span class="va">outliers_mask</span> <span class="op">=</span> (<span class="va">data</span> <span class="op"><</span> <span class="va">lower_bound</span>) <span class="op">|</span> (<span class="va">data</span> <span class="op">></span> <span class="va">upper_bound</span>)
+<span class="va">outliers</span> <span class="op">=</span> <span class="va">data</span>[<span class="va">outliers_mask</span>]
+
+<span class="fn">print</span>(<span class="st">f"Outliers detected: {outliers}"</span>)  <span class="cm"># [100 200]</span>
+
+<span class="cm"># Clean data by removing outliers</span>
+<span class="va">clean_data</span> <span class="op">=</span> <span class="va">data</span>[<span class="op">~</span><span class="va">outliers_mask</span>]</code></pre>
+
+  <h3>Z-Score Method</h3>
+
+  <p>Z-score identifies outliers as values beyond 3 standard deviations from the mean. Works best for normally distributed data.</p>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Outlier detection with Z-score</span>
+<span class="va">z_scores</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">abs</span>((<span class="va">data</span> <span class="op">-</span> <span class="fn">np</span>.<span class="fn">mean</span>(<span class="va">data</span>)) <span class="op">/</span> <span class="fn">np</span>.<span class="fn">std</span>(<span class="va">data</span>))
+<span class="va">outliers_z</span> <span class="op">=</span> <span class="va">data</span>[<span class="va">z_scores</span> <span class="op">></span> <span class="nm">3</span>]  <span class="cm"># More than 3 std from mean</span></code></pre>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>IQR method is robust to extreme values; use for real data</li>
+      <li>Z-score assumes normal distribution; use only when appropriate</li>
+      <li>Always visualize outliers before removing—they might be valuable</li>
+      <li>Document your outlier handling strategy for reproducibility</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section reveal" id="random-seed-reproducibility">
+  <span class="section-label">Advanced</span>
+  <h2>Random Seeds and Reproducibility in Production</h2>
+
+  <p>Random number generation is essential for machine learning, but randomness can cause problems in production. Controlling randomness with seeds is crucial for reproducibility and debugging.</p>
+
+  <h3>Seeding Strategy</h3>
+
+  <div class="code-header"><span class="code-lang">Python</span><button class="copy-btn">Copy</button></div>
+  <pre><code><span class="cm"># Reproducible random number generation</span>
+<span class="kw">import</span> <span class="im">numpy</span> <span class="kw">as</span> <span class="im">np</span>
+<span class="kw">import</span> <span class="im">random</span>
+
+<span class="kw">def</span> <span class="fn">set_seed</span>(<span class="va">seed</span><span class="op">=</span><span class="nm">42</span>):
+    <span class="st">"""Set seed for all random sources"""</span>
+    <span class="cm"># NumPy seed</span>
+    <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">seed</span>(<span class="va">seed</span>)
+
+    <span class="cm"># Python's random module</span>
+    <span class="fn">random</span>.<span class="fn">seed</span>(<span class="va">seed</span>)
+
+<span class="cm"># Call at start of script</span>
+<span class="fn">set_seed</span>(<span class="nm">42</span>)
+
+<span class="cm"># Now all random operations are reproducible</span>
+<span class="va">arr1</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">5</span>)
+<span class="fn">set_seed</span>(<span class="nm">42</span>)
+<span class="va">arr2</span> <span class="op">=</span> <span class="fn">np</span>.<span class="fn">random</span>.<span class="fn">randn</span>(<span class="nm">5</span>)
+
+<span class="fn">print</span>(<span class="st">f"Arrays identical: {np.array_equal(arr1, arr2)}"</span>)  <span class="cm"># True</span></code></pre>
+
+  <h3>When to Seed and When Not To</h3>
+
+  <p><strong>Always seed:</strong> Unit tests, experiments, model training (for reproducibility), bug investigation, demos.</p>
+  <p><strong>Never seed:</strong> Monte Carlo simulations (each run should differ), production systems after tuning (use fixed hyperparameters).</p>
+
+  <div class="key-takeaway">
+    <h4>✦ Key Takeaways</h4>
+    <ul>
+      <li>Always set seed in research and testing for reproducibility</li>
+      <li>Set seed for all random sources (NumPy, Python, TensorFlow)</li>
+      <li>Document your seed choice for future reference</li>
+      <li>Use np.random.default_rng for new code; RandomState is legacy</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<div class="next-preview reveal">
+  <h4>📍 Up Next: Lesson 2.6</h4>
+  <p><strong>Advanced Linear Algebra Operations</strong> — You now understand statistics and random generation. The final lesson covers advanced linear algebra: eigenvalue decomposition, QR factorization, singular value decomposition, and more. These are crucial for dimensionality reduction, PCA, and understanding matrix structure.</p>
+</div>
+
+<div class="nav-buttons">
+  <a href="../learn.html?c=associate&l=module2-lesson4" class="nav-btn prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Previous</a>
+  <a href="../learn.html?c=associate&l=module2-lesson6" class="nav-btn next">Next: Advanced Linear Algebra <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
+</div>
+
+</div></main>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <img src="../../assets/logo_only.png" alt="SustainSys" class="footer-logo-img">
+      <div class="footer-logo-text">Sustain<span>Sys</span> AI Academy</div>
+    </div>
+    <p>&copy; 2026 SustainSys. All rights reserved.</p>
+    <p><a href="https://sustainsys.co.uk">sustainsys.co.uk</a></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../assets/supabase-auth.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="../assets/stripe-checkout.js"></script>
+<script>window.COURSE_GATE_ID = 'associate';</script>
+<script src="../assets/course-gate.js"></script>
+<script src="../assets/course-nav.js"></script>
+</body>
+</html>
