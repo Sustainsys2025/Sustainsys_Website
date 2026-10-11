@@ -40,7 +40,6 @@ sustainsys.co.uk/
 ├── styles.css                          # Shared design system & components
 ├── main.js                             # Shared JavaScript (nav, effects, etc.)
 │
-├── Sustainsys_Logo.mp4               # Animated video logo
 ├── logo_only.png                       # Static PNG logo (footer)
 ├── thumbnails/                         # WebP image thumbnails
 │   └── thumbnail-1.webp ... thumbnail-12.webp
