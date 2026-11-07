@@ -59,6 +59,10 @@
         .form-group {
             margin-bottom: 1.2rem;
         }
+        .form-status { padding: 1rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; line-height: 1.6; }
+        .form-status.ok  { background: #ECFDF5; border-left: 4px solid #16A34A; color: #14532D; }
+        .form-status.err { background: #FEF2F2; border-left: 4px solid #DC2626; color: #7F1D1D; }
+        .form-status a { color: inherit; font-weight: 700; text-decoration: underline; }
 
         .form-group label {
             display: block;
@@ -529,17 +533,14 @@
                     <h3>Send Us a Message</h3>
                     <p>Whether you're interested in a product demonstration, corporate or individual AI training, or simply want to connect &mdash; fill out the form below and we'll get back to you promptly.</p>
 
-                    <form action="https://formsubmit.co/info@sustainsys.co.uk" method="POST">
-                        <!-- FormSubmit configuration -->
-                        <input type="hidden" name="_subject" value="New Contact Form Submission - SustainSys">
-                        <input type="hidden" name="_captcha" value="true">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="text" name="_honey" style="display:none">
-                        <input type="hidden" name="_next" value="https://sustainsys.co.uk/contact.html?submitted=true">
+                    <form method="POST" id="contactForm">
+                        <input type="hidden" name="kind" value="contact">
+                        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                        <div class="form-status" id="contactStatus" style="display:none;"></div>
 
                         <div class="form-group">
                             <label for="inquiry-type">Inquiry Type</label>
-                            <select id="inquiry-type" name="Inquiry Type" required>
+                            <select id="inquiry-type" name="inquiry_type" required>
                                 <option value="" disabled selected>Select your inquiry type</option>
                                 <option value="Product Demo">Product Demo</option>
                                 <option value="Corporate Training">Corporate Training</option>
@@ -550,22 +551,22 @@
 
                         <div class="form-group">
                             <label for="name">Full Name</label>
-                            <input type="text" id="name" name="Name" placeholder="Your full name" required>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email Address</label>
-                            <input type="email" id="email" name="Email" placeholder="you@company.com" required>
+                            <input type="email" id="email" name="email" placeholder="you@company.com" required>
                         </div>
 
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="Phone" placeholder="+44 7XXX XXXXXX">
+                            <input type="tel" id="phone" name="phone" placeholder="+44 7XXX XXXXXX">
                         </div>
 
                         <div class="form-group">
                             <label for="message">Your Message</label>
-                            <textarea id="message" name="Message" placeholder="Tell us about your requirements, project scope, or questions..." required></textarea>
+                            <textarea id="message" name="message" placeholder="Tell us about your requirements, project scope, or questions..." required></textarea>
                         </div>
 
                         <button type="submit" class="form-submit">Send Message &#8594;</button>
@@ -690,6 +691,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+<script src="forms.js?v=20261107"></script>
+<script>
+(function () {
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    window.sustainsysSubmit(form, {
+      status: document.getElementById('contactStatus'),
+      subject: 'Website enquiry',
+      successHtml: '<strong>Thank you &mdash; your message has been sent.</strong> We respond within 24 business hours.'
+    });
+  });
+})();
 </script>
 </body>
 </html>
