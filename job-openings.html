@@ -173,6 +173,62 @@
         .job-card-closed:hover { opacity: .75; }
         .job-card-closed .job-title { color: #64748b; }
 
+        /* ---- Application form ---- */
+        .apply-card {
+            background: #ffffff;
+            border: 1px solid rgba(26,58,107,.25);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 3rem 0 2rem;
+            box-shadow: 0 4px 20px rgba(26,58,107,.08);
+            scroll-margin-top: 110px;
+        }
+        .apply-card h2 { font-size: 1.6rem; color: #1A3A6B; margin-bottom: .4rem; }
+        .apply-card > p { color: #475569; margin-bottom: 1.6rem; line-height: 1.6; }
+        .apply-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+        .apply-grid .full { grid-column: 1 / -1; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label {
+            display: block; font-size: .82rem; font-weight: 600; color: #1e293b;
+            margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .5px;
+        }
+        .form-group label .req { color: #A4421F; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: .75rem 1rem; background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 8px; font-family: 'DM Sans', 'Inter', sans-serif; font-size: .92rem;
+            color: #1e293b; transition: all .3s; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #1A3A6B; box-shadow: 0 0 0 3px rgba(26,58,107,.1);
+        }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .form-group select {
+            cursor: pointer; appearance: none; padding-right: 2.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center;
+        }
+        .form-group input[type="file"] { padding: .55rem 1rem; background: #fff; }
+        .form-hint { font-size: .8rem; color: #64748b; margin-top: .35rem; }
+        .form-check { display: flex; gap: .7rem; align-items: flex-start; font-size: .9rem; color: #334155; line-height: 1.5; margin: .4rem 0 1.4rem; }
+        .form-check input { width: 18px; height: 18px; margin-top: .2rem; flex: none; }
+        .form-submit {
+            display: inline-block; padding: .85rem 2.5rem; background: linear-gradient(135deg, #A4421F, #7F3117);
+            color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', 'Inter', sans-serif;
+            font-size: .92rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+            transition: all .3s;
+        }
+        .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(164,66,31,.3); }
+        .apply-alt { font-size: .88rem; color: #64748b; margin-top: 1rem; }
+        .apply-success {
+            display: none; background: #ECFDF5; border-left: 4px solid #16A34A; color: #14532D;
+            padding: 1rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; line-height: 1.6;
+        }
+        .apply-success.show { display: block; }
+        @media (max-width: 720px) {
+            .apply-card { padding: 1.5rem; }
+            .apply-grid { grid-template-columns: 1fr; }
+        }
+
         .job-section {
             margin-bottom: 2rem;
         }
@@ -517,7 +573,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="job-badge">Open</div>
+                    <div style="display:flex;flex-direction:column;gap:.6rem;align-items:flex-end;">
+                        <div class="job-badge">Open</div>
+                        <a href="#apply" class="btn btn-primary apply-link" data-position="Clinical Projects and Client Operations Coordinator (SUS-2026-COORD-01)" style="display:inline-block;padding:.55rem 1.2rem;font-size:.85rem;white-space:nowrap;">Apply Now &rarr;</a>
+                    </div>
                 </div>
 
                 <p class="job-summary">
@@ -605,10 +664,10 @@
 
                         <div class="job-section">
                             <h3 class="job-section-title">How to Apply</h3>
-                            <p>Send a CV and a short covering note to <a href="mailto:careers@sustainsys.co.uk?subject=Application%20-%20SUS-2026-COORD-01%20Clinical%20Projects%20and%20Client%20Operations%20Coordinator">careers@sustainsys.co.uk</a> quoting reference <strong>SUS-2026-COORD-01</strong> by <strong>24 November 2026</strong>. Interviews will be held in the week commencing 24 November 2026 at Mildenhall or by video. SustainSys Consulting Ltd is an equal opportunities employer.</p>
+                            <p>Use the <a href="#apply" class="apply-link" data-position="Clinical Projects and Client Operations Coordinator (SUS-2026-COORD-01)">application form</a> on this page to upload your CV and a short covering note, or email them to <a href="mailto:careers@sustainsys.co.uk?subject=Application%20-%20SUS-2026-COORD-01">careers@sustainsys.co.uk</a> quoting reference <strong>SUS-2026-COORD-01</strong>, by <strong>24 November 2026</strong>. Interviews will be held in the week commencing 24 November 2026 at Mildenhall or by video. SustainSys Consulting Ltd is an equal opportunities employer.</p>
                         </div>
 
-                        <a href="mailto:careers@sustainsys.co.uk?subject=Application%20-%20SUS-2026-COORD-01%20Clinical%20Projects%20and%20Client%20Operations%20Coordinator" class="btn btn-primary" style="display:inline-block;">
+                        <a href="#apply" class="btn btn-primary apply-link" data-position="Clinical Projects and Client Operations Coordinator (SUS-2026-COORD-01)" style="display:inline-block;">
                             Apply Now &rarr;
                         </a>
                     </div>
@@ -1156,6 +1215,110 @@
 
         </section>
 
+        <!-- Application form -->
+        <section class="apply-card" id="apply">
+            <h2>Apply for a role</h2>
+            <p>Complete the form and attach your CV (PDF or Word, up to 5&nbsp;MB). We acknowledge every application and shortlist against the published person specification.</p>
+
+            <div class="apply-success" id="applySuccess">
+                <strong>Thank you &mdash; your application has been received.</strong> We will confirm by email and be in touch about next steps after the closing date.
+            </div>
+
+            <form action="https://formsubmit.co/careers@sustainsys.co.uk" method="POST" enctype="multipart/form-data" id="applyForm">
+                <input type="hidden" name="_subject" value="Job application - SustainSys careers page">
+                <input type="hidden" name="_captcha" value="true">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="https://sustainsys.co.uk/job-openings.html?applied=true#apply">
+                <input type="text" name="_honey" style="display:none">
+
+                <div class="apply-grid">
+                    <div class="form-group full">
+                        <label for="app-position">Position <span class="req">*</span></label>
+                        <select id="app-position" name="Position" required>
+                            <option value="" disabled selected>Select the role you are applying for</option>
+                            <option value="Clinical Projects and Client Operations Coordinator (SUS-2026-COORD-01)">Clinical Projects and Client Operations Coordinator &mdash; Ref SUS-2026-COORD-01</option>
+                            <option value="AI/ML Engineer (on hold - expression of interest)">AI/ML Engineer &mdash; expression of interest (recruitment on hold)</option>
+                            <option value="General application">General application</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-name">Full name <span class="req">*</span></label>
+                        <input type="text" id="app-name" name="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="app-email">Email <span class="req">*</span></label>
+                        <input type="email" id="app-email" name="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="app-phone">Phone</label>
+                        <input type="tel" id="app-phone" name="Phone" placeholder="+44 7XXX XXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label for="app-location">Current location (town / city) <span class="req">*</span></label>
+                        <input type="text" id="app-location" name="Current location" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-inuk">Are you currently in the UK? <span class="req">*</span></label>
+                        <select id="app-inuk" name="Currently in the UK" required>
+                            <option value="" disabled selected>Select</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="app-rtw">Right to work in the UK <span class="req">*</span></label>
+                        <select id="app-rtw" name="Right to work status" required>
+                            <option value="" disabled selected>Select</option>
+                            <option>British or Irish citizen</option>
+                            <option>Settled status / indefinite leave to remain</option>
+                            <option>Pre-settled status</option>
+                            <option>Skilled Worker visa (would need to switch sponsor)</option>
+                            <option>Graduate visa</option>
+                            <option>Student visa</option>
+                            <option>Dependant or other visa with unrestricted work rights</option>
+                            <option>Other UK permission (please describe in covering note)</option>
+                            <option>No current UK permission</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-licence">Full UK driving licence</label>
+                        <select id="app-licence" name="UK driving licence">
+                            <option value="" disabled selected>Select</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                        <div class="form-hint">Required for the Coordinator role.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="app-notice">Notice period / availability</label>
+                        <input type="text" id="app-notice" name="Availability" placeholder="e.g. 4 weeks, or immediately">
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="app-cv">CV <span class="req">*</span></label>
+                        <input type="file" id="app-cv" name="attachment" accept=".pdf,.doc,.docx" required>
+                        <div class="form-hint">PDF, DOC or DOCX, maximum 5&nbsp;MB.</div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="app-note">Covering note <span class="req">*</span></label>
+                        <textarea id="app-note" name="Covering note" placeholder="Tell us briefly how your experience matches the role requirements." required></textarea>
+                    </div>
+                </div>
+
+                <label class="form-check">
+                    <input type="checkbox" name="Consent" value="Agreed" required>
+                    <span>I confirm the information provided is accurate and consent to SustainSys Consulting Ltd processing my application data and CV for recruitment purposes, in line with the <a href="privacy.html">Privacy Policy</a>. Data is retained for six months after the vacancy closes unless you ask us to delete it sooner.</span>
+                </label>
+
+                <button type="submit" class="form-submit">Submit Application &#8594;</button>
+                <p class="apply-alt">Prefer email? Send your CV and covering note to <a href="mailto:careers@sustainsys.co.uk">careers@sustainsys.co.uk</a>, quoting the job reference.</p>
+            </form>
+        </section>
+
         <!-- CTA Section -->
         <div class="cta-section">
             <h3>Don't See Your Role?</h3>
@@ -1163,7 +1326,7 @@
                 We're always looking for talented individuals to join our team. Send us your CV and let us
                 know how you can contribute to SustainSys.
             </p>
-            <a href="mailto:careers@sustainsys.co.uk?subject=General Application" class="btn btn-primary">
+            <a href="#apply" class="btn btn-primary apply-link" data-position="General application">
                 Send Your CV
             </a>
         </div>
@@ -1238,6 +1401,35 @@
             card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(card);
         });
+
+        // Application form helpers
+        (function () {
+            var select = document.getElementById('app-position');
+            document.querySelectorAll('.apply-link').forEach(function (a) {
+                a.addEventListener('click', function () {
+                    var pos = a.getAttribute('data-position');
+                    if (select && pos) {
+                        for (var i = 0; i < select.options.length; i++) {
+                            if (select.options[i].value === pos) { select.selectedIndex = i; break; }
+                        }
+                    }
+                });
+            });
+            if (window.location.search.indexOf('applied=true') !== -1) {
+                var ok = document.getElementById('applySuccess');
+                if (ok) { ok.classList.add('show'); ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            }
+            var form = document.getElementById('applyForm');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    var f = document.getElementById('app-cv');
+                    if (f && f.files && f.files[0] && f.files[0].size > 5 * 1024 * 1024) {
+                        e.preventDefault();
+                        alert('Your CV is larger than 5 MB. Please attach a smaller file or email it to careers@sustainsys.co.uk.');
+                    }
+                });
+            }
+        })();
     </script>
 <script>
 // Mobile Projects dropdown toggle
